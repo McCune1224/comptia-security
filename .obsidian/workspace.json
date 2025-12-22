@@ -11,12 +11,14 @@
             "id": "a91f1a0f6bdc71b1",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "markdown",
               "state": {
-                "file": "CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf"
+                "file": "SY0-701 Exam Overview.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-file-text",
-              "title": "CompTIA-Security-Plus-SY0-701-Exam-Objectives"
+              "icon": "lucide-file",
+              "title": "SY0-701 Exam Overview"
             }
           }
         ]
@@ -92,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+                "file": "SY0-701 Exam Overview.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for CompTIA-Security-Plus-SY0-701-Exam-Objectives"
+              "title": "Backlinks for SY0-701 Exam Overview"
             }
           },
           {
@@ -184,12 +186,12 @@
   },
   "active": "a91f1a0f6bdc71b1",
   "lastOpenFiles": [
+    "SY0-701 Exam Overview.md",
+    "Untitled.base",
+    "CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
     "Welcome.md",
     "create a link.md",
-    "Untitled.base",
     "Untitled 1.canvas",
-    "Untitled.md",
-    "CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
     "Untitled.canvas",
     "LICENSE",
     "comptia-security/LICENSE",
