@@ -1,0 +1,50 @@
+Front,Back,Tags
+What are the three components of the CIA Triad?,"Confidentiality, Integrity, and Availability",1 General Security Concepts
+What does Confidentiality ensure?,"Information is accessible only to authorized personnel (e.g., through encryption)",1 General Security Concepts
+What does Integrity ensure?,"Data remains accurate and unaltered (e.g., through checksums)",1 General Security Concepts
+What does Availability ensure?,"Information and resources are accessible when needed (e.g., through redundancy measures)",1 General Security Concepts
+What is Non-repudiation?,"Guarantees that an action or event cannot be denied by the involved parties (e.g., digital signatures)",1 General Security Concepts
+What is the CIANA Pentagon?,An extension of the CIA triad with the addition of Non-repudiation and Authentication,1 General Security Concepts
+What are the Triple A's of Security?,"Authentication, Authorization, and Accounting",1 General Security Concepts
+What is Authentication?,"Verifying the identity of a user or system (e.g., password checks)",1 General Security Concepts
+What is Authorization?,Determining actions or resources an authenticated user can access (permissions),1 General Security Concepts
+What is Accounting?,Tracking user activities and resource usage for audit or billing purposes,1 General Security Concepts
+What are the 4 broad categories of Security Controls?,"Technical, Managerial, Operational, and Physical",1 General Security Concepts
+What are Technical Controls?,"Technologies, hardware, and software mechanisms implemented to manage and reduce risks",1 General Security Concepts
+What are Managerial Controls?,Strategic planning and governance side of security (also called administrative controls),1 General Security Concepts
+What are Operational Controls?,Procedures and measures designed to protect data on a day-to-day basis; governed by internal processes and human actions,1 General Security Concepts
+What are Physical Controls?,"Tangible, real-world measures taken to protect assets",1 General Security Concepts
+What are the 6 basic types of Security Controls?,"Preventative, Deterrent, Detective, Corrective, Compensating, and Directive",1 General Security Concepts
+What is a Preventative Control?,Proactive measures implemented to thwart potential security threats or breaches,1 General Security Concepts
+What is a Deterrent Control?,Discourages potential attackers by making the effort seem less appealing or more challenging,1 General Security Concepts
+What is a Detective Control?,Monitors and alerts organizations to malicious activities as they occur or shortly thereafter,1 General Security Concepts
+What is a Corrective Control?,Mitigates any potential damage and restores systems to their normal state,1 General Security Concepts
+What is a Compensating Control?,Alternative measures implemented when primary security controls are not feasible or effective,1 General Security Concepts
+What is a Directive Control?,"Guides, informs, or mandates actions; often rooted in policy or documentation",1 General Security Concepts
+What is the Zero Trust Model?,"Operates on the principle that no one should be trusted by default; demands verification for every device, user, and transaction",1 General Security Concepts
+What are the two planes used to achieve Zero Trust?,Control Plane and Data Plane,1 General Security Concepts
+What does the Control Plane include in Zero Trust?,"Adaptive identity, threat scope reduction, policy-driven access control, and secured zones",1 General Security Concepts
+What does the Data Plane include in Zero Trust?,"Subject/system, policy engine, policy administrator, and policy enforcement points",1 General Security Concepts
+What is Adaptive Identity in Zero Trust?,"Relies on real-time validation that takes into account the user's behavior, device, location, and more",1 General Security Concepts
+What is Threat Scope Reduction in Zero Trust?,Limits users' access to only what they need for their work tasks to reduce the network's potential attack surface,1 General Security Concepts
+What is Gap Analysis?,Process of evaluating the differences between an organization's current performance and its desired performance,1 General Security Concepts
+What are the two basic types of Gap Analysis?,Technical Gap Analysis and Business Gap Analysis,1 General Security Concepts
+What is a Plan of Action and Milestones (POA&M)?,"Outlines specific measures to address each vulnerability, allocates resources, and sets up timelines for remediation tasks",1 General Security Concepts
+What are the five basic methods to ensure confidentiality?,"Encryption, Access Controls, Data Masking, Physical Security Measures, and Training and Awareness",1 General Security Concepts
+What is Data Masking?,Method that involves obscuring specific data within a database to make it inaccessible for unauthorized users while retaining real data's authenticity for authorized users,1 General Security Concepts
+What are five methods to maintain integrity?,"Hashing, Digital Signatures, Checksums, Access Controls, and Regular Audits",1 General Security Concepts
+What is Hashing?,Process of converting data into a fixed-size value,1 General Security Concepts
+What is a Checksum?,Method to verify the integrity of data during transmission,1 General Security Concepts
+What is the best strategy to maintain availability?,Use redundancy in systems and network designs,1 General Security Concepts
+What are the types of redundancy?,"Server Redundancy, Data Redundancy, Network Redundancy, and Power Redundancy",1 General Security Concepts
+What is Server Redundancy?,"Using multiple servers in a load balanced or failover configuration so if one fails, others can take over",1 General Security Concepts
+What is Data Redundancy?,Storing data in multiple places,1 General Security Concepts
+What is Network Redundancy?,"Ensuring that if one network path fails, data can travel through another route",1 General Security Concepts
+What is Power Redundancy?,Using backup power sources like generators and UPS systems,1 General Security Concepts
+What are the 5 commonly used authentication methods (factors)?,"Something you know, Something you have, Something you are, Something you do, and Somewhere you are",1 General Security Concepts
+What is Multi-Factor Authentication (MFA)?,Security process that requires users to provide multiple methods of identification to verify their identity,1 General Security Concepts
+What is the Knowledge Factor?,"Something you know - relies on information a user can recall (e.g., password)",1 General Security Concepts
+What is the Possession Factor?,"Something you have - relies on the user presenting a physical item (e.g., smart card)",1 General Security Concepts
+What is the Inherence Factor?,"Something you are - relies on unique physical or behavioral characteristics (e.g., fingerprint)",1 General Security Concepts
+What is the Action Factor?,Something you do - relies on the user conducting a unique action to prove who they are,1 General Security Concepts
+What is the Location Factor?,Somewhere you are - relies on the user being in a certain geographic location before access is granted,1 General Security Concepts

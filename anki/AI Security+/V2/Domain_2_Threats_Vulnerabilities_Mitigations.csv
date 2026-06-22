@@ -1,0 +1,109 @@
+Front,Back,Tags
+What is a Threat Actor?,"Anything that could cause harm, loss, damage, or compromise to IT systems",2 Threats Vulnerabilities Mitigations
+What are common Threat Actor Motivations?,"Data Exfiltration, Blackmail, Espionage, Service Disruption, Financial Gain, Philosophical/Political Beliefs, Ethical Reasons, Revenge, Disruption/Chaos, and War",2 Threats Vulnerabilities Mitigations
+What are the two most basic attributes of a Threat Actor?,"Internal vs. External, and differences in resources/funding and level of sophistication",2 Threats Vulnerabilities Mitigations
+What is an Unskilled Attacker (Script Kiddie)?,Individual with limited technical expertise who uses readily available tools and scripts developed by others,2 Threats Vulnerabilities Mitigations
+What is a Hacktivist?,"Individual or group driven by political, social, or environmental ideologies; uses hacking to promote a cause",2 Threats Vulnerabilities Mitigations
+What techniques do Hacktivists use?,"Website Defacement, DDoS Attacks, Doxing, and Leaking of Sensitive Data",2 Threats Vulnerabilities Mitigations
+What is Organized Crime in cybersecurity?,"Groups or syndicates that conduct criminal activities in the digital world for financial gain (e.g., ransomware, identity theft)",2 Threats Vulnerabilities Mitigations
+What is a Nation-state Actor?,Highly skilled attackers sponsored by governments for cyber espionage or warfare,2 Threats Vulnerabilities Mitigations
+What is a False Flag Attack?,Attack orchestrated to appear as if it originates from a different source to mislead investigators,2 Threats Vulnerabilities Mitigations
+What is an Advanced Persistent Threat (APT)?,A prolonged and targeted cyberattack where an intruder gains unauthorized access and remains undetected for an extended period,2 Threats Vulnerabilities Mitigations
+What is an Insider Threat?,"Security threat originating from within the organization; can take forms like data theft, sabotage, or misuse of access privileges",2 Threats Vulnerabilities Mitigations
+What is Shadow IT?,"Use of IT systems, devices, software, or services without explicit organizational approval",2 Threats Vulnerabilities Mitigations
+What is BYOD (Bring Your Own Device)?,Involves the use of personal devices for work purposes,2 Threats Vulnerabilities Mitigations
+What is a Threat Vector?,Means or pathway by which an attacker can gain unauthorized access to deliver a malicious payload,2 Threats Vulnerabilities Mitigations
+What is an Attack Surface?,Encompasses all various points where an unauthorized user can try to enter or extract data from an environment,2 Threats Vulnerabilities Mitigations
+What are common threat vectors?,"Message-based, Image-based, File-based, Voice Calls, Removable Devices, and Unsecured Networks",2 Threats Vulnerabilities Mitigations
+What is Baiting?,Attacker leaves a malware-infected USB drive where a target might find it,2 Threats Vulnerabilities Mitigations
+What is Vishing?,Use of voice calls to trick victims into revealing sensitive information,2 Threats Vulnerabilities Mitigations
+What is BlueBorne?,Set of vulnerabilities in Bluetooth technology that can allow an attacker to take over devices without user interaction,2 Threats Vulnerabilities Mitigations
+What is BlueSmack?,Type of DoS attack targeting Bluetooth-enabled devices by sending specially crafted L2CAP packets,2 Threats Vulnerabilities Mitigations
+What is a Honeypot?,Decoy system to attract and deceive attackers,2 Threats Vulnerabilities Mitigations
+What is a Honeynet?,Network of decoy systems for observing complex attacks,2 Threats Vulnerabilities Mitigations
+What is a Honeyfile?,Decoy file to detect unauthorized access or data breaches,2 Threats Vulnerabilities Mitigations
+What is a Honeytoken?,Fake data to alert administrators when accessed or used,2 Threats Vulnerabilities Mitigations
+What are TTPs?,"Tactics, Techniques, and Procedures - specific methods and patterns associated with a threat actor",2 Threats Vulnerabilities Mitigations
+What is Social Engineering?,"Manipulative strategy exploiting human psychology for unauthorized access to systems, data, or physical spaces",2 Threats Vulnerabilities Mitigations
+What are the six main motivational triggers used by social engineers?,"Authority, Urgency, Social Proof, Scarcity, Likability, and Fear",2 Threats Vulnerabilities Mitigations
+What is Impersonation?,Pretending to be someone else to gain unauthorized access,2 Threats Vulnerabilities Mitigations
+What is Brand Impersonation?,Attacker pretends to represent a legitimate company or brand using logos and language,2 Threats Vulnerabilities Mitigations
+What is Typosquatting?,Registering domain names similar to popular websites but with common typographical errors,2 Threats Vulnerabilities Mitigations
+What is a Watering Hole Attack?,Targeted attack where attackers compromise a specific website or service that their target is known to use,2 Threats Vulnerabilities Mitigations
+What is Pretexting?,Creating a fabricated scenario to manipulate targets into giving information,2 Threats Vulnerabilities Mitigations
+What is Phishing?,Sending fraudulent emails that appear to be from reputable sources to convince individuals to reveal personal information,2 Threats Vulnerabilities Mitigations
+What is Spear Phishing?,More targeted form of phishing focused on a specific group of individuals or organizations,2 Threats Vulnerabilities Mitigations
+What is Whaling?,Form of spear phishing that targets high-profile individuals like CEOs or CFOs,2 Threats Vulnerabilities Mitigations
+What is Business Email Compromise (BEC)?,Sophisticated phishing attack using internal email accounts to get employees to perform malicious actions,2 Threats Vulnerabilities Mitigations
+What is Vishing (Voice Phishing)?,Attacker tricks victims into sharing personal or financial information over the phone,2 Threats Vulnerabilities Mitigations
+What is Smishing (SMS Phishing)?,Use of text messages to trick individuals into providing personal information,2 Threats Vulnerabilities Mitigations
+What are key indicators of phishing attacks?,"Urgency, Unusual Requests, Mismatched URLs, Strange Email Addresses, and Poor Spelling/Grammar",2 Threats Vulnerabilities Mitigations
+What is Shoulder Surfing?,Looking over someone's shoulder to gather personal information,2 Threats Vulnerabilities Mitigations
+What is Dumpster Diving?,Searching through trash to find valuable information,2 Threats Vulnerabilities Mitigations
+What is Tailgating?,Unauthorized person closely follows someone with legitimate access through an access control point without their knowledge,2 Threats Vulnerabilities Mitigations
+What is Piggybacking?,Involves two people working together where one with legitimate access intentionally allows another unauthorized person to enter,2 Threats Vulnerabilities Mitigations
+What is the key difference between Piggybacking and Tailgating?,Piggybacking uses social engineering to gain consent; Tailgating doesn't use or obtain consent,2 Threats Vulnerabilities Mitigations
+What is Malware?,Malicious software designed to infiltrate computer systems and potentially damage them without user consent,2 Threats Vulnerabilities Mitigations
+What is a Virus?,"Malicious code that attaches to clean files, spreads, and corrupts host files",2 Threats Vulnerabilities Mitigations
+What is a Worm?,Standalone program that replicates and spreads to other computers without user interaction,2 Threats Vulnerabilities Mitigations
+What is a Trojan?,Malicious software disguised as legitimate software that grants unauthorized access,2 Threats Vulnerabilities Mitigations
+What is a Remote Access Trojan (RAT)?,Widely used by attackers to provide remote control of a victim machine,2 Threats Vulnerabilities Mitigations
+What is Ransomware?,Malicious software that encrypts user data and demands ransom for decryption,2 Threats Vulnerabilities Mitigations
+What should you do if you're a victim of ransomware?,"Never pay the ransom, disconnect from network, notify authorities, restore from known good backups",2 Threats Vulnerabilities Mitigations
+What is a Botnet?,Network of compromised computers or devices controlled remotely by malicious actors,2 Threats Vulnerabilities Mitigations
+What is a Zombie?,Name of a compromised computer or device that is part of a botnet,2 Threats Vulnerabilities Mitigations
+What is a Rootkit?,Designed to gain administrative-level control over a computer system without being detected,2 Threats Vulnerabilities Mitigations
+What is a Keylogger?,Software or hardware that records every keystroke made on a computer or mobile device,2 Threats Vulnerabilities Mitigations
+What is Spyware?,Malicious software designed to gather and send information about a user without their knowledge,2 Threats Vulnerabilities Mitigations
+What is Bloatware?,Software pre-installed on new computers that the user did not request; not malicious but can introduce vulnerabilities,2 Threats Vulnerabilities Mitigations
+What is a Logic Bomb?,Malicious code that only executes when certain conditions have been met,2 Threats Vulnerabilities Mitigations
+What is a Backdoor?,Originally placed in programs to bypass normal security; can be placed by threat actors for persistent access,2 Threats Vulnerabilities Mitigations
+What is a Boot Sector Virus?,Stored in the first sector of a hard drive and loaded into memory when the computer boots,2 Threats Vulnerabilities Mitigations
+What is a Macro Virus?,"Embedded inside a document so that when opened, the virus is executed",2 Threats Vulnerabilities Mitigations
+What is a Polymorphic Virus?,Changes its code each time it is executed to evade detection,2 Threats Vulnerabilities Mitigations
+What is a Metamorphic Virus?,Able to rewrite itself entirely before infecting a given file,2 Threats Vulnerabilities Mitigations
+What is an Encrypted Virus?,Hides itself by encrypting its malicious code to avoid detection,2 Threats Vulnerabilities Mitigations
+What are common indicators of malware attacks?,"Account lockouts, concurrent session utilization, blocked content, impossible travel, resource consumption, inaccessibility, out-of-cycle logging, missing logs, and documented attacks",2 Threats Vulnerabilities Mitigations
+What is Impossible Travel?,User's account accessed from two or more geographically separated locations in an impossibly short period of time,2 Threats Vulnerabilities Mitigations
+What is a Vulnerability?,Any weakness in system design or implementation,2 Threats Vulnerabilities Mitigations
+What is Risk?,"Where threats and vulnerabilities intersect; if either doesn't exist, there is no risk",2 Threats Vulnerabilities Mitigations
+What is Risk Management?,Finding different ways to minimize the likelihood of an outcome and achieve the desired outcome,2 Threats Vulnerabilities Mitigations
+What are common hardware vulnerabilities?,"Firmware vulnerabilities, end-of-life systems, missing patches, and misconfigurations",2 Threats Vulnerabilities Mitigations
+What is Firmware?,Specialized software stored on hardware devices that can grant attackers full control,2 Threats Vulnerabilities Mitigations
+What is Bluejacking?,Sending unsolicited messages to a Bluetooth device,2 Threats Vulnerabilities Mitigations
+What is Bluesnarfing?,Unauthorized access to a Bluetooth device to steal information,2 Threats Vulnerabilities Mitigations
+What is Bluebugging?,Allows attackers to take control of a device's Bluetooth functions,2 Threats Vulnerabilities Mitigations
+What is Bluesmack?,DoS attack overwhelming a Bluetooth device with data,2 Threats Vulnerabilities Mitigations
+What is Sideloading?,Installing apps from unofficial sources bypassing the device's default app store,2 Threats Vulnerabilities Mitigations
+What is Jailbreaking/Rooting?,Gives users escalated privileges but exposes devices to security breaches,2 Threats Vulnerabilities Mitigations
+What is Mobile Device Management (MDM)?,"Solution that minimizes mobile vulnerabilities through patching, configuration management, and best practice enforcement",2 Threats Vulnerabilities Mitigations
+What is a Zero-Day Vulnerability?,Newly discovered and exploited vulnerability with no known defenses or mitigations,2 Threats Vulnerabilities Mitigations
+What is SQL Injection?,Exploits web app or database vulnerabilities by inserting malicious SQL code into input fields,2 Threats Vulnerabilities Mitigations
+What is an XML Bomb (Billion Laughs Attack)?,"Consumes memory exponentially, acting like a denial-of-service attack",2 Threats Vulnerabilities Mitigations
+What is XXE (XML External Entity) Attack?,Attempts to read local resources like password hashes,2 Threats Vulnerabilities Mitigations
+What is Cross-Site Scripting (XSS)?,Injects malicious scripts into web pages to compromise visitors,2 Threats Vulnerabilities Mitigations
+What is Cross-Site Request Forgery (CSRF/XSRF)?,Triggers actions on different websites without user consent,2 Threats Vulnerabilities Mitigations
+What is a Buffer Overflow?,Software vulnerability when more data is written to a memory buffer than it can hold,2 Threats Vulnerabilities Mitigations
+What is ASLR?,Address Space Layout Randomization - randomizes memory addresses to prevent attackers from guessing return pointer addresses,2 Threats Vulnerabilities Mitigations
+What is a Race Condition?,Software vulnerability related to the order and timing of events in concurrent processes,2 Threats Vulnerabilities Mitigations
+What is Time-of-Check (TOC)?,Attackers manipulate a resource's state after it is checked but before it is used,2 Threats Vulnerabilities Mitigations
+What is Time-of-Use (TOU)?,Attackers alter a resource's state after it is checked but before it is used,2 Threats Vulnerabilities Mitigations
+What is a Deadlock?,Occurs when a lock remains in place because the process it's waiting for is terminated or crashes,2 Threats Vulnerabilities Mitigations
+What is a Denial of Service (DoS) attack?,Attack that attempts to make a computer or server's resources unavailable,2 Threats Vulnerabilities Mitigations
+What is a Distributed Denial of Service (DDoS) attack?,Multiple machines target a single victim and attack simultaneously,2 Threats Vulnerabilities Mitigations
+What is a SYN Flood?,Initiating multiple TCP sessions but not completing the 3-way handshake,2 Threats Vulnerabilities Mitigations
+What is DNS Amplification?,DDoS attack that exploits DNS resolution process to overwhelm a target with response traffic,2 Threats Vulnerabilities Mitigations
+What is DNS Cache Poisoning?,Corrupts a DNS resolver's cache with false information to redirect users to malicious websites,2 Threats Vulnerabilities Mitigations
+What is DNS Tunneling?,Encapsulates non-DNS traffic over port 53 to bypass firewall rules,2 Threats Vulnerabilities Mitigations
+What is Domain Hijacking?,Unauthorized change of domain registration leading to loss of website control,2 Threats Vulnerabilities Mitigations
+What is a Directory Traversal Attack?,"Allows access to commands, files, and directories outside the web document root",2 Threats Vulnerabilities Mitigations
+What is Privilege Escalation?,Exploiting system vulnerability to gain elevated access permissions,2 Threats Vulnerabilities Mitigations
+What is Vertical Privilege Escalation?,"Going from normal user to higher privilege (e.g., admin or root)",2 Threats Vulnerabilities Mitigations
+What is Horizontal Privilege Escalation?,Accessing or modifying resources at the same level as the attacker,2 Threats Vulnerabilities Mitigations
+What is a Replay Attack?,Malicious repeat or delay of a valid data transmission,2 Threats Vulnerabilities Mitigations
+What is Session Hijacking?,Attacker takes over a user session to gain unauthorized access,2 Threats Vulnerabilities Mitigations
+What is an On-Path Attack (Man-in-the-Middle)?,Attacker positions their workstation between two hosts during communication,2 Threats Vulnerabilities Mitigations
+What is ARP Poisoning?,Manipulating ARP tables to redirect network traffic,2 Threats Vulnerabilities Mitigations
+What is SSL Stripping?,Attack that tricks encryption application into presenting HTTP instead of HTTPS,2 Threats Vulnerabilities Mitigations
+What is a Downgrade Attack?,Forces a client or server to abandon a higher security mode in favor of a lower security mode,2 Threats Vulnerabilities Mitigations
+What are Indicators of Compromise (IoC)?,Pieces of forensic data that identify potentially malicious activity on a network or system,2 Threats Vulnerabilities Mitigations

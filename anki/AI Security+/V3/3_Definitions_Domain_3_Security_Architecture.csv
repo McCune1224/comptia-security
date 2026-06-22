@@ -1,0 +1,82 @@
+Front,Back,Tags
+What is IaaS (Infrastructure as a Service)?,"Cloud provider manages physical infrastructure, networking, and virtualization; customer manages OS, middleware, runtime, apps, and data.",3::Definitions
+What is PaaS (Platform as a Service)?,"Provider manages runtime, middleware, OS, and infrastructure; customer only manages apps and data.",3::Definitions
+What is SaaS (Software as a Service)?,"Provider manages everything including apps, runtime, middleware, OS, and infrastructure; customer just uses the application.",3::Definitions
+How does the Shared Responsibility Model differ per service model?,"IaaS: customer secures most layers (OS, apps, data). PaaS: customer secures apps and data. SaaS: provider secures nearly everything, customer secures data and users.",3::Definitions
+What is a public cloud?,"Third-party provider delivers computing resources to multiple tenants over the internet; elastic, pay-as-you-go.",3::Definitions
+What is a private cloud?,"Dedicated cloud infrastructure for a single organization; more control, higher cost, often on-premises or hosted.",3::Definitions
+What is a hybrid cloud?,"Combination of public and private cloud with orchestration between them; allows workload portability and bursting.",3::Definitions
+What is a community cloud?,"Shared infrastructure for organizations with common compliance, security, or policy concerns (e.g., government, healthcare).",3::Definitions
+What is a multi-cloud strategy?,"Using services from multiple cloud providers simultaneously to avoid vendor lock-in, improve resilience, and optimize costs.",3::Definitions
+What is on-premises vs cloud vs hybrid deployment?,"On-premises: full control, full responsibility. Cloud: provider manages infrastructure. Hybrid: mix of both with interconnectivity.",3::Definitions
+What is a CASB (Cloud Access Security Broker)?,"On-premises or cloud-based security gateway between users and cloud providers; provides visibility, data security, compliance, and threat protection.",3::Definitions
+What is CSPM (Cloud Security Posture Management)?,"Automated tools that continuously detect misconfigurations, compliance violations, and insecure deployments across cloud environments.",3::Definitions
+What are key cloud security considerations?,"Shared physical servers (multi-tenancy risk), data remnants from decommissioned storage, weak IAM, and publicly exposed storage buckets.",3::Definitions
+What is a secure baseline / golden image?,"Pre-hardened, standardized VM or container image approved for deployment; ensures consistent security configuration across all instances.",3::Definitions
+What is a Type 1 hypervisor?,"Bare-metal hypervisor runs directly on host hardware (VMware ESXi, Microsoft Hyper-V, KVM); more efficient, better performance.",3::Definitions
+What is a Type 2 hypervisor?,"Hosted hypervisor runs on top of an existing operating system (VirtualBox, VMware Workstation); adds overhead of host OS.",3::Definitions
+What is a VM Escape attack?,"Exploit that breaks out of a virtualized guest OS to access the hypervisor or other VMs; critical virtualization vulnerability.",3::Definitions
+What is resource reuse in virtualization?,"Data remnants from one VM (memory, storage, cache) may be exposed to another VM if the hypervisor does not properly isolate or sanitize resources.",3::Definitions
+What is a VM snapshot?,"Point-in-time save of a VM's state, disk, and memory; useful for backup and recovery but can expose sensitive data if left accessible.",3::Definitions
+What is the difference between containers and VMs?,"Containers share the host OS kernel (lightweight, fast startup, less isolation). VMs include a full guest OS (heavier, stronger isolation boundary).",3::Definitions
+What are the core Docker components?,"Images (read-only templates), Containers (running instances of images), Registry (repository for storing and distributing images, e.g., Docker Hub).",3::Definitions
+What is Kubernetes (K8s)?,"Container orchestration platform for automated deployment, scaling, and management; key components: Pods, RBAC, Network Policies, Secrets management.",3::Definitions
+What is a service mesh (e.g. Istio)?,"Dedicated infrastructure layer for service-to-service communication; uses sidecar proxies to provide mTLS, traffic management, observability, and policy enforcement.",3::Definitions
+What is Infrastructure as Code (IaC)?,"Managing and provisioning infrastructure through machine-readable definition files instead of manual processes; tools: Terraform, AWS CloudFormation, Pulumi.",3::Definitions
+What is idempotence in IaC?,"Applying the same configuration repeatedly produces the same result; no unintended changes or side effects on re-apply.",3::Definitions
+What is Policy as Code?,"Automated policy enforcement and compliance checking integrated into CI/CD pipelines; tools: Open Policy Agent (OPA), HashiCorp Sentinel.",3::Definitions
+What is drift detection?,"Identifying when deployed infrastructure has changed from the defined configuration state; IaC tools alert on or remediate unauthorized config changes.",3::Definitions
+What is serverless computing / FaaS?,"Event-driven execution model where cloud provider manages all servers; functions run only when triggered; no infrastructure management for the customer (AWS Lambda, Azure Functions).",3::Definitions
+What is a microservices architecture?,"Application decomposed into small, independent services that communicate via APIs; each service can be deployed, scaled, and updated independently.",3::Definitions
+What is edge computing?,"Processing data near the source (local devices, on-site servers) rather than in a centralized cloud; reduces latency, bandwidth usage, and enables offline operation.",3::Definitions
+What is CIEM (Cloud Infrastructure Entitlement Management)?,"Tools that manage and monitor cloud permissions at scale; detect excessive privileges, unused permissions, and enforce least-privilege policies.",3::Definitions
+What is ZTNA (Zero Trust Network Access)?,"Zero Trust replacement for VPN; grants per-application access based on user identity, device posture, and context — never network location alone.",3::Definitions
+What is the core principle of Zero Trust?,"Never trust, always verify. Eliminate implicit trust based on network location. Verify every access request as if originating from an untrusted network.",3::Definitions
+How does Zero Trust differ from traditional perimeter security?,"Traditional perimeter (castle-and-moat) trusts everything inside the network. Zero Trust assumes breach and verifies every request regardless of origin.",3::Definitions
+What is microsegmentation?,"Dividing the network into granular, isolated zones and applying separate security policies to each workload, application, or service.",3::Definitions
+What is an identity-aware proxy?,"A proxy that grants or denies access based on user identity, device posture, and context rather than just source IP or network location.",3::Definitions
+What is continuous verification in Zero Trust?,"Re-evaluating trust throughout a session — not just at login. Checks device health, user behavior, and risk posture in real time.",3::Definitions
+What is ICS/SCADA?,"Industrial Control Systems / Supervisory Control and Data Acquisition used for industrial process control; key components: PLC (Programmable Logic Controller), RTU (Remote Terminal Unit), HMI (Human-Machine Interface).",3::Definitions
+What is IoT (Internet of Things)?,"Network of constrained devices with sensors and actuators; often characterized by weak security, limited patching capability, large attack surface, and diverse protocols.",3::Definitions
+What is an embedded system?,"Dedicated-function computer system with firmware; typically hard to patch, resource-constrained, and often deployed with default or hardcoded credentials.",3::Definitions
+What is an RTOS (Real-Time Operating System)?,"Operating system designed for deterministic real-time processing; guarantees task completion within strict time constraints; used in industrial and safety-critical systems.",3::Definitions
+What is an air gap?,"Physical isolation of a system from any unsecured networks (including the internet); the highest level of security for sensitive systems.",3::Definitions
+What are OTA (Over-the-Air) updates?,"Wireless remote patching and firmware updates for embedded, IoT, and connected devices; critical for addressing security vulnerabilities without physical access.",3::Definitions
+What is SDN (Software-Defined Networking)?,"Network architecture that separates the control plane from the data plane, enabling centralized, programmable network management and policy enforcement.",3::Definitions
+What are the three planes in SDN?,"Control plane (makes routing decisions), Data plane (forwards traffic based on control plane decisions), Application plane (network services, policies, and orchestration).",3::Definitions
+What is SD-WAN?,"Software-defined approach to managing wide-area networks; provides centralized policy, traffic shaping, and cost-effective alternative to MPLS.",3::Definitions
+What is High Availability (HA)?,"Design approach that eliminates single points of failure and minimizes downtime through redundancy, failover, and automatic recovery.",3::Definitions
+What is Five 9s (99.999%) availability?,"Approximately 5.26 minutes of downtime per year; a common high-availability target for critical systems.",3::Definitions
+What is load balancing?,"Distributing incoming network traffic across multiple servers to improve performance, reliability, and availability; includes health checks and automatic failover.",3::Definitions
+What is clustering?,"Grouping multiple servers to work as a single system; provides high availability, load distribution, and failover capabilities.",3::Definitions
+What are RAID levels and their characteristics?,"RAID 0: striping, no redundancy. RAID 1: mirroring. RAID 5: striping with single parity. RAID 6: striping with double parity. RAID 10: mirroring + striping (nested).",3::Definitions
+What is geographic dispersion?,"Deploying resources across multiple physical locations (data centers, regions) to survive regional outages and disasters.",3::Definitions
+What is platform diversity?,"Using different operating systems, vendors, or technologies to prevent a single vulnerability or exploit from compromising the entire environment.",3::Definitions
+What are UPS types and their characteristics?,"Offline/Standby: basic surge protection and battery. Line-interactive: voltage regulation (buck/boost). Online/Double-conversion: continuous battery power, zero transfer time, highest protection.",3::Definitions
+What is an SLA (Service Level Agreement)?,"Contract defining expected uptime, performance, and remedies for failures; commonly includes availability percentage targets (e.g., 99.9%, 99.99%).",3::Definitions
+What are redundancy models (N+1 / 2N / 2N+1)?,"N+1: one spare component. 2N: fully duplicated infrastructure. 2N+1: full duplicate plus one spare; each model provides increasing fault tolerance.",3::Definitions
+What is RTO (Recovery Time Objective)?,"Maximum acceptable downtime after a disaster; the target time within which systems must be restored.",3::Definitions
+What is RPO (Recovery Point Objective)?,"Maximum acceptable data loss measured in time (e.g., 15 minutes, 1 hour); determines required backup and replication frequency.",3::Definitions
+What is MTTR (Mean Time to Repair)?,"Average time required to diagnose and repair a failed component and restore normal operation; measures maintainability.",3::Definitions
+What is MTBF (Mean Time Between Failures)?,"Average operating time between failures for a system or component; measures reliability and is used for maintenance planning.",3::Definitions
+What is MTD (Maximum Tolerable Downtime)?,"Total amount of time a business can survive without a system; RTO must be less than or equal to MTD.",3::Definitions
+What are hot warm and cold site types?,"Hot: fully operational with live data, immediate failover. Warm: partially configured with some hardware, ready in hours to days. Cold: empty facility with no equipment, ready in days to weeks.",3::Definitions
+What are the main backup types?,"Full: complete copy of all data. Incremental: only data changed since last backup (any type). Differential: only data changed since last full backup. Snapshot: point-in-time state of a system.",3::Definitions
+What is synchronous vs asynchronous replication?,"Synchronous: write confirmed at both primary and replica before acknowledgment; zero data loss, higher latency. Asynchronous: write confirmed locally first; near-real-time, less overhead, potential data loss on failure.",3::Definitions
+What are the three data states?,"Data at rest (stored on disk or storage), data in transit (moving across a network), data in use (loaded in memory and being processed by a CPU).",3::Definitions
+What are common data classification levels?,"Public (no restrictions), Internal (limited internal access), Confidential (sensitive, restricted access), Critical/Restricted (highest sensitivity, strict need-to-know).",3::Definitions
+What are US government data classification levels?,"Unclassified, SBU (Sensitive But Unclassified), Confidential, Secret, Top Secret (highest level, national security risk).",3::Definitions
+What is PII vs PHI?,"PII: Personally Identifiable Information (name, SSN, email, address). PHI: Protected Health Information (medical records, health insurance, HIPAA-regulated).",3::Definitions
+What is data masking?,"Replacing sensitive data with realistic but fictional placeholder values; irreversible by design; used for test and development environments.",3::Definitions
+What is tokenization?,"Replacing sensitive data with a non-sensitive token; original data stored securely in a separate vault; reversible; commonly used for PCI DSS compliance.",3::Definitions
+What are the three types of DLP?,"Network DLP (monitors traffic for sensitive data), Endpoint DLP (monitors device activity and storage), Cloud/Storage DLP (monitors cloud repositories and data stores).",3::Definitions
+What is data sovereignty?,"Data is subject to the laws and regulations of the country where it is physically stored; impacts where providers can locate data centers.",3::Definitions
+What is data retention?,"Policies defining how long data is kept before secure disposal; driven by legal, regulatory, and business requirements.",3::Definitions
+What is PKI (Public Key Infrastructure)?,"Framework for creating, distributing, managing, and revoking digital certificates; components include CA, RA, certificates, CRL, and OCSP.",3::Definitions
+What is a CA vs an RA?,"CA (Certificate Authority): issues, manages, and revokes digital certificates. RA (Registration Authority): verifies the identity of certificate requestors before the CA issues a certificate.",3::Definitions
+What is a CRL vs OCSP?,"CRL (Certificate Revocation List): periodically published list of revoked certificate serial numbers; can have latency. OCSP (Online Certificate Status Protocol): real-time check of a single certificate's revocation status.",3::Definitions
+What are key management options?,"HSM (hardened hardware for key operations), TPM (firmware-based secure key storage on device), Software-based (keys in files, memory, or database — least secure).",3::Definitions
+What is a KMS (Key Management System)?,"Centralized platform for the full lifecycle of cryptographic keys: generation, rotation, deletion, auditing; cloud-native examples: AWS KMS, Azure Key Vault, GCP Cloud KMS.",3::Definitions
+What is a secure enclave?,"Hardware-isolated execution environment that protects sensitive code and data from the main OS and other processes; examples: Intel SGX, ARM TrustZone, Apple Secure Enclave.",3::Definitions
+What is an HSM (Hardware Security Module)?,"Hardened, tamper-resistant hardware device dedicated to cryptographic key operations; typically FIPS 140-2 or FIPS 140-3 Level 2/3 certified.",3::Definitions
+What is a CWPP (Cloud Workload Protection Platform)?,"Security tools that protect workloads (VMs, containers, serverless functions) across multi-cloud environments; includes vulnerability management, runtime protection, and compliance monitoring.",3::Definitions

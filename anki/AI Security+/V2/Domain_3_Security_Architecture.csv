@@ -1,0 +1,56 @@
+Front,Back,Tags
+What is Cloud Computing?,"Delivery of computing services over the internet, including servers, storage, databases, networking, software, analytics, and intelligence",3 Security Architecture
+What is an On-Premise Solution?,Computing infrastructure physically located on-site at a business,3 Security Architecture
+What is a Hybrid Solution?,"Combined on-premise, private cloud, and public cloud services allowing workload flexibility",3 Security Architecture
+What are key cloud security considerations?,"Shared physical server vulnerabilities, inadequate virtual environment security, user access management, lack of up-to-date security measures, single point of failure, weak authentication/encryption, unclear policies, and data remnants",3 Security Architecture
+What is Data Remnants?,Residual data left behind after deletion or erasure processes in a cloud environment,3 Security Architecture
+What is Virtualization?,"Emulates servers, each with its own OS within a virtual machine",3 Security Architecture
+What is Containerization?,Lightweight alternative encapsulating apps with their OS environment,3 Security Architecture
+What are the two types of Hypervisors?,Type 1 (Bare Metal) runs directly on hardware; Type 2 (Hosted) operates within a standard OS,3 Security Architecture
+What is VM Escape?,Attackers break out of isolated VMs to access the hypervisor,3 Security Architecture
+What is Resource Reuse?,Improper clearing of resources may expose sensitive data,3 Security Architecture
+What is Serverless Computing?,Cloud provider manages server allocation; developers focus solely on writing code,3 Security Architecture
+What is FaaS (Functions as a Service)?,Developers write and deploy individual functions triggered by events,3 Security Architecture
+What are Microservices?,"Architectural style breaking down large applications into small, independent services",3 Security Architecture
+What is Physical Separation (Air Gapping)?,Isolates a system by physically disconnecting it from all networks,3 Security Architecture
+What is Logical Separation?,"Establishes boundaries within a network using firewalls, VLANs, and network devices",3 Security Architecture
+What is SDN (Software-Defined Network)?,"Revolutionary approach enabling dynamic, programmatically efficient network configuration",3 Security Architecture
+What are the three planes of SDN?,"Data Plane (Forwarding), Control Plane, and Application Plane",3 Security Architecture
+What is Infrastructure as Code (IaC)?,Automation of managing and provisioning technology stack through code instead of manual configuration,3 Security Architecture
+What is Idempotence?,Operation consistently produces the same results; crucial for consistency across environments,3 Security Architecture
+What is Centralized Architecture?,All computing functions managed from a single location or authority,3 Security Architecture
+What is Decentralized Architecture?,Computing functions distributed across multiple systems or locations,3 Security Architecture
+What is IoT (Internet of Things)?,"Network of physical devices with sensors, software, and connectivity enabling data exchange",3 Security Architecture
+What is an ICS (Industrial Control System)?,Systems used to monitor and control industrial processes,3 Security Architecture
+What is SCADA?,Supervisory Control and Data Acquisition - a subset of ICS for geographically dispersed industrial processes,3 Security Architecture
+What is an Embedded System?,Dedicated computer system designed for specific functions within larger devices,3 Security Architecture
+What is an RTOS (Real-Time Operating System)?,Designed for real-time applications that process data without significant delays,3 Security Architecture
+What is an OTA (Over-the-Air) Update?,Patches delivered and installed remotely on embedded systems,3 Security Architecture
+What is High Availability?,Aims to keep services continuously available by minimizing downtime,3 Security Architecture
+What does 'Five Nines' mean?,"99.999% uptime, allowing only about 5 minutes of downtime per year",3 Security Architecture
+What is Load Balancing?,Distributes workloads across multiple resources to optimize use and prevent overloading,3 Security Architecture
+What is Clustering?,"Uses multiple computers, storage devices, and network connections as a single system",3 Security Architecture
+What is RAID 0?,Data striping across multiple disks for improved performance; NO redundancy,3 Security Architecture
+What is RAID 1?,Mirroring data identically on two storage devices; one device can fail without data loss,3 Security Architecture
+What is RAID 5?,Striping with parity across at least three devices; can continue if one device fails,3 Security Architecture
+What is RAID 6?,Similar to RAID 5 but includes double parity; can withstand failure of two devices,3 Security Architecture
+What is RAID 10?,Combines RAID 1 (mirroring) and RAID 0 (striping); requires minimum of four devices,3 Security Architecture
+What is a UPS (Uninterruptible Power Supply)?,Provides emergency power during power source failures; typically 15-60 minutes,3 Security Architecture
+What is a Line Conditioner?,Stabilizes voltage supply and filters out fluctuations,3 Security Architecture
+What is a Power Distribution Center (PDC)?,Central hub for power reception and distribution including circuit protection and monitoring,3 Security Architecture
+What is RPO (Recovery Point Objective)?,Maximum acceptable data loss measured in time,3 Security Architecture
+What is RTO (Recovery Time Objective)?,Maximum acceptable time before severe impact; target time for restoring a business process,3 Security Architecture
+What is MTTR (Mean Time to Repair)?,Average time to repair a failed component or system,3 Security Architecture
+What is MTBF (Mean Time Between Failures)?,Average time between system or component failures,3 Security Architecture
+What is a Snapshot?,Point-in-time copy capturing a consistent state of data,3 Security Architecture
+What is Replication?,Real-time or near-real-time data copying to maintain data continuity,3 Security Architecture
+What is Journaling?,Maintaining a detailed record of data changes over time for granular recovery,3 Security Architecture
+What is a Business Continuity Plan (BCP)?,Plans and processes for responding to disruptive events; covers both technical and non-technical disruptions,3 Security Architecture
+What is a Disaster Recovery Plan (DRP)?,Focuses on IT systems and data recovery after disasters; subset of BCP,3 Security Architecture
+What is a Hot Site?,"Up and running continuously, enabling quick switchover; most expensive",3 Security Architecture
+What is a Warm Site?,Not fully equipped but fundamentals in place; can be up in a few days,3 Security Architecture
+What is a Cold Site?,Fewer facilities; may be just an empty building ready in 1-2 months; most cost-effective,3 Security Architecture
+What is Geographic Dispersion?,Spreading resources across different locations for higher redundancy,3 Security Architecture
+What is a Tabletop Exercise?,Scenario-based discussion among key stakeholders to assess preparedness,3 Security Architecture
+What is a Failover Test?,Controlled experiment for transitioning from primary to backup components,3 Security Architecture
+What is Parallel Processing?,Replicates data and system processes onto a secondary system running concurrently,3 Security Architecture

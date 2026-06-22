@@ -1,0 +1,133 @@
+Front,Back,Tags
+What port does FTP use?,Port 21 (TCP),4 Security Operations
+What port does SSH/SCP/SFTP use?,Port 22 (TCP),4 Security Operations
+What port does Telnet use?,Port 23 (TCP),4 Security Operations
+What port does SMTP use?,Port 25 (TCP),4 Security Operations
+What port does DNS use?,Port 53 (TCP/UDP),4 Security Operations
+What port does TFTP use?,Port 69 (UDP),4 Security Operations
+What port does HTTP use?,Port 80 (TCP),4 Security Operations
+What port does Kerberos use?,Port 88 (UDP),4 Security Operations
+What port does POP3 use?,Port 110 (TCP),4 Security Operations
+What port does IMAP use?,Port 143 (TCP),4 Security Operations
+What port does SNMP use?,Port 161 (UDP),4 Security Operations
+What port does SNMP Trap use?,Port 162 (UDP),4 Security Operations
+What port does LDAP use?,Port 389 (TCP),4 Security Operations
+What port does HTTPS use?,Port 443 (TCP),4 Security Operations
+What port does SMB use?,Port 445 (TCP),4 Security Operations
+What port does SMTPS use?,Ports 465 and 587 (TCP),4 Security Operations
+What port does Syslog use?,Port 514 (UDP),4 Security Operations
+What port does LDAPS use?,Port 636 (TCP),4 Security Operations
+What port does IMAPS use?,Port 993 (TCP),4 Security Operations
+What port does POP3S use?,Port 995 (TCP),4 Security Operations
+What port does Microsoft SQL use?,Port 1433 (TCP),4 Security Operations
+What port does RADIUS use?,Ports 1645/1646 (TCP) and 1812/1813 (UDP),4 Security Operations
+What port does RDP use?,Port 3389 (TCP),4 Security Operations
+What port does Syslog TLS use?,Port 6514 (TCP),4 Security Operations
+What is a Packet Filtering Firewall?,Inspects packet headers for IP addresses and port numbers; operates at Layer 4,4 Security Operations
+What is a Stateful Firewall?,"Tracks connections and requests, allowing return traffic for outbound requests; operates at Layer 4",4 Security Operations
+What is a Proxy Firewall?,Makes connections on behalf of endpoints; can operate at Layer 5 (session) or Layer 7 (application),4 Security Operations
+What is a Next Generation Firewall (NGFW)?,"Application-aware, conducts deep packet inspection, uses signature-based intrusion protection",4 Security Operations
+What is a UTM (Unified Threat Management) Firewall?,Combines multiple security functions in a single device; uses separate individual engines,4 Security Operations
+What is a Web Application Firewall (WAF)?,Focuses on inspecting HTTP traffic; prevents XSS and SQL injection,4 Security Operations
+What is an ACL (Access Control List)?,Consists of permit and deny statements controlling traffic flow into and out of networks,4 Security Operations
+What is the rule order for ACLs?,"Top-down; first matching rule is executed, so place most specific rules at the top",4 Security Operations
+What is the key difference between IDS and IPS?,"IDS logs and alerts; IPS logs, alerts, AND takes action",4 Security Operations
+What is a NIDS?,Network-based Intrusion Detection System - monitors traffic coming in and out of a network,4 Security Operations
+What is a HIDS?,Host-based Intrusion Detection System - looks at suspicious network traffic going to or from a single endpoint,4 Security Operations
+What is a WIDS?,Wireless Intrusion Detection System - detects attempts to cause DoS on wireless networks,4 Security Operations
+What is Signature-based Detection?,Analyzes traffic based on defined signatures; can only recognize previously identified attacks,4 Security Operations
+What is Anomaly-based Detection?,Analyzes traffic and compares it to a normal baseline to determine if a threat is occurring,4 Security Operations
+What is a Load Balancer?,Distributes network/application traffic across multiple servers to enhance efficiency and prevent overload,4 Security Operations
+What is a Proxy Server?,Acts as intermediary between clients and servers; provides content caching and filtering,4 Security Operations
+What is a Jump Server/Jump Box?,Secure gateway for system administrators to access devices in different security zones,4 Security Operations
+What is an ADC (Application Delivery Controller)?,Offers advanced load balancing functionality,4 Security Operations
+What is Port Security?,Network switch feature that restricts device access to specific ports based on MAC addresses,4 Security Operations
+What is a CAM Table?,Content Addressable Memory table storing MAC addresses associated with switch ports,4 Security Operations
+What is MAC Flooding?,Attack that overwhelms the CAM table causing the switch to fail open,4 Security Operations
+What is 802.1x Authentication?,Provides port-based authentication for wired and wireless networks,4 Security Operations
+What are the three roles in 802.1x?,"Supplicant, Authenticator, and Authentication Server",4 Security Operations
+What is a Sticky MAC?,Feature that automatically learns and associates MAC addresses with interfaces for easier port security setup,4 Security Operations
+What is the difference between RADIUS and TACACS+?,"RADIUS is cross-platform; TACACS+ is Cisco proprietary and independently handles authentication, authorization, and accounting",4 Security Operations
+What is EAP-TLS?,Uses public key infrastructure with digital certificates on both client and server; provides mutual authentication,4 Security Operations
+What is EAP-TTLS?,Requires digital certificate on server only; client uses password for authentication,4 Security Operations
+What is PEAP?,Supports mutual authentication using server certificates and Active Directory databases,4 Security Operations
+What is EAP-FAST?,Uses protected access credential instead of certificate to establish mutual authentication,4 Security Operations
+What is a Site-to-Site VPN?,Connects two sites cost-effectively using a VPN tunnel over the public internet,4 Security Operations
+What is a Client-to-Site VPN?,Connects a single host to the central office; ideal for remote users,4 Security Operations
+What is a Clientless VPN?,Uses a web browser to establish secure remote-access VPN; utilizes HTTPS and TLS,4 Security Operations
+What is a Full Tunnel VPN?,Encrypts and routes ALL network requests through the VPN,4 Security Operations
+What is a Split Tunnel VPN?,"Divides traffic, routing some through VPN and some directly to the internet",4 Security Operations
+What is TLS?,Transport Layer Security - provides encryption for data in transit using TCP,4 Security Operations
+What is DTLS?,Datagram Transport Layer Security - UDP-based alternative to TLS for faster connections,4 Security Operations
+What is IPSec?,"Internet Protocol Security - secure protocol suite for IP communication providing confidentiality, integrity, authentication, and anti-replay",4 Security Operations
+What are the two IPSec tunneling modes?,Transport Mode (uses original IP header) and Tunneling Mode (adds new header),4 Security Operations
+What is AH (Authentication Header)?,Offers connectionless data integrity and data origin authentication,4 Security Operations
+What is ESP (Encapsulating Security Payload)?,"Provides confidentiality, integrity, encryption, and replay protection",4 Security Operations
+What is MTU?,Maximum Transmission Unit - default 1500 bytes; may cause fragmentation in VPNs,4 Security Operations
+What is SD-WAN?,Software-Defined Wide Area Network - virtualized approach to managing and optimizing WAN connections,4 Security Operations
+What is SASE?,Secure Access Service Edge - combines network security and WAN capabilities in a single cloud-based service,4 Security Operations
+What does SASE include?,"Firewalls, VPNs, zero-trust network access, and Cloud Access Security Brokers (CASBs)",4 Security Operations
+What is a Screened Subnet?,Buffer zone between internal and external networks hosting public-facing services (modern term for DMZ),4 Security Operations
+What is Fail-Open?,"Allows traffic to pass during a failure, maintaining connectivity but reducing security",4 Security Operations
+What is Fail-Closed?,"Blocks all traffic during a failure, prioritizing security over connectivity",4 Security Operations
+What is an Inline Device?,Device in the path of network traffic,4 Security Operations
+What is a Tap/Monitor?,Captures data without disruption to traffic flow,4 Security Operations
+What is Hardening?,"Process of enhancing system, application, or network security by applying patches, configuring access controls, and disabling unnecessary services",4 Security Operations
+What is Least Functionality?,Configuring systems with only essential applications and services,4 Security Operations
+What is Application Allowlisting?,Only applications on the approved list are allowed to run (more secure),4 Security Operations
+What is Application Blocklisting?,Applications on the blocklist are prevented from running (less secure),4 Security Operations
+What is a Trusted Operating System (TOS)?,OS designed to provide a secure computing environment enforcing stringent security policies with mandatory access controls,4 Security Operations
+What is EAL (Evaluation Assurance Level)?,"Predefined security standard from Common Criteria; EAL 1 is lowest, EAL 7 is highest",4 Security Operations
+What is SELinux?,Security-Enhanced Linux - enforces Mandatory Access Control (MAC) on processes and resources,4 Security Operations
+What are the three SELinux modes?,"Disabled, Enforcing, and Permissive",4 Security Operations
+What is a Security Baseline?,Standard set of security configurations applied to systems to ensure minimum level of security,4 Security Operations
+What is Baselining?,"Process of measuring changes in the network, hardware, or software environment to establish what is 'normal'",4 Security Operations
+What is a Hotfix?,Software patch that solves a security issue and should be applied immediately after testing,4 Security Operations
+What is a Service Pack?,Includes all hotfixes and updates since the release of the operating system,4 Security Operations
+What are Patch Rings?,Implementing patches one group at a time to minimize risk,4 Security Operations
+What is Full-Disk Encryption (FDE)?,Encrypts the entire hard drive to protect all data stored on it,4 Security Operations
+What is Partition Encryption?,Encrypts specific partitions while leaving others unencrypted,4 Security Operations
+What is Volume Encryption?,Encrypts a set space on the storage medium creating an encrypted container,4 Security Operations
+What is File-level Encryption?,Encrypts individual files instead of entire partitions or disks,4 Security Operations
+What is Database Encryption?,Secures the entire database across multiple storage devices,4 Security Operations
+What is Record Encryption?,Encrypts individual records or rows within a database,4 Security Operations
+What is WPA3?,Latest Wi-Fi security protocol providing stronger encryption and authentication,4 Security Operations
+What is WPA2?,Wi-Fi Protected Access 2 - uses AES encryption,4 Security Operations
+What is WEP?,Wired Equivalent Privacy - oldest and least secure wireless encryption,4 Security Operations
+What is Input Validation?,Ensuring data entered into an application meets specific criteria before processing,4 Security Operations
+What is Code Signing?,Digitally signing code to verify its authenticity and integrity,4 Security Operations
+What is Sandboxing?,Running applications in an isolated environment to prevent them from affecting the system,4 Security Operations
+What is Static Code Analysis?,Analyzing source code without executing it to find vulnerabilities,4 Security Operations
+What is Dynamic Code Analysis?,Testing and evaluating code during runtime,4 Security Operations
+What is NAC (Network Access Control)?,Restricts network access based on policy enforcement on devices and users,4 Security Operations
+What is Web Filtering?,Restricting access to certain websites based on content categorization,4 Security Operations
+What is DNS Filtering?,Blocking access to malicious domains at the DNS level,4 Security Operations
+What is Reputation-based Filtering?,Blocking content based on the reputation of the source,4 Security Operations
+What is SPF (Sender Policy Framework)?,Email authentication method that specifies which mail servers can send email for a domain,4 Security Operations
+What is DKIM (DomainKeys Identified Mail)?,Adds digital signature to emails to verify they haven't been tampered with,4 Security Operations
+What is DMARC?,"Domain-based Message Authentication, Reporting, and Conformance - uses SPF and DKIM to verify email authenticity",4 Security Operations
+What is EDR (Endpoint Detection and Response)?,"Continuous monitoring of endpoint devices to identify, investigate, and prevent cyber threats",4 Security Operations
+What is UBA (User Behavior Analytics)?,Uses machine learning and data analytics to identify potentially harmful activities and anomalies,4 Security Operations
+What are Bollards?,"Short, sturdy vertical posts controlling or preventing vehicle access",4 Security Operations
+What is an Access Control Vestibule?,Double-door system electronically controlled to allow only one door open at a time,4 Security Operations
+What is Tailgating?,Unauthorized person closely follows someone with legitimate access through an access control point,4 Security Operations
+What is Piggybacking?,Two people working together where one with legitimate access intentionally allows another unauthorized person to enter,4 Security Operations
+What is a Mantrap?,Another term for access control vestibule designed to prevent tailgating,4 Security Operations
+What is RFID?,Radio-Frequency Identification - used in access badges for contactless authentication,4 Security Operations
+What is NFC?,Near Field Communication - used for contactless authentication in access badges,4 Security Operations
+What is FAR (False Acceptance Rate)?,Occurs when system erroneously authenticates an unauthorized user,4 Security Operations
+What is FRR (False Rejection Rate)?,Denies access to an authorized user,4 Security Operations
+What is CER (Crossover Error Rate)?,Balance between FAR and FRR for optimal authentication effectiveness,4 Security Operations
+What are the four categories of sensors?,"Infrared, Pressure, Microwave, and Ultrasonic",4 Security Operations
+What is a PTZ System?,Pan-Tilt-Zoom - can move the camera or its angle to better detect issues,4 Security Operations
+What are the three mobile device deployment models?,"BYOD (Bring Your Own Device), COPE (Corporate-Owned, Personally Enabled), and CYOD (Choose Your Own Device)",4 Security Operations
+What is MDM (Mobile Device Management)?,Manages and tracks mobile devices; centralizes management and enforces corporate policies,4 Security Operations
+What is Sanitization?,Thorough process to make data inaccessible and irretrievable from storage medium,4 Security Operations
+What is Degaussing?,Uses strong magnetic field to disrupt magnetic domains on storage devices; renders data unreadable,4 Security Operations
+What is Cryptographic Erase?,Destroys encryption keys rendering data unreadable; quick and efficient sanitization method,4 Security Operations
+What is Data Retention?,Strategically deciding what data to keep and for how long based on regulatory requirements and business needs,4 Security Operations
+What is Change Management?,Structured approach to transitioning from a current state to a desired future state,4 Security Operations
+What is a CAB (Change Advisory Board)?,Body of representatives evaluating proposed changes before approval,4 Security Operations
+What is a Backout Plan?,Pre-determined strategy to revert systems to their original state if issues occur during change implementation,4 Security Operations
+What is a Maintenance Window?,Designated timeframe for implementing changes to reduce disruptions,4 Security Operations
+What is Version Control?,"Tracks and manages changes in documents, software, and files",4 Security Operations

@@ -1,0 +1,147 @@
+Front,Back,Tags
+What is a Threat Actor?,"Anything that can cause harm, loss, or compromise to IT systems. Can be individuals, groups, or nation-states.",2::Definitions
+What is data exfiltration as a threat actor motivation?,"The unauthorized copying or transfer of sensitive data from a target system, often for competitive advantage or intelligence.",2::Definitions
+What is blackmail as a threat actor motivation?,Threatening to reveal sensitive information about a victim unless demands (usually financial) are met.,2::Definitions
+What is espionage as a threat actor motivation?,"Stealing secrets, intellectual property, or classified information for political, military, or economic advantage.",2::Definitions
+What is service disruption as a threat actor motivation?,"Intentional disruption of services (e.g., DDoS, ransomware) to cause downtime, reputational damage, or financial loss.",2::Definitions
+What is financial gain as a threat actor motivation?,"The most common motivation — stealing money, cryptocurrency, credit cards, or demanding ransoms.",2::Definitions
+What is philosophical/political motivation for threat actors?,"Driven by ideology, political beliefs, or social causes — often seen with hacktivists.",2::Definitions
+What is an ethical (ethical hacker) threat actor?,"Security researchers who find and disclose vulnerabilities responsibly, often through bug bounty programs.",2::Definitions
+What is revenge as a threat actor motivation?,Disgruntled employees or former insiders seeking to harm an organization out of perceived grievances.,2::Definitions
+What is chaos as a threat actor motivation?,"Motivation driven by desire to cause disruption, anarchy, or simply 'for the lulz' — no clear financial or political goal.",2::Definitions
+What is cyberwarfare as a threat actor motivation?,"State-sponsored attacks targeting critical infrastructure, military systems, or government networks as acts of war.",2::Definitions
+What is an unskilled attacker (script kiddie)?,"An inexperienced attacker who uses pre-made tools, scripts, and exploits downloaded from the internet with little understanding of how they work.",2::Definitions
+What is a hacktivist?,"A threat actor driven by political or social ideology who defaces websites, leaks data, or disrupts services to promote a cause.",2::Definitions
+What is organized crime in cybersecurity?,"Criminal groups motivated by financial gain who deploy ransomware, steal credit cards, commit fraud, and operate botnets.",2::Definitions
+What is a nation-state threat actor?,"Government-sponsored, highly sophisticated attackers with deep resources who conduct espionage, sabotage, and APT operations.",2::Definitions
+What is an insider threat?,"A current or former employee, contractor, or partner who poses a security risk — can be malicious (intentional) or negligent (accidental).",2::Definitions
+What is shadow IT?,"The use of unauthorized hardware, software, or cloud services within an organization without IT department approval or knowledge.",2::Definitions
+What is an APT (Advanced Persistent Threat)?,"A highly sophisticated, stealthy, and long-term targeted attack typically conducted by nation-state groups, focused on intelligence gathering over extended periods.",2::Definitions
+What is a false flag attack?,An attack designed to appear as if it originated from a different group or nation-state to mislead attribution and provoke retaliation.,2::Definitions
+What are TTPs?,"Tactics, Techniques, and Procedures — the specific methods, tools, and patterns used by a threat actor, used for profiling and attribution.",2::Definitions
+What is the difference between internal and external threat actors?,"Internal actors are inside the organization (employees, contractors); external actors operate from outside the network perimeter.",2::Definitions
+What is social engineering?,Psychological manipulation of people to divulge confidential information or perform actions that compromise security.,2::Definitions
+What is phishing?,"Mass, generic emails sent to many recipients, impersonating legitimate entities to steal credentials or deliver malware.",2::Definitions
+What is spear phishing?,"A highly targeted phishing attack directed at a specific individual, using personalized information to increase credibility.",2::Definitions
+What is whaling?,"A spear phishing attack targeting senior executives (CEO, CFO) — the 'big fish' — often involving legal or financial pretexts.",2::Definitions
+What is vishing?,"Voice phishing — social engineering conducted over phone calls, often spoofing caller ID to impersonate IT support or banks.",2::Definitions
+What is smishing?,SMS text message phishing — sending fraudulent text messages with malicious links or requests for personal information.,2::Definitions
+What is Business Email Compromise (BEC)?,A sophisticated scam targeting companies that wire large sums. Includes CEO fraud (impersonating executive) and account compromise.,2::Definitions
+What is pretexting?,"Creating a fabricated scenario or false identity (e.g., impersonating a vendor, auditor, or IT tech) to extract information from a target.",2::Definitions
+What is a watering hole attack?,"Compromising a website frequently visited by a target group to infect visitors with malware, relying on trust in the legitimate site.",2::Definitions
+What is baiting?,"Offering something enticing (e.g., infected USB drive labeled 'Confidential' left in parking lot) to trick victims into installing malware.",2::Definitions
+What is typosquatting (URL hijacking)?,"Registering domain names that are common misspellings of legitimate domains to capture traffic, steal credentials, or serve malware.",2::Definitions
+What is brand impersonation?,"Creating fake websites, emails, or social media profiles that mimic a trusted brand to deceive victims into providing credentials or payment.",2::Definitions
+What is in-person impersonation?,"Physically pretending to be someone else (e.g., a repair technician, delivery person, or new employee) to gain unauthorized access.",2::Definitions
+What is authority as a social engineering trigger?,"Attackers impersonate figures of authority (CEO, IT director, law enforcement) to compel compliance through perceived power.",2::Definitions
+What is urgency as a social engineering trigger?,Creating a false sense of time pressure ('Your account will be locked in 1 hour!') to bypass rational decision-making.,2::Definitions
+What is social proof as a social engineering trigger?,"Exploiting the tendency to follow others' behavior — e.g., 'All your colleagues have already updated their password.'",2::Definitions
+What is scarcity as a social engineering trigger?,"Creating artificial scarcity ('Only 5 items left!') to pressure victims into quick, unthinking actions.",2::Definitions
+What is likability as a social engineering trigger?,"Building rapport, friendliness, and common ground to lower a victim's defenses and encourage compliance.",2::Definitions
+What is fear as a social engineering trigger?,"Threatening negative consequences (arrest, account closure, legal action) to frighten victims into acting without verification.",2::Definitions
+What is tailgating vs piggybacking?,"Tailgating: following an authorized person through a secured door without their knowledge. Piggybacking: entering with their consent after a polite request (e.g., 'I forgot my badge').",2::Definitions
+What is a threat vector?,"The specific pathway, method, or mechanism used by a threat actor to gain unauthorized access or deliver a payload.",2::Definitions
+What is an attack surface?,"The total sum of all potential entry points (network ports, APIs, users, devices, applications) that an attacker could exploit.",2::Definitions
+What is a message-based threat vector?,"Attack delivered via email, SMS, or messaging apps — includes phishing, malicious attachments, and links.",2::Definitions
+What is an image-based threat vector?,"Malware or exploits hidden within image files (e.g., steganography, pixel-level manipulation) used to deliver payloads or exfiltrate data.",2::Definitions
+What is a file-based threat vector?,"Malicious executable files, PDFs, Office macros, or scripts delivered as attachments or downloads.",2::Definitions
+What is a voice call threat vector?,"Social engineering conducted via phone calls (vishing), VoIP manipulation, or AI voice cloning for impersonation.",2::Definitions
+What is a removable device threat vector?,"USB drives, SD cards, or external HDDs used to deliver malware (baiting) or exfiltrate data (insider threat).",2::Definitions
+What is an unsecured network threat vector?,"Using public Wi-Fi, open networks, or rogue hotspots (Evil Twin) to intercept traffic or deliver attacks.",2::Definitions
+What is a supply chain threat vector?,"Attacks targeting third-party vendors, software dependencies, hardware components, or service providers to compromise the primary target.",2::Definitions
+What is an AI-augmented threat vector?,"Attack methods enhanced by artificial intelligence — AI-generated phishing, deepfake impersonation, automated vulnerability scanning, and adaptive malware.",2::Definitions
+What are deepfakes in cybersecurity?,"AI-generated synthetic media (audio, video, images) that realistically impersonate individuals, used for fraud, disinformation, and social engineering.",2::Definitions
+What is adversarial ML (machine learning)?,"Techniques that manipulate ML model inputs with subtle perturbations to cause misclassification, evasion, or incorrect outputs.",2::Definitions
+What is prompt injection?,"An attack that manipulates a large language model (LLM) by crafting inputs that override system instructions, causing unintended outputs or data leakage.",2::Definitions
+What is model poisoning?,"Corrupting a machine learning model during training by injecting malicious data, causing the model to behave incorrectly on specific inputs (backdoor).",2::Definitions
+What is AI-generated phishing?,Phishing emails created by generative AI that are grammatically perfect, highly personalized, and lack traditional telltale signs (bad grammar, odd formatting).,2::Definitions
+What is LLM data leakage?,"Sensitive data exposed when users input confidential information into LLM prompts, or when the model inadvertently reproduces training data containing secrets.",2::Definitions
+What is training data poisoning?,"Inserting malicious samples into an ML model's training dataset to create backdoors, trigger misclassification, or bias model outputs.",2::Definitions
+What is AI-enhanced social engineering?,Using AI tools (voice cloning, real-time deepfake video, personalized chatbot interactions) to dramatically increase the credibility of social engineering attacks.,2::Definitions
+What is a virus?,"Malware that attaches itself to legitimate programs or files and requires human action (e.g., opening a file) to replicate and spread.",2::Definitions
+What is a worm?,"Self-replicating malware that spreads automatically across networks without human interaction, exploiting vulnerabilities to propagate.",2::Definitions
+What is a Trojan horse / RAT?,Malware disguised as legitimate software. A RAT (Remote Access Trojan) gives attackers remote control over the infected system.,2::Definitions
+What is ransomware?,Malware that encrypts files and demands payment for decryption. Modern variants often add double extortion — threatening to leak stolen data.,2::Definitions
+What is a rootkit?,Malware designed to hide deep within the operating system (kernel level) to conceal its presence and maintain persistent privileged access.,2::Definitions
+What is spyware?,"Malware that covertly gathers information about a user or organization — browsing habits, credentials, keystrokes — and sends it to attackers.",2::Definitions
+What is a keylogger?,"A type of spyware that records every keystroke made on a compromised system, capturing passwords, credit card numbers, and confidential communications.",2::Definitions
+What is a botnet?,"A network of compromised computers (bots/zombies) controlled remotely by an attacker (bot herder) used for DDoS, spam, credential stuffing, and mining.",2::Definitions
+What is a logic bomb?,"Malicious code embedded in legitimate software that triggers when specific conditions are met (e.g., a date, user deletion, a certain file missing).",2::Definitions
+What is bloatware?,"Unwanted pre-installed software on devices (often from manufacturers) that consumes resources, introduces vulnerabilities, and expands the attack surface.",2::Definitions
+What is fileless malware?,"Memory-resident malware that doesn't write files to disk, using legitimate system tools (PowerShell, WMI, .NET) to execute payloads — harder to detect.",2::Definitions
+What is polymorphic malware?,"Malware that changes its code signature (using mutation engines) every time it replicates, evading signature-based antivirus detection.",2::Definitions
+What is SQL Injection (SQLi)?,An attack that inserts malicious SQL statements into input fields to manipulate a backend database — read/modify/delete data or bypass authentication.,2::Definitions
+What is NoSQL Injection?,"An attack targeting NoSQL databases (MongoDB, CouchDB) by injecting malicious queries through input fields, exploiting less strict query validation.",2::Definitions
+What is Cross-Site Scripting (XSS)?,"Injecting malicious scripts into web pages viewed by other users. Types: Stored (persistent on server), Reflected (in URL/response), DOM-based (client-side).",2::Definitions
+What is CSRF (Cross-Site Request Forgery)?,"An attack that tricks a user's browser into executing unwanted actions on a trusted site where they're authenticated, e.g., changing email or transferring funds.",2::Definitions
+What is SSRF (Server-Side Request Forgery)?,"An attacker makes the server send requests to internal resources (e.g., cloud metadata endpoints, internal databases) that should not be accessible externally.",2::Definitions
+What is a buffer overflow?,"Writing more data to a buffer than it can hold, causing adjacent memory to be overwritten — can lead to arbitrary code execution or system crash.",2::Definitions
+What is an integer overflow?,"An arithmetic operation that produces a value exceeding the maximum integer size, causing unexpected wraparound behavior that can be exploited.",2::Definitions
+What is a race condition / TOC/TOU?,A vulnerability where the timing between checking a condition (Time-of-Check) and using a resource (Time-of-Use) is exploited to manipulate state.,2::Definitions
+What is directory/path traversal?,"An attack that manipates file paths (e.g., ../../../etc/passwd) to access restricted files outside the web root directory.",2::Definitions
+What is command injection?,"Injecting arbitrary OS commands into input fields that are executed by the server, allowing full system compromise.",2::Definitions
+What is LDAP injection?,An attack that injects malicious LDAP filter strings into input fields to query or manipulate an LDAP directory service.,2::Definitions
+What is XML injection / XXE?,"Injecting malicious XML content or exploiting XML External Entity processing to read local files, perform SSRF, or cause DoS.",2::Definitions
+What is memory injection (DLL injection / process hollowing)?,Techniques that inject malicious code into the memory space of legitimate processes. Process hollowing replaces a process's code with malware.,2::Definitions
+What is code injection?,"Injecting executable code (e.g., PHP, Python, JavaScript) into an application that then runs it, leading to unauthorized actions and system compromise.",2::Definitions
+What is a brute force attack?,Attempting every possible combination of characters until the correct password is found — computationally expensive but guaranteed to find it eventually.,2::Definitions
+What is a dictionary attack?,"Using a precompiled wordlist of common passwords, dictionary words, and leaked credentials to guess passwords — faster than brute force.",2::Definitions
+What is password spraying?,"A low-and-slow attack that tries a few common passwords (e.g., Spring2024!, Password123) against many usernames to avoid account lockout.",2::Definitions
+What is credential stuffing?,"Using username/password pairs leaked from one breach to attempt login on other services, exploiting password reuse across accounts.",2::Definitions
+What is a hybrid attack?,"A dictionary attack supplemented with mutations — adding numbers, special chars, and common substitutions (e.g., Passw0rd! instead of Password).",2::Definitions
+What is pass the hash?,An attack where the attacker captures a password hash (not the plaintext password) and uses it to authenticate to other systems without ever cracking it.,2::Definitions
+What is the difference between DoS and DDoS?,"DoS (Denial of Service): single source overwhelms a target. DDoS (Distributed DoS): multiple compromised systems (botnet) coordinate the attack, harder to block.",2::Definitions
+What is a volumetric DDoS attack?,"Overwhelms bandwidth with massive traffic floods (e.g., UDP floods, ICMP floods) to saturate the network link.",2::Definitions
+What is a protocol DDoS attack?,"Exhausts server resources by exploiting protocol handshakes (e.g., SYN flood, Ping of Death, Smurf attack).",2::Definitions
+What is an application layer (Layer 7) DDoS attack?,"Targets specific application functions (e.g., HTTP GET/POST floods, Slowloris) with seemingly legitimate traffic that's hard to distinguish from real users.",2::Definitions
+What is an on-path attack (MITM)?,The attacker secretly intercepts and potentially alters communication between two parties who believe they're directly communicating with each other.,2::Definitions
+What is a replay attack?,"Capturing valid network traffic (e.g., an authentication token) and retransmitting it later to impersonate the original sender.",2::Definitions
+What is a downgrade attack?,"Forcing a system to use a weaker, less secure protocol version (e.g., TLS 1.0 instead of TLS 1.3) to exploit known vulnerabilities.",2::Definitions
+What is DNS poisoning / cache poisoning?,"Corrupting a DNS resolver's cache with forged DNS records, redirecting users to malicious sites when they type legitimate domain names.",2::Definitions
+What is DNS tunneling?,"Encoding non-DNS traffic (data exfiltration, C2 communication) within DNS queries and responses, exploiting the fact that DNS is often allowed through firewalls.",2::Definitions
+What is ARP spoofing?,"Sending fake ARP messages to associate the attacker's MAC address with a legitimate IP address on a local network, enabling MITM attacks.",2::Definitions
+What is MAC flooding?,"Overflowing a switch's CAM (Content Addressable Memory) table with fake MAC addresses, forcing the switch into hub mode and allowing traffic sniffing.",2::Definitions
+What is DHCP starvation?,"Flooding a network with fake DHCP requests to exhaust the DHCP server's IP address pool, causing legitimate devices to fail and enabling a rogue DHCP server.",2::Definitions
+What is an Evil Twin attack?,"A rogue wireless access point that mimics a legitimate SSID to trick users into connecting, allowing the attacker to intercept traffic and steal credentials.",2::Definitions
+What is a deauthentication attack?,"Sending forged deauth frames to disconnect devices from a WiFi network, forcing reconnection — often used as a precursor to an Evil Twin or KRACK attack.",2::Definitions
+What is jamming (RF jamming)?,"Deliberate transmission of radio frequency interference to disrupt wireless communications, causing denial of service on WiFi, Bluetooth, or cellular networks.",2::Definitions
+What is RFID cloning / NFC relay?,"Copying the data from an RFID tag or NFC card (e.g., access badge) to a cloned device, allowing unauthorized physical access.",2::Definitions
+What is BlueBorne?,"A set of Bluetooth vulnerabilities allowing remote code execution, data theft, and MITM without requiring pairing with the target device.",2::Definitions
+What is BlueSmack?,"A Bluetooth DoS attack that sends oversized packets (echo request) to a Bluetooth device, causing it to crash or become unresponsive.",2::Definitions
+What is WEP cracking?,Exploiting weaknesses in the WEP encryption protocol — IV reuse allows keys to be cracked within minutes using tools like Aircrack-ng.,2::Definitions
+What is KRACK?,"Key Reinstallation Attack against WPA2 — forces nonce reuse by manipulating the 4-way handshake, allowing decryption of WiFi traffic.",2::Definitions
+What is an SBOM (Software Bill of Materials)?,"A formal, machine-readable inventory of all software components, dependencies, and versions used in a product — critical for supply chain risk management.",2::Definitions
+What is the SLSA framework?,Supply-chain Levels for Software Artifacts — a security framework that defines integrity levels (SLSA 1-4) for build and deployment pipelines to prevent tampering.,2::Definitions
+What is dependency confusion?,An attack where a package manager installs a malicious package from a public repository with the same name as an internal/private package (package name squatting).,2::Definitions
+What is a supply chain compromise?,"An attack that infiltrates a target by compromising a trusted third-party vendor, software dependency, or hardware component — e.g., SolarWinds breach.",2::Definitions
+What is a malicious hardware implant?,"Physical tampering with hardware during manufacturing or transit — e.g., adding a small chip to a motherboard for backdoor access.",2::Definitions
+What is a zero-day vulnerability?,"A flaw unknown to the vendor with no available patch — the most dangerous type of vulnerability, often exploited before discovery.",2::Definitions
+What is a security misconfiguration?,"Improperly configured security settings — default credentials, open cloud storage buckets, unnecessary open ports, verbose error messages.",2::Definitions
+What is a firmware vulnerability?,"A flaw in firmware (BIOS/UEFI, router, IoT firmware) that is difficult to patch and can persist across OS reinstallations.",2::Definitions
+What is VM escape?,An exploit that breaks out of a virtual machine's isolation to access the host hypervisor or other VMs on the same hardware.,2::Definitions
+What is resource reuse?,"Data remnants left in memory, storage, or cache that are not properly cleared before being reassigned — can leak sensitive data to new tenants/users.",2::Definitions
+What is sideloading?,"Installing applications from unauthorized sources (third-party app stores, direct APK/IPA files) bypassing official security checks and app review.",2::Definitions
+What is jailbreaking (iOS) / rooting (Android)?,Removing operating system restrictions to gain superuser access — bypasses security controls and voids warranty but allows unauthorized app installation.,2::Definitions
+What is EOL / EOSL?,"End of Life / End of Service Life — products no longer receive security patches or vendor support, becoming vulnerable targets.",2::Definitions
+What is an embedded system vulnerability?,"Security flaws in embedded systems (IoT devices, medical devices, industrial controllers) that are hard to patch and often have poor security defaults.",2::Definitions
+What is a legacy platform risk?,"Running outdated operating systems (Windows 7, Server 2008) or software that no longer receives patches — creates an easily exploitable attack surface.",2::Definitions
+What is weak encryption implementation?,"Using outdated algorithms (DES, MD5, SHA-1), short key lengths, improper IV handling, or flawed implementations that make encryption ineffective.",2::Definitions
+What is system hardening?,The process of reducing attack surface by removing unnecessary services, closing unused ports, applying secure configurations, and enforcing least privilege.,2::Definitions
+What is patching and patch rings?,"Applying vendor security updates in staged rollout rings — first to test/dev, then small production groups, finally broad deployment to minimize regression risk.",2::Definitions
+What is network segmentation / microsegmentation?,Dividing a network into isolated segments with firewalls between them. Microsegmentation applies this at the individual workload level using software-defined policies.,2::Definitions
+What is the principle of least privilege?,"Granting users, processes, and systems only the minimum permissions needed to perform their function — reduces blast radius of any compromise.",2::Definitions
+What is application allowlisting vs blocklisting?,Allowlisting: only approved applications can run (default deny). Blocklisting: known-bad applications are blocked (default allow). Allowlisting is more secure.,2::Definitions
+What is encryption for data at rest vs in transit vs in use?,"At rest: encrypting stored data (AES-256). In transit: encrypting network traffic (TLS). In use: protecting data in memory (e.g., confidential computing, secure enclaves).",2::Definitions
+What is isolation in security?,"Separating processes, networks, or data to contain breaches — e.g., containers, VMs, air-gapped networks, sandboxed applications.",2::Definitions
+What is configuration enforcement / baselines?,"Establishing secure standard configurations (e.g., CIS Benchmarks) and using automated tools (Ansible, Group Policy) to enforce them across all systems.",2::Definitions
+What is File Integrity Monitoring (FIM)?,"Monitoring critical files and system state for unauthorized changes — tools like Tripwire, OSSEC alert on hash mismatches or attribute modifications.",2::Definitions
+What is a Web Application Firewall (WAF)?,"A security filter that monitors and blocks HTTP traffic to web applications, detecting SQLi, XSS, and other application-layer attacks based on rule sets.",2::Definitions
+What is a host firewall / HIPS?,Host-based firewall controls inbound/outbound traffic on endpoints. HIPS (Host-based Intrusion Prevention System) also monitors system calls and processes for malicious behavior.,2::Definitions
+What is sandboxing?,"Running untrusted code or analyzing suspicious files in an isolated environment that prevents access to the host system, network, or sensitive data.",2::Definitions
+What is secure decommissioning?,"Properly destroying data when retiring hardware: degaussing magnetic media, shredding SSDs, cryptographic wiping, and physically destroying storage devices.",2::Definitions
+What are compensating controls?,"Alternative security measures implemented when a primary control cannot be applied (e.g., using microsegmentation when full network segmentation is impractical).",2::Definitions
+What is unusual outbound traffic as an IOC?,"Large data transfers, connections to known-bad IPs, or unusual protocols (e.g., DNS tunneling) leaving the network — may indicate data exfiltration.",2::Definitions
+What is impossible travel as an IOC?,"A user logging in from geographically distant locations within an impossible time frame (e.g., login from US and Asia 5 minutes apart) — indicates credential compromise.",2::Definitions
+What are geolocation anomalies as IOCs?,"Logins from unexpected countries, cities, or IP ranges that don't match the user's known location or travel patterns.",2::Definitions
+What are privileged account anomalies as IOCs?,"Unusual behavior from admin accounts — logins at odd hours, unexpected privilege escalations, access to systems outside normal scope.",2::Definitions
+What is increased database read volume as an IOC?,Sudden spikes in database queries (SELECT * FROM users) or large data dumps compared to baseline — may indicate an attacker harvesting data.,2::Definitions

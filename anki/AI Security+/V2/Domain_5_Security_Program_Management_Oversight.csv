@@ -1,0 +1,151 @@
+Front,Back,Tags
+What are the five steps of the Risk Management Lifecycle?,"Risk Identification, Risk Analysis, Risk Treatment, Risk Monitoring, and Risk Reporting",5 Security Program Management Oversight
+What are the four risk treatment strategies?,"Avoidance, Reduction (Mitigation), Sharing (Transference), and Acceptance",5 Security Program Management Oversight
+What is Risk Transference?,"Shifts risk to another party (e.g., insurance, contract indemnity clauses)",5 Security Program Management Oversight
+What is Risk Acceptance?,Acknowledge and deal with risk if it occurs; no actions taken to mitigate,5 Security Program Management Oversight
+What is Risk Avoidance?,Change plans or strategies to eliminate a specific risk,5 Security Program Management Oversight
+What is Risk Mitigation?,Take steps to reduce likelihood or impact of risk,5 Security Program Management Oversight
+What is Residual Risk?,"Likelihood and impact of risk after mitigation, transference, or acceptance measures have been taken",5 Security Program Management Oversight
+What is Control Risk?,Assessment of how a security measure has lost effectiveness over time,5 Security Program Management Oversight
+What are the four types of Risk Assessment frequencies?,"Ad-Hoc, Recurring, One-Time, and Continuous",5 Security Program Management Oversight
+What is Qualitative Risk Analysis?,"Assesses risks based on potential impact and likelihood; categorizes as high, medium, or low",5 Security Program Management Oversight
+What is Quantitative Risk Analysis?,"Provides objective numerical evaluation of risks using SLE, EF, ARO, and ALE",5 Security Program Management Oversight
+What is SLE (Single Loss Expectancy)?,Monetary value expected to be lost in a single event; calculated as Asset Value x EF,5 Security Program Management Oversight
+What is EF (Exposure Factor)?,Proportion of asset lost in an event (0% to 100%),5 Security Program Management Oversight
+What is ARO (Annualized Rate of Occurrence)?,Estimated frequency of threat occurrence within a year,5 Security Program Management Oversight
+What is ALE (Annualized Loss Expectancy)?,Expected annual loss from a risk; calculated as SLE x ARO,5 Security Program Management Oversight
+What is a Risk Register?,"Records identified risks, descriptions, impacts, likelihoods, and mitigation actions",5 Security Program Management Oversight
+What is Risk Tolerance?,Maximum amount of risk an organization is willing to accept,5 Security Program Management Oversight
+What is Risk Appetite?,"Willingness to pursue or retain risk (Expansionary, Conservative, or Neutral)",5 Security Program Management Oversight
+What are KRIs (Key Risk Indicators)?,Predictive metrics signaling increasing risk exposure,5 Security Program Management Oversight
+What is a Risk Owner?,"Individual responsible for managing the risk, monitoring, and implementing mitigation actions",5 Security Program Management Oversight
+What is Governance?,"Overall management of IT infrastructure, policies, procedures, and operations",5 Security Program Management Oversight
+What is the GRC Triad?,"Governance, Risk, and Compliance",5 Security Program Management Oversight
+What is a Policy?,High-level guidelines indicating organizational commitments,5 Security Program Management Oversight
+What is a Standard?,"Specific, mandatory actions or rules adhering to policies",5 Security Program Management Oversight
+What is a Procedure?,Step-by-step instructions ensuring consistency and compliance,5 Security Program Management Oversight
+What is an AUP (Acceptable Use Policy)?,Document outlining do's and don'ts for users interacting with IT systems,5 Security Program Management Oversight
+What is an Information Security Policy?,Cornerstone of security outlining how an organization protects information assets,5 Security Program Management Oversight
+What is an Incident Response Policy?,"Addresses detection, reporting, assessment, response, and learning from security incidents",5 Security Program Management Oversight
+What is an SDLC Policy?,Guides software development stages from requirements to maintenance including secure coding practices,5 Security Program Management Oversight
+What is Compliance?,"Adherence to laws, regulations, standards, and policies",5 Security Program Management Oversight
+What is Due Diligence?,Identifying compliance risks through thorough review,5 Security Program Management Oversight
+What is Due Care?,Mitigating identified risks,5 Security Program Management Oversight
+What is Attestation?,Formal declaration that processes and controls are compliant,5 Security Program Management Oversight
+What is Internal Compliance Reporting?,Ensures adherence to internal policies and procedures,5 Security Program Management Oversight
+What is External Compliance Reporting?,Demonstrates compliance to external entities; often mandatory by law or contract,5 Security Program Management Oversight
+What are consequences of Non-compliance?,"Fines, sanctions, reputational damage, loss of license, and contractual impacts",5 Security Program Management Oversight
+What are the three data states?,"Data at Rest, Data in Transit (Motion), and Data in Use",5 Security Program Management Oversight
+What is Data Classification?,"Based on value to organization and sensitivity of information, determined by data owner",5 Security Program Management Oversight
+What are commercial business classification levels?,"Public, Sensitive, Private, Confidential, and Critical",5 Security Program Management Oversight
+What are government classification levels?,"Unclassified, Sensitive but Unclassified, Confidential, Secret, and Top Secret",5 Security Program Management Oversight
+What is PII (Personally Identifiable Information)?,"Information used to identify an individual (names, SSNs, addresses)",5 Security Program Management Oversight
+What is PHI (Protected Health Information)?,Information about health status linked to a specific individual; protected under HIPAA,5 Security Program Management Oversight
+What is Data Sovereignty?,Digital information subject to laws of the country where it's located,5 Security Program Management Oversight
+What is GDPR?,General Data Protection Regulation - protects EU citizens' data within EU and EEA borders,5 Security Program Management Oversight
+What is Encryption?,Transform plaintext into ciphertext using algorithms and keys,5 Security Program Management Oversight
+What is Hashing?,Converts data into fixed-size hash values; irreversible one-way function,5 Security Program Management Oversight
+What is Masking?,"Replace some or all data with placeholders (e.g., 'x'); irreversible de-identification",5 Security Program Management Oversight
+What is Tokenization?,Replace sensitive data with non-sensitive tokens; original data stored securely elsewhere,5 Security Program Management Oversight
+What is Obfuscation?,Make data unclear or unintelligible using various techniques,5 Security Program Management Oversight
+What is Segmentation?,Divide network into separate segments with unique security controls,5 Security Program Management Oversight
+What is Geofencing?,Virtual boundaries to restrict data access based on location,5 Security Program Management Oversight
+What is DLP (Data Loss Prevention)?,Strategy to prevent sensitive information from leaving an organization,5 Security Program Management Oversight
+What is Endpoint DLP?,Installed as software on workstations; monitors data in use on individual computers,5 Security Program Management Oversight
+What is Network DLP?,Placed at network perimeter; focuses on monitoring data entering and leaving the network,5 Security Program Management Oversight
+What is Storage DLP?,Installed on server in data center; inspects data at rest,5 Security Program Management Oversight
+What is Cloud DLP?,Offered as SaaS; protects data stored in cloud services,5 Security Program Management Oversight
+What is Symmetric Encryption?,Uses a single key for both encryption and decryption; faster but has key distribution challenges,5 Security Program Management Oversight
+What is Asymmetric Encryption?,"Uses two separate keys - public key for encryption, private key for decryption",5 Security Program Management Oversight
+What is a Hybrid Approach in encryption?,"Combines symmetric and asymmetric encryption; asymmetric to share secret key, symmetric for bulk data transfer",5 Security Program Management Oversight
+What is a Stream Cipher?,Encrypts data bit-by-bit or byte-by-byte in a continuous stream,5 Security Program Management Oversight
+What is a Block Cipher?,"Breaks input data into fixed-size blocks before encryption (usually 64, 128, or 256 bits)",5 Security Program Management Oversight
+What is DES?,Data Encryption Standard - uses 64-bit key (56 effective); widely used from 1970s to early 2000s,5 Security Program Management Oversight
+What is 3DES (Triple DES)?,Utilizes three 56-bit keys; provides 112-bit key strength but is slower,5 Security Program Management Oversight
+What is AES?,"Advanced Encryption Standard - supports 128, 192, or 256-bit keys; US government encryption standard",5 Security Program Management Oversight
+What is Blowfish?,Block cipher with key sizes from 32 to 448 bits,5 Security Program Management Oversight
+What is RC4?,Stream cipher with variable key sizes; used in SSL and WEP,5 Security Program Management Oversight
+What is Diffie-Hellman?,Used for key exchange and secure key distribution; vulnerable to man-in-the-middle attacks,5 Security Program Management Oversight
+What is RSA?,"Used for key exchange, encryption, and digital signatures; relies on factoring large prime numbers",5 Security Program Management Oversight
+What is ECC (Elliptic Curve Cryptography)?,Efficient and secure; commonly used in mobile devices; six times more efficient than RSA,5 Security Program Management Oversight
+What is ECDHE?,Elliptic Curve Diffie-Hellman Ephemeral - provides perfect forward secrecy,5 Security Program Management Oversight
+What is MD5?,Message Digest Algorithm 5 - creates 128-bit hash; not recommended for security-critical applications,5 Security Program Management Oversight
+What is SHA-1?,Secure Hash Algorithm 1 - produces 160-bit hash digest,5 Security Program Management Oversight
+What is SHA-256?,Part of SHA-2 family; offers 256-bit hash digests,5 Security Program Management Oversight
+What is SHA-3?,Uses 224 to 512-bit hash digests; more secure with 120 rounds of computations,5 Security Program Management Oversight
+What is HMAC?,Hash-based Message Authentication Code - checks message integrity and authenticity,5 Security Program Management Oversight
+What is a Digital Signature?,Hash digest of a message encrypted with sender's private key,5 Security Program Management Oversight
+What is a Pass the Hash Attack?,Technique allowing attacker to authenticate using underlying hash of password instead of plaintext,5 Security Program Management Oversight
+What is a Birthday Attack?,Occurs when two different messages result in same hash output (collision),5 Security Program Management Oversight
+What is Key Stretching?,"Technique to mitigate weaker keys by creating longer, more secure keys",5 Security Program Management Oversight
+What is Salting?,Adds random data to passwords before hashing to ensure distinct hash outputs,5 Security Program Management Oversight
+What is a Nonce?,Number Used Once - adds unique random numbers to prevent replay attacks,5 Security Program Management Oversight
+What is PKI (Public Key Infrastructure)?,Framework managing digital keys and certificates for secure data transfer,5 Security Program Management Oversight
+What is a Digital Certificate?,Electronically signed document binding a public key with a user's identity,5 Security Program Management Oversight
+What is X.509?,Commonly used standard for digital certificates within PKI,5 Security Program Management Oversight
+What is a Wildcard Certificate?,Allows multiple subdomains to use the same certificate,5 Security Program Management Oversight
+What is a SAN (Subject Alternate Name) Certificate?,Specifies additional domains and IP addresses supported by the certificate,5 Security Program Management Oversight
+What is a Self-Signed Certificate?,Signed by the same entity whose identity it certifies; lacks third-party trust,5 Security Program Management Oversight
+What is a Certificate Authority (CA)?,Trusted third party that issues digital certificates,5 Security Program Management Oversight
+What is a Registration Authority (RA)?,Requests identifying information and forwards certificate request to CA,5 Security Program Management Oversight
+What is a CSR (Certificate Signing Request)?,Block of encoded text with information about entity requesting certificate,5 Security Program Management Oversight
+What is a CRL (Certificate Revocation List)?,List of all digital certificates revoked by the certificate authority,5 Security Program Management Oversight
+What is OCSP?,Online Certificate Status Protocol - determines certificate revocation status using serial number,5 Security Program Management Oversight
+What is OCSP Stapling?,Certificate holder gets OCSP record from server at regular intervals and includes it in SSL/TLS handshake,5 Security Program Management Oversight
+What is Key Escrow?,"Storage of cryptographic keys in a secure, third-party location for retrieval",5 Security Program Management Oversight
+What is Blockchain?,Shared immutable ledger for transactions and asset tracking; decentralized and transparent,5 Security Program Management Oversight
+What is a Smart Contract?,Self-executing contract with code-defined terms that execute automatically when conditions are met,5 Security Program Management Oversight
+What is a TPM (Trusted Platform Module)?,Dedicated microcontroller for hardware-level security; used in BitLocker,5 Security Program Management Oversight
+What is an HSM (Hardware Security Module)?,Physical device for safeguarding and managing digital keys in tamper-proof environment,5 Security Program Management Oversight
+What is a Key Management System?,"Manages, stores, distributes, and retires cryptographic keys",5 Security Program Management Oversight
+What is a Secure Enclave?,Coprocessor integrated into main processor for secure data processing and storage,5 Security Program Management Oversight
+What is Steganography?,Conceals a message within another to hide its very existence,5 Security Program Management Oversight
+What is Data Masking (Data Obfuscation)?,Disguises original data to protect sensitive information while maintaining usability,5 Security Program Management Oversight
+What is a Downgrade Attack?,Forces systems to use weaker or older cryptographic standards,5 Security Program Management Oversight
+What is a Collision Attack?,Finds two different inputs producing the same hash output,5 Security Program Management Oversight
+What is Post-Quantum Cryptography?,New cryptographic algorithms resistant to attacks from future quantum computers,5 Security Program Management Oversight
+What is a Supply Chain Attack?,Attack targeting a weaker link in the supply chain to gain access to a primary target,5 Security Program Management Oversight
+What is Vendor Due Diligence?,Rigorous evaluation of vendor cybersecurity and supply chain practices,5 Security Program Management Oversight
+What is a Right-to-Audit Clause?,Contract provision allowing organizations to evaluate vendor's internal processes,5 Security Program Management Oversight
+What is an SLA (Service Level Agreement)?,Defines standard of service a client can expect including performance benchmarks,5 Security Program Management Oversight
+What is an MOU (Memorandum of Understanding)?,Less binding agreement expressing mutual intent without detailed specifics,5 Security Program Management Oversight
+What is an NDA (Non-Disclosure Agreement)?,Ensures confidentiality of sensitive information shared during negotiations,5 Security Program Management Oversight
+What is an MSA (Master Service Agreement)?,Covers general terms of engagement across multiple transactions,5 Security Program Management Oversight
+What is a Statement of Work (SOW)?,"Specifies project details, deliverables, timelines, and milestones",5 Security Program Management Oversight
+What is an Internal Audit?,Systematic evaluation conducted by organization's own team,5 Security Program Management Oversight
+What is an External Audit?,Performed by third-party entities to provide unbiased perspective,5 Security Program Management Oversight
+What is Penetration Testing?,Simulated cyber attack to identify exploitable vulnerabilities,5 Security Program Management Oversight
+What is Red Teaming?,Offensive penetration testing actively seeking and exploiting vulnerabilities,5 Security Program Management Oversight
+What is Blue Teaming?,Defensive penetration testing focused on detecting and responding to attacks,5 Security Program Management Oversight
+What is Purple Teaming?,Combines offensive and defensive testing; red and blue teams collaborate,5 Security Program Management Oversight
+What is Passive Reconnaissance?,"Gathering information without direct engagement (e.g., open-source intelligence)",5 Security Program Management Oversight
+What is Active Reconnaissance?,"Engaging with target system directly (e.g., scanning for open ports with Nmap)",5 Security Program Management Oversight
+What is Attestation?,Formal validation confirming accuracy and authenticity of specific information,5 Security Program Management Oversight
+What is IAM (Identity and Access Management)?,Ensures right individuals have right access to right resources for right reasons,5 Security Program Management Oversight
+What is Provisioning?,"Creating new user accounts, assigning permissions, and providing system access",5 Security Program Management Oversight
+What is Deprovisioning?,Removing access rights when no longer needed,5 Security Program Management Oversight
+What is Identity Proofing?,Process of verifying a user's identity before creating their account,5 Security Program Management Oversight
+What is SSO (Single Sign-On)?,Authentication process allowing users to access multiple applications with one set of credentials,5 Security Program Management Oversight
+What is LDAP?,Lightweight Directory Access Protocol - used to access and maintain distributed directory information,5 Security Program Management Oversight
+What is OAuth?,Open standard for token-based authentication and authorization,5 Security Program Management Oversight
+What is SAML?,Security Assertion Markup Language - standard for logging users into applications based on sessions,5 Security Program Management Oversight
+What is Federation?,Links electronic identities across multiple identity management systems,5 Security Program Management Oversight
+What is PAM (Privileged Access Management)?,Restricts and monitors privileged access within an IT environment,5 Security Program Management Oversight
+What is Just-In-Time (JIT) Permissions?,Grants administrative access only when needed for a specific task,5 Security Program Management Oversight
+What is Password Vaulting?,"Technique that stores and manages passwords securely, often in a digital vault",5 Security Program Management Oversight
+What is MAC (Mandatory Access Control)?,Uses security labels to authorize resource access; requires assigning labels to users and resources,5 Security Program Management Oversight
+What is DAC (Discretionary Access Control)?,Resource owners specify which users can access their resources,5 Security Program Management Oversight
+What is RBAC (Role-Based Access Control)?,Assigns users to roles and assigns permissions to roles,5 Security Program Management Oversight
+What is Rule-Based Access Control?,Uses security rules or access control lists; policies can be changed quickly,5 Security Program Management Oversight
+What is ABAC (Attribute-Based Access Control)?,"Considers various attributes (user, environment, resource) for access decisions",5 Security Program Management Oversight
+What is the Principle of Least Privilege?,Users are granted the minimum access required to perform their job functions,5 Security Program Management Oversight
+What is Separation of Duties?,Dividing tasks among multiple people to prevent fraud and errors,5 Security Program Management Oversight
+What is a Brute Force Attack?,Tries every possible character combination until correct password is found,5 Security Program Management Oversight
+What is a Dictionary Attack?,Uses a list of commonly used passwords to crack passwords,5 Security Program Management Oversight
+What is Password Spraying?,Tries a few common passwords against many usernames to avoid account lockouts,5 Security Program Management Oversight
+What is a Hybrid Attack?,Combines elements of brute force and dictionary attacks,5 Security Program Management Oversight
+What are the five characteristics of password policies?,"Password Length, Complexity, Reuse rules, Expiration, and Age",5 Security Program Management Oversight
+What is a Password Manager?,Tool for storing and managing passwords securely with features like generation and auto-fill,5 Security Program Management Oversight
+What is Passwordless Authentication?,"Authentication methods that don't require passwords (biometrics, hardware tokens, magic links)",5 Security Program Management Oversight
+What is a Passkey?,Alternative to traditional passwords utilizing public key cryptography and device authentication,5 Security Program Management Oversight
+What should an Anti-phishing Campaign include?,User security awareness training and remedial training for users who fell for simulated phishing,5 Security Program Management Oversight
