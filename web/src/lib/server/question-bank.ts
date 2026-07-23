@@ -1,0 +1,162 @@
+import type {
+	Domain,
+	ObjectiveId,
+	PublicQuestion,
+	QuestionFormat,
+	QuestionResponse,
+	SourceRef
+} from '$lib/types';
+import rawBank from './data/question-bank.json';
+
+export interface DefinitionBase {
+	id: string;
+	domain: Domain;
+	objective: ObjectiveId;
+	format: QuestionFormat;
+	prompt: string;
+	context?: string;
+	explanation: string;
+	sourceRefs: SourceRef[];
+}
+
+export interface ChoiceDefinition extends DefinitionBase {
+	kind: 'single-choice' | 'multiple-choice';
+	options: { id: string; text: string; rationale: string }[];
+	correctOptionIds: string[];
+	selectCount: 1 | 2 | 3;
+}
+
+export interface OrderingDefinition extends DefinitionBase {
+	kind: 'ordering';
+	items: { id: string; text: string }[];
+	correctOrder: string[];
+}
+
+export interface MatchingDefinition extends DefinitionBase {
+	kind: 'matching';
+	premises: { id: string; text: string }[];
+	targets: { id: string; text: string }[];
+	correctMatches: Record<string, string>;
+}
+
+export interface NumericDefinition extends DefinitionBase {
+	kind: 'numeric';
+	unit: string;
+	correctValue: number;
+	tolerance: number;
+}
+
+export interface EvidenceDefinition extends DefinitionBase {
+	kind: 'evidence';
+	artifact: { label: string; format: 'log' | 'acl' | 'command-output'; lines: { id: string; text: string }[] };
+	selectCount: number;
+	correctLineIds: string[];
+}
+
+export interface ConfigurationDefinition extends DefinitionBase {
+	kind: 'configuration';
+	fields: { id: string; label: string; options: { id: string; text: string }[] }[];
+	correctValues: Record<string, string>;
+}
+
+export type QuestionDefinition =
+	| ChoiceDefinition
+	| OrderingDefinition
+	| MatchingDefinition
+	| NumericDefinition
+	| EvidenceDefinition
+	| ConfigurationDefinition;
+
+export interface QuestionBank {
+	mcqs: ChoiceDefinition[];
+	pbqs: QuestionDefinition[];
+}
+
+const objectivesByDomain: Record<Domain, ObjectiveId[]> = {
+	1: ['1.1', '1.2', '1.3', '1.4'],
+	2: ['2.1', '2.2', '2.3', '2.4', '2.5'],
+	3: ['3.1', '3.2', '3.3', '3.4'],
+	4: ['4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8', '4.9'],
+	5: ['5.1', '5.2', '5.3', '5.4', '5.5', '5.6']
+};
+
+const mcqObjectiveTotals: Record<ObjectiveId, number> = {
+	'1.1': 6, '1.2': 6, '1.3': 6, '1.4': 6,
+	'2.1': 8, '2.2': 9, '2.3': 9, '2.4': 9, '2.5': 9,
+	'3.1': 9, '3.2': 9, '3.3': 9, '3.4': 9,
+	'4.1': 6, '4.2': 6, '4.3': 6, '4.4': 6, '4.5': 7, '4.6': 6, '4.7': 6, '4.8': 7, '4.9': 6,
+	'5.1': 7, '5.2': 7, '5.3': 7, '5.4': 7, '5.5': 6, '5.6': 6
+};
+
+function fail(id: string, message: string): never {
+	throw new Error(`Question bank validation failed for ${id}: ${message}`);
+}
+
+function hasUniqueIds(items: { id: string }[]): boolean {
+	return new Set(items.map((item) => item.id)).size === items.length;
+}
+
+export function validateQuestionBank(bank: QuestionBank): void {
+	if (bank.mcqs.length !== 200) fail('mcqs', `expected 200 items, found ${bank.mcqs.length}`);
+	if (bank.pbqs.length !== 30) fail('pbqs', `expected 30 items, found ${bank.pbqs.length}`);
+	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
+	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
+	if (new Set(all.map((question) => question.prompt.trim())).size !== all.length) fail('bank', 'prompts must be unique');
+	const mcqDomainTotals: Record<Domain, number> = { 1: 24, 2: 44, 3: 36, 4: 56, 5: 40 };
+	const multiTotals: Record<Domain, number> = { 1: 4, 2: 7, 3: 5, 4: 8, 5: 6 };
+	const scenarioTotals: Record<Domain, number> = { 1: 14, 2: 35, 3: 28, 4: 45, 5: 28 };
+	for (const domain of [1, 2, 3, 4, 5] as Domain[]) {
+		const mcqs = bank.mcqs.filter((question) => question.domain === domain);
+		if (mcqs.length !== mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected ${mcqDomainTotals[domain]} items`);
+		if (mcqs.filter((question) => question.kind === 'multiple-choice').length !== multiTotals[domain]) fail(`mcq-${domain}`, 'invalid multiple-choice count');
+		if (mcqs.filter((question) => question.format === 'scenario').length !== scenarioTotals[domain]) fail(`mcq-${domain}`, 'invalid scenario count');
+	}
+	for (const [objective, expected] of Object.entries(mcqObjectiveTotals) as [ObjectiveId, number][]) {
+		if (bank.mcqs.filter((question) => question.objective === objective).length !== expected) fail(objective, `expected ${expected} MCQs`);
+	}
+	for (const question of all) {
+		if (!objectivesByDomain[question.domain].includes(question.objective)) fail(question.id, 'objective does not belong to domain');
+		if (!question.id.match(question.format === 'pbq' ? /^pbq-[1-5]-\d{3}$/ : /^mcq-[1-5]-\d{3}$/)) fail(question.id, 'invalid ID or format');
+		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0) fail(question.id, 'missing authored content or source reference');
+		if (question.kind === 'single-choice' || question.kind === 'multiple-choice') {
+			if (question.options.length !== (question.kind === 'single-choice' ? 4 : question.options.length) || (question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))) fail(question.id, 'invalid option count');
+			if (!hasUniqueIds(question.options) || question.options.some((option) => !option.text.trim() || !option.rationale.trim())) fail(question.id, 'invalid options');
+			if (question.correctOptionIds.length !== question.selectCount || !question.correctOptionIds.every((id) => question.options.some((option) => option.id === id))) fail(question.id, 'invalid correct choice IDs');
+		}
+		if (question.kind === 'ordering' && (!hasUniqueIds(question.items) || question.correctOrder.length !== question.items.length || new Set(question.correctOrder).size !== question.items.length || !question.correctOrder.every((id) => question.items.some((item) => item.id === id)))) fail(question.id, 'invalid ordering response key');
+		if (question.kind === 'matching' && (!hasUniqueIds(question.premises) || !hasUniqueIds(question.targets) || question.premises.length !== question.targets.length || Object.keys(question.correctMatches).length !== question.premises.length || new Set(Object.values(question.correctMatches)).size !== question.targets.length)) fail(question.id, 'invalid matching response key');
+		if (question.kind === 'numeric' && (!Number.isFinite(question.correctValue) || question.tolerance < 0)) fail(question.id, 'invalid numeric response key');
+		if (question.kind === 'evidence' && (question.correctLineIds.length !== question.selectCount || new Set(question.correctLineIds).size !== question.selectCount || !question.correctLineIds.every((id) => question.artifact.lines.some((line) => line.id === id)))) fail(question.id, 'invalid evidence response key');
+		if (question.kind === 'configuration' && (Object.keys(question.correctValues).length !== question.fields.length || question.fields.some((field) => !question.correctValues[field.id] || !field.options.some((option) => option.id === question.correctValues[field.id])))) fail(question.id, 'invalid configuration response key');
+	}
+}
+
+export function loadQuestionBank(): QuestionBank {
+	const bank = rawBank as QuestionBank;
+	validateQuestionBank(bank);
+	return bank;
+}
+
+export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion {
+	const base = { id: definition.id, domain: definition.domain, objective: definition.objective, format: definition.format, prompt: definition.prompt, ...(definition.context ? { context: definition.context } : {}) };
+	switch (definition.kind) {
+		case 'single-choice':
+		case 'multiple-choice': return { ...base, kind: definition.kind, options: definition.options.map(({ id, text }) => ({ id, text })), selectCount: definition.selectCount };
+		case 'ordering': return { ...base, kind: 'ordering', items: definition.items };
+		case 'matching': return { ...base, kind: 'matching', premises: definition.premises, targets: definition.targets };
+		case 'numeric': return { ...base, kind: 'numeric', unit: definition.unit };
+		case 'evidence': return { ...base, kind: 'evidence', artifact: definition.artifact, selectCount: definition.selectCount };
+		case 'configuration': return { ...base, kind: 'configuration', fields: definition.fields };
+	}
+}
+
+export function correctResponse(definition: QuestionDefinition): QuestionResponse {
+	switch (definition.kind) {
+		case 'single-choice': case 'multiple-choice': return { kind: 'choice', optionIds: definition.correctOptionIds };
+		case 'ordering': return { kind: 'ordering', itemIds: definition.correctOrder };
+		case 'matching': return { kind: 'matching', matches: definition.correctMatches };
+		case 'numeric': return { kind: 'numeric', value: definition.correctValue };
+		case 'evidence': return { kind: 'evidence', lineIds: definition.correctLineIds };
+		case 'configuration': return { kind: 'configuration', values: definition.correctValues };
+	}
+}

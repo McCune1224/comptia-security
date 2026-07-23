@@ -1,22 +1,11 @@
 import { json } from '@sveltejs/kit';
-import { completeQuizSession, completePbqSession } from '$lib/server/quiz';
+import { apiError, readJson } from '$lib/server/api';
+import { quizService } from '$lib/server/quiz';
 
-export async function POST({ request }) {
-	const body = await request.json();
-	const { sessionId } = body;
-
-	if (!sessionId) {
-		return json({ error: 'Missing sessionId' }, { status: 400 });
-	}
-
+export async function POST({ request }: { request: Request }) {
 	try {
-		// Try both session types
-		const result = completeQuizSession(sessionId) || completePbqSession(sessionId);
-		if (!result) {
-			return json({ error: 'Session not found' }, { status: 404 });
-		}
-		return json(result);
-	} catch (e) {
-		return json({ error: (e as Error).message }, { status: 400 });
-	}
+		const body = await readJson(request);
+		if (typeof body.sessionId !== 'string') return json({ error: { code: 'INVALID_REQUEST', message: 'sessionId is required.' } }, { status: 400 });
+		return json(quizService.completeSession(body.sessionId));
+	} catch (error) { return apiError(error); }
 }

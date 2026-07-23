@@ -26,17 +26,3 @@ export function getScoreLabel(pct: number): string {
 	return 'Needs Work';
 }
 
-/** CompTIA-style scaled score: 100-900 range, 750 = pass (~83%) */
-export function toScaledScore(percentage: number): number {
-	// CompTIA doesn't publish the exact mapping, but 750 pass roughly = ~83% raw
-	// Linear map: 0% → 100, 100% → 900
-	return Math.round(100 + (percentage / 100) * 800);
-}
-
-/** ponytail: detect multi-select count from prompt text like "Select 3 answers" */
-export function detectSelectCount(prompt: string): number | undefined {
-	const m = prompt.match(/select\s+(\d+)/i);
-	if (m) return parseInt(m[1], 10);
-	// "Select all that apply" — fallback: count from correct answer pipe splits
-	return undefined;
-}

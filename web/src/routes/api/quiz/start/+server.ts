@@ -1,33 +1,16 @@
 import { json } from '@sveltejs/kit';
-import {
-	startDefinitionQuiz,
-	startScenarioQuiz,
-	startPbqSession,
-	startFullPracticeExam,
-} from '$lib/server/quiz';
+import type { Domain, SessionMode, SessionType } from '$lib/types';
+import { apiError, readJson } from '$lib/server/api';
+import { quizService } from '$lib/server/quiz';
 
-export async function POST({ request }) {
-	const body = await request.json();
-	const { type, count = 10, domain } = body;
-
+export async function POST({ request }: { request: Request }) {
 	try {
-		let result;
-		switch (type) {
-			case 'scenario':
-				result = startScenarioQuiz(count);
-				break;
-			case 'pbq':
-				result = startPbqSession(count);
-				break;
-			case 'full':
-				result = startFullPracticeExam();
-				break;
-			default:
-				result = startDefinitionQuiz(count, domain ? parseInt(domain, 10) : undefined);
-		}
-
-		return json(result);
-	} catch (e) {
-		return json({ error: (e as Error).message }, { status: 400 });
-	}
+		const body = await readJson(request);
+		const type = body.type;
+		const mode = body.mode;
+		const count = body.count;
+		const domain = body.domain;
+		if (typeof type !== 'string' || !['quiz', 'scenario', 'pbq', 'full'].includes(type) || (mode !== undefined && (typeof mode !== 'string' || !['practice', 'exam'].includes(mode))) || (count !== undefined && (typeof count !== 'number' || !Number.isInteger(count) || count < 1)) || (domain !== undefined && (typeof domain !== 'number' || !Number.isInteger(domain) || domain < 1 || domain > 5))) return json({ error: { code: 'INVALID_REQUEST', message: 'Invalid start-session fields.' } }, { status: 400 });
+		return json({ session: quizService.startSession({ type: type as SessionType, ...(mode ? { mode: mode as SessionMode } : {}), ...(count ? { count } : {}), ...(domain ? { domain: domain as Domain } : {}) }) });
+	} catch (error) { return apiError(error); }
 }

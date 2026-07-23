@@ -1,65 +1,166 @@
 export interface Card {
 	front: string;
 	back: string;
-	domain: number;
+	domain: Domain;
 	tags: string[];
 }
 
-export interface Question {
-	/** The question text (Card.front) */
-	prompt: string;
-	/** The correct answer (Card.back). For multi-select, pipe-separated: "Answer1|Answer2" */
-	correctAnswer: string;
-	/** Shuffled options for multiple-choice */
-	options: string[];
-	/** Domain number 1-5 */
-	domain: number;
-	/** Category within the domain */
-	category: string;
-	/** Question type: definition (Q&A), scenario (situational), pbq (ordering) */
-	type: 'definition' | 'scenario' | 'pbq';
-	/** If set, this is a multi-select question — user must pick exactly this many answers */
-	selectCount?: number;
+export type Domain = 1 | 2 | 3 | 4 | 5;
+
+export type ObjectiveId =
+	| '1.1'
+	| '1.2'
+	| '1.3'
+	| '1.4'
+	| '2.1'
+	| '2.2'
+	| '2.3'
+	| '2.4'
+	| '2.5'
+	| '3.1'
+	| '3.2'
+	| '3.3'
+	| '3.4'
+	| '4.1'
+	| '4.2'
+	| '4.3'
+	| '4.4'
+	| '4.5'
+	| '4.6'
+	| '4.7'
+	| '4.8'
+	| '4.9'
+	| '5.1'
+	| '5.2'
+	| '5.3'
+	| '5.4'
+	| '5.5'
+	| '5.6';
+
+export type SessionType = 'quiz' | 'scenario' | 'pbq' | 'full';
+export type SessionMode = 'practice' | 'exam';
+export type SessionStatus = 'active' | 'completed' | 'abandoned';
+export type QuestionFormat = 'standard' | 'scenario' | 'pbq';
+
+export interface SourceRef {
+	source: 'exam-objectives' | 'study-guide';
+	section: string;
 }
 
-export interface PbqQuestion {
-	prompt: string;
-	/** The steps in correct order */
-	correctSteps: string[];
-	/** Optional explanation per step */
-	explanations?: string[];
-	domain: number;
-	category: string;
-}
-
-export interface QuizSession {
+export interface PublicQuestionBase {
 	id: string;
-	startedAt: string;
-	type: 'quiz' | 'pbq' | 'scenario' | 'full';
-	domain: number | null;
-	questions: Question[];
-	answers: QuizAnswer[];
-	completed: boolean;
+	domain: Domain;
+	objective: ObjectiveId;
+	format: QuestionFormat;
+	prompt: string;
+	context?: string;
 }
 
-export interface QuizAnswer {
-	questionIndex: number;
-	/** Comma-joined selections for multi-select, single string for MC */
-	selected: string;
-	correct: boolean;
-	domain: number;
-	/** User flagged this question for review */
-	flagged?: boolean;
+export interface PublicChoiceQuestion extends PublicQuestionBase {
+	kind: 'single-choice' | 'multiple-choice';
+	options: { id: string; text: string }[];
+	selectCount: 1 | 2 | 3;
+}
+
+export interface PublicOrderingQuestion extends PublicQuestionBase {
+	kind: 'ordering';
+	items: { id: string; text: string }[];
+}
+
+export interface PublicMatchingQuestion extends PublicQuestionBase {
+	kind: 'matching';
+	premises: { id: string; text: string }[];
+	targets: { id: string; text: string }[];
+}
+
+export interface PublicNumericQuestion extends PublicQuestionBase {
+	kind: 'numeric';
+	unit: string;
+}
+
+export interface PublicEvidenceQuestion extends PublicQuestionBase {
+	kind: 'evidence';
+	artifact: {
+		label: string;
+		format: 'log' | 'acl' | 'command-output';
+		lines: { id: string; text: string }[];
+	};
+	selectCount: number;
+}
+
+export interface PublicConfigurationQuestion extends PublicQuestionBase {
+	kind: 'configuration';
+	fields: { id: string; label: string; options: { id: string; text: string }[] }[];
+}
+
+export type PublicQuestion =
+	| PublicChoiceQuestion
+	| PublicOrderingQuestion
+	| PublicMatchingQuestion
+	| PublicNumericQuestion
+	| PublicEvidenceQuestion
+	| PublicConfigurationQuestion;
+
+export type QuestionResponse =
+	| { kind: 'choice'; optionIds: string[] }
+	| { kind: 'ordering'; itemIds: string[] }
+	| { kind: 'matching'; matches: Record<string, string> }
+	| { kind: 'numeric'; value: number }
+	| { kind: 'evidence'; lineIds: string[] }
+	| { kind: 'configuration'; values: Record<string, string> };
+
+export interface QuestionFeedback {
+	earnedPoints: number;
+	possiblePoints: number;
+	fullyCorrect: boolean;
+	correctResponse: QuestionResponse;
+	explanation: string;
+	sourceRefs: SourceRef[];
+	optionRationales?: Record<string, string>;
+}
+
+export interface QuestionReview {
+	question: PublicQuestion;
+	response: QuestionResponse | null;
+	feedback: QuestionFeedback;
+}
+
+export interface ScoreBreakdown {
+	earnedPoints: number;
+	possiblePoints: number;
+	fullyCorrect: number;
+	totalQuestions: number;
+}
+
+export interface ActiveSessionSummary {
+	sessionId: string;
+	type: SessionType;
+	mode: SessionMode;
+	startedAt: string;
+	deadlineAt?: string;
+	answeredCount: number;
+	totalQuestions: number;
+	currentIndex: number;
+}
+
+export interface SessionView extends ActiveSessionSummary {
+	status: SessionStatus;
+	questions: PublicQuestion[];
+	responses: Record<number, QuestionResponse>;
+	flaggedQuestionIndexes: number[];
 }
 
 export interface QuizResult {
 	sessionId: string;
-	score: number;
-	total: number;
+	type: SessionType;
+	mode: SessionMode;
+	earnedPoints: number;
+	possiblePoints: number;
 	percentage: number;
-	/** Scaled 100-900 score (CompTIA scale, 750 = pass) */
-	scaledScore: number;
-	domainBreakdown: Record<number, { correct: number; total: number }>;
-	type: string;
+	fullyCorrect: number;
+	totalQuestions: number;
+	domainBreakdown: Record<Domain, ScoreBreakdown>;
+	objectiveBreakdown: Partial<Record<ObjectiveId, ScoreBreakdown>>;
 	completedAt: string;
+	review: QuestionReview[];
 }

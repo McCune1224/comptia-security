@@ -1,22 +1,7 @@
 import { json } from '@sveltejs/kit';
-import { getAllDomainProgress, getRecentSessions, getWeakTopics } from '$lib/server/db';
+import { quizRepository } from '$lib/server/db';
+import { quizService } from '$lib/server/quiz';
 
 export function GET() {
-	const progress = getAllDomainProgress();
-	const recentSessions = getRecentSessions(5);
-	const weakTopics = getWeakTopics();
-
-	return json({
-		progress,
-		recentSessions: recentSessions.map(s => ({
-			id: s.id,
-			date: s.completed_at,
-			type: s.type,
-			score: `${s.correct_answers}/${s.total_questions}`,
-			percentage: s.total_questions > 0
-				? Math.round((s.correct_answers / s.total_questions) * 100)
-				: 0,
-		})),
-		weakTopics,
-	});
+	return json({ progress: quizRepository.getAllDomainProgress(), recentSessions: quizRepository.getRecentSessions(5).map((session) => ({ id: session.id, date: session.completed_at, type: session.type, earnedPoints: session.points_earned, possiblePoints: session.points_possible, percentage: session.points_possible ? Math.round(session.points_earned / session.points_possible * 1000) / 10 : 0 })), weakTopics: quizRepository.getWeakTopics(), activeSession: quizService.getActiveSession() });
 }

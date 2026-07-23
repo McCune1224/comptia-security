@@ -1,18 +1,12 @@
 import { json } from '@sveltejs/kit';
-import { submitAnswer } from '$lib/server/quiz';
+import type { QuestionResponse } from '$lib/types';
+import { apiError, readJson } from '$lib/server/api';
+import { quizService } from '$lib/server/quiz';
 
-export async function POST({ request }) {
-	const body = await request.json();
-	const { sessionId, questionIndex, answer } = body;
-
-	if (!sessionId || questionIndex === undefined || !answer) {
-		return json({ error: 'Missing required fields: sessionId, questionIndex, answer' }, { status: 400 });
-	}
-
+export async function PUT({ request }: { request: Request }) {
 	try {
-		const result = submitAnswer(sessionId, questionIndex, answer);
-		return json(result);
-	} catch (e) {
-		return json({ error: (e as Error).message }, { status: 400 });
-	}
+		const body = await readJson(request);
+		if (typeof body.sessionId !== 'string' || !Number.isInteger(body.questionIndex) || !body.response || typeof body.response !== 'object') return json({ error: { code: 'INVALID_REQUEST', message: 'sessionId, questionIndex, and response are required.' } }, { status: 400 });
+		return json(quizService.saveResponse(body.sessionId, body.questionIndex as number, body.response as QuestionResponse));
+	} catch (error) { return apiError(error); }
 }

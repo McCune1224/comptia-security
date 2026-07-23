@@ -118,10 +118,10 @@ What are deepfakes in cybersecurity?,"AI-generated synthetic media (audio, video
 What is adversarial ML (machine learning)?,"Techniques that manipulate ML model inputs with subtle perturbations to cause misclassification, evasion, or incorrect outputs.",2::Definitions
 What is prompt injection?,"An attack that manipulates a large language model (LLM) by crafting inputs that override system instructions, causing unintended outputs or data leakage.",2::Definitions
 What is model poisoning?,"Corrupting a machine learning model during training by injecting malicious data, causing the model to behave incorrectly on specific inputs (backdoor).",2::Definitions
-What is AI-generated phishing?,Phishing emails created by generative AI that are grammatically perfect, highly personalized, and lack traditional telltale signs (bad grammar, odd formatting).,2::Definitions
+What is AI-generated phishing?,"Phishing emails created by generative AI that are grammatically perfect, highly personalized, and lack traditional telltale signs (bad grammar, odd formatting).",2::Definitions
 What is LLM data leakage?,"Sensitive data exposed when users input confidential information into LLM prompts, or when the model inadvertently reproduces training data containing secrets.",2::Definitions
 What is training data poisoning?,"Inserting malicious samples into an ML model's training dataset to create backdoors, trigger misclassification, or bias model outputs.",2::Definitions
-What is AI-enhanced social engineering?,Using AI tools (voice cloning, real-time deepfake video, personalized chatbot interactions) to dramatically increase the credibility of social engineering attacks.,2::Definitions
+What is AI-enhanced social engineering?,"Using AI tools (voice cloning, real-time deepfake video, personalized chatbot interactions) to dramatically increase the credibility of social engineering attacks.",2::Definitions
 What is a virus?,"Malware that attaches itself to legitimate programs or files and requires human action (e.g., opening a file) to replicate and spread.",2::Definitions
 What is a worm?,"Self-replicating malware that spreads automatically across networks without human interaction, exploiting vulnerabilities to propagate.",2::Definitions
 What is a Trojan horse / RAT?,Malware disguised as legitimate software. A RAT (Remote Access Trojan) gives attackers remote control over the infected system.,2::Definitions
@@ -190,7 +190,7 @@ What is EOL / EOSL?,"End of Life / End of Service Life — products no longer re
 What is an embedded system vulnerability?,"Security flaws in embedded systems (IoT devices, medical devices, industrial controllers) that are hard to patch and often have poor security defaults.",2::Definitions
 What is a legacy platform risk?,"Running outdated operating systems (Windows 7, Server 2008) or software that no longer receives patches — creates an easily exploitable attack surface.",2::Definitions
 What is weak encryption implementation?,"Using outdated algorithms (DES, MD5, SHA-1), short key lengths, improper IV handling, or flawed implementations that make encryption ineffective.",2::Definitions
-What is system hardening?,The process of reducing attack surface by removing unnecessary services, closing unused ports, applying secure configurations, and enforcing least privilege.,2::Definitions
+What is system hardening?,"The process of reducing attack surface by removing unnecessary services, closing unused ports, applying secure configurations, and enforcing least privilege.",2::Definitions
 What is patching and patch rings?,"Applying vendor security updates in staged rollout rings — first to test/dev, then small production groups, finally broad deployment to minimize regression risk.",2::Definitions
 What is network segmentation / microsegmentation?,Dividing a network into isolated segments with firewalls between them. Microsegmentation applies this at the individual workload level using software-defined policies.,2::Definitions
 What is the principle of least privilege?,"Granting users, processes, and systems only the minimum permissions needed to perform their function — reduces blast radius of any compromise.",2::Definitions

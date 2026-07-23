@@ -1,374 +1,121 @@
 import crypto from 'node:crypto';
-import type { Card, Question, PbqQuestion, QuizAnswer, QuizResult } from '$lib/types';
-import { loadDefinitionCards, loadScenarioCards, loadPbqCards, getCardsByDomain } from './cards';
-import { pickDistractors } from './distractor';
-import { createSession, insertAnswer, completeSession, getSessionResult } from './db';
-import { detectSelectCount, toScaledScore } from '$lib/utils';
+import type { ActiveSessionSummary, Domain, PublicQuestion, QuestionResponse, QuizResult, SessionMode, SessionType, SessionView } from '$lib/types';
+import { quizRepository, type QuizRepository, type StoredSession } from './db';
+import { loadQuestionBank, toPublicQuestion, type QuestionBank, type QuestionDefinition } from './question-bank';
+import { scoreQuestion } from './scoring';
 
-/** Parse PBQ card back into ordered steps */
-function parsePbqSteps(back: string): string[] {
-	// Format: "1. Step name - 2. Step name - 3. Step name"
-	const parts = back.split('-').map(s => s.trim());
-	return parts.map(p => p.replace(/^\d+\.\s*/, '').trim());
+export class QuizServiceError extends Error {
+	constructor(public code: 'INVALID_REQUEST' | 'SESSION_NOT_FOUND' | 'ACTIVE_SESSION_EXISTS' | 'SESSION_CLOSED' | 'RESPONSE_LOCKED', message: string, public details?: Record<string, unknown>) { super(message); }
 }
 
-/** Generate multiple-choice options: correct answer + token-matched distractors */
-function generateOptions(card: Card, pool: Card[]): string[] {
-	const distractors = pickDistractors(card, pool, 3);
-	const options = [card.back, ...distractors];
-	// Shuffle
-	for (let i = options.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[options[i], options[j]] = [options[j], options[i]];
+export interface QuizService {
+	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain }): SessionView;
+	getSession(sessionId: string): SessionView | QuizResult;
+	getActiveSession(): ActiveSessionSummary | null;
+	saveResponse(sessionId: string, questionIndex: number, response: QuestionResponse): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
+	updateSession(sessionId: string, update: { currentIndex?: number; flag?: { questionIndex: number; value: boolean } }): SessionView;
+	abandonSession(sessionId: string): void;
+	completeSession(sessionId: string): QuizResult;
+}
+
+function shuffle<T>(items: T[], rng: () => number): T[] {
+	const result = [...items];
+	for (let index = result.length - 1; index > 0; index--) { const selected = Math.floor(rng() * (index + 1)); [result[index], result[selected]] = [result[selected], result[index]]; }
+	return result;
+}
+
+function presentation(question: QuestionDefinition, rng: () => number): QuestionDefinition {
+	const cloned = structuredClone(question) as QuestionDefinition;
+	if (cloned.kind === 'single-choice' || cloned.kind === 'multiple-choice') cloned.options = shuffle(cloned.options, rng);
+	if (cloned.kind === 'ordering') cloned.items = shuffle(cloned.items, rng);
+	if (cloned.kind === 'matching') cloned.targets = shuffle(cloned.targets, rng);
+	return cloned;
+}
+
+function asView(stored: StoredSession): SessionView {
+	const questions = stored.questions.map(toPublicQuestion);
+	return { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, startedAt: stored.summary.started_at, ...(stored.deadlineAt ? { deadlineAt: stored.deadlineAt } : {}), answeredCount: Object.keys(stored.responses).length, totalQuestions: questions.length, currentIndex: stored.currentIndex, status: stored.summary.status, questions, responses: stored.responses, flaggedQuestionIndexes: stored.flags };
+}
+
+function summary(stored: StoredSession): ActiveSessionSummary {
+	const view = asView(stored);
+	const { status: _status, questions: _questions, responses: _responses, flaggedQuestionIndexes: _flags, ...active } = view;
+	return active;
+}
+
+function validateResponse(question: QuestionDefinition, response: QuestionResponse): void {
+	const distinct = (ids: string[]) => ids.length === new Set(ids).size;
+	if ((question.kind === 'single-choice' || question.kind === 'multiple-choice') && response.kind === 'choice') {
+		if (response.optionIds.length !== question.selectCount || !distinct(response.optionIds) || !response.optionIds.every((id) => question.options.some((option) => option.id === id))) throw new QuizServiceError('INVALID_REQUEST', 'Choice response does not match the question.');
+		return;
 	}
-	return options;
+	if (question.kind === 'ordering' && response.kind === 'ordering' && response.itemIds.length === question.items.length && distinct(response.itemIds) && response.itemIds.every((id) => question.items.some((item) => item.id === id))) return;
+	if (question.kind === 'matching' && response.kind === 'matching' && Object.keys(response.matches).length === question.premises.length && question.premises.every((premise) => question.targets.some((target) => target.id === response.matches[premise.id])) && distinct(Object.values(response.matches))) return;
+	if (question.kind === 'numeric' && response.kind === 'numeric' && Number.isFinite(response.value)) return;
+	if (question.kind === 'evidence' && response.kind === 'evidence' && response.lineIds.length === question.selectCount && distinct(response.lineIds) && response.lineIds.every((id) => question.artifact.lines.some((line) => line.id === id))) return;
+	if (question.kind === 'configuration' && response.kind === 'configuration' && Object.keys(response.values).length === question.fields.length && question.fields.every((field) => field.options.some((option) => option.id === response.values[field.id]))) return;
+	throw new QuizServiceError('INVALID_REQUEST', 'Response does not match the question interaction.');
 }
 
-/** Convert a definition card to a Question */
-function cardToQuestion(card: Card, pool: Card[]): Question {
-	const hasPipes = card.back.includes('|');
-	const sc = hasPipes ? (detectSelectCount(card.front) || card.back.split('|').filter(Boolean).length) : undefined;
+export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date() }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date }): QuizService {
+	const expire = (stored: StoredSession): StoredSession => {
+		if (stored.summary.status === 'active' && stored.deadlineAt && new Date(stored.deadlineAt) <= now()) { complete(stored); return repository.getSession(stored.summary.id)!; }
+		return stored;
+	};
+	const requireStored = (id: string) => { const stored = repository.getSession(id); if (!stored) throw new QuizServiceError('SESSION_NOT_FOUND', 'Session was not found.'); return expire(stored); };
+	const complete = (stored: StoredSession): QuizResult => {
+		if (stored.summary.status === 'completed' && stored.result) return stored.result;
+		if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is not active.');
+		const domainBreakdown = { 1: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 2: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 3: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 4: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 5: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 } } as QuizResult['domainBreakdown'];
+		const objectiveBreakdown: QuizResult['objectiveBreakdown'] = {};
+		const review = stored.questions.map((question, index) => {
+			const response = stored.responses[index] ?? null;
+			const feedback = scoreQuestion(question, response);
+			const domain = domainBreakdown[question.domain]; domain.earnedPoints += feedback.earnedPoints; domain.possiblePoints++; domain.totalQuestions++; if (feedback.fullyCorrect) domain.fullyCorrect++;
+			const objective = objectiveBreakdown[question.objective] ?? { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }; objective.earnedPoints += feedback.earnedPoints; objective.possiblePoints++; objective.totalQuestions++; if (feedback.fullyCorrect) objective.fullyCorrect++; objectiveBreakdown[question.objective] = objective;
+			return { question: toPublicQuestion(question), response, feedback };
+		});
+		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
+		const result: QuizResult = { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, earnedPoints, possiblePoints: stored.questions.length, percentage: Math.round(earnedPoints / stored.questions.length * 1000) / 10, fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length, totalQuestions: stored.questions.length, domainBreakdown, objectiveBreakdown, completedAt: now().toISOString(), review };
+		return repository.complete(stored.summary.id, result, review.map((item, index) => ({ index, question: stored.questions[index], response: item.response, points: item.feedback.earnedPoints })), result.completedAt);
+	};
 	return {
-		prompt: card.front,
-		correctAnswer: card.back,
-		options: generateOptions(card, pool),
-		domain: card.domain,
-		category: card.tags[1] || 'general',
-		type: 'definition',
-		selectCount: sc,
+		startSession(input) {
+			const active = repository.getActiveSession();
+			if (active) {
+				const current = expire(active);
+				if (current.summary.status === 'active') throw new QuizServiceError('ACTIVE_SESSION_EXISTS', 'Resume or abandon the active session first.', { session: summary(current) });
+			}
+			const mode: SessionMode = input.type === 'full' ? 'exam' : input.mode ?? 'practice';
+			if (!['quiz', 'scenario', 'pbq', 'full'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined)) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
+			const source = input.type === 'pbq' ? bank.pbqs : input.type === 'scenario' ? bank.mcqs.filter((question) => question.format === 'scenario') : bank.mcqs;
+			const count = input.type === 'full' ? 90 : input.count ?? (input.type === 'quiz' ? 20 : input.type === 'scenario' ? 10 : 5);
+			let selected: QuestionDefinition[];
+			if (input.type === 'full') {
+				let pbqs: QuestionDefinition[] | undefined;
+				for (const first of bank.pbqs.filter((question) => question.domain === 1)) for (const second of bank.pbqs.filter((question) => question.domain === 2)) for (const third of bank.pbqs.filter((question) => question.domain === 3)) for (const fourth of bank.pbqs.filter((question) => question.domain === 4)) for (const fifth of bank.pbqs.filter((question) => question.domain === 5)) if (new Set([first.kind, second.kind, third.kind, fourth.kind, fifth.kind]).size === 5) { pbqs = [first, second, third, fourth, fifth]; break; }
+				if (!pbqs) throw new QuizServiceError('INVALID_REQUEST', 'Bank cannot assemble five distinct PBQ interactions.');
+				const quotas: Record<Domain, number> = { 1: 11, 2: 20, 3: 16, 4: 25, 5: 18 };
+				selected = [...pbqs];
+				for (const domain of [1, 2, 3, 4, 5] as Domain[]) selected.push(...shuffle(bank.mcqs.filter((question) => question.domain === domain), rng).slice(0, quotas[domain] - 1));
+			} else {
+				const filtered = input.domain ? source.filter((question) => question.domain === input.domain) : source;
+				const valid = input.type === 'quiz' ? count >= 5 && count <= 50 : input.type === 'scenario' ? count >= 5 && count <= 30 : count >= 1 && (count <= 10 || count === 30);
+				if (!valid || count > filtered.length) throw new QuizServiceError('INVALID_REQUEST', 'Requested count is unavailable.', { available: filtered.length });
+				selected = shuffle(filtered, rng).slice(0, count);
+			}
+			selected = shuffle(selected, rng).map((question) => presentation(question, rng));
+			const startedAt = now().toISOString(); const deadlineAt = mode === 'exam' ? new Date(now().getTime() + (input.type === 'full' ? 90 : selected.length) * 60_000).toISOString() : null;
+			repository.createSession({ id: crypto.randomUUID(), type: input.type, mode, domain: input.domain ?? null, startedAt, deadlineAt, questions: selected });
+			return asView(repository.getActiveSession()!);
+		},
+		getSession(id) { const stored = requireStored(id); return stored.summary.status === 'completed' && stored.result ? stored.result : asView(stored); },
+		getActiveSession() { const stored = repository.getActiveSession(); return stored ? summary(expire(stored)) : null; },
+		saveResponse(id, questionIndex, response) { const stored = requireStored(id); if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.'); if (!Number.isInteger(questionIndex) || questionIndex < 0 || questionIndex >= stored.questions.length) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.'); if (stored.summary.mode === 'practice' && stored.responses[questionIndex]) throw new QuizServiceError('RESPONSE_LOCKED', 'Practice responses are locked after feedback.'); const question = stored.questions[questionIndex]; validateResponse(question, response); repository.saveResponse(id, questionIndex, response, now().toISOString()); return { saved: true as const, ...(stored.summary.mode === 'practice' ? { feedback: scoreQuestion(question, response) } : {}) }; },
+		updateSession(id, update) { const stored = requireStored(id); if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.'); if (update.currentIndex !== undefined && (!Number.isInteger(update.currentIndex) || update.currentIndex < 0 || update.currentIndex >= stored.questions.length)) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.'); if (update.flag && (!Number.isInteger(update.flag.questionIndex) || update.flag.questionIndex < 0 || update.flag.questionIndex >= stored.questions.length)) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.'); repository.updateState(id, update.currentIndex, update.flag, now().toISOString()); return asView(requireStored(id)); },
+		abandonSession(id) { const stored = requireStored(id); if (!repository.abandon(id, now().toISOString())) throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.'); },
+		completeSession(id) { return complete(requireStored(id)); }
 	};
 }
 
-/** Convert a scenario card to a Question */
-function scenarioToQuestion(card: Card, scenarioPool: Card[]): Question {
-	const hasPipes = card.back.includes('|');
-	const sc = hasPipes ? (detectSelectCount(card.front) || card.back.split('|').filter(Boolean).length) : undefined;
-	return {
-		prompt: card.front,
-		correctAnswer: card.back,
-		options: generateOptions(card, scenarioPool),
-		domain: card.domain,
-		category: card.tags[1] || 'scenario',
-		type: 'scenario',
-		selectCount: sc,
-	};
-}
-
-/** Convert a PBQ card to a PbqQuestion */
-function pbqToPbqQuestion(card: Card): PbqQuestion {
-	const steps = parsePbqSteps(card.back);
-	// First step often includes the count — split if numbered
-	return {
-		prompt: card.front,
-		correctSteps: steps,
-		domain: card.domain,
-		category: card.tags[1] || 'pbq',
-	};
-}
-
-// ─── Session Management ───
-
-const activeSessions = new Map<string, {
-	questions: Question[];
-	answers: QuizAnswer[];
-	type: string;
-	domain: number | null;
-	pbqQuestions?: PbqQuestion[];
-	pbqAnswers?: { questionIndex: number; steps: string[]; correct: boolean }[];
-}>();
-
-export function startDefinitionQuiz(
-	count: number,
-	domain?: number
-): { sessionId: string; questions: Question[] } {
-	const pool = domain ? getCardsByDomain(domain) : loadDefinitionCards();
-	if (pool.length === 0) throw new Error('No cards available for selected domain');
-
-	// Pick random cards from the pool
-	const shuffled = [...pool].sort(() => Math.random() - 0.5);
-	const selected = shuffled.slice(0, Math.min(count, shuffled.length));
-
-	// Generate questions with distractors from the same pool
-	const questions = selected.map(c => cardToQuestion(c, pool));
-
-	const sessionId = crypto.randomUUID();
-	activeSessions.set(sessionId, {
-		questions,
-		answers: [],
-		type: 'quiz',
-		domain: domain ?? null,
-	});
-
-	createSession(sessionId, 'quiz', domain ?? null);
-
-	return { sessionId, questions };
-}
-
-export function startScenarioQuiz(count: number): { sessionId: string; questions: Question[] } {
-	const pool = loadScenarioCards();
-	const shuffled = [...pool].sort(() => Math.random() - 0.5);
-	const selected = shuffled.slice(0, Math.min(count, shuffled.length));
-
-	const questions = selected.map(c => scenarioToQuestion(c, pool));
-
-	const sessionId = crypto.randomUUID();
-	activeSessions.set(sessionId, {
-		questions,
-		answers: [],
-		type: 'scenario',
-		domain: null,
-	});
-
-	createSession(sessionId, 'scenario', null);
-
-	return { sessionId, questions };
-}
-
-export function startPbqSession(count: number): { sessionId: string; questions: PbqQuestion[] } {
-	const pool = loadPbqCards();
-	const shuffled = [...pool].sort(() => Math.random() - 0.5);
-	const selected = shuffled.slice(0, Math.min(count, shuffled.length));
-
-	const questions = selected.map(c => pbqToPbqQuestion(c));
-
-	const sessionId = crypto.randomUUID();
-	activeSessions.set(sessionId, {
-		questions: [],
-		answers: [],
-		type: 'pbq',
-		domain: null,
-		pbqQuestions: questions,
-		pbqAnswers: [],
-	});
-
-	createSession(sessionId, 'pbq', null);
-
-	return { sessionId, questions };
-}
-
-export function startFullPracticeExam(): { sessionId: string; questions: Question[] } {
-	// 90 max questions in real exam, mix of domains proportional to weights
-	const domainWeights: [number, number][] = [
-		[1, 12], [2, 22], [3, 18], [4, 28], [5, 20],
-	];
-
-	const targetTotal = 90;
-	const allCards = loadDefinitionCards();
-	const questions: Question[] = [];
-
-	for (const [domain, weight] of domainWeights) {
-		const domainCards = allCards.filter(c => c.domain === domain);
-		const domainCount = Math.round((weight / 100) * targetTotal);
-		const shuffled = [...domainCards].sort(() => Math.random() - 0.5);
-		const selected = shuffled.slice(0, Math.min(domainCount, shuffled.length));
-
-		for (const card of selected) {
-			questions.push(cardToQuestion(card, allCards));
-		}
-	}
-
-	// Shuffle all questions
-	const shuffledQs = questions.sort(() => Math.random() - 0.5);
-
-	const sessionId = crypto.randomUUID();
-	activeSessions.set(sessionId, {
-		questions: shuffledQs,
-		answers: [],
-		type: 'full',
-		domain: null,
-	});
-
-	createSession(sessionId, 'full', null);
-
-	return { sessionId, questions: shuffledQs };
-}
-
-export function submitAnswer(
-	sessionId: string,
-	questionIndex: number,
-	answer: string
-): { correct: boolean; correctAnswer: string; isComplete: boolean } {
-	const session = activeSessions.get(sessionId);
-	if (!session) throw new Error('Session not found');
-	if (questionIndex >= session.questions.length) throw new Error('Question index out of range');
-
-	const question = session.questions[questionIndex];
-	let correct: boolean;
-	if (question.selectCount && question.selectCount > 1) {
-		// Multi-select: compare as sets (order-independent)
-		const selectedSet = new Set(answer.split(',').map(s => s.trim()).filter(Boolean));
-		const correctSet = new Set(question.correctAnswer.split('|').map(s => s.trim()).filter(Boolean));
-		correct = selectedSet.size === correctSet.size && [...selectedSet].every(s => correctSet.has(s));
-	} else {
-		correct = answer === question.correctAnswer;
-	}
-
-	const qa: QuizAnswer = {
-		questionIndex,
-		selected: answer,
-		correct,
-		domain: question.domain,
-	};
-	session.answers.push(qa);
-
-	insertAnswer(
-		sessionId,
-		questionIndex,
-		question.prompt,
-		question.domain,
-		question.category,
-		question.correctAnswer,
-		answer,
-		correct
-	);
-
-	const isComplete = session.answers.length >= session.questions.length;
-
-	if (isComplete) {
-		const correctCount = session.answers.filter(a => a.correct).length;
-		completeSession(sessionId, correctCount, session.questions.length);
-	}
-
-	return { correct, correctAnswer: question.correctAnswer, isComplete };
-}
-
-export function submitPbqAnswer(
-	sessionId: string,
-	questionIndex: number,
-	steps: string[]
-): { correct: boolean; correctSteps: string[]; isComplete: boolean } {
-	const session = activeSessions.get(sessionId);
-	if (!session) throw new Error('Session not found');
-	if (!session.pbqQuestions) throw new Error('Not a PBQ session');
-	if (questionIndex >= session.pbqQuestions.length) throw new Error('Question index out of range');
-
-	const question = session.pbqQuestions[questionIndex];
-	const correct = steps.length === question.correctSteps.length &&
-		steps.every((s, i) => s === question.correctSteps[i]);
-
-	session.pbqAnswers = session.pbqAnswers || [];
-	session.pbqAnswers.push({ questionIndex, steps, correct });
-
-	// Persist to DB — serialize steps as JSON
-	insertAnswer(
-		sessionId,
-		questionIndex,
-		question.prompt,
-		question.domain,
-		question.category,
-		question.correctSteps.join(' → '),
-		steps.join(' → '),
-		correct
-	);
-
-	const isComplete = session.pbqAnswers.length >= session.pbqQuestions.length;
-
-	if (isComplete) {
-		const correctCount = session.pbqAnswers.filter(a => a.correct).length;
-		completeSession(sessionId, correctCount, session.pbqQuestions.length);
-	}
-
-	return { correct, correctSteps: question.correctSteps, isComplete };
-}
-
-export function completePbqSession(sessionId: string): QuizResult | null {
-	const session = activeSessions.get(sessionId);
-	if (!session || !session.pbqQuestions) {
-		const dbResult = getSessionResult(sessionId);
-		if (!dbResult) return null;
-		const pct = dbResult.total > 0 ? Math.round((dbResult.correct / dbResult.total) * 100) : 0;
-		return {
-			sessionId,
-			score: dbResult.correct,
-			total: dbResult.total,
-			percentage: pct,
-			scaledScore: toScaledScore(pct),
-			domainBreakdown: dbResult.domainBreakdown,
-			type: dbResult.type,
-			completedAt: dbResult.completedAt || new Date().toISOString(),
-		};
-	}
-
-	const correctCount = (session.pbqAnswers || []).filter(a => a.correct).length;
-	const total = session.pbqQuestions.length;
-	completeSession(sessionId, correctCount, total);
-	activeSessions.delete(sessionId);
-
-	const domainBreakdown: Record<number, { correct: number; total: number }> = {};
-	for (const q of session.pbqQuestions) {
-		if (!domainBreakdown[q.domain]) domainBreakdown[q.domain] = { correct: 0, total: 0 };
-		domainBreakdown[q.domain].total++;
-	}
-	for (const a of (session.pbqAnswers || [])) {
-		const q = session.pbqQuestions[a.questionIndex];
-		if (q && a.correct) domainBreakdown[q.domain].correct++;
-	}
-
-	const pbqPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
-	return {
-		sessionId,
-		score: correctCount,
-		total,
-		percentage: pbqPct,
-		scaledScore: toScaledScore(pbqPct),
-		domainBreakdown,
-		type: 'pbq',
-		completedAt: new Date().toISOString(),
-	};
-}
-
-export function completeQuizSession(sessionId: string): QuizResult | null {
-	const session = activeSessions.get(sessionId);
-	if (!session) {
-		// Session may have been auto-completed already — check DB
-		const dbResult = getSessionResult(sessionId);
-		if (!dbResult) return null;
-
-		const qPct = dbResult.total > 0 ? Math.round((dbResult.correct / dbResult.total) * 100) : 0;
-		return {
-			sessionId,
-			score: dbResult.correct,
-			total: dbResult.total,
-			percentage: qPct,
-			scaledScore: toScaledScore(qPct),
-			domainBreakdown: dbResult.domainBreakdown,
-			type: dbResult.type,
-			completedAt: dbResult.completedAt || new Date().toISOString(),
-		};
-	}
-
-	const correctCount = session.answers.filter(a => a.correct).length;
-	completeSession(sessionId, correctCount, session.questions.length);
-	activeSessions.delete(sessionId);
-
-	const quizPct = session.questions.length > 0
-		? Math.round((correctCount / session.questions.length) * 100)
-		: 0;
-	return {
-		sessionId,
-		score: correctCount,
-		total: session.questions.length,
-		percentage: quizPct,
-		scaledScore: toScaledScore(quizPct),
-		domainBreakdown: calculateDomainBreakdown(session.answers, session.questions),
-		type: session.type,
-		completedAt: new Date().toISOString(),
-	};
-}
-
-function calculateDomainBreakdown(
-	answers: QuizAnswer[],
-	questions: Question[]
-): Record<number, { correct: number; total: number }> {
-	const breakdown: Record<number, { correct: number; total: number }> = {};
-	for (const q of questions) {
-		if (!breakdown[q.domain]) breakdown[q.domain] = { correct: 0, total: 0 };
-		breakdown[q.domain].total++;
-	}
-	for (const a of answers) {
-		if (breakdown[a.domain] && a.correct) {
-			breakdown[a.domain].correct++;
-		}
-	}
-	return breakdown;
-}
+export const quizService = createQuizService({ repository: quizRepository, bank: loadQuestionBank() });
