@@ -22,11 +22,11 @@ anki/AI Security+/V3/*.csv  ──→  src/lib/server/cards.ts  ──→  quiz.
 
 CSV files in `anki/AI Security+/V3/`:
 
-| File | Content | Type |
-|------|---------|------|
-| `{1..5}_Definitions_Domain_*.csv` | Domain 1–5 definition Q&A cards | `definition` |
-| `7_Scenario_Practice.csv` | Scenario-based situational questions | `scenario` |
-| `8_PBQ_Practice.csv` | Performance-based (ordering) questions | `pbq` |
+| File                              | Content                                | Type         |
+| --------------------------------- | -------------------------------------- | ------------ |
+| `{1..5}_Definitions_Domain_*.csv` | Domain 1–5 definition Q&A cards        | `definition` |
+| `7_Scenario_Practice.csv`         | Scenario-based situational questions   | `scenario`   |
+| `8_PBQ_Practice.csv`              | Performance-based (ordering) questions | `pbq`        |
 
 Each CSV row: `front,back,tags` where tags encode domain + category (`1::General Concepts`).
 
@@ -43,36 +43,36 @@ QuizResult    — sessionId, score, total, percentage, domainBreakdown, type, co
 
 ## Server Lib (`src/lib/server/`)
 
-| Module | Purpose |
-|--------|---------|
-| `cards.ts` | Reads & caches CSVs by type (definition/scenario/pbq) |
-| `distractor.ts` | Token/Jaccard-similarity distractor picker for multiple-choice options |
-| `quiz.ts` | Session lifecycle: start, submitAnswer, complete. Holds active sessions in memory. |
-| `db.ts` | SQLite CRUD: sessions, answers, domain progress. Schema auto-created. |
-| `sync.ts` | Writes results back to Obsidian vault notes (dashboard, weak topics, mock exams) |
+| Module          | Purpose                                                                            |
+| --------------- | ---------------------------------------------------------------------------------- |
+| `cards.ts`      | Reads & caches CSVs by type (definition/scenario/pbq)                              |
+| `distractor.ts` | Token/Jaccard-similarity distractor picker for multiple-choice options             |
+| `quiz.ts`       | Session lifecycle: start, submitAnswer, complete. Holds active sessions in memory. |
+| `db.ts`         | SQLite CRUD: sessions, answers, domain progress. Schema auto-created.              |
+| `sync.ts`       | Writes results back to Obsidian vault notes (dashboard, weak topics, mock exams)   |
 
 ## API Routes
 
-| Method | Path | Body/Params | Returns |
-|--------|------|-------------|---------|
-| `POST` | `/api/quiz/start` | `{ type, count?, domain? }` | `{ sessionId, questions[] }` |
-| `POST` | `/api/quiz/answer` | `{ sessionId, questionIndex, answer }` | `{ correct, correctAnswer, isComplete }` |
-| `POST` | `/api/quiz/complete` | `{ sessionId }` | `QuizResult` |
-| `GET` | `/api/progress` | — | `{ progress, recentSessions[], weakTopics[] }` |
-| `GET` | `/api/cards` | `?domain=&type=` | `{ total, cards[] }` |
-| `POST` | `/api/sync` | `{ sessionId }` | `{ success, messages[] }` |
+| Method | Path                 | Body/Params                            | Returns                                        |
+| ------ | -------------------- | -------------------------------------- | ---------------------------------------------- |
+| `POST` | `/api/quiz/start`    | `{ type, count?, domain? }`            | `{ sessionId, questions[] }`                   |
+| `POST` | `/api/quiz/answer`   | `{ sessionId, questionIndex, answer }` | `{ correct, correctAnswer, isComplete }`       |
+| `POST` | `/api/quiz/complete` | `{ sessionId }`                        | `QuizResult`                                   |
+| `GET`  | `/api/progress`      | —                                      | `{ progress, recentSessions[], weakTopics[] }` |
+| `GET`  | `/api/cards`         | `?domain=&type=`                       | `{ total, cards[] }`                           |
+| `POST` | `/api/sync`          | `{ sessionId }`                        | `{ success, messages[] }`                      |
 
 `type` values: `'quiz'` (definition MC), `'scenario'`, `'pbq'`, `'full'` (90-quest exam).
 
 ## Frontend Pages (all use Svelte 5 runes, Tailwind CSS v4)
 
-| Route | File | Purpose |
-|-------|------|---------|
-| `/` | `src/routes/+page.svelte` | **Dashboard** — domain progress cards, quick-action buttons, recent sessions, weak topics |
-| `/quiz` | `src/routes/quiz/+page.svelte` | **Quiz** — domain/count setup → multiple-choice flow → results |
-| `/pbq` | `src/routes/pbq/+page.svelte` | **PBQ** — SortableJS drag-to-rank ordering → check answer → results |
-| `/scenarios` | `src/routes/scenarios/+page.svelte` | **Scenarios** — count setup → scenario MC flow → results |
-| `/progress` | `src/routes/progress/+page.svelte` | **Progress** — domain breakdown, recent sessions, weak topics table |
+| Route        | File                                | Purpose                                                                                   |
+| ------------ | ----------------------------------- | ----------------------------------------------------------------------------------------- |
+| `/`          | `src/routes/+page.svelte`           | **Dashboard** — domain progress cards, quick-action buttons, recent sessions, weak topics |
+| `/quiz`      | `src/routes/quiz/+page.svelte`      | **Quiz** — domain/count setup → multiple-choice flow → results                            |
+| `/pbq`       | `src/routes/pbq/+page.svelte`       | **PBQ** — SortableJS drag-to-rank ordering → check answer → results                       |
+| `/scenarios` | `src/routes/scenarios/+page.svelte` | **Scenarios** — count setup → scenario MC flow → results                                  |
+| `/progress`  | `src/routes/progress/+page.svelte`  | **Progress** — domain breakdown, recent sessions, weak topics table                       |
 
 All pages are single-file `+page.svelte` components — no shared component library, no stores, no SSR load functions. Data fetched via `fetch` in `onMount`/`$effect`.
 

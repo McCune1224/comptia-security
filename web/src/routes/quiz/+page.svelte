@@ -3,9 +3,82 @@
 	import { page } from '$app/state';
 	import ExamFlow from '$lib/components/ExamFlow.svelte';
 	import type { SessionType } from '$lib/types';
-	let started = $derived(Boolean(page.url.searchParams.get('session')) || page.url.searchParams.get('start') === '1');
-	let sessionType = $derived((page.url.searchParams.get('type') === 'full' ? 'full' : 'quiz') as SessionType);
-	let count = $state(20); let domain = $state<number | undefined>(); let mode = $state<'practice' | 'exam'>('practice');
+	import { DOMAIN_NAMES } from '$lib/utils';
+
+	let started = $derived(
+		Boolean(page.url.searchParams.get('session')) || page.url.searchParams.get('start') === '1'
+	);
+	let sessionType = $derived(
+		(page.url.searchParams.get('type') === 'full' ? 'full' : 'quiz') as SessionType
+	);
+	let count = $state(Number(page.url.searchParams.get('count')) || 20);
+	let domain = $state<number | undefined>(
+		page.url.searchParams.get('domain') ? Number(page.url.searchParams.get('domain')) : undefined
+	);
+	let mode = $state<'practice' | 'exam'>(
+		(page.url.searchParams.get('mode') as 'practice' | 'exam') || 'practice'
+	);
 </script>
-{#if started}<ExamFlow type={sessionType} {count} {domain} {mode} onDone={() => goto('/')} />
-{:else}<div class="mx-auto max-w-md space-y-5 py-8"><h1 class="text-2xl font-bold text-white">Objective Quiz</h1><div class="glass space-y-4 rounded-2xl p-6"><label>Question count <select bind:value={count}><option value={5}>5</option><option value={10}>10</option><option value={20}>20</option><option value={50}>50</option></select></label><label>Domain <select bind:value={domain}><option value={undefined}>All domains</option>{#each [1,2,3,4,5] as item}<option value={item}>Domain {item}</option>{/each}</select></label><button class="rounded bg-cyan-600 px-4 py-2" onclick={() => goto('/quiz?start=1')}>Start quiz</button></div></div>{/if}
+
+{#if started}
+	<ExamFlow type={sessionType} {count} {domain} {mode} onDone={() => goto('/')} />
+{:else}
+	<div class="mx-auto max-w-lg space-y-6 px-4 py-8">
+		<div>
+			<div class="mb-3 grid h-11 w-11 place-items-center rounded-xl bg-accent/10 text-accent">
+				<svg
+					viewBox="0 0 24 24"
+					class="h-6 w-6"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"
+					><rect x="5" y="3" width="14" height="18" rx="2" /><path
+						d="M9 3h6v3H9zM9 11h6M9 15h4"
+					/></svg
+				>
+			</div>
+			<h1 class="text-2xl font-bold text-text-primary sm:text-3xl">Objective Quiz</h1>
+			<p class="mt-2 text-sm text-text-secondary">
+				Build confidence across Security+ objectives with focused, adaptive practice.
+			</p>
+		</div>
+		<div class="glass space-y-5 rounded-2xl p-6 sm:p-8">
+			<label class="block text-sm font-medium text-text-secondary"
+				>Question count<select class="mt-1.5" bind:value={count}
+					><option value={5}>5 questions</option><option value={10}>10 questions</option><option
+						value={20}>20 questions</option
+					><option value={50}>50 questions</option></select
+				></label
+			>
+			<label class="block text-sm font-medium text-text-secondary"
+				>Domain<select class="mt-1.5" bind:value={domain}
+					><option value={undefined}>All domains</option>{#each [1, 2, 3, 4, 5] as item}<option
+							value={item}>{DOMAIN_NAMES[item]}</option
+						>{/each}</select
+				></label
+			>
+			<fieldset>
+				<legend class="mb-1.5 block text-sm font-medium text-text-secondary">Session mode</legend>
+				<div class="grid grid-cols-2 rounded-xl bg-surface-700 p-1">
+					<button
+						class="min-h-10 rounded-lg px-3 text-sm font-medium transition {mode === 'practice'
+							? 'bg-surface-800 text-text-primary shadow-sm'
+							: 'text-text-muted'}"
+						type="button"
+						onclick={() => (mode = 'practice')}>Practice</button
+					><button
+						class="min-h-10 rounded-lg px-3 text-sm font-medium transition {mode === 'exam'
+							? 'bg-surface-800 text-text-primary shadow-sm'
+							: 'text-text-muted'}"
+						type="button"
+						onclick={() => (mode = 'exam')}>Exam</button
+					>
+				</div>
+			</fieldset>
+			<button
+				class="h-12 w-full rounded-xl bg-gradient-to-r from-accent to-info px-8 font-semibold text-white transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
+				onclick={() => goto(`/quiz?start=1&count=${count}&domain=${domain ?? ''}&mode=${mode}`)}>Start quiz</button
+			>
+		</div>
+	</div>
+{/if}

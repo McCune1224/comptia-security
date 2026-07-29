@@ -1,0 +1,767 @@
+[
+  {
+    "id": "mcq-3-001",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "A defense contractor operates a private cloud for classified workloads and also uses a public cloud SaaS for email. To collaborate on a joint weapons-system project with three other contractors, each maintains their own private cloud but needs a shared environment with standardized security controls and shared costs. Which cloud deployment model BEST satisfies the collaboration requirement?",
+    "context": "Three defense contractors each maintain private clouds for classified work. They need a shared environment to collaborate on a joint project with standardized security controls, shared costs, and governed access among their organizations.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Hybrid cloud", "rationale": "Hybrid connects public and private clouds. The requirement is for multiple organizations to share — that's community cloud, not hybrid." },
+      { "id": "b", "text": "Community cloud", "rationale": "Community cloud is infrastructure shared by several organizations with common security, compliance, and jurisdictional concerns. The three contractors share requirements and costs — this is the textbook community cloud use case." },
+      { "id": "c", "text": "Multi-cloud", "rationale": "Multi-cloud means using multiple different cloud providers independently, not a shared governance model. The contractors need a shared environment, not separate providers." },
+      { "id": "d", "text": "Federated cloud", "rationale": "Federation allows identity interoperability across clouds, but the scenario describes a shared infrastructure with cost-sharing and standard controls — community cloud is the more precise deployment model." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "Community cloud is infrastructure shared by several organizations with common concerns. The three defense contractors share compliance requirements (ITAR/export controls), want standardized security, and share costs — exactly the community cloud use case. Hybrid connects public+private for one org; multi-cloud is separate providers.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-002",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "A security architect is evaluating virtualization platforms for two use cases: (1) a bare-metal deployment consolidating six legacy servers onto a single host where the hypervisor must have direct hardware access with no host OS overhead, and (2) a developer workstation running multiple Linux distros for testing where the hypervisor runs on top of Windows 11. Which hypervisor types correspond to each use case? (Choose TWO.)",
+    "context": "Two virtualization use cases: (1) production server consolidation requiring direct hardware access with no underlying OS, and (2) a developer workstation running multiple test VMs on top of Windows 11.",
+    "kind": "multiple-choice",
+    "options": [
+      { "id": "a", "text": "Type 1 hypervisor for use case 1; Type 2 hypervisor for use case 2", "rationale": "Type 1 (bare-metal) runs directly on hardware — ideal for server consolidation with maximum performance. Type 2 (hosted) runs on an existing OS — appropriate for a developer workstation running VMs on Windows." },
+      { "id": "b", "text": "Type 2 hypervisor for use case 1; Type 1 hypervisor for use case 2", "rationale": "Reverses the correct assignment. Type 2 adds OS overhead, unsuitable for high-performance production consolidation. Type 1 doesn't run on top of Windows." },
+      { "id": "c", "text": "Containers for both use cases", "rationale": "Containers share the host kernel and don't provide the full VM isolation needed for testing different Linux distros with different kernels. Both scenarios specifically require VMs, not containers." },
+      { "id": "d", "text": "Embedded hypervisor for use case 1; Type 1 for use case 2", "rationale": "Embedded hypervisors are firmware-based and typically found in IoT/small devices. Neither scenario matches." },
+      { "id": "e", "text": "Type 1 hypervisor for both use cases", "rationale": "Type 1 can't run on top of Windows 11 — use case 2 requires a Type 2 hypervisor that runs as an application on the host OS." },
+      { "id": "f", "text": "Containers for use case 1; Type 2 hypervisor for use case 2", "rationale": "Containers don't provide full OS isolation and share the host kernel, making them inappropriate for consolidating legacy servers that may require different kernel versions or configurations." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 2,
+    "explanation": "Type 1 (bare-metal) hypervisors like VMware ESXi or Hyper-V Server run directly on hardware with no host OS, maximizing performance for server consolidation. Type 2 (hosted) hypervisors like VMware Workstation or VirtualBox run as applications on an existing OS, appropriate for developer workstations. The question tests understanding that 'type' refers to architecture, not a numbering scheme.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-003",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "During a penetration test, an assessor exploits a vulnerability in the hypervisor that allows code executing inside a VM to read memory from the host OS and other VMs on the same physical host. Which type of attack has been successfully demonstrated, and what control would MOST directly prevent it?",
+    "context": "A penetration tester exploits a hypervisor vulnerability allowing a process inside one VM to read host and cross-VM memory.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Container escape; fix by updating container runtime", "rationale": "Container escape breaks out of a container, not a VM. This is a hypervisor-level attack, and a container runtime update wouldn't fix a hypervisor flaw." },
+      { "id": "b", "text": "VM escape; fix by applying hypervisor patches and enabling hardware virtualization extensions", "rationale": "VM escape occurs when an attacker breaks out of a VM to access the hypervisor or other VMs. Hypervisor patching and hardware isolation features (Intel VT-x/AMD-V with EPT/SLAT) are the primary defenses." },
+      { "id": "c", "text": "Privilege escalation within the guest OS; fix by hardening the guest firewall", "rationale": "Privilege escalation stays within the guest. Reading host memory from the guest indicates a hypervisor boundary was crossed — this is VM escape, not just escalation." },
+      { "id": "d", "text": "Side-channel attack; fix by disabling simultaneous multithreading", "rationale": "Side-channel attacks infer data through timing or cache analysis but don't directly read memory. The scenario describes direct memory read via hypervisor exploit, not inference." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "VM escape is when code executed inside a VM breaks the hypervisor boundary to access the host or other VMs. Hypervisor patching fixes known vulnerabilities, and hardware virtualization extensions with second-level address translation (EPT/SLAT) provide hardware-enforced isolation between VMs.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-004",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "A manufacturing plant deploys a SCADA system controlling robotic assembly arms on an isolated OT network. The OT team refuses to install antivirus or apply patches because it could disrupt time-sensitive production cycles. The IT team discovers that a contractor connected a laptop to the OT network for diagnostics, bypassing the air gap. What is the MOST significant security risk this scenario illustrates?",
+    "context": "A SCADA system on an isolated OT network has no antivirus or patches due to production concerns. A contractor bypassed the air gap by connecting a diagnostic laptop directly to the OT network.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Weak encryption between SCADA components", "rationale": "The scenario doesn't mention encryption. The primary issue is the air-gap violation via the contractor laptop, not cryptographic weakness." },
+      { "id": "b", "text": "Lack of network segmentation between IT and OT", "rationale": "The scenario states the OT network IS isolated with an air gap. The problem is that a contractor bypassed that isolation, not that segmentation doesn't exist." },
+      { "id": "c", "text": "Inability to patch or scan the OT environment combined with uncontrolled physical access vectors", "rationale": "The OT network can't be patched or scanned (due to production impact) AND the air gap was defeated by physical access. This dual risk — brittle, unpatchable systems + uncontrolled physical access — is the classic ICS/SCADA security challenge." },
+      { "id": "d", "text": "Insufficient logging and monitoring of the SCADA system", "rationale": "While logging may be absent, the core risk is the inability to apply security controls plus the ease of air-gap bypass, not just missing logs." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "OT/ICS environments face dual risk: (1) systems can't be patched or scanned because of availability requirements, and (2) air gaps are fragile — easily defeated by contractors, vendors, or removable media. This is why the Purdue model and OT-specific segmentation are critical for securing industrial environments.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-005",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "A DevOps team uses Terraform to define cloud infrastructure as code, storing templates in a Git repository. A developer accidentally commits an AWS access key into the repo, triggering a secret-scanning tool that automatically revokes the key and blocks the merge. Which security principle of Infrastructure as Code does this workflow BEST demonstrate?",
+    "context": "A DevOps team uses Terraform for cloud infrastructure. Secret scanning catches an AWS key committed to Git and automatically revokes it before the merge proceeds.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Immutable infrastructure — infrastructure is replaced, not modified", "rationale": "Immutable infrastructure means servers are redeployed rather than patched. The scenario describes secret scanning in CI/CD, not immutability." },
+      { "id": "b", "text": "Policy as code — security controls are automated and enforced in the pipeline", "rationale": "The secret-scanning tool automatically detects and revokes the exposed key before merge — this codifies a security policy that runs as part of the CI/CD pipeline, enforcing it without manual review." },
+      { "id": "c", "text": "Configuration drift detection — the tool compares desired vs actual state", "rationale": "Configuration drift refers to manual changes diverging from IaC templates. The scenario isn't about drift — it's about catching secrets before infrastructure is provisioned." },
+      { "id": "d", "text": "Software-defined networking — network config is defined programmatically", "rationale": "SDN separates the control plane from data plane. The scenario doesn't involve network configuration at all." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "Policy as code embeds security rules directly into the CI/CD pipeline, automatically enforcing them before infrastructure changes are applied. This is a core security benefit of IaC — catching misconfigurations and secrets before they reach production, rather than after.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-006",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "A hospital network uses traditional networking where each switch and router makes independent forwarding decisions. The security team wants to implement microsegmentation so that the MRI imaging systems can ONLY talk to the PACS server on port 389, and the PACS server can ONLY accept connections from imaging systems — enforced centrally, not per-device ACLs. Which architecture change is required?",
+    "context": "A hospital wants microsegmentation with centrally enforced policies between MRI imaging systems and a PACS server, currently using traditional distributed routing decisions.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Replace all switches with Layer 7 firewalls at each segment boundary", "rationale": "Layer 7 firewalls still require per-device rules. The requirement is centralized policy management, not replacing all switching hardware." },
+      { "id": "b", "text": "Implement software-defined networking with a centralized controller that pushes flow rules to all network devices", "rationale": "SDN decouples the control plane from the data plane. A centralized controller defines microsegmentation policies and pushes them as flow rules to OpenFlow-enabled switches — enabling the exact centrally-enforced, host-to-host restrictions the hospital needs." },
+      { "id": "c", "text": "Deploy a VPN concentrator and route all imaging traffic through it", "rationale": "A VPN concentrator adds encryption overhead and a bottleneck. It doesn't provide the granular, centrally managed microsegmentation between specific hosts and ports." },
+      { "id": "d", "text": "Configure VLANs with ACLs on the core switch", "rationale": "VLANs with ACLs are per-device configurations and don't scale to granular host-to-host port-level rules. This also doesn't address the centralized management requirement." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "SDN separates the control plane (centralized controller) from the data plane (switches), enabling centrally managed microsegmentation policies. The controller programs flow rules into switches, enforcing exactly which hosts can communicate on which ports — without configuring ACLs on each device individually.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-007",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "scenario",
+    "prompt": "An organization migrates a customer-facing web application to AWS using EC2 (IaaS). They configure security groups, patch the guest OS monthly, and manage the application code. AWS manages the underlying host hardware and hypervisor. A vulnerability is later discovered in the physical server's TPM firmware. Who is responsible for patching this firmware, and what is this division of responsibility called?",
+    "context": "A company uses AWS EC2 (IaaS) for a web app. They manage the OS and app; AWS manages hosts and hypervisor. A physical server TPM firmware vulnerability is discovered.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "The customer is responsible; this is the shared responsibility model", "rationale": "In IaaS, the customer is NOT responsible for physical infrastructure. AWS manages the hardware, including firmware. The customer secures the guest OS and above." },
+      { "id": "b", "text": "AWS is responsible; this is the shared responsibility model", "rationale": "Under the shared responsibility model, AWS is responsible for the security OF the cloud — physical hosts, hypervisors, and firmware. The customer is responsible for security IN the cloud — OS, apps, and network configs. TPM firmware is AWS's responsibility." },
+      { "id": "c", "text": "Both are equally responsible; this is the zero-trust model", "rationale": "Zero trust is an architecture principle, not a responsibility division. The shared responsibility model governs cloud security ownership, and physical firmware is the provider's domain." },
+      { "id": "d", "text": "Neither is responsible; firmware vulnerabilities are accepted risks", "rationale": "Both parties have responsibilities under the shared model. Accepting risk is a decision, not a default state." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "The shared responsibility model divides duties: the cloud provider secures the physical infrastructure (hosts, network, hypervisors, firmware), and the customer secures whatever runs on top (OS, apps, data, network configs in IaaS). Physical TPM firmware is unequivocally the provider's responsibility.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-008",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "standard",
+    "prompt": "Which statement accurately describes the security differences between virtual machines and containers?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Containers provide stronger isolation than VMs because each container has its own kernel", "rationale": "Containers share the host kernel, which is actually a weaker isolation boundary. VMs have separate kernels per guest, providing stronger isolation." },
+      { "id": "b", "text": "VMs use a shared kernel while each container runs its own OS instance", "rationale": "Reverses the truth. VMs each have their own OS/kernel; containers share the host's kernel." },
+      { "id": "c", "text": "VMs provide hardware-enforced isolation via the hypervisor, while containers provide process-level isolation through kernel namespaces and cgroups", "rationale": "Each VM has a dedicated virtualized hardware boundary enforced by the hypervisor. Containers isolate at the process level using Linux kernel namespaces and cgroups, sharing the same kernel — making VM escape generally harder than container breakout." },
+      { "id": "d", "text": "Both VMs and containers achieve the same level of isolation but differ in startup time and resource usage", "rationale": "Isolation is fundamentally different: VMs have hardware-enforced boundaries; containers rely on kernel-level isolation, which has a larger attack surface (shared syscalls, /proc, etc.)." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "VMs virtualize hardware with a hypervisor, each running its own OS kernel — providing hardware-enforced isolation. Containers virtualize the OS, sharing the host kernel via namespaces (process isolation) and cgroups (resource limits). Container breakout typically requires fewer privileges than VM escape because the kernel attack surface is shared.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-009",
+    "domain": 3,
+    "objective": "3.1",
+    "format": "standard",
+    "prompt": "A security architect is designing an isolated environment to test patches against a production-like configuration. The architect needs full control over the hypervisor, network topology, and guest OS configurations without sharing physical hardware with other tenants. Which cloud service model BEST meets these requirements?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "SaaS with a dedicated instance", "rationale": "SaaS provides no control over the underlying hypervisor, network, or OS. The customer only manages application-level settings." },
+      { "id": "b", "text": "PaaS on a reserved plan", "rationale": "PaaS abstracts the OS and runtime. The architect needs full control over the hypervisor, which PaaS does not provide." },
+      { "id": "c", "text": "IaaS with a single-tenant host", "rationale": "IaaS provides control over OS, network, and applications. A single-tenant (dedicated) host ensures no other customer's VMs share the physical hardware, giving the architect full control over the hypervisor and isolation." },
+      { "id": "d", "text": "FaaS with dedicated functions", "rationale": "FaaS (serverless) abstracts even the runtime. The architect would have no control over the execution environment, hypervisor, or network topology." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "IaaS provides the most control — the customer manages VMs, guest OSes, network configs, and (with dedicated hosts) even the hypervisor. Single-tenant/dedicated hosts ensure no other tenant shares the physical server, meeting the requirement for full isolation and control.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.1" }
+    ]
+  },
+  {
+    "id": "mcq-3-010",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "A financial services company hosts a public-facing web application with a three-tier architecture: web servers, application servers, and a database. The security architect places the web servers in a DMZ, the app servers in an internal trusted zone, and the database in a restricted zone. The architect insists that the web servers must initiate connections TO the app servers, but the app servers must NEVER initiate connections to the web servers. What network architecture principle is being enforced?",
+    "context": "Three-tier architecture with web in DMZ, app in trusted zone, database in restricted zone. Rules specify web→app connections are allowed but app→web must be blocked.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Stateful inspection — the firewall tracks connection state", "rationale": "Stateful inspection tracks whether packets belong to established sessions. This scenario is about controlling directionality, not connection state tracking." },
+      { "id": "b", "text": "Unidirectional traffic flow — traffic is allowed only from less trusted to more trusted zones", "rationale": "The DMZ (less trusted) can initiate to the internal zone (more trusted), but internal assets cannot initiate back to the DMZ. This prevents an attacker who compromises the DMZ from using it as a pivot point into the internal network." },
+      { "id": "c", "text": "Defense in depth — multiple layers of security", "rationale": "Defense in depth is about multiple control types, not directional traffic rules. The scenario specifically describes unidirectional flow constraints." },
+      { "id": "d", "text": "Egress filtering — outbound traffic from internal zones is inspected", "rationale": "Egress filtering monitors outgoing traffic. The constraint here is about preventing reverse-initiated connections, not inspecting outbound traffic content." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "Unidirectional traffic is a core DMZ security principle. The DMZ initiates connections inward to request data, but internal systems never initiate connections outward to the DMZ. This prevents lateral movement: if an attacker compromises the DMZ web server, they cannot use it to connect back to internal systems because return connections are blocked.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-011",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "An enterprise needs two firewall functions: (1) A perimeter device that performs stateful packet inspection, supports IPsec VPN termination, includes IPS, and can identify application-layer traffic like SQL injection attempts. (2) A low-overhead device for an isolated SCADA network that checks only source/destination IP, port, and protocol without tracking connection state. Which firewall types meet each requirement? (Choose TWO.)",
+    "context": "Two firewall requirements: (1) perimeter device with stateful inspection, IPS, VPN, and application-layer identification. (2) Low-overhead device for an isolated SCADA network checking only IP/port/protocol without state tracking.",
+    "kind": "multiple-choice",
+    "options": [
+      { "id": "a", "text": "Next-generation firewall (NGFW) for requirement 1; stateless firewall for requirement 2", "rationale": "NGFWs combine stateful inspection, IPS, application-level inspection, and VPN — matching requirement 1. Stateless firewalls check individual packets against rules without state tracking, ideal for low-overhead SCADA environments where connection state is unnecessary." },
+      { "id": "b", "text": "UTM appliance for requirement 1; stateful firewall for requirement 2", "rationale": "UTM is essentially an NGFW, so it works for req 1. But req 2 specifically says 'without tracking connection state' — a stateful firewall would do exactly what they don't want." },
+      { "id": "c", "text": "Packet-filtering firewall for requirement 1; NGFW for requirement 2", "rationale": "Packet-filtering firewalls lack IPS, application inspection, and VPN — they don't meet req 1. NGFW is overkill and inappropriate for a low-overhead SCADA network." },
+      { "id": "d", "text": "Web application firewall (WAF) for requirement 1; proxy firewall for requirement 2", "rationale": "WAF protects at Layer 7 and doesn't do VPN or general IPS. Proxy firewalls terminate and re-establish connections, which involves state and overhead — wrong for req 2." },
+      { "id": "e", "text": "Circuit-level gateway for both", "rationale": "Circuit-level gateways validate TCP handshakes but don't inspect application data or provide IPS/VPN. Neither requirement is met." },
+      { "id": "f", "text": "NGFW for requirement 1; packet-filtering firewall for requirement 2", "rationale": "NGFW matches req 1. Packet-filtering firewalls check header fields (IP, port, protocol) per-packet with no state tracking and minimal overhead — the correct match for req 2." }
+    ],
+    "correctOptionIds": ["a", "f"],
+    "selectCount": 2,
+    "explanation": "An NGFW combines stateful inspection, IPS, application awareness, and VPN — the Swiss Army knife for perimeter protection. A stateless (packet-filtering) firewall checks each packet individually against ACL rules with no memory of prior packets, making it lightweight and appropriate for SCADA where state tracking adds unnecessary complexity and latency.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-012",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "A hospital's security team discovers that after implementing VLANs to separate the MRI imaging subnet (10.1.10.0/24) from the patient records subnet (10.1.20.0/24), a clinician with access to both VLANs can initiate traffic between an imaging workstation and the records database. The team needs a solution that prevents all lateral movement between workloads regardless of IP addressing, including traffic that never leaves the hypervisor. Which approach addresses this?",
+    "context": "VLAN separation exists between imaging and records subnets, but a user with access to both VLANs can bridge traffic. The team needs to prevent lateral movement even for traffic staying within the same hypervisor.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Implement ACLs on the core switch to block inter-VLAN routing", "rationale": "ACLs on the core switch can block inter-VLAN routing, but they don't prevent traffic within the same hypervisor — east-west VM traffic on the same host never reaches the switch." },
+      { "id": "b", "text": "Deploy a next-generation firewall between the VLANs and enforce all traffic through it", "rationale": "NGFW can inspect and control inter-VLAN traffic at the network level, but traffic between VMs on the same hypervisor (vSwitch) can bypass the physical firewall entirely." },
+      { "id": "c", "text": "Implement microsegmentation using a distributed firewall or host-based policies enforced at the hypervisor vSwitch", "rationale": "Microsegmentation with distributed firewalls enforces policies at the virtual switch level, controlling traffic between workloads regardless of IP or physical topology — including east-west traffic that never leaves the hypervisor." },
+      { "id": "d", "text": "Move all workloads to separate physical servers with individual firewall ports", "rationale": "This eliminates virtualization benefits and still doesn't prevent a user from accessing both systems. Microsegmentation solves the problem more effectively." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "VLANs only segment at the network level — they cannot control east-west traffic between VMs on the same hypervisor (which flows through the virtual switch). Microsegmentation uses distributed firewalls (e.g., VMware NSX, Microsoft Azure vNET) at the hypervisor layer to enforce host-to-host policies regardless of IP, subnet, or physical location.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-013",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "standard",
+    "prompt": "A security administrator needs to allow a small number of approved administrators to SSH into a highly restricted PCI DSS network segment that has no direct internet connectivity. All administrative sessions must be logged and monitored. What device placement strategy satisfies these requirements?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Place a VPN concentrator in the DMZ and route all admin traffic through it into the PCI segment", "rationale": "A VPN concentrator provides encrypted tunnels but doesn't provide the session logging, monitoring, and access control granularity of a dedicated bastion host." },
+      { "id": "b", "text": "Deploy a jump server (bastion host) in a management network with strict ACLs, and require all admins to SSH through it, with session recording enabled", "rationale": "A jump server (bastion host) sits in a management subnet and acts as the sole entry point to the restricted segment. All admin traffic is forced through it, enabling full session logging, audit trails, and centralized access control." },
+      { "id": "c", "text": "Install a proxy server within the PCI segment and configure reverse proxy rules for each admin's IP", "rationale": "A reverse proxy handles application-layer traffic, not SSH sessions. It's designed for web traffic, not administrative access." },
+      { "id": "d", "text": "Configure port forwarding on the firewall to redirect SSH ports directly to each server in the PCI segment", "rationale": "Port forwarding exposes individual servers directly and provides no session logging or centralized access control — the opposite of the requirement." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "A jump server (bastion host) is a hardened, monitored gateway that sits in a management network segment. All administrative access to restricted zones is funneled through it, providing centralized authentication, full session recording, and audit trails. No direct SSH access to PCI assets is allowed — admins must SSH into the jump server first, then connect from there.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-014",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "A company with 2,000 remote employees currently uses a VPN concentrator at headquarters. Employees report slow performance when accessing cloud apps (Microsoft 365, Salesforce). The security team wants to reduce latency, move access control closer to users, and inspect traffic at the edge without backhauling everything through HQ. Which TWO architectural approaches address these goals? (Choose TWO.)",
+    "context": "2,000 remote employees use a VPN back to headquarters for cloud app access resulting in poor performance. The team wants to reduce latency, avoid HQ backhauling, and inspect traffic at the edge.",
+    "kind": "multiple-choice",
+    "options": [
+      { "id": "a", "text": "Implement SD-WAN to route cloud traffic directly from branch offices without traversing HQ", "rationale": "SD-WAN allows intelligent routing — cloud traffic goes direct to the internet, and only corporate traffic goes through HQ. This eliminates backhauling for SaaS apps, reducing latency." },
+      { "id": "b", "text": "Deploy additional VPN concentrators in each AWS region used by the company", "rationale": "More VPN concentrators help with capacity but still require traffic to be encrypted and tunneled, adding overhead and still backhauling through the concentrator location." },
+      { "id": "c", "text": "Migrate from VPN to a SASE architecture that converges SD-WAN with cloud-delivered security (SWG, CASB, ZTNA)", "rationale": "SASE shifts security inspection to the cloud edge, close to users. Combined with SD-WAN, traffic goes direct to cloud apps while security (SWG, CASB, FWaaS) is enforced at the PoP nearest the user — eliminating HQ backhauling and reducing latency." },
+      { "id": "d", "text": "Move all cloud apps back to on-premises hosting in data centers", "rationale": "Regresses the architecture and defeats the purpose of cloud adoption. The organization wants to improve cloud app performance, not eliminate them." },
+      { "id": "e", "text": "Replace the corporate VPN with IPsec tunnels between each employee's home and HQ", "rationale": "IPsec tunnels still terminate at HQ. This is functionally identical to the current VPN with different encapsulation — no improvement." },
+      { "id": "f", "text": "Implement hairpin NAT on the HQ firewall to speed up internal traffic", "rationale": "Hairpin NAT addresses traffic that originates and terminates in the same network, not remote users accessing cloud apps. Irrelevant to the problem." }
+    ],
+    "correctOptionIds": ["a", "c"],
+    "selectCount": 2,
+    "explanation": "SD-WAN intelligently routes traffic based on destination — cloud app traffic goes direct to the internet instead of being backhauled to HQ. SASE converges SD-WAN with cloud-native security services (SWG, CASB, ZTNA) delivered from edge PoPs close to users. Together, they eliminate backhauling, reduce latency, and distribute security inspection to the edge.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-015",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "A security analyst reviews IDS alerts and notices repeated port scans from an external IP targeting the DMZ. The analyst deploys a system that responds to the scans with realistic service banners and deliberately slow TCP handshake responses to waste the attacker's time while alerting the SOC. This system has no production data and is isolated from internal networks. What type of security control has been deployed, and where should it be placed?",
+    "context": "An analyst deploys a system that responds to external port scans with realistic banners and slow handshakes to waste attacker time and alert the SOC. It contains no production data and is isolated from internal networks.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Honeypot, placed in the DMZ alongside production servers to blend in", "rationale": "A honeypot is a decoy system that mimics real services. Placing it in the DMZ makes it visible to attackers scanning the perimeter and blends with legitimate services. The slow-response behavior is a honeypot technique to delay attackers." },
+      { "id": "b", "text": "IDS sensor, placed in the internal network to detect lateral movement", "rationale": "The system actively responds with banners and handshakes — an IDS is passive and only monitors. This is an active decoy, not a monitoring sensor." },
+      { "id": "c", "text": "Honeynet, placed on the internet outside the corporate firewall", "rationale": "A honeynet is a network of honeypots. Placing it outside the firewall makes it visible to the public internet, but the scenario describes responding to scans already hitting the DMZ — placement inside the DMZ is more targeted." },
+      { "id": "d", "text": "Honeytoken, placed in the database to detect data exfiltration", "rationale": "Honeytokens are fake data records (e.g., fake credit card numbers) placed in databases. The scenario describes a network-level decoy with service banners, not database records." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "A honeypot is a decoy system designed to attract attackers. It mimics legitimate services and provides early warning of reconnaissance. Placing it in the DMZ ensures it's reachable from the internet but isolated from production systems. Using slow handshakes and realistic banners is a common honeypot technique (e.g., using Cowrie or Dionaea) to engage attackers and buy time for detection.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-016",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "A company runs a public e-commerce application with a login page, product catalog, and payment processing. The security team wants to deploy controls to: (1) inspect all HTTP requests for SQL injection and XSS payloads before they reach the application, and (2) detect anomalous outbound traffic patterns indicating data exfiltration from the database server. Which devices should be placed where?",
+    "context": "E-commerce app needs: (1) HTTP request inspection for SQLi/XSS before hitting the app, and (2) detection of anomalous outbound traffic from the database server.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "WAF in front of the web server for req 1; NIDS on the database subnet mirror port for req 2", "rationale": "A WAF inspects HTTP/HTTPS traffic specifically for web application attacks like SQLi and XSS — placed inline in front of the web server. A network-based IDS on the DB subnet's mirror/SPAN port analyzes all traffic to/from the database for anomalies without being inline." },
+      { "id": "b", "text": "IPS on the database server for req 1; WAF on the core switch for req 2", "rationale": "An IPS on the database inspects database traffic, not HTTP. A WAF doesn't belong on the core switch — it's specific to web application traffic." },
+      { "id": "c", "text": "Load balancer with SSL termination for req 1; firewall ACLs for req 2", "rationale": "SSL termination doesn't inspect application payloads for SQLi/XSS. Firewall ACLs filter by IP/port, not anomalous traffic patterns." },
+      { "id": "d", "text": "Reverse proxy for req 1; HIDS on the database server for req 2", "rationale": "A reverse proxy can cache and route traffic but doesn't provide WAF-level inspection. A HIDS monitors host-level activity (file changes, logins), not network traffic patterns." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "A WAF is the correct device for application-layer HTTP inspection (SQLi, XSS, CSRF) — it's deployed inline in front of web servers. A NIDS passively monitors network traffic via a port mirror/SPAN port and can detect anomalous outbound patterns from the database (large data volumes, unusual destinations, odd protocols) without adding latency or risk of inline failure.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-017",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "scenario",
+    "prompt": "An organization's CISO mandates that all remote access must verify identity and device posture before granting access, establish per-application encrypted tunnels rather than full network access, and hide internal IP addresses from users entirely. Users must authenticate to each application individually rather than getting a network-level ticket. Which architecture best meets these requirements?",
+    "context": "CISO mandates: (1) verify identity + device posture before access, (2) per-application tunnels (not full network), (3) hide internal IPs, (4) per-app auth instead of network-level SSO.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Site-to-site IPsec VPN with X.509 certificates", "rationale": "Site-to-site VPN connects entire networks, not per-application. It provides network-level access, not per-app tunnels. Device posture is not typically checked." },
+      { "id": "b", "text": "SSL/TLS VPN with full tunnel mode", "rationale": "SSL VPN with full tunnel gives network-level access to the internal subnet. The requirement is per-application access, not full network connectivity." },
+      { "id": "c", "text": "Zero Trust Network Access (ZTNA)", "rationale": "ZTNA creates per-application, outbound-only encrypted tunnels. It authenticates both user and device before granting access, hides internal IPs via the ZTNA broker, and requires per-app authentication — matching all four requirements exactly." },
+      { "id": "d", "text": "SD-WAN with integrated firewall", "rationale": "SD-WAN optimizes routing between sites. While it includes security features, it doesn't provide per-application access control for remote individual users or hide internal IPs from clients." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "ZTNA (a Gartner term, similar to BeyondCorp or Software-Defined Perimeter) implements per-application micro-tunnels that are established only after user and device are verified. Internal IPs are never exposed to the client. Each application requires separate authentication, and the ZTNA controller acts as a policy decision point, ensuring least-privilege access.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-018",
+    "domain": 3,
+    "objective": "3.2",
+    "format": "standard",
+    "prompt": "A security engineer configures a firewall rule allowing inbound HTTPS traffic. A stateless firewall and a stateful firewall process this rule differently. Which statement accurately describes the difference?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Both firewalls evaluate each packet independently and require an explicit rule for return traffic", "rationale": "Only stateless firewalls evaluate each packet independently. Stateful firewalls track connection state and automatically allow return traffic for established sessions." },
+      { "id": "b", "text": "A stateless firewall evaluates each packet independently and requires an explicit rule for return traffic; a stateful firewall tracks the TCP handshake and automatically permits return packets belonging to established sessions", "rationale": "Stateless firewalls have no memory of past packets — they apply ACL rules to every packet individually. Stateful firewalls maintain a state table of active connections and automatically allow return traffic when they match an established session entry." },
+      { "id": "c", "text": "A stateless firewall inspects application payloads; a stateful firewall checks only IP headers", "rationale": "Reverses the relationship. Stateless firewalls are generally faster but only check headers (Layer 3-4). Stateful inspection adds connection tracking but is still primarily header-based — neither typically inspects application payloads (that's an NGFW/WAF function)." },
+      { "id": "d", "text": "Stateful firewalls block all UDP traffic because UDP has no connection state", "rationale": "Stateful firewalls handle UDP by creating pseudo-state entries based on source/destination tuples. They don't block UDP entirely." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "Stateless (packet-filtering) firewalls have no concept of connection state — each packet is evaluated independently against rules. Return traffic needs its own explicit allow rule. Stateful firewalls maintain a state table tracking TCP connections (SYN→SYN-ACK→ACK) and other protocol states, automatically permitting return packets that match an established session entry.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.2" }
+    ]
+  },
+  {
+    "id": "mcq-3-019",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A multinational company's data governance team identifies the following data sets: (a) customer names and email addresses, (b) encrypted database backups stored off-site, (c) employee salary information with SSNs, (d) marketing brochures posted on the public website, and (e) internal VoIP call metadata retained for 90 days. According to standard data classification models, which labels should be assigned to each?",
+    "context": "Data sets: customer names/emails, encrypted backups, employee salaries with SSNs, public marketing brochures, internal VoIP metadata retained 90 days.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "(a) Public, (b) Confidential, (c) Restricted, (d) Public, (e) Internal", "rationale": "Customer names/emails are PII and should be at least Confidential, not Public. Encrypted backups are still sensitive data that should be Confidential." },
+      { "id": "b", "text": "(a) Internal, (b) Confidential, (c) Restricted, (d) Public, (e) Internal", "rationale": "Customer names/emails qualify as Internal (business-use data but not highly sensitive). Encrypted backups are Confidential. Salaries with SSNs are Restricted — the highest sensitivity. Marketing brochures are intentionally Public. VoIP metadata is Internal — useful for business but not sensitive enough for Confidential." },
+      { "id": "c", "text": "(a) Restricted, (b) Public, (c) Restricted, (d) Public, (e) Confidential", "rationale": "Customer names/emails alone don't typically reach Restricted (that requires e.g., SSNs, health records). Encrypted backups are not Public — they're sensitive data regardless of encryption. VoIP metadata doesn't warrant Confidential." },
+      { "id": "d", "text": "(a) Confidential, (b) Internal, (c) Confidential, (d) Public, (e) Internal", "rationale": "Encrypted backups (b) contain all data and should be at least Confidential, not Internal. Employee salary with SSN (c) is Restricted, not Confidential — higher sensitivity level is needed for SSNs." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "Standard classification: Public (no access restrictions, intended for public consumption), Internal (business-use data that shouldn't be public but isn't highly sensitive), Confidential (sensitive data requiring protection, e.g., PII, financial records, backups), Restricted (highly sensitive data with severe impact if disclosed, e.g., SSNs, trade secrets). Customer names/emails are PII but alone are typically Internal-to-Confidential. SSNs are Restricted. Marketing materials are Public. Backups inherit the classification of their contents.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-020",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A hospital stores MRI scan images (DICOM files) containing patient PII on a network-attached storage array. The security team needs to protect this data from a scenario where an attacker gains physical access to the storage array and removes the drives. The data must remain unreadable even if the drives are removed from the array. The array is currently encrypted at the filesystem level with a key stored on the OS volume. Which control addresses the specific threat?",
+    "context": "Hospital MRI images with PII on a NAS. Threat: attacker removes physical drives. Filesystem encryption is used but the key is on the OS volume — drives removed from the array could be read.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Full-disk encryption with hardware security module (HSM)-managed keys separate from the array", "rationale": "Full-disk encryption at the hardware level ensures that drives cannot be read if removed. Using an HSM to manage keys separately from the array means the key material is not stored on the drives themselves — even if drives are removed, data is inaccessible." },
+      { "id": "b", "text": "Implement file-level permissions restricting access to the PACS administrators group", "rationale": "File permissions protect against unauthorized access through the OS, not against physical drive removal. Permissions are irrelevant when the drive is connected to a different system." },
+      { "id": "c", "text": "Enable Windows EFS (Encrypting File System) on the share", "rationale": "EFS is file-level encryption tied to user certificates. It protects files within the running OS but doesn't protect against physical drive removal if the certificate store is on the same drive." },
+      { "id": "d", "text": "Configure a DLP policy to detect PII in DICOM files", "rationale": "DLP detects and prevents data exfiltration over the network. The threat is physical drive removal, which bypasses DLP entirely." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "Full-disk encryption (FDE) at the hardware or controller level ensures data is encrypted on the physical platters. When combined with HSM-managed keys stored separately (not on the drives), removing the drives makes the data inaccessible — the drives need the array controller + HSM to decrypt. This directly Addresses the physical removal threat.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-021",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A security architect is designing data protection controls for three data states: (1) A database actively processing credit card transactions in memory, (2) encrypted backups replicated to a secondary data center, (3) a user uploading documents to a cloud storage portal via HTTPS. Which controls are MOST appropriate for each state, and which data states are described? (Choose TWO.)",
+    "context": "Three data states: (1) credit card transactions processing in memory, (2) encrypted backups replicated off-site, (3) user uploading documents via HTTPS to cloud storage.",
+    "kind": "multiple-choice",
+    "options": [
+      { "id": "a", "text": "State 1 is data in use — control: memory encryption (e.g., Intel SGX/TME) and secure enclaves", "rationale": "Data in use is actively being processed in memory. Memory encryption technologies like Intel Total Memory Encryption or AMD Secure Encrypted Virtualization protect data in RAM from cold boot attacks, DMA attacks, and hypervisor reads." },
+      { "id": "b", "text": "State 2 is data in transit — control: TLS mTLS between data centers", "rationale": "Backups replicated between data centers traverse the network and need in-transit encryption. But state 2 says 'encrypted backups' — the data is at rest on the destination storage. Replication is in transit, but the STATE of the stored backup is at rest." },
+      { "id": "c", "text": "State 3 is data in transit — control: TLS 1.3 with HSTS and certificate pinning", "rationale": "Data being uploaded over HTTPS is data in transit across the network. TLS 1.3 provides encryption, HSTS prevents downgrade attacks, and certificate pinning prevents MITM via rogue CAs." },
+      { "id": "d", "text": "State 1 is data in transit — control: TLS for database connections", "rationale": "Data processing in memory is data in use, not in transit. TLS protects network communication, not memory contents." },
+      { "id": "e", "text": "State 2 is data at rest — control: disk encryption with separate key management", "rationale": "Backups stored on disk at the secondary data center are data at rest. Even though replication involves transit, the stored backup state is at rest. Disk encryption (with keys not stored on the same system) protects the persisted backups." },
+      { "id": "f", "text": "State 3 is data at rest — control: SED (self-encrypting drives) on the user's device", "rationale": "The document upload goes from the user's device to cloud storage. The in-transit upload needs TLS. SED protects data at rest on the user's device, but the described state is the uploading process — that's in transit." }
+    ],
+    "correctOptionIds": ["a", "c"],
+    "selectCount": 2,
+    "explanation": "Data in transit = moving across a network (TLS protects it). Data at rest = stored on media (encryption + key management protects it). Data in use = actively processed in RAM (memory encryption, secure enclaves protect it). State 1 is in use (memory), state 2 is at rest (stored backups), state 3 is in transit (upload).",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-022",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A law firm deploys DLP to prevent sensitive client documents from leaving the network. The firm discovered that employees were emailing PDFs containing confidential case details to personal Gmail accounts. They also found that an employee copied case files to a USB drive, and that encrypted traffic to personal cloud storage bypassed the existing DLP. Which DLP deployment types would address each vector?",
+    "context": "Law firm DLP: (1) confidential PDFs emailed to personal Gmail, (2) case files copied to USB, (3) encrypted traffic to personal cloud storage bypassing current DLP.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Network DLP for email; endpoint DLP for USB; SSL/TLS inspection at the proxy for cloud storage", "rationale": "Network DLP scans SMTP traffic for sensitive content. Endpoint DLP enforces policies on the device itself (block USB writes, monitor file access). Cloud storage encrypted traffic requires SSL/TLS inspection at a forward proxy to decrypt, inspect, and re-encrypt traffic — closing the encryption bypass." },
+      { "id": "b", "text": "Endpoint DLP for all three; network DLP is redundant", "rationale": "Endpoint DLP can block USB and encrypted uploads at the agent level. However, network DLP can catch email exfiltration from unmanaged devices or guests that aren't running the endpoint agent." },
+      { "id": "c", "text": "Network DLP for email and cloud; storage DLP for USB", "rationale": "Storage DLP scans data at rest in repositories — it doesn't prevent USB copy in real time. USB is an endpoint control." },
+      { "id": "d", "text": "Proxy-based DLP for all; disable USB ports via Group Policy", "rationale": "Disabling USB via Group Policy is effective but separate from DLP. The question asks about DLP deployment types for each vector." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "Network DLP monitors traffic (email, web uploads) as it crosses the network boundary. Endpoint DLP enforces rules on the device (block USB writes, clipboard restrictions, file print/save-as). SSL/TLS inspection at the proxy decrypts outbound HTTPS traffic for inspection — without it, encrypted cloud storage traffic is opaque to network DLP.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-023",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A global SaaS company stores customer data in data centers across the US, EU, and Australia. A German customer files a request to have all their personal data deleted. The company confirms the data is stored in Frankfurt and deleted from live systems. However, the customer discovers that the company's disaster recovery replica in Ireland still contains their data. What security concept does this incident reveal the company failed to address?",
+    "context": "A German customer requests GDPR deletion of their personal data. The company deletes it from the primary Frankfurt data center but the DR replica in Ireland still contains the data.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Data encryption — the data should have been encrypted and the key deleted", "rationale": "While crypto-shredding (deleting encryption keys) is a valid deletion strategy, the core issue is that data sovereignty and geographic replication were not considered in the deletion workflow." },
+      { "id": "b", "text": "Data sovereignty — the company failed to ensure data stayed within the jurisdiction and that deletion policies covered all geographic copies", "rationale": "Data sovereignty means data is subject to the laws of the country where it's stored. The company's deletion policy only covered primary storage, ignoring cross-border DR replicas. GDPR requires complete erasure, and the Ireland replica violates both sovereignty (data still exists in another jurisdiction) and the right to be forgotten." },
+      { "id": "c", "text": "Data minimization — the company shouldn't have stored the data at all", "rationale": "Data minimization limits collection, not deletion. The issue is that deletion was incomplete, not that too much data was collected initially." },
+      { "id": "d", "text": "Data classification — the data was incorrectly classified", "rationale": "Classification determines protection level, not geographic replication and deletion scope. The data was properly classified as personal data; the failure was in operationalizing deletion across all copies." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "Data sovereignty requires that data handling complies with the laws of the jurisdiction where it's stored. GDPR's right to erasure requires complete deletion across all copies — primary, backup, replica, and archive. The Ireland replica violated this because (1) the data still exists, and (2) the data is now stored in Ireland under Irish law, potentially without adequate GDPR safeguards if the replication was uncontrolled.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-024",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A healthcare SaaS provider stores the following data for each patient: name, date of birth, email address, blood type, last clinic visit date, and credit card number used for copay. Under US regulations, which data elements are PHI (Protected Health Information) and which are PII?",
+    "context": "Patient data stored by healthcare SaaS: name, DOB, email, blood type, last visit date, credit card number used for copay.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "All listed data elements are both PHI and PII", "rationale": "Under HIPAA, any individually identifiable health information held by a covered entity is PHI. Name + DOB + blood type + visit date clearly identify an individual and relate to health. Email and credit card are also PII. Since the data is held by a healthcare entity and relates to the individual's health or payment for healthcare, ALL elements are PHI." },
+      { "id": "b", "text": "Blood type and visit date are PHI; name, DOB, email, and credit card are PII only", "rationale": "Under HIPAA, 'individually identifiable health information' includes any identifier that relates to past/present/future health or payment. Name, DOB, and email in combination with health context become PHI. Credit card for healthcare payment is also PHI." },
+      { "id": "c", "text": "Only blood type is PHI; everything else is PII", "rationale": "HIPAA defines PHI broadly. Visit dates and payment information relating to healthcare are explicitly PHI, not just clinical data like blood type." },
+      { "id": "d", "text": "None of this data is PHI because it's not part of a medical record diagnosis", "rationale": "HIPAA PHI includes billing and payment information related to healthcare. The credit card is used for a healthcare copay — this makes it PHI in this context." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "PHI is a subset of PII that is health-related and held by a covered entity or business associate. HIPAA's definition includes any individually identifiable health information, including demographic data, medical history, test results, and payment information. Since the data is held by a healthcare SaaS provider and relates to healthcare (blood type, visits, copays) with patient identifiers, ALL listed elements are PHI.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-025",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "standard",
+    "prompt": "A company needs to ensure that all internal application traffic between microservices is encrypted. The services communicate using REST APIs and run on Kubernetes pods that are frequently created and destroyed. Traditional TLS with static certificates is impractical because of the dynamic pod lifecycle. Which solution should the security architect choose?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "IPsec tunnels between each pair of nodes in the Kubernetes cluster", "rationale": "IPsec configuration doesn't scale in dynamic environments — adding/removing peers for every new pod would be unmanageable. IPsec is better for site-to-site, not service-to-service." },
+      { "id": "b", "text": "mTLS with a service mesh (e.g., Istio, Linkerd) using short-lived certificates automatically rotated by a certificate authority", "rationale": "Service meshes implement mTLS with automatic certificate provisioning and rotation via sidecar proxies (Envoy). Each pod gets a short-lived certificate from the mesh CA that's automatically rotated — no manual certificate management, and traffic between services is encrypted." },
+      { "id": "c", "text": "WireGuard VPN tunnel from each pod to a central VPN concentrator", "rationale": "A central concentrator creates a bottleneck and doesn't scale for service-to-service mesh communication. It also introduces a single point of failure and additional latency." },
+      { "id": "d", "text": "SSH tunnels established between each service at startup", "rationale": "SSH tunnels don't scale to dynamic environments and require managing SSH keys for every pod pair. Not designed for high-throughput service mesh communication." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "mTLS via a service mesh sidecar is the standard solution for microservice-to-microservice encryption in dynamic environments. Each pod gets an envoy/ sidecar proxy that handles TLS automatically, with certificates issued by the mesh CA and rotated frequently (often every 24 hours). This accommodates the dynamic pod lifecycle without manual certificate management.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-026",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "standard",
+    "prompt": "A company processes highly sensitive payroll data using an in-memory database. The security architect is concerned about cold boot attacks, DMA attacks via Thunderbolt ports, and the hypervisor reading guest memory. Which technology protects data while it is being actively processed in RAM?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Full-disk encryption with a TPM", "rationale": "Full-disk encryption protects data at rest on storage. Once the OS boots and data is loaded into RAM, FDE does not protect memory contents." },
+      { "id": "b", "text": "TLS 1.3 for all network connections", "rationale": "TLS protects data in transit over the network. Data in RAM is the concern, not network communication." },
+      { "id": "c", "text": "Trusted Execution Environment (TEE) such as Intel SGX or AMD SEV with memory encryption", "rationale": "TEEs create hardware-enforced encrypted enclaves in memory. Intel SGX encrypts CPU cache lines so that memory reads from the OS, hypervisor, or physical DMA access get only encrypted data. AMD SEV provides similar protection for entire VM memory. These protect data in use against cold boot, DMA, and hypervisor attacks." },
+      { "id": "d", "text": "Database column-level encryption", "rationale": "Column-level encryption protects data at rest in database tables. When queried, the data is decrypted in memory and becomes visible — it doesn't protect the in-use state." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "Data in use is the most difficult state to protect because data must be decrypted for processing. TEEs (SGX, SEV, TrustZone) encrypt memory at the hardware level, ensuring that even the OS, hypervisor, or an attacker with physical DMA access cannot read the plaintext data. The CPU decrypts data only within the processor package.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-027",
+    "domain": 3,
+    "objective": "3.3",
+    "format": "scenario",
+    "prompt": "A hospital's DLP system flags all outbound emails containing the word 'cancer' as potential PHI violations. Oncologists regularly email referrals mentioning 'cancer' to other specialists, causing the security team to investigate hundreds of false positives daily. The DLP administrator needs to reduce false positives without allowing actual PHI data exfiltration. Which approach BEST addresses this?",
+    "context": "Hospital DLP flags all emails with 'cancer' as PHI violations. Oncologists send legitimate referrals mentioning 'cancer' daily, creating hundreds of false positives. Need to reduce false positives without allowing real PHI exfiltration.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Add 'cancer' to the DLP exceptions list for all medical staff", "rationale": "Whitelisting 'cancer' entirely would allow an attacker to exfiltrate actual PHI by simply including the word 'cancer' in otherwise legitimate-looking email. Too permissive." },
+      { "id": "b", "text": "Disable the DLP rule and rely on user training to prevent PHI leaks", "rationale": "Removing the control entirely is excessive. The goal is to reduce false positives while maintaining protection, not eliminate the control." },
+      { "id": "c", "text": "Use contextual DLP policies: combine keyword matching with recipient domain analysis, attachment scanning, and data pattern matching (e.g., name + DOB + diagnosis in the same email)", "rationale": "Contextual DLP reduces false positives by requiring multiple signals — not just a keyword, but also recipient being an external domain, presence of patient identifiers (name + DOB + MRN), and structured data patterns. A referral to another specialist's @hospital.org domain with a brief mention of 'cancer' without patient identifiers wouldn't trigger." },
+      { "id": "d", "text": "Implement a DLP exemption window during business hours", "rationale": "Time-based exemptions don't solve the false positive problem — legitimate referrals happen all day, and attackers could exploit business hours to exfiltrate data." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "Contextual DLP uses multiple detection techniques — keyword + regex + data fingerprinting + recipient analysis + document properties — to accurately identify true violations while ignoring benign uses of the same terms. This is far more effective than simple keyword matching.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.3" }
+    ]
+  },
+  {
+    "id": "mcq-3-028",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "A financial trading firm calculates that every hour of system downtime costs $850,000 in lost transactions. The firm can tolerate a maximum of 15 minutes of data loss (transactions not yet replicated). The IT team proposes a solution that can restore systems within 30 minutes of a failure. Which metrics should the firm specify in the disaster recovery plan to match these business requirements?",
+    "context": "Trading firm: $850k/hour downtime cost, max 15 minutes data loss tolerance, proposed solution restores in 30 minutes.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "RTO of 30 minutes, RPO of 15 minutes — matches business requirements", "rationale": "RTO (Recovery Time Objective) is the maximum acceptable downtime — the proposed 30-minute restore solution matches this. RPO (Recovery Point Objective) is the maximum acceptable data loss — 15 minutes of un-replicated transactions is the stated tolerance. Both metrics align with business requirements." },
+      { "id": "b", "text": "RTO of 15 minutes, RPO of 30 minutes — exceeds business requirements", "rationale": "Reverses the values. RTO is recovery time, not data loss. RPO is data loss, not recovery time. Also, the proposal restores in 30 minutes, which sets RTO at 30 minutes — not 15." },
+      { "id": "c", "text": "MTD of 30 minutes, RPO of 15 minutes — correct metrics", "rationale": "MTD (Maximum Tolerable Downtime) is the TOTAL time the business can survive without the system, including recovery. It's always larger than RTO. The firm needs an RTO to match the restore capability, not MTD." },
+      { "id": "d", "text": "MTTR of 30 minutes, RPO of 15 minutes — correct metrics", "rationale": "MTTR (Mean Time to Repair) is a historical measurement of average repair time, not a planning objective. The DR plan specifies objectives (RTO/RPO), not historical averages." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "RTO = maximum acceptable time to restore operations after a disaster (30 minutes, matching the restore capability). RPO = maximum acceptable data loss measured in time (15 minutes of transactions). Both are forward-looking objectives. MTD is the total survival time (always > RTO), MTTR is a historical metric, not an objective.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-029",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "An e-commerce company needs to select a disaster recovery site strategy. The CFO wants to minimize capital expenditure for the DR site. The CTO requires that the site be fully operational within 4 hours of a primary data center failure and must have a full copy of all data that is no more than 1 hour old. The business can accept intermittent service degradation during failover. Which site type BEST balances cost and requirements?",
+    "context": "E-commerce DR site requirements: minimize CapEx, fully operational within 4 hours, data no more than 1 hour old, can accept intermittent degradation during failover.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Hot site — fully duplicated infrastructure with real-time replication. Meets all requirements but has highest CapEx.", "rationale": "Hot sites have real-time replication and fully operational standby infrastructure. This meets the 1-hour RPO and 4-hour RTO but violates the CFO's CapEx constraint — hot sites are the most expensive." },
+      { "id": "b", "text": "Cold site — empty facility with power and cooling. Lowest cost but cannot meet the 4-hour RTO.", "rationale": "Cold sites require procuring, configuring, and installing hardware before restoring, which typically takes days or weeks — cannot meet the 4-hour RTO." },
+      { "id": "c", "text": "Warm site — pre-configured infrastructure with periodic data replication. Meets 4-hour RTO with 1-hour RPO at lower CapEx than a hot site.", "rationale": "Warm sites have pre-installed hardware (servers, storage, network) with replicated data. The 1-hour RPO is achievable with periodic replication (e.g., log shipping every 30-60 minutes). The 4-hour RTO is achievable because infrastructure is already in place and only needs data sync and system startup. Significantly lower CapEx than a hot site." },
+      { "id": "d", "text": "Cloud-based DR as a Service (DRaaS) — replicates infrastructure to cloud, pay only during testing and failover.", "rationale": "DRaaS is often a warm recovery model in the cloud. While valid, the question asks which site TYPE best fits — and warm site is the general category that balances cost and recovery speed for these specific metrics." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "Warm sites have the infrastructure ready but not fully operational — data is replicated periodically (hours old, not real-time). This meets the 1-hour RPO with periodic sync and the 4-hour RTO with pre-staged hardware, at significantly lower cost than a hot site (which would mirror everything in real-time with full redundancy).",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-030",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "A university IT department backs up research data nightly to a local NAS (Network Attached Storage) in the same server room. After a fire destroys the server room, the university loses all data — including the backups. The new security director implements a backup strategy that maintains data on local disk for quick recovery, on tape stored at an offsite commercial vault, and one additional copy in a different geographic region. Which backup strategy does this describe?",
+    "context": "University lost all data when a fire destroyed the server room because backups were stored on a NAS in the same room. New strategy: local disk for fast recovery, offsite tape vault, and one more copy in a different geographic region.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Grandfather-father-son rotation — a tape rotation scheme", "rationale": "GFS is a backup rotation schedule (daily/weekly/monthly), not a storage topology. The scenario describes three copies in different locations and media, not a rotation scheme." },
+      { "id": "b", "text": "The 3-2-1 backup rule — three copies of data, on two different media types, with one offsite", "rationale": "The 3-2-1 rule: 3 copies of data, on 2 different media types (disk + tape), 1 offsite. The scenario has local disk (copy 1), tape at offsite vault (copy 2, different medium, offsite), and additional georedundant copy (copy 3, different geographic region). Matches exactly." },
+      { "id": "c", "text": "Continuous data protection — real-time replication", "rationale": "CDP captures every write in real time. The scenario describes periodic backups (nightly) stored on specific media types, not continuous replication." },
+      { "id": "d", "text": "Differential backup strategy — only changed data since the last full backup", "rationale": "Differential describes backup TYPE (what data is backed up), not the storage topology. The scenario describes WHERE and ON WHAT data is stored, not how data is selected for backup." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "The 3-2-1 rule: three total copies, two different media types, one offsite. Local disk (copy 1, medium 1), offsite tape vault (copy 2, medium 2, offsite), georedundant copy (copy 3). The fire destroying the primary + same-room NAS violated the 3-2-1 rule — both copies were on the same medium (disk) in the same location.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-031",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "A database administrator manages a 2 TB SQL database that must be available 24/7. The backup strategy requires: (1) A weekly full backup on Sunday at 2 AM, (2) the ability to restore to any point within the last 24 hours with minimal data loss, (3) minimizing the total backup storage required. Which backup types should be used for daily backups between full backups, and why is this approach preferred over alternative types? (Choose TWO.)",
+    "context": "2 TB SQL database: weekly full backup Sunday 2 AM, need point-in-time recovery within last 24 hours with minimal data loss, minimize total backup storage.",
+    "kind": "multiple-choice",
+    "options": [
+      { "id": "a", "text": "Daily differential backups — each captures all changes since Sunday's full backup, requiring only the full + latest differential to restore", "rationale": "Differential backups grow larger each day (Monday = day's changes, Tuesday = 2 days' changes, etc.) and only restore to the time of the differential, not any arbitrary point. They don't provide point-in-time recovery within 24 hours." },
+      { "id": "b", "text": "Daily incremental backups — each captures only changes since the previous backup, minimizing storage space", "rationale": "Incremental backups are the smallest possible — each captures only changes since the last backup (full or incremental). This minimizes storage. However, restore requires the full + ALL subsequent incrementals, which is slower." },
+      { "id": "c", "text": "Transaction log backups taken every 15 minutes — enable point-in-time recovery to any moment by replaying logs", "rationale": "Transaction log backups (for databases in full recovery mode) capture every transaction. Combined with periodic full or differential backups, they allow restoring to any point in time — even between backups — by replaying logs to the desired moment." },
+      { "id": "d", "text": "Full backups nightly — provides complete data each night with the simplest restore", "rationale": "Nightly full backups of 2 TB would consume excessive storage and bandwidth. While restore is simple (just the latest full), it violates the 'minimize storage' requirement." },
+      { "id": "e", "text": "Synthetic full backups created from the previous full + all incrementals without touching production", "rationale": "Synthetic fulls reduce production load but don't change the storage or point-in-time recovery characteristics. They still need transaction log backups for PITR." }
+    ],
+    "correctOptionIds": ["b", "c"],
+    "selectCount": 2,
+    "explanation": "Daily incremental backups minimize storage (each captures only the previous day's changes) while weekly fulls provide a clean restore baseline. Transaction log backups every 15 minutes enable point-in-time recovery to any moment within the 24-hour window — essential for compliance scenarios where even a few minutes of data loss is unacceptable. Note: the 'daily' incrementals + 15-minute log shipping is the standard approach.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-032",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "standard",
+    "prompt": "A database administrator configures a disk array with six physical disks. The system requires maximum read performance and fault tolerance — the array must survive two simultaneous disk failures without data loss. Which RAID configuration meets these requirements?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "RAID 0 with 6 disks — stripes data across all disks for maximum performance, but provides zero fault tolerance", "rationale": "RAID 0 has the best performance (all spindles in parallel) but zero redundancy. One disk failure destroys all data." },
+      { "id": "b", "text": "RAID 1 with 3 mirrored pairs — mirrors data for redundancy but only 3 disks of usable capacity", "rationale": "RAID 1 survives 1 disk failure per mirrored pair. With 3 pairs, surviving 2 failures depends on which disks fail — if they're in different pairs, it survives. But read performance is limited to one disk per pair." },
+      { "id": "c", "text": "RAID 6 with 6 disks — dual parity stripes data across all disks and can survive two simultaneous failures", "rationale": "RAID 6 uses block-level striping with dual distributed parity. With 6 disks, usable capacity is 4 disks (2 parity). It survives any 2 disk failures simultaneously and reads are fast (all spindles participate)." },
+      { "id": "d", "text": "RAID 10 with 3 mirrored pairs striped — provides redundancy and performance but only survives 2 failures if they're in different mirrors", "rationale": "RAID 10 (stripe of mirrors) provides good performance and redundancy, but can only survive up to 2 failures if each failed disk is in a different mirror pair. If both failures hit the same mirror, data is lost. RAID 6 guarantees survival of any 2 failures." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "RAID 6 uses dual distributed parity and can tolerate any 2 simultaneous disk failures. With 6 disks, it provides high read throughput (all disks are read in parallel for striped data) and guaranteed dual-fault tolerance — regardless of which 2 disks fail.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-033",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "An e-commerce site uses three web servers behind a load balancer. Users report being repeatedly logged out when the load balancer sends their requests to different servers, even though they authenticated successfully. The login state is stored in the server's local memory. Which load balancing configuration resolves this issue?",
+    "context": "E-commerce site: 3 web servers behind load balancer, login sessions stored in local server memory. Users get logged out when requests go to different servers.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Round-robin distribution — distributes requests evenly but doesn't fix the session persistence problem", "rationale": "Round-robin cycles through servers sequentially, maximizing the session-mismatch problem — every other request goes to a different server." },
+      { "id": "b", "text": "Least connections — sends requests to the server with fewest active connections", "rationale": "Least connections optimizes load distribution but doesn't guarantee the same server handles the same user session. Still causes random session loss." },
+      { "id": "c", "text": "Session persistence (sticky sessions) — load balancer consistently routes requests from the same client to the same server", "rationale": "Sticky sessions (also called session affinity) configure the load balancer to send all requests from a specific client to the same backend server for the duration of the session — typically via cookie insertion or source IP hashing." },
+      { "id": "d", "text": "Health checks — removes unhealthy servers from the pool", "rationale": "Health checks ensure servers are operational but have nothing to do with session routing consistency." }
+    ],
+    "correctOptionIds": ["c"],
+    "selectCount": 1,
+    "explanation": "Sticky sessions (session persistence) ensure the same client is always directed to the same backend server. Common methods: cookie-based (load balancer inserts a cookie mapping the client to a specific server) or source-IP affinity (hash of client IP maps to server). However, sticky sessions are a workaround — the better architecture is externalizing session state to a shared store (Redis, database) so any server can handle any request.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-034",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "A data center operator is designing power resilience for a critical server rack that processes financial transactions. The requirement is: (1) instant failover to battery power for graceful shutdown during a 3-minute utility blip, (2) sustain operations for 6 hours during an extended outage, and (3) protect against voltage sags and surges that could damage equipment. Which combination of power solutions BEST meets all requirements?",
+    "context": "Data center power requirements: (1) instant battery failover for short blips, (2) 6-hour extended outage coverage, (3) surge/sag protection for equipment.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "UPS for blips and surge protection; generator for extended outage. UPS batteries provide instant failover for short blips, generator takes over after UPS stabilizes.", "rationale": "UPS provides instantaneous battery failover (no gap) and conditions power to protect against sags/surges. A generator (diesel or natural gas) provides extended runtime. The UPS bridges the gap until the generator starts and stabilizes." },
+      { "id": "b", "text": "Generator only — modern generators start in under 10 seconds and eliminate the need for UPS", "rationale": "Generators cannot start instantly — there is a gap (10-30 seconds) during which servers would lose power. Additionally, generators don't condition power or protect against surges." },
+      { "id": "c", "text": "UPS only with 6-hour battery capacity — eliminates generator cost", "rationale": "A UPS with 6 hours of battery capacity would require massive, expensive battery banks with frequent replacement costs. Generators are far more cost-effective for extended runtime." },
+      { "id": "d", "text": "Surge suppressor for surge protection; generator for extended outage; no UPS needed", "rationale": "Surge suppressors protect against spikes but don't provide battery power for sag events or blips. Without UPS, there's no bridge power during the generator startup gap." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "UPS handles instantaneous failover (sub-cycle transfer time), power conditioning (sags, surges, frequency regulation), and bridges the gap until the generator stabilizes. Generators provide cost-effective extended runtime. This is the standard data center power architecture: utility → UPS → PDU → equipment, with generator as backup fuel source.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-035",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "standard",
+    "prompt": "A company experiences a ransomware attack that encrypts all servers. IT takes 6 hours to detect the attack, 4 hours to restore from clean backups, and 2 hours to validate data integrity and resume operations. The business can survive a maximum of 12 hours without the system. Which statement BEST interprets the MTD, MTTR, and RTO relationship?",
+    "context": "",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "MTD is 12 hours. The actual recovery time (RTO) was 10 hours (detect 6 + restore 4). Validation (2 hours) is part of recovery, making total 12 hours — meeting the MTD.", "rationale": "MTD is the maximum tolerable downtime — 12 hours. RTO is the target recovery time. The actual recovery: 6 (detection) + 4 (restore) + 2 (validation) = 12 hours total. This equals the MTD — technically met but no margin. MTTR is the actual measured time: 12 hours." },
+      { "id": "b", "text": "MTD is 12 hours, MTTR is 6 hours, and RTO was met with 6 hours to spare", "rationale": "MTTR includes the entire restoration process, not just detection. Detection (6h) + restore (4h) + validation (2h) = 12 hours total recovery time (MTTR). MTTR is not 6 hours." },
+      { "id": "c", "text": "MTD is 10 hours, MTTR is 4 hours, and the company exceeded the MTD by 2 hours", "rationale": "MTD is the upfront business decision (12 hours), not calculated from the incident. MTTR is the total time from detection to validated recovery — 12 hours, not 4." },
+      { "id": "d", "text": "MTD and RTO are interchangeable; both are 12 hours in this scenario", "rationale": "RTO is the TARGET (what you plan for), MTD is the MAXIMUM (what the business can survive). They're related but distinct. RTO should be less than MTD to provide margin." }
+    ],
+    "correctOptionIds": ["a"],
+    "selectCount": 1,
+    "explanation": "MTD (Maximum Tolerable Downtime) is a business decision — the total time the organization can survive without the system. RTO is the recovery time target. In this incident, total time from detection to validated operations was 12 hours, exactly matching the MTD — no margin. Best practice: set RTO well below MTD (e.g., RTO of 4 hours with MTD of 12).",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  },
+  {
+    "id": "mcq-3-036",
+    "domain": 3,
+    "objective": "3.4",
+    "format": "scenario",
+    "prompt": "A financial services company runs its trading platform on two load-balanced application servers with a shared database. The servers are in an active-active cluster. During a routine deployment, one server crashes. The remaining server immediately takes over all traffic with no interruption to trading. The security architect reviews this setup and notes that if the shared database fails, all trading stops. Which recommendation would MOST improve availability?",
+    "context": "Two load-balanced app servers in active-active cluster with a shared database. One server crashes — no interruption. But if the shared database fails, all trading stops.",
+    "kind": "single-choice",
+    "options": [
+      { "id": "a", "text": "Change the app servers to active-passive to reduce complexity", "rationale": "Active-passive reduces load capacity and doesn't address the single point of failure — the database. The app servers already handle a single failure well." },
+      { "id": "b", "text": "Implement database clustering with synchronous replication between two database nodes", "rationale": "A clustered database (e.g., SQL Server Always On, Oracle RAC, PostgreSQL Patroni) with synchronous replication ensures that if the primary database fails, the secondary can take over with zero data loss and minimal failover time — eliminating the single point of failure." },
+      { "id": "c", "text": "Add a third application server for more load capacity", "rationale": "More app servers increase capacity but don't address the database single point of failure. The app tier already survives a single server loss." },
+      { "id": "d", "text": "Move the database to a single larger server with more memory and faster storage", "rationale": "A larger server is still a single point of failure. 'Scaling up' doesn't add redundancy — it just makes the failure more expensive." }
+    ],
+    "correctOptionIds": ["b"],
+    "selectCount": 1,
+    "explanation": "The app tier already has high availability via active-active load balancing. The critical single point of failure is the shared database. Database clustering with synchronous replication (or an Always On availability group) provides automated failover between database nodes, ensuring the database tier has the same resilience as the app tier.",
+    "sourceRefs": [
+      { "source": "exam-objectives", "section": "Objective 3.4" }
+    ]
+  }
+]

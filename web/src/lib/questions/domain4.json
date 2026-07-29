@@ -1,0 +1,2626 @@
+[
+  {
+    "id": "mcq-4-001",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A systems administrator configures 40 new Linux servers using a documented set of configuration rules that disable root SSH login, enforce password complexity, enable audit logging, and apply file integrity monitoring. Which term best describes this documented set of security rules?",
+    "context": "A systems administrator configures 40 new Linux servers using a documented set of configuration rules that disable root SSH login, enforce password complexity, enable audit logging, and apply file integrity monitoring.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Orchestration playbook",
+        "rationale": "Playbooks are used in SOAR to automate response workflows, not for initial system configuration baselines."
+      },
+      {
+        "id": "b",
+        "text": "Secure baseline",
+        "rationale": "A secure baseline is a documented minimum set of security configurations applied consistently to all systems. CIS benchmarks and DISA STIGs are authoritative sources."
+      },
+      {
+        "id": "c",
+        "text": "Hardening guideline",
+        "rationale": "Hardening guidelines are broader recommendations. A baseline is the specific, measurable set of rules applied consistently during deployment."
+      },
+      {
+        "id": "d",
+        "text": "Configuration management database",
+        "rationale": "A CMDB tracks configuration items and their relationships; it does not define security settings."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "A secure baseline is a documented minimum set of security configurations consistently applied to all systems. CIS Benchmarks and DISA STIGs are authoritative sources for creating secure baselines. The scenario describes applying specific, measurable security rules uniformly, which is the definition of a secure baseline.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Hardening and Baselines"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-002",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A company issues tablets to field sales staff. The security policy requires that if a device is lost or stolen, all corporate data must be remotely wiped and the device must require a 6-digit PIN. Which mobile management solution enforces these requirements?",
+    "context": "A company issues tablets to field sales staff. The security policy requires that if a device is lost or stolen, all corporate data must be remotely wiped and the device must require a 6-digit PIN.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "MDM (Mobile Device Management)",
+        "rationale": "MDM allows IT to enforce PIN policies, configure device settings, and perform remote wipe on corporate-managed devices."
+      },
+      {
+        "id": "b",
+        "text": "MAM (Mobile Application Management)",
+        "rationale": "MAM protects individual applications rather than the whole device. It cannot remotely wipe the entire device, only corporate app data."
+      },
+      {
+        "id": "c",
+        "text": "COPE (Corporate-Owned Personally-Enabled)",
+        "rationale": "COPE is a device ownership model, not a management solution. MDM is used to manage COPE devices."
+      },
+      {
+        "id": "d",
+        "text": "BYOD policy",
+        "rationale": "BYOD is a policy framework allowing personal devices for work, not a technical enforcement solution for PIN and remote wipe."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Mobile Device Management (MDM) is the technical solution that enforces security policies such as PIN requirements and enables remote wipe on corporate-managed mobile devices.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Mobile Device Management"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-003",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "An auditor identifies the following in a branch office wireless deployment: WPA2-PSK with key 'Spring2024', SSID 'Acme-Corp' broadcast enabled, MAC filtering enabled, and access point firmware from 2019. Which TWO findings pose the most significant security risks?",
+    "context": "An auditor identifies the following in a branch office wireless deployment: WPA2-PSK with key 'Spring2024', SSID 'Acme-Corp' broadcast enabled, MAC filtering enabled, and access point firmware from 2019.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The pre-shared key uses a weak, guessable password vulnerable to offline cracking",
+        "rationale": "A PSK containing common words and a predictable date pattern can be cracked offline by capturing the WPA2 4-way handshake."
+      },
+      {
+        "id": "b",
+        "text": "WPA2 uses RC4 encryption which is deprecated",
+        "rationale": "This is incorrect. WPA2 uses AES-CCMP encryption, not RC4. WEP used RC4."
+      },
+      {
+        "id": "c",
+        "text": "Outdated AP firmware may contain unpatched vulnerabilities",
+        "rationale": "Firmware from 2019 likely has known vulnerabilities that are publicly documented and exploitable."
+      },
+      {
+        "id": "d",
+        "text": "SSID broadcast helps attackers discover the network",
+        "rationale": "SSID broadcast is a convenience feature. Disabling broadcast does not prevent discovery because SSIDs are in probe responses and beacon frames."
+      },
+      {
+        "id": "e",
+        "text": "MAC filtering prevents all unauthorized connections",
+        "rationale": "MAC filtering is minimal because MAC addresses are transmitted in plaintext and can be trivially spoofed."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "The two most significant risks are: (1) the weak PSK 'Spring2024' - an attacker capturing the 4-way handshake can crack it offline; (2) outdated AP firmware from 2019 likely contains known, exploitable vulnerabilities.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Wireless Security"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-004",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "Which of the following is the MOST important step a server administrator should take before deploying a critical security patch to a production database server?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Apply the patch directly to production since it is a critical vulnerability",
+        "rationale": "Bypassing testing risks application compatibility issues and service disruption."
+      },
+      {
+        "id": "b",
+        "text": "Test the patch in a staging environment that mirrors production",
+        "rationale": "Testing validates that the patch does not cause compatibility issues or break functionality before production deployment."
+      },
+      {
+        "id": "c",
+        "text": "Disable the database service until the change advisory board meets",
+        "rationale": "Disrupting the service unnecessarily impacts business operations."
+      },
+      {
+        "id": "d",
+        "text": "Rely on a web application firewall as a permanent compensating control",
+        "rationale": "A WAF is a temporary compensating control, not a replacement for patching the underlying vulnerability."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Testing a patch in a staging environment that mirrors production is the most important step before production deployment. This validates that the patch does not introduce compatibility issues or cause service disruption.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Patch Management"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-005",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "Which browser security control BEST prevents malicious scripts from executing without user consent by allowing a website to specify approved script sources?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Pop-up blocker",
+        "rationale": "Pop-up blockers prevent unwanted pop-up windows but do not block inline script execution within the page."
+      },
+      {
+        "id": "b",
+        "text": "Content Security Policy (CSP)",
+        "rationale": "CSP is an HTTP header that allows websites to whitelist approved sources of scripts, styles, and other resources, preventing XSS and script injection attacks."
+      },
+      {
+        "id": "c",
+        "text": "Private browsing mode",
+        "rationale": "Private browsing only prevents local history and cache storage; it does not affect script execution."
+      },
+      {
+        "id": "d",
+        "text": "Clearing cookies and cache",
+        "rationale": "Clearing stored data removes session information but does not prevent scripts from executing."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Content Security Policy (CSP) is an HTTP response header that allows websites to define approved sources for scripts, styles, images, and other resources. CSP is the most effective browser-level control against XSS.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Browser Hardening"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-006",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "A company wants to ensure that only authorized company-issued laptops can connect to the wired network ports in conference rooms. Users must authenticate using their domain credentials before gaining network access. Which technology should be implemented?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "WPA2-Enterprise",
+        "rationale": "WPA2-Enterprise is for wireless networks using 802.1X authentication, not for wired network ports."
+      },
+      {
+        "id": "b",
+        "text": "802.1X with EAP-PEAP",
+        "rationale": "802.1X provides port-based authentication for both wired and wireless networks. EAP-PEAP tunnels the inner authentication using domain credentials."
+      },
+      {
+        "id": "c",
+        "text": "MAC address allow listing",
+        "rationale": "MAC addresses are transmitted in plaintext and can be spoofed trivially."
+      },
+      {
+        "id": "d",
+        "text": "VPN with certificate authentication",
+        "rationale": "VPN is designed for remote access, not for controlling physical network port access within a facility."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "802.1X is an IEEE standard for port-based network access control that works on both wired and wireless networks. EAP-PEAP creates a TLS tunnel for secure credential exchange.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "802.1X and NAC"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-007",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A hospital is retiring 50 MRI machine computers that contain patient health information (PHI). The sanitization method must physically destroy the storage media to ensure zero chance of data recovery. What disposal method should the project manager select?",
+    "context": "A hospital is retiring 50 MRI machine computers that contain patient health information (PHI). The sanitization method must physically destroy the storage media to ensure zero chance of data recovery.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Degaussing",
+        "rationale": "Degaussing destroys magnetic domains and erases data, but it does not physically destroy the media. SSDs are also not affected by degaussing."
+      },
+      {
+        "id": "b",
+        "text": "Secure erasure with DoD 5220.22-M (3-pass overwrite)",
+        "rationale": "Software overwriting sanitizes the data but does not physically destroy the media."
+      },
+      {
+        "id": "c",
+        "text": "Physical shredding",
+        "rationale": "Physical shredding destroys the storage media platters or chips, making data recovery impossible. This meets the requirement for physical destruction."
+      },
+      {
+        "id": "d",
+        "text": "Cryptographic erasure",
+        "rationale": "Crypto-shredding encrypts data and destroys the encryption keys. This requires the data to have been encrypted while in use."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "Physical shredding is the only method that physically destroys storage media. For PHI compliance, when physical destruction is specified, shredding, pulverizing, or incineration are appropriate.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Asset Disposal and Sanitization"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-008",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "An organization has no record of which software versions are running on its 500 workstations. When a critical remote code execution vulnerability is announced, the security team cannot determine which systems are affected. What asset management control should have been implemented?",
+    "context": "An organization has no record of which software versions are running on its 500 workstations. When a critical remote code execution vulnerability is announced, the security team cannot determine which systems are affected.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hardware asset inventory",
+        "rationale": "A hardware inventory tracks physical devices by serial number and location but does not capture software versions installed."
+      },
+      {
+        "id": "b",
+        "text": "Software inventory with version tracking",
+        "rationale": "Software inventory tracks installed applications and their versions, enabling rapid identification of affected systems."
+      },
+      {
+        "id": "c",
+        "text": "Configuration management database",
+        "rationale": "A CMDB tracks relationships between IT components but requires software inventory data as input."
+      },
+      {
+        "id": "d",
+        "text": "Data classification policy",
+        "rationale": "Data classification policy categorizes data by sensitivity level, not software versions."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Software inventory with version tracking provides visibility into which software versions are installed on each system. When a vulnerability is announced, the team can immediately query the inventory to find all affected systems.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Asset Management"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-009",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "A security analyst discovers that multiple employees have been emailing spreadsheets containing customer Social Security numbers to their personal email accounts. The company has a data classification policy with labels: Public, Internal, Confidential, and Restricted. Which TWO controls should leadership implement to prevent future occurrences?",
+    "context": "A security analyst discovers that multiple employees have been emailing spreadsheets containing customer Social Security numbers to their personal email accounts.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Deploy DLP rules that block Confidential and Restricted data from being emailed externally",
+        "rationale": "DLP can scan outbound email content, detect SSN patterns, and automatically block the transmission."
+      },
+      {
+        "id": "b",
+        "text": "Require all employees to sign an acceptable use policy",
+        "rationale": "An AUP sets expectations but does not technically enforce the restriction."
+      },
+      {
+        "id": "c",
+        "text": "Deploy data discovery and classification tools to automatically label SSNs",
+        "rationale": "Automated classification tools identify PII and apply labels so enforcement controls can act on them."
+      },
+      {
+        "id": "d",
+        "text": "Reduce the frequency of security awareness training",
+        "rationale": "Reducing training frequency would worsen the problem."
+      },
+      {
+        "id": "e",
+        "text": "Block all email attachments in transit",
+        "rationale": "Blanket-blocking all attachments disrupts legitimate business operations."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "DLP rules detect and block sensitive data from being emailed externally. Automated data discovery tools identify and label sensitive data so DLP can enforce protection.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Classification and DLP"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-010",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A law firm must retain client case files for 7 years after case closure per bar association rules. After 7 years, files must be securely destroyed. An audit reveals files from 15 years ago are still on the file server. Which policy is being violated?",
+    "context": "A law firm must retain client case files for 7 years after case closure. An audit reveals files from 15 years ago are still on the file server.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Data retention policy",
+        "rationale": "A data retention policy specifies how long data must be kept and when it must be destroyed."
+      },
+      {
+        "id": "b",
+        "text": "Data classification policy",
+        "rationale": "Data classification categorizes data by sensitivity but does not specify retention schedules."
+      },
+      {
+        "id": "c",
+        "text": "Acceptable use policy",
+        "rationale": "An AUP governs appropriate use of systems, not data retention periods."
+      },
+      {
+        "id": "d",
+        "text": "Backup policy",
+        "rationale": "A backup policy specifies backup frequency and retention, not primary storage retention."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "A data retention policy defines how long data must be retained and when it should be destroyed. Keeping data beyond the retention period increases legal liability and risk.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Retention and Disposal"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-011",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "An organization labels data as Public, Internal, Confidential, and Restricted based on the potential impact of unauthorized disclosure. What is this practice called?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Data masking",
+        "rationale": "Data masking obscures specific data elements; it does not categorize data by sensitivity."
+      },
+      {
+        "id": "b",
+        "text": "Data classification",
+        "rationale": "Data classification categorizes data by sensitivity and criticality to determine appropriate protection controls."
+      },
+      {
+        "id": "c",
+        "text": "Data sovereignty",
+        "rationale": "Data sovereignty concerns data being subject to the laws of the country where it is stored."
+      },
+      {
+        "id": "d",
+        "text": "Data minimization",
+        "rationale": "Data minimization is the principle of collecting only the minimum data needed."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Data classification assigns sensitivity labels to data based on the impact of unauthorized disclosure. These labels drive appropriate security controls.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Classification"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-012",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A systems administrator needs to retire a server that hosted a classified project database. The storage uses RAID 5 across four SAS SSDs. The administrator wants to ensure data cannot be recovered while allowing the SSDs to be repurposed. Which sanitization method should be used?",
+    "context": "A systems administrator needs to retire a server that hosted a classified project database. The storage uses RAID 5 across four SAS SSDs.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Degaussing",
+        "rationale": "Degaussing does not work effectively on SSDs, which use NAND flash rather than magnetic platters. It also renders SSDs unusable."
+      },
+      {
+        "id": "b",
+        "text": "ATA Secure Erase",
+        "rationale": "ATA Secure Erase uses the SSD's internal firmware to cryptographically erase all data blocks, making data unrecoverable while leaving drives functional."
+      },
+      {
+        "id": "c",
+        "text": "Physical shredding",
+        "rationale": "Physical shredding destroys the drives and prevents reuse."
+      },
+      {
+        "id": "d",
+        "text": "Quick format",
+        "rationale": "A quick format only removes the file system index; data remains recoverable."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "ATA Secure Erase sanitizes SSDs so data cannot be recovered while leaving them functional for reuse. Degaussing does not work on SSDs and physical destruction prevents reuse.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Sanitization Methods"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-013",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A vulnerability scanner reports a critical finding on a web server with CVSS v3.1 base score of 9.8. The CVSS vector is AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H. What does this vector indicate about the authentication requirements to exploit this vulnerability?",
+    "context": "A vulnerability scanner reports a critical finding with CVSS v3.1 base score of 9.8. Vector: AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The attacker must be authenticated as a domain user",
+        "rationale": "PR:N means no authentication is required."
+      },
+      {
+        "id": "b",
+        "text": "The attacker must have physical access to the server",
+        "rationale": "AV:N means the vulnerability is exploitable over the network."
+      },
+      {
+        "id": "c",
+        "text": "No privileges are required to exploit the vulnerability",
+        "rationale": "PR:N indicates the attacker does not need any authentication or privileges."
+      },
+      {
+        "id": "d",
+        "text": "The attacker must trick a user into clicking a link",
+        "rationale": "UI:N means no user interaction is required."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "PR:N means no privileges are required. Combined with AV:N (network), AC:L (low complexity), and UI:N (no user interaction), this vulnerability is trivially exploitable remotely, explaining the 9.8 critical score.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "CVSS Scoring"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-014",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A security team discovers that a known remote code execution vulnerability in OpenSSL affects four internal applications. The vendor has released a security patch. What should the team do FIRST before deploying the patch to production?",
+    "context": "A security team discovers a remote code execution vulnerability in OpenSSL affecting four internal applications. The vendor released a patch.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Test the patch in a staging environment that mirrors production",
+        "rationale": "Testing validates the patch does not break application functionality before production deployment."
+      },
+      {
+        "id": "b",
+        "text": "Apply the patch immediately to all production systems",
+        "rationale": "Bypassing testing risks service disruption from compatibility issues."
+      },
+      {
+        "id": "c",
+        "text": "Schedule the patch for the next quarterly maintenance window",
+        "rationale": "Delaying a critical RCE patch leaves systems exposed to exploitation."
+      },
+      {
+        "id": "d",
+        "text": "Implement a WAF rule as a permanent fix",
+        "rationale": "A WAF rule is a compensating control; patching is the proper fix."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The first step before deploying any patch to production is testing in a staging environment that mirrors production. This validates compatibility before impacting production.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Patch Management"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-015",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "A monthly vulnerability scan identifies 4,200 findings. After triage, 3,800 are false positives. Of 400 true positives, 300 are low, 80 medium, and 20 high severity. Which TWO metrics BEST help leadership understand remediation effectiveness?",
+    "context": "A monthly vulnerability scan identifies 4,200 findings. After triage, 3,800 are false positives. Of 400 true positives, 300 are low, 80 medium, and 20 high severity.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Total number of findings (4,200) each month",
+        "rationale": "Including false positives is misleading."
+      },
+      {
+        "id": "b",
+        "text": "True positive count and false positive rate",
+        "rationale": "Tracking true positives and false positive rate measures scanner tuning and real vulnerability workload."
+      },
+      {
+        "id": "c",
+        "text": "Mean time to remediate (MTTR) for high and medium severity",
+        "rationale": "MTTR measures how quickly the team remediates genuine risks."
+      },
+      {
+        "id": "d",
+        "text": "Number of new vulnerabilities discovered each month",
+        "rationale": "New vulns alone do not show whether existing ones are being fixed."
+      },
+      {
+        "id": "e",
+        "text": "Total number of IP addresses scanned",
+        "rationale": "Scope does not measure remediation effectiveness."
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "True positive counts and false positive rate (b) measure scanner accuracy and workload. MTTR for high/medium vulnerabilities (c) measures remediation efficiency.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Vulnerability Scanning Metrics"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-016",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A penetration tester discovers a critical SQL injection vulnerability in a third-party SaaS application used by the organization. What is the MOST appropriate disclosure approach?",
+    "context": "A penetration tester discovers a critical SQL injection vulnerability in a third-party SaaS application.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Publish the vulnerability details on a public security forum immediately",
+        "rationale": "Public disclosure without vendor notification gives attackers a head start."
+      },
+      {
+        "id": "b",
+        "text": "Report the vulnerability to the vendor privately with technical details and a remediation timeline",
+        "rationale": "Responsible disclosure requires privately notifying the vendor with details and allowing time to patch."
+      },
+      {
+        "id": "c",
+        "text": "Exploit the vulnerability in production to demonstrate impact",
+        "rationale": "Exploiting vulnerabilities without authorization is unauthorized access and potentially illegal."
+      },
+      {
+        "id": "d",
+        "text": "Report the vulnerability to the media for public awareness",
+        "rationale": "Media disclosure bypasses vendor notification and can cause reputational harm."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Responsible (coordinated) disclosure involves privately notifying the vendor with technical details and allowing reasonable time to develop a patch before public disclosure.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Vulnerability Disclosure"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-017",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "A vulnerability scanner reports a missing patch that could allow local privilege escalation on a server. The CVSS attack vector is AV:L (Local). How should the security team prioritize this finding compared to a network-exploitable critical vulnerability?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Higher priority because privilege escalation is always critical",
+        "rationale": "The local attack vector reduces exploitability compared to network-based vulnerabilities."
+      },
+      {
+        "id": "b",
+        "text": "Lower priority because the attacker must already have local access",
+        "rationale": "AV:L means the attacker must already have local system access, limiting the attack surface."
+      },
+      {
+        "id": "c",
+        "text": "Equal priority because both could lead to full system compromise",
+        "rationale": "While both can lead to compromise, the difficulty of exploitation differs."
+      },
+      {
+        "id": "d",
+        "text": "Informational severity that can be ignored",
+        "rationale": "Privilege escalation should not be ignored; it just has reduced priority."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "AV:L (Local) means the attacker must already have local access, significantly reducing exploitability compared to AV:N (Network) where the vulnerability can be triggered remotely.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Vulnerability Classification"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-018",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A vulnerability scanner reports that all Windows servers are missing KB5005565. The administrator confirms the patch was installed last month and Windows Update shows it as installed. The scanner continues to flag it. What type of scan result is this?",
+    "context": "A vulnerability scanner reports that all Windows servers are missing KB5005565. The administrator confirms the patch was installed last month.",
+    "options": [
+      {
+        "id": "a",
+        "text": "True positive",
+        "rationale": "The patch is installed so there is no actual vulnerability."
+      },
+      {
+        "id": "b",
+        "text": "False positive",
+        "rationale": "The scanner reports a vulnerability that does not exist since the patch is installed."
+      },
+      {
+        "id": "c",
+        "text": "False negative",
+        "rationale": "A false negative would be failing to detect a real vulnerability."
+      },
+      {
+        "id": "d",
+        "text": "True negative",
+        "rationale": "A true negative means correctly identifying no vulnerability, but the scanner IS flagging it."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "A false positive incorrectly indicates a vulnerability exists. The patch is installed but the scanner continues to flag it as missing, possibly due to plugin issues or credential problems.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Vulnerability Scanning Results"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-019",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A SOC analyst reviews Windows Event Logs and finds Event ID 4688 on multiple workstations showing powershell.exe launched with encoded commands from a parent process of WINWORD.EXE. What is the analyst MOST likely observing?",
+    "context": "A SOC analyst finds Event ID 4688 showing powershell.exe with encoded commands launched from WINWORD.EXE parent process.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A user running legitimate administrative scripts from Word",
+        "rationale": "This is not a standard legitimate workflow and matches known attack patterns."
+      },
+      {
+        "id": "b",
+        "text": "A malicious macro executing PowerShell code to download a payload",
+        "rationale": "This is a common attack chain: malicious Word macros use PowerShell to download and execute payloads."
+      },
+      {
+        "id": "c",
+        "text": "A scheduled task running PowerShell maintenance scripts",
+        "rationale": "Scheduled tasks show taskeng.exe or svchost.exe as parent, not WINWORD.EXE."
+      },
+      {
+        "id": "d",
+        "text": "A Windows update running post-installation scripts",
+        "rationale": "Windows updates use system processes as parents, not Microsoft Word."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Event ID 4688 logs process creation. WINWORD.EXE spawning PowerShell with encoded commands is a known attacker technique: malicious Office macros invoke PowerShell to download payloads while evading detection.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Windows Event Log Analysis"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-020",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A network engineer deploys a security appliance inline between the firewall and the core switch. The appliance analyzes traffic and automatically blocks connections matching known attack signatures. What type of control is this?",
+    "context": "A network engineer deploys a security appliance inline between the firewall and core switch that blocks connections matching attack signatures.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Passive IDS",
+        "rationale": "A passive IDS monitors via port mirror but cannot block traffic inline."
+      },
+      {
+        "id": "b",
+        "text": "Network-based IPS",
+        "rationale": "An IPS is deployed inline and actively blocks malicious traffic based on signatures."
+      },
+      {
+        "id": "c",
+        "text": "Next-generation firewall",
+        "rationale": "An NGFW includes IPS but is typically positioned at the network perimeter."
+      },
+      {
+        "id": "d",
+        "text": "Endpoint detection and response",
+        "rationale": "EDR runs on endpoints, not inline on the network."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "An Intrusion Prevention System (IPS) is deployed inline and actively blocks malicious traffic. Key characteristics: inline placement, real-time analysis, automatic blocking.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "IDS/IPS"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-021",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "A healthcare organization handles PHI. Compliance requires preventing patient data from leaving the network. Which TWO DLP capabilities are MOST important for preventing data exfiltration via email?",
+    "context": "A healthcare organization handles PHI and needs to prevent patient data from leaving the network via email.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Network DLP scanning SMTP traffic for medical record number patterns",
+        "rationale": "Network DLP monitors outbound email at the gateway, scanning for PHI patterns."
+      },
+      {
+        "id": "b",
+        "text": "Storage DLP scanning databases for unencrypted PHI",
+        "rationale": "Storage DLP addresses data-at-rest but does not prevent email exfiltration."
+      },
+      {
+        "id": "c",
+        "text": "Endpoint DLP blocking copy-paste of PHI to webmail in browsers",
+        "rationale": "Endpoint DLP prevents data loss through webmail by monitoring clipboard and browser interactions."
+      },
+      {
+        "id": "d",
+        "text": "NAC blocking unauthorized devices from the network",
+        "rationale": "NAC manages device connectivity, not data exfiltration via email."
+      },
+      {
+        "id": "e",
+        "text": "IPS blocking SQL injection attacks",
+        "rationale": "IPS prevents network attacks but not data loss via email."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Network DLP monitors SMTP traffic at the gateway for sensitive data. Endpoint DLP prevents data loss through webmail. Together they cover corporate email and web-based email exfiltration.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Loss Prevention"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-022",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A university wants students to connect personal laptops to the campus network but requires up-to-date antivirus and patches before granting full access. Non-compliant devices go to a quarantine VLAN. What technology enforces this?",
+    "context": "A university requires up-to-date antivirus and patches before granting full network access. Non-compliant devices go to a quarantine VLAN.",
+    "options": [
+      {
+        "id": "a",
+        "text": "NAC with pre-admission assessment",
+        "rationale": "NAC checks endpoint compliance before granting access and can quarantine non-compliant devices."
+      },
+      {
+        "id": "b",
+        "text": "802.1X authentication only",
+        "rationale": "802.1X handles authentication but not endpoint compliance checks."
+      },
+      {
+        "id": "c",
+        "text": "EDR with endpoint isolation",
+        "rationale": "EDR detects threats but does not enforce pre-admission policies."
+      },
+      {
+        "id": "d",
+        "text": "VPN with split tunneling",
+        "rationale": "VPN is for remote access, not on-campus network access control."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "NAC with pre-admission assessment evaluates device security posture before granting network access. Non-compliant devices are placed in a quarantine VLAN for remediation.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Network Access Control"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-023",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "Which statement BEST distinguishes Endpoint Detection and Response (EDR) from eXtended Detection and Response (XDR)?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "EDR protects endpoints only; XDR extends across endpoints, network, email, and cloud workloads",
+        "rationale": "XDR unifies telemetry from multiple security layers; EDR is limited to endpoints."
+      },
+      {
+        "id": "b",
+        "text": "EDR is cloud-based; XDR is on-premises",
+        "rationale": "Both can be deployed in cloud, on-premises, or hybrid."
+      },
+      {
+        "id": "c",
+        "text": "EDR uses signatures; XDR uses machine learning",
+        "rationale": "Both use multiple detection methods including signatures and ML."
+      },
+      {
+        "id": "d",
+        "text": "EDR is reactive; XDR is proactive",
+        "rationale": "Both provide real-time detection and response."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "EDR focuses on endpoint telemetry. XDR correlates data across multiple security layers: endpoints, network, email, cloud, and identity for unified detection and response.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "EDR and XDR"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-024",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A Windows server generates Event ID 7045 at 3:00 AM. An hour later, Event ID 4688 shows cmd.exe running 'net localgroup Administrators corpuser5 /add' as SYSTEM. What is the likely attack chain?",
+    "context": "Windows Event ID 7045 at 3:00 AM. Event ID 4688 later shows cmd.exe adding a user to Administrators group.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A scheduled task ran legitimate maintenance",
+        "rationale": "Scheduled tasks do not create services via 7045."
+      },
+      {
+        "id": "b",
+        "text": "A service was installed (7045), then used to add a user to Administrators",
+        "rationale": "Event 7045 logs service installation. The attacker installed a service running as SYSTEM to add a backdoor admin account."
+      },
+      {
+        "id": "c",
+        "text": "A user logged in via RDP and ran administrative commands",
+        "rationale": "RDP generates Event ID 4624, not 7045."
+      },
+      {
+        "id": "d",
+        "text": "The system automatically updated software",
+        "rationale": "Software updates do not add local admin accounts."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Event 7045 indicates a new service was installed. The attacker installed a malicious service running as SYSTEM to execute a command adding a user to Administrators (persistence and privilege escalation).",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Windows Event Log Analysis"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-025",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A network engineer needs a firewall rule allowing inbound HTTPS from the internet to web server 10.1.1.10. The last ACL rule is implicit deny. Which rule should be added?",
+    "context": "A firewall rule is needed for inbound HTTPS from the internet to web server 10.1.1.10. The ACL ends with implicit deny.",
+    "options": [
+      {
+        "id": "a",
+        "text": "permit tcp any host 10.1.1.10 eq 443",
+        "rationale": "Correct: any source (internet) to web server destination port 443."
+      },
+      {
+        "id": "b",
+        "text": "permit tcp host 10.1.1.10 any eq 443",
+        "rationale": "Reversed: permits FROM the server to any destination on port 443 (outbound)."
+      },
+      {
+        "id": "c",
+        "text": "permit ip any host 10.1.1.10",
+        "rationale": "Overly permissive: allows all protocols, not just HTTPS."
+      },
+      {
+        "id": "d",
+        "text": "permit tcp any eq 443 host 10.1.1.10",
+        "rationale": "Port on the source side: matches source port 443, not destination."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "'permit tcp any host 10.1.1.10 eq 443' allows any source to the web server on destination port 443 (HTTPS). Implicit deny blocks all other traffic.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Firewall ACLs"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-026",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "Firewall rules: (1) permit tcp 10.0.1.0/24 any eq 443, (2) permit tcp any host 10.0.1.50 eq 80, (3) permit icmp any any, (4) deny tcp any any eq 22. A connection arrives from 192.168.1.100 to 10.0.1.50 port 443. What happens?",
+    "context": "Firewall rules: (1) permit tcp 10.0.1.0/24 any eq 443, (2) permit tcp any host 10.0.1.50 eq 80, (3) permit icmp any any, (4) deny tcp any any eq 22. Connection: 192.168.1.100 to 10.0.1.50:443.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Permitted by rule 2",
+        "rationale": "Rule 2 permits port 80, not 443."
+      },
+      {
+        "id": "b",
+        "text": "Permitted by rule 1",
+        "rationale": "Rule 1 requires source 10.0.1.0/24. Source is 192.168.1.100."
+      },
+      {
+        "id": "c",
+        "text": "Denied by implicit deny",
+        "rationale": "No explicit rule matches: rule 1 wrong source, rule 2 wrong port, rule 3 ICMP only, rule 4 port 22. Implicit deny blocks it."
+      },
+      {
+        "id": "d",
+        "text": "Denied by rule 4",
+        "rationale": "Rule 4 denies port 22 (SSH), not 443."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "ACLs process top-down. No rule matches this traffic, so the implicit deny at the bottom blocks it.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Firewall Rule Ordering"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-027",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "A company wants to block known malware sites and categories like gambling, while also inspecting TLS traffic. Which TWO technologies should be deployed together?",
+    "context": "A company needs to block malware sites and categories, and inspect TLS traffic.",
+    "options": [
+      {
+        "id": "a",
+        "text": "DNS-layer filtering",
+        "rationale": "DNS filtering blocks malicious domains at resolution time before a connection is established."
+      },
+      {
+        "id": "b",
+        "text": "SSL/TLS forward proxy with certificate inspection",
+        "rationale": "A forward proxy decrypts HTTPS traffic for inspection using a corporate CA certificate."
+      },
+      {
+        "id": "c",
+        "text": "Network-based IPS only",
+        "rationale": "IPS cannot inspect encrypted HTTPS traffic without TLS decryption."
+      },
+      {
+        "id": "d",
+        "text": "Application allow listing on endpoints",
+        "rationale": "Application control manages which apps run, not website access."
+      },
+      {
+        "id": "e",
+        "text": "Full tunnel VPN for all users",
+        "rationale": "A VPN encrypts traffic but does not provide URL filtering or inspection."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "DNS filtering blocks domains before connection. TLS proxy decrypts HTTPS for content inspection. Together they provide URL blocking and deep inspection of encrypted traffic.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Web and DNS Filtering"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-028",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A remote employee connects via VPN and can access internal servers and the internet through the corporate connection, while also printing to a local home printer. What VPN configuration is this?",
+    "context": "Remote employee accesses internal servers and internet through VPN while also using a local home printer.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Full tunnel",
+        "rationale": "Full tunnel sends all traffic through the VPN, hiding local resources from direct access."
+      },
+      {
+        "id": "b",
+        "text": "Split tunnel",
+        "rationale": "Split tunnel sends only corporate traffic through VPN; internet and local traffic use the local connection."
+      },
+      {
+        "id": "c",
+        "text": "Site-to-site VPN",
+        "rationale": "Site-to-site connects entire networks, not individual users."
+      },
+      {
+        "id": "d",
+        "text": "Always-on VPN",
+        "rationale": "Always-on auto-connects but does not describe traffic routing."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Split tunneling routes corporate traffic through the VPN while internet and local traffic use the user's local connection, preserving local resource access.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "VPN Technologies"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-029",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A retail chain with 200 stores needs to connect each store to the data center. Each store has broadband and 4G backup. The solution must dynamically route over the best link and prioritize POS transactions over guest Wi-Fi. Which technology meets these requirements?",
+    "context": "Retail chain with 200 stores needs connectivity using broadband and 4G backup with dynamic routing and traffic prioritization.",
+    "options": [
+      {
+        "id": "a",
+        "text": "MPLS with static routing",
+        "rationale": "MPLS requires dedicated circuits and does not dynamically use broadband or 4G."
+      },
+      {
+        "id": "b",
+        "text": "SD-WAN",
+        "rationale": "SD-WAN uses multiple connection types, dynamically routes based on performance, and applies QoS for application prioritization."
+      },
+      {
+        "id": "c",
+        "text": "Site-to-site VPN over internet",
+        "rationale": "Provides connectivity but lacks intelligent routing and QoS."
+      },
+      {
+        "id": "d",
+        "text": "Direct peering via BGP",
+        "rationale": "BGP does not provide application-level traffic prioritization."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "SD-WAN provides application-aware routing, link load balancing, automatic failover, and QoS for traffic prioritization across multiple connection types.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "SD-WAN"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-030",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "Which firewall type is specifically designed to analyze HTTP/HTTPS traffic at the application layer and detect web attacks like SQL injection and XSS?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Stateless packet filter",
+        "rationale": "Inspects only packet header fields (IP, ports)."
+      },
+      {
+        "id": "b",
+        "text": "Stateful firewall",
+        "rationale": "Tracks connection states but does not inspect application-layer payloads."
+      },
+      {
+        "id": "c",
+        "text": "Web application firewall",
+        "rationale": "A WAF operates at Layer 7 and inspects HTTP/HTTPS traffic for web application attacks."
+      },
+      {
+        "id": "d",
+        "text": "Proxy firewall",
+        "rationale": "Acts as intermediary but is not specifically tuned for web application attack detection."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "A WAF is purpose-built to inspect HTTP/HTTPS at Layer 7 for SQL injection, XSS, and other OWASP Top 10 attacks.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Firewall Types"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-031",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "An employee saves a spreadsheet with credit card numbers to a USB drive. The DLP agent on the laptop blocks the save and alerts. What type of DLP control is this?",
+    "context": "A DLP agent on a laptop blocks saving a spreadsheet with credit card numbers to a USB drive.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Network DLP",
+        "rationale": "Network DLP monitors traffic on the wire, not endpoint storage operations."
+      },
+      {
+        "id": "b",
+        "text": "Storage DLP",
+        "rationale": "Storage DLP scans data at rest in databases, not data-in-use on endpoints."
+      },
+      {
+        "id": "c",
+        "text": "Endpoint DLP",
+        "rationale": "Endpoint DLP monitors data-in-use operations on the workstation including saving to USB."
+      },
+      {
+        "id": "d",
+        "text": "Cloud DLP",
+        "rationale": "Cloud DLP monitors data in SaaS applications."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "Endpoint DLP agents monitor data-in-use: file saves, USB writes, clipboard operations. Detecting credit card patterns and blocking the save is endpoint DLP.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "DLP Controls"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-032",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A company requires users to enter a 6-digit code from an authenticator app on their smartphone after providing their password. Which authentication factors are being used?",
+    "context": "Users enter a password and then a 6-digit code from an authenticator app on their smartphone.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Something you know and something you have",
+        "rationale": "Password is knowledge. Smartphone with authenticator app (TOTP) is possession."
+      },
+      {
+        "id": "b",
+        "text": "Something you know and somewhere you are",
+        "rationale": "Geolocation is not part of this scenario."
+      },
+      {
+        "id": "c",
+        "text": "Something you have and something you are",
+        "rationale": "Biometrics are not used. Password is a knowledge factor."
+      },
+      {
+        "id": "d",
+        "text": "Something you know and something you do",
+        "rationale": "Behavioral factors are not involved."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Knowledge factor (password) + possession factor (TOTP from smartphone authenticator app) = true multifactor authentication using two different factor categories.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "MFA Factors"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-033",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "An organization deploys an identity provider so users log in once and access Salesforce and Workday without re-entering their password, using SAML 2.0. What is this architecture?",
+    "context": "Users log in once with corporate credentials and access Salesforce and Workday via SAML 2.0 assertions.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Federated identity with single sign-on",
+        "rationale": "SAML 2.0 enables SSO via authentication assertions from IdP to service providers."
+      },
+      {
+        "id": "b",
+        "text": "OAuth 2.0 authorization framework",
+        "rationale": "OAuth is for delegated authorization, not SAML-based authentication."
+      },
+      {
+        "id": "c",
+        "text": "LDAP directory service integration",
+        "rationale": "LDAP is a directory protocol, not an SSO token protocol."
+      },
+      {
+        "id": "d",
+        "text": "Kerberos authentication",
+        "rationale": "Kerberos uses tickets within Windows domains, not SAML assertions."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Federated SSO with SAML 2.0: users authenticate once at the IdP and receive SAML assertions to access multiple SPs without re-authentication.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "SSO and Federation"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-034",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "An audit reveals 15 IT administrators share the domain admin account 'AdminSA' with a 3-year-old password used for daily tasks including email. Which TWO controls remediate the most critical risks?",
+    "context": "15 IT admins share a domain admin account with old password, used for daily tasks including email.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Deploy PAM with automatic password rotation and check-in/check-out",
+        "rationale": "PAM manages privileged credentials with rotation and accountability."
+      },
+      {
+        "id": "b",
+        "text": "Implement JIT privilege elevation granting admin rights only when needed",
+        "rationale": "JIT reduces standing privileges by elevating temporarily for specific tasks."
+      },
+      {
+        "id": "c",
+        "text": "Disable the domain admin account permanently",
+        "rationale": "Breaks administrative functions without a replacement access method."
+      },
+      {
+        "id": "d",
+        "text": "Require personal accounts for email only",
+        "rationale": "Partial solution that does not address the shared privileged account."
+      },
+      {
+        "id": "e",
+        "text": "Increase the password length to 30 characters",
+        "rationale": "Does not solve the shared account problem."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "PAM manages credentials with rotation and check-in/check-out. JIT grants temporary elevation, reducing standing privileges. Together they eliminate the shared account problem.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "PAM and JIT"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-035",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A web app allows 'Sign in with Google'. Users are redirected to Google, authenticate, and Google sends an ID token confirming identity. Which protocol is this?",
+    "context": "A web app redirects users to Google for authentication and receives an ID token confirming identity.",
+    "options": [
+      {
+        "id": "a",
+        "text": "SAML 2.0",
+        "rationale": "SAML uses XML assertions, typically for enterprise SSO, not consumer social login."
+      },
+      {
+        "id": "b",
+        "text": "OAuth 2.0",
+        "rationale": "OAuth 2.0 is for authorization. It does not issue ID tokens for authentication."
+      },
+      {
+        "id": "c",
+        "text": "OpenID Connect (OIDC)",
+        "rationale": "OIDC is an authentication layer on OAuth 2.0 that issues ID tokens (JWTs) confirming user identity."
+      },
+      {
+        "id": "d",
+        "text": "Kerberos",
+        "rationale": "Kerberos is used within Windows domains, not for web social login."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "OIDC is built on OAuth 2.0 and provides authentication via ID tokens (signed JWTs). 'Sign in with Google' uses OIDC with Google as the identity provider.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "OIDC and OAuth"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-036",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "An organization uses an automated process that creates AD accounts, assigns groups, and provisions email and file access when a new employee is hired in the HR system. What is this called?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Deprovisioning",
+        "rationale": "Deprovisioning removes access when someone leaves."
+      },
+      {
+        "id": "b",
+        "text": "Just-in-time access",
+        "rationale": "JIT grants temporary elevated privileges."
+      },
+      {
+        "id": "c",
+        "text": "Identity provisioning",
+        "rationale": "Identity provisioning automates account creation and entitlement assignment based on HR events."
+      },
+      {
+        "id": "d",
+        "text": "Access attestation",
+        "rationale": "Attestation is periodic review of access rights."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "Identity provisioning automates creating and configuring user accounts based on authoritative HR data, ensuring consistent and timely access for new employees.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Identity Provisioning"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-037",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A terminated employee's AD account remained active for 3 weeks. During that time, it was used to log in remotely from an unrecognized IP. Which deprovisioning control failed?",
+    "context": "A terminated employee's account remained active for 3 weeks and was used for remote login from an unrecognized IP.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Credential rotation",
+        "rationale": "Rotates passwords regularly but does not disable accounts upon termination."
+      },
+      {
+        "id": "b",
+        "text": "Account disablement and access revocation",
+        "rationale": "Accounts must be disabled immediately upon termination to prevent unauthorized access."
+      },
+      {
+        "id": "c",
+        "text": "Account lockout policy",
+        "rationale": "Prevents brute force after multiple failed attempts."
+      },
+      {
+        "id": "d",
+        "text": "Password expiration policy",
+        "rationale": "Forces periodic password changes, not immediate disablement."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Immediate account disablement upon termination is essential. The 3-week gap allowed unauthorized access, indicating a failure in the deprovisioning process.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Deprovisioning"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-038",
+    "domain": 4,
+    "objective": "4.7",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A SOC team receives 5,000+ low-severity alerts daily. They deploy a solution that automatically enriches alerts with threat intelligence, correlates them into incidents, and creates ITSM tickets. What was deployed?",
+    "context": "A solution automatically enriches alerts with threat intelligence, correlates into incidents, and creates ITSM tickets.",
+    "options": [
+      {
+        "id": "a",
+        "text": "SIEM enhancements",
+        "rationale": "SIEM collects and correlates logs but does not typically automate enrichment and ticketing."
+      },
+      {
+        "id": "b",
+        "text": "SOAR (Security Orchestration, Automation, and Response)",
+        "rationale": "SOAR automates alert enrichment, incident correlation, ticketing, and response workflows."
+      },
+      {
+        "id": "c",
+        "text": "EDR platform",
+        "rationale": "EDR focuses on endpoint detection, not multi-source alert management."
+      },
+      {
+        "id": "d",
+        "text": "IPS tuning",
+        "rationale": "Reduces false positives but does not automate enrichment and ticketing."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "SOAR platforms automate security workflows including alert enrichment, correlation, and ticketing, reducing analyst workload and speeding response.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.7"
+      },
+      {
+        "source": "study-guide",
+        "section": "SOAR"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-039",
+    "domain": 4,
+    "objective": "4.7",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A security engineer documents step-by-step procedures for phishing response: verify headers, check URL reputation, block sender domain, search mailboxes. What is this documented procedure called?",
+    "context": "Step-by-step procedures for responding to phishing reports are documented.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Runbook",
+        "rationale": "Runbooks are IT operations procedures for routine tasks."
+      },
+      {
+        "id": "b",
+        "text": "Incident response plan",
+        "rationale": "An IR plan is a high-level strategic document."
+      },
+      {
+        "id": "c",
+        "text": "Playbook",
+        "rationale": "A playbook defines step-by-step procedures for specific security scenarios like phishing."
+      },
+      {
+        "id": "d",
+        "text": "Workflow diagram",
+        "rationale": "A workflow diagram is visual; the description is of written step-by-step procedures."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "A playbook documents step-by-step procedures for handling specific security incident types. Playbooks are key components of SOAR platforms and IR programs.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.7"
+      },
+      {
+        "source": "study-guide",
+        "section": "Playbooks"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-040",
+    "domain": 4,
+    "objective": "4.7",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "A security team manually reviews firewall logs for misconfigurations, taking 8 hours per week and missing overnight changes. What TWO benefits would automating this provide?",
+    "context": "Manual firewall log review takes 8 hours per week and misses overnight changes.",
+    "options": [
+      {
+        "id": "a",
+        "text": "24/7 continuous monitoring without human fatigue",
+        "rationale": "Automated systems run continuously without breaks or alert fatigue."
+      },
+      {
+        "id": "b",
+        "text": "Elimination of all false positive alerts",
+        "rationale": "Automation cannot completely eliminate false positives."
+      },
+      {
+        "id": "c",
+        "text": "Reduced mean time to detect (MTTD) misconfigurations",
+        "rationale": "Automated analysis processes logs in near real-time."
+      },
+      {
+        "id": "d",
+        "text": "Automatic remediation without human oversight",
+        "rationale": "Full automation without human review carries risk of unintended consequences."
+      },
+      {
+        "id": "e",
+        "text": "Guaranteed 100% detection rate",
+        "rationale": "No system guarantees 100% detection."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Automation provides continuous monitoring without fatigue and significantly reduces MTTD by processing logs in near real-time.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.7"
+      },
+      {
+        "source": "study-guide",
+        "section": "Automation Benefits"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-041",
+    "domain": 4,
+    "objective": "4.7",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A SOAR platform needs to query VirusTotal and Shodan for enrichment, then block malicious IPs on a firewall. How should the SOAR integrate with these services?",
+    "context": "A SOAR platform needs to query external services and block IPs on a firewall.",
+    "options": [
+      {
+        "id": "a",
+        "text": "SSH command-line access to each service",
+        "rationale": "Cloud services do not provide SSH access."
+      },
+      {
+        "id": "b",
+        "text": "SNMP monitoring queries",
+        "rationale": "SNMP is for network device monitoring."
+      },
+      {
+        "id": "c",
+        "text": "RESTful API calls with authentication tokens",
+        "rationale": "SOAR platforms use REST APIs with API keys or OAuth tokens for integration."
+      },
+      {
+        "id": "d",
+        "text": "Database replication between services",
+        "rationale": "Not feasible for real-time enrichment."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "SOAR platforms integrate via RESTful APIs using authentication tokens. The playbook calls each service's API in sequence for enrichment and blocking.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.7"
+      },
+      {
+        "source": "study-guide",
+        "section": "API Integration"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-042",
+    "domain": 4,
+    "objective": "4.7",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "Which statement BEST describes the difference between automation and orchestration in a security context?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Automation replaces manual tasks; orchestration coordinates multiple automated tasks across systems",
+        "rationale": "Automation handles individual tasks; orchestration sequences multiple tasks across systems."
+      },
+      {
+        "id": "b",
+        "text": "Automation is for on-premises; orchestration is for cloud",
+        "rationale": "Both apply to any environment."
+      },
+      {
+        "id": "c",
+        "text": "Automation uses SOAR; orchestration uses SIEM",
+        "rationale": "Both can use SOAR platforms."
+      },
+      {
+        "id": "d",
+        "text": "They are interchangeable terms",
+        "rationale": "Related but distinct concepts."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Automation performs a single task without human intervention. Orchestration coordinates multiple automated tasks across different systems to complete a larger workflow.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.7"
+      },
+      {
+        "source": "study-guide",
+        "section": "Automation vs Orchestration"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-043",
+    "domain": 4,
+    "objective": "4.7",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A CI/CD pipeline integrates a security scanner that automatically fails the build if a critical vulnerability is detected in code. What is this practice called?",
+    "context": "A security scanner in CI/CD automatically fails the build on critical vulnerability detection.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Vulnerability management",
+        "rationale": "Vulnerability management is the broader process, not specifically CI/CD integration."
+      },
+      {
+        "id": "b",
+        "text": "Security automation in DevSecOps",
+        "rationale": "Integrating security scanning into CI/CD is core DevSecOps, shifting security left."
+      },
+      {
+        "id": "c",
+        "text": "Runtime application self-protection",
+        "rationale": "RASP protects at runtime, not in the build pipeline."
+      },
+      {
+        "id": "d",
+        "text": "Dynamic application security testing",
+        "rationale": "DAST tests running applications, not during the build."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "DevSecOps integrates security into CI/CD pipelines. Automated security scanning that fails builds with vulnerabilities shifts security left, catching issues early.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.7"
+      },
+      {
+        "source": "study-guide",
+        "section": "DevSecOps and CI/CD"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-044",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A security team detects unusual outbound traffic from a database server, isolates it, engages law enforcement, and begins forensic imaging. Per NIST SP 800-61, which phase comes NEXT?",
+    "context": "A security team detects unusual traffic, isolates the server, engages law enforcement, and begins forensic imaging.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Preparation",
+        "rationale": "Preparation occurs before any incident."
+      },
+      {
+        "id": "b",
+        "text": "Detection and Analysis",
+        "rationale": "This phase is already completed."
+      },
+      {
+        "id": "c",
+        "text": "Containment, Eradication, and Recovery",
+        "rationale": "Isolation is containment. Next steps include eradication and recovery."
+      },
+      {
+        "id": "d",
+        "text": "Post-Incident Activity (Lessons Learned)",
+        "rationale": "Lessons Learned comes after eradication and recovery."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "NIST SP 800-61 phases: Preparation, Detection and Analysis, Containment/Eradication/Recovery, Post-Incident Activity. The team has contained the server; eradication and recovery follow.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "NIST Incident Response Phases"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-045",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A forensic investigator arrives at a running compromised server. Per the order of volatility, which evidence should be captured FIRST?",
+    "context": "A forensic investigator arrives at a running compromised server.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hard drive contents",
+        "rationale": "Persistent storage with low volatility."
+      },
+      {
+        "id": "b",
+        "text": "RAM contents",
+        "rationale": "RAM is most volatile and lost on power loss; captured first per order of volatility."
+      },
+      {
+        "id": "c",
+        "text": "Network connections",
+        "rationale": "Can be determined from RAM and netstat."
+      },
+      {
+        "id": "d",
+        "text": "System event logs",
+        "rationale": "Written to disk, which is less volatile than RAM."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Order of volatility: (1) CPU registers/cache, (2) RAM, (3) network/process table, (4) temp files, (5) disk, (6) archives. RAM disappears on power-off, so it is captured first.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Order of Volatility"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-046",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A forensic analyst collects a laptop, images the drive, stores the original in a locked locker, and documents who handled it and when. What is this documentation maintaining?",
+    "context": "A forensic analyst documents who handled evidence and when.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chain of custody",
+        "rationale": "Chain of custody records every person who handled evidence, ensuring admissibility in court."
+      },
+      {
+        "id": "b",
+        "text": "Incident response plan",
+        "rationale": "High-level strategic document."
+      },
+      {
+        "id": "c",
+        "text": "Order of volatility",
+        "rationale": "Framework for collection priority, not documentation."
+      },
+      {
+        "id": "d",
+        "text": "Forensic imaging report",
+        "rationale": "Technical details of imaging, not the physical custody trail."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Chain of custody is a chronological record of evidence handling that is critical for evidence admissibility in legal proceedings.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Chain of Custody"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-047",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "kind": "multiple-choice",
+    "prompt": "During a ransomware incident, the team must collect evidence from affected systems while returning them to production quickly. Which TWO collection approaches are MOST appropriate?",
+    "context": "Forensic evidence must be collected from ransomware-affected systems while enabling quick return to production.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Capture a full disk image using a write blocker",
+        "rationale": "Preserves all data including unallocated and slack space without altering the original."
+      },
+      {
+        "id": "b",
+        "text": "Perform a live memory capture before powering down",
+        "rationale": "Preserves volatile evidence: processes, connections, encryption keys."
+      },
+      {
+        "id": "c",
+        "text": "Remove the hard drive and replace it",
+        "rationale": "Prevents quick return to production."
+      },
+      {
+        "id": "d",
+        "text": "Run the system for 24 hours to collect more data",
+        "rationale": "Risks ransomware spreading and evidence being overwritten."
+      },
+      {
+        "id": "e",
+        "text": "Reformat drives and restore from backup",
+        "rationale": "Destroys all forensic evidence."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "Full disk imaging and live memory capture preserve both persistent and volatile evidence while allowing the system to be rebuilt and returned to production.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Forensic Evidence Collection"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-048",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "An investigator takes a bit-for-bit copy of a drive using a write blocker, then computes SHA-256 hashes of original and copy, confirming they match. What does the matching hash verify?",
+    "context": "SHA-256 hashes of original drive and forensic copy match after imaging with a write blocker.",
+    "options": [
+      {
+        "id": "a",
+        "text": "The data on the drive is not encrypted",
+        "rationale": "Hash does not indicate encryption status."
+      },
+      {
+        "id": "b",
+        "text": "The copy is exact and the imaging process did not alter the original",
+        "rationale": "Matching hashes confirm bit-for-bit integrity and that the write blocker prevented modification."
+      },
+      {
+        "id": "c",
+        "text": "The drive was not physically damaged",
+        "rationale": "Hash confirms data integrity, not physical condition."
+      },
+      {
+        "id": "d",
+        "text": "The suspect was the drive owner",
+        "rationale": "Hash does not identify ownership."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Hash verification proves the forensic copy is bit-for-bit identical and the write blocker prevented any alteration of the original. This integrity check is essential for evidence admissibility.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Forensic Imaging"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-049",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "After containing a breach, a post-incident review finds an unpatched VPN appliance was exploited. The team creates a remediation plan. Which NIST IR phase is this?",
+    "context": "Post-incident review identifies root cause and creates remediation plan.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Preparation",
+        "rationale": "Preparation occurs before incidents."
+      },
+      {
+        "id": "b",
+        "text": "Detection and Analysis",
+        "rationale": "Occurs during the incident."
+      },
+      {
+        "id": "c",
+        "text": "Containment, Eradication, and Recovery",
+        "rationale": "The active response phases during the incident."
+      },
+      {
+        "id": "d",
+        "text": "Post-Incident Activity (Lessons Learned)",
+        "rationale": "The lessons learned phase includes root cause analysis and remediation planning."
+      }
+    ],
+    "correctOptionIds": [
+      "d"
+    ],
+    "selectCount": 1,
+    "explanation": "NIST's Post-Incident Activity phase involves lessons learned, root cause analysis, and creating a remediation plan to prevent recurrence.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Lessons Learned"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-050",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "During an active incident, which communication channel is MOST appropriate for the incident response team to use for coordination?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Corporate email",
+        "rationale": "Could be monitored if the attacker has compromised the environment."
+      },
+      {
+        "id": "b",
+        "text": "Public chat application",
+        "rationale": "May lack security controls for incident-sensitive information."
+      },
+      {
+        "id": "c",
+        "text": "Out-of-band communication channel",
+        "rationale": "Uses separate infrastructure from the potentially compromised environment."
+      },
+      {
+        "id": "d",
+        "text": "Phone calls only",
+        "rationale": "Impractical for sharing detailed technical data."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "Out-of-band communication uses separate infrastructure not relying on potentially compromised systems, preventing attackers from monitoring IR coordination.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Incident Response Communication"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-051",
+    "domain": 4,
+    "objective": "4.9",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A SOC analyst needs to see every time a user was added to a privileged security group to investigate privilege escalation. Which Windows Security Event ID should they query?",
+    "context": "A SOC analyst needs to see when users are added to privileged security groups.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Event ID 4624 (successful logon)",
+        "rationale": "Tracks logon events, not group changes."
+      },
+      {
+        "id": "b",
+        "text": "Event ID 4732 (member added to security-enabled global group)",
+        "rationale": "4732 records when a user is added to a security group, including privileged groups."
+      },
+      {
+        "id": "c",
+        "text": "Event ID 4688 (process creation)",
+        "rationale": "Tracks process execution."
+      },
+      {
+        "id": "d",
+        "text": "Event ID 5156 (Windows Filtering Platform connection)",
+        "rationale": "Tracks network connections."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Event ID 4732 is logged when a member is added to a security-enabled global group, making it the key event for detecting privilege escalation via group membership changes.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.9"
+      },
+      {
+        "source": "study-guide",
+        "section": "Windows Event Log"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-052",
+    "domain": 4,
+    "objective": "4.9",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A network admin configures routers and switches to send logs to a central server at severity levels 0-4 for routers and 0-3 for firewalls. What standard logging protocol is being configured?",
+    "context": "Routers and switches send logs with severity filters to a central server.",
+    "options": [
+      {
+        "id": "a",
+        "text": "SNMP traps",
+        "rationale": "SNMP traps are for monitoring alerts via MIBs, not syslog event messages."
+      },
+      {
+        "id": "b",
+        "text": "NetFlow",
+        "rationale": "NetFlow collects traffic flow metadata, not event logs."
+      },
+      {
+        "id": "c",
+        "text": "Syslog",
+        "rationale": "Syslog is the standard protocol for event logging from network devices with severity levels 0-7."
+      },
+      {
+        "id": "d",
+        "text": "IPFIX",
+        "rationale": "IPFIX is an evolution of NetFlow for flow information export."
+      }
+    ],
+    "correctOptionIds": [
+      "c"
+    ],
+    "selectCount": 1,
+    "explanation": "Syslog (RFC 5424) is the standard logging protocol for network devices, with eight severity levels from 0 (Emergency) to 7 (Debug).",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.9"
+      },
+      {
+        "source": "study-guide",
+        "section": "Syslog"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-053",
+    "domain": 4,
+    "objective": "4.9",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "An analyst needs to find which internal hosts communicated with a known C2 server over 30 days, needing IPs, ports, and byte counts but NOT full packet contents. Which data source?",
+    "context": "An analyst needs flow-level data of communications with a known C2 server over 30 days.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Full packet capture (PCAP)",
+        "rationale": "Contains complete payloads but is resource-intensive for 30 days."
+      },
+      {
+        "id": "b",
+        "text": "NetFlow records",
+        "rationale": "Provides flow metadata (IPs, ports, bytes) without storing payloads, efficient for long retention."
+      },
+      {
+        "id": "c",
+        "text": "Windows Event Log",
+        "rationale": "Records system events, not network flows."
+      },
+      {
+        "id": "d",
+        "text": "SNMP metrics",
+        "rationale": "Provides device performance metrics, not connection logs."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "NetFlow captures flow metadata (IPs, ports, protocol, byte counts) without packet payloads, making it storage-efficient for long-term traffic analysis.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.9"
+      },
+      {
+        "source": "study-guide",
+        "section": "NetFlow"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-054",
+    "domain": 4,
+    "objective": "4.9",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "An analyst suspects malware beaconing to an external IP. The analyst needs to see the actual payload data exchanged to understand the commands received. Which data source is required?",
+    "context": "An analyst needs to see actual payload data of suspected malware beaconing traffic.",
+    "options": [
+      {
+        "id": "a",
+        "text": "NetFlow records",
+        "rationale": "Shows metadata only, not payload content."
+      },
+      {
+        "id": "b",
+        "text": "Full packet capture (PCAP)",
+        "rationale": "Captures complete packets including payload data for session reconstruction."
+      },
+      {
+        "id": "c",
+        "text": "Syslog",
+        "rationale": "Text-based event log, not packet data."
+      },
+      {
+        "id": "d",
+        "text": "DNS logs",
+        "rationale": "Show domain queries, not TCP payloads."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Full packet capture (PCAP) captures complete network packets including payloads, allowing TCP session reconstruction to read actual commands sent to malware.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.9"
+      },
+      {
+        "source": "study-guide",
+        "section": "Packet Capture"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-055",
+    "domain": 4,
+    "objective": "4.9",
+    "format": "standard",
+    "kind": "single-choice",
+    "prompt": "A monitoring system uses SNMPv3 to poll interface utilization, CPU load, and memory from 200 switches. Which SNMP component defines the specific metrics collected?",
+    "context": "",
+    "options": [
+      {
+        "id": "a",
+        "text": "Syslog severity level",
+        "rationale": "For event logging severity, not metric definitions."
+      },
+      {
+        "id": "b",
+        "text": "MIB (Management Information Base)",
+        "rationale": "A MIB defines managed device data using OIDs, including interface stats, CPU, memory."
+      },
+      {
+        "id": "c",
+        "text": "SNMP trap",
+        "rationale": "An unsolicited alert, not a definition of metrics."
+      },
+      {
+        "id": "d",
+        "text": "Community string",
+        "rationale": "An authentication credential in SNMPv1/v2c."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "A Management Information Base (MIB) defines the structure of managed device data using Object Identifiers (OIDs), each mapping to a specific metric.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.9"
+      },
+      {
+        "source": "study-guide",
+        "section": "SNMP"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-056",
+    "domain": 4,
+    "objective": "4.9",
+    "format": "scenario",
+    "kind": "single-choice",
+    "prompt": "A WAF blocks a potential SQL injection attempt. The team needs to analyze the HTTP request headers and body to determine if it is a true or false positive. Which data source provides this detail?",
+    "context": "A WAF blocked a request. The team needs HTTP request details including headers and body.",
+    "options": [
+      {
+        "id": "a",
+        "text": "NetFlow",
+        "rationale": "Shows connection metadata, not HTTP content."
+      },
+      {
+        "id": "b",
+        "text": "WAF access logs",
+        "rationale": "WAF logs record full HTTP request details: URI, headers, POST body, and WAF action."
+      },
+      {
+        "id": "c",
+        "text": "SNMP interface statistics",
+        "rationale": "Shows bandwidth utilization, not application data."
+      },
+      {
+        "id": "d",
+        "text": "Windows Security Event Log",
+        "rationale": "Records OS-level events, not HTTP requests."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "WAF access logs contain detailed HTTP request information including URI, headers, POST data, and the WAF rule triggered, enabling true/false positive determination.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.9"
+      },
+      {
+        "source": "study-guide",
+        "section": "Application Logs"
+      }
+    ]
+  }
+]

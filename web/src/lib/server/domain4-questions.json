@@ -1,0 +1,2588 @@
+[
+  {
+    "id": "mcq-4-001",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A security team uses Ansible to apply CIS Level 2 benchmarks to 40 Linux servers. After deployment, an auditor finds four servers still have root SSH login enabled. What is the MOST likely cause?",
+    "context": "A security team uses Ansible to apply CIS Level 2 benchmarks to 40 Linux servers. After deployment, an auditor finds four servers still have root SSH login enabled.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The four servers were not included in the Ansible inventory file",
+        "rationale": "Ansible only targets hosts defined in the inventory file. Missing inventory entries means playbooks never execute on those hosts."
+      },
+      {
+        "id": "b",
+        "text": "The SSH daemon was restarted before the playbook completed",
+        "rationale": "Ansible applies configurations idempotently; service restart order does not prevent configuration changes from being applied."
+      },
+      {
+        "id": "c",
+        "text": "SELinux prevented Ansible from modifying sshd_config",
+        "rationale": "Ansible modules handle SELinux contexts, and the CIS playbook typically includes SELinux configuration tasks."
+      },
+      {
+        "id": "d",
+        "text": "The Wazuh agent blocked the SSH configuration change",
+        "rationale": "Wazuh agents monitor and report events; they do not block system configuration changes."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Ansible only applies configurations to hosts defined in its inventory file. If four servers were not listed, they would not receive any playbook tasks including SSH hardening. Regular inventory audits and automated CMDB integration help prevent this issue.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-002",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A SOC analyst notices a newly deployed Linux server is not forwarding audit logs to the Wazuh manager. The Wazuh agent service is running and /var/ossec/etc/ossec.conf exists. Which configuration issue MOST likely explains the missing logs?",
+    "context": "A SOC analyst notices a newly deployed Linux server is not forwarding audit logs to the Wazuh manager. The Wazuh agent is running and ossec.conf exists.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The <client><server><address> tag points to an incorrect manager IP or hostname",
+        "rationale": "If the Wazuh agent cannot reach the manager, it runs but queues logs locally without forwarding them."
+      },
+      {
+        "id": "b",
+        "text": "The auditd service is not installed on the server",
+        "rationale": "Wazuh agents collect logs from multiple sources and are not dependent on auditd for forwarding."
+      },
+      {
+        "id": "c",
+        "text": "The ossec.conf file lacks a <syscheck> section",
+        "rationale": "File integrity monitoring is a separate capability; <syscheck> controls FIM, not log forwarding."
+      },
+      {
+        "id": "d",
+        "text": "SELinux is enforcing mode and blocking the agent's outbound connection",
+        "rationale": "SELinux does not typically block outbound TCP connections made by the Wazuh agent on port 1514/1515."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The most likely cause is an incorrect manager address in ossec.conf. The Wazuh agent starts and appears healthy, but cannot connect to the wrong manager IP, so logs are queued and never forwarded. Verifying the manager address and testing connectivity with tcpdump on port 1514 is the standard troubleshooting step.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-003",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings three weeks later. Group Policy confirms the GPO is still linked and enforced. What is the MOST likely explanation?",
+    "context": "After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings. Group Policy confirms the GPO is still linked and enforced.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "A local administrator used Local Group Policy Editor to modify the TLS settings, overriding the domain GPO",
+        "rationale": "Local Group Policy can override domain GPO settings if the domain GPO is not set to 'Enforced'."
+      },
+      {
+        "id": "b",
+        "text": "Windows Update automatically reset the TLS settings during patching",
+        "rationale": "Windows updates do not override Group Policy security settings; GPO reapplies settings at every refresh interval."
+      },
+      {
+        "id": "c",
+        "text": "The servers were rebooted and lost their GPO cache",
+        "rationale": "Rebooting does not clear Group Policy cache; GPO is re-downloaded and reapplied at startup and periodically."
+      },
+      {
+        "id": "d",
+        "text": "An antivirus update quarantined the registry keys controlling TLS",
+        "rationale": "Antivirus software does not modify TLS registry keys; it scans files for malware signatures."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Local Group Policy can override domain-level GPO settings if the domain policy is not enforced. Domain GPOs should be set to 'Enforced' and Local Group Policy should be restricted via the 'Turn off Local Group Policy Objects processing' setting.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-004",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "An organization adopts immutable infrastructure for web servers using AWS EC2 Auto Scaling with a hardened AMI. After a critical patch is released, a junior engineer connects to a running instance, installs the patch manually, and creates a new AMI from that instance. What security principle did this violate?",
+    "context": "An organization adopts immutable infrastructure using AWS EC2 Auto Scaling with hardened AMIs. A junior engineer patches a running instance manually and creates a new AMI from it.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Immutable infrastructure requires building new images from a clean, unmodified source, not from a running instance that may have configuration drift",
+        "rationale": "Creating AMIs from running instances risks inheriting undocumented changes, configuration drift, or undetected compromise."
+      },
+      {
+        "id": "b",
+        "text": "The engineer should have applied the patch using AWS Systems Manager Patch Manager instead",
+        "rationale": "While Systems Manager can patch instances, immutable infrastructure requires building new images rather than patching running instances."
+      },
+      {
+        "id": "c",
+        "text": "The engineer should have tested the patch in a staging environment first",
+        "rationale": "Testing is important, but the core violation is creating an image from a running instance rather than from a clean build."
+      },
+      {
+        "id": "d",
+        "text": "The engineer should have updated the Auto Scaling launch template before creating the new AMI",
+        "rationale": "The launch template must be updated, but the fundamental issue is the mutable approach to image creation."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Immutable infrastructure mandates that servers are never modified in-place. A new hardened image is built from a clean source, tested, and deployed through the CI/CD pipeline. By patching a running instance, the engineer introduced configuration drift by inheritance.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-005",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A patch management team needs to prioritize deployment for four scenarios. Which two scenarios represent the highest risk and should be expedited? (Select TWO.)",
+    "context": "A patch management team needs to prioritize deployment for multiple vulnerabilities. Two scenarios represent the highest risk.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "A remote code execution vulnerability in the company's public-facing web server with an active exploit in the wild",
+        "rationale": "RCE with active exploitation against an internet-facing asset represents the highest possible risk requiring immediate out-of-band patching."
+      },
+      {
+        "id": "b",
+        "text": "A medium-severity privilege escalation vulnerability in a productivity application used by 10% of users",
+        "rationale": "Local privilege escalation in a non-critical app with low prevalence is a routine patch-cycle candidate."
+      },
+      {
+        "id": "c",
+        "text": "A denial-of-service vulnerability in the internal DNS server that requires local network access to exploit",
+        "rationale": "DoS requiring local access in an internal system is lower priority than actively exploited RCE."
+      },
+      {
+        "id": "d",
+        "text": "A critical information disclosure vulnerability in the VPN concentrator with a published proof-of-concept exploit",
+        "rationale": "VPN concentrators are perimeter devices; a critical vuln with a published PoC against perimeter infrastructure is extremely urgent."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "d"
+    ],
+    "selectCount": 2,
+    "explanation": "Risk-based patch management prioritizes: (1) vulnerabilities with active exploitation, (2) critical/high CVSS severity, (3) internet-facing systems, (4) vulnerabilities with public exploit code. Options A and D both represent imminent threats requiring emergency out-of-band patching.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-006",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A SOC analyst uses Splunk to detect configuration drift on Windows servers. A search identifies that the 'RestrictAnonymous' registry key was changed on 12 servers without change management approval. Which Splunk correlation BEST identifies this drift?",
+    "context": "A SOC analyst uses Splunk to detect configuration drift on Windows servers. A registry key change was unauthorized.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "A scheduled search comparing current registry values against a known-good baseline with alerts on discrepancies",
+        "rationale": "Baseline comparison is the standard approach for configuration drift detection — establish a known-good state and alert on deviations."
+      },
+      {
+        "id": "b",
+        "text": "A real-time search for Event ID 4657 (Registry modification) on all servers",
+        "rationale": "Event ID 4657 logs registry modifications but does not evaluate whether the new value matches the expected baseline."
+      },
+      {
+        "id": "c",
+        "text": "A machine learning model detecting anomalous registry changes based on historical patterns",
+        "rationale": "ML-based anomaly detection requires significant training data and may miss infrequent but authorized changes."
+      },
+      {
+        "id": "d",
+        "text": "A lookup table of all registry keys with their creation timestamps",
+        "rationale": "Registry key creation timestamps do not indicate the current value or whether it deviates from the baseline."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Configuration drift detection requires an authoritative baseline. In Splunk, known-good configuration values are stored in a lookup table, and a scheduled search compares current values against the baseline.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-007",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "A DevSecOps team uses Trivy to scan container images in a CI/CD pipeline. A scan of the production base image reports a critical vulnerability in the OpenSSL package. The developer argues it is a false positive because the application does not use OpenSSL directly. Which response BEST addresses the risk?",
+    "context": "A DevSecOps team uses Trivy to scan container images. A critical OpenSSL CVE is found in the base image. The developer claims it is irrelevant since the app does not use OpenSSL directly.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The vulnerability must still be remediated because OpenSSL is linked into the image and could be leveraged through dependency confusion or transitive calls",
+        "rationale": "Any library present in the image expands the attack surface and can be exploited through other dependencies or future code changes."
+      },
+      {
+        "id": "b",
+        "text": "The scan result is a false positive because only directly imported libraries present a security risk",
+        "rationale": "Transitive dependencies and unused libraries still count toward the attack surface and must be patched."
+      },
+      {
+        "id": "c",
+        "text": "The team should configure Trivy to suppress CVEs for libraries the application does not import",
+        "rationale": "Suppressing CVEs bypasses security policy; the correct approach is to patch the base image."
+      },
+      {
+        "id": "d",
+        "text": "The container should be deployed with a WAF that blocks exploitation of the OpenSSL vulnerability",
+        "rationale": "WAFs operate at the HTTP/HTTPS layer and cannot mitigate vulnerabilities within the container's linked libraries."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "In container security, every package in the image contributes to the attack surface. The correct remediation is to rebuild the base image with an updated OpenSSL version or switch to a patched distro image.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-008",
+    "domain": 4,
+    "objective": "4.1",
+    "format": "scenario",
+    "prompt": "During a forensic investigation, the analyst discovers that PowerShell commands executed by an attacker were not recorded in Event ID 4104 (ScriptBlock Logging). Event ID 400 (Engine start) events are present. What is the MOST likely configuration gap?",
+    "context": "PowerShell commands were not recorded in Event ID 4104. Event ID 400 is present.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Script Block Logging was not enabled via Group Policy or registry",
+        "rationale": "Event ID 4104 requires explicit enablement via Group Policy. Without it, only engine start/stop events (400/403) are recorded."
+      },
+      {
+        "id": "b",
+        "text": "The attacker used PowerShell in constrained language mode which bypasses logging",
+        "rationale": "Constrained language mode restricts capabilities but does not disable Script Block Logging."
+      },
+      {
+        "id": "c",
+        "text": "The attacker deleted the event logs after executing commands",
+        "rationale": "Log deletion would remove both Event IDs 400 and 4104. Since Event ID 400 is present, logs were not deleted."
+      },
+      {
+        "id": "d",
+        "text": "The attacker used PowerShell 7 (pwsh.exe) which does not write to the Windows Event Log",
+        "rationale": "PowerShell 7 writes to Windows Event Log similarly to Windows PowerShell 5.1."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "PowerShell Script Block Logging (Event ID 4104) is disabled by default and must be enabled through Group Policy. Attackers target systems without Script Block Logging to execute in-memory payloads without leaving traces.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-009",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A Splunk correlation rule triggers an impossible-travel alert: a user authenticated from New York at 09:05 UTC and London at 09:35 UTC. The user is a remote employee who uses a company VPN. What is the MOST likely explanation?",
+    "context": "A Splunk correlation rule for impossible travel triggers. A user authenticated from New York at 09:05 and London at 09:35. The user uses a company VPN.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The VPN connection egressed through a different geographic POP, and the geolocation reflects the VPN server location, not the user's actual location",
+        "rationale": "VPN concentrators route traffic through regional Points of Presence. If the VPN session dropped and reconnected to a different POP, the source IP geolocation changes."
+      },
+      {
+        "id": "b",
+        "text": "The user physically traveled from New York to London in 30 minutes using a private jet",
+        "rationale": "While technically possible, this is far less likely than a VPN routing issue for a remote employee."
+      },
+      {
+        "id": "c",
+        "text": "An attacker obtained the user's credentials and is authenticating from London",
+        "rationale": "Credential theft is possible, but VPN egress switching is a well-known cause of impossible-travel false positives."
+      },
+      {
+        "id": "d",
+        "text": "The Splunk geolocation database contains an error mapping the London IP address",
+        "rationale": "Geolocation errors can occur, but VPN POP switching is more common and explains the proximity in time."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Impossible-travel detections frequently produce false positives when users connect through VPNs or cloud-based VDI. The VPN egress IP determines geolocation. If a VPN session reconnects to a different POP, the user appears to teleport.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-010",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A Windows server shows 500 failed logon attempts (Event ID 4625) from a single IP address within 10 minutes, followed by a successful logon (Event ID 4624) with Logon Type 3 from the same IP. Which conclusion is MOST accurate?",
+    "context": "A Windows server shows 500 Event ID 4625 failures from one IP, then one Event ID 4624 success from the same IP with Logon Type 3.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "A brute-force attack succeeded — the attacker found valid credentials after multiple failed attempts",
+        "rationale": "Multiple failed logons followed by a successful logon from the same IP is the classic pattern of a successful brute-force attack."
+      },
+      {
+        "id": "b",
+        "text": "This is a password-spraying attack where the attacker tried one password against many usernames",
+        "rationale": "Password spraying involves few attempts per user across many accounts, not many attempts from one IP."
+      },
+      {
+        "id": "c",
+        "text": "The account is locked out and the successful logon is from a service using cached credentials",
+        "rationale": "Account lockout prevents any logon including service accounts."
+      },
+      {
+        "id": "d",
+        "text": "The failed events are caused by a misconfigured service account using expired credentials",
+        "rationale": "A misconfigured service generates failures from the server itself, not an external IP."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The evidence chain clearly indicates a successful brute-force attack: hundreds of Event ID 4625 failures followed by Event ID 4624 success from the same source IP. Logon Type 3 indicates a network logon (SMB, RDP).",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-011",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A Linux server sends syslog messages to a central ELK stack. Authentication failure messages show severity 4 (WARNING) instead of severity 3 (ERROR). The syslog-ng configuration uses 'authpriv.info' as the filter. What is the root cause?",
+    "context": "A Linux server sends syslog to ELK. Auth failures show WARNING (4) instead of ERROR (3). The syslog-ng filter is 'authpriv.info'.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The Linux PAM module defaults to LOG_WARNING for authentication failures",
+        "rationale": "PAM modules can use LOG_WARNING for auth failures, which explains the severity. The 'authpriv.info' filter captures all messages at INFO and above."
+      },
+      {
+        "id": "b",
+        "text": "The syslog-ng configuration should use 'authpriv.err' to capture only ERROR severity messages",
+        "rationale": "Using 'authpriv.err' would exclude WARNING messages, not explain why failures show as WARNING."
+      },
+      {
+        "id": "c",
+        "text": "The ELK Logstash pipeline is misconfigured and incorrectly parsing the syslog PRI field",
+        "rationale": "Log parsing could affect displayed severity, but the root cause is the priority set by the sending application."
+      },
+      {
+        "id": "d",
+        "text": "The syslog-ng filter 'authpriv.info' captures all messages at severity INFO and above",
+        "rationale": "This describes how the filter works but does not explain the root cause of the severity level."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "PAM (Pluggable Authentication Modules) modules set syslog priorities. Many Linux distributions configure PAM to log authentication failures with LOG_WARNING (severity 4) rather than LOG_ERR. Understanding syslog facility/severity codes (0-7) is essential for accurate SIEM parsing.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-012",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A security analyst reviews NetFlow data and identifies a workstation that sent 2 GB of data to a remote IP in Russia between 2:00 AM and 4:00 AM. The remote IP has no prior history. Which additional NetFlow attribute would BEST confirm exfiltration?",
+    "context": "A workstation sent 2 GB to a remote Russian IP at 2-4 AM. The remote IP has no prior history.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The flow uses a non-standard destination port (TCP 4444) and the transfer occurred outside of business hours",
+        "rationale": "Non-standard ports and off-hours transfers are strong behavioral indicators of data exfiltration."
+      },
+      {
+        "id": "b",
+        "text": "The source workstation has high CPU usage during the transfer period",
+        "rationale": "CPU usage is not captured in NetFlow data; NetFlow captures IPs, ports, protocols, and byte counts."
+      },
+      {
+        "id": "c",
+        "text": "The researcher's account shows a concurrent interactive login during the transfer",
+        "rationale": "NetFlow does not capture authentication data."
+      },
+      {
+        "id": "d",
+        "text": "The destination IP is in the same /24 subnet as a legitimate business partner",
+        "rationale": "This would reduce suspicion, not confirm exfiltration."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "NetFlow records include IP, ports, protocol, packet count, byte count, and timestamps. For exfiltration detection, analysts look for unusual destination countries, non-standard ports, off-hours transfers, and disproportionate data volumes.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-013",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A security analyst configures an ELK stack to parse application logs. The Logstash grok filter fails on lines like '2024-03-15 14:30:22 ERROR auth_user[1423]: Login failed for user admin from IP 10.0.0.5'. Which two grok patterns would correctly parse this log line? (Select TWO.)",
+    "context": "A security analyst configures Logstash to parse application logs. The grok filter fails on a specific log line format.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:log_level} %{WORD:process}\\[%{NUMBER:pid}\\]: %{GREEDYDATA:message}",
+        "rationale": "This correctly captures ISO8601 timestamps, log levels, process names, PIDs, and the remaining message."
+      },
+      {
+        "id": "b",
+        "text": "%{DATA:timestamp} %{WORD:level} %{USERNAME:app}\\[%{INT:pid}\\]:%{GREEDYDATA:msg}",
+        "rationale": "DATA is too permissive for ISO timestamps and USERNAME may fail on underscores in process names."
+      },
+      {
+        "id": "c",
+        "text": "%{SYSLOGTIMESTAMP:timestamp} %{LOGLEVEL:log_level} %{WORD:process}\\[%{NUMBER:pid}\\]: %{IP:client_ip}",
+        "rationale": "SYSLOGTIMESTAMP does not match ISO 8601 timestamps. This pattern would fail on the timestamp field."
+      },
+      {
+        "id": "d",
+        "text": "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:log_level} %{WORD:process}\\[%{INT:pid}\\]: Login failed for user %{USERNAME:user} from IP %{IP:client_ip}",
+        "rationale": "This captures the full structured data with high specificity, avoiding greedy matching issues."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "d"
+    ],
+    "selectCount": 2,
+    "explanation": "Logstash grok filters parse unstructured log data. Pattern (a) captures key metadata using GREEDYDATA for flexibility. Pattern (d) extracts specific fields (username, IP) with higher precision.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-014",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A company must comply with PCI DSS requirement 10.7, retaining audit trail history for at least 12 months. The SIEM team configures Elasticsearch hot/warm/cold storage tiers. After 14 months, logs from month 10 are unsearchable. What is the MOST likely cause?",
+    "context": "A company configures Elasticsearch hot/warm/cold storage for PCI DSS compliance. After 14 months, logs from month 10 are unsearchable.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The cold storage node was configured with snapshot lifecycle management that deleted indices older than 12 months",
+        "rationale": "If the SLM policy deleted indices at 12 months instead of transitioning to frozen/archive storage, month 10 data would be permanently removed."
+      },
+      {
+        "id": "b",
+        "text": "The logs were corrupted during the transition from warm to cold storage",
+        "rationale": "Corruption would be detected by Elasticsearch index health checks."
+      },
+      {
+        "id": "c",
+        "text": "The hard drive on the cold storage node failed and RAID reconstruction is in progress",
+        "rationale": "A failed disk would affect all cold data, not just month 10."
+      },
+      {
+        "id": "d",
+        "text": "The Elasticsearch cluster ran out of disk space and initiated shard deletion for the oldest indices",
+        "rationale": "Elasticsearch does not automatically delete shards due to disk space."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Elasticsearch Snapshot Lifecycle Management (SLM) automates index deletion. If configured for 12-month deletion rather than transitioning to frozen tier, data is permanently removed. PCI DSS requires 12 months of retained logs.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-015",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A security auditor requires proof that log files collected from 50 Linux servers have not been modified since collection. The current syslog-ng setup writes logs to rotating files. Which enhancement BEST provides non-repudiation of log integrity?",
+    "context": "A security auditor requires proof that Linux syslog logs have not been modified since collection. The current setup writes syslog-ng to rotating files.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Configure syslog-ng to sign each log line with an HMAC-SHA256 key stored in a hardware security module (HSM)",
+        "rationale": "HMAC-based signing provides cryptographic proof of integrity and non-repudiation when the key is secured in an HSM."
+      },
+      {
+        "id": "b",
+        "text": "Store logs on a RAID 6 array to protect against disk failure",
+        "rationale": "RAID protects against disk failure but does not provide cryptographic integrity verification."
+      },
+      {
+        "id": "c",
+        "text": "Enable syslog-ng disk-based buffering to prevent log loss during network outages",
+        "rationale": "Disk buffering improves reliability but does not provide integrity verification."
+      },
+      {
+        "id": "d",
+        "text": "Set the log files to read-only with chmod 444 after rotation",
+        "rationale": "File permissions can be changed by any root user and do not provide cryptographic proof."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Non-repudiation requires cryptographic verification. HMAC-SHA256 signing provides integrity verification, key management through HSM, and non-repudiation. Alternatives include WORM storage and signed syslog formats.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-016",
+    "domain": 4,
+    "objective": "4.2",
+    "format": "scenario",
+    "prompt": "A Splunk analyst needs to find all instances where the Windows Task Scheduler created a new task on domain controllers. Event ID 4698 (scheduled task created) should be searched in the 'wineventlog' index. Which Splunk SPL query accomplishes this while showing task name and command?",
+    "context": "A Splunk analyst needs to find Event ID 4698 on domain controllers and see task name and command.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "index=wineventlog EventCode=4698 TaskName=* TaskCommand=* | table _time, host, TaskName, TaskCommand",
+        "rationale": "This query filters the index for Event ID 4698 and presents the relevant fields."
+      },
+      {
+        "id": "b",
+        "text": "index=wineventlog EventID=4698 | table _time, host, EventData",
+        "rationale": "EventID is incorrect for this index; Splunk for Windows uses EventCode, not EventID."
+      },
+      {
+        "id": "c",
+        "text": "index=wineventlog EventCode=4698 | search TaskName=* | fields TaskName, TaskCommand",
+        "rationale": "The search command after the pipe is redundant; filters should be in the base search for performance."
+      },
+      {
+        "id": "d",
+        "text": "sourcetype=WinEventLog:Security EventID=4698 | table taskname, command",
+        "rationale": "Field names are case-sensitive and the Windows TA uses EventCode, not EventID."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The correct SPL uses index=wineventlog EventCode=4698. Event ID 4698 tracks scheduled task creation. Event ID 4699 is task deletion, and 4700 is task enabled.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-017",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOC uses a SOAR platform to automate phishing response. When a user clicks a phishing link and submits credentials on a fake login page, the playbook should isolate the workstation and reset the password. During a test, the playbook isolates the workstation but does NOT reset the password. What is the MOST likely playbook design flaw?",
+    "context": "A SOAR playbook for phishing response isolates the workstation but does not reset the password. The playbook uses a conditional block after setting the credential-theft indicator.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The playbook branches on the phishing indicator alone, and the password-reset action is in a branch that only executes if a 'credential-theft' boolean is true",
+        "rationale": "If the playbook uses parallel branches, the password-reset branch depends on a boolean flag that was never set."
+      },
+      {
+        "id": "b",
+        "text": "The API call to the identity provider timed out due to network latency",
+        "rationale": "API timeouts would generate an error and typically trigger a retry, which was not observed."
+      },
+      {
+        "id": "c",
+        "text": "The SOAR platform lacks the correct IAM permissions to execute password resets",
+        "rationale": "Permission errors would generate an explicit failure response logged by the SOAR platform."
+      },
+      {
+        "id": "d",
+        "text": "The user was already isolated by a previous playbook, so the password reset was skipped",
+        "rationale": "Playbooks execute independently; prior isolation does not prevent a password reset action."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "SOAR playbook logic often uses conditional branches based on indicators. The phishing indicator triggers isolation, but the credential-theft indicator may not have been set because the playbook only checked the URL, not the follow-on credential capture.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-018",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOC analyst configures a SOAR platform to ingest threat intelligence from AlienVault OTX, IBM X-Force, and a commercial STIX/TAXII feed. The SOAR generates many false positive alerts for IPs that appear in only one feed with low confidence scores. Which configuration change would BEST reduce false positives?",
+    "context": "A SOAR platform ingests threat intelligence from multiple feeds and generates many false positives for low-confidence, single-feed IOCs.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Trigger only when the same IOC appears in at least two independent feeds with a confidence score above a defined threshold",
+        "rationale": "Cross-referencing multiple independent sources with a minimum confidence threshold filters out low-quality threat intelligence."
+      },
+      {
+        "id": "b",
+        "text": "Remove all free threat intelligence feeds and use only the commercial STIX/TAXII feed",
+        "rationale": "Commercial feeds can also contain false positives; removing sources reduces coverage."
+      },
+      {
+        "id": "c",
+        "text": "Increase the confidence score threshold for all feeds to 90%",
+        "rationale": "Blindly increasing thresholds may filter out legitimate threats reported at lower confidence levels."
+      },
+      {
+        "id": "d",
+        "text": "Disable all automated playbooks and manually review each alert",
+        "rationale": "This defeats the purpose of SOAR automation."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Threat intelligence quality management uses confidence scoring and source cross-referencing. The STIX/TAXII protocol provides standardized confidence and TLP markings.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-019",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOC manager designs a SOAR playbook for EDR IOCs. Which two triggers should be configured for FULL automation (no human approval required)? (Select TWO.)",
+    "context": "A SOC manager designs a SOAR playbook for EDR IOCs. Two trigger types should be fully automated.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Isolation of a workstation confirmed to be communicating with a known C2 server in a threat intelligence feed",
+        "rationale": "Definitive C2 communication requires immediate containment. Automated isolation reduces dwell time."
+      },
+      {
+        "id": "b",
+        "text": "Blocking an IP address on the firewall after 10 failed SSH attempts from that IP",
+        "rationale": "Failed logins may indicate brute-force or be caused by misconfigured services. This requires human review."
+      },
+      {
+        "id": "c",
+        "text": "Password reset for a user whose credentials were found in a dark web credential dump",
+        "rationale": "Credential dumps may contain old or inaccurate data. Automated resets could lock out legitimate users."
+      },
+      {
+        "id": "d",
+        "text": "Quarantining a file identified as malicious by three independent AV engines with 100% match",
+        "rationale": "Multi-engine consensus with unanimous detection provides high confidence. Automated quarantine prevents spread."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "d"
+    ],
+    "selectCount": 2,
+    "explanation": "Full automation is appropriate when: the indicator is highly reliable, the action is reversible or low-risk, and speed is critical. Actions with potential business disruption typically require human approval.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-020",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOAR platform triages 200 alerts per hour using a priority matrix based on CVSS score and asset criticality. A medium-severity (CVSS 5.5) alert on an internet-facing web server gets LOW priority, while a low-severity (CVSS 3.0) alert on the same server gets HIGH priority. What BEST explains this?",
+    "context": "A SOAR assigns LOW priority to CVSS 5.5 but HIGH priority to CVSS 3.0 on the same internet-facing web server.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The CVSS 3.0 alert corresponds to active exploitation in the wild, while the CVSS 5.5 has no known exploits — the SOAR integrates exploit intelligence into priority scoring",
+        "rationale": "SOAR platforms augment CVSS with threat intelligence such as CISA KEV, exploit availability, and active campaign data."
+      },
+      {
+        "id": "b",
+        "text": "The CVSS 5.5 vulnerability was incorrectly scored and the SOAR should recalculate it",
+        "rationale": "The scenario describes intelligence-augmented prioritization, not CVSS recalculation."
+      },
+      {
+        "id": "c",
+        "text": "The SOAR automation engine has a bug that reversed the priority assignments",
+        "rationale": "A bug is possible but less likely than intentional exploit-intelligence integration."
+      },
+      {
+        "id": "d",
+        "text": "The medium severity vulnerability is in a compensating control so it is less relevant",
+        "rationale": "Compensating controls affect risk but do not explain why CVSS 3.0 would be prioritized over CVSS 5.5."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Modern SOAR platforms integrate threat intelligence to augment CVSS scores with exploit context. A vulnerability with active exploitation poses an immediate threat superseding its base CVSS score.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-021",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOAR playbook enriches file hashes from email attachments by querying VirusTotal's API. After deployment, the SOC exceeds the VirusTotal free tier quota within two hours. Which design improvement BEST ensures continuous enrichment without exceeding API limits?",
+    "context": "A SOAR playbook queries VirusTotal API for file hash enrichment but exceeds the free tier quota within two hours.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Implement a cache store that checks if the hash was already queried in the last 24 hours before making an API call",
+        "rationale": "Caching prevents redundant API calls for duplicated or re-sent attachments, the most common cause of quota exhaustion."
+      },
+      {
+        "id": "b",
+        "text": "Upgrade to a VirusTotal Enterprise license with unlimited API calls",
+        "rationale": "Purchasing a higher tier addresses the symptom but caching reduces cost and API load."
+      },
+      {
+        "id": "c",
+        "text": "Remove VirusTotal enrichment and rely on the email gateway's built-in reputation scoring",
+        "rationale": "Removing enrichment reduces detection capability."
+      },
+      {
+        "id": "d",
+        "text": "Increase the playbook's timeout to wait longer for API responses",
+        "rationale": "Timeout settings do not affect API call volume."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "API rate limiting and quota management are essential SOAR design considerations. Caching hash-to-verdict mappings with appropriate TTL significantly reduces API calls while maintaining enrichment quality.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-022",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOAR playbook detects a compromised host using EDR signals and triggers network isolation via a switch management API. The playbook runs successfully, but the isolated host continues communicating with internal servers. What is the MOST likely cause?",
+    "context": "A SOAR playbook triggers network isolation via a switch API, but the isolated host continues communicating with internal servers.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The playbook disabled the switch port but the host has a redundant network connection through a different switch that was not isolated",
+        "rationale": "Hosts with multiple NICs connected to different switches require all switch ports to be disabled."
+      },
+      {
+        "id": "b",
+        "text": "The EDR agent failed to detect the C2 traffic after isolation",
+        "rationale": "EDR detection is not relevant to network isolation effectiveness."
+      },
+      {
+        "id": "c",
+        "text": "The switch API call returned success but the ACL was applied to the wrong VLAN",
+        "rationale": "While possible, the redundant NIC scenario is a more common operational gap."
+      },
+      {
+        "id": "d",
+        "text": "The host was already quarantined by the EDR agent before the SOAR action completed",
+        "rationale": "EDR quarantine does not explain why traffic continued after switch isolation."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "SOAR isolation playbooks must account for hosts with multiple network paths (dual NICs, cellular modems, virtual switches). The playbook should query the CMDB for all interfaces and disable all connected ports.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-023",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOAR integration with a cloud SIEM fails after the SIEM provider rotates API keys for routine security maintenance. The playbook runs but returns HTTP 401 errors. Which SOAR capability would have prevented this outage?",
+    "context": "A SOAR integration fails after the SIEM provider rotates API keys. The playbook returns 401 errors.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "A secrets management integration with HashiCorp Vault or AWS Secrets Manager that automatically retrieves the current API key",
+        "rationale": "Automated secrets management allows the SOAR to retrieve current API keys dynamically when rotated."
+      },
+      {
+        "id": "b",
+        "text": "An API retry policy that resubmits failed requests after a 5-second delay",
+        "rationale": "Retry policies handle transient network errors, not authentication failures from credential changes."
+      },
+      {
+        "id": "c",
+        "text": "A webhook that alerts the SOC when API calls return error codes",
+        "rationale": "Alerting detects the problem but does not prevent the outage."
+      },
+      {
+        "id": "d",
+        "text": "A playbook test mode that validates API connectivity before execution",
+        "rationale": "Test mode would detect the failure but not resolve it."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Secrets management integration prevents outages from credential rotation. Best practices include dynamic secrets with short TTLs and automated rotation that updates the vault before the old key expires.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-024",
+    "domain": 4,
+    "objective": "4.3",
+    "format": "scenario",
+    "prompt": "A SOC designs a SOAR playbook for email quarantine. The playbook must analyze sender reputation, attachment hashes, and URL reputation before deciding delete/quarantine/deliver. Which two design principles minimize false positives? (Select TWO.)",
+    "context": "A SOC designs a SOAR playbook for email quarantine. It must analyze sender reputation, attachments, and URLs before deciding the action.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Implement a weighted scoring system where each indicator contributes to a final risk score, and the action is determined by configurable thresholds",
+        "rationale": "Weighted scoring allows fine-tuning based on organizational risk tolerance."
+      },
+      {
+        "id": "b",
+        "text": "Use a binary decision tree where any single malicious indicator triggers immediate deletion",
+        "rationale": "Binary decision trees with immediate deletion based on a single indicator generate excessive false positives."
+      },
+      {
+        "id": "c",
+        "text": "Include a human-in-the-loop decision point when the risk score falls in a middle range that is neither clearly malicious nor clearly benign",
+        "rationale": "Gray-area decisions benefit from human analysis."
+      },
+      {
+        "id": "d",
+        "text": "Deliver all messages with any benign indicator and only quarantine messages where ALL indicators are malicious",
+        "rationale": "This is too permissive — a single benign indicator should not override an overall malicious assessment."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Weighted scoring enables nuanced decision-making combining multiple risk factors. Human-in-the-loop for borderline cases reduces false positives while maintaining security.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-025",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "A security analyst receives an EDR alert that a workstation is beaconing to a known C2 server every 60 seconds. The analyst isolates the workstation, captures memory and disk images, then rebuilds the workstation from a known-good image. Which NIST IR lifecycle phase is the analyst performing when rebuilding the workstation?",
+    "context": "A security analyst confirms a C2 beaconing alert, isolates the workstation, captures images, then rebuilds from a known-good image.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Eradication — removing all traces of the incident by rebuilding the compromised system",
+        "rationale": "Eradication eliminates the root cause. Rebuilding from a known-good image removes malware and restores trust."
+      },
+      {
+        "id": "b",
+        "text": "Recovery — returning the system to production operation",
+        "rationale": "Recovery follows eradication; rebuilding is part of eradication, bringing it online is recovery."
+      },
+      {
+        "id": "c",
+        "text": "Containment — preventing the incident from spreading",
+        "rationale": "Containment (isolation) was performed earlier when the analyst isolated the workstation."
+      },
+      {
+        "id": "d",
+        "text": "Post-Incident Activity — conducting a lessons-learned review",
+        "rationale": "Post-incident occurs after recovery and involves documentation and process improvement."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The NIST SP 800-61 IR Lifecycle: (1) Preparation, (2) Detection & Analysis, (3) Containment, Eradication & Recovery, (4) Post-Incident Activity. Rebuilding is specifically Eradication within phase 3.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-026",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "A company conducts an IR exercise where participants verbally describe their actions and decisions based on a pre-defined script without using live systems. What type of exercise is this?",
+    "context": "An IR exercise where participants verbally describe their response to a scenario without executing technical actions.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tabletop exercise — a discussion-based session where participants talk through their response without executing technical actions",
+        "rationale": "Tabletop exercises are discussion-based, focusing on roles, communications, and decision-making."
+      },
+      {
+        "id": "b",
+        "text": "Functional exercise — a live simulation where participants execute actual response procedures",
+        "rationale": "Functional exercises involve actual execution of procedures in a simulated environment."
+      },
+      {
+        "id": "c",
+        "text": "Full-scale exercise — a comprehensive, multi-agency exercise with live systems",
+        "rationale": "Full-scale exercises involve actual deployment of personnel and resources."
+      },
+      {
+        "id": "d",
+        "text": "Walkthrough — a technical review of system configurations",
+        "rationale": "A walkthrough is a code or configuration review, not an IR exercise."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The three IR exercise types are: Tabletop (discussion-based), Functional (hands-on with test systems), and Full-scale (comprehensive, multi-agency live exercise). Tabletop exercises are the most cost-effective way to test IR plans.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-027",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "An organization's IR plan requires notifying law enforcement within 4 hours of confirming ransomware on critical infrastructure. The CISO delays notification by 6 hours to collect more evidence. Which IR plan component did the CISO violate?",
+    "context": "An IR plan requires law enforcement notification within 4 hours. The CISO delays by 6 hours for more evidence.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The communication plan — specifically the external notification and escalation procedures with defined SLAs",
+        "rationale": "The communication plan defines who must be notified, by when, and by whom. Delaying violates defined SLAs."
+      },
+      {
+        "id": "b",
+        "text": "The containment strategy — isolating affected systems to prevent spread",
+        "rationale": "Containment involves technical actions, not notification timelines."
+      },
+      {
+        "id": "c",
+        "text": "The evidence preservation policy — collecting forensic data before remediation",
+        "rationale": "While evidence collection is important, the violation is of notification timelines."
+      },
+      {
+        "id": "d",
+        "text": "The business continuity plan — maintaining operations during the incident",
+        "rationale": "BCP focuses on maintaining critical functions, not notification timelines."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The IR plan's communication plan defines internal and external notification requirements with SLAs. Violating defined SLAs may have legal and regulatory consequences.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-028",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "A forensic analyst uses 'dd if=/dev/sda of=/evidence/image.dd bs=4096 conv=noerror,sync' to image a hard drive. After completion, the SHA-256 hash of the original drive does not match the image hash. What is the MOST likely cause?",
+    "context": "An analyst runs dd with conv=noerror,sync. The source disk hash does not match the image hash.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The 'conv=noerror,sync' option caused dd to pad unreadable sectors with zeros, altering the data from the original",
+        "rationale": "The noerror option continues on read errors, and sync pads failed blocks with zeros. This causes hash mismatch."
+      },
+      {
+        "id": "b",
+        "text": "The dd command was used incorrectly — the if and of parameters were reversed",
+        "rationale": "If reversed, dd would have overwritten the source drive, an immediately catastrophic failure."
+      },
+      {
+        "id": "c",
+        "text": "The SHA-256 hash was calculated on the image file instead of the device",
+        "rationale": "Hashing the image vs. device produces different results, but investigators typically hash both."
+      },
+      {
+        "id": "d",
+        "text": "The block size of 4096 caused dd to skip the MBR/GPT partition table",
+        "rationale": "Block size does not affect whether dd reads the partition table."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The conv=noerror,sync option handles bad sectors by padding with zeros. While this maintains correct image sizing, the padded zeros differ from original data, causing hash mismatch. Forensic documentation should note all read errors.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-029",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "An incident responder arrives at a scene where a server is actively running ransomware. The responder needs to preserve volatile data. Which action should be performed FIRST?",
+    "context": "An incident responder arrives at a scene where a server is actively running ransomware. The responder needs to preserve volatile data.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Capture the contents of volatile memory using a tool like memdump.exe or LiME before any other action",
+        "rationale": "Memory contains running processes, encryption keys, network connections, and the ransomware binary. Memory must be captured first."
+      },
+      {
+        "id": "b",
+        "text": "Pull the power cable to instantly stop the encryption process",
+        "rationale": "Pulling power destroys volatile data and may corrupt disk writes. Not recommended."
+      },
+      {
+        "id": "c",
+        "text": "Run 'netstat -an' to capture active network connections to a text file",
+        "rationale": "Running netstat changes system state and should only occur after memory capture."
+      },
+      {
+        "id": "d",
+        "text": "Disconnect the network cable to prevent further C2 communication",
+        "rationale": "Disconnecting the network stops C2 but does not preserve the most volatile data."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Order of Volatility (OOV): CPU registers > routing tables > process table/kernel memory > temporary files > disk > remote logs. Memory acquisition (RAM) must come before any action that alters system state.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-030",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "During a ransomware incident affecting 50 workstations, the IR team disables non-essential network services on the floor switch instead of physically disconnecting each workstation, before evidence collection. Which TWO containment objectives is the team achieving with this switch-level approach? (Select TWO.)",
+    "context": "During a ransomware incident, the IR team disables services on the switch instead of disconnecting 50 workstations individually.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Preventing lateral movement by segmenting the affected subnet from the rest of the network",
+        "rationale": "Switch-level ACLs isolate the compromised subnet, stopping the ransomware from spreading to other network segments."
+      },
+      {
+        "id": "b",
+        "text": "Preserving forensic evidence on individual workstations by avoiding actions that alter system state",
+        "rationale": "Physical disconnection or power-off would alter volatile data. Switch isolation stops network traffic without changing the forensic state of each workstation."
+      },
+      {
+        "id": "c",
+        "text": "Eradicating the ransomware by removing malicious files from all 50 workstations",
+        "rationale": "Eradication requires removing malware from each system, which switch-level isolation does not accomplish."
+      },
+      {
+        "id": "d",
+        "text": "Recovering encrypted files by initiating automated backup restoration",
+        "rationale": "File recovery is a separate recovery-phase action, not a containment objective."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "Network segmentation as containment uses network infrastructure to isolate compromised subnets. This achieves two objectives: (1) stops lateral movement by blocking the propagation path, (2) preserves forensic evidence by avoiding power-off or physical disconnection. This approach is scalable for large incidents and enables remote forensic analysis through managed access rules.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-031",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "After containing a web application breach caused by an unpatched SQL injection vulnerability in a custom application, the IR team needs permanent removal. Which action represents COMPLETE eradication?",
+    "context": "After containing a web application breach caused by SQL injection in a custom app, the IR team needs complete eradication.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Patching the SQL injection vulnerability AND verifying all compromised data and backdoors are removed",
+        "rationale": "Eradication requires removing the root cause AND eliminating all persistence mechanisms."
+      },
+      {
+        "id": "b",
+        "text": "Restoring the application from the last known-good backup",
+        "rationale": "Restoring from backup may reintroduce the vulnerability and does not remove attacker backdoors."
+      },
+      {
+        "id": "c",
+        "text": "Changing all database passwords used by the application",
+        "rationale": "Password changes are recovery, not eradication. The SQLi vulnerability itself must be fixed."
+      },
+      {
+        "id": "d",
+        "text": "Rebuilding the web server from a hardened image",
+        "rationale": "Rebuilding removes webshells but does not fix the application code vulnerability."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Complete eradication requires removing root cause, eliminating all persistence mechanisms, and verifying the system is in a known-good state. NIST SP 800-61 emphasizes eradication is only complete when all threats are removed.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-032",
+    "domain": 4,
+    "objective": "4.4",
+    "format": "scenario",
+    "prompt": "A post-incident review meeting 30 days after a data breach presents metrics (72-hour dwell time, 15-minute MTTD, 4-hour MTTR) and recommends implementing MFA. The root cause was a missing access control policy. Which NIST IR lifecycle phase is being performed?",
+    "context": "A post-incident review 30 days after a breach presents metrics, identifies root cause, and recommends MFA.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Post-Incident Activity — the lessons-learned phase where the incident is analyzed and improvements are recommended",
+        "rationale": "Post-incident activity involves detailed review, metrics analysis, root cause identification, and improvement recommendations."
+      },
+      {
+        "id": "b",
+        "text": "Recovery — returning systems to normal operations",
+        "rationale": "Recovery occurs immediately after eradication, not 30 days later."
+      },
+      {
+        "id": "c",
+        "text": "Detection and Analysis — identifying and confirming the incident",
+        "rationale": "Detection occurs during the active incident, not in a review meeting."
+      },
+      {
+        "id": "d",
+        "text": "Preparation — establishing policies and tools before an incident",
+        "rationale": "Preparation occurs before incidents. The post-incident review feeds into preparation."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Post-Incident Activity (NIST SP 800-61 Phase 4) occurs 2-4 weeks after recovery. It involves lessons-learned, root cause analysis, metric review, and improvement recommendations that feed back into Preparation.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-033",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A forensic analyst must collect evidence from a running, compromised Linux server. Which sequence represents the CORRECT order of volatility?",
+    "context": "A forensic analyst must collect evidence from a running, compromised Linux server following the correct order of volatility.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "RAM -> network connections -> running processes -> temporary files -> hard drive -> remote backups",
+        "rationale": "This follows the correct OOV: most volatile (RAM) to least volatile (archived data)."
+      },
+      {
+        "id": "b",
+        "text": "Hard drive -> RAM -> network connections -> running processes -> temporary files -> remote backups",
+        "rationale": "Hard drive is less volatile than RAM; network connections are lost on power-off."
+      },
+      {
+        "id": "c",
+        "text": "Remote backups -> hard drive -> temporary files -> running processes -> RAM -> network connections",
+        "rationale": "This is the reverse of the correct order."
+      },
+      {
+        "id": "d",
+        "text": "Running processes -> hard drive -> RAM -> network connections -> temporary files -> remote backups",
+        "rationale": "RAM is more volatile than running processes."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "RFC 3227 Order of Volatility: (1) CPU registers/cache, (2) routing/ARP/process tables, (3) live network connections, (4) temporary files, (5) disk, (6) remote logs, (7) archival media.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-034",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A forensic analyst collects a hard drive from a suspected insider threat. The analyst documents everyone who handled the drive, when and why it was transferred, and secures it in a locked evidence locker. During legal proceedings, the defense argues evidence tampering. Which document BEST addresses this challenge?",
+    "context": "An analyst documents who handled the evidence, when, and why, and secures it. The defense challenges evidence integrity.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The chain of custody form — documenting every transfer with date, time, purpose, and signatures",
+        "rationale": "Chain of custody provides a documented, auditable trail establishing that evidence was not tampered with."
+      },
+      {
+        "id": "b",
+        "text": "The forensic report describing tools and methods used during analysis",
+        "rationale": "The forensic report describes analysis methodology, not evidence handling before analysis."
+      },
+      {
+        "id": "c",
+        "text": "The incident response report describing the overall investigation",
+        "rationale": "The IR report covers the incident timeline but not detailed custody logs."
+      },
+      {
+        "id": "d",
+        "text": "The evidence bag seal showing whether the bag was opened",
+        "rationale": "Evidence seals show if the container was opened but not who handled it or when."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Chain of custody documents every transfer with: who transferred, who received, date/time, purpose, and signatures. Breaks can render evidence inadmissible under Daubert or Frye standards.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-035",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "An organization issues a legal hold notice. A system administrator receives the notice but continues the standard 30-day log rotation, deleting logs that are 35 days old. What is the consequence?",
+    "context": "A system administrator receives a legal hold notice but continues standard log rotation, deleting logs that are 35 days old.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The organization may face spoliation of evidence sanctions including adverse inference instructions or monetary penalties",
+        "rationale": "Spoliation is destruction of evidence relevant to litigation. Courts may impose adverse inference instructions, monetary sanctions, or default judgment."
+      },
+      {
+        "id": "b",
+        "text": "There is no consequence because logs older than 30 days are outside the scope of the legal hold",
+        "rationale": "Legal holds apply to ALL relevant ESI regardless of retention policies."
+      },
+      {
+        "id": "c",
+        "text": "The administrator should have deleted the logs before the legal hold was issued",
+        "rationale": "Deleting evidence before a hold may also be spoliation if litigation is foreseeable."
+      },
+      {
+        "id": "d",
+        "text": "The organization only needs to preserve logs if a lawsuit is actually filed",
+        "rationale": "Legal holds begin when litigation is reasonably anticipated, not just when filed."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "A legal hold suspends normal retention policies for relevant ESI. Deleting evidence under a legal hold constitutes spoliation, resulting in court sanctions.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-036",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A forensic analyst needs to acquire a SATA hard drive from a powered-off Windows workstation used to access illegal content. Which acquisition method should be used?",
+    "context": "A forensic analyst needs to acquire a SATA hard drive from a powered-off Windows workstation.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Remove the drive, connect it to a forensic write-blocker, attach to a forensic workstation, and create a bit-for-bit image using FTK Imager",
+        "rationale": "For powered-off systems, use a hardware write-blocker and create a forensic image (E01 or dd)."
+      },
+      {
+        "id": "b",
+        "text": "Boot the workstation from a Linux live CD and use dd to image the drive to USB",
+        "rationale": "Booting from a live CD modifies system state and risks writing to the evidence drive."
+      },
+      {
+        "id": "c",
+        "text": "Create a network-based image by connecting to the forensic server via crossover cable",
+        "rationale": "Network imaging requires the system to be running, changing system state."
+      },
+      {
+        "id": "d",
+        "text": "Remove the drive and connect it directly to a forensic workstation without a write-blocker",
+        "rationale": "Connecting without a write-blocker allows the OS to write to the drive, contaminating evidence."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Forensic acquisition best practices: hardware write-blocker, bit-for-bit imaging, forensic imaging tools (FTK Imager creates E01 with metadata and hashes), and hash verification.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-037",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A forensic analyst needs evidence from a live, critical Windows server that cannot be shut down. Which two acquisition methods should be prioritized? (Select TWO.)",
+    "context": "A forensic analyst needs evidence from a live, critical Windows server that cannot be shut down.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Live memory acquisition using FTK Imager's memory capture or Dumplt to capture RAM before any other action",
+        "rationale": "Memory is the most volatile data and must be captured first."
+      },
+      {
+        "id": "b",
+        "text": "Full disk imaging via network boot (PXE) to a forensic server",
+        "rationale": "Network boot requires a reboot, destroying volatile data. Not suitable."
+      },
+      {
+        "id": "c",
+        "text": "Triage imaging of specific files and folders relevant to the investigation using PowerShell or a forensic tool",
+        "rationale": "Triage imaging collects key evidence without impacting the running system."
+      },
+      {
+        "id": "d",
+        "text": "Shutting down the server gracefully and removing the hard drives for offline imaging",
+        "rationale": "The server cannot be shut down. Graceful shutdown also destroys volatile data."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Live forensics: capture volatile memory first, then perform triage collection of key files (registry hives, prefetch, event logs, $MFT). Full disk imaging requires shutdown, which is not an option here.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-038",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A security analyst needs to capture network traffic to investigate possible data exfiltration from workstation 10.0.1.50. The traffic crosses a core switch carrying all VLANs. Which packet capture approach is MOST appropriate?",
+    "context": "A security analyst needs to capture traffic from a specific workstation. The traffic crosses a core switch with all VLANs.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Configure a SPAN/port mirror on the core switch to copy traffic from the workstation's access switch port, capture with Wireshark or tcpdump",
+        "rationale": "SPAN/port mirror copies traffic from specific ports without disrupting production traffic."
+      },
+      {
+        "id": "b",
+        "text": "Install a network TAP inline between the workstation and the switch",
+        "rationale": "A TAP requires physical installation and a maintenance window, not ideal during an active investigation."
+      },
+      {
+        "id": "c",
+        "text": "Run tcpdump directly on the workstation to capture its own traffic",
+        "rationale": "Running tcpdump on a suspect workstation alerts the attacker and risks evidence tampering."
+      },
+      {
+        "id": "d",
+        "text": "Use Wireshark on the core switch's management interface to capture all VLAN traffic",
+        "rationale": "Capturing all VLAN traffic is unnecessary and may miss the specific workstation's traffic."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Network forensics: SPAN/port mirror copies specific port traffic to a monitoring port without disrupting production. Filter to the target IP to minimize capture file size.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-039",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A forensic analyst has physical access to a seized, powered-on, passcode-locked iOS smartphone. Which acquisition method is MOST appropriate?",
+    "context": "A forensic analyst has physical access to a seized, powered-on, passcode-locked iOS smartphone.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Check if the device supports logical acquisition via USB using Cellebrite UFED or GrayKey to bypass the lock screen on supported iOS versions",
+        "rationale": "Commercial forensic tools use available exploits to bypass iOS lock screens for logical or full file system acquisition."
+      },
+      {
+        "id": "b",
+        "text": "Remove the NAND flash chip for chip-off acquisition",
+        "rationale": "Chip-off is invasive, destroys the device, and is rarely effective for iOS due to hardware encryption."
+      },
+      {
+        "id": "c",
+        "text": "Guess the passcode by trying common PINs",
+        "rationale": "Guessing triggers device wipe after 10 failed attempts."
+      },
+      {
+        "id": "d",
+        "text": "Perform JTAG acquisition by connecting to the test access port",
+        "rationale": "Modern iOS devices have locked bootloaders preventing JTAG access."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Mobile forensics for iOS: (1) Logical acquisition via USB using exploits, (2) iCloud backup, (3) Full file system (requires jailbreak), (4) Chip-off/JTAG as last resort. Modern iOS uses Secure Enclave hardware encryption.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-040",
+    "domain": 4,
+    "objective": "4.5",
+    "format": "scenario",
+    "prompt": "A forensic investigator needs to collect logs from a compromised AWS EC2 instance that was terminated by the attacker. The investigator has AWS account access. Which AWS feature should be used to recover the instance's logs?",
+    "context": "A forensic investigator needs logs from a compromised, terminated EC2 instance. The investigator has AWS account access.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "AWS CloudTrail logs and Amazon CloudWatch Logs — stored independently of the EC2 instance lifecycle",
+        "rationale": "CloudTrail records API calls (including termination), and CloudWatch stores instance logs that persist after termination."
+      },
+      {
+        "id": "b",
+        "text": "The EC2 instance's system log (console output) accessible after termination",
+        "rationale": "Console output only contains early boot diagnostics, not detailed application logs."
+      },
+      {
+        "id": "c",
+        "text": "An EBS snapshot of the root volume",
+        "rationale": "EBS snapshots persist if taken before termination, but are not automatically created."
+      },
+      {
+        "id": "d",
+        "text": "The EC2 instance's instance metadata service (IMDS)",
+        "rationale": "IMDS is internal to running instances and inaccessible after termination."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Cloud forensics: CloudTrail records API calls, CloudWatch stores instance logs independently of instance lifecycle. Key forensic sources for terminated instances.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-041",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "In a data breach trial, the prosecution presents: (1) a printed log showing the defendant's IP, (2) expert testimony about the log format, (3) the actual hard drive with original logs. Which evidence types are represented?",
+    "context": "In a data breach trial: printed log showing IP, expert testimony, actual hard drive. Which evidence types?",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "(1) Demonstrative — (2) Testimonial — (3) Real evidence",
+        "rationale": "Printed log is demonstrative (visual aid), expert testimony is testimonial (sworn statement), hard drive is real evidence (physical object)."
+      },
+      {
+        "id": "b",
+        "text": "(1) Documentary — (2) Real — (3) Demonstrative",
+        "rationale": "Expert testimony is testimonial, not real evidence. Hard drive is real, not demonstrative."
+      },
+      {
+        "id": "c",
+        "text": "(1) Real — (2) Documentary — (3) Testimonial",
+        "rationale": "Printed log is demonstrative, not real. Testimony is testimonial, not documentary."
+      },
+      {
+        "id": "d",
+        "text": "(1) Testimonial — (2) Real — (3) Documentary",
+        "rationale": "Printed log is not testimonial. Hard drive is real, not documentary."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Four evidence types: Real (physical objects), Documentary (writings/records), Demonstrative (visual aids), Testimonial (sworn statements). Understanding classification is critical for admissibility.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-042",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "A forensic analyst examines a Windows 10 system for evidence of a portable application run from a USB drive that was never installed. Which two artifacts would contain evidence of execution? (Select TWO.)",
+    "context": "A forensic analyst needs to find evidence of a portable application run from USB on Windows 10 that was never installed.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Prefetch files (.pf) recording application execution paths, run count, and last run time",
+        "rationale": "Prefetch files track executable launches regardless of installation status, including from removable media."
+      },
+      {
+        "id": "b",
+        "text": "The Windows Installer cache (C:\\Windows\\Installer) storing MSI installation packages",
+        "rationale": "The Installer cache only contains MSI packages; portable apps that were never installed have no entries."
+      },
+      {
+        "id": "c",
+        "text": "AmCache.hive storing execution artifacts for all PE files including portable executables",
+        "rationale": "AmCache records SHA-1 hashes and execution metadata for all PE-like files executed on the system."
+      },
+      {
+        "id": "d",
+        "text": "The SAM registry hive storing local user account credentials",
+        "rationale": "SAM stores account data, not program execution artifacts."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Windows execution artifacts: Prefetch records exe launches with path and timestamps. AmCache.hive stores SHA-1 hashes and execution data for all PE files including portable executables from removable media.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-043",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "A forensic analyst investigating a file exfiltration on NTFS needs to determine which files were accessed or deleted between 2:00 PM and 3:00 PM. Which NTFS artifact is BEST suited?",
+    "context": "A forensic analyst needs to determine which files were accessed or deleted on NTFS within a 1-hour window.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The NTFS Change Journal ($UsnJrnl) recording every file and directory modification, creation, deletion, and access",
+        "rationale": "$UsnJrnl records all NTFS changes sequentially with timestamps, ideal for timeline analysis."
+      },
+      {
+        "id": "b",
+        "text": "The Master File Table ($MFT) storing current file metadata",
+        "rationale": "$MFT shows current state but does not maintain a historical log of changes."
+      },
+      {
+        "id": "c",
+        "text": "The Volume Shadow Copy (VSS) storing previous file versions",
+        "rationale": "VSS contains point-in-time snapshots but not a comprehensive log of all changes."
+      },
+      {
+        "id": "d",
+        "text": "The $LogFile recording file system transactions for crash recovery",
+        "rationale": "$LogFile is primarily for crash recovery and harder to parse than $UsnJrnl."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "NTFS $UsnJrnl records: file creation, deletion, modification, access with USN_REASON constants and timestamps. It's stored in Extend\\$UsnJrnl with a 32 MB default maximum.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-044",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "A Prefetch file for malware.exe shows last run time 2023-03-15 14:30 UTC. $MFT shows file created 2023-03-15 13:00 UTC and last modified 2023-03-14 10:00 UTC. What does this timeline indicate?",
+    "context": "Prefetch malware.exe: last run 03-15 14:30. $MFT: created 03-15 13:00, last modified 03-14 10:00.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The file was created elsewhere and copied to this system on March 15. The modified timestamp reflects the original source time",
+        "rationale": "When a file is copied to NTFS, creation timestamp updates to copy time but last modified is preserved from source. Modified before creation indicates file originated elsewhere."
+      },
+      {
+        "id": "b",
+        "text": "The file was created on March 14, modified on March 15, and executed on March 15",
+        "rationale": "$MFT creation is March 15 13:00, not March 14. Modified is BEFORE creation — only possible with file copy."
+      },
+      {
+        "id": "c",
+        "text": "An attacker used timestomping to hide the execution time",
+        "rationale": "Timestomping modifies timestamps; creation after modification is a natural artifact of file copying."
+      },
+      {
+        "id": "d",
+        "text": "The Prefetch file timestamp is unreliable",
+        "rationale": "Prefetch timestamps are reliable indicators of last execution time."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "NTFS timestamp behavior during copy: Creation -> current time, Last Modified -> preserved from source, Last Accessed -> current time. Modified-before-created indicates file origin from another system.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-045",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "A forensic analyst investigates a system that may have executed a file from a spear-phishing email three days ago. Which registry-based artifact would provide evidence of execution time?",
+    "context": "A forensic analyst needs to find evidence of a malicious file's execution time from three days ago.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The UserAssist key in NTUSER.DAT recording GUI-based program launches with count and last run timestamp",
+        "rationale": "UserAssist tracks GUI application launches via Windows Explorer with execution timestamps."
+      },
+      {
+        "id": "b",
+        "text": "The Shimcache (AppCompatCache) key recording executable path and last modified timestamp",
+        "rationale": "Shimcache stores the file's last modified timestamp, not execution time. It updates at boot, not execution."
+      },
+      {
+        "id": "c",
+        "text": "The RunMRU key recording programs run from the Start Menu Run dialog",
+        "rationale": "RunMRU only captures Start > Run launches, not email attachment executions."
+      },
+      {
+        "id": "d",
+        "text": "The MUICache key recording application names for UI language caching",
+        "rationale": "MUICache stores display names without execution timestamps."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "UserAssist (HKCU\\...\\UserAssist\\{GUID}\\Count) tracks GUI executions with path (ROT13-encoded), session count, and last run timestamp. Tools like RegRipper and Registry Explorer parse these entries.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-046",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "A forensic analyst investigates fileless malware that executes only in memory via PowerShell. Which two artifacts would still contain evidence of execution? (Select TWO.)",
+    "context": "A forensic analyst investigates fileless malware that runs in-memory via PowerShell and never writes to disk.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Windows Event Log (Event ID 4104 — PowerShell ScriptBlock Logging) capturing script content for in-memory execution",
+        "rationale": "If Script Block Logging is enabled, Event ID 4104 captures full script text for all PowerShell execution."
+      },
+      {
+        "id": "b",
+        "text": "Prefetch files for powershell.exe showing execution timestamps even without malware on disk",
+        "rationale": "Fileless malware launched via PowerShell creates a Prefetch file for powershell.exe with execution timestamps."
+      },
+      {
+        "id": "c",
+        "text": "The $MFT recording file metadata on disk",
+        "rationale": "Fileless malware writes no files to disk, so $MFT has no evidence of the payload."
+      },
+      {
+        "id": "d",
+        "text": "The Windows Page File (pagefile.sys) containing remnants of scripts swapped from memory",
+        "rationale": "Pagefile may contain fragments but is less reliable than Event Log and Prefetch."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "Fileless malware artifacts: Event ID 4104 captures PowerShell script content (if enabled). Prefetch records powershell.exe execution. Additional sources: Event ID 4688 with command-line logging, SRUM, and network captures.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-047",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "Shimcache (AppCompatCache) shows a malicious executable with timestamp 2024-06-15. The system was last rebooted on 2024-06-20. The user claims they never ran the file. What can the analyst conclude?",
+    "context": "Shimcache shows a file with timestamp 2024-06-15. System last rebooted 2024-06-20. User denies running the file.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The Shimcache timestamp reflects the file's last modified timestamp from $MFT, not execution time",
+        "rationale": "Shimcache stores the file's last modified timestamp from $MFT $FILE_NAME, NOT execution time. It updates at boot, not execution."
+      },
+      {
+        "id": "b",
+        "text": "The user is lying — Shimcache directly records execution time",
+        "rationale": "Shimcache does NOT record execution time; it records file last modified timestamp."
+      },
+      {
+        "id": "c",
+        "text": "The timestamp is from the BIOS clock and should be converted to UTC",
+        "rationale": "Shimcache timestamps use system local time."
+      },
+      {
+        "id": "d",
+        "text": "The file was executed on June 15 and updated during the June 20 reboot",
+        "rationale": "Shimcache timestamp is the file's modified timestamp, not execution or boot time."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Shimcache confusion: it stores executable paths with the file's last modified timestamp (from $MFT), not execution time. It cannot prove execution — Prefetch and UserAssist are better for execution evidence.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-048",
+    "domain": 4,
+    "objective": "4.6",
+    "format": "scenario",
+    "prompt": "Multiple System32 executables have identical timestamps in $STANDARD_INFORMATION and $FILE_NAME (2024-07-04 03:00:00). However, $LogFile shows different values. What technique has been used?",
+    "context": "System32 executables have identical timestamps in $SI and $FN. $LogFile shows different values. What anti-forensic technique?",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Timestomping using SetMACE that modifies $SI timestamps but cannot alter $LogFile records",
+        "rationale": "Timestomping tools modify $MFT $STANDARD_INFORMATION timestamps but cannot retroactively alter transactional logs in $LogFile."
+      },
+      {
+        "id": "b",
+        "text": "Windows Update bulk-updated all executables on July 4",
+        "rationale": "Windows Update causes legitimate timestamp updates. Different $LogFile values indicate tampering."
+      },
+      {
+        "id": "c",
+        "text": "An antivirus scan modified the file timestamps during a scheduled scan",
+        "rationale": "Antivirus reads, not modifies, file timestamps."
+      },
+      {
+        "id": "d",
+        "text": "The NTFS volume was compressed, causing timestamp normalization",
+        "rationale": "NTFS compression does not set all timestamps to an identical date across different executables."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Timestomping modifies $SI timestamps. Detection: compare $SI, $FN, $LogFile, and $UsnJrnl timestamps. $LogFile preserves original timestamps before modification, providing definitive evidence of tampering.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-049",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "A penetration tester runs 'nmap -sS -sV -O -p 1-10000 10.0.0.1'. All 10,000 ports show as 'filtered' but the web application is accessible via a browser. Why did Nmap report all ports as filtered?",
+    "context": "A tester runs 'nmap -sS -sV -O -p 1-10000 10.0.0.1'. All ports show filtered but web app is accessible via browser.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "A stateful firewall drops SYN packets (SYN scan) but allows established TCP connections — the browser uses an established connection",
+        "rationale": "A stateful firewall blocks unsolicited inbound SYN packets but allows traffic belonging to established connections."
+      },
+      {
+        "id": "b",
+        "text": "The tester specified a port range that does not include port 80 or 443",
+        "rationale": "The range 1-10000 includes ports 80 and 443, and the browser accesses the app successfully."
+      },
+      {
+        "id": "c",
+        "text": "Nmap's -O flag requires root privileges to function correctly",
+        "rationale": "Lack of root affects OS detection results, not port state reporting."
+      },
+      {
+        "id": "d",
+        "text": "The target has a host-based firewall blocking the tester's IP",
+        "rationale": "If the tester's IP were blocked, the browser would also fail."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Nmap port states: open (accepting), closed (RST received), filtered (firewall blocking probe). Stateful firewalls track connection state and block unsolicited SYN packets. TCP connect scan (-sT) may bypass some firewalls.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-050",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "An analyst captures network traffic and sees HTTP POST requests with encrypted 200-400 byte payloads every 5 minutes to an external IP from one workstation. Which Wireshark filter BEST isolates this traffic?",
+    "context": "An analyst sees HTTP POST requests with small encrypted payloads every 5 minutes to an external IP from one workstation.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "http.request.method == POST and ip.src == 10.0.1.50 and ip.dst == 203.0.113.5",
+        "rationale": "This filter precisely captures POST method from the suspect workstation to the external IP."
+      },
+      {
+        "id": "b",
+        "text": "tcp.port == 80 and ip.addr == 10.0.1.50",
+        "rationale": "This captures all port 80 traffic to/from the workstation, too broad."
+      },
+      {
+        "id": "c",
+        "text": "http.request and ip.addr == 203.0.113.5",
+        "rationale": "This does not restrict to POST or the specific source workstation."
+      },
+      {
+        "id": "d",
+        "text": "data.len > 100 and tcp.port == 80",
+        "rationale": "This captures any large HTTP payload, too broad."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Wireshark display filters: http.request.method == POST targets specific HTTP methods. Combine with IP filters. C2/exfiltration patterns use periodic small POST requests.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-051",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "An analyst uses tcpdump to capture suspicious traffic. The capture must include only TCP traffic to/from 10.0.1.50 on ports 80 and 443, saving to a file for analysis. Which tcpdump command accomplishes this?",
+    "context": "An analyst uses tcpdump to capture only TCP traffic to/from 10.0.1.50 on ports 80 and 443.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "tcpdump -i eth0 -w capture.pcap tcp and host 10.0.1.50 and (port 80 or port 443)",
+        "rationale": "This captures TCP traffic to/from the specified host on ports 80 and 443, writing to a pcap file."
+      },
+      {
+        "id": "b",
+        "text": "tcpdump -i eth0 port 80 or port 443",
+        "rationale": "This captures all port 80/443 traffic, not filtered by host IP."
+      },
+      {
+        "id": "c",
+        "text": "tcpdump -i eth0 -w capture.pcap host 10.0.1.50",
+        "rationale": "This captures all traffic to/from the host, including non-TCP protocols."
+      },
+      {
+        "id": "d",
+        "text": "tcpdump -i eth0 -r capture.pcap tcp and host 10.0.1.50",
+        "rationale": "The -r flag reads from a file, not captures live traffic."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "tcpdump syntax: -i (interface), -w (write file), -r (read file). Berkeley Packet Filter (BPF) syntax: 'tcp and host X and (port Y or port Z)'.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-052",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "A security analyst runs a Nessus vulnerability scan against a web server. The scan reports a 'Critical' vulnerability for Apache Struts2 with a CVSS score of 10.0. The development team confirms Apache Struts2 is NOT installed on the server. Which two actions should the analyst take? (Select TWO.)",
+    "context": "Nessus reports a Critical Apache Struts2 vulnerability on a web server. The dev team says Struts2 is not installed.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Verify the Nessus plugin output to check whether the detection was based on a banner grab or actual exploitation attempt",
+        "rationale": "Banner-based detections can be false positives if the web server's banner is misleading or the plugin matched the wrong product."
+      },
+      {
+        "id": "b",
+        "text": "Immediately patch the server as the scanner is highly accurate",
+        "rationale": "Ignoring the development team's input and patching a non-existent vulnerability is wasted effort."
+      },
+      {
+        "id": "c",
+        "text": "Check if the server uses middleware or components that include the vulnerable Struts2 libraries",
+        "rationale": "Struts2 libraries might be bundled as transitive dependencies even if not directly installed."
+      },
+      {
+        "id": "d",
+        "text": "Mark the vulnerability as accepted risk and close the ticket",
+        "rationale": "The vulnerability should be investigated, not simply accepted without verification."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Nessus uses plugin signatures including banner grabbing and version detection. False positives occur when banners are misleading. Verify by checking plugin details and examining if libraries are included via transitive dependencies.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-053",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "A security team uses OpenVAS to scan internal network infrastructure. The scan completes but misses several known vulnerabilities on a legacy Windows Server 2008 R2 system. What is the MOST likely reason?",
+    "context": "OpenVAS scans internal infrastructure but misses known vulnerabilities on a legacy Windows Server 2008 R2 system.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The target was not properly authenticated for the credentialed scan, preventing OpenVAS from performing local security checks",
+        "rationale": "Credentialed scans provide far deeper visibility by examining registry, file versions, and patch levels. Without credentials, OpenVAS only performs external checks that may miss OS-level vulnerabilities."
+      },
+      {
+        "id": "b",
+        "text": "OpenVAS cannot detect vulnerabilities in Windows Server 2008 R2 because it is out of support",
+        "rationale": "OpenVAS can scan any OS; however, unauthenticated scans miss local vulnerabilities."
+      },
+      {
+        "id": "c",
+        "text": "The scan was configured to only check for critical severity vulnerabilities",
+        "rationale": "Scan severity filters affect reporting but not detection; the scanner still checks for all vulnerabilities."
+      },
+      {
+        "id": "d",
+        "text": "The network firewall blocked OpenVAS from reaching the target system",
+        "rationale": "If the firewall blocked access, no vulnerabilities would be detected at all."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Credentialed (authenticated) vulnerability scans provide significantly more accurate results by allowing the scanner to examine the local system state. OpenVAS supports credentialed scanning via SMB, SSH, or local agent.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-054",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "A security analyst uses Kismet to monitor wireless networks. During a site survey, Kismet detects an access point broadcasting a SSID that matches the company's guest network, but the signal strength is very weak and the BSSID does not match any known corporate AP. What type of threat does this MOST likely represent?",
+    "context": "Kismet detects an AP with the company's guest SSID but weak signal and unknown BSSID.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "An evil twin attack — a rogue access point impersonating the legitimate guest network to capture credentials",
+        "rationale": "An evil twin AP broadcasts the same SSID as a legitimate network but with a different BSSID. Kismet detects the discrepancy between SSID and known BSSID mappings."
+      },
+      {
+        "id": "b",
+        "text": "A deauthentication attack targeting the guest network",
+        "rationale": "Deauth attacks send disassociation frames to disconnect clients but do not create new access points."
+      },
+      {
+        "id": "c",
+        "text": "A PKI authentication bypass attempt",
+        "rationale": "PKI bypass is not related to rogue AP detection."
+      },
+      {
+        "id": "d",
+        "text": "A Bluetooth relay attack exploiting the guest Wi-Fi",
+        "rationale": "Bluetooth relay is a different attack vector targeting Bluetooth, not Wi-Fi SSID impersonation."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Kismet is a wireless sniffer/detector that identifies rogue APs by cross-referencing SSID with known BSSID MAC prefixes. An evil twin uses the same SSID to trick users into connecting. Detection methods include signal strength monitoring, BSSID verification, and 802.11 frame analysis.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-055",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "A security analyst uses airodump-ng to capture WPA2 handshakes for a security assessment. The analyst later uses aircrack-ng with a wordlist but cannot crack the PSK. Which TWO factors could explain this failure? (Select TWO.)",
+    "context": "An analyst captures a WPA2 handshake with airodump-ng but cannot crack the PSK with aircrack-ng using a wordlist.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The WPA2 passphrase does not appear in the wordlist — dictionary attacks only succeed if the passphrase is in the list",
+        "rationale": "aircrack-ng performs dictionary attacks against captured handshakes. If the passphrase was randomly generated or is complex, it will not be in any wordlist."
+      },
+      {
+        "id": "b",
+        "text": "The captured handshake is missing one or more of the four EAPOL frames required for cracking",
+        "rationale": "aircrack-ng requires all four frames of the WPA2 4-way handshake. If airodump-ng missed frames due to weak signal or client disconnection, cracking is impossible."
+      },
+      {
+        "id": "c",
+        "text": "The target network uses WPA3-Enterprise which prevents dictionary attacks on captured handshakes",
+        "rationale": "The scenario explicitly states WPA2. WPA3 uses SAE (Simultaneous Authentication of Equals) which is resistant to dictionary attacks, but this does not apply here."
+      },
+      {
+        "id": "d",
+        "text": "The passphrase uses special characters that aircrack-ng cannot process",
+        "rationale": "aircrack-ng supports all ASCII and Unicode passphrases. Special characters do not affect its ability to compute the PMKID."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "WPA2-PSK cracking with aircrack-ng requires: (1) a complete 4-way handshake (all four EAPOL frames), and (2) the passphrase must be in the wordlist. Two common failure modes are an incomplete capture (missing EAPOL frames due to weak signal or brief client association) and a passphrase absent from the wordlist. GPU-accelerated tools like Hashcat (mode 2500) can brute-force passphrases, but dictionary attacks remain limited to wordlist coverage.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-4-056",
+    "domain": 4,
+    "objective": "4.8",
+    "format": "scenario",
+    "prompt": "A security analyst needs to audit password strength for a Windows Active Directory environment. The analyst has access to the NTDS.dit file and SYSTEM registry hive from a domain controller backup. Which tool should the analyst use to extract and crack the password hashes?",
+    "context": "An analyst has NTDS.dit and SYSTEM hive from a DC backup and needs to audit password strength.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Use impacket-secretsdump to extract NTLM hashes from NTDS.dit, then use Hashcat with GPU acceleration to crack the hashes",
+        "rationale": "secretsdump extracts NTLM hashes from the NTDS.dit database using the SYSTEM hive's boot key. Hashcat cracks NTLM hashes efficiently using GPU acceleration."
+      },
+      {
+        "id": "b",
+        "text": "Use aircrack-ng to capture authentication traffic from domain controllers",
+        "rationale": "aircrack-ng is a wireless tool and cannot extract or crack Windows NTLM hashes."
+      },
+      {
+        "id": "c",
+        "text": "Use John the Ripper directly against NTDS.dit without extracting hashes first",
+        "rationale": "John the Ripper cannot parse NTDS.dit directly. The hashes must first be extracted using tools like secretsdump or DSInternals."
+      },
+      {
+        "id": "d",
+        "text": "Use Nmap to enumerate user accounts and attempt password guessing",
+        "rationale": "Nmap can enumerate SMB users but cannot extract password hashes from NTDS.dit."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Extracting AD password hashes: (1) Export NTDS.dit and SYSTEM hive from DC backup, (2) Use impacket-secretsdump (secretsdump.py -ntds NTDS.dit -system SYSTEM LOCAL) to extract NTLM hashes, (3) Crack with Hashcat (mode 1000 for NTLM) using GPU or John the Ripper. This is both a pentest technique and a defense audit method to identify weak passwords.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 4.8"
+      },
+      {
+        "source": "study-guide",
+        "section": "Domain 4 — Security Operations"
+      }
+    ]
+  }
+]

@@ -31,6 +31,7 @@ export interface QuizRepository {
 	complete(id: string, result: QuizResult, answers: { index: number; question: QuestionDefinition; response: QuestionResponse | null; points: number }[], completedAt: string): QuizResult;
 	getAllDomainProgress(): Record<number, { attempted: number; correct: number; earnedPoints: number; possiblePoints: number; percentage: number; lastReviewed: string | null }>;
 	getRecentSessions(limit?: number): SessionRow[];
+	getAllCompletedSessions(): SessionRow[];
 	getWeakTopics(): { domain: number; objective: string; earnedPoints: number; possiblePoints: number; percentage: number; severity: 'high' | 'review' }[];
 	close(): void;
 }
@@ -108,6 +109,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		},
 		getAllDomainProgress() { const result: Record<number, { attempted: number; correct: number; earnedPoints: number; possiblePoints: number; percentage: number; lastReviewed: string | null }> = {}; for (const row of db.prepare('SELECT * FROM domain_progress').all() as { domain: number; total_attempted: number; total_correct: number; points_earned: number; points_possible: number; last_reviewed_at: string | null }[]) result[row.domain] = { attempted: row.total_attempted, correct: row.total_correct, earnedPoints: row.points_earned, possiblePoints: row.points_possible, percentage: row.points_possible ? Math.round(row.points_earned / row.points_possible * 1000) / 10 : 0, lastReviewed: row.last_reviewed_at }; return result; },
 		getRecentSessions(limit = 10) { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC LIMIT ?").all(limit) as SessionRow[]; },
+		getAllCompletedSessions() { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC").all() as SessionRow[]; },
 		getWeakTopics() { return (db.prepare("SELECT domain, objective, SUM(points_earned) earnedPoints, SUM(points_possible) possiblePoints FROM quiz_answers WHERE objective IS NOT NULL GROUP BY domain, objective HAVING SUM(points_possible) >= 3 AND SUM(points_earned) * 1.0 / SUM(points_possible) < .85 ORDER BY earnedPoints * 1.0 / possiblePoints").all() as { domain: number; objective: string; earnedPoints: number; possiblePoints: number }[]).map((row) => ({ ...row, percentage: Math.round(row.earnedPoints / row.possiblePoints * 1000) / 10, severity: row.earnedPoints / row.possiblePoints < .7 ? 'high' : 'review' })); },
 		close() { db.close(); }
 	};

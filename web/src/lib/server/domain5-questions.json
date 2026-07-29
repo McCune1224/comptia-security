@@ -1,0 +1,1883 @@
+[
+  {
+    "id": "mcq-5-001",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "scenario",
+    "prompt": "A security manager is creating a hierarchical document framework for the organization's security program. The highest-level document states management's overall intent and direction regarding information security. Below it, mandatory rules specify exactly what must be done, followed by step-by-step task instructions, and finally recommendations. Which of the following correctly represents this hierarchy from top to bottom?",
+    "context": "Security manager developing a document framework with four distinct document types.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Policy, Procedure, Standard, Guideline",
+        "rationale": "Standards are mandatory requirements that derive from policies, so they should appear before procedures, not after."
+      },
+      {
+        "id": "b",
+        "text": "Policy, Standard, Procedure, Guideline",
+        "rationale": "This is the correct PPSG hierarchy: Policy (high-level intent), Standard (mandatory rules), Procedure (step-by-step instructions), Guideline (recommendations)."
+      },
+      {
+        "id": "c",
+        "text": "Standard, Policy, Guideline, Procedure",
+        "rationale": "Standards derive from and support policies, so policies are always at the top of the hierarchy."
+      },
+      {
+        "id": "d",
+        "text": "Guideline, Policy, Standard, Procedure",
+        "rationale": "Guidelines are non-mandatory recommendations and are not the highest in the hierarchy."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "The PPSG hierarchy is: Policy (high-level management direction, mandatory), Standard (specific mandatory rules supporting the policy), Procedure (step-by-step instructions for tasks), Guideline (recommended but optional practices).",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Security Governance"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-002",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "scenario",
+    "prompt": "A large hospital is implementing a new electronic health records system. The chief nursing officer has been assigned responsibility for determining how patient data should be classified and who can access it within the nursing department. The IT security team implements the technical controls. Which role best describes the chief nursing officer's responsibilities?",
+    "context": "Hospital implementing EHR with defined data governance roles.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Data owner",
+        "rationale": "The data owner is a senior manager responsible for data classification, access determination, and ensuring proper data handling within their domain."
+      },
+      {
+        "id": "b",
+        "text": "Data steward",
+        "rationale": "A data steward handles day-to-day data quality and metadata management but does not typically set classification or access policies."
+      },
+      {
+        "id": "c",
+        "text": "Data controller",
+        "rationale": "Data controller is a GDPR term referring to the entity that determines the purposes and means of processing personal data, not an internal role classification."
+      },
+      {
+        "id": "d",
+        "text": "Data custodian",
+        "rationale": "The data custodian (or data processor) implements technical controls and handles data storage but does not determine classification policy."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "A data owner is a senior-level manager who determines data classification, who can access the data, and how it should be handled. The data custodian implements the technical controls. Data steward manages data quality. Data controller/data processor are GDPR legal concepts.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Governance Roles"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-003",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "scenario",
+    "prompt": "After a data breach exposed customer payment information, an investigation revealed that the company had identified similar vulnerabilities during a risk assessment six months earlier but had not implemented the recommended controls due to budget constraints. Which governance concept did the company fail to uphold?",
+    "context": "Company identified risks during assessment but did not act on findings before a breach occurred.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Due care",
+        "rationale": "Due care means acting responsibly and prudently by implementing reasonable security controls. Failure to act on known risks is a failure of due care and can lead to negligence findings."
+      },
+      {
+        "id": "b",
+        "text": "Due diligence",
+        "rationale": "Due diligence refers to researching and identifying risks before making decisions. The company performed due diligence by conducting the assessment, but failed to act on findings."
+      },
+      {
+        "id": "c",
+        "text": "Separation of duties",
+        "rationale": "Separation of duties requires distributing critical tasks among multiple people to prevent fraud. This scenario involves failure to remediate known risks, not task separation."
+      },
+      {
+        "id": "d",
+        "text": "Risk appetite",
+        "rationale": "Risk appetite is the amount of risk the organization is willing to accept. While relevant, the core failure was not exercising due care by implementing known controls."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Due care requires organizations to take reasonable steps to protect assets and act responsibly. Identifying risks through due diligence is the first step, but due care requires acting on those findings. Failure to implement known controls is a breach of due care and can establish negligence.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Due Care and Due Diligence"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-004",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "scenario",
+    "prompt": "An organization's change advisory board (CAB) is reviewing a request to update a production firewall rule. The proposed change would open a port needed by a new application, but the security team has not completed a risk assessment. Which action should the CAB take based on standard change management policy?",
+    "context": "CAB reviewing a firewall rule change request that lacks a required risk assessment.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Approve the change and conduct the risk assessment after implementation",
+        "rationale": "Approving without a risk assessment bypasses the change management process and could introduce unmitigated security risks."
+      },
+      {
+        "id": "b",
+        "text": "Deny the change until the risk assessment is completed and submitted",
+        "rationale": "Standard change management policy requires proper review and approval before changes, including completion of required impact assessments."
+      },
+      {
+        "id": "c",
+        "text": "Implement the change immediately and document it retroactively",
+        "rationale": "This is an emergency change process, but the scenario does not describe an emergency requiring immediate implementation."
+      },
+      {
+        "id": "d",
+        "text": "Delegate the decision to the application owner",
+        "rationale": "The CAB is responsible for change approvals; delegating to the application owner bypasses established governance."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Change management policies require that all proposed changes go through a formal review and approval process, including completing required impact assessments, before implementation. Standard changes must not bypass this process.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Change Management"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-005",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "standard",
+    "prompt": "Which TWO of the following are essential characteristics of an effective organizational security policy? (Choose TWO.)",
+    "context": "Organizational security policy development fundamentals.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "It uses highly technical language to ensure precision among security professionals",
+        "rationale": "Security policies must be understandable by all employees, not just security professionals. Excessive technical jargon reduces effectiveness."
+      },
+      {
+        "id": "b",
+        "text": "It is reviewed and approved by senior management or the board of directors",
+        "rationale": "Senior management approval demonstrates organizational commitment and provides the authority needed for enforcement."
+      },
+      {
+        "id": "c",
+        "text": "It is aligned with organizational goals, legal requirements, and regulatory obligations",
+        "rationale": "Policies must support business objectives and comply with applicable laws and regulations to be effective and enforceable."
+      },
+      {
+        "id": "d",
+        "text": "It includes detailed step-by-step configuration commands for technical implementation",
+        "rationale": "Detailed implementation instructions belong in procedures and standards, not in high-level policies."
+      },
+      {
+        "id": "e",
+        "text": "It is written once and never revised to ensure consistency",
+        "rationale": "Policies must be reviewed and updated periodically to remain relevant as technology, threats, and regulations change."
+      }
+    ],
+    "correctOptionIds": [
+      "b",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Effective security policies must have management approval to demonstrate authority and commitment, and must align with organizational goals and regulatory requirements to be relevant. Policies should be understandable by all employees, reviewed regularly, and focus on high-level direction rather than technical implementation details.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Security Policies"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-006",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "scenario",
+    "prompt": "An employee uses their company-issued laptop to access personal cryptocurrency trading platforms during work hours, which is against the organization's acceptable use policy. The employee's manager notices the activity and reports it to HR. According to standard governance practices, which document should the organization reference when determining the disciplinary response?",
+    "context": "Employee violating acceptable use policy by accessing personal cryptocurrency trading sites during work hours.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The acceptable use policy itself, which should include enforcement and consequences",
+        "rationale": "Policies should clearly state the consequences of noncompliance, providing the basis for consistent disciplinary action."
+      },
+      {
+        "id": "b",
+        "text": "The employee's individual employment contract",
+        "rationale": "While employment contracts may reference policies, the specific consequences for policy violations are typically defined within the policies themselves."
+      },
+      {
+        "id": "c",
+        "text": "The IT department's technical configuration standards",
+        "rationale": "Technical standards address system configuration, not disciplinary actions for policy violations."
+      },
+      {
+        "id": "d",
+        "text": "The organization's business continuity plan",
+        "rationale": "The business continuity plan is unrelated to employee disciplinary matters for policy violations."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "A well-written acceptable use policy should include both the behavioral requirements and the consequences for violations. This provides a consistent, transparent framework for disciplinary actions and helps protect the organization from wrongful termination claims.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Acceptable Use Policy"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-007",
+    "domain": 5,
+    "objective": "5.1",
+    "format": "standard",
+    "prompt": "Which group within an organization has the ultimate responsibility for approving the information security strategy and ensuring it aligns with business objectives?",
+    "context": "Organizational governance structures and security strategy approval.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Board of directors or senior leadership",
+        "rationale": "The board of directors has fiduciary responsibility and ultimate authority over organizational strategy, including information security."
+      },
+      {
+        "id": "b",
+        "text": "Chief Information Security Officer (CISO)",
+        "rationale": "The CISO develops and implements the security strategy but must obtain board approval for major initiatives and resource commitments."
+      },
+      {
+        "id": "c",
+        "text": "IT steering committee",
+        "rationale": "The steering committee oversees IT projects and priorities but does not have ultimate organizational authority."
+      },
+      {
+        "id": "d",
+        "text": "Internal audit department",
+        "rationale": "Internal audit provides independent assurance and evaluation but does not set or approve strategy."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Ultimate responsibility for security governance rests with the board of directors or senior leadership, who have fiduciary duty to protect organizational assets. The CISO implements the strategy, but the board approves it and ensures adequate resources are allocated.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Governance Structures"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-008",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "scenario",
+    "prompt": "A security analyst is performing a quantitative risk assessment on a customer database server. The server has an asset value of $500,000. Historical data indicates that a ransomware attack would destroy 40% of the data value. Similar organizations experience a successful ransomware attack once every two years. What is the annualized loss expectancy (ALE)?",
+    "context": "Customer database: AV=$500,000, EF=40%, ARO=0.5 (one attack every two years).",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "$200,000",
+        "rationale": "This is the SLE ($500,000 \u00d7 0.40) but does not account for the ARO. ALE requires multiplying SLE by ARO."
+      },
+      {
+        "id": "b",
+        "text": "$100,000",
+        "rationale": "ALE = SLE \u00d7 ARO. SLE = $500,000 \u00d7 0.40 = $200,000. ARO = 0.5. $200,000 \u00d7 0.5 = $100,000. This is the expected annual loss."
+      },
+      {
+        "id": "c",
+        "text": "$250,000",
+        "rationale": "This incorrectly calculates AV \u00d7 ARO ($500,000 \u00d7 0.5) without factoring in the exposure factor."
+      },
+      {
+        "id": "d",
+        "text": "$50,000",
+        "rationale": "This would result from incorrectly dividing SLE by ARO ($200,000 / 0.5 = $400,000 or other miscalculations), not the correct multiplication."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "ALE = SLE \u00d7 ARO. Single Loss Expectancy (SLE) = AV \u00d7 EF = $500,000 \u00d7 0.40 = $200,000. Annualized Rate of Occurrence (ARO) = 0.5 (once every 2 years). ALE = $200,000 \u00d7 0.5 = $100,000. This represents the organization's expected annual financial loss from this risk.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Quantitative Risk Assessment"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-009",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "scenario",
+    "prompt": "A risk management team is assessing threats to the organization's critical systems. The team assigns ordinal values such as \"high,\" \"medium,\" and \"low\" to each risk based on expert judgment and group discussion. No monetary values are assigned. Which type of risk assessment method is being used?",
+    "context": "Risk assessment using ordinal rankings and expert judgment without monetary calculations.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Quantitative risk assessment",
+        "rationale": "Quantitative assessments use numerical values and monetary amounts (AV, EF, ARO, ALE). This scenario uses subjective rankings, not numbers."
+      },
+      {
+        "id": "b",
+        "text": "Qualitative risk assessment",
+        "rationale": "Qualitative assessments use subjective rankings (high/medium/low), expert judgment, and ordinal scales. No monetary values are calculated."
+      },
+      {
+        "id": "c",
+        "text": "Hybrid risk assessment",
+        "rationale": "Hybrid combines both qualitative and quantitative methods. This scenario is purely qualitative with ordinal rankings."
+      },
+      {
+        "id": "d",
+        "text": "Delphi risk assessment",
+        "rationale": "The Delphi technique is a specific qualitative method involving anonymous expert rounds, but the scenario describes a general qualitative approach, not the specific Delphi process."
+      }
+    ],
+    "correctOptionIds": [
+      "b"
+    ],
+    "selectCount": 1,
+    "explanation": "Qualitative risk assessment uses subjective measures like ordinal rankings (high/medium/low), expert judgment, and scenario analysis. It does not assign monetary values. This contrasts with quantitative analysis which calculates SLE, ALE, and other financial metrics.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Risk Assessment Methods"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-010",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "scenario",
+    "prompt": "After completing a risk assessment, an organization identifies that a legacy payment processing system has a high likelihood of compromise and would result in significant regulatory fines. The organization decides to terminate use of the system entirely and migrate all transactions to a modern, supported platform. Which risk response strategy does this represent?",
+    "context": "Organization decides to eliminate a high-risk legacy payment system rather than continue operating it.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Risk avoidance",
+        "rationale": "Risk avoidance means eliminating the risk by discontinuing the activity that creates it. Migrating away from the legacy system removes the risk entirely."
+      },
+      {
+        "id": "b",
+        "text": "Risk mitigation",
+        "rationale": "Risk mitigation would involve implementing security controls to reduce the likelihood or impact while still using the legacy system."
+      },
+      {
+        "id": "c",
+        "text": "Risk transfer",
+        "rationale": "Risk transfer shifts the financial burden to another party (e.g., cyber insurance). The organization is not transferring the risk but eliminating it."
+      },
+      {
+        "id": "d",
+        "text": "Risk acceptance",
+        "rationale": "Risk acceptance means acknowledging the risk and choosing to operate without additional controls. The organization chose to stop using the system, not accept the risk."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Risk avoidance eliminates the risk entirely by not engaging in the risky activity. By decommissioning the legacy payment system, the organization avoids the risk altogether rather than trying to reduce, transfer, or accept it.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Risk Response Strategies"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-011",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "standard",
+    "prompt": "Which TWO of the following are recognized risk response strategies in the NIST Risk Management Framework? (Choose TWO.)",
+    "context": "NIST RMF risk response strategies.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Risk avoidance",
+        "rationale": "Avoidance eliminates risk by discontinuing the activity that generates the risk. It is one of the four primary risk response strategies."
+      },
+      {
+        "id": "b",
+        "text": "Risk delegation",
+        "rationale": "Delegation is not a standard risk response strategy. Risk management is a shared responsibility but cannot be delegated away in terms of accountability."
+      },
+      {
+        "id": "c",
+        "text": "Risk transfer",
+        "rationale": "Transfer shifts the financial burden of a risk to another party, such as purchasing cyber insurance or outsourcing. It is one of the four primary risk response strategies."
+      },
+      {
+        "id": "d",
+        "text": "Risk ignorance",
+        "rationale": "Ignoring risks is not a recognized risk management strategy. The four strategies are: avoid, transfer, mitigate, and accept."
+      },
+      {
+        "id": "e",
+        "text": "Risk documentation",
+        "rationale": "Documentation is part of risk register maintenance, not a distinct risk response strategy for handling identified risks."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "The four primary risk response strategies are: Avoid (eliminate the risk activity), Transfer (shift financial burden to another party), Mitigate (reduce likelihood or impact), and Accept (acknowledge and monitor without additional action).",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Risk Response"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-012",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "scenario",
+    "prompt": "A business continuity planner is conducting a business impact analysis (BIA) for the organization's order processing system. The maximum amount of time the business can survive without this system is 48 hours. The recovery team estimates it will take 12 hours to restore operations. The planners have determined that data must be recoverable to within 30 minutes of the last transaction. Which values represent the RTO and RPO respectively?",
+    "context": "Order processing system: maximum survivable outage=48h, estimated recovery time=12h, data recovery window=30min.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "RTO: 12 hours, RPO: 30 minutes",
+        "rationale": "RTO (Recovery Time Objective) is the target time to restore operations after a disaster, which is 12 hours. RPO (Recovery Point Objective) is the maximum acceptable data loss, which is 30 minutes."
+      },
+      {
+        "id": "b",
+        "text": "RTO: 48 hours, RPO: 30 minutes",
+        "rationale": "48 hours is the MTD (Maximum Tolerable Downtime), not the RTO. RTO is the recovery target, which is shorter than MTD."
+      },
+      {
+        "id": "c",
+        "text": "RTO: 30 minutes, RPO: 12 hours",
+        "rationale": "This reverses the definitions. RTO relates to system restoration time, while RPO relates to data loss tolerance."
+      },
+      {
+        "id": "d",
+        "text": "RTO: 12 hours, RPO: 48 hours",
+        "rationale": "48 hours is the MTD, not a recovery point. RPO must be shorter than the backup frequency and represents data loss, not downtime."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "RTO (Recovery Time Objective) is the target time for restoring operations after a disaster, stated as 12 hours. RPO (Recovery Point Objective) is the maximum acceptable data loss measured in time, stated as 30 minutes. MTD (Maximum Tolerable Downtime) is 48 hours, which is longer than RTO.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Business Impact Analysis"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-013",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "scenario",
+    "prompt": "A risk manager is creating a document that lists all identified risks to the organization, including their likelihood, potential impact, assigned risk owner, and planned response strategies. This document is reviewed quarterly by the steering committee. Which document is being described?",
+    "context": "Risk manager creating a comprehensive risk documentation that is reviewed quarterly.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Risk register",
+        "rationale": "A risk register is a central repository that catalogues all identified risks, including likelihood, impact ratings, risk owners, and response strategies."
+      },
+      {
+        "id": "b",
+        "text": "Business impact analysis",
+        "rationale": "A BIA identifies critical business processes, recovery priorities, and dependencies. It does not typically list all risks with response strategies."
+      },
+      {
+        "id": "c",
+        "text": "Statement of applicability",
+        "rationale": "A Statement of Applicability (SOA) is used in ISO 27001 to document which controls are applicable, not to list all organizational risks."
+      },
+      {
+        "id": "d",
+        "text": "Risk assessment report",
+        "rationale": "A risk assessment report summarizes findings from a specific assessment exercise. The risk register is the ongoing living document that tracks all risks over time."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "A risk register is the primary document for tracking identified risks throughout their lifecycle. It typically includes risk descriptions, likelihood and impact ratings, risk scores, assigned owners, response strategies, and status updates. It is maintained as a living document reviewed regularly.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Risk Register"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-014",
+    "domain": 5,
+    "objective": "5.2",
+    "format": "standard",
+    "prompt": "An organization's board of directors has stated that they are willing to accept only low levels of risk in their operational environment and prefer conservative security investments. However, the IT department has identified that some legacy systems have moderate residual risk that cannot be fully mitigated without significant cost. Which concepts are being described?",
+    "context": "Board's risk preferences versus actual residual risk from legacy systems.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The board defines risk appetite (low); the legacy systems exceed risk tolerance",
+        "rationale": "Risk appetite is the broad level of risk the organization is willing to accept. Risk tolerance is the specific acceptable deviation from that appetite. Low appetite with legacy risks exceeding tolerance creates a gap requiring remediation."
+      },
+      {
+        "id": "b",
+        "text": "The board defines risk tolerance (low); the legacy systems define risk appetite",
+        "rationale": "This reverses the definitions. Risk appetite is set by leadership, not by existing system conditions."
+      },
+      {
+        "id": "c",
+        "text": "Both are describing risk tolerance at different levels",
+        "rationale": "Risk appetite and risk tolerance are distinct concepts. Appetite is the broad willingness to accept risk, while tolerance is the acceptable variance for specific risks."
+      },
+      {
+        "id": "d",
+        "text": "The board defines risk threshold; the legacy systems define risk appetite",
+        "rationale": "\"Risk threshold\" is not a standard term in the NIST framework. The correct distinction is between risk appetite and risk tolerance."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Risk appetite is the broad amount of risk an organization is willing to accept in pursuit of its objectives. Risk tolerance is the specific acceptable variation around individual risk levels. When residual risk exceeds tolerance, remediation is needed to align with the organization's risk appetite.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Risk Appetite vs Risk Tolerance"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-015",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "scenario",
+    "prompt": "A financial services company is evaluating a cloud-based SaaS provider for customer relationship management. Before signing a contract, the company wants to verify that the vendor has adequate security controls. The vendor provides a report prepared by an independent CPA firm that describes the vendor's controls and includes testing of their operating effectiveness over a 12-month period. Which type of report has the vendor provided?",
+    "context": "Vendor providing a third-party audit report covering controls and operating effectiveness over 12 months.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "SOC 2 Type II report",
+        "rationale": "SOC 2 Type II reports describe a service organization's controls and include testing of their operating effectiveness over a period of time (typically 6-12 months)."
+      },
+      {
+        "id": "b",
+        "text": "SOC 2 Type I report",
+        "rationale": "SOC 2 Type I reports describe controls at a single point in time but do not test operating effectiveness over a period."
+      },
+      {
+        "id": "c",
+        "text": "SOC 3 report",
+        "rationale": "SOC 3 reports are general-use reports that summarize SOC 2 findings but do not include detailed control descriptions or test results."
+      },
+      {
+        "id": "d",
+        "text": "PCI ROC report",
+        "rationale": "A PCI Report on Compliance (ROC) is specific to payment card environments, not general SaaS controls."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "SOC 2 Type II reports are designed for service organizations and include an independent auditor's opinion on the suitability of design and operating effectiveness of controls over a period of time. Type I reports only assess control design at a single point in time.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "SOC Reports"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-016",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "scenario",
+    "prompt": "A healthcare organization contracts with a cloud provider for data storage. The contract specifies that the provider will maintain 99.99% uptime, encrypt data at rest and in transit, provide quarterly access reports, and notify the organization within one hour of any security incident. The provider fails to meet the 99.99% uptime requirement for three consecutive months. Which document defines the remedies available to the healthcare organization?",
+    "context": "Cloud provider failing to meet uptime requirements specified in the contract.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Service level agreement (SLA)",
+        "rationale": "SLAs define specific performance metrics, remedies, and penalties for noncompliance, including uptime guarantees and service credits."
+      },
+      {
+        "id": "b",
+        "text": "Memorandum of understanding (MOU)",
+        "rationale": "MOUs are high-level agreements expressing common goals and are generally not legally binding or enforceable for specific performance metrics."
+      },
+      {
+        "id": "c",
+        "text": "Interconnection security agreement (ISA)",
+        "rationale": "ISAs define technical security requirements for connecting systems but do not typically address uptime guarantees or service credits."
+      },
+      {
+        "id": "d",
+        "text": "Business associate agreement (BAA)",
+        "rationale": "A BAA is a HIPAA-specific document addressing protected health information handling, not general uptime or performance remedies."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "An SLA is the contractual document that specifies measurable performance targets (uptime, response times) and the remedies when those targets are not met, such as service credits or termination rights. MOUs are less formal, while ISAs focus on interconnection security.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Service Level Agreements"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-017",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "scenario",
+    "prompt": "A security team is conducting a vendor risk assessment for a critical software development partner. The team needs to evaluate the vendor's security practices before granting access to the organization's source code repository. Which TWO documents should the team request as part of a thorough vendor due diligence review? (Choose TWO.)",
+    "context": "Vendor risk assessment before granting source code access to a development partner.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "SOC 2 Type II report",
+        "rationale": "A SOC 2 Type II report provides independent verification of a vendor's controls over a period of time, helping assess their security posture."
+      },
+      {
+        "id": "b",
+        "text": "Penetration test results",
+        "rationale": "Recent penetration test results demonstrate how the vendor's security controls hold up against real attack techniques and identify exploitable weaknesses."
+      },
+      {
+        "id": "c",
+        "text": "Vendor's marketing brochure",
+        "rationale": "Marketing materials are not objective evidence of security posture and should not be relied upon for risk assessment."
+      },
+      {
+        "id": "d",
+        "text": "Employee satisfaction survey results",
+        "rationale": "Employee satisfaction does not directly indicate the effectiveness of the vendor's security controls or practices."
+      },
+      {
+        "id": "e",
+        "text": "Vendor's publicly traded stock price history",
+        "rationale": "Stock performance is irrelevant to evaluating a vendor's security controls and risk posture."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "b"
+    ],
+    "selectCount": 2,
+    "explanation": "A SOC 2 Type II report provides independent assurance about a vendor's control environment over time. Penetration test results show the practical effectiveness of security controls. Both are objective, substantive artifacts for vendor risk assessment.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Vendor Due Diligence"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-018",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "scenario",
+    "prompt": "A manufacturing company is evaluating two cloud storage vendors. Vendor A provides a SOC report that evaluates the suitability of control design at a specific point in time. Vendor B provides a SOC report that evaluates both control design and operating effectiveness over a six-month period. The company's compliance team requires assurance that controls are actually operating effectively over time. Which vendor should they choose and why?",
+    "context": "Company comparing SOC reports from two vendors for compliance requirements.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Vendor B, because a Type II report tests operating effectiveness over a period of time",
+        "rationale": "SOC 2 Type II reports evaluate both design suitability and operating effectiveness over a minimum 6-month period, providing greater assurance."
+      },
+      {
+        "id": "b",
+        "text": "Vendor A, because a Type I report is more comprehensive",
+        "rationale": "Type I reports are less comprehensive as they only evaluate design at a single point in time, not operating effectiveness."
+      },
+      {
+        "id": "c",
+        "text": "Either vendor, because both report types provide equivalent assurance",
+        "rationale": "Type I and Type II reports are not equivalent. Type II provides significantly more assurance by testing controls over time."
+      },
+      {
+        "id": "d",
+        "text": "Neither, because SOC reports do not evaluate security controls",
+        "rationale": "SOC 2 reports specifically evaluate security, availability, processing integrity, confidentiality, and privacy controls."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "SOC 2 Type II reports provide assurance about both the design and operating effectiveness of controls over a period (minimum 6 months). Type I reports only assess design at a single point in time. For compliance requiring evidence of ongoing control effectiveness, Type II is the appropriate choice.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "SOC Reports Type I vs Type II"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-019",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "scenario",
+    "prompt": "A technology startup is evaluating a potential software vendor. Before sharing detailed network architecture diagrams and proprietary API documentation, the startup wants to ensure the vendor cannot disclose this information to competitors. Which document should be signed before sharing this sensitive information?",
+    "context": "Startup needs to protect proprietary information before sharing it with a potential vendor.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Non-disclosure agreement (NDA)",
+        "rationale": "An NDA is a legally binding contract that prevents the recipient from disclosing confidential information to third parties. It should be signed before sharing sensitive data."
+      },
+      {
+        "id": "b",
+        "text": "Service level agreement (SLA)",
+        "rationale": "An SLA defines performance metrics and remedies but does not specifically address confidentiality of shared information."
+      },
+      {
+        "id": "c",
+        "text": "Memorandum of understanding (MOU)",
+        "rationale": "An MOU is a high-level agreement of intent and is generally not legally binding for confidentiality protections."
+      },
+      {
+        "id": "d",
+        "text": "Business associate agreement (BAA)",
+        "rationale": "A BAA is specific to HIPAA-regulated entities and protected health information, not general proprietary business information."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "An NDA is the appropriate legal instrument to protect confidential information shared during vendor evaluations. It establishes legally enforceable obligations to maintain confidentiality and specifies consequences for unauthorized disclosure.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "NDAs and Vendor Agreements"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-020",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "standard",
+    "prompt": "Two government agencies need to connect their separate networks to share classified information. They must document the technical security requirements for the connection, including encryption standards and authentication methods, in a formal agreement. Which type of document is most appropriate for this purpose?",
+    "context": "Two government agencies connecting networks with specific technical security requirements.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Interconnection security agreement (ISA)",
+        "rationale": "An ISA documents the technical security requirements, including encryption, authentication, and connectivity controls, for connecting separate systems or networks."
+      },
+      {
+        "id": "b",
+        "text": "Memorandum of understanding (MOU)",
+        "rationale": "An MOU is a high-level agreement expressing intent to cooperate but does not typically specify detailed technical security controls."
+      },
+      {
+        "id": "c",
+        "text": "Service level agreement (SLA)",
+        "rationale": "An SLA defines performance metrics like uptime and response times, not technical interconnection security controls."
+      },
+      {
+        "id": "d",
+        "text": "Non-disclosure agreement (NDA)",
+        "rationale": "An NDA addresses confidentiality of shared information but does not specify network connection security requirements."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "An ISA is specifically designed to document technical security requirements for connecting systems, including encryption standards, authentication methods, and connectivity controls. It is commonly used alongside an MOU when organizations need to interconnect networks.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "ISA and MOU"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-021",
+    "domain": 5,
+    "objective": "5.3",
+    "format": "standard",
+    "prompt": "An organization discovers that a critical hardware component in its data center is manufactured by a subcontractor in a country with weak intellectual property laws and known state-sponsored espionage activities. The organization has no direct contractual relationship with this subcontractor. Which type of risk does this scenario primarily illustrate?",
+    "context": "Organization using hardware with components from a high-risk subcontractor outside direct contractual control.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Supply chain risk",
+        "rationale": "Supply chain risk involves threats originating from vendors, suppliers, and subcontractors throughout the product lifecycle, especially when visibility into lower-tier suppliers is limited."
+      },
+      {
+        "id": "b",
+        "text": "Compliance risk",
+        "rationale": "Compliance risk relates to violations of laws or regulations. While there may be compliance implications, the primary risk here is from the supply chain itself."
+      },
+      {
+        "id": "c",
+        "text": "Business continuity risk",
+        "rationale": "Business continuity risk relates to the organization's ability to continue operations after disruptions. The scenario describes a security/trust concern rather than operational continuity."
+      },
+      {
+        "id": "d",
+        "text": "Reputational risk",
+        "rationale": "Reputational risk is a consequence rather than the root risk. The primary issue is the lack of visibility and control in the supply chain."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Supply chain risk includes threats from vendors, suppliers, and subcontractors throughout the product lifecycle. When organizations lack visibility into lower-tier suppliers, they may unknowingly introduce compromised or counterfeit components, exposing themselves to espionage, backdoors, or quality issues.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Supply Chain Risk Management"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-022",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "scenario",
+    "prompt": "A US-based e-commerce company sells products to customers worldwide, including the European Union. The company collects names, email addresses, shipping addresses, and payment information. After a data breach exposes EU customer data, the EU regulatory authority imposes a fine of 4% of the company's annual global revenue. Which regulation provides the basis for this penalty?",
+    "context": "US company with EU customers fined 4% of global revenue after a data breach.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "General Data Protection Regulation (GDPR)",
+        "rationale": "GDPR applies to any organization processing personal data of EU residents, regardless of where the organization is based. Maximum fines are up to 4% of annual global revenue or 20 million euros, whichever is higher."
+      },
+      {
+        "id": "b",
+        "text": "Health Insurance Portability and Accountability Act (HIPAA)",
+        "rationale": "HIPAA applies to protected health information in the US healthcare system, not general e-commerce customer data."
+      },
+      {
+        "id": "c",
+        "text": "Payment Card Industry Data Security Standard (PCI DSS)",
+        "rationale": "PCI DSS applies to payment card data but is an industry standard, not a regulation with 4% revenue fines. Penalties are imposed by acquiring banks, not EU regulators."
+      },
+      {
+        "id": "d",
+        "text": "Sarbanes-Oxley Act (SOX)",
+        "rationale": "SOX applies to financial reporting controls for publicly traded US companies and does not address personal data protection or impose 4% revenue fines."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "GDPR has extraterritorial reach, applying to any organization processing personal data of EU residents. Its tiered fine structure allows penalties up to 4% of annual global revenue for severe violations involving data subject rights and cross-border data transfers.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "GDPR"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-023",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "scenario",
+    "prompt": "A retail company processes credit card transactions in its physical stores and through its e-commerce website. The company stores cardholder data to process refunds and recurring billing. The security team is reviewing which systems and processes must comply with a specific set of security requirements. Which compliance framework applies to the handling of cardholder data?",
+    "context": "Retail company processing credit card transactions in-store and online.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "PCI DSS",
+        "rationale": "The Payment Card Industry Data Security Standard applies to all entities that store, process, or transmit cardholder data, including retailers, with 12 specific requirements for protecting card data."
+      },
+      {
+        "id": "b",
+        "text": "SOX",
+        "rationale": "SOX applies to financial reporting controls for publicly traded companies, not specifically to credit card data protection."
+      },
+      {
+        "id": "c",
+        "text": "GLBA",
+        "rationale": "The Gramm-Leach-Bliley Act applies to financial institutions' handling of nonpublic personal information, not general retail credit card processing."
+      },
+      {
+        "id": "d",
+        "text": "FERPA",
+        "rationale": "FERPA protects student educational records and does not apply to commercial credit card transactions."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "PCI DSS is the industry security standard for any entity that stores, processes, or transmits cardholder data. It includes 12 core requirements covering network security, data protection, access control, monitoring, and testing. Noncompliance can result in fines from acquiring banks and increased transaction fees.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "PCI DSS"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-024",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "standard",
+    "prompt": "A regional hospital system stores electronic health records, treatment histories, and insurance information for its patients. The system also processes billing transactions and transmits patient data to insurance companies for reimbursement. Which federal regulation primarily governs the security and privacy of this patient data?",
+    "context": "Hospital system storing and transmitting electronic health records and patient information.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "HIPAA",
+        "rationale": "HIPAA establishes security and privacy rules for protected health information (PHI) held by covered entities such as healthcare providers, health plans, and healthcare clearinghouses."
+      },
+      {
+        "id": "b",
+        "text": "FERPA",
+        "rationale": "FERPA protects student education records and does not apply to healthcare providers or patient medical records."
+      },
+      {
+        "id": "c",
+        "text": "GDPR",
+        "rationale": "GDPR is an EU regulation. While it applies to EU residents' data globally, the primary governing regulation for US healthcare data is HIPAA."
+      },
+      {
+        "id": "d",
+        "text": "FISMA",
+        "rationale": "FISMA applies to federal government information systems and their contractors, not private healthcare providers."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "HIPAA's Privacy Rule and Security Rule establish national standards for protecting individuals' medical records and other personal health information. Covered entities include healthcare providers, health plans, and healthcare clearinghouses that transmit health information electronically.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "HIPAA"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-025",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "scenario",
+    "prompt": "A European online retailer collects customer data including names, email addresses, purchase history, and payment information. A customer requests that the company delete all their personal data and stop processing it for marketing purposes. The company's legal team is reviewing which data subject rights apply under the GDPR. Which TWO rights are explicitly granted to data subjects under the GDPR? (Choose TWO.)",
+    "context": "European retailer receiving customer requests about personal data handling under GDPR.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Right to erasure (right to be forgotten)",
+        "rationale": "GDPR Article 17 grants data subjects the right to have their personal data erased without undue delay under specific circumstances."
+      },
+      {
+        "id": "b",
+        "text": "Right to unlimited free data storage",
+        "rationale": "GDPR does not grant any right to free data storage services. This is a fabricated option."
+      },
+      {
+        "id": "c",
+        "text": "Right to data portability",
+        "rationale": "GDPR Article 20 grants data subjects the right to receive their personal data in a structured, commonly used format and transmit it to another controller."
+      },
+      {
+        "id": "d",
+        "text": "Right to alter transaction history for favorable credit reporting",
+        "rationale": "GDPR does not grant rights to alter factual transaction records. This would conflict with data accuracy and legal obligations."
+      },
+      {
+        "id": "e",
+        "text": "Right to demand free physical copies of all server logs",
+        "rationale": "GDPR does not require organizations to provide free physical copies of technical server logs. Data subject access requests have reasonable limits."
+      },
+      {
+        "id": "f",
+        "text": "Right to require the company to share customer data with competitors daily",
+        "rationale": "Data portability applies to the data subject's own data upon request, not automatic daily sharing with competitors."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "GDPR provides several key data subject rights including: right to be informed, right of access, right to rectification, right to erasure (to be forgotten), right to restrict processing, right to data portability, right to object, and rights related to automated decision-making. Rights to erasure and data portability are among the most significant.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "GDPR Data Subject Rights"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-026",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "scenario",
+    "prompt": "A publicly traded corporation is preparing its annual financial statements. The CFO is concerned about ensuring that internal controls over financial reporting are adequate to prevent material misstatements. The external auditor will evaluate these controls and issue an opinion as part of the audit. Which federal regulation establishes these requirements?",
+    "context": "Publicly traded company ensuring internal controls over financial reporting for external audit.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sarbanes-Oxley Act (SOX)",
+        "rationale": "SOX Section 404 requires management to assess and report on the effectiveness of internal controls over financial reporting, with external auditor attestation."
+      },
+      {
+        "id": "b",
+        "text": "Gramm-Leach-Bliley Act (GLBA)",
+        "rationale": "GLBA requires financial institutions to protect nonpublic personal information but does not establish internal control requirements for financial reporting."
+      },
+      {
+        "id": "c",
+        "text": "PCI DSS",
+        "rationale": "PCI DSS protects cardholder data but does not govern financial reporting controls."
+      },
+      {
+        "id": "d",
+        "text": "FISMA",
+        "rationale": "FISMA applies to federal information systems, not publicly traded corporations' financial reporting."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "SOX was enacted in response to corporate scandals (Enron, WorldCom) and requires publicly traded companies to establish, maintain, and annually assess internal controls over financial reporting. Executives must certify financial statements, and external auditors must attest to management's control assessment.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "SOX"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-027",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "scenario",
+    "prompt": "A state university maintains student records including grades, disciplinary actions, and financial aid information. A third-party educational analytics company requests access to this data to develop predictive models for student retention. Before sharing any data, the university must ensure compliance with the federal law protecting student education records. Which regulation governs this data sharing?",
+    "context": "University considering sharing student records with a third-party analytics company.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "FERPA",
+        "rationale": "FERPA protects the privacy of student education records and requires written consent before disclosing personally identifiable information from student records, with specific exceptions."
+      },
+      {
+        "id": "b",
+        "text": "HIPAA",
+        "rationale": "HIPAA protects health information, but student education records including health records maintained by educational institutions are generally covered by FERPA, not HIPAA."
+      },
+      {
+        "id": "c",
+        "text": "GLBA",
+        "rationale": "GLBA applies to financial institutions' handling of nonpublic personal information. Educational institutions are not financial institutions under GLBA."
+      },
+      {
+        "id": "d",
+        "text": "GDPR",
+        "rationale": "GDPR is an EU regulation. While it may apply to EU students at US universities, the primary federal regulation for US student records is FERPA."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "FERPA (Family Educational Rights and Privacy Act) is a federal law that protects the privacy of student education records. It applies to all educational institutions that receive federal funding. Schools must have written permission from parents or eligible students to release personally identifiable information from education records.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "FERPA"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-028",
+    "domain": 5,
+    "objective": "5.4",
+    "format": "standard",
+    "prompt": "A regional bank collects customer information including Social Security numbers, account balances, investment portfolios, and transaction histories. The bank shares some of this data with affiliate marketing partners. Which federal regulation requires the bank to provide customers with a privacy notice explaining information-sharing practices and offering an opt-out mechanism?",
+    "context": "Bank collecting and sharing customer financial information with marketing partners.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Gramm-Leach-Bliley Act (GLBA)",
+        "rationale": "GLBA requires financial institutions to provide clear privacy notices explaining information-sharing practices and give customers the right to opt out of sharing with nonaffiliated third parties."
+      },
+      {
+        "id": "b",
+        "text": "Sarbanes-Oxley Act (SOX)",
+        "rationale": "SOX addresses financial reporting accuracy and internal controls, not consumer privacy notices or information-sharing opt-out rights."
+      },
+      {
+        "id": "c",
+        "text": "PCI DSS",
+        "rationale": "PCI DSS requires protection of cardholder data but does not require privacy notices or opt-out mechanisms."
+      },
+      {
+        "id": "d",
+        "text": "FERPA",
+        "rationale": "FERPA protects student education records and does not apply to financial institutions or banking data."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "GLBA's Privacy Rule requires financial institutions to provide initial and annual privacy notices describing their information collection and sharing practices. Customers must be given the opportunity to opt out of having their nonpublic personal information shared with nonaffiliated third parties. GLBA also includes Safeguards and Pretexting Rules.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "GLBA"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-029",
+    "domain": 5,
+    "objective": "5.5",
+    "format": "scenario",
+    "prompt": "A company hires an external penetration testing firm to evaluate its network security. The testing team is given no prior knowledge of the network, no credentials, and no documentation. They must discover vulnerabilities entirely through external reconnaissance and active testing. Which type of penetration test is being conducted?",
+    "context": "External pen test with no prior knowledge, credentials, or documentation provided to testers.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Black-box test",
+        "rationale": "In a black-box test, the testers have no prior knowledge of the target environment and must conduct their own reconnaissance and discovery."
+      },
+      {
+        "id": "b",
+        "text": "White-box test",
+        "rationale": "White-box testing provides full knowledge including network diagrams, source code, and credentials to the testers."
+      },
+      {
+        "id": "c",
+        "text": "Gray-box test",
+        "rationale": "Gray-box testing provides limited knowledge, typically some credentials and network documentation, but not full internal visibility."
+      },
+      {
+        "id": "d",
+        "text": "Red-team test",
+        "rationale": "Red-team tests are goal-oriented adversarial simulations, but the term describes the objective (e.g., steal data) rather than the knowledge level of the testers."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Black-box testing simulates an external attacker with no inside knowledge. Testers must gather information through open-source intelligence (OSINT), scanning, and enumeration to find vulnerabilities. This approach best simulates real-world external attacks.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Penetration Testing Types"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-030",
+    "domain": 5,
+    "objective": "5.5",
+    "format": "scenario",
+    "prompt": "A large financial institution has authorized a team to simulate a sophisticated threat actor attempting to compromise their trading systems. The team receives no advance notice, uses stealthy methods to avoid detection, and has a specific goal of exfiltrating sensitive customer data without being caught by the internal security team. Which type of security exercise is being conducted?",
+    "context": "Simulated threat actor targeting trading systems with stealth and specific exfiltration goals.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Red-team exercise",
+        "rationale": "A red-team exercise is an adversarial simulation that mimics real-world threat actors with specific goals, using stealth and evasion techniques to test the organization's detection and response capabilities."
+      },
+      {
+        "id": "b",
+        "text": "Blue-team exercise",
+        "rationale": "The blue team is the defensive side that detects and responds to attacks. They are the ones being tested, not conducting the simulation."
+      },
+      {
+        "id": "c",
+        "text": "Purple-team exercise",
+        "rationale": "Purple-team exercises involve red and blue teams working collaboratively to share information and improve defenses, not simulating stealthy adversary behavior."
+      },
+      {
+        "id": "d",
+        "text": "Vulnerability assessment",
+        "rationale": "A vulnerability assessment scans for and identifies known vulnerabilities but does not attempt to exploit them or simulate sophisticated stealthy adversary behavior."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Red-team exercises simulate real-world adversaries with specific objectives, stealth requirements, and evasive tactics. They test not only technical vulnerabilities but also the organization's people, processes, and detection/response capabilities. Blue teams defend, purple teams collaborate.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Red Team vs Blue Team"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-031",
+    "domain": 5,
+    "objective": "5.5",
+    "format": "scenario",
+    "prompt": "An organization is planning security testing for the upcoming year. The CISO is reviewing the differences between a vulnerability assessment and a penetration test to determine which approach is most appropriate for each system. Which TWO statements correctly describe differences between vulnerability assessments and penetration tests? (Choose TWO.)",
+    "context": "CISO comparing vulnerability assessments and penetration tests for annual security testing planning.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Penetration tests attempt to exploit identified vulnerabilities to achieve a goal",
+        "rationale": "Penetration testing goes beyond identification by actively attempting to exploit vulnerabilities to determine the actual risk and potential impact."
+      },
+      {
+        "id": "b",
+        "text": "Vulnerability assessments are typically more expensive than penetration tests",
+        "rationale": "Vulnerability assessments are generally less expensive than penetration tests because they are more automated and less labor-intensive."
+      },
+      {
+        "id": "c",
+        "text": "Vulnerability assessments identify and report potential weaknesses without exploitation",
+        "rationale": "Vulnerability assessments use automated and manual techniques to identify potential vulnerabilities but do not attempt to exploit them."
+      },
+      {
+        "id": "d",
+        "text": "Penetration tests do not require any documentation or reporting",
+        "rationale": "Penetration tests require detailed documentation and final reports just like vulnerability assessments, including findings, evidence, and remediation recommendations."
+      },
+      {
+        "id": "e",
+        "text": "Vulnerability assessments always require authenticated access to all systems",
+        "rationale": "Vulnerability assessments can be conducted with or without credentials. Unauthenticated scans are common for external assessments."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Vulnerability assessments identify and report potential vulnerabilities but stop short of exploitation. Penetration tests actively attempt to exploit vulnerabilities to determine the actual risk. Both require documentation, but penetration tests are typically more expensive due to the manual effort involved in exploitation.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Vulnerability Assessment vs Penetration Test"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-032",
+    "domain": 5,
+    "objective": "5.5",
+    "format": "scenario",
+    "prompt": "An organization's internal audit team is planning to audit the IT department's access control processes. The IT manager argues that the audit should be conducted by an external firm because the internal audit team reports to the same executive leadership as the IT department. Which principle is the IT manager concerned about?",
+    "context": "Internal audit team planned to audit IT access controls, but IT manager questions impartiality.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Auditor independence",
+        "rationale": "Auditor independence requires that auditors remain objective and free from conflicts of interest. If the internal audit team reports to the same leadership as the department being audited, their independence may be compromised."
+      },
+      {
+        "id": "b",
+        "text": "Separation of duties",
+        "rationale": "Separation of duties divides critical tasks among multiple individuals to prevent fraud. While related to internal controls, this is not the primary concern about audit impartiality."
+      },
+      {
+        "id": "c",
+        "text": "Due care",
+        "rationale": "Due care refers to acting responsibly and prudently. The IT manager's concern is about objectivity, not the level of care exercised."
+      },
+      {
+        "id": "d",
+        "text": "Chain of custody",
+        "rationale": "Chain of custody documents the handling of evidence. This is relevant to forensic investigations, not audit independence."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Auditor independence is essential for objective and unbiased audit results. Internal auditors should report to a level of the organization that ensures independence from the areas being audited (typically the board or audit committee). When independence is insufficient, external auditors may be engaged.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Internal vs External Audits"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-033",
+    "domain": 5,
+    "objective": "5.5",
+    "format": "standard",
+    "prompt": "A SOC 2 Type II report provides assurance about a service organization's controls. Which of the following best describes what a SOC 2 Type II report covers?",
+    "context": "Understanding the scope and coverage of SOC 2 Type II reports.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "The suitability of design and operating effectiveness of controls over a period of at least six months",
+        "rationale": "SOC 2 Type II reports assess both control design and operating effectiveness over a minimum six-month period, providing evidence that controls work as intended over time."
+      },
+      {
+        "id": "b",
+        "text": "The suitability of control design at a single point in time",
+        "rationale": "This describes a SOC 2 Type I report, which assesses control design at a specific moment without testing operating effectiveness."
+      },
+      {
+        "id": "c",
+        "text": "The financial statement accuracy of the service organization",
+        "rationale": "Financial statement audits are covered by SOC 1 reports, not SOC 2. SOC 2 addresses security, availability, processing integrity, confidentiality, and privacy."
+      },
+      {
+        "id": "d",
+        "text": "A summary of the service organization's marketing claims about security",
+        "rationale": "SOC reports are independent audit reports, not marketing summaries. They provide objective, audited assessments of controls."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "SOC 2 Type II reports provide assurance on both the design suitability and operating effectiveness of controls related to the Trust Services Criteria (security, availability, processing integrity, confidentiality, privacy) over a specified period of at least six months.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "SOC Reports"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-034",
+    "domain": 5,
+    "objective": "5.5",
+    "format": "standard",
+    "prompt": "An organization wants to improve its security detection and response capabilities by having its offensive and defensive security teams work together. The offensive team shares its tactics and tools with the defensive team during the engagement so the defensive team can improve monitoring and response. Which type of exercise is being conducted?",
+    "context": "Offensive and defensive teams collaborating with information sharing during a security exercise.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Purple-team exercise",
+        "rationale": "Purple-team exercises involve red (offensive) and blue (defensive) teams working collaboratively, sharing information to improve detection and response capabilities."
+      },
+      {
+        "id": "b",
+        "text": "Red-team exercise",
+        "rationale": "Red-team exercises are purely offensive simulations where the red team operates independently without sharing methods with defenders."
+      },
+      {
+        "id": "c",
+        "text": "Blue-team exercise",
+        "rationale": "Blue-team exercises focus on defensive operations and incident response but do not typically involve offensive team collaboration."
+      },
+      {
+        "id": "d",
+        "text": "Tabletop exercise",
+        "rationale": "Tabletop exercises are discussion-based walkthroughs of incident response plans, not live technical collaboration between offensive and defensive teams."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Purple-team exercises break down the traditional wall between red and blue teams by facilitating real-time information sharing. The red team shares techniques being used so the blue team can develop and test detections immediately, accelerating security improvement.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.5"
+      },
+      {
+        "source": "study-guide",
+        "section": "Red Team, Blue Team, Purple Team"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-035",
+    "domain": 5,
+    "objective": "5.6",
+    "format": "scenario",
+    "prompt": "A company's security team launches a simulated phishing campaign targeting all employees. The campaign uses a realistic email pretending to be from the IT department requesting password verification. Results show that 35% of employees clicked the link, 15% entered credentials, and 8% reported the email to the security team. Which metric indicates the most significant improvement opportunity for the security awareness program?",
+    "context": "Phishing simulation results: 35% clicked link, 15% entered credentials, 8% reported.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only 8% of employees reported the suspicious email",
+        "rationale": "The reporting rate is very low, indicating that employees either did not recognize the email as suspicious or did not know how to report it. Training should emphasize reporting mechanisms."
+      },
+      {
+        "id": "b",
+        "text": "35% of employees clicked the link",
+        "rationale": "While the click rate is concerning, clicking a link is less severe than entering credentials. The reporting rate shows a systemic failure in the response process."
+      },
+      {
+        "id": "c",
+        "text": "15% of employees entered credentials",
+        "rationale": "Credential entry is a critical failure, but the most important program improvement is ensuring employees know how to report suspicious emails."
+      },
+      {
+        "id": "d",
+        "text": "All employees received the simulated phishing email",
+        "rationale": "Receiving the test email is expected in a simulation. The delivery itself is not a negative metric."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "While the click and credential-entry rates are concerning, the extremely low reporting rate (8%) indicates that most employees who recognized the email as suspicious did not know how or where to report it. A key component of security awareness training is establishing and communicating clear reporting procedures.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Phishing Simulations"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-036",
+    "domain": 5,
+    "objective": "5.6",
+    "format": "scenario",
+    "prompt": "A hospital is developing a security awareness training program. The training team is determining what content different employee groups need. The IT security team needs training on secure coding and incident response procedures. Nursing staff need training on protecting patient privacy and recognizing phishing. Administrative staff need training on data handling and clean desk policies. Which training approach is being described?",
+    "context": "Hospital developing differentiated training content for different employee roles.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Role-based training",
+        "rationale": "Role-based training tailors content to the specific security responsibilities and risks associated with each employee's job function, ensuring relevance and effectiveness."
+      },
+      {
+        "id": "b",
+        "text": "Annual security awareness training",
+        "rationale": "Annual training refers to frequency, not content differentiation. Role-based training can be delivered annually but describes a different concept."
+      },
+      {
+        "id": "c",
+        "text": "General security awareness training",
+        "rationale": "General training provides the same content to all employees. The scenario clearly describes differentiated content by role."
+      },
+      {
+        "id": "d",
+        "text": "Gamification",
+        "rationale": "Gamification uses game elements to increase engagement. The scenario describes tailoring content by role, not gamification techniques."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Role-based training delivers content tailored to the specific security risks and responsibilities of different job functions. IT staff need technical training, healthcare workers need privacy training, and executives may need strategic risk training. This is more effective than one-size-fits-all approaches.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Role-Based Training"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-037",
+    "domain": 5,
+    "objective": "5.6",
+    "format": "scenario",
+    "prompt": "A company is redesigning its security awareness program after a ransomware incident that started with a phishing email. Management wants to implement a program that measurably reduces the likelihood of successful phishing attacks. Which TWO elements should be included in the redesigned program? (Choose TWO.)",
+    "context": "Company redesigning security awareness program after a ransomware incident from phishing.",
+    "kind": "multiple-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Regular phishing simulations with immediate feedback for users who fail",
+        "rationale": "Phishing simulations test user awareness and provide immediate, non-punitive feedback to help users recognize phishing indicators in a safe environment."
+      },
+      {
+        "id": "b",
+        "text": "Posting employees' failed simulation results publicly to encourage improvement",
+        "rationale": "Public shaming is counterproductive and creates a culture of fear that discourages reporting actual incidents. Training should be positive and supportive."
+      },
+      {
+        "id": "c",
+        "text": "A clear, simple reporting mechanism for suspected phishing emails",
+        "rationale": "An easy-to-use reporting button (e.g., Outlook report message button) encourages users to report suspicious emails, turning them into a human detection sensor network."
+      },
+      {
+        "id": "d",
+        "text": "Eliminating all security awareness training except the annual compliance video",
+        "rationale": "Reducing training frequency contradicts the goal of improving security awareness. Effective programs require ongoing engagement."
+      },
+      {
+        "id": "e",
+        "text": "Requiring employees to memorize complex security policies verbatim",
+        "rationale": "Memorization is not an effective training strategy. Understanding concepts and knowing reporting procedures is more valuable than rote memorization."
+      }
+    ],
+    "correctOptionIds": [
+      "a",
+      "c"
+    ],
+    "selectCount": 2,
+    "explanation": "Regular phishing simulations with immediate feedback help users learn to recognize phishing in a controlled environment. A clear reporting mechanism (such as a phishing report button) enables users to report suspicious emails quickly, turning them into active participants in the defense against phishing attacks.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Security Awareness Program Elements"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-038",
+    "domain": 5,
+    "objective": "5.6",
+    "format": "scenario",
+    "prompt": "An employee receives an email that appears to be from the CEO requesting an urgent wire transfer to a new vendor. The employee notices the email address has a slight misspelling in the domain name. The employee sends a separate email to the IT security team to verify the request and does not click any links or reply to the suspicious email. Which type of behavior is the employee demonstrating?",
+    "context": "Employee recognizes a suspicious CEO impersonation email and reports it without engaging.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Positive security awareness behavior",
+        "rationale": "The employee correctly identified suspicious indicators (misspelled domain, unusual request), avoided engaging with the threat, and reported it through proper channels. This is exactly the behavior security awareness training aims to develop."
+      },
+      {
+        "id": "b",
+        "text": "Whistleblowing",
+        "rationale": "Whistleblowing involves reporting illegal or unethical activities within an organization. The employee is reporting a potential phishing attempt, not organizational misconduct."
+      },
+      {
+        "id": "c",
+        "text": "Social engineering",
+        "rationale": "Social engineering is the manipulation technique being used against the employee, not the employee's response. The employee is resisting social engineering, not performing it."
+      },
+      {
+        "id": "d",
+        "text": "Noncompliance with reporting procedures",
+        "rationale": "The employee is correctly following reporting procedures by contacting the security team through a separate channel rather than replying to the suspicious email."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "The employee demonstrated the three key behaviors that security awareness training seeks to develop: 1) Identify (noticed the misspelled domain), 2) Resist (did not engage with the email), and 3) Report (contacted the security team through proper channels).",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Reporting Mechanisms"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-039",
+    "domain": 5,
+    "objective": "5.6",
+    "format": "standard",
+    "prompt": "A compliance auditor is reviewing an organization's security awareness program. The auditor notes that the organization provides training to all employees upon hire but has no schedule for subsequent training sessions. According to security best practices and common compliance frameworks, how frequently should ongoing security awareness training typically be conducted?",
+    "context": "Audit finding: no recurring security awareness training schedule exists beyond initial onboarding.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "At least annually",
+        "rationale": "Most compliance frameworks (HIPAA, PCI DSS, etc.) and security best practices require security awareness training at least annually, with more frequent updates based on threat landscape changes."
+      },
+      {
+        "id": "b",
+        "text": "Only when a security incident occurs",
+        "rationale": "Incident-triggered training is reactive and insufficient. Regular ongoing training is needed to maintain awareness of evolving threats."
+      },
+      {
+        "id": "c",
+        "text": "Every five years",
+        "rationale": "This interval is far too long. Threats and technologies change rapidly; annual training is the minimum standard."
+      },
+      {
+        "id": "d",
+        "text": "Training is only needed at hire and upon termination",
+        "rationale": "Security awareness must be ongoing to address the evolving threat landscape. Annual training is the minimum requirement in most frameworks."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Security awareness training should be provided at least annually, with many organizations opting for quarterly or monthly updates. Initial training upon hire is required, and refresher training should address emerging threats, policy changes, and lessons learned from incidents.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Training Frequency"
+      }
+    ]
+  },
+  {
+    "id": "mcq-5-040",
+    "domain": 5,
+    "objective": "5.6",
+    "format": "standard",
+    "prompt": "An organization is trying to increase engagement in its security awareness training program. Employee completion rates are low, and those who complete the training score poorly on follow-up assessments. The training team proposes introducing leaderboards, badges, and friendly competition between departments to motivate participation. Which technique is being proposed?",
+    "context": "Organization seeking to improve security training engagement through competition and achievement incentives.",
+    "kind": "single-choice",
+    "options": [
+      {
+        "id": "a",
+        "text": "Gamification",
+        "rationale": "Gamification applies game design elements such as points, badges, leaderboards, and competition to non-game contexts like training to increase engagement and motivation."
+      },
+      {
+        "id": "b",
+        "text": "Phishing simulation",
+        "rationale": "Phishing simulations test user awareness of phishing emails but are not the same as adding game elements to a training program."
+      },
+      {
+        "id": "c",
+        "text": "Role-based training",
+        "rationale": "Role-based training tailors content to job functions. The scenario describes engagement techniques, not content customization."
+      },
+      {
+        "id": "d",
+        "text": "Computer-based training (CBT)",
+        "rationale": "CBT is a delivery method (online modules). Gamification can be applied within CBT, but the techniques described are specifically gamification elements."
+      }
+    ],
+    "correctOptionIds": [
+      "a"
+    ],
+    "selectCount": 1,
+    "explanation": "Gamification uses game mechanics like points, levels, leaderboards, challenges, and badges to increase motivation and engagement in non-game activities. When applied to security awareness training, it can improve completion rates and knowledge retention by making learning more interactive and rewarding.",
+    "sourceRefs": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 5.6"
+      },
+      {
+        "source": "study-guide",
+        "section": "Gamification"
+      }
+    ]
+  }
+]

@@ -1,5 +1,50 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'; import { page } from '$app/state'; import ExamFlow from '$lib/components/ExamFlow.svelte';
-	let started = $derived(Boolean(page.url.searchParams.get('session')) || page.url.searchParams.get('start') === '1'); let count = $state(5);
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	import ExamFlow from '$lib/components/ExamFlow.svelte';
+
+	let started = $derived(
+		Boolean(page.url.searchParams.get('session')) || page.url.searchParams.get('start') === '1'
+	);
+	let count = $state(Number(page.url.searchParams.get('count')) || 5);
 </script>
-{#if started}<ExamFlow type="pbq" {count} onDone={() => goto('/')} />{:else}<div class="mx-auto max-w-md space-y-5 py-8"><h1 class="text-2xl font-bold text-white">Performance-based questions</h1><div class="glass rounded-2xl p-6"><select bind:value={count}><option value={1}>1</option><option value={3}>3</option><option value={5}>5</option><option value={10}>10</option><option value={30}>All 30</option></select><button class="ml-3 rounded bg-orange-600 px-4 py-2" onclick={() => goto('/pbq?start=1')}>Start PBQs</button></div></div>{/if}
+
+{#if started}
+	<ExamFlow type="pbq" {count} onDone={() => goto('/')} />
+{:else}
+	<div class="mx-auto max-w-lg space-y-6 px-4 py-8">
+		<div>
+			<div
+				class="mb-3 grid h-11 w-11 place-items-center rounded-xl bg-orange-500/10 text-orange-500"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					class="h-6 w-6"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"
+					><path
+						d="M8 5.5 10.5 3l2.5 2.5L15.5 3 18 5.5 15.5 8 18 10.5 15.5 13 18 15.5 15.5 18 13 15.5 10.5 18 8 15.5 5.5 18 3 15.5 5.5 13 3 10.5 5.5 8 3 5.5 5.5 3 8 5.5Z"
+					/></svg
+				>
+			</div>
+			<h1 class="text-2xl font-bold text-text-primary sm:text-3xl">Performance-based Questions</h1>
+			<p class="mt-2 text-sm text-text-secondary">
+				Practice hands-on items that ask you to configure, match, order, and investigate.
+			</p>
+		</div>
+		<div class="glass space-y-5 rounded-2xl p-6 sm:p-8">
+			<label class="block text-sm font-medium text-text-secondary"
+				>PBQ count<select class="mt-1.5" bind:value={count}
+					><option value={1}>1 PBQ</option><option value={3}>3 PBQs</option><option value={5}
+						>5 PBQs</option
+					><option value={10}>10 PBQs</option><option value={30}>All 30 PBQs</option></select
+				></label
+			>
+			<button
+				class="h-12 w-full rounded-xl bg-gradient-to-r from-orange-500 to-accent-warm px-8 font-semibold text-white transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
+				onclick={() => goto(`/pbq?start=1&count=${count}`)}>Start PBQs</button
+			>
+		</div>
+	</div>
+{/if}

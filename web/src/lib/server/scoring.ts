@@ -1,5 +1,5 @@
 import type { QuestionFeedback, QuestionResponse } from '$lib/types';
-import { correctResponse, type QuestionDefinition } from './question-bank';
+import { correctResponse, toPublicQuestion, type QuestionDefinition } from './question-bank';
 
 function selectedScore(correctIds: string[], selectedIds: string[]): number {
 	const correct = new Set(correctIds);
@@ -41,8 +41,17 @@ export function scoreQuestion(
 			case 'configuration':
 				if (response.kind === 'configuration') earnedPoints = question.fields.filter((field) => response.values[field.id] === question.correctValues[field.id]).length / question.fields.length;
 				break;
+			case 'multi-step':
+				if (response.kind === 'multi-step') {
+					const stepScores = question.steps.map((step, i) => scoreQuestion(step, response.stepResponses[i] ?? null));
+					earnedPoints = stepScores.reduce((sum, s) => sum + s.earnedPoints, 0) / question.steps.length;
+				}
+				break;
 		}
 	}
+	const multiSteps = question.kind === 'multi-step' && response?.kind === 'multi-step'
+		? question.steps.map((step, i) => scoreQuestion(step, (response as { kind: 'multi-step'; stepResponses: QuestionResponse[] }).stepResponses[i] ?? null))
+		: undefined;
 	return {
 		earnedPoints,
 		possiblePoints: 1,
@@ -52,6 +61,7 @@ export function scoreQuestion(
 		sourceRefs: question.sourceRefs,
 		...(question.kind === 'single-choice' || question.kind === 'multiple-choice'
 			? { optionRationales: Object.fromEntries(question.options.map((option) => [option.id, option.rationale])) }
-			: {})
+			: {}),
+		...(multiSteps ? { stepFeedback: multiSteps } : {})
 	};
 }

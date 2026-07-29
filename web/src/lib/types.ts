@@ -71,6 +71,7 @@ export interface PublicMatchingQuestion extends PublicQuestionBase {
 	kind: 'matching';
 	premises: { id: string; text: string }[];
 	targets: { id: string; text: string }[];
+	extraTargets?: { id: string; text: string }[];
 }
 
 export interface PublicNumericQuestion extends PublicQuestionBase {
@@ -93,13 +94,20 @@ export interface PublicConfigurationQuestion extends PublicQuestionBase {
 	fields: { id: string; label: string; options: { id: string; text: string }[] }[];
 }
 
+export interface PublicMultiStepPbqQuestion extends PublicQuestionBase {
+	kind: 'multi-step';
+	context: string;
+	steps: PublicQuestion[];
+}
+
 export type PublicQuestion =
 	| PublicChoiceQuestion
 	| PublicOrderingQuestion
 	| PublicMatchingQuestion
 	| PublicNumericQuestion
 	| PublicEvidenceQuestion
-	| PublicConfigurationQuestion;
+	| PublicConfigurationQuestion
+	| PublicMultiStepPbqQuestion;
 
 export type QuestionResponse =
 	| { kind: 'choice'; optionIds: string[] }
@@ -107,7 +115,8 @@ export type QuestionResponse =
 	| { kind: 'matching'; matches: Record<string, string> }
 	| { kind: 'numeric'; value: number }
 	| { kind: 'evidence'; lineIds: string[] }
-	| { kind: 'configuration'; values: Record<string, string> };
+	| { kind: 'configuration'; values: Record<string, string> }
+	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
 
 export interface QuestionFeedback {
 	earnedPoints: number;
@@ -117,6 +126,7 @@ export interface QuestionFeedback {
 	explanation: string;
 	sourceRefs: SourceRef[];
 	optionRationales?: Record<string, string>;
+	stepFeedback?: QuestionFeedback[];
 }
 
 export interface QuestionReview {
@@ -159,6 +169,7 @@ export interface QuizResult {
 	percentage: number;
 	fullyCorrect: number;
 	totalQuestions: number;
+	flaggedQuestionIndexes: number[];
 	domainBreakdown: Record<Domain, ScoreBreakdown>;
 	objectiveBreakdown: Partial<Record<ObjectiveId, ScoreBreakdown>>;
 	completedAt: string;

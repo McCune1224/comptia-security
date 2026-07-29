@@ -29,6 +29,7 @@ function presentation(question: QuestionDefinition, rng: () => number): Question
 	if (cloned.kind === 'single-choice' || cloned.kind === 'multiple-choice') cloned.options = shuffle(cloned.options, rng);
 	if (cloned.kind === 'ordering') cloned.items = shuffle(cloned.items, rng);
 	if (cloned.kind === 'matching') cloned.targets = shuffle(cloned.targets, rng);
+	if (cloned.kind === 'multi-step') cloned.steps = cloned.steps.map((step) => presentation(step, rng)) as typeof cloned.steps;
 	return cloned;
 }
 
@@ -50,10 +51,14 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 		return;
 	}
 	if (question.kind === 'ordering' && response.kind === 'ordering' && response.itemIds.length === question.items.length && distinct(response.itemIds) && response.itemIds.every((id) => question.items.some((item) => item.id === id))) return;
-	if (question.kind === 'matching' && response.kind === 'matching' && Object.keys(response.matches).length === question.premises.length && question.premises.every((premise) => question.targets.some((target) => target.id === response.matches[premise.id])) && distinct(Object.values(response.matches))) return;
+	if (question.kind === 'matching' && response.kind === 'matching' && Object.keys(response.matches).length === question.premises.length && question.premises.every((premise) => { const matchId = response.matches[premise.id]; return question.targets.some((target) => target.id === matchId) || (question.extraTargets?.some((extra) => extra.id === matchId) ?? false); }) && distinct(Object.values(response.matches))) return;
 	if (question.kind === 'numeric' && response.kind === 'numeric' && Number.isFinite(response.value)) return;
 	if (question.kind === 'evidence' && response.kind === 'evidence' && response.lineIds.length === question.selectCount && distinct(response.lineIds) && response.lineIds.every((id) => question.artifact.lines.some((line) => line.id === id))) return;
 	if (question.kind === 'configuration' && response.kind === 'configuration' && Object.keys(response.values).length === question.fields.length && question.fields.every((field) => field.options.some((option) => option.id === response.values[field.id]))) return;
+	if (question.kind === 'multi-step' && response.kind === 'multi-step' && response.stepResponses.length === question.steps.length) {
+		for (let i = 0; i < question.steps.length; i++) { validateResponse(question.steps[i], response.stepResponses[i]); }
+		return;
+	}
 	throw new QuizServiceError('INVALID_REQUEST', 'Response does not match the question interaction.');
 }
 
@@ -76,7 +81,7 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 			return { question: toPublicQuestion(question), response, feedback };
 		});
 		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
-		const result: QuizResult = { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, earnedPoints, possiblePoints: stored.questions.length, percentage: Math.round(earnedPoints / stored.questions.length * 1000) / 10, fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length, totalQuestions: stored.questions.length, domainBreakdown, objectiveBreakdown, completedAt: now().toISOString(), review };
+		const result: QuizResult = { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, earnedPoints, possiblePoints: stored.questions.length, percentage: Math.round(earnedPoints / stored.questions.length * 1000) / 10, fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length, totalQuestions: stored.questions.length, flaggedQuestionIndexes: stored.flags, domainBreakdown, objectiveBreakdown, completedAt: now().toISOString(), review };
 		return repository.complete(stored.summary.id, result, review.map((item, index) => ({ index, question: stored.questions[index], response: item.response, points: item.feedback.earnedPoints })), result.completedAt);
 	};
 	return {
