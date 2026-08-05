@@ -52,11 +52,17 @@
 
 	let overview = $state<Overview | null>(null);
 	let error = $state('');
+	let review = $state<{ streak: number; dueCount: number; wallCount: number } | null>(null);
 
 	onMount(async () => {
 		const response = await fetch('/api/course/overview');
 		if (response.ok) overview = await response.json();
 		else error = 'Unable to load course overview.';
+		const reviewResponse = await fetch('/api/review');
+		if (reviewResponse.ok) {
+			const data = await reviewResponse.json();
+			review = data.summary;
+		}
 	});
 
 	function kindLabel(kind: string): string {
@@ -66,7 +72,9 @@
 				? 'Scenario'
 				: kind === 'pbq'
 					? 'PBQ'
-					: 'Full Exam';
+					: kind === 'review'
+						? 'Review'
+						: 'Full Exam';
 	}
 
 	const domainColors = [
@@ -174,6 +182,48 @@
 				</div>
 			</div>
 		</section>
+
+		<!-- Daily review strip -->
+		{#if review}
+			<section
+				class="flex flex-col gap-4 rounded-md border border-accent/40 bg-surface-900 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"
+			>
+				<div class="flex items-center gap-4">
+					<div class="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-accent/15">
+						<svg
+							viewBox="0 0 24 24"
+							class="h-6 w-6 text-accent-warm"
+							fill="currentColor"
+							><path
+								d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
+							/></svg
+						>
+					</div>
+					<div>
+						<p class="eyebrow">Daily review</p>
+						<p class="mt-1 text-sm text-text-secondary">
+							<span class="num-display text-lg font-bold text-text-primary"
+								>{review.streak} day streak</span
+							>
+							<span class="mx-2 text-text-subtle">·</span>
+							{#if review.dueCount > 0}
+								<span class="font-bold text-accent">{review.dueCount} cards due</span>
+							{:else}
+								<span class="text-text-muted">nothing due — wall has {review.wallCount}</span>
+							{/if}
+						</p>
+					</div>
+				</div>
+				<div class="flex items-center gap-3">
+					<a
+						class="btn btn-primary flex-1 sm:flex-none"
+						href="/quiz?review=daily"
+						>Start today's review</a
+					>
+					<a class="text-sm font-bold text-accent hover:underline" href="/review">Review →</a>
+				</div>
+			</section>
+		{/if}
 
 		<!-- To-do + readiness panel -->
 		<div class="grid gap-6 lg:grid-cols-3">

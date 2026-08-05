@@ -37,7 +37,7 @@ export type ObjectiveId =
 	| '5.5'
 	| '5.6';
 
-export type SessionType = 'quiz' | 'scenario' | 'pbq' | 'full';
+export type SessionType = 'quiz' | 'scenario' | 'pbq' | 'full' | 'review';
 export type SessionMode = 'practice' | 'exam';
 export type SessionStatus = 'active' | 'completed' | 'abandoned';
 export type QuestionFormat = 'standard' | 'scenario' | 'pbq';

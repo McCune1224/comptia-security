@@ -40,6 +40,30 @@ export interface StoredSession {
 	flags: number[];
 }
 
+export interface ReviewCardRow {
+	questionId: string;
+	intervalDays: number;
+	ease: number;
+	lapses: number;
+	dueAt: string; // local calendar date YYYY-MM-DD
+	lastResult: 'correct' | 'wrong' | null;
+	reviewCount: number;
+	firstSeenAt: string;
+}
+
+export interface StudyDayRow {
+	dateKey: string;
+	questions: number;
+	sessions: number;
+	updatedAt: string;
+}
+
+export interface AnswerHistoryRow {
+	questionId: string;
+	isCorrect: boolean;
+	completedAt: string;
+}
+
 export interface QuizRepository {
 	createSession(session: { id: string; type: SessionType; mode: SessionMode; domain: number | null; startedAt: string; deadlineAt: string | null; questions: QuestionDefinition[]; assignmentId?: string | null }): void;
 	getSession(id: string): StoredSession | null;
@@ -52,6 +76,12 @@ export interface QuizRepository {
 	getRecentSessions(limit?: number): SessionRow[];
 	getAllCompletedSessions(): SessionRow[];
 	getWeakTopics(): { domain: number; objective: string; earnedPoints: number; possiblePoints: number; percentage: number; severity: 'high' | 'review' }[];
+	getReviewCards(): ReviewCardRow[];
+	upsertReviewCard(card: ReviewCardRow): void;
+	getStudyLog(): StudyDayRow[];
+	recordStudyDay(dateKey: string, questions: number, updatedAt: string): void;
+	getAnswerHistory(): AnswerHistoryRow[];
+	getAnsweredQuestionIds(): string[];
 	getExamDate(): string;
 	setExamDate(examDate: string): void;
 	getCourseModules(): CourseModule[];
@@ -115,6 +145,8 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		for (const [name, sql] of [['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!progressColumns.has(name)) db.exec(`ALTER TABLE domain_progress ADD COLUMN ${name} ${sql}`);
 		db.exec(`CREATE TABLE IF NOT EXISTS quiz_session_state (session_id TEXT PRIMARY KEY, schema_version INTEGER NOT NULL, deadline_at TEXT, current_index INTEGER NOT NULL DEFAULT 0, questions_json TEXT NOT NULL, result_json TEXT, updated_at TEXT NOT NULL, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
 		CREATE TABLE IF NOT EXISTS quiz_session_responses (session_id TEXT NOT NULL, question_index INTEGER NOT NULL, response_json TEXT, flagged INTEGER NOT NULL DEFAULT 0, answered_at TEXT, PRIMARY KEY(session_id, question_index), FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
+		CREATE TABLE IF NOT EXISTS review_cards (question_id TEXT PRIMARY KEY, interval_days REAL NOT NULL DEFAULT 0, ease REAL NOT NULL DEFAULT 2.5, lapses INTEGER NOT NULL DEFAULT 0, due_at TEXT NOT NULL, last_result TEXT, review_count INTEGER NOT NULL DEFAULT 0, first_seen_at TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS study_log (date_key TEXT PRIMARY KEY, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_modules (id TEXT PRIMARY KEY, week INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', position INTEGER NOT NULL);
@@ -125,9 +157,9 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		CREATE TABLE IF NOT EXISTS google_synced_events (source TEXT PRIMARY KEY, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL);`);
 		db.prepare("UPDATE quiz_sessions SET mode = COALESCE(NULLIF(mode, ''), 'practice'), status = CASE WHEN completed_at IS NOT NULL THEN 'completed' WHEN id NOT IN (SELECT session_id FROM quiz_session_state) THEN 'abandoned' ELSE 'active' END, points_earned = CASE WHEN completed_at IS NOT NULL THEN correct_answers ELSE points_earned END, points_possible = CASE WHEN completed_at IS NOT NULL THEN total_questions ELSE points_possible END, updated_at = COALESCE(NULLIF(updated_at, ''), started_at)").run();
 		db.prepare('UPDATE quiz_answers SET points_earned = is_correct, points_possible = 1 WHERE points_possible = 0').run();
-		db.pragma('user_version = 4');
+		db.pragma('user_version = 5');
 	});
-	if (db.pragma('user_version', { simple: true }) !== 4) migrate();
+	if (db.pragma('user_version', { simple: true }) !== 5) migrate();
 	seedCourse(db);
 	const readSession = (id: string): StoredSession | null => {
 		const row = db.prepare('SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ?').get(id) as (SessionRow & StateRow) | undefined;
@@ -170,6 +202,12 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		getRecentSessions(limit = 10) { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC LIMIT ?").all(limit) as SessionRow[]; },
 		getAllCompletedSessions() { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC").all() as SessionRow[]; },
 		getWeakTopics() { return (db.prepare("SELECT domain, objective, SUM(points_earned) earnedPoints, SUM(points_possible) possiblePoints FROM quiz_answers WHERE objective IS NOT NULL GROUP BY domain, objective HAVING SUM(points_possible) >= 3 AND SUM(points_earned) * 1.0 / SUM(points_possible) < .85 ORDER BY earnedPoints * 1.0 / possiblePoints").all() as { domain: number; objective: string; earnedPoints: number; possiblePoints: number }[]).map((row) => ({ ...row, percentage: Math.round(row.earnedPoints / row.possiblePoints * 1000) / 10, severity: row.earnedPoints / row.possiblePoints < .7 ? 'high' : 'review' })); },
+		getReviewCards() { return db.prepare('SELECT question_id AS questionId, interval_days AS intervalDays, ease, lapses, due_at AS dueAt, last_result AS lastResult, review_count AS reviewCount, first_seen_at AS firstSeenAt FROM review_cards').all() as unknown as ReviewCardRow[]; },
+		upsertReviewCard(card) { db.prepare('INSERT INTO review_cards (question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(question_id) DO UPDATE SET interval_days = excluded.interval_days, ease = excluded.ease, lapses = excluded.lapses, due_at = excluded.due_at, last_result = excluded.last_result, review_count = excluded.review_count').run(card.questionId, card.intervalDays, card.ease, card.lapses, card.dueAt, card.lastResult, card.reviewCount, card.firstSeenAt); },
+		getStudyLog() { return db.prepare('SELECT date_key AS dateKey, questions, sessions, updated_at AS updatedAt FROM study_log ORDER BY date_key').all() as unknown as StudyDayRow[]; },
+		recordStudyDay(dateKey, questions, updatedAt) { db.prepare('INSERT INTO study_log (date_key, questions, sessions, updated_at) VALUES (?, ?, 1, ?) ON CONFLICT(date_key) DO UPDATE SET questions = questions + excluded.questions, sessions = sessions + 1, updated_at = excluded.updated_at').run(dateKey, questions, updatedAt); },
+		getAnswerHistory() { return db.prepare("SELECT a.question_id AS questionId, a.is_correct AS isCorrect, s.completed_at AS completedAt FROM quiz_answers a JOIN quiz_sessions s ON s.id = a.session_id WHERE a.question_id IS NOT NULL AND s.status = 'completed'").all() as unknown as AnswerHistoryRow[]; },
+		getAnsweredQuestionIds() { return (db.prepare('SELECT DISTINCT question_id FROM quiz_answers WHERE question_id IS NOT NULL').all() as { question_id: string }[]).map((row) => row.question_id); },
 		getExamDate() { return (db.prepare("SELECT value FROM course_meta WHERE key = 'exam_date'").get() as { value: string } | undefined)?.value ?? defaultExamDate(); },
 		setExamDate(examDate) { db.prepare("INSERT INTO course_meta (key, value) VALUES ('exam_date', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(examDate); },
 		getCourseModules() { return db.prepare('SELECT id, week, title, description, position FROM course_modules ORDER BY position').all() as CourseModule[]; },

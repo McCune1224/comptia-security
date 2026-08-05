@@ -23,7 +23,7 @@ API routes → SvelteKit pages (course home, syllabus, modules, assignments, gra
 
 - **No SSR needed** — all page data is fetched client-side via `fetch('/api/...')`.
 - **No authentication** — local-only single-user app.
-- **No ORM** — raw `better-sqlite3` queries; schema auto-created + migrated (user_version 3).
+- **No ORM** — raw `better-sqlite3` queries; schema auto-created + migrated (user_version 5).
 
 ## Course Model (`src/lib/server/course.ts`)
 
@@ -47,6 +47,16 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   blank; `____` markers in the prompt, one per blank) and `word-bank` (sentence blanks + word chips
   with distractors, click-to-fill, partial credit per assignment). Both also work as multi-step
   children.
+- **Daily review engine** (`src/lib/server/review.ts`): SM-2-lite spaced repetition over the bank.
+  `review_cards` holds per-question interval/ease/lapses/due date (local calendar day); `study_log`
+  records per-day question counts for streaks and the 12-week heatmap. `composeQueue('daily')`
+  builds "Today's 10" from due cards (most-lapsed first) + weak-objective questions (<85% on ≥3
+  attempts) + brand-new questions; `composeQueue('wall')` drills the Wall of Shame (questions
+  answered wrong at least once, cleared only after review proves mastery: interval ≥ 3 days =
+  two consecutive corrects). Completing ANY session logs a study day; review sessions also update
+  cards (`reviewSvc.recordCompletion` hook in `quiz.ts`). `/review` page: streak hero, heatmap,
+  filterable wall; home page has a review strip. Start a review session via
+  `POST /api/quiz/start {type:'review', reviewSource:'daily'|'wall'}` or `/quiz?review=daily`.
 - **Scheduling:** every assignment has a `dueOffsetDays` (negative = days before exam). The exam
   date lives in `course_meta` (`exam_date`, default: **last day of the current month**) and can be
   changed from the Syllabus page — changing it reschedules every due date.
@@ -76,6 +86,9 @@ Quiz engine (pre-existing): `quiz_sessions`, `quiz_answers`, `domain_progress`,
 Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `course_lessons`,
 `course_assignments`, `course_assignment_submissions`, `course_lesson_completions`.
 
+Review layer: `review_cards` (per-question spaced-repetition state), `study_log` (per-day
+question/session counts for streaks + heatmap).
+
 ## API Routes
 
 | Method | Path | Purpose |
@@ -87,7 +100,8 @@ Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `cour
 | `POST` | `/api/course/lessons/[id]` | Mark lesson `{ completed: boolean }` |
 | `POST` | `/api/course/exam-date` | Set exam date `{ examDate: 'YYYY-MM-DD' }` (reschedules all) |
 | `GET`  | `/api/gradebook` | `{ gradebook, readiness }` |
-| `POST` | `/api/quiz/start` | Session start — now accepts optional `assignmentId` |
+| `GET`  | `/api/review` | Daily-review summary: streak, due cards, today count, 84-day heatmap, wall of shame (with wall items) |
+| `POST` | `/api/quiz/start` | Session start — accepts optional `assignmentId`; `type: 'review'` requires `reviewSource: 'daily' \| 'wall'` |
 | `GET/PATCH/DELETE` | `/api/quiz/session/[id]` | Resume, move/flag, abandon |
 | `PUT`  | `/api/quiz/answer` | Save answer (practice returns feedback) |
 | `POST` | `/api/quiz/complete` | Finalize; records assignment submission when linked |
@@ -109,7 +123,8 @@ Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `cour
 | `/assignments/[id]` | `src/routes/assignments/[id]/+page.svelte` | Assignment detail — due date, status, best submission, launch |
 | `/gradebook` | `src/routes/gradebook/+page.svelte` | Weighted grade, letter grade, category breakdown, per-assignment table |
 | `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`) |
-| `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment |
+| `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session |
+| `/review` | `src/routes/review/+page.svelte` | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame |
 | `/progress` `/history` | existing | Legacy analytics |
 
 ### Shared components

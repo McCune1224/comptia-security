@@ -11,15 +11,17 @@ export async function POST({ request }: { request: Request }) {
 		const count = body.count;
 		const domain = body.domain;
 		const assignmentId = body.assignmentId;
+		const reviewSource = body.reviewSource;
 		if (
 			typeof type !== 'string' ||
-			!['quiz', 'scenario', 'pbq', 'full'].includes(type) ||
+			!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(type) ||
 			(mode !== undefined && (typeof mode !== 'string' || !['practice', 'exam'].includes(mode))) ||
 			(count !== undefined &&
 				(typeof count !== 'number' || !Number.isInteger(count) || count < 1)) ||
 			(domain !== undefined &&
 				(typeof domain !== 'number' || !Number.isInteger(domain) || domain < 1 || domain > 5)) ||
-			(assignmentId !== undefined && typeof assignmentId !== 'string')
+			(assignmentId !== undefined && typeof assignmentId !== 'string') ||
+			(reviewSource !== undefined && reviewSource !== 'daily' && reviewSource !== 'wall')
 		)
 			return json(
 				{ error: { code: 'INVALID_REQUEST', message: 'Invalid start-session fields.' } },
@@ -31,7 +33,8 @@ export async function POST({ request }: { request: Request }) {
 				...(mode ? { mode: mode as SessionMode } : {}),
 				...(count ? { count } : {}),
 				...(domain ? { domain: domain as Domain } : {}),
-				...(assignmentId ? { assignmentId: assignmentId as string } : {})
+				...(assignmentId ? { assignmentId: assignmentId as string } : {}),
+				...(reviewSource ? { reviewSource: reviewSource as 'daily' | 'wall' } : {})
 			})
 		});
 	} catch (error) {

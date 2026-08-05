@@ -6,7 +6,12 @@
 	import { DOMAIN_NAMES } from '$lib/utils';
 
 	let started = $derived(
-		Boolean(page.url.searchParams.get('session')) || page.url.searchParams.get('start') === '1'
+		Boolean(page.url.searchParams.get('session')) ||
+			page.url.searchParams.get('start') === '1' ||
+			page.url.searchParams.get('review') !== null
+	);
+	let reviewSource = $derived(
+		(page.url.searchParams.get('review') as 'daily' | 'wall' | null) ?? undefined
 	);
 	let sessionType = $derived(
 		(page.url.searchParams.get('type') === 'full' ? 'full' : 'quiz') as SessionType
@@ -29,12 +34,17 @@
 
 {#if started}
 	<ExamFlow
-		type={sessionType}
-		{count}
-		{domain}
-		{mode}
+		type={reviewSource ? 'review' : sessionType}
+		count={reviewSource ? 10 : count}
+		domain={reviewSource ? undefined : domain}
+		mode={reviewSource ? 'practice' : mode}
 		{assignmentId}
+		{reviewSource}
 		onDone={() => {
+			if (reviewSource) {
+				goto('/review');
+				return;
+			}
 			onDone();
 			return;
 		}}

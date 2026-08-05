@@ -28,7 +28,8 @@
 			quiz: 'Objective Quiz',
 			scenario: 'Scenario Quiz',
 			pbq: 'PBQ Practice',
-			full: 'Practice Exam'
+			full: 'Practice Exam',
+			review: 'Daily Review'
 		};
 		return labels[type] ?? type;
 	}

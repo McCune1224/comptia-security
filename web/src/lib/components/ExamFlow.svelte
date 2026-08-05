@@ -16,6 +16,7 @@
 		count,
 		domain,
 		assignmentId,
+		reviewSource,
 		onDone
 	}: {
 		type: SessionType;
@@ -23,6 +24,7 @@
 		count?: number;
 		domain?: number;
 		assignmentId?: string;
+		reviewSource?: 'daily' | 'wall';
 		onDone?: () => void;
 	} = $props();
 	let session = $state<SessionView | null>(null);
@@ -134,7 +136,8 @@
 					mode,
 					count,
 					domain,
-					...(assignmentId ? { assignmentId } : {})
+					...(assignmentId ? { assignmentId } : {}),
+					...(reviewSource ? { reviewSource } : {})
 				})
 			});
 			const data = await response.json();

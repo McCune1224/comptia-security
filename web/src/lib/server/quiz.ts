@@ -4,13 +4,14 @@ import { quizRepository, type QuizRepository, type StoredSession } from './db';
 import { loadQuestionBank, toPublicQuestion, type QuestionBank, type QuestionDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
 import { courseService } from './course-service';
+import { reviewService, type ReviewService, type ReviewSource } from './review';
 
 export class QuizServiceError extends Error {
 	constructor(public code: 'INVALID_REQUEST' | 'SESSION_NOT_FOUND' | 'ACTIVE_SESSION_EXISTS' | 'SESSION_CLOSED' | 'RESPONSE_LOCKED', message: string, public details?: Record<string, unknown>) { super(message); }
 }
 
 export interface QuizService {
-	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain; assignmentId?: string }): SessionView;
+	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain; assignmentId?: string; reviewSource?: ReviewSource }): SessionView;
 	getSession(sessionId: string): SessionView | QuizResult;
 	getActiveSession(): ActiveSessionSummary | null;
 	saveResponse(sessionId: string, questionIndex: number, response: QuestionResponse): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
@@ -66,7 +67,7 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	throw new QuizServiceError('INVALID_REQUEST', 'Response does not match the question interaction.');
 }
 
-export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date() }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date }): QuizService {
+export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date(), reviewSvc = reviewService }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date; reviewSvc?: ReviewService }): QuizService {
 	const expire = (stored: StoredSession): StoredSession => {
 		if (stored.summary.status === 'active' && stored.deadlineAt && new Date(stored.deadlineAt) <= now()) { complete(stored); return repository.getSession(stored.summary.id)!; }
 		return stored;
@@ -88,6 +89,11 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 		const result: QuizResult = { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, earnedPoints, possiblePoints: stored.questions.length, percentage: Math.round(earnedPoints / stored.questions.length * 1000) / 10, fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length, totalQuestions: stored.questions.length, flaggedQuestionIndexes: stored.flags, domainBreakdown, objectiveBreakdown, completedAt: now().toISOString(), review };
 		const finalized = repository.complete(stored.summary.id, result, review.map((item, index) => ({ index, question: stored.questions[index], response: item.response, points: item.feedback.earnedPoints })), result.completedAt);
 		if (stored.summary.assignment_id) courseService.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
+		reviewSvc.recordCompletion(
+			stored.questions.map((question, index) => ({ questionId: question.id, points: review[index].feedback.earnedPoints })),
+			result.completedAt,
+			stored.summary.type
+		);
 		return finalized;
 	};
 	return {
@@ -98,11 +104,14 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 				if (current.summary.status === 'active') throw new QuizServiceError('ACTIVE_SESSION_EXISTS', 'Resume or abandon the active session first.', { session: summary(current) });
 			}
 			const mode: SessionMode = input.type === 'full' ? 'exam' : input.mode ?? 'practice';
-			if (!['quiz', 'scenario', 'pbq', 'full'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined)) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
+			if (!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined) || (input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall')) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
 			const source = input.type === 'pbq' ? bank.pbqs : input.type === 'scenario' ? bank.mcqs.filter((question) => question.format === 'scenario') : bank.mcqs;
-			const count = input.type === 'full' ? 90 : input.count ?? (input.type === 'quiz' ? 20 : input.type === 'scenario' ? 10 : 5);
+			const count = input.type === 'full' ? 90 : input.count ?? (input.type === 'quiz' ? 20 : input.type === 'scenario' ? 10 : input.type === 'review' ? 10 : 5);
 			let selected: QuestionDefinition[];
-			if (input.type === 'full') {
+			if (input.type === 'review') {
+				if (count < 1 || count > 20) throw new QuizServiceError('INVALID_REQUEST', 'Review count must be between 1 and 20.');
+				selected = reviewSvc.composeQueue({ source: input.reviewSource!, count }, now());
+			} else if (input.type === 'full') {
 				let pbqs: QuestionDefinition[] | undefined;
 				for (const first of bank.pbqs.filter((question) => question.domain === 1)) for (const second of bank.pbqs.filter((question) => question.domain === 2)) for (const third of bank.pbqs.filter((question) => question.domain === 3)) for (const fourth of bank.pbqs.filter((question) => question.domain === 4)) for (const fifth of bank.pbqs.filter((question) => question.domain === 5)) if (new Set([first.kind, second.kind, third.kind, fourth.kind, fifth.kind]).size === 5) { pbqs = [first, second, third, fourth, fifth]; break; }
 				if (!pbqs) throw new QuizServiceError('INVALID_REQUEST', 'Bank cannot assemble five distinct PBQ interactions.');
