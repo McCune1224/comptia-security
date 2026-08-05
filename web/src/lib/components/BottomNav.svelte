@@ -4,6 +4,7 @@
 	const items = [
 		{ href: '/', label: 'Home', icon: 'home' },
 		{ href: '/syllabus', label: 'Syllabus', icon: 'syllabus' },
+		{ href: '/quiz', label: 'Practice', icon: 'quiz', primary: true },
 		{ href: '/gradebook', label: 'Grades', icon: 'grades' },
 		{ href: '/calendar', label: 'Calendar', icon: 'calendar' }
 	];
@@ -14,13 +15,13 @@
 </script>
 
 <nav
-	class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface-900/85 px-2 pb-[env(safe-area-inset-bottom)] pt-1.5 backdrop-blur-xl md:hidden"
+	class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface-900/90 pb-safe backdrop-blur-xl md:hidden"
 	aria-label="Primary navigation"
 >
-	<div class="mx-auto grid max-w-md grid-cols-4">
+	<div class="mx-auto grid max-w-md grid-cols-5">
 		{#each items as item}
 			<a
-				class="relative flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-xl text-xs font-medium transition {isActive(
+				class="relative flex min-h-16 flex-col items-center justify-center gap-1 pb-1 pt-2 text-[11px] font-bold transition {isActive(
 					item.href
 				)
 					? 'text-accent'
@@ -31,7 +32,7 @@
 				{#if item.icon === 'home'}
 					<svg
 						viewBox="0 0 24 24"
-						class="h-5 w-5"
+						class="h-6 w-6"
 						fill={isActive(item.href) ? 'currentColor' : 'none'}
 						stroke="currentColor"
 						stroke-width="1.8"
@@ -40,7 +41,7 @@
 				{:else if item.icon === 'syllabus'}
 					<svg
 						viewBox="0 0 24 24"
-						class="h-5 w-5"
+						class="h-6 w-6"
 						fill="none"
 						stroke="currentColor"
 						stroke-width="1.8"
@@ -48,10 +49,23 @@
 							d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"
 						/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" /></svg
 					>
+				{:else if item.icon === 'quiz'}
+					<span class="-mt-5 grid h-12 w-12 place-items-center rounded-md bg-accent text-white">
+						<svg
+							viewBox="0 0 24 24"
+							class="h-6 w-6"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							><rect x="5" y="3" width="14" height="18" rx="2" /><path
+								d="M9 3h6v3H9zM9 11h6M9 15h4"
+							/></svg
+						>
+					</span>
 				{:else if item.icon === 'grades'}
 					<svg
 						viewBox="0 0 24 24"
-						class="h-5 w-5"
+						class="h-6 w-6"
 						fill="none"
 						stroke="currentColor"
 						stroke-width="1.8"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" /></svg
@@ -59,7 +73,7 @@
 				{:else}
 					<svg
 						viewBox="0 0 24 24"
-						class="h-5 w-5"
+						class="h-6 w-6"
 						fill="none"
 						stroke="currentColor"
 						stroke-width="1.8"
@@ -68,9 +82,14 @@
 						/></svg
 					>
 				{/if}
-				<span>{item.label}</span>
-				{#if isActive(item.href)}<span class="absolute bottom-0 h-0.5 w-8 rounded-full bg-accent"
-					></span>{/if}
+				{#if item.primary}
+					<span class="text-accent">{item.label}</span>
+				{:else}
+					<span>{item.label}</span>
+				{/if}
+				{#if isActive(item.href) && !item.primary}
+					<span class="absolute bottom-0.5 h-1 w-6 rounded-sm bg-accent"></span>
+				{/if}
 			</a>
 		{/each}
 	</div>

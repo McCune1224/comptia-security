@@ -74,8 +74,18 @@
 			const step = question.steps[i];
 			const response = draft.stepResponses[i];
 			if (!response) return false;
-			if (step.kind === 'fill-blank' && response.kind === 'fill-blank' && !step.blanks.every((blank) => (response.values[blank.id] ?? '').trim())) return false;
-			if (step.kind === 'word-bank' && response.kind === 'word-bank' && !step.blanks.every((blank) => response.assignments[blank.id])) return false;
+			if (
+				step.kind === 'fill-blank' &&
+				response.kind === 'fill-blank' &&
+				!step.blanks.every((blank) => (response.values[blank.id] ?? '').trim())
+			)
+				return false;
+			if (
+				step.kind === 'word-bank' &&
+				response.kind === 'word-bank' &&
+				!step.blanks.every((blank) => response.assignments[blank.id])
+			)
+				return false;
 		}
 		return true;
 	}
@@ -299,7 +309,10 @@
 	}
 
 	function updateSubFillBlank(blankId: string, value: string) {
-		const values = getSubResponse()?.kind === 'fill-blank' ? { ...(getSubResponse() as { kind: 'fill-blank'; values: Record<string, string> }).values } : {};
+		const values =
+			getSubResponse()?.kind === 'fill-blank'
+				? { ...(getSubResponse() as { kind: 'fill-blank'; values: Record<string, string> }).values }
+				: {};
 		values[blankId] = value;
 		updateSubResponse({ kind: 'fill-blank', values });
 	}
@@ -412,40 +425,33 @@
 
 {#if error}
 	<div
-		class="mb-4 flex items-center justify-between gap-3 rounded-xl border border-danger/40 bg-danger/10 p-4 text-danger"
+		class="mb-4 flex items-center justify-between gap-3 rounded-md border border-danger/40 bg-danger/10 p-4 text-danger"
 	>
-		<span>{error}</span><button class="font-medium underline" type="button" onclick={load}
+		<span>{error}</span><button class="font-bold underline" type="button" onclick={load}
 			>Retry</button
 		>
 	</div>
 {/if}
 
 {#if activeConflict}
-	<div class="glass mx-auto max-w-lg space-y-4 rounded-2xl border-t-4 border-t-accent-warm p-6">
+	<div class="card mx-auto max-w-lg space-y-4 border-t-4 border-t-accent-warm p-6">
 		<div>
-			<p class="text-sm font-medium text-accent-warm">Session in progress</p>
-			<h1 class="mt-1 text-xl font-bold text-text-primary">An active session already exists</h1>
+			<p class="text-sm font-bold text-accent-warm">Session in progress</p>
+			<h1 class="h-display mt-1 text-xl text-text-primary">An active session already exists</h1>
 		</div>
 		<p class="text-text-secondary">
 			{activeConflict.type} · {activeConflict.answeredCount}/{activeConflict.totalQuestions} answered
 		</p>
 		<div class="flex flex-col gap-3 sm:flex-row">
-			<a
-				class="flex h-11 items-center justify-center rounded-xl bg-accent px-4 font-semibold text-white transition hover:brightness-110"
-				href={resumeRoute(activeConflict)}>Resume</a
-			>
-			<button
-				class="h-11 rounded-xl border border-border px-4 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary"
-				type="button"
-				onclick={abandonAndStart}>Abandon and start new session</button
+			<a class="btn btn-primary" href={resumeRoute(activeConflict)}>Resume</a>
+			<button class="btn btn-ghost" type="button" onclick={abandonAndStart}
+				>Abandon and start new session</button
 			>
 		</div>
 	</div>
 {:else if result}
-	<div class="glass mx-auto max-w-3xl space-y-6 rounded-3xl p-6 text-center sm:p-10">
-		<p class="text-sm font-semibold uppercase tracking-[0.18em] text-text-muted">
-			Session complete
-		</p>
+	<div class="card mx-auto max-w-3xl space-y-6 p-6 text-center sm:p-10">
+		<p class="eyebrow">Session complete</p>
 		<div class="relative mx-auto grid h-48 w-48 place-items-center">
 			<svg viewBox="0 0 42 42" class="h-full w-full -rotate-90"
 				><circle
@@ -460,27 +466,20 @@
 					cy="21"
 					r="15.9155"
 					fill="none"
-					stroke="url(#score-gradient)"
+					stroke="var(--color-accent)"
 					stroke-width="3"
 					pathLength="100"
 					stroke-dasharray={`${result.percentage} 100`}
 					stroke-linecap="round"
-				/><defs
-					><linearGradient id="score-gradient"
-						><stop stop-color="var(--color-accent)" /><stop
-							offset="1"
-							stop-color="var(--color-accent-secondary)"
-						/></linearGradient
-					></defs
-				></svg
+				/></svg
 			>
 			<div class="absolute">
-				<p class="gradient-text text-4xl font-extrabold">{result.percentage}%</p>
+				<p class="gradient-text num-display text-4xl">{result.percentage}%</p>
 				<p class="text-xs text-text-muted">overall score</p>
 			</div>
 		</div>
 		<div>
-			<h1 class="text-2xl font-bold text-text-primary">Practice performance</h1>
+			<h1 class="h-display text-2xl text-text-primary">Practice performance</h1>
 			<p class="mt-2 text-text-secondary">
 				{result.earnedPoints.toFixed(2)} / {result.possiblePoints} points · {result.fullyCorrect} fully
 				correct of {result.totalQuestions}
@@ -489,24 +488,19 @@
 		{#if Object.keys(result.domainBreakdown).length}
 			<div class="grid grid-cols-2 gap-3 text-left sm:grid-cols-5">
 				{#each Object.entries(result.domainBreakdown) as [domain, score]}<div
-						class="rounded-xl bg-surface-700 p-3"
+						class="rounded-md border border-border bg-surface-800/60 p-3"
 					>
 						<p class="text-xs text-text-muted">Domain {domain}</p>
-						<p class="mt-1 text-lg font-semibold text-text-primary">
+						<p class="num-display mt-1 text-lg text-text-primary">
 							{score.earnedPoints.toFixed(1)}/{score.possiblePoints}
 						</p>
 					</div>{/each}
 			</div>
 		{/if}
 		<div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-			<a
-				class="h-12 inline-flex items-center rounded-xl bg-gradient-to-r from-accent to-accent-secondary px-8 font-semibold text-white transition hover:brightness-110 active:scale-[0.98]"
-				href="/history/{result.sessionId}">Review Answers</a
-			>
-			<button
-				class="h-12 rounded-xl border border-border px-8 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary"
-				type="button"
-				onclick={onDone}>{assignmentId ? 'Back to assignment' : 'Return to dashboard'}</button
+			<a class="btn btn-primary" href="/history/{result.sessionId}">Review Answers</a>
+			<button class="btn btn-ghost" type="button" onclick={onDone}
+				>{assignmentId ? 'Back to assignment' : 'Return to dashboard'}</button
 			>
 		</div>
 	</div>
@@ -514,16 +508,14 @@
 	<div class="mx-auto max-w-4xl space-y-5">
 		<header class="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
 			<div class="flex flex-wrap items-center gap-2">
-				<span class="rounded-full bg-surface-700 px-3 py-1.5 font-semibold text-text-primary"
+				<span class="chip bg-surface-700 text-text-primary"
 					>Q{index + 1} of {session.totalQuestions}</span
-				><span class="rounded-full bg-info/10 px-3 py-1.5 font-medium text-info"
-					>Domain {question.domain}</span
-				><span class="rounded-full bg-surface-700 px-3 py-1.5 text-text-muted"
-					>{question.kind.replace('-', ' ')}</span
+				><span class="chip bg-info/10 text-info">Domain {question.domain}</span><span
+					class="chip bg-surface-700 text-text-muted">{question.kind.replace('-', ' ')}</span
 				>
 			</div>
 			{#if timer}<span
-					class="flex items-center gap-1.5 rounded-full bg-surface-700 px-3 py-1.5 font-mono font-medium {isLowTime()
+					class="chip flex items-center gap-1.5 bg-surface-700 font-mono font-semibold {isLowTime()
 						? 'text-danger'
 						: 'text-text-secondary'}"
 					><svg
@@ -539,13 +531,13 @@
 		{#if session && (session.mode === 'exam' || session.mode === 'practice')}
 			{@const showGrid = session.mode === 'exam' || session.mode === 'practice'}
 			{#if showGrid}
-				<div class="mb-4 flex flex-wrap gap-1.5">
+				<div class="mb-4 flex flex-wrap gap-2">
 					{#each Array.from({ length: session.totalQuestions }) as _, qi}
 						{@const isAnswered = session.responses[qi] !== undefined}
 						{@const isFlagged = session.flaggedQuestionIndexes.includes(qi)}
 						{@const isCurrent = qi === index}
 						<button
-							class="grid h-8 w-8 place-items-center rounded-lg text-xs font-semibold transition {isCurrent
+							class="grid h-10 w-10 place-items-center rounded-md text-sm font-bold transition {isCurrent
 								? 'ring-2 ring-accent ring-offset-1 ring-offset-surface-800'
 								: ''} {isAnswered
 								? 'bg-accent text-white'
@@ -564,20 +556,20 @@
 				</div>
 			{/if}
 		{/if}
-		<div class="glass rounded-2xl p-5 sm:p-8">
+		<div class="card p-5 sm:p-8">
 			{#if question.context}<div
-					class="mb-5 rounded-xl border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
+					class="mb-5 rounded-md border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
 				>
 					{question.context}
 				</div>{/if}
-			<h1 class="mb-6 text-lg font-semibold leading-relaxed text-text-primary sm:text-xl">
+			<h1 class="h-display mb-6 text-xl leading-relaxed text-text-primary sm:text-2xl">
 				{question.prompt}
 			</h1>
 
 			{#if question.kind === 'single-choice' || question.kind === 'multiple-choice'}
 				<div class="space-y-3">
 					{#each question.options as option (option.id)}<label
-							class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-150 {feedback
+							class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-md border-2 p-4 transition-all duration-150 {feedback
 								? choiceFeedbackClass(option.id)
 								: draft?.kind === 'choice' && draft.optionIds.includes(option.id)
 									? 'border-accent bg-accent/10'
@@ -606,7 +598,7 @@
 			{:else if question.kind === 'ordering'}
 				<div bind:this={orderingEl} class="space-y-3">
 					{#each draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id) as id, itemIndex}
-						<div class="glass flex items-center gap-3 rounded-xl p-3" data-id={id}>
+						<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
 							<button
 								class="drag-handle cursor-grab active:cursor-grabbing flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
 								type="button"
@@ -651,7 +643,7 @@
 				{@const allTargets = [...question.targets, ...(question.extraTargets ?? [])]}
 				<div class="space-y-3">
 					{#each question.premises as premise}<div
-							class="flex flex-col gap-3 rounded-xl bg-surface-700/60 p-4 sm:flex-row sm:items-center"
+							class="flex flex-col gap-3 rounded-md bg-surface-700/60 p-4 sm:flex-row sm:items-center"
 						>
 							<span class="flex-1 text-text-primary">{premise.text}</span><select
 								class="sm:w-56"
@@ -680,7 +672,7 @@
 			{:else if question.kind === 'evidence'}
 				<div class="space-y-2 font-mono text-sm">
 					{#each question.artifact.lines as line}<label
-							class="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-900/60 p-3 transition {draft?.kind ===
+							class="flex cursor-pointer items-start gap-3 rounded-md border border-border bg-surface-900/60 p-3 transition {draft?.kind ===
 								'evidence' && draft.lineIds.includes(line.id)
 								? 'border-accent bg-accent/10'
 								: 'hover:border-border-strong'}"
@@ -694,7 +686,7 @@
 			{:else if question.kind === 'configuration'}
 				<div class="space-y-3">
 					{#each question.fields as field}<label
-							class="flex flex-col gap-2 rounded-xl bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
+							class="flex flex-col gap-2 rounded-md bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
 							><span class="flex-1">{field.label}</span><select
 								class="sm:w-56"
 								value={draft?.kind === 'configuration' ? draft.values[field.id] : ''}
@@ -727,7 +719,7 @@
 					</p>
 					<div class="flex flex-wrap gap-2 text-xs text-text-muted">
 						{#each question.blanks as blank}
-							<span class="rounded-full bg-surface-700 px-2.5 py-1">
+							<span class="rounded-md bg-surface-700 px-2.5 py-1">
 								{blank.label}: {blank.placeholder}
 							</span>
 						{/each}
@@ -744,7 +736,8 @@
 							{segment}
 							{#if si < segments.length - 1}
 								{@const blank = question.blanks[si]}
-								{@const assignedId = draft?.kind === 'word-bank' ? (draft.assignments[blank.id] ?? '') : ''}
+								{@const assignedId =
+									draft?.kind === 'word-bank' ? (draft.assignments[blank.id] ?? '') : ''}
 								{@const assignedWord = question.bank.find((word) => word.id === assignedId)}
 								<button
 									type="button"
@@ -775,7 +768,7 @@
 								{@const isUsed = usedIds.has(word.id)}
 								<button
 									type="button"
-									class="rounded-full border px-3.5 py-1.5 text-sm font-medium transition {isUsed
+									class="rounded-md border px-3.5 py-1.5 text-sm font-medium transition {isUsed
 										? 'cursor-not-allowed border-border opacity-40 line-through'
 										: feedback
 											? 'cursor-default border-border opacity-70'
@@ -794,15 +787,15 @@
 				{@const subDraft = getSubResponse()}
 				<div class="space-y-4">
 					<div
-						class="rounded-xl border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
+						class="rounded-md border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
 					>
 						{question.context}
 					</div>
 					<div class="flex items-center gap-2 text-sm">
-						<span class="rounded-full bg-surface-700 px-3 py-1.5 font-semibold text-text-primary">
+						<span class="rounded-md bg-surface-700 px-3 py-1.5 font-semibold text-text-primary">
 							Step {subStep + 1} of {question.steps.length}
 						</span>
-						<span class="rounded-full bg-surface-700 px-3 py-1.5 text-text-muted">
+						<span class="rounded-md bg-surface-700 px-3 py-1.5 text-text-muted">
 							{step.kind.replace('-', ' ')}
 						</span>
 					</div>
@@ -812,7 +805,7 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.options as option (option.id)}
 								<label
-									class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-150 {subDraft?.kind ===
+									class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-md border-2 p-4 transition-all duration-150 {subDraft?.kind ===
 										'choice' && subDraft.optionIds.includes(option.id)
 										? 'border-accent bg-accent/10'
 										: 'border-border hover:border-border-strong'}"
@@ -839,7 +832,7 @@
 						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 						<div bind:this={subOrderingEl} class="space-y-3">
 							{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map((i) => i.id) as id, itemIndex}
-								<div class="glass flex items-center gap-3 rounded-xl p-3" data-id={id}>
+								<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
 									<button
 										class="drag-handle cursor-grab active:cursor-grabbing flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
 										type="button"
@@ -882,7 +875,7 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.premises as premise}
 								<div
-									class="flex flex-col gap-3 rounded-xl bg-surface-700/60 p-4 sm:flex-row sm:items-center"
+									class="flex flex-col gap-3 rounded-md bg-surface-700/60 p-4 sm:flex-row sm:items-center"
 								>
 									<span class="flex-1 text-text-primary">{premise.text}</span>
 									<select
@@ -920,7 +913,7 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.artifact.lines as line}
 								<label
-									class="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-900/60 p-3 transition {subDraft?.kind ===
+									class="flex cursor-pointer items-start gap-3 rounded-md border border-border bg-surface-900/60 p-3 transition {subDraft?.kind ===
 										'evidence' && subDraft.lineIds.includes(line.id)
 										? 'border-accent bg-accent/10'
 										: 'hover:border-border-strong'}"
@@ -945,7 +938,7 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.fields as field}
 								<label
-									class="flex flex-col gap-2 rounded-xl bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
+									class="flex flex-col gap-2 rounded-md bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
 								>
 									<span class="flex-1">{field.label}</span>
 									<select
@@ -980,7 +973,9 @@
 											type="text"
 											placeholder={blank.placeholder}
 											aria-label={blank.label}
-											value={subDraft?.kind === 'fill-blank' ? (subDraft.values[blank.id] ?? '') : ''}
+											value={subDraft?.kind === 'fill-blank'
+												? (subDraft.values[blank.id] ?? '')
+												: ''}
 											oninput={(e) => updateSubFillBlank(blank.id, e.currentTarget.value)}
 										/>
 									{/if}
@@ -998,7 +993,8 @@
 									{segment}
 									{#if si < stepSegments.length - 1}
 										{@const blank = step.blanks[si]}
-										{@const assignedId = subDraft?.kind === 'word-bank' ? (subDraft.assignments[blank.id] ?? '') : ''}
+										{@const assignedId =
+											subDraft?.kind === 'word-bank' ? (subDraft.assignments[blank.id] ?? '') : ''}
 										{@const assignedWord = step.bank.find((word) => word.id === assignedId)}
 										<span
 											class="mx-1 inline-flex min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold {assignedWord
@@ -1014,7 +1010,7 @@
 								{#each step.bank as word}
 									<button
 										type="button"
-										class="rounded-full border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
+										class="rounded-md border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
 											word.id
 										)
 											? 'cursor-not-allowed border-border opacity-40 line-through'
@@ -1031,13 +1027,13 @@
 
 					<div class="flex gap-2">
 						<button
-							class="h-9 rounded-xl border border-border px-4 text-sm font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+							class="btn btn-ghost h-11 px-4 text-sm"
 							type="button"
 							onclick={() => moveSubStep(-1)}
 							disabled={subStep === 0}>← Back</button
 						>
 						<button
-							class="h-9 rounded-xl border border-border px-4 text-sm font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+							class="btn btn-ghost h-11 px-4 text-sm"
 							type="button"
 							onclick={() => moveSubStep(1)}
 							disabled={subStep === question.steps.length - 1}>Next →</button
@@ -1048,13 +1044,13 @@
 
 			<div class="mt-6 flex flex-wrap gap-2 sm:gap-3">
 				<button
-					class="h-11 rounded-xl border border-border px-5 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+					class="btn btn-ghost h-11 px-4"
 					type="button"
 					onclick={() => move(index - 1)}
 					disabled={index === 0}>← Previous</button
 				>
 				<button
-					class="h-11 flex-1 rounded-xl bg-gradient-to-r from-accent to-info px-5 font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
+					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
 					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered()}
@@ -1064,43 +1060,37 @@
 							? 'Check Answer'
 							: 'Save Answer'}</button
 				>
-				>
 				<button
-					class="h-11 rounded-xl border border-border px-5 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+					class="btn btn-ghost h-11 px-4"
 					type="button"
 					onclick={() => move(index + 1)}
 					disabled={index === session.totalQuestions - 1}>Next →</button
 				>
 				{#if session.mode === 'exam'}<button
-						class="h-11 rounded-xl border px-5 font-medium transition {session.flaggedQuestionIndexes.includes(
-							index
-						)
+						class="btn h-11 border px-4 {session.flaggedQuestionIndexes.includes(index)
 							? 'border-accent-warm bg-accent-warm/10 text-accent-warm'
-							: 'border-border text-text-secondary hover:border-border-strong'}"
+							: 'border-border-strong text-text-secondary hover:text-text-primary'}"
 						type="button"
 						onclick={toggleFlag}
 						>⌑ {session.flaggedQuestionIndexes.includes(index) ? 'Flagged' : 'Flag'}</button
 					>{/if}
-				<button
-					class="ml-auto h-11 rounded-xl bg-gradient-to-r from-accent-warm to-danger px-5 font-medium text-white transition hover:brightness-110"
-					type="button"
-					onclick={complete}>Submit</button
+				<button class="btn btn-danger ml-auto h-11 px-4" type="button" onclick={complete}
+					>Submit</button
 				>
 			</div>
 
 			{#if feedback}
 				<div
-					class="mt-5 translate-y-0 rounded-xl border-l-4 p-4 opacity-100 transition-all duration-200 {feedback.fullyCorrect
+					class="mt-5 translate-y-0 rounded-md border-l-4 p-4 opacity-100 transition-all duration-200 {feedback.fullyCorrect
 						? 'border-l-success bg-success/10'
 						: feedback.earnedPoints > 0
 							? 'border-l-accent-warm bg-accent-warm/10'
 							: 'border-l-danger bg-danger/10'}"
 				>
 					<div class="flex items-center justify-between gap-3">
-						<strong class="text-text-primary"
+						<strong class="h-display text-text-primary"
 							>{feedback.fullyCorrect ? 'Correct' : 'Answer review'}</strong
-						><span
-							class="rounded-full bg-surface-800 px-3 py-1 text-sm font-semibold text-text-primary"
+						><span class="chip bg-surface-800 text-text-primary"
 							>{feedback.earnedPoints}/{feedback.possiblePoints} points</span
 						>
 					</div>
@@ -1108,7 +1098,7 @@
 
 					{#if feedback.optionRationales && (question?.kind === 'single-choice' || question?.kind === 'multiple-choice')}
 						<div class="mt-3 space-y-2">
-							<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
+							<p class="text-xs font-bold uppercase tracking-wide text-text-muted">
 								Option rationales
 							</p>
 							{#each question.options as option}
@@ -1119,14 +1109,14 @@
 								{@const isSelected =
 									draft?.kind === 'choice' && draft.optionIds.includes(option.id)}
 								<div
-									class="rounded-lg bg-surface-700/60 p-2 text-sm {isCorrect
+									class="rounded-md bg-surface-700/60 p-2.5 text-sm {isCorrect
 										? 'border-l-2 border-l-success'
 										: isSelected
 											? 'border-l-2 border-l-danger'
 											: ''}"
 								>
 									<div class="flex items-center gap-2">
-										<span class="font-medium text-text-primary">{option.text}</span>
+										<span class="font-bold text-text-primary">{option.text}</span>
 										{#if isCorrect}<span class="text-xs text-success">(correct)</span>{/if}
 										{#if isSelected && !isCorrect}<span class="text-xs text-danger"
 												>(your answer)</span
@@ -1141,7 +1131,7 @@
 					{#if feedback.sourceRefs?.length}
 						<div class="mt-3 flex flex-wrap gap-2">
 							{#each feedback.sourceRefs as ref}
-								<span class="rounded-full bg-surface-800 px-2.5 py-1 text-xs text-text-muted">
+								<span class="chip bg-surface-800 text-xs text-text-muted">
 									{ref.source}: {ref.section}
 								</span>
 							{/each}

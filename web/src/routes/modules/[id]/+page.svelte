@@ -77,7 +77,7 @@
 			.map((line) => {
 				const trimmed = line.trim();
 				if (trimmed.startsWith('**')) {
-					return `<p class="mt-3 font-semibold text-text-primary">${trimmed.replace(/\*\*(.*?)\*\*/g, '$1')}</p>`;
+					return `<p class="h-display mt-4 text-base text-text-primary">${trimmed.replace(/\*\*(.*?)\*\*/g, '$1')}</p>`;
 				}
 				if (trimmed.startsWith('- ')) {
 					return `<p class="flex gap-2 text-sm leading-6 text-text-secondary"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"></span><span>${trimmed
@@ -96,7 +96,7 @@
 
 <div class="mx-auto max-w-4xl space-y-6">
 	{#if error}
-		<section class="glass rounded-2xl p-6 text-danger">{error}</section>
+		<section class="card p-6 text-danger">{error}</section>
 	{:else if !moduleView}
 		<div class="grid min-h-64 place-items-center">
 			<span class="h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
@@ -104,37 +104,39 @@
 		</div>
 	{:else}
 		<div>
-			<a href="/syllabus" class="text-sm font-medium text-accent hover:underline">← Syllabus</a>
-			<p class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-accent">
-				Week {moduleView.module.week}
-			</p>
-			<h1 class="mt-1 text-2xl font-bold text-text-primary sm:text-3xl">
+			<a
+				href="/syllabus"
+				class="inline-flex min-h-10 items-center text-sm font-bold text-accent hover:underline"
+				>← Syllabus</a
+			>
+			<p class="eyebrow mt-4">Week {moduleView.module.week}</p>
+			<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">
 				{moduleView.module.title}
 			</h1>
-			<p class="mt-2 text-text-secondary">{moduleView.module.description}</p>
-			<div class="mt-4 flex items-center gap-3">
-				<div class="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-600">
+			<p class="mt-3 leading-relaxed text-text-secondary">{moduleView.module.description}</p>
+			<div class="mt-5 flex items-center gap-3">
+				<div class="h-2 flex-1 overflow-hidden rounded-full bg-surface-600">
 					<div
-						class="animate-progress h-full rounded-full bg-gradient-to-r from-accent to-accent-secondary"
+						class="animate-progress h-full rounded-full bg-accent"
 						style="width: {moduleView.lessonsTotal
 							? (moduleView.lessonsCompleted / moduleView.lessonsTotal) * 100
 							: 0}%"
 					></div>
 				</div>
-				<span class="text-sm font-semibold text-text-secondary"
+				<span class="text-sm font-bold text-text-secondary"
 					>{moduleView.lessonsCompleted}/{moduleView.lessonsTotal} lessons</span
 				>
 			</div>
 		</div>
 
 		{#if moduleView.lessons.length}
-			<section class="glass rounded-2xl p-5 sm:p-6">
-				<h2 class="mb-4 text-lg font-bold text-text-primary">Lessons</h2>
+			<section class="card p-5 sm:p-6">
+				<h2 class="h-display mb-4 text-xl text-text-primary">Lessons</h2>
 				<div class="space-y-3">
 					{#each moduleView.lessons as lesson (lesson.id)}
-						<div class="rounded-xl border border-border bg-surface-700/40">
+						<div class="overflow-hidden rounded-md border border-border bg-surface-800/60">
 							<div
-								class="flex w-full cursor-pointer items-center gap-3 p-4 text-left"
+								class="flex min-h-16 w-full cursor-pointer items-center gap-3 p-4 text-left"
 								role="button"
 								tabindex="0"
 								onclick={() => (openLesson = openLesson === lesson.id ? null : lesson.id)}
@@ -146,7 +148,7 @@
 								}}
 							>
 								<button
-									class="grid h-7 w-7 shrink-0 cursor-pointer place-items-center rounded-full text-xs {lesson.completed
+									class="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded text-xs {lesson.completed
 										? 'bg-success/15 text-success'
 										: 'bg-surface-700 text-text-muted'}"
 									type="button"
@@ -170,13 +172,14 @@
 										>
 									{:else}✓{/if}
 								</button>
-								<span class="flex-1 font-medium text-text-primary">{lesson.title}</span>
-								<span class="text-xs text-text-muted"
+								<span class="flex-1 font-bold text-text-primary">{lesson.title}</span>
+								<span class="hidden text-xs text-text-muted sm:block"
 									>{lesson.completed ? 'Completed' : 'Mark as read'}</span
 								>
 								<svg
 									viewBox="0 0 24 24"
-									class="h-4 w-4 text-text-subtle transition-transform {openLesson === lesson.id
+									class="h-5 w-5 shrink-0 text-text-subtle transition-transform {openLesson ===
+									lesson.id
 										? 'rotate-180'
 										: ''}"
 									fill="none"
@@ -185,11 +188,13 @@
 								>
 							</div>
 							{#if openLesson === lesson.id}
-								<div class="border-t border-border px-4 py-4">
-									<p class="mb-3 rounded-xl bg-surface-800/70 p-3 text-sm text-text-muted">
+								<div class="ruled px-4 py-4">
+									<p
+										class="mb-3 rounded-md bg-surface-700/60 p-3 text-sm leading-relaxed text-text-muted"
+									>
 										{lesson.summary}
 									</p>
-									
+
 									<div class="space-y-1">{@html renderMarkdown(lesson.content)}</div>
 								</div>
 							{/if}
@@ -200,21 +205,20 @@
 		{/if}
 
 		{#if moduleView.assignments.length}
-			<section class="glass rounded-2xl p-5 sm:p-6">
-				<h2 class="mb-4 text-lg font-bold text-text-primary">Assignments</h2>
-				<div class="space-y-2">
+			<section class="card p-5 sm:p-6">
+				<h2 class="h-display mb-4 text-xl text-text-primary">Assignments</h2>
+				<div class="space-y-2.5">
 					{#each moduleView.assignments as item (item.assignment.id)}
 						<a
 							href="/assignments/{item.assignment.id}"
-							class="flex items-center justify-between gap-3 rounded-xl bg-surface-700/50 p-4 transition hover:bg-surface-700/80"
+							class="flex items-center justify-between gap-3 rounded-md border border-border bg-surface-800/60 p-4 transition hover:border-border-strong hover:bg-surface-700/60"
 						>
 							<div class="min-w-0">
-								<div class="flex items-center gap-2">
-									<span
-										class="rounded-md bg-surface-800 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-text-muted"
+								<div class="flex flex-wrap items-center gap-2">
+									<span class="chip bg-surface-700 text-text-muted"
 										>{kindLabel(item.assignment.kind)}</span
 									>
-									<p class="truncate font-semibold text-text-primary">{item.assignment.title}</p>
+									<p class="truncate font-bold text-text-primary">{item.assignment.title}</p>
 								</div>
 								<p class="mt-1 text-xs text-text-muted">
 									{item.assignment.count} questions · {item.assignment.durationMinutes} min ·
@@ -224,7 +228,7 @@
 							<div class="flex shrink-0 items-center gap-3">
 								{#if item.bestSubmission}
 									<span
-										class="text-sm font-bold {item.bestSubmission.percentage >= 85
+										class="num-display text-sm {item.bestSubmission.percentage >= 85
 											? 'text-success'
 											: 'text-accent-warm'}">{item.bestSubmission.percentage}%</span
 									>

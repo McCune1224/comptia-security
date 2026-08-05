@@ -78,9 +78,9 @@
 	];
 </script>
 
-<div class="space-y-8">
+<div class="space-y-6 sm:space-y-8">
 	{#if error}
-		<section class="glass rounded-2xl p-6 text-danger">{error}</section>
+		<section class="card p-6 text-danger">{error}</section>
 	{:else if !overview}
 		<div class="grid min-h-64 place-items-center">
 			<div class="text-center">
@@ -93,24 +93,19 @@
 	{:else}
 		<!-- Course banner -->
 		<section
-			class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-surface-800 via-surface-900 to-surface-800 p-6 sm:p-8"
+			class="relative overflow-hidden rounded-md border border-border-strong bg-surface-900 p-6 sm:p-8"
 		>
-			<div
-				class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
-			></div>
 			<div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 				<div>
-					<p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">
-						SEC+ 701 · Course Home
-					</p>
-					<h1 class="mt-2 text-2xl font-extrabold text-text-primary sm:text-3xl">
-						CompTIA Security+ (SY0-701)
+					<p class="eyebrow">SEC+ 701 · Course home</p>
+					<h1 class="h-display mt-2 text-3xl text-text-primary sm:text-4xl">
+						CompTIA Security+ <span class="text-accent">(SY0-701)</span>
 					</h1>
-					<p class="mt-2 max-w-xl text-sm text-text-secondary sm:text-base">
-						Exam: {overview.examDateLabel}
+					<p class="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
+						Exam: <span class="font-semibold text-text-primary">{overview.examDateLabel}</span>
 						<span class="mx-2 text-text-subtle">·</span>
 						<span
-							class="font-semibold {overview.daysUntilExam < 7
+							class="font-bold {overview.daysUntilExam < 7
 								? 'text-accent-warm'
 								: 'text-text-primary'}"
 						>
@@ -121,11 +116,8 @@
 									: `${overview.daysUntilExam} days until the exam`}
 						</span>
 					</p>
-					<div class="mt-5 flex flex-wrap gap-3">
-						<a
-							href="/syllabus"
-							class="inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-white transition hover:brightness-110 active:scale-[0.98]"
-						>
+					<div class="mt-6 flex flex-wrap gap-3">
+						<a href="/syllabus" class="btn btn-primary">
 							<svg
 								viewBox="0 0 24 24"
 								class="h-4 w-4"
@@ -138,10 +130,7 @@
 							>
 							View syllabus
 						</a>
-						<a
-							href="/gradebook"
-							class="inline-flex h-11 items-center gap-2 rounded-xl border border-border bg-surface-800/60 px-5 text-sm font-semibold text-text-secondary transition hover:border-border-strong hover:text-text-primary"
-						>
+						<a href="/gradebook" class="btn btn-ghost">
 							<svg
 								viewBox="0 0 24 24"
 								class="h-4 w-4"
@@ -153,7 +142,7 @@
 						</a>
 					</div>
 				</div>
-				<div class="flex items-center gap-6">
+				<div class="flex items-center justify-around gap-6 lg:justify-end">
 					<div class="text-center">
 						<ProgressRing
 							value={overview.readiness.score}
@@ -162,7 +151,7 @@
 							label="Readiness"
 						/>
 						<p
-							class="mt-2 text-sm font-semibold {overview.readiness.ready
+							class="mt-2 text-sm font-bold {overview.readiness.ready
 								? 'text-success'
 								: 'text-accent-warm'}"
 						>
@@ -174,7 +163,7 @@
 					</div>
 					<div class="hidden h-24 w-px bg-border sm:block"></div>
 					<div class="text-center">
-						<p class="text-3xl font-extrabold text-text-primary">
+						<p class="num-display text-4xl text-text-primary">
 							{overview.gradebook.letterGrade}
 						</p>
 						<p class="mt-1 text-xs text-text-muted">Course grade</p>
@@ -188,9 +177,9 @@
 
 		<!-- To-do + readiness panel -->
 		<div class="grid gap-6 lg:grid-cols-3">
-			<section class="glass rounded-2xl p-5 sm:p-6 lg:col-span-2">
+			<section class="card p-5 sm:p-6 lg:col-span-2">
 				<div class="flex items-center justify-between">
-					<h2 class="flex items-center gap-2 text-lg font-bold text-text-primary">
+					<h2 class="h-display flex items-center gap-2 text-xl text-text-primary">
 						<svg
 							viewBox="0 0 24 24"
 							class="h-5 w-5 text-accent"
@@ -200,26 +189,25 @@
 						>
 						What's due
 					</h2>
-					<a class="text-sm font-medium text-accent hover:underline" href="/calendar">Calendar →</a>
+					<a class="text-sm font-bold text-accent hover:underline" href="/calendar">Calendar →</a>
 				</div>
 				{#if overview.toDo.length === 0}
-					<p class="mt-5 rounded-xl bg-success/10 p-4 text-sm text-success">
+					<p class="mt-5 rounded-md bg-success/10 p-4 text-sm text-success">
 						🎉 Everything is submitted. Great work — keep the momentum with a practice session.
 					</p>
 				{:else}
-					<div class="mt-4 space-y-2">
+					<div class="mt-4 space-y-2.5">
 						{#each overview.toDo as item (item.assignment.id)}
 							<a
 								href="/assignments/{item.assignment.id}"
-								class="flex items-center justify-between gap-3 rounded-xl bg-surface-700/50 p-3.5 transition hover:bg-surface-700/80"
+								class="flex items-center justify-between gap-3 rounded-md border border-border bg-surface-800/60 p-4 transition hover:border-border-strong hover:bg-surface-700/60"
 							>
 								<div class="flex min-w-0 items-center gap-3">
-									<span
-										class="shrink-0 rounded-lg bg-surface-800 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-text-muted"
+									<span class="chip shrink-0 bg-surface-700 text-text-muted"
 										>{kindLabel(item.assignment.kind)}</span
 									>
 									<div class="min-w-0">
-										<p class="truncate text-sm font-semibold text-text-primary">
+										<p class="truncate text-sm font-bold text-text-primary">
 											{item.assignment.title}
 										</p>
 										<p
@@ -240,17 +228,17 @@
 				{/if}
 			</section>
 
-			<section class="glass rounded-2xl p-5 sm:p-6">
-				<h2 class="text-lg font-bold text-text-primary">Exam readiness</h2>
+			<section class="card p-5 sm:p-6">
+				<h2 class="h-display text-xl text-text-primary">Exam readiness</h2>
 				<div class="mt-4 space-y-4">
 					<div>
 						<div class="flex justify-between text-sm">
 							<span class="text-text-muted">Domain mastery</span>
-							<span class="font-semibold text-text-secondary"
+							<span class="font-bold text-text-secondary"
 								>{overview.readiness.domainMastery ?? '—'}%</span
 							>
 						</div>
-						<div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-600">
+						<div class="mt-1.5 h-2 overflow-hidden rounded-full bg-surface-600">
 							<div
 								class="h-full rounded-full bg-info"
 								style="width: {overview.readiness.domainMastery ?? 0}%"
@@ -260,11 +248,11 @@
 					<div>
 						<div class="flex justify-between text-sm">
 							<span class="text-text-muted">Full-exam average</span>
-							<span class="font-semibold text-text-secondary"
+							<span class="font-bold text-text-secondary"
 								>{overview.readiness.examAverage ?? '—'}%</span
 							>
 						</div>
-						<div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-600">
+						<div class="mt-1.5 h-2 overflow-hidden rounded-full bg-surface-600">
 							<div
 								class="h-full rounded-full bg-accent-secondary"
 								style="width: {overview.readiness.examAverage ?? 0}%"
@@ -272,23 +260,21 @@
 						</div>
 					</div>
 					{#if overview.readiness.examCount === 0}
-						<p class="rounded-xl bg-surface-700/60 p-3 text-xs text-text-muted">
+						<p class="rounded-md bg-surface-700/60 p-3 text-xs leading-relaxed text-text-muted">
 							No full-length exams yet. Take one to unlock a reliable readiness estimate — target
 							85%+.
 						</p>
 					{:else if !overview.readiness.ready}
-						<p class="rounded-xl bg-surface-700/60 p-3 text-xs text-text-muted">
+						<p class="rounded-md bg-surface-700/60 p-3 text-xs leading-relaxed text-text-muted">
 							Keep pushing — you need <strong class="text-text-secondary">83.3%</strong> (750/900) to
 							pass. Focus on your weak objectives and retake a full exam.
 						</p>
 					{:else}
-						<p class="rounded-xl bg-success/10 p-3 text-xs text-success">
+						<p class="rounded-md bg-success/10 p-3 text-xs leading-relaxed text-success">
 							You're scoring above the passing threshold. Keep the streak and book that exam!
 						</p>
 					{/if}
-					<a
-						href="/quiz?start=1&type=full&mode=exam"
-						class="block h-11 rounded-xl bg-gradient-to-r from-accent to-accent-secondary text-center font-semibold leading-[44px] text-white transition hover:brightness-110"
+					<a href="/quiz?start=1&type=full&mode=exam" class="btn btn-primary w-full"
 						>Take a full exam now</a
 					>
 				</div>
@@ -298,24 +284,23 @@
 		<!-- Modules -->
 		<section>
 			<div class="mb-4 flex items-center justify-between">
-				<h2 class="text-xl font-bold text-text-primary">Course modules</h2>
-				<a class="text-sm font-medium text-accent hover:underline" href="/syllabus">Full syllabus</a
-				>
+				<h2 class="h-display text-xl text-text-primary">Course modules</h2>
+				<a class="text-sm font-bold text-accent hover:underline" href="/syllabus">Full syllabus</a>
 			</div>
 			<div class="grid gap-4 md:grid-cols-2">
 				{#each overview.modules as module (module.module.id)}
 					<a
 						href="/modules/{module.module.id}"
-						class="glass group rounded-2xl p-5 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg"
+						class="card group p-5 transition-all duration-200 hover:border-accent/50"
 					>
 						<div class="flex items-start justify-between gap-3">
 							<div class="flex items-center gap-3">
 								<span
-									class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-surface-700 text-sm font-bold text-accent"
+									class="num-display grid h-11 w-11 shrink-0 place-items-center rounded-md bg-accent/15 text-sm text-accent"
 									>W{module.module.week}</span
 								>
 								<div>
-									<h3 class="font-semibold text-text-primary group-hover:text-accent">
+									<h3 class="h-display text-lg text-text-primary group-hover:text-accent">
 										{module.module.title}
 									</h3>
 									<p class="mt-0.5 text-xs text-text-muted">
@@ -329,9 +314,9 @@
 						<p class="mt-3 line-clamp-2 text-xs leading-5 text-text-secondary">
 							{module.module.description}
 						</p>
-						<div class="mt-4 h-1.5 overflow-hidden rounded-full bg-surface-600">
+						<div class="mt-4 h-2 overflow-hidden rounded-full bg-surface-600">
 							<div
-								class="animate-progress h-full rounded-full bg-gradient-to-r from-accent to-accent-secondary"
+								class="animate-progress h-full rounded-full bg-accent"
 								style="width: {module.assignmentsTotal
 									? (module.assignmentsSubmitted / module.assignmentsTotal) * 100
 									: 0}%"
@@ -344,26 +329,25 @@
 
 		<!-- Recent sessions -->
 		{#if overview.recentSessions.length}
-			<section class="glass rounded-2xl p-5 sm:p-6">
+			<section class="card p-5 sm:p-6">
 				<div class="flex items-center justify-between">
-					<h2 class="text-lg font-bold text-text-primary">Recent sessions</h2>
-					<a class="text-sm font-medium text-accent hover:underline" href="/history">View all</a>
+					<h2 class="h-display text-xl text-text-primary">Recent sessions</h2>
+					<a class="text-sm font-bold text-accent hover:underline" href="/history">View all</a>
 				</div>
 				<div class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
 					{#each overview.recentSessions as session (session.id)}
 						<a
 							href="/history/{session.id}"
-							class="flex items-center justify-between rounded-xl bg-surface-700/50 p-3 transition hover:bg-surface-700/80"
+							class="flex items-center justify-between gap-2 rounded-md border border-border bg-surface-800/60 p-3 transition hover:border-border-strong hover:bg-surface-700/60"
 						>
 							<div class="flex items-center gap-3">
-								<span
-									class="rounded-full bg-surface-800 px-2.5 py-1 text-xs font-medium text-text-secondary"
+								<span class="chip bg-surface-700 text-text-secondary"
 									>{kindLabel(session.type)}</span
 								>
 								<span class="text-sm text-text-muted">{formatDate(session.date)}</span>
 							</div>
 							<span
-								class="text-sm font-semibold {session.percentage >= 85
+								class="num-display text-sm {session.percentage >= 85
 									? 'text-success'
 									: session.percentage >= 60
 										? 'text-accent-warm'

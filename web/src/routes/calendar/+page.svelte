@@ -78,21 +78,21 @@
 
 <div class="mx-auto max-w-5xl space-y-8">
 	<div>
-		<p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">Deadlines</p>
-		<h1 class="mt-1 text-2xl font-bold text-text-primary sm:text-3xl">Course calendar</h1>
-		<p class="mt-2 text-text-secondary">Every assignment due date, anchored to your exam date.</p>
+		<p class="eyebrow">Deadlines</p>
+		<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">Course calendar</h1>
+		<p class="mt-3 text-text-secondary">Every assignment due date, anchored to your exam date.</p>
 	</div>
 
 	{#if error}
-		<section class="glass rounded-2xl p-6 text-danger">{error}</section>
+		<section class="card p-6 text-danger">{error}</section>
 	{:else}
 		<div class="grid gap-6 lg:grid-cols-3">
-			<section class="glass rounded-2xl p-5 sm:p-6 lg:col-span-2">
+			<section class="card p-4 sm:p-6 lg:col-span-2">
 				<div class="mb-4 flex items-center justify-between">
-					<h2 class="text-lg font-bold text-text-primary">{monthLabel}</h2>
+					<h2 class="h-display text-xl text-text-primary">{monthLabel}</h2>
 					<div class="flex gap-2">
 						<button
-							class="grid h-9 w-9 place-items-center rounded-xl border border-border text-text-secondary transition hover:border-border-strong hover:text-text-primary"
+							class="grid h-11 w-11 place-items-center rounded-md border border-border-strong text-text-secondary transition hover:border-border-strong hover:text-text-primary"
 							type="button"
 							aria-label="Previous month"
 							onclick={() => shiftMonth(-1)}
@@ -106,7 +106,7 @@
 							>
 						</button>
 						<button
-							class="grid h-9 w-9 place-items-center rounded-xl border border-border text-text-secondary transition hover:border-border-strong hover:text-text-primary"
+							class="grid h-11 w-11 place-items-center rounded-md border border-border-strong text-text-secondary transition hover:border-border-strong hover:text-text-primary"
 							type="button"
 							aria-label="Next month"
 							onclick={() => shiftMonth(1)}
@@ -122,7 +122,7 @@
 					</div>
 				</div>
 				<div
-					class="grid grid-cols-7 gap-1 text-center text-xs font-semibold uppercase tracking-wide text-text-muted"
+					class="grid grid-cols-7 gap-1 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
 				>
 					{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div class="py-2">
 							{day}
@@ -134,7 +134,9 @@
 						{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
 						{@const items = byDay[keyFor(day)] ?? []}
 						<button
-							class="min-h-16 rounded-xl border p-1.5 text-left transition {isToday(day)
+							class="flex min-h-14 flex-col items-start rounded-md border p-1.5 text-left transition sm:min-h-16 {isToday(
+								day
+							)
 								? 'border-accent/60 bg-accent/10'
 								: 'border-border bg-surface-800/40 hover:bg-surface-700/60'}"
 							type="button"
@@ -142,14 +144,14 @@
 								(selectedDay = selectedDay && keyFor(selectedDay) === keyFor(day) ? null : day)}
 						>
 							<span
-								class="text-xs font-semibold {isToday(day)
+								class="text-xs font-bold {isToday(day)
 									? 'text-accent'
 									: inPast(day)
 										? 'text-text-subtle'
 										: 'text-text-secondary'}">{index + 1}</span
 							>
 							{#if items.length}
-								<span class="mt-1 flex flex-wrap gap-0.5">
+								<span class="mt-auto flex flex-wrap gap-0.5">
 									{#each items as item (item.assignment.id)}
 										<span
 											class="block h-1.5 w-1.5 rounded-full {item.status === 'submitted'
@@ -171,10 +173,10 @@
 				</div>
 				{#if selectedDay}
 					{@const items = byDay[keyFor(selectedDay)] ?? []}
-					<div class="mt-4 rounded-xl border border-border bg-surface-800/60 p-4">
+					<div class="mt-4 rounded-md border border-border bg-surface-800/60 p-4">
 						<p class="mb-3 text-sm font-bold text-text-primary">
 							{keyFor(selectedDay)}
-							{#if isToday(selectedDay)}<span class="ml-2 text-xs font-medium text-accent"
+							{#if isToday(selectedDay)}<span class="ml-2 text-xs font-semibold text-accent"
 									>Today</span
 								>{/if}
 						</p>
@@ -185,11 +187,9 @@
 								{#each items as item (item.assignment.id)}
 									<a
 										href="/assignments/{item.assignment.id}"
-										class="flex items-center justify-between gap-3 rounded-lg bg-surface-700/50 p-2.5 transition hover:bg-surface-700/80"
+										class="flex items-center justify-between gap-3 rounded-md bg-surface-700/50 p-3 transition hover:bg-surface-700/80"
 									>
-										<span class="text-sm font-medium text-text-primary"
-											>{item.assignment.title}</span
-										>
+										<span class="text-sm font-bold text-text-primary">{item.assignment.title}</span>
 										<StatusChip status={item.status} />
 									</a>
 								{/each}
@@ -199,10 +199,10 @@
 				{/if}
 			</section>
 
-			<section class="glass h-fit rounded-2xl p-5 sm:p-6">
-				<h2 class="text-lg font-bold text-text-primary">Up next</h2>
+			<section class="card h-fit p-5 sm:p-6">
+				<h2 class="h-display text-xl text-text-primary">Up next</h2>
 				{#if upcoming.length === 0}
-					<p class="mt-4 rounded-xl bg-success/10 p-4 text-sm text-success">
+					<p class="mt-4 rounded-md bg-success/10 p-4 text-sm text-success">
 						All assignments submitted. 🎉
 					</p>
 				{:else}
@@ -210,10 +210,10 @@
 						{#each upcoming.slice(0, 8) as item (item.assignment.id)}
 							<a
 								href="/assignments/{item.assignment.id}"
-								class="flex items-center justify-between gap-2 rounded-xl bg-surface-700/50 p-3 transition hover:bg-surface-700/80"
+								class="flex items-center justify-between gap-2 rounded-md border border-border bg-surface-800/60 p-3 transition hover:border-border-strong hover:bg-surface-700/60"
 							>
 								<div class="min-w-0">
-									<p class="truncate text-sm font-medium text-text-primary">
+									<p class="truncate text-sm font-bold text-text-primary">
 										{item.assignment.title}
 									</p>
 									<p
@@ -231,7 +231,7 @@
 									</p>
 								</div>
 								<span
-									class={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${statusTone(item.status)}`}
+									class={`shrink-0 rounded px-2 py-0.5 text-[10px] font-bold ${statusTone(item.status)}`}
 								>
 									{item.status === 'submitted'
 										? 'Done'

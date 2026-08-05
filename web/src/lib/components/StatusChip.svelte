@@ -13,9 +13,7 @@
 	const { label, classes } = $derived(config[status]);
 </script>
 
-<span
-	class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold {classes}"
->
+<span class="chip {classes}">
 	<span class="h-1.5 w-1.5 rounded-full bg-current"></span>
 	{label}
 </span>

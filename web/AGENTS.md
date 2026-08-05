@@ -39,10 +39,10 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   - `quiz` (6) — 20-question objective quizzes, 30% weight
   - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
   - `full` (4) — 90-question timed full exams + week-1 checkpoint, 50% weight
-- **Question bank:** 280 MCQs (40/60/52/72/56 across Domains 1–5, all scenario-format) + 64 PBQs
+- **Question bank:** 300 MCQs (45/66/55/77/57 across Domains 1–5, all scenario-format) + 73 PBQs
   (matching, ordering, evidence, configuration, numeric, multi-step, **fill-blank**, **word-bank**).
-  Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`, `expand-interactive.py`;
-  `bank-lib.py` merges them idempotently.
+  Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`, `expand-interactive.py`,
+  `expand-exam-aligned.py`; `bank-lib.py` merges them idempotently.
 - **Interactive kinds:** `fill-blank` (typed recall, case/whitespace-insensitive, partial credit per
   blank; `____` markers in the prompt, one per blank) and `word-bank` (sentence blanks + word chips
   with distractors, click-to-fill, partial credit per assignment). Both also work as multi-step
@@ -135,8 +135,22 @@ readiness, and the course service end-to-end. DB tests use `:memory:`; the modul
 ## Styling
 
 - Tailwind CSS v4 — `@import "tailwindcss"` in `app.css`, no config file.
-- Dark nav (`bg-surface-900`) with cyan accent; light/dark theme via `data-theme` + `ThemeToggle`.
-- Content area: `max-w-7xl mx-auto`; progress colors: red (<60%), yellow (60–84%), green (≥85%).
+- **"Dark study tool" design system** — near-black warm charcoal + a single acid-lime accent.
+  Dark theme (`#0e0d0b` bg) is the default; light theme (`#f4f3ee` warm gray, not beige) is for
+  sunlight readability. Accent = acid lime (`--color-accent`, `#b7f04c` dark / `#557a10` light).
+  Semantic status colors only for success/danger/info/warning — never brand accents.
+- Fonts: **Inter Variable** (body) + **Space Grotesk Variable** (display, `.h-display` /
+  `.num-display`), self-hosted via `@fontsource-variable/*` — works offline. No serif anywhere.
+- Component classes in `app.css`: `.card` (sharp 6px, hairline border, flat — no shadows/glows),
+  `.btn` / `.btn-primary` / `.btn-ghost` / `.btn-danger` (≥44px touch targets, flat, sharp),
+  `.chip` (square, 0 radius), `.eyebrow` (mono uppercase), `.gradient-text` (solid lime), `.pb-safe`.
+- **Mobile-first**: bottom nav (`BottomNav.svelte`) has 5 tabs with a raised center Practice
+  button; mobile menu is a bottom sheet (`MobileMenu.svelte`); gradebook/history tables become
+  stacked cards below `md:`; `max-w-6xl` content column.
+- Progress colors: red (<60%), amber (60–84%), green (≥85%) via `getPercentColor` /
+  `getBarColor` in `utils.ts`.
+- Design rules: no gradients, no glow/colored shadows, no pill buttons, no serif — keep it
+  flat, sharp (6px max), and dense.
 
 ## Phase 2 Candidates (not yet implemented)
 

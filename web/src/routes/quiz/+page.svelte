@@ -40,9 +40,9 @@
 		}}
 	/>
 {:else}
-	<div class="mx-auto max-w-lg space-y-6 px-4 py-8">
+	<div class="mx-auto max-w-lg space-y-6 py-4 sm:py-8">
 		<div>
-			<div class="mb-3 grid h-11 w-11 place-items-center rounded-xl bg-accent/10 text-accent">
+			<div class="mb-3 grid h-12 w-12 place-items-center rounded-md bg-accent/15 text-accent">
 				<svg
 					viewBox="0 0 24 24"
 					class="h-6 w-6"
@@ -54,21 +54,21 @@
 					/></svg
 				>
 			</div>
-			<h1 class="text-2xl font-bold text-text-primary sm:text-3xl">Free Practice Quiz</h1>
-			<p class="mt-2 text-sm text-text-secondary">
+			<h1 class="h-display text-3xl text-text-primary">Free Practice Quiz</h1>
+			<p class="mt-2 leading-relaxed text-text-secondary">
 				Build confidence across Security+ objectives with focused, adaptive practice. Free practice
 				sessions don't count toward your course grade.
 			</p>
 		</div>
-		<div class="glass space-y-5 rounded-2xl p-6 sm:p-8">
-			<label class="block text-sm font-medium text-text-secondary"
+		<div class="card space-y-5 p-6 sm:p-8">
+			<label class="block text-sm font-bold text-text-secondary"
 				>Question count<select class="mt-1.5" bind:value={count}
 					><option value={5}>5 questions</option><option value={10}>10 questions</option><option
 						value={20}>20 questions</option
 					><option value={50}>50 questions</option></select
 				></label
 			>
-			<label class="block text-sm font-medium text-text-secondary"
+			<label class="block text-sm font-bold text-text-secondary"
 				>Domain<select class="mt-1.5" bind:value={domain}
 					><option value={undefined}>All domains</option>{#each [1, 2, 3, 4, 5] as item}<option
 							value={item}>{DOMAIN_NAMES[item]}</option
@@ -76,17 +76,17 @@
 				></label
 			>
 			<fieldset>
-				<legend class="mb-1.5 block text-sm font-medium text-text-secondary">Session mode</legend>
-				<div class="grid grid-cols-2 rounded-xl bg-surface-700 p-1">
+				<legend class="mb-1.5 block text-sm font-bold text-text-secondary">Session mode</legend>
+				<div class="grid grid-cols-2 rounded-md bg-surface-700 p-1">
 					<button
-						class="min-h-10 rounded-lg px-3 text-sm font-medium transition {mode === 'practice'
-							? 'bg-surface-800 text-text-primary shadow-sm'
+						class="min-h-11 rounded px-3 text-sm font-bold transition {mode === 'practice'
+							? 'bg-surface-800 text-text-primary'
 							: 'text-text-muted'}"
 						type="button"
 						onclick={() => (mode = 'practice')}>Practice</button
 					><button
-						class="min-h-10 rounded-lg px-3 text-sm font-medium transition {mode === 'exam'
-							? 'bg-surface-800 text-text-primary shadow-sm'
+						class="min-h-11 rounded px-3 text-sm font-bold transition {mode === 'exam'
+							? 'bg-surface-800 text-text-primary'
 							: 'text-text-muted'}"
 						type="button"
 						onclick={() => (mode = 'exam')}>Exam</button
@@ -94,7 +94,7 @@
 				</div>
 			</fieldset>
 			<button
-				class="h-12 w-full rounded-xl bg-gradient-to-r from-accent to-info px-8 font-semibold text-white transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
+				class="btn btn-primary w-full sm:w-auto"
 				onclick={() => goto(`/quiz?start=1&count=${count}&domain=${domain ?? ''}&mode=${mode}`)}
 				>Start quiz</button
 			>

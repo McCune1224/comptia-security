@@ -12,10 +12,10 @@
 {#if started}
 	<ExamFlow type="pbq" {count} onDone={() => goto('/')} />
 {:else}
-	<div class="mx-auto max-w-lg space-y-6 px-4 py-8">
+	<div class="mx-auto max-w-lg space-y-6 py-4 sm:py-8">
 		<div>
 			<div
-				class="mb-3 grid h-11 w-11 place-items-center rounded-xl bg-orange-500/10 text-orange-500"
+				class="mb-3 grid h-12 w-12 place-items-center rounded-md bg-accent-warm/15 text-accent-warm"
 			>
 				<svg
 					viewBox="0 0 24 24"
@@ -28,13 +28,13 @@
 					/></svg
 				>
 			</div>
-			<h1 class="text-2xl font-bold text-text-primary sm:text-3xl">Performance-based Questions</h1>
-			<p class="mt-2 text-sm text-text-secondary">
+			<h1 class="h-display text-3xl text-text-primary">Performance-based Questions</h1>
+			<p class="mt-2 leading-relaxed text-text-secondary">
 				Practice hands-on items that ask you to configure, match, order, and investigate.
 			</p>
 		</div>
-		<div class="glass space-y-5 rounded-2xl p-6 sm:p-8">
-			<label class="block text-sm font-medium text-text-secondary"
+		<div class="card space-y-5 p-6 sm:p-8">
+			<label class="block text-sm font-bold text-text-secondary"
 				>PBQ count<select class="mt-1.5" bind:value={count}
 					><option value={1}>1 PBQ</option><option value={3}>3 PBQs</option><option value={5}
 						>5 PBQs</option
@@ -42,7 +42,7 @@
 				></label
 			>
 			<button
-				class="h-12 w-full rounded-xl bg-gradient-to-r from-orange-500 to-accent-warm px-8 font-semibold text-white transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
+				class="btn btn-primary w-full sm:w-auto"
 				onclick={() => goto(`/pbq?start=1&count=${count}`)}>Start PBQs</button
 			>
 		</div>

@@ -8,15 +8,15 @@ export const DOMAIN_NAMES: Record<number, string> = {
 };
 
 export function getPercentColor(pct: number): string {
-	if (pct >= 85) return 'text-green-400';
-	if (pct >= 60) return 'text-yellow-400';
-	return 'text-red-400';
+	if (pct >= 85) return 'text-success';
+	if (pct >= 60) return 'text-accent-warm';
+	return 'text-danger';
 }
 
 export function getBarColor(pct: number): string {
-	if (pct >= 85) return 'bg-green-500';
-	if (pct >= 60) return 'bg-yellow-500';
-	return 'bg-red-500';
+	if (pct >= 85) return 'bg-success';
+	if (pct >= 60) return 'bg-accent-warm';
+	return 'bg-danger';
 }
 
 export function getScoreLabel(pct: number): string {

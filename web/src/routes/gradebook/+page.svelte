@@ -59,16 +59,16 @@
 
 <div class="mx-auto max-w-5xl space-y-8">
 	<div>
-		<p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">Evaluation</p>
-		<h1 class="mt-1 text-2xl font-bold text-text-primary sm:text-3xl">Gradebook</h1>
-		<p class="mt-2 text-text-secondary">
+		<p class="eyebrow">Evaluation</p>
+		<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">Gradebook</h1>
+		<p class="mt-3 text-text-secondary">
 			Weighted categories: quizzes 30% · scenarios &amp; PBQs 20% · full exams 50%. Retakes keep
 			your best score.
 		</p>
 	</div>
 
 	{#if error}
-		<section class="glass rounded-2xl p-6 text-danger">{error}</section>
+		<section class="card p-6 text-danger">{error}</section>
 	{:else if !data}
 		<div class="grid min-h-64 place-items-center">
 			<span class="h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
@@ -76,7 +76,7 @@
 		</div>
 	{:else}
 		{@const { gradebook, readiness } = data}
-		<section class="glass grid gap-6 rounded-2xl p-6 sm:grid-cols-3 sm:p-8">
+		<section class="card grid gap-6 p-6 sm:grid-cols-3 sm:p-8">
 			<div class="flex flex-col items-center justify-center text-center">
 				<ProgressRing
 					value={gradebook.weightedPercentage ?? 0}
@@ -89,7 +89,7 @@
 				</p>
 			</div>
 			<div class="flex flex-col items-center justify-center text-center">
-				<p class="text-6xl font-extrabold gradient-text">{gradebook.letterGrade}</p>
+				<p class="num-display gradient-text text-6xl">{gradebook.letterGrade}</p>
 				<p class="mt-2 text-sm text-text-muted">
 					{gradebook.weightedPercentage === null
 						? 'No grades yet'
@@ -98,7 +98,7 @@
 			</div>
 			<div class="flex flex-col items-center justify-center text-center">
 				<ProgressRing value={readiness.score} size={120} stroke={12} label="Readiness" />
-				<p class="mt-3 text-sm {readiness.ready ? 'text-success' : 'text-accent-warm'}">
+				<p class="mt-3 text-sm font-bold {readiness.ready ? 'text-success' : 'text-accent-warm'}">
 					{readiness.label}
 				</p>
 				<p class="text-xs text-text-muted">Projected {readiness.passingScale}/900</p>
@@ -106,33 +106,33 @@
 		</section>
 
 		{#if gradebook.categories.some((c) => c.percentage !== null)}
-			<section class="glass rounded-2xl p-5 sm:p-6">
-				<h2 class="mb-4 text-lg font-bold text-text-primary">Category breakdown</h2>
+			<section class="card p-5 sm:p-6">
+				<h2 class="h-display mb-4 text-xl text-text-primary">Category breakdown</h2>
 				<div class="space-y-4">
 					{#each gradebook.categories as category (category.category)}
 						<div>
 							<div class="flex items-center justify-between text-sm">
-								<span class="font-medium text-text-primary">
+								<span class="font-bold text-text-primary">
 									{category.label}
-									<span class="ml-2 text-xs text-text-muted"
+									<span class="ml-2 text-xs font-semibold text-text-muted"
 										>{Math.round(category.weight * 100)}% weight</span
 									>
 								</span>
-								<span class="font-semibold {pctClass(category.percentage)}">
+								<span class="font-bold {pctClass(category.percentage)}">
 									{category.percentage === null ? 'Not attempted' : `${category.percentage}%`}
 									<span class="ml-1 text-xs font-normal text-text-muted"
 										>({category.earned.toFixed(1)}/{category.possible} pts)</span
 									>
 								</span>
 							</div>
-							<div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-600">
+							<div class="mt-1.5 h-2 overflow-hidden rounded-full bg-surface-600">
 								<div
 									class="h-full rounded-full {category.percentage === null
 										? 'bg-surface-600'
 										: category.percentage >= 85
 											? 'bg-success'
 											: category.percentage >= 60
-												? 'bg-yellow-500'
+												? 'bg-accent-warm'
 												: 'bg-danger'}"
 									style="width: {category.percentage ?? 0}%"
 								></div>
@@ -146,19 +146,49 @@
 			</section>
 		{/if}
 
-		<section class="glass rounded-2xl p-5 sm:p-6">
-			<h2 class="mb-4 text-lg font-bold text-text-primary">All assignments</h2>
-			<div class="overflow-x-auto">
+		<section class="card p-5 sm:p-6">
+			<h2 class="h-display mb-4 text-xl text-text-primary">All assignments</h2>
+
+			<!-- Mobile: stacked cards -->
+			<div class="space-y-2.5 md:hidden">
+				{#each gradebook.assignments as item (item.assignment.id)}
+					<a
+						href="/assignments/{item.assignment.id}"
+						class="block rounded-md border border-border bg-surface-800/60 p-4 transition hover:border-border-strong"
+					>
+						<div class="flex items-start justify-between gap-3">
+							<div class="min-w-0">
+								<p class="truncate font-bold text-text-primary">{item.assignment.title}</p>
+								<p class="mt-1 text-xs text-text-muted">
+									{kindLabel(item.assignment.kind)} · due {formatDate(item.dueDate)} · {item
+										.assignment.points} pts
+								</p>
+							</div>
+							<span
+								class="num-display shrink-0 text-lg {pctClass(
+									item.status === 'submitted' ? item.percentage : null
+								)}"
+							>
+								{item.status === 'submitted' ? `${item.percentage}%` : '—'}
+							</span>
+						</div>
+						<div class="mt-3"><StatusChip status={item.status} /></div>
+					</a>
+				{/each}
+			</div>
+
+			<!-- Desktop: table -->
+			<div class="hidden overflow-x-auto md:block">
 				<table class="w-full min-w-[560px] text-sm">
 					<thead>
 						<tr
 							class="border-b border-border text-left text-xs uppercase tracking-wide text-text-muted"
 						>
-							<th class="pb-3 pr-4 font-semibold">Assignment</th>
-							<th class="pb-3 pr-4 font-semibold">Due</th>
-							<th class="pb-3 pr-4 font-semibold">Points</th>
-							<th class="pb-3 pr-4 font-semibold">Score</th>
-							<th class="pb-3 font-semibold">Status</th>
+							<th class="pb-3 pr-4 font-bold">Assignment</th>
+							<th class="pb-3 pr-4 font-bold">Due</th>
+							<th class="pb-3 pr-4 font-bold">Points</th>
+							<th class="pb-3 pr-4 font-bold">Score</th>
+							<th class="pb-3 font-bold">Status</th>
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-border">
@@ -167,10 +197,9 @@
 								<td class="py-3 pr-4">
 									<a
 										href="/assignments/{item.assignment.id}"
-										class="font-medium text-text-primary hover:text-accent"
+										class="font-bold text-text-primary hover:text-accent"
 									>
-										<span
-											class="mr-2 rounded bg-surface-800 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-text-muted"
+										<span class="chip mr-2 bg-surface-700 text-text-muted"
 											>{kindLabel(item.assignment.kind)}</span
 										>
 										{item.assignment.title}
@@ -179,7 +208,7 @@
 								<td class="py-3 pr-4 text-text-muted">{formatDate(item.dueDate)}</td>
 								<td class="py-3 pr-4 text-text-muted">{item.assignment.points}</td>
 								<td
-									class="py-3 pr-4 font-semibold {pctClass(
+									class="num-display py-3 pr-4 {pctClass(
 										item.status === 'submitted' ? item.percentage : null
 									)}"
 								>

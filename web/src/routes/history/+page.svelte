@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { getPercentColor } from '$lib/utils';
 
 	type SessionSummary = {
 		id: string;
@@ -49,19 +50,13 @@
 		const m = minutes % 60;
 		return `${h}h ${m}m`;
 	}
-
-	function scoreColor(pct: number): string {
-		if (pct >= 85) return 'text-green-400';
-		if (pct >= 60) return 'text-yellow-400';
-		return 'text-red-400';
-	}
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8">
 	<div>
-		<p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">History</p>
-		<h1 class="mt-1 text-2xl font-bold text-text-primary sm:text-3xl">Past sessions</h1>
-		<p class="mt-2 text-text-secondary">
+		<p class="eyebrow">History</p>
+		<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">Past sessions</h1>
+		<p class="mt-3 text-text-secondary">
 			Review your completed quiz sessions and performance breakdowns.
 		</p>
 	</div>
@@ -76,59 +71,80 @@
 			</div>
 		</div>
 	{:else if sessions.length === 0}
-		<section class="glass grid min-h-80 place-items-center rounded-3xl p-8 text-center">
+		<section class="card grid min-h-80 place-items-center p-8 text-center">
 			<div>
-				<div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-accent/10 text-accent">
-					<svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8">
-						<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+				<div class="mx-auto grid h-14 w-14 place-items-center rounded-md bg-accent/15 text-accent">
+					<svg
+						viewBox="0 0 24 24"
+						class="h-7 w-7"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+					>
+						<circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" />
 					</svg>
 				</div>
-				<h2 class="mt-5 text-xl font-bold text-text-primary">No completed sessions yet</h2>
+				<h2 class="h-display mt-5 text-xl text-text-primary">No completed sessions yet</h2>
 				<p class="mx-auto mt-2 max-w-sm text-text-secondary">
 					Complete a quiz or exam to see your results here.
 				</p>
-				<a
-					class="mt-6 inline-flex h-12 items-center rounded-xl bg-gradient-to-r from-accent to-accent-secondary px-6 font-semibold text-white transition hover:brightness-110 active:scale-[0.98]"
-					href="/quiz">Start a quiz</a
-				>
+				<a class="btn btn-primary mt-6" href="/quiz">Start a quiz</a>
 			</div>
 		</section>
 	{:else}
-		<section class="glass rounded-2xl overflow-hidden">
+		<!-- Mobile: stacked cards -->
+		<section class="space-y-2.5 md:hidden">
+			{#each sessions as session (session.id)}
+				<a href="/history/{session.id}" class="card block p-4 transition hover:border-accent/50">
+					<div class="flex items-center justify-between gap-3">
+						<span class="chip bg-surface-700 text-text-secondary">{typeLabel(session.type)}</span>
+						<span class="num-display text-lg font-bold {getPercentColor(session.percentage)}">
+							{session.percentage}%
+						</span>
+					</div>
+					<p class="mt-2 text-sm text-text-muted">{formatDate(session.completedAt)}</p>
+					<p class="mt-1 text-xs text-text-muted">
+						{session.earnedPoints.toFixed(1)}/{session.possiblePoints} pts · {formatDuration(
+							session.duration
+						)}
+					</p>
+				</a>
+			{/each}
+		</section>
+
+		<!-- Desktop: table -->
+		<section class="card hidden overflow-hidden md:block">
 			<table class="w-full text-left text-sm">
 				<thead>
-					<tr class="border-b border-border bg-surface-700/60">
-						<th class="px-5 py-3 font-semibold text-text-secondary">Date</th>
-						<th class="px-5 py-3 font-semibold text-text-secondary">Type</th>
-						<th class="px-5 py-3 font-semibold text-text-secondary">Score</th>
-						<th class="px-5 py-3 font-semibold text-text-secondary">Percentage</th>
-						<th class="px-5 py-3 font-semibold text-text-secondary">Duration</th>
+					<tr class="border-b border-border bg-surface-900/60">
+						<th class="px-5 py-3 font-bold text-text-secondary">Date</th>
+						<th class="px-5 py-3 font-bold text-text-secondary">Type</th>
+						<th class="px-5 py-3 font-bold text-text-secondary">Score</th>
+						<th class="px-5 py-3 font-bold text-text-secondary">Percentage</th>
+						<th class="px-5 py-3 font-bold text-text-secondary">Duration</th>
 						<th class="px-5 py-3"></th>
 					</tr>
 				</thead>
 				<tbody>
 					{#each sessions as session (session.id)}
-						<tr class="border-b border-border last:border-0 hover:bg-surface-700/30 transition">
+						<tr class="border-b border-border transition last:border-0 hover:bg-surface-700/30">
 							<td class="px-5 py-4 text-text-primary">{formatDate(session.completedAt)}</td>
 							<td class="px-5 py-4">
-								<span class="rounded-full bg-surface-700 px-2.5 py-1 text-xs font-medium text-text-secondary">
+								<span class="chip bg-surface-700 text-text-secondary">
 									{typeLabel(session.type)}
 								</span>
 							</td>
 							<td class="px-5 py-4 text-text-primary">
 								{session.earnedPoints.toFixed(1)}/{session.possiblePoints}
 							</td>
-							<td class="px-5 py-4 font-semibold {scoreColor(session.percentage)}">
+							<td class="num-display px-5 py-4 font-bold {getPercentColor(session.percentage)}">
 								{session.percentage}%
 							</td>
-							<td class="px-5 py-4 text-text-muted text-sm">
+							<td class="px-5 py-4 text-sm text-text-muted">
 								{formatDuration(session.duration)}
 							</td>
 							<td class="px-5 py-4 text-right">
-								<a
-									class="inline-flex h-9 items-center rounded-lg bg-accent px-3 text-sm font-medium text-white transition hover:brightness-110"
-									href="/history/{session.id}">Review</a
-								>
+								<a class="btn btn-primary h-10 px-4 text-xs" href="/history/{session.id}">Review</a>
 							</td>
 						</tr>
 					{/each}
