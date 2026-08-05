@@ -1,13 +1,16 @@
 import Database from 'better-sqlite3';
+import fs from 'node:fs';
 import path from 'node:path';
 import type { QuestionResponse, QuizResult, SessionMode, SessionStatus, SessionType } from '$lib/types';
 import type { QuestionDefinition } from './question-bank';
+import { COURSE_DEFINITION, defaultExamDate, type CourseAssignment, type CourseLesson, type CourseModule, type SubmissionRecord } from './course';
 
 export const DB_PATH = path.resolve(process.cwd(), 'data/quiz.db');
 
 type SessionRow = {
 	id: string; started_at: string; completed_at: string | null; type: SessionType; domain: number | null;
 	mode: SessionMode; status: SessionStatus; points_earned: number; points_possible: number; updated_at: string;
+	assignment_id: string | null;
 };
 type StateRow = { deadline_at: string | null; current_index: number; questions_json: string; result_json: string | null };
 
@@ -22,7 +25,7 @@ export interface StoredSession {
 }
 
 export interface QuizRepository {
-	createSession(session: { id: string; type: SessionType; mode: SessionMode; domain: number | null; startedAt: string; deadlineAt: string | null; questions: QuestionDefinition[] }): void;
+	createSession(session: { id: string; type: SessionType; mode: SessionMode; domain: number | null; startedAt: string; deadlineAt: string | null; questions: QuestionDefinition[]; assignmentId?: string | null }): void;
 	getSession(id: string): StoredSession | null;
 	getActiveSession(): StoredSession | null;
 	saveResponse(id: string, index: number, response: QuestionResponse, answeredAt: string): void;
@@ -33,6 +36,15 @@ export interface QuizRepository {
 	getRecentSessions(limit?: number): SessionRow[];
 	getAllCompletedSessions(): SessionRow[];
 	getWeakTopics(): { domain: number; objective: string; earnedPoints: number; possiblePoints: number; percentage: number; severity: 'high' | 'review' }[];
+	getExamDate(): string;
+	setExamDate(examDate: string): void;
+	getCourseModules(): CourseModule[];
+	getCourseLessons(): CourseLesson[];
+	getCourseAssignments(): CourseAssignment[];
+	getLessonCompletions(): Set<string>;
+	setLessonCompleted(lessonId: string, completed: boolean): void;
+	getSubmissions(): SubmissionRecord[];
+	recordSubmission(submission: SubmissionRecord): void;
 	close(): void;
 }
 
@@ -46,7 +58,23 @@ function parseStoredSession(row: SessionRow & StateRow, responseRows: { question
 	return { summary: row, deadlineAt: row.deadline_at, currentIndex: row.current_index, questions: JSON.parse(row.questions_json) as QuestionDefinition[], result: row.result_json ? JSON.parse(row.result_json) as QuizResult : null, responses, flags };
 }
 
+function seedCourse(db: Database.Database): void {
+	const seed = db.transaction(() => {
+		if (!db.prepare("SELECT 1 FROM course_meta WHERE key = 'exam_date'").get()) {
+			db.prepare('INSERT INTO course_meta (key, value) VALUES (?, ?)').run('exam_date', defaultExamDate());
+		}
+		const insertModule = db.prepare('INSERT OR IGNORE INTO course_modules (id, week, title, description, position) VALUES (?, ?, ?, ?, ?)');
+		for (const module of COURSE_DEFINITION.modules) insertModule.run(module.id, module.week, module.title, module.description, module.position);
+		const insertLesson = db.prepare('INSERT OR IGNORE INTO course_lessons (id, module_id, title, summary, content, position) VALUES (?, ?, ?, ?, ?, ?)');
+		for (const lesson of COURSE_DEFINITION.lessons) insertLesson.run(lesson.id, lesson.moduleId, lesson.title, lesson.summary, lesson.content, lesson.position);
+		const insertAssignment = db.prepare('INSERT OR IGNORE INTO course_assignments (id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		for (const assignment of COURSE_DEFINITION.assignments) insertAssignment.run(assignment.id, assignment.moduleId, assignment.title, assignment.description, assignment.kind, assignment.category, assignment.points, assignment.count, assignment.domain, assignment.mode, assignment.durationMinutes, assignment.dueOffsetDays, assignment.position);
+	});
+	seed();
+}
+
 export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_PATH): QuizRepository {
+	if (filename !== ':memory:') fs.mkdirSync(path.dirname(filename), { recursive: true });
 	const db = new Database(filename);
 	db.pragma('foreign_keys = ON');
 	db.pragma('journal_mode = WAL');
@@ -60,16 +88,23 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 	const answerColumns = columns('quiz_answers');
 	const progressColumns = columns('domain_progress');
 	const migrate = db.transaction(() => {
-		for (const [name, sql] of [['mode', "TEXT NOT NULL DEFAULT 'practice'"], ['status', "TEXT NOT NULL DEFAULT 'active'"], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0'], ['updated_at', "TEXT NOT NULL DEFAULT ''"]] as const) if (!sessionColumns.has(name)) db.exec(`ALTER TABLE quiz_sessions ADD COLUMN ${name} ${sql}`);
+		for (const [name, sql] of [['mode', "TEXT NOT NULL DEFAULT 'practice'"], ['status', "TEXT NOT NULL DEFAULT 'active'"], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0'], ['updated_at', "TEXT NOT NULL DEFAULT ''"], ['assignment_id', 'TEXT']] as const) if (!sessionColumns.has(name)) db.exec(`ALTER TABLE quiz_sessions ADD COLUMN ${name} ${sql}`);
 		for (const [name, sql] of [['question_id', 'TEXT'], ['objective', 'TEXT'], ['response_json', 'TEXT'], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!answerColumns.has(name)) db.exec(`ALTER TABLE quiz_answers ADD COLUMN ${name} ${sql}`);
 		for (const [name, sql] of [['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!progressColumns.has(name)) db.exec(`ALTER TABLE domain_progress ADD COLUMN ${name} ${sql}`);
 		db.exec(`CREATE TABLE IF NOT EXISTS quiz_session_state (session_id TEXT PRIMARY KEY, schema_version INTEGER NOT NULL, deadline_at TEXT, current_index INTEGER NOT NULL DEFAULT 0, questions_json TEXT NOT NULL, result_json TEXT, updated_at TEXT NOT NULL, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
-		CREATE TABLE IF NOT EXISTS quiz_session_responses (session_id TEXT NOT NULL, question_index INTEGER NOT NULL, response_json TEXT, flagged INTEGER NOT NULL DEFAULT 0, answered_at TEXT, PRIMARY KEY(session_id, question_index), FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));`);
+		CREATE TABLE IF NOT EXISTS quiz_session_responses (session_id TEXT NOT NULL, question_index INTEGER NOT NULL, response_json TEXT, flagged INTEGER NOT NULL DEFAULT 0, answered_at TEXT, PRIMARY KEY(session_id, question_index), FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
+		CREATE TABLE IF NOT EXISTS course_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_modules (id TEXT PRIMARY KEY, week INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_assignments (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, kind TEXT NOT NULL, category TEXT NOT NULL, points REAL NOT NULL, count INTEGER NOT NULL, domain INTEGER, mode TEXT NOT NULL, duration_minutes INTEGER NOT NULL, due_offset_days INTEGER NOT NULL, position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_assignment_submissions (assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (assignment_id, session_id));
+		CREATE TABLE IF NOT EXISTS course_lesson_completions (lesson_id TEXT PRIMARY KEY, completed_at TEXT NOT NULL);`);
 		db.prepare("UPDATE quiz_sessions SET mode = COALESCE(NULLIF(mode, ''), 'practice'), status = CASE WHEN completed_at IS NOT NULL THEN 'completed' WHEN id NOT IN (SELECT session_id FROM quiz_session_state) THEN 'abandoned' ELSE 'active' END, points_earned = CASE WHEN completed_at IS NOT NULL THEN correct_answers ELSE points_earned END, points_possible = CASE WHEN completed_at IS NOT NULL THEN total_questions ELSE points_possible END, updated_at = COALESCE(NULLIF(updated_at, ''), started_at)").run();
 		db.prepare('UPDATE quiz_answers SET points_earned = is_correct, points_possible = 1 WHERE points_possible = 0').run();
-		db.pragma('user_version = 2');
+		db.pragma('user_version = 3');
 	});
-	if (db.pragma('user_version', { simple: true }) !== 2) migrate();
+	if (db.pragma('user_version', { simple: true }) !== 3) migrate();
+	seedCourse(db);
 	const readSession = (id: string): StoredSession | null => {
 		const row = db.prepare('SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ?').get(id) as (SessionRow & StateRow) | undefined;
 		if (!row) return null;
@@ -78,7 +113,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 	return {
 		createSession(session) {
 			const create = db.transaction(() => {
-				db.prepare('INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').run(session.id, session.startedAt, session.type, session.domain, session.questions.length, session.mode, 'active', session.startedAt);
+				db.prepare('INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)').run(session.id, session.startedAt, session.type, session.domain, session.questions.length, session.mode, 'active', session.startedAt, session.assignmentId ?? null);
 				db.prepare('INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, updated_at) VALUES (?, 1, ?, 0, ?, ?)').run(session.id, session.deadlineAt, JSON.stringify(session.questions), session.startedAt);
 			}); create();
 		},
@@ -111,8 +146,17 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		getRecentSessions(limit = 10) { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC LIMIT ?").all(limit) as SessionRow[]; },
 		getAllCompletedSessions() { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC").all() as SessionRow[]; },
 		getWeakTopics() { return (db.prepare("SELECT domain, objective, SUM(points_earned) earnedPoints, SUM(points_possible) possiblePoints FROM quiz_answers WHERE objective IS NOT NULL GROUP BY domain, objective HAVING SUM(points_possible) >= 3 AND SUM(points_earned) * 1.0 / SUM(points_possible) < .85 ORDER BY earnedPoints * 1.0 / possiblePoints").all() as { domain: number; objective: string; earnedPoints: number; possiblePoints: number }[]).map((row) => ({ ...row, percentage: Math.round(row.earnedPoints / row.possiblePoints * 1000) / 10, severity: row.earnedPoints / row.possiblePoints < .7 ? 'high' : 'review' })); },
+		getExamDate() { return (db.prepare("SELECT value FROM course_meta WHERE key = 'exam_date'").get() as { value: string } | undefined)?.value ?? defaultExamDate(); },
+		setExamDate(examDate) { db.prepare("INSERT INTO course_meta (key, value) VALUES ('exam_date', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(examDate); },
+		getCourseModules() { return db.prepare('SELECT id, week, title, description, position FROM course_modules ORDER BY position').all() as CourseModule[]; },
+		getCourseLessons() { return db.prepare('SELECT id, module_id AS moduleId, title, summary, content, position FROM course_lessons ORDER BY position').all() as unknown as CourseLesson[]; },
+		getCourseAssignments() { return db.prepare('SELECT id, module_id AS moduleId, title, description, kind, category, points, count, domain, mode, duration_minutes AS durationMinutes, due_offset_days AS dueOffsetDays, position FROM course_assignments ORDER BY position').all() as unknown as CourseAssignment[]; },
+		getLessonCompletions() { return new Set((db.prepare('SELECT lesson_id FROM course_lesson_completions').all() as { lesson_id: string }[]).map((row) => row.lesson_id)); },
+		setLessonCompleted(lessonId, completed) { if (completed) db.prepare('INSERT INTO course_lesson_completions (lesson_id, completed_at) VALUES (?, ?) ON CONFLICT(lesson_id) DO UPDATE SET completed_at = excluded.completed_at').run(lessonId, new Date().toISOString()); else db.prepare('DELETE FROM course_lesson_completions WHERE lesson_id = ?').run(lessonId); },
+		getSubmissions() { return db.prepare('SELECT assignment_id AS assignmentId, session_id AS sessionId, earned, percentage, completed_at AS completedAt FROM course_assignment_submissions').all() as unknown as SubmissionRecord[]; },
+		recordSubmission(submission) { db.prepare('INSERT INTO course_assignment_submissions (assignment_id, session_id, earned, percentage, completed_at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(assignment_id, session_id) DO UPDATE SET earned = excluded.earned, percentage = excluded.percentage, completed_at = excluded.completed_at').run(submission.assignmentId, submission.sessionId, submission.earned, submission.percentage, submission.completedAt); },
 		close() { db.close(); }
 	};
 }
 
-export const quizRepository = createQuizRepository();
+export const quizRepository = createQuizRepository(process.env.VITEST ? ':memory:' : undefined);

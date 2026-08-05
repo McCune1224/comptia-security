@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
-import Sortable from 'sortablejs';
+	import Sortable from 'sortablejs';
 	import type {
 		ActiveSessionSummary,
 		QuestionFeedback,
@@ -15,12 +15,14 @@ import Sortable from 'sortablejs';
 		mode = 'practice',
 		count,
 		domain,
+		assignmentId,
 		onDone
 	}: {
 		type: SessionType;
 		mode?: 'practice' | 'exam';
 		count?: number;
 		domain?: number;
+		assignmentId?: string;
 		onDone?: () => void;
 	} = $props();
 	let session = $state<SessionView | null>(null);
@@ -97,7 +99,13 @@ import Sortable from 'sortablejs';
 			const response = await fetch('/api/quiz/start', {
 				method: 'POST',
 				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({ type, mode, count, domain })
+				body: JSON.stringify({
+					type,
+					mode,
+					count,
+					domain,
+					...(assignmentId ? { assignmentId } : {})
+				})
 			});
 			const data = await response.json();
 			if (!response.ok) {
@@ -188,12 +196,15 @@ import Sortable from 'sortablejs';
 
 	$effect(() => {
 		if (question?.kind !== 'ordering' || !orderingEl) return;
-		const ids = draft?.kind === 'ordering' ? [...draft.itemIds] : question.items.map((item) => item.id);
+		const ids =
+			draft?.kind === 'ordering' ? [...draft.itemIds] : question.items.map((item) => item.id);
 		const instance = new Sortable(orderingEl, {
 			animation: 150,
 			handle: '.drag-handle',
 			onEnd: (evt) => {
-				const reorder = [...(draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id))];
+				const reorder = [
+					...(draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id))
+				];
 				if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
 				const [moved] = reorder.splice(evt.oldIndex, 1);
 				reorder.splice(evt.newIndex, 0, moved);
@@ -214,7 +225,8 @@ import Sortable from 'sortablejs';
 			handle: '.drag-handle',
 			onEnd: (evt) => {
 				const current = getSubResponse();
-				const reorder = current?.kind === 'ordering' ? [...current.itemIds] : step.items.map((i) => i.id);
+				const reorder =
+					current?.kind === 'ordering' ? [...current.itemIds] : step.items.map((i) => i.id);
 				if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
 				const [moved] = reorder.splice(evt.oldIndex, 1);
 				reorder.splice(evt.newIndex, 0, moved);
@@ -404,7 +416,7 @@ import Sortable from 'sortablejs';
 			<button
 				class="h-12 rounded-xl border border-border px-8 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary"
 				type="button"
-				onclick={onDone}>Return to dashboard</button
+				onclick={onDone}>{assignmentId ? 'Back to assignment' : 'Return to dashboard'}</button
 			>
 		</div>
 	</div>
@@ -447,9 +459,13 @@ import Sortable from 'sortablejs';
 								? 'ring-2 ring-accent ring-offset-1 ring-offset-surface-800'
 								: ''} {isAnswered
 								? 'bg-accent text-white'
-								: 'border border-border text-text-secondary hover:border-border-strong'} {isFlagged ? 'ring-1 ring-accent-warm' : ''}"
+								: 'border border-border text-text-secondary hover:border-border-strong'} {isFlagged
+								? 'ring-1 ring-accent-warm'
+								: ''}"
 							type="button"
-							title="Question {qi + 1}{isFlagged ? ' (flagged)' : ''}{isAnswered ? ' (answered)' : ''}"
+							title="Question {qi + 1}{isFlagged ? ' (flagged)' : ''}{isAnswered
+								? ' (answered)'
+								: ''}"
 							onclick={() => move(qi)}
 						>
 							{qi + 1}
@@ -521,7 +537,10 @@ import Sortable from 'sortablejs';
 									}
 								}}
 							>
-								<svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-text-subtle" fill="currentColor"
+								<svg
+									viewBox="0 0 24 24"
+									class="h-5 w-5 shrink-0 text-text-subtle"
+									fill="currentColor"
 									><circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" /><circle
 										cx="9"
 										cy="12"
@@ -531,7 +550,8 @@ import Sortable from 'sortablejs';
 										cy="18"
 										r="1.5"
 									/></svg
-							></button>
+								></button
+							>
 							<span class="flex-1 text-text-primary"
 								>{question.items.find((item) => item.id === id)?.text}</span
 							>
@@ -599,7 +619,9 @@ import Sortable from 'sortablejs';
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
 				<div class="space-y-4">
-					<div class="rounded-xl border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary">
+					<div
+						class="rounded-xl border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
+					>
 						{question.context}
 					</div>
 					<div class="flex items-center gap-2 text-sm">
@@ -616,16 +638,22 @@ import Sortable from 'sortablejs';
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.options as option (option.id)}
 								<label
-									class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-150 {subDraft?.kind === 'choice' && subDraft.optionIds.includes(option.id) ? 'border-accent bg-accent/10' : 'border-border hover:border-border-strong'}"
+									class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-150 {subDraft?.kind ===
+										'choice' && subDraft.optionIds.includes(option.id)
+										? 'border-accent bg-accent/10'
+										: 'border-border hover:border-border-strong'}"
 								>
 									<input
 										type={step.kind === 'multiple-choice' ? 'checkbox' : 'radio'}
 										checked={subDraft?.kind === 'choice' && subDraft.optionIds.includes(option.id)}
 										onchange={() => {
 											const ids = subDraft?.kind === 'choice' ? [...subDraft.optionIds] : [];
-											const next = step.kind === 'multiple-choice'
-												? (ids.includes(option.id) ? ids.filter(i => i !== option.id) : [...ids, option.id])
-												: [option.id];
+											const next =
+												step.kind === 'multiple-choice'
+													? ids.includes(option.id)
+														? ids.filter((i) => i !== option.id)
+														: [...ids, option.id]
+													: [option.id];
 											updateSubResponse({ kind: 'choice', optionIds: next });
 										}}
 									/>
@@ -636,7 +664,7 @@ import Sortable from 'sortablejs';
 					{:else if step.kind === 'ordering'}
 						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 						<div bind:this={subOrderingEl} class="space-y-3">
-							{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map(i => i.id) as id, itemIndex}
+							{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map((i) => i.id) as id, itemIndex}
 								<div class="glass flex items-center gap-3 rounded-xl p-3" data-id={id}>
 									<button
 										class="drag-handle cursor-grab active:cursor-grabbing flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
@@ -646,7 +674,10 @@ import Sortable from 'sortablejs';
 											if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
 												e.preventDefault();
 												const current = getSubResponse();
-												const ids = current?.kind === 'ordering' ? [...current.itemIds] : step.items.map(i => i.id);
+												const ids =
+													current?.kind === 'ordering'
+														? [...current.itemIds]
+														: step.items.map((i) => i.id);
 												const dir = e.key === 'ArrowUp' ? -1 : 1;
 												const target = itemIndex + dir;
 												if (target < 0 || target >= ids.length) return;
@@ -655,13 +686,19 @@ import Sortable from 'sortablejs';
 											}
 										}}
 									>
-										<svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-text-subtle" fill="currentColor">
+										<svg
+											viewBox="0 0 24 24"
+											class="h-5 w-5 shrink-0 text-text-subtle"
+											fill="currentColor"
+										>
 											<circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" />
 											<circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
 											<circle cx="9" cy="18" r="1.5" /><circle cx="15" cy="18" r="1.5" />
 										</svg>
 									</button>
-									<span class="flex-1 text-text-primary">{step.items.find(i => i.id === id)?.text}</span>
+									<span class="flex-1 text-text-primary"
+										>{step.items.find((i) => i.id === id)?.text}</span
+									>
 								</div>
 							{/each}
 						</div>
@@ -670,13 +707,17 @@ import Sortable from 'sortablejs';
 						<div class="space-y-3">
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.premises as premise}
-								<div class="flex flex-col gap-3 rounded-xl bg-surface-700/60 p-4 sm:flex-row sm:items-center">
+								<div
+									class="flex flex-col gap-3 rounded-xl bg-surface-700/60 p-4 sm:flex-row sm:items-center"
+								>
 									<span class="flex-1 text-text-primary">{premise.text}</span>
 									<select
 										class="sm:w-56"
 										value={subDraft?.kind === 'matching' ? subDraft.matches[premise.id] : ''}
 										onchange={(e) => {
-											const matches = { ...(subDraft?.kind === 'matching' ? subDraft.matches : {}) };
+											const matches = {
+												...(subDraft?.kind === 'matching' ? subDraft.matches : {})
+											};
 											matches[premise.id] = e.currentTarget.value;
 											updateSubResponse({ kind: 'matching', matches });
 										}}
@@ -696,7 +737,8 @@ import Sortable from 'sortablejs';
 								class="w-full sm:max-w-xs"
 								type="number"
 								value={subDraft?.kind === 'numeric' ? subDraft.value : ''}
-								oninput={(e) => updateSubResponse({ kind: 'numeric', value: Number(e.currentTarget.value) })}
+								oninput={(e) =>
+									updateSubResponse({ kind: 'numeric', value: Number(e.currentTarget.value) })}
 							/><span class="text-text-secondary">{step.unit}</span>
 						</div>
 					{:else if step.kind === 'evidence'}
@@ -704,14 +746,19 @@ import Sortable from 'sortablejs';
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.artifact.lines as line}
 								<label
-									class="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-900/60 p-3 transition {subDraft?.kind === 'evidence' && subDraft.lineIds.includes(line.id) ? 'border-accent bg-accent/10' : 'hover:border-border-strong'}"
+									class="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-900/60 p-3 transition {subDraft?.kind ===
+										'evidence' && subDraft.lineIds.includes(line.id)
+										? 'border-accent bg-accent/10'
+										: 'hover:border-border-strong'}"
 								>
 									<input
 										type="checkbox"
 										checked={subDraft?.kind === 'evidence' && subDraft.lineIds.includes(line.id)}
 										onchange={() => {
 											const ids = subDraft?.kind === 'evidence' ? [...subDraft.lineIds] : [];
-											const next = ids.includes(line.id) ? ids.filter(i => i !== line.id) : [...ids, line.id];
+											const next = ids.includes(line.id)
+												? ids.filter((i) => i !== line.id)
+												: [...ids, line.id];
 											updateSubResponse({ kind: 'evidence', lineIds: next });
 										}}
 									/>
@@ -723,13 +770,17 @@ import Sortable from 'sortablejs';
 						<div class="space-y-3">
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.fields as field}
-								<label class="flex flex-col gap-2 rounded-xl bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center">
+								<label
+									class="flex flex-col gap-2 rounded-xl bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
+								>
 									<span class="flex-1">{field.label}</span>
 									<select
 										class="sm:w-56"
 										value={subDraft?.kind === 'configuration' ? subDraft.values[field.id] : ''}
 										onchange={(e) => {
-											const values = { ...(subDraft?.kind === 'configuration' ? subDraft.values : {}) };
+											const values = {
+												...(subDraft?.kind === 'configuration' ? subDraft.values : {})
+											};
 											values[field.id] = e.currentTarget.value;
 											updateSubResponse({ kind: 'configuration', values });
 										}}
@@ -749,12 +800,14 @@ import Sortable from 'sortablejs';
 							class="h-9 rounded-xl border border-border px-4 text-sm font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
 							type="button"
 							onclick={() => moveSubStep(-1)}
-							disabled={subStep === 0}>← Back</button>
+							disabled={subStep === 0}>← Back</button
+						>
 						<button
 							class="h-9 rounded-xl border border-border px-4 text-sm font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
 							type="button"
 							onclick={() => moveSubStep(1)}
-							disabled={subStep === question.steps.length - 1}>Next →</button>
+							disabled={subStep === question.steps.length - 1}>Next →</button
+						>
 					</div>
 				</div>
 			{/if}
@@ -775,7 +828,8 @@ import Sortable from 'sortablejs';
 						? 'Saving…'
 						: session.mode === 'practice'
 							? 'Check Answer'
-							: 'Save Answer'}</button>
+							: 'Save Answer'}</button
+				>
 				>
 				<button
 					class="h-11 rounded-xl border border-border px-5 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
@@ -820,16 +874,29 @@ import Sortable from 'sortablejs';
 
 					{#if feedback.optionRationales && (question?.kind === 'single-choice' || question?.kind === 'multiple-choice')}
 						<div class="mt-3 space-y-2">
-							<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">Option rationales</p>
+							<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
+								Option rationales
+							</p>
 							{#each question.options as option}
 								{@const rationale = feedback.optionRationales?.[option.id]}
-								{@const isCorrect = feedback.correctResponse.kind === 'choice' && feedback.correctResponse.optionIds.includes(option.id)}
-								{@const isSelected = draft?.kind === 'choice' && draft.optionIds.includes(option.id)}
-								<div class="rounded-lg bg-surface-700/60 p-2 text-sm {isCorrect ? 'border-l-2 border-l-success' : isSelected ? 'border-l-2 border-l-danger' : ''}">
+								{@const isCorrect =
+									feedback.correctResponse.kind === 'choice' &&
+									feedback.correctResponse.optionIds.includes(option.id)}
+								{@const isSelected =
+									draft?.kind === 'choice' && draft.optionIds.includes(option.id)}
+								<div
+									class="rounded-lg bg-surface-700/60 p-2 text-sm {isCorrect
+										? 'border-l-2 border-l-success'
+										: isSelected
+											? 'border-l-2 border-l-danger'
+											: ''}"
+								>
 									<div class="flex items-center gap-2">
 										<span class="font-medium text-text-primary">{option.text}</span>
 										{#if isCorrect}<span class="text-xs text-success">(correct)</span>{/if}
-										{#if isSelected && !isCorrect}<span class="text-xs text-danger">(your answer)</span>{/if}
+										{#if isSelected && !isCorrect}<span class="text-xs text-danger"
+												>(your answer)</span
+											>{/if}
 									</div>
 									{#if rationale}<p class="mt-0.5 text-xs text-text-muted">{rationale}</p>{/if}
 								</div>

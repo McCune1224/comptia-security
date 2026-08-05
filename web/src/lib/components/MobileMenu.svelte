@@ -6,10 +6,14 @@
 
 	const links = [
 		{ href: '/', label: 'Home' },
+		{ href: '/syllabus', label: 'Syllabus' },
+		{ href: '/gradebook', label: 'Grades' },
+		{ href: '/calendar', label: 'Calendar' },
 		{ href: '/quiz', label: 'Quiz' },
 		{ href: '/scenarios', label: 'Scenarios' },
 		{ href: '/pbq', label: 'PBQs' },
-		{ href: '/progress', label: 'Progress' }
+		{ href: '/progress', label: 'Progress' },
+		{ href: '/history', label: 'History' }
 	];
 
 	function handleKeydown(event: KeyboardEvent) {
