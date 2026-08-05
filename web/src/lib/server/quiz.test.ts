@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PublicChoiceQuestion } from '$lib/types';
+import type { ObjectiveId, PublicChoiceQuestion } from '$lib/types';
 import { createQuizRepository } from './db';
 import { loadQuestionBank } from './question-bank';
 import { createQuizService } from './quiz';
@@ -56,6 +56,23 @@ describe('QuizService', () => {
 		// Case- and whitespace-insensitive normalization: uppercase padded answer is fully correct
 		expect(result.review[fillIndex].feedback.earnedPoints).toBe(1);
 		expect(result.review[wbIndex].feedback.earnedPoints).toBe(1);
+		repository.close();
+	});
+
+	it('filters quiz sessions by objective and rejects misuse', () => {
+		const repository = createQuizRepository(':memory:');
+		const bank = loadQuestionBank();
+		const service = createQuizService({ repository, bank, rng: () => 0.5, now: () => new Date('2026-07-22T12:00:00.000Z') });
+		// Objective outside the valid set is rejected up front (no active session yet).
+		expect(() => service.startSession({ type: 'quiz', objective: '9.9' as ObjectiveId, count: 5 })).toThrow('Invalid session type, mode, or domain.');
+		// Objective is only valid for quiz sessions.
+		expect(() => service.startSession({ type: 'pbq', objective: '1.1', count: 5 })).toThrow('Invalid session type, mode, or domain.');
+		const session = service.startSession({ type: 'quiz', objective: '1.1', count: 5 });
+		expect(session.questions).toHaveLength(5);
+		expect(session.questions.every((q) => q.objective === '1.1')).toBe(true);
+		// A real objective with too few questions reports availability.
+		service.abandonSession(session.sessionId);
+		expect(() => service.startSession({ type: 'quiz', objective: '1.1', count: 50 })).toThrow('Requested count is unavailable.');
 		repository.close();
 	});
 });

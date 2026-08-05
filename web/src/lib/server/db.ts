@@ -82,6 +82,7 @@ export interface QuizRepository {
 	recordStudyDay(dateKey: string, questions: number, updatedAt: string): void;
 	getAnswerHistory(): AnswerHistoryRow[];
 	getAnsweredQuestionIds(): string[];
+	getObjectiveProgress(): { objective: string; attempted: number; earnedPoints: number; possiblePoints: number }[];
 	getExamDate(): string;
 	setExamDate(examDate: string): void;
 	getCourseModules(): CourseModule[];
@@ -208,6 +209,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		recordStudyDay(dateKey, questions, updatedAt) { db.prepare('INSERT INTO study_log (date_key, questions, sessions, updated_at) VALUES (?, ?, 1, ?) ON CONFLICT(date_key) DO UPDATE SET questions = questions + excluded.questions, sessions = sessions + 1, updated_at = excluded.updated_at').run(dateKey, questions, updatedAt); },
 		getAnswerHistory() { return db.prepare("SELECT a.question_id AS questionId, a.is_correct AS isCorrect, s.completed_at AS completedAt FROM quiz_answers a JOIN quiz_sessions s ON s.id = a.session_id WHERE a.question_id IS NOT NULL AND s.status = 'completed'").all() as unknown as AnswerHistoryRow[]; },
 		getAnsweredQuestionIds() { return (db.prepare('SELECT DISTINCT question_id FROM quiz_answers WHERE question_id IS NOT NULL').all() as { question_id: string }[]).map((row) => row.question_id); },
+		getObjectiveProgress() { return db.prepare('SELECT objective, COUNT(*) AS attempted, SUM(points_earned) AS earnedPoints, SUM(points_possible) AS possiblePoints FROM quiz_answers WHERE objective IS NOT NULL GROUP BY objective').all() as { objective: string; attempted: number; earnedPoints: number; possiblePoints: number }[]; },
 		getExamDate() { return (db.prepare("SELECT value FROM course_meta WHERE key = 'exam_date'").get() as { value: string } | undefined)?.value ?? defaultExamDate(); },
 		setExamDate(examDate) { db.prepare("INSERT INTO course_meta (key, value) VALUES ('exam_date', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(examDate); },
 		getCourseModules() { return db.prepare('SELECT id, week, title, description, position FROM course_modules ORDER BY position').all() as CourseModule[]; },

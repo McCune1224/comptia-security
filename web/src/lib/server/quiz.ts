@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import type { ActiveSessionSummary, Domain, PublicQuestion, QuestionResponse, QuizResult, SessionMode, SessionType, SessionView } from '$lib/types';
+import type { ActiveSessionSummary, Domain, ObjectiveId, PublicQuestion, QuestionResponse, QuizResult, SessionMode, SessionType, SessionView } from '$lib/types';
 import { quizRepository, type QuizRepository, type StoredSession } from './db';
 import { loadQuestionBank, toPublicQuestion, type QuestionBank, type QuestionDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
@@ -11,7 +11,7 @@ export class QuizServiceError extends Error {
 }
 
 export interface QuizService {
-	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain; assignmentId?: string; reviewSource?: ReviewSource }): SessionView;
+	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain; objective?: ObjectiveId; assignmentId?: string; reviewSource?: ReviewSource }): SessionView;
 	getSession(sessionId: string): SessionView | QuizResult;
 	getActiveSession(): ActiveSessionSummary | null;
 	saveResponse(sessionId: string, questionIndex: number, response: QuestionResponse): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
@@ -104,7 +104,7 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 				if (current.summary.status === 'active') throw new QuizServiceError('ACTIVE_SESSION_EXISTS', 'Resume or abandon the active session first.', { session: summary(current) });
 			}
 			const mode: SessionMode = input.type === 'full' ? 'exam' : input.mode ?? 'practice';
-			if (!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined) || (input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall')) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
+			if (!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined) || (input.objective !== undefined && (input.type !== 'quiz' || !/^[1-5]\.[1-9]$/.test(input.objective))) || (input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall')) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
 			const source = input.type === 'pbq' ? bank.pbqs : input.type === 'scenario' ? bank.mcqs.filter((question) => question.format === 'scenario') : bank.mcqs;
 			const count = input.type === 'full' ? 90 : input.count ?? (input.type === 'quiz' ? 20 : input.type === 'scenario' ? 10 : input.type === 'review' ? 10 : 5);
 			let selected: QuestionDefinition[];
@@ -119,7 +119,7 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 				selected = [...pbqs];
 				for (const domain of [1, 2, 3, 4, 5] as Domain[]) selected.push(...shuffle(bank.mcqs.filter((question) => question.domain === domain), rng).slice(0, quotas[domain] - 1));
 			} else {
-				const filtered = input.domain ? source.filter((question) => question.domain === input.domain) : source;
+				const filtered = source.filter((question) => (!input.domain || question.domain === input.domain) && (!input.objective || question.objective === input.objective));
 				const valid = input.type === 'quiz' ? count >= 5 && count <= 50 : input.type === 'scenario' ? count >= 5 && count <= 30 : count >= 1 && (count <= 10 || count === 30);
 				if (!valid || count > filtered.length) throw new QuizServiceError('INVALID_REQUEST', 'Requested count is unavailable.', { available: filtered.length });
 				selected = shuffle(filtered, rng).slice(0, count);

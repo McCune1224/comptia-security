@@ -327,6 +327,11 @@
 					<a href="/quiz?start=1&type=full&mode=exam" class="btn btn-primary w-full"
 						>Take a full exam now</a
 					>
+					<a
+						class="mt-3 block text-center text-sm font-bold text-accent hover:underline"
+						href="/mastery"
+						>Objective mastery →</a
+					>
 				</div>
 			</section>
 		</div>

@@ -10,6 +10,7 @@ export async function POST({ request }: { request: Request }) {
 		const mode = body.mode;
 		const count = body.count;
 		const domain = body.domain;
+		const objective = body.objective;
 		const assignmentId = body.assignmentId;
 		const reviewSource = body.reviewSource;
 		if (
@@ -20,6 +21,8 @@ export async function POST({ request }: { request: Request }) {
 				(typeof count !== 'number' || !Number.isInteger(count) || count < 1)) ||
 			(domain !== undefined &&
 				(typeof domain !== 'number' || !Number.isInteger(domain) || domain < 1 || domain > 5)) ||
+			(objective !== undefined &&
+				(typeof objective !== 'string' || !/^[1-5]\.[1-9]$/.test(objective))) ||
 			(assignmentId !== undefined && typeof assignmentId !== 'string') ||
 			(reviewSource !== undefined && reviewSource !== 'daily' && reviewSource !== 'wall')
 		)
@@ -33,6 +36,7 @@ export async function POST({ request }: { request: Request }) {
 				...(mode ? { mode: mode as SessionMode } : {}),
 				...(count ? { count } : {}),
 				...(domain ? { domain: domain as Domain } : {}),
+				...(objective ? { objective: objective as `1.1` } : {}),
 				...(assignmentId ? { assignmentId: assignmentId as string } : {}),
 				...(reviewSource ? { reviewSource: reviewSource as 'daily' | 'wall' } : {})
 			})

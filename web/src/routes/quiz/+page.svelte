@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import ExamFlow from '$lib/components/ExamFlow.svelte';
 	import type { SessionType } from '$lib/types';
-	import { DOMAIN_NAMES } from '$lib/utils';
+	import { DOMAIN_NAMES, OBJECTIVES_BY_DOMAIN } from '$lib/utils';
 
 	let started = $derived(
 		Boolean(page.url.searchParams.get('session')) ||
@@ -19,6 +19,9 @@
 	let count = $state(Number(page.url.searchParams.get('count')) || 20);
 	let domain = $state<number | undefined>(
 		page.url.searchParams.get('domain') ? Number(page.url.searchParams.get('domain')) : undefined
+	);
+	let objective = $state<string | undefined>(
+		page.url.searchParams.get('objective') ?? undefined
 	);
 	let mode = $state<'practice' | 'exam'>(
 		(page.url.searchParams.get('mode') as 'practice' | 'exam') || 'practice'
@@ -37,6 +40,7 @@
 		type={reviewSource ? 'review' : sessionType}
 		count={reviewSource ? 10 : count}
 		domain={reviewSource ? undefined : domain}
+		objective={reviewSource ? undefined : objective}
 		mode={reviewSource ? 'practice' : mode}
 		{assignmentId}
 		{reviewSource}
@@ -85,6 +89,21 @@
 						>{/each}</select
 				></label
 			>
+			{#if domain}
+				<label class="block text-sm font-bold text-text-secondary"
+					>Objective<select
+						class="mt-1.5"
+						bind:value={objective}
+						onchange={() => {
+							if (objective) count = 5;
+							else count = 20;
+						}}
+						><option value={undefined}>All objectives</option
+						>{#each OBJECTIVES_BY_DOMAIN[domain] as item}<option value={item}>{item}</option
+						>{/each}</select
+					></label
+				>
+			{/if}
 			<fieldset>
 				<legend class="mb-1.5 block text-sm font-bold text-text-secondary">Session mode</legend>
 				<div class="grid grid-cols-2 rounded-md bg-surface-700 p-1">
@@ -105,7 +124,10 @@
 			</fieldset>
 			<button
 				class="btn btn-primary w-full sm:w-auto"
-				onclick={() => goto(`/quiz?start=1&count=${count}&domain=${domain ?? ''}&mode=${mode}`)}
+				onclick={() =>
+					goto(
+						`/quiz?start=1&count=${count}&domain=${domain ?? ''}&objective=${objective ?? ''}&mode=${mode}`
+					)}
 				>Start quiz</button
 			>
 		</div>

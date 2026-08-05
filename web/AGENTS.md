@@ -100,8 +100,9 @@ question/session counts for streaks + heatmap).
 | `POST` | `/api/course/lessons/[id]` | Mark lesson `{ completed: boolean }` |
 | `POST` | `/api/course/exam-date` | Set exam date `{ examDate: 'YYYY-MM-DD' }` (reschedules all) |
 | `GET`  | `/api/gradebook` | `{ gradebook, readiness }` |
+| `GET`  | `/api/mastery` | Per-objective + per-domain accuracy across all 28 SY0-701 objectives (from `quiz_answers`) |
 | `GET`  | `/api/review` | Daily-review summary: streak, due cards, today count, 84-day heatmap, wall of shame (with wall items) |
-| `POST` | `/api/quiz/start` | Session start — accepts optional `assignmentId`; `type: 'review'` requires `reviewSource: 'daily' \| 'wall'` |
+| `POST` | `/api/quiz/start` | Session start — accepts optional `assignmentId`; `type: 'quiz'` accepts optional `objective` filter; `type: 'review'` requires `reviewSource: 'daily' \| 'wall'` |
 | `GET/PATCH/DELETE` | `/api/quiz/session/[id]` | Resume, move/flag, abandon |
 | `PUT`  | `/api/quiz/answer` | Save answer (practice returns feedback) |
 | `POST` | `/api/quiz/complete` | Finalize; records assignment submission when linked |
@@ -125,6 +126,7 @@ question/session counts for streaks + heatmap).
 | `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`) |
 | `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session |
 | `/review` | `src/routes/review/+page.svelte` | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame |
+| `/mastery` | `src/routes/mastery/+page.svelte` | **Mastery matrix** — all 28 objectives color-coded by accuracy; tap any cell to drill it (5-question practice session filtered to that objective) |
 | `/progress` `/history` | existing | Legacy analytics |
 
 ### Shared components

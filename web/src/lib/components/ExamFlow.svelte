@@ -15,6 +15,7 @@
 		mode = 'practice',
 		count,
 		domain,
+		objective,
 		assignmentId,
 		reviewSource,
 		onDone
@@ -23,6 +24,7 @@
 		mode?: 'practice' | 'exam';
 		count?: number;
 		domain?: number;
+		objective?: string;
 		assignmentId?: string;
 		reviewSource?: 'daily' | 'wall';
 		onDone?: () => void;
@@ -136,6 +138,7 @@
 					mode,
 					count,
 					domain,
+					objective,
 					...(assignmentId ? { assignmentId } : {}),
 					...(reviewSource ? { reviewSource } : {})
 				})
