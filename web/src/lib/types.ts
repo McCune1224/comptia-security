@@ -94,6 +94,20 @@ export interface PublicConfigurationQuestion extends PublicQuestionBase {
 	fields: { id: string; label: string; options: { id: string; text: string }[] }[];
 }
 
+export interface PublicFillBlankQuestion extends PublicQuestionBase {
+	kind: 'fill-blank';
+	/** Blanks in the order they appear in the prompt; each accepts a set of normalized answers. */
+	blanks: { id: string; label: string; placeholder: string }[];
+}
+
+export interface PublicWordBankQuestion extends PublicQuestionBase {
+	kind: 'word-bank';
+	/** Blanks in the order they appear in the prompt. */
+	blanks: { id: string; label: string }[];
+	/** Available words (includes distractors). */
+	bank: { id: string; word: string }[];
+}
+
 export interface PublicMultiStepPbqQuestion extends PublicQuestionBase {
 	kind: 'multi-step';
 	context: string;
@@ -107,6 +121,8 @@ export type PublicQuestion =
 	| PublicNumericQuestion
 	| PublicEvidenceQuestion
 	| PublicConfigurationQuestion
+	| PublicFillBlankQuestion
+	| PublicWordBankQuestion
 	| PublicMultiStepPbqQuestion;
 
 export type QuestionResponse =
@@ -116,6 +132,8 @@ export type QuestionResponse =
 	| { kind: 'numeric'; value: number }
 	| { kind: 'evidence'; lineIds: string[] }
 	| { kind: 'configuration'; values: Record<string, string> }
+	| { kind: 'fill-blank'; values: Record<string, string> }
+	| { kind: 'word-bank'; assignments: Record<string, string> }
 	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
 
 export interface QuestionFeedback {

@@ -66,6 +66,8 @@
 			case 'matching': return 'See correct matches below.';
 			case 'evidence': return 'See correct selections below.';
 			case 'configuration': return 'See correct settings below.';
+			case 'fill-blank': return 'See correct answers below.';
+			case 'word-bank': return 'See correct words below.';
 			case 'numeric': return `${cr.value}`;
 			case 'multi-step': return 'See step breakdown below.';
 		}
@@ -89,6 +91,8 @@
 			case 'matching': return Object.values(review.response.matches).join(', ');
 			case 'evidence': return review.response.lineIds.join(', ');
 			case 'configuration': return Object.values(review.response.values).join(', ');
+			case 'fill-blank': return Object.values(review.response.values).join(' | ');
+			case 'word-bank': return Object.values(review.response.assignments).join(' | ');
 			case 'numeric': return `${review.response.value}`;
 			case 'multi-step': return `${review.response.stepResponses.length} step(s)`;
 		}
@@ -312,6 +316,43 @@
 										</span>
 										{#if !isConfigCorrect && correctVal}
 											<span class="text-xs text-text-muted">(correct: {field.options.find(o => o.id === correctVal)?.text})</span>
+										{/if}
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else if q.kind === 'fill-blank'}
+						<div class="space-y-2">
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wide">Your answers</p>
+							{#each q.blanks as blank, bi}
+								{@const userValue = review.response?.kind === 'fill-blank' ? (review.response.values[blank.id] ?? '') : ''}
+								{@const correctValues = review.feedback.correctResponse.kind === 'fill-blank' ? Object.values(review.feedback.correctResponse.values).filter(() => true) : []}
+								{@const correctValue = correctValues[bi] ?? ''}
+								{@const isBlankCorrect = userValue.trim().toLowerCase() === correctValue.trim().toLowerCase()}
+								<div class="rounded-xl bg-surface-700/60 p-3 text-sm">
+									<div class="flex items-center gap-2">
+										<span class="flex-1 text-text-secondary">{blank.label}</span>
+										<span class="font-medium {isBlankCorrect ? 'text-success' : 'text-danger'}">{userValue || '—'}</span>
+										{#if !isBlankCorrect}
+											<span class="text-xs text-text-muted">(correct: {correctValue})</span>
+										{/if}
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else if q.kind === 'word-bank'}
+						<div class="space-y-2">
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wide">Your words</p>
+							{#each q.blanks as blank, bi}
+								{@const userWordId = review.response?.kind === 'word-bank' ? (review.response.assignments[blank.id] ?? '') : ''}
+								{@const correctWordId = review.feedback.correctResponse.kind === 'word-bank' ? (review.feedback.correctResponse.assignments[blank.id] ?? '') : ''}
+								{@const isWordCorrect = userWordId === correctWordId}
+								<div class="rounded-xl bg-surface-700/60 p-3 text-sm">
+									<div class="flex items-center gap-2">
+										<span class="flex-1 text-text-secondary">{blank.label}</span>
+										<span class="font-medium {isWordCorrect ? 'text-success' : 'text-danger'}">{q.bank.find(w => w.id === (userWordId || correctWordId))?.word ?? '—'}</span>
+										{#if !isWordCorrect && correctWordId}
+											<span class="text-xs text-text-muted">(correct: {q.bank.find(w => w.id === correctWordId)?.word})</span>
 										{/if}
 									</div>
 								</div>

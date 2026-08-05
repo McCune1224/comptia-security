@@ -71,7 +71,27 @@
 		if (question?.kind !== 'multi-step') return true;
 		if (draft?.kind !== 'multi-step') return false;
 		for (let i = 0; i < question.steps.length; i++) {
-			if (!draft.stepResponses[i]) return false;
+			const step = question.steps[i];
+			const response = draft.stepResponses[i];
+			if (!response) return false;
+			if (step.kind === 'fill-blank' && response.kind === 'fill-blank' && !step.blanks.every((blank) => (response.values[blank.id] ?? '').trim())) return false;
+			if (step.kind === 'word-bank' && response.kind === 'word-bank' && !step.blanks.every((blank) => response.assignments[blank.id])) return false;
+		}
+		return true;
+	}
+
+	/** True when the current question's blanks (fill-blank / word-bank) are all answered. */
+	function blanksAnswered(): boolean {
+		if (!question) return true;
+		if (question.kind === 'fill-blank') {
+			const response = draft?.kind === 'fill-blank' ? draft : null;
+			if (!response) return false;
+			return question.blanks.every((blank) => (response.values[blank.id] ?? '').trim().length > 0);
+		}
+		if (question.kind === 'word-bank') {
+			const response = draft?.kind === 'word-bank' ? draft : null;
+			if (!response) return false;
+			return question.blanks.every((blank) => !!response.assignments[blank.id]);
 		}
 		return true;
 	}
@@ -247,6 +267,76 @@
 		values[fieldId] = value;
 		draft = { kind: 'configuration', values };
 	}
+
+	function updateFillBlank(blankId: string, value: string) {
+		const values = draft?.kind === 'fill-blank' ? { ...draft.values } : {};
+		values[blankId] = value;
+		draft = { kind: 'fill-blank', values };
+	}
+
+	/** word-bank: assign a word to the selected blank, or the first empty blank. */
+	function assignWord(wordId: string) {
+		if (!question || question.kind !== 'word-bank') return;
+		const assignments = draft?.kind === 'word-bank' ? { ...draft.assignments } : {};
+		const used = new Set(Object.values(assignments));
+		if (used.has(wordId)) return;
+		const selected = wordBankSelected;
+		const blankId =
+			selected && !assignments[selected]
+				? selected
+				: question.blanks.find((blank) => !assignments[blank.id])?.id;
+		if (!blankId) return;
+		assignments[blankId] = wordId;
+		wordBankSelected = null;
+		draft = { kind: 'word-bank', assignments };
+	}
+
+	function clearBlank(blankId: string) {
+		if (draft?.kind !== 'word-bank') return;
+		const assignments = { ...draft.assignments };
+		delete assignments[blankId];
+		draft = { kind: 'word-bank', assignments };
+	}
+
+	function updateSubFillBlank(blankId: string, value: string) {
+		const values = getSubResponse()?.kind === 'fill-blank' ? { ...(getSubResponse() as { kind: 'fill-blank'; values: Record<string, string> }).values } : {};
+		values[blankId] = value;
+		updateSubResponse({ kind: 'fill-blank', values });
+	}
+
+	function assignSubWord(wordId: string) {
+		const step = question?.kind === 'multi-step' ? question.steps[subStep] : null;
+		if (!step || step.kind !== 'word-bank') return;
+		const current = getSubResponse();
+		const assignments = current?.kind === 'word-bank' ? { ...current.assignments } : {};
+		const used = new Set(Object.values(assignments));
+		if (used.has(wordId)) return;
+		const blankId = step.blanks.find((blank) => !assignments[blank.id])?.id;
+		if (!blankId) return;
+		assignments[blankId] = wordId;
+		updateSubResponse({ kind: 'word-bank', assignments });
+	}
+
+	function clearSubBlank(blankId: string) {
+		const current = getSubResponse();
+		if (current?.kind !== 'word-bank') return;
+		const assignments = { ...current.assignments };
+		delete assignments[blankId];
+		updateSubResponse({ kind: 'word-bank', assignments });
+	}
+
+	/** Split a prompt on ____ placeholders so blanks can be embedded inline. */
+	function promptSegments(prompt: string) {
+		return prompt.split('____');
+	}
+
+	/** Which blank a word-bank word is assigned to ('' = unused). */
+	function wordBankAssignment(blankId: string): string {
+		if (draft?.kind !== 'word-bank') return '';
+		return draft.assignments[blankId] ?? '';
+	}
+
+	let wordBankSelected = $state<string | null>(null);
 
 	function toggleEvidence(lineId: string) {
 		const ids = draft?.kind === 'evidence' ? draft.lineIds : [];
@@ -615,6 +705,90 @@
 							></label
 						>{/each}
 				</div>
+			{:else if question.kind === 'fill-blank'}
+				{@const segments = promptSegments(question.prompt)}
+				<div class="space-y-5">
+					<p class="text-base leading-relaxed text-text-primary">
+						{#each segments as segment, si}
+							{segment}
+							{#if si < segments.length - 1}
+								{@const blank = question.blanks[si]}
+								<input
+									class="mx-1 inline-block w-36 border-b-2 border-dashed border-accent bg-transparent px-1 py-0.5 text-center font-semibold text-accent outline-none transition focus:border-solid focus:bg-accent/5 sm:w-44"
+									type="text"
+									placeholder={blank.placeholder}
+									aria-label={blank.label}
+									value={draft?.kind === 'fill-blank' ? (draft.values[blank.id] ?? '') : ''}
+									disabled={!!feedback}
+									oninput={(event) => updateFillBlank(blank.id, event.currentTarget.value)}
+								/>
+							{/if}
+						{/each}
+					</p>
+					<div class="flex flex-wrap gap-2 text-xs text-text-muted">
+						{#each question.blanks as blank}
+							<span class="rounded-full bg-surface-700 px-2.5 py-1">
+								{blank.label}: {blank.placeholder}
+							</span>
+						{/each}
+					</div>
+				</div>
+			{:else if question.kind === 'word-bank'}
+				{@const segments = promptSegments(question.prompt)}
+				{@const usedIds = new Set(
+					draft?.kind === 'word-bank' ? Object.values(draft.assignments) : []
+				)}
+				<div class="space-y-5">
+					<p class="text-base leading-relaxed text-text-primary">
+						{#each segments as segment, si}
+							{segment}
+							{#if si < segments.length - 1}
+								{@const blank = question.blanks[si]}
+								{@const assignedId = draft?.kind === 'word-bank' ? (draft.assignments[blank.id] ?? '') : ''}
+								{@const assignedWord = question.bank.find((word) => word.id === assignedId)}
+								<button
+									type="button"
+									class="mx-1 inline-flex min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold transition {assignedWord
+										? 'border-accent bg-accent/15 text-accent'
+										: wordBankSelected === blank.id
+											? 'border-accent-warm bg-accent-warm/10 text-accent-warm'
+											: 'border-dashed border-border-strong text-text-muted hover:border-accent'} {feedback
+										? 'cursor-default'
+										: 'cursor-pointer'}"
+									onclick={() => {
+										if (feedback) return;
+										if (assignedWord) clearBlank(blank.id);
+										else wordBankSelected = wordBankSelected === blank.id ? null : blank.id;
+									}}
+								>
+									{assignedWord ? assignedWord.word : `____${si + 1}`}
+								</button>
+							{/if}
+						{/each}
+					</p>
+					<div>
+						<p class="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
+							Word bank — click a word, then click a blank (or click a filled blank to clear)
+						</p>
+						<div class="flex flex-wrap gap-2">
+							{#each question.bank as word}
+								{@const isUsed = usedIds.has(word.id)}
+								<button
+									type="button"
+									class="rounded-full border px-3.5 py-1.5 text-sm font-medium transition {isUsed
+										? 'cursor-not-allowed border-border opacity-40 line-through'
+										: feedback
+											? 'cursor-default border-border opacity-70'
+											: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
+									disabled={isUsed || !!feedback}
+									onclick={() => assignWord(word.id)}
+								>
+									{word.word}
+								</button>
+							{/each}
+						</div>
+					</div>
+				</div>
 			{:else if question.kind === 'multi-step'}
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
@@ -793,6 +967,66 @@
 								</label>
 							{/each}
 						</div>
+					{:else if step.kind === 'fill-blank'}
+						{@const stepSegments = promptSegments(step.prompt)}
+						<div class="space-y-4">
+							<p class="mb-2 font-medium text-text-primary">
+								{#each stepSegments as segment, si}
+									{segment}
+									{#if si < stepSegments.length - 1}
+										{@const blank = step.blanks[si]}
+										<input
+											class="mx-1 inline-block w-36 border-b-2 border-dashed border-accent bg-transparent px-1 py-0.5 text-center font-semibold text-accent outline-none transition focus:border-solid focus:bg-accent/5 sm:w-44"
+											type="text"
+											placeholder={blank.placeholder}
+											aria-label={blank.label}
+											value={subDraft?.kind === 'fill-blank' ? (subDraft.values[blank.id] ?? '') : ''}
+											oninput={(e) => updateSubFillBlank(blank.id, e.currentTarget.value)}
+										/>
+									{/if}
+								{/each}
+							</p>
+						</div>
+					{:else if step.kind === 'word-bank'}
+						{@const stepSegments = promptSegments(step.prompt)}
+						{@const stepUsed = new Set(
+							subDraft?.kind === 'word-bank' ? Object.values(subDraft.assignments) : []
+						)}
+						<div class="space-y-4">
+							<p class="mb-2 font-medium text-text-primary">
+								{#each stepSegments as segment, si}
+									{segment}
+									{#if si < stepSegments.length - 1}
+										{@const blank = step.blanks[si]}
+										{@const assignedId = subDraft?.kind === 'word-bank' ? (subDraft.assignments[blank.id] ?? '') : ''}
+										{@const assignedWord = step.bank.find((word) => word.id === assignedId)}
+										<span
+											class="mx-1 inline-flex min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold {assignedWord
+												? 'border-accent bg-accent/15 text-accent'
+												: 'border-dashed border-border-strong text-text-muted'}"
+										>
+											{assignedWord ? assignedWord.word : `____${si + 1}`}
+										</span>
+									{/if}
+								{/each}
+							</p>
+							<div class="flex flex-wrap gap-2">
+								{#each step.bank as word}
+									<button
+										type="button"
+										class="rounded-full border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
+											word.id
+										)
+											? 'cursor-not-allowed border-border opacity-40 line-through'
+											: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
+										disabled={stepUsed.has(word.id)}
+										onclick={() => assignSubWord(word.id)}
+									>
+										{word.word}
+									</button>
+								{/each}
+							</div>
+						</div>
 					{/if}
 
 					<div class="flex gap-2">
@@ -823,7 +1057,7 @@
 					class="h-11 flex-1 rounded-xl bg-gradient-to-r from-accent to-info px-5 font-medium text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered()}
+					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'

@@ -26,4 +26,36 @@ describe('QuizService', () => {
 		expect(service.startSession({ type: 'pbq', count: 5 }).questions).toHaveLength(5);
 		repository.close();
 	});
+
+	it('round-trips fill-blank and word-bank responses through a PBQ session', () => {
+		const repository = createQuizRepository(':memory:');
+		const bank = loadQuestionBank();
+		const service = createQuizService({ repository, bank, rng: () => 0.5, now: () => new Date('2026-07-22T12:00:00.000Z') });
+		const session = service.startSession({ type: 'pbq', count: 30 });
+		const fillIndex = session.questions.findIndex((q) => q.kind === 'fill-blank');
+		expect(fillIndex).toBeGreaterThanOrEqual(0);
+		const fillPublic = session.questions[fillIndex] as { id: string; kind: 'fill-blank'; blanks: { id: string }[] };
+		const fillDef = bank.pbqs.find((q) => q.id === fillPublic.id && q.kind === 'fill-blank');
+		expect(fillDef?.kind).toBe('fill-blank');
+		if (fillDef?.kind !== 'fill-blank') throw new Error('missing fill-blank definition');
+		const fillValues = Object.fromEntries(
+			fillDef.blanks.map((blank, i) => [
+				blank.id,
+				i === 0 ? `  ${blank.acceptedAnswers[0].toUpperCase()}  ` : blank.acceptedAnswers[0]
+			])
+		);
+		service.saveResponse(session.sessionId, fillIndex, { kind: 'fill-blank', values: fillValues } as never);
+		const wbIndex = session.questions.findIndex((q) => q.kind === 'word-bank');
+		expect(wbIndex).toBeGreaterThanOrEqual(0);
+		const wbPublic = session.questions[wbIndex] as { id: string; kind: 'word-bank'; blanks: { id: string }[]; bank: { id: string; word: string }[] };
+		const wbDef = bank.pbqs.find((q) => q.id === wbPublic.id && q.kind === 'word-bank');
+		expect(wbDef?.kind).toBe('word-bank');
+		if (wbDef?.kind !== 'word-bank') throw new Error('missing word-bank definition');
+		service.saveResponse(session.sessionId, wbIndex, { kind: 'word-bank', assignments: wbDef.correctAssignments } as never);
+		const result = service.completeSession(session.sessionId);
+		// Case- and whitespace-insensitive normalization: uppercase padded answer is fully correct
+		expect(result.review[fillIndex].feedback.earnedPoints).toBe(1);
+		expect(result.review[wbIndex].feedback.earnedPoints).toBe(1);
+		repository.close();
+	});
 });

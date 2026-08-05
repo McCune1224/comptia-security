@@ -41,6 +41,23 @@ export function scoreQuestion(
 			case 'configuration':
 				if (response.kind === 'configuration') earnedPoints = question.fields.filter((field) => response.values[field.id] === question.correctValues[field.id]).length / question.fields.length;
 				break;
+			case 'fill-blank':
+				if (response.kind === 'fill-blank') {
+					const normalize = (value: string) => value.trim().toLowerCase().replace(/\s+/g, ' ');
+					earnedPoints =
+						question.blanks.filter((blank) =>
+							blank.acceptedAnswers.some(
+								(answer) => normalize(response.values[blank.id] ?? '') === normalize(answer)
+							)
+						).length / question.blanks.length;
+				}
+				break;
+			case 'word-bank':
+				if (response.kind === 'word-bank')
+					earnedPoints = question.blanks.filter(
+						(blank) => response.assignments[blank.id] === question.correctAssignments[blank.id]
+					).length / question.blanks.length;
+				break;
 			case 'multi-step':
 				if (response.kind === 'multi-step') {
 					const stepScores = question.steps.map((step, i) => scoreQuestion(step, response.stepResponses[i] ?? null));

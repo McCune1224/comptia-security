@@ -30,6 +30,7 @@ function presentation(question: QuestionDefinition, rng: () => number): Question
 	if (cloned.kind === 'single-choice' || cloned.kind === 'multiple-choice') cloned.options = shuffle(cloned.options, rng);
 	if (cloned.kind === 'ordering') cloned.items = shuffle(cloned.items, rng);
 	if (cloned.kind === 'matching') cloned.targets = shuffle(cloned.targets, rng);
+	if (cloned.kind === 'word-bank') cloned.bank = shuffle(cloned.bank, rng);
 	if (cloned.kind === 'multi-step') cloned.steps = cloned.steps.map((step) => presentation(step, rng)) as typeof cloned.steps;
 	return cloned;
 }
@@ -56,6 +57,8 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	if (question.kind === 'numeric' && response.kind === 'numeric' && Number.isFinite(response.value)) return;
 	if (question.kind === 'evidence' && response.kind === 'evidence' && response.lineIds.length === question.selectCount && distinct(response.lineIds) && response.lineIds.every((id) => question.artifact.lines.some((line) => line.id === id))) return;
 	if (question.kind === 'configuration' && response.kind === 'configuration' && Object.keys(response.values).length === question.fields.length && question.fields.every((field) => field.options.some((option) => option.id === response.values[field.id]))) return;
+	if (question.kind === 'fill-blank' && response.kind === 'fill-blank' && Object.keys(response.values).length === question.blanks.length && question.blanks.every((blank) => typeof response.values[blank.id] === 'string')) return;
+	if (question.kind === 'word-bank' && response.kind === 'word-bank' && Object.keys(response.assignments).length === question.blanks.length && question.blanks.every((blank) => question.bank.some((word) => word.id === response.assignments[blank.id])) && new Set(Object.values(response.assignments)).size === question.blanks.length) return;
 	if (question.kind === 'multi-step' && response.kind === 'multi-step' && response.stepResponses.length === question.steps.length) {
 		for (let i = 0; i < question.steps.length; i++) { validateResponse(question.steps[i], response.stepResponses[i]); }
 		return;

@@ -60,6 +60,22 @@ export interface ConfigurationDefinition extends DefinitionBase {
 	correctValues: Record<string, string>;
 }
 
+export interface FillBlankDefinition extends DefinitionBase {
+	kind: 'fill-blank';
+	/** Blanks in the order they appear in the prompt (mark each with ____ in the prompt text). */
+	blanks: { id: string; label: string; placeholder: string; acceptedAnswers: string[] }[];
+}
+
+export interface WordBankDefinition extends DefinitionBase {
+	kind: 'word-bank';
+	/** Blanks in the order they appear in the prompt (mark each with ____ in the prompt text). */
+	blanks: { id: string; label: string }[];
+	/** Candidate words, including distractors (must contain all correct words + at least one distractor). */
+	bank: { id: string; word: string }[];
+	/** blankId -> bank word id */
+	correctAssignments: Record<string, string>;
+}
+
 export interface MultiStepPbqDefinition extends DefinitionBase {
 	kind: 'multi-step';
 	context: string;
@@ -73,6 +89,8 @@ export type QuestionDefinition =
 	| NumericDefinition
 	| EvidenceDefinition
 	| ConfigurationDefinition
+	| FillBlankDefinition
+	| WordBankDefinition
 	| MultiStepPbqDefinition;
 
 export interface QuestionBank {
@@ -106,7 +124,7 @@ function hasUniqueIds(items: { id: string }[]): boolean {
 
 export function validateQuestionBank(bank: QuestionBank): void {
 	if (bank.mcqs.length !== 280) fail('mcqs', `expected 280 items, found ${bank.mcqs.length}`);
-	if (bank.pbqs.length !== 50) fail('pbqs', `expected 50 items, found ${bank.pbqs.length}`);
+	if (bank.pbqs.length !== 64) fail('pbqs', `expected 64 items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
 	if (new Set(all.map((question) => question.prompt.trim())).size !== all.length) fail('bank', 'prompts must be unique');
@@ -136,6 +154,8 @@ export function validateQuestionBank(bank: QuestionBank): void {
 		if (question.kind === 'numeric' && (!Number.isFinite(question.correctValue) || question.tolerance < 0)) fail(question.id, 'invalid numeric response key');
 		if (question.kind === 'evidence' && (question.correctLineIds.length !== question.selectCount || new Set(question.correctLineIds).size !== question.selectCount || !question.correctLineIds.every((id) => question.artifact.lines.some((line) => line.id === id)))) fail(question.id, 'invalid evidence response key');
 		if (question.kind === 'configuration' && (question.fields.length < 4 || Object.keys(question.correctValues).length !== question.fields.length || question.fields.some((field) => field.options.length < 4 || !question.correctValues[field.id] || !field.options.some((option) => option.id === question.correctValues[field.id])))) fail(question.id, 'invalid configuration (need ≥4 fields, ≥4 options each)');
+		if (question.kind === 'fill-blank' && (question.blanks.length < 2 || !hasUniqueIds(question.blanks) || question.blanks.some((blank) => !blank.label.trim() || blank.acceptedAnswers.length === 0 || blank.acceptedAnswers.some((answer) => !answer.trim())) || (question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)) fail(question.id, 'invalid fill-blank (need ≥2 blanks, one ____ per blank, non-empty accepted answers)');
+		if (question.kind === 'word-bank' && (question.blanks.length < 2 || !hasUniqueIds(question.blanks) || !hasUniqueIds(question.bank) || question.bank.length < question.blanks.length + 1 || Object.keys(question.correctAssignments).length !== question.blanks.length || question.blanks.some((blank) => !question.correctAssignments[blank.id] || !question.bank.some((word) => word.id === question.correctAssignments[blank.id])) || new Set(Object.values(question.correctAssignments)).size !== question.blanks.length || (question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)) fail(question.id, 'invalid word-bank (need ≥2 blanks, bank ≥ blanks+1 with distractors, unique assignments)');
 		if (question.kind === 'multi-step') {
 			if (!question.steps || question.steps.length < 2 || question.steps.length > 4) fail(question.id, 'multi-step must have 2-4 steps');
 			for (const step of question.steps) {
@@ -147,6 +167,8 @@ export function validateQuestionBank(bank: QuestionBank): void {
 				if (step.kind === 'configuration' && (step.fields.length < 4 || Object.keys(step.correctValues).length !== step.fields.length || step.fields.some((f) => f.options.length < 4 || !step.correctValues[f.id] || !f.options.some((o) => o.id === step.correctValues[f.id])))) fail(step.id || question.id, 'invalid child configuration (need ≥4 fields, ≥4 options each, valid correctValues)');
 				if (step.kind === 'evidence' && (step.correctLineIds.length !== step.selectCount || !step.correctLineIds.every((id) => step.artifact.lines.some((l) => l.id === id)))) fail(step.id || question.id, 'invalid child evidence');
 				if (step.kind === 'numeric' && (!Number.isFinite(step.correctValue) || step.tolerance < 0)) fail(step.id || question.id, 'invalid child numeric');
+				if (step.kind === 'fill-blank' && (step.blanks.length < 1 || !hasUniqueIds(step.blanks) || step.blanks.some((b) => !b.label.trim() || b.acceptedAnswers.length === 0) || (step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)) fail(step.id || question.id, 'invalid child fill-blank');
+				if (step.kind === 'word-bank' && (step.blanks.length < 2 || !hasUniqueIds(step.blanks) || !hasUniqueIds(step.bank) || step.bank.length < step.blanks.length + 1 || Object.keys(step.correctAssignments).length !== step.blanks.length || new Set(Object.values(step.correctAssignments)).size !== step.blanks.length || (step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)) fail(step.id || question.id, 'invalid child word-bank');
 			}
 		}
 	}
@@ -168,6 +190,8 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 		case 'numeric': return { ...base, kind: 'numeric', unit: definition.unit };
 		case 'evidence': return { ...base, kind: 'evidence', artifact: definition.artifact, selectCount: definition.selectCount };
 		case 'configuration': return { ...base, kind: 'configuration', fields: definition.fields };
+		case 'fill-blank': return { ...base, kind: 'fill-blank', blanks: definition.blanks.map(({ id, label, placeholder }) => ({ id, label, placeholder })) };
+		case 'word-bank': return { ...base, kind: 'word-bank', blanks: definition.blanks, bank: definition.bank };
 		case 'multi-step': return { ...base, kind: 'multi-step', context: definition.context, steps: definition.steps.map(toPublicQuestion) };
 	}
 }
@@ -180,6 +204,8 @@ export function correctResponse(definition: QuestionDefinition): QuestionRespons
 		case 'numeric': return { kind: 'numeric', value: definition.correctValue };
 		case 'evidence': return { kind: 'evidence', lineIds: definition.correctLineIds };
 		case 'configuration': return { kind: 'configuration', values: definition.correctValues };
+		case 'fill-blank': return { kind: 'fill-blank', values: Object.fromEntries(definition.blanks.map((blank) => [blank.id, blank.acceptedAnswers[0]])) };
+		case 'word-bank': return { kind: 'word-bank', assignments: definition.correctAssignments };
 		case 'multi-step': return { kind: 'multi-step', stepResponses: definition.steps.map(correctResponse) };
 	}
 }
