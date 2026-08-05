@@ -3,13 +3,14 @@ import type { ActiveSessionSummary, Domain, PublicQuestion, QuestionResponse, Qu
 import { quizRepository, type QuizRepository, type StoredSession } from './db';
 import { loadQuestionBank, toPublicQuestion, type QuestionBank, type QuestionDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
+import { courseService } from './course-service';
 
 export class QuizServiceError extends Error {
 	constructor(public code: 'INVALID_REQUEST' | 'SESSION_NOT_FOUND' | 'ACTIVE_SESSION_EXISTS' | 'SESSION_CLOSED' | 'RESPONSE_LOCKED', message: string, public details?: Record<string, unknown>) { super(message); }
 }
 
 export interface QuizService {
-	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain }): SessionView;
+	startSession(input: { type: SessionType; mode?: SessionMode; count?: number; domain?: Domain; assignmentId?: string }): SessionView;
 	getSession(sessionId: string): SessionView | QuizResult;
 	getActiveSession(): ActiveSessionSummary | null;
 	saveResponse(sessionId: string, questionIndex: number, response: QuestionResponse): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
@@ -82,7 +83,9 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 		});
 		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
 		const result: QuizResult = { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, earnedPoints, possiblePoints: stored.questions.length, percentage: Math.round(earnedPoints / stored.questions.length * 1000) / 10, fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length, totalQuestions: stored.questions.length, flaggedQuestionIndexes: stored.flags, domainBreakdown, objectiveBreakdown, completedAt: now().toISOString(), review };
-		return repository.complete(stored.summary.id, result, review.map((item, index) => ({ index, question: stored.questions[index], response: item.response, points: item.feedback.earnedPoints })), result.completedAt);
+		const finalized = repository.complete(stored.summary.id, result, review.map((item, index) => ({ index, question: stored.questions[index], response: item.response, points: item.feedback.earnedPoints })), result.completedAt);
+		if (stored.summary.assignment_id) courseService.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
+		return finalized;
 	};
 	return {
 		startSession(input) {
@@ -111,7 +114,7 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 			}
 			selected = shuffle(selected, rng).map((question) => presentation(question, rng));
 			const startedAt = now().toISOString(); const deadlineAt = mode === 'exam' ? new Date(now().getTime() + (input.type === 'full' ? 90 : selected.length) * 60_000).toISOString() : null;
-			repository.createSession({ id: crypto.randomUUID(), type: input.type, mode, domain: input.domain ?? null, startedAt, deadlineAt, questions: selected });
+			repository.createSession({ id: crypto.randomUUID(), type: input.type, mode, domain: input.domain ?? null, startedAt, deadlineAt, questions: selected, assignmentId: input.assignmentId ?? null });
 			return asView(repository.getActiveSession()!);
 		},
 		getSession(id) { const stored = requireStored(id); return stored.summary.status === 'completed' && stored.result ? stored.result : asView(stored); },

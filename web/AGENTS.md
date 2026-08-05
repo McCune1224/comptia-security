@@ -1,99 +1,115 @@
-# Security+ Quiz App — Project Context
+# Security+ Course — Project Context
 
 ## Overview
 
-Security+ exam prep web app built with SvelteKit 5 (runes). Sources Anki-style CSV flashcards from the parent `anki/` directory and presents them as interactive quizzes — multiple choice, performance-based questions (drag-and-rank), and scenario-based questions — with persistent progress tracking via SQLite.
+A Blackboard-style **course learning system** for CompTIA Security+ (SY0-701) exam prep, built with
+SvelteKit 5 (runes) and SQLite. It combines a structured course (4 weekly modules, lessons, and
+deadline-driven graded assignments) with the quiz engine (MCQs, scenarios, PBQs, full-length exams)
+and rigorous evaluation (weighted gradebook, exam-readiness meter).
 
 ## Architecture
 
 ```
-anki/AI Security+/V3/*.csv  ──→  src/lib/server/cards.ts  ──→  quiz.ts  ──→  API routes
-                                                            ↕
-                                                      db.ts (better-sqlite3)
-                                                            ↕
-                                                        data/quiz.db
+course.ts (definition + scheduling + gradebook logic)
+    ↕
+db.ts (better-sqlite3 — sessions, answers, domain progress, course tables)
+    ↕
+course-service.ts (aggregates course + gradebook + readiness views)
+    ↕
+quiz.ts (session lifecycle; records assignment submissions on completion)
+    ↕
+API routes → SvelteKit pages (course home, syllabus, modules, assignments, gradebook, calendar)
 ```
 
 - **No SSR needed** — all page data is fetched client-side via `fetch('/api/...')`.
 - **No authentication** — local-only single-user app.
-- **No ORM** — raw `better-sqlite3` queries.
+- **No ORM** — raw `better-sqlite3` queries; schema auto-created + migrated (user_version 3).
 
-## Data Sources
+## Course Model (`src/lib/server/course.ts`)
 
-CSV files in `anki/AI Security+/V3/`:
+The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on first run:
 
-| File                              | Content                                | Type         |
-| --------------------------------- | -------------------------------------- | ------------ |
-| `{1..5}_Definitions_Domain_*.csv` | Domain 1–5 definition Q&A cards        | `definition` |
-| `7_Scenario_Practice.csv`         | Scenario-based situational questions   | `scenario`   |
-| `8_PBQ_Practice.csv`              | Performance-based (ordering) questions | `pbq`        |
+- **4 modules** (`week-1`…`week-4`) mirroring a 3–4 week study plan:
+  1. Foundations & Threats (Domains 1–2)
+  2. Architecture & Operations I (Domains 3–4)
+  3. Operations II & Program Management (Domain 4 finish + Domain 5)
+  4. Final Review & Readiness (targeted review + final full exam)
+- **7 lessons** with study content (summary + markdown body) per module; lessons are marked read.
+- **12 graded assignments** across three weighted categories:
+  - `quiz` (6) — 20-question objective quizzes, 30% weight
+  - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
+  - `full` (4) — 90-question timed full exams + week-1 checkpoint, 50% weight
+- **Scheduling:** every assignment has a `dueOffsetDays` (negative = days before exam). The exam
+  date lives in `course_meta` (`exam_date`, default: today + 28 days) and can be changed from the
+  Syllabus page — changing it reschedules every due date.
 
-Each CSV row: `front,back,tags` where tags encode domain + category (`1::General Concepts`).
+### Gradebook
 
-## Data Model (`src/lib/types.ts`)
+- `computeGradebook()` — per-assignment best score (retakes keep the best), category percentages,
+  weighted overall percentage, letter grade (A ≥ 90 … F < 60).
+- Assignment status: `open` / `due-soon` (≤2 days) / `overdue` / `in-progress` (active session
+  linked to the assignment) / `submitted`.
+- `computeReadiness()` — blends domain mastery (weighted by the real SY0-701 question quotas
+  11/20/16/25/18) with the average of the last two full exams; projects a 100–900 scaled score;
+  `ready` = score ≥ 83.3% (750/900).
 
-```ts
-Card          — front, back, domain, tags[]
-Question      — prompt, correctAnswer, options[4], domain, category, type
-PbqQuestion   — prompt, correctSteps[], domain, category
-QuizSession   — id, startedAt, type, domain, questions[], answers[], completed
-QuizAnswer    — questionIndex, selected, correct, domain
-QuizResult    — sessionId, score, total, percentage, domainBreakdown, type, completedAt
-```
+### Assignment → session integration
 
-## Server Lib (`src/lib/server/`)
+- `POST /api/quiz/start` accepts an optional `assignmentId`; stored on `quiz_sessions.assignment_id`.
+- When a linked session is completed, `quiz.ts` records a submission row
+  (`course_assignment_submissions`) via `courseService.recordCompletion(...)`.
+- Launch config comes from `sessionLaunchFor(assignment)` (type/mode/count/domain).
 
-| Module          | Purpose                                                                            |
-| --------------- | ---------------------------------------------------------------------------------- |
-| `cards.ts`      | Reads & caches CSVs by type (definition/scenario/pbq)                              |
-| `distractor.ts` | Token/Jaccard-similarity distractor picker for multiple-choice options             |
-| `quiz.ts`       | Session lifecycle: start, submitAnswer, complete. Holds active sessions in memory. |
-| `db.ts`         | SQLite CRUD: sessions, answers, domain progress. Schema auto-created.              |
-| `sync.ts`       | Writes results back to Obsidian vault notes (dashboard, weak topics, mock exams)   |
+## DB Tables
+
+Quiz engine (pre-existing): `quiz_sessions`, `quiz_answers`, `domain_progress`,
+`quiz_session_state`, `quiz_session_responses`.
+
+Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `course_lessons`,
+`course_assignments`, `course_assignment_submissions`, `course_lesson_completions`.
 
 ## API Routes
 
-| Method | Path                 | Body/Params                            | Returns                                        |
-| ------ | -------------------- | -------------------------------------- | ---------------------------------------------- |
-| `POST` | `/api/quiz/start`    | `{ type, count?, domain? }`            | `{ sessionId, questions[] }`                   |
-| `POST` | `/api/quiz/answer`   | `{ sessionId, questionIndex, answer }` | `{ correct, correctAnswer, isComplete }`       |
-| `POST` | `/api/quiz/complete` | `{ sessionId }`                        | `QuizResult`                                   |
-| `GET`  | `/api/progress`      | —                                      | `{ progress, recentSessions[], weakTopics[] }` |
-| `GET`  | `/api/cards`         | `?domain=&type=`                       | `{ total, cards[] }`                           |
-| `POST` | `/api/sync`          | `{ sessionId }`                        | `{ success, messages[] }`                      |
+| Method | Path | Purpose |
+| ------ | ---- | ------- |
+| `GET`  | `/api/course/overview` | Home payload: exam date/countdown, readiness, gradebook summary, modules w/ progress, to-do list, recent sessions |
+| `GET`  | `/api/course/syllabus` | All modules with lessons + assignments + statuses |
+| `GET`  | `/api/course/modules/[id]` | Single module (lessons + assignments) |
+| `GET`  | `/api/course/assignments/[id]` | Assignment detail incl. best submission + launch config |
+| `POST` | `/api/course/lessons/[id]` | Mark lesson `{ completed: boolean }` |
+| `POST` | `/api/course/exam-date` | Set exam date `{ examDate: 'YYYY-MM-DD' }` (reschedules all) |
+| `GET`  | `/api/gradebook` | `{ gradebook, readiness }` |
+| `POST` | `/api/quiz/start` | Session start — now accepts optional `assignmentId` |
+| `GET/PATCH/DELETE` | `/api/quiz/session/[id]` | Resume, move/flag, abandon |
+| `PUT`  | `/api/quiz/answer` | Save answer (practice returns feedback) |
+| `POST` | `/api/quiz/complete` | Finalize; records assignment submission when linked |
+| `GET`  | `/api/progress`, `/api/history`, `/api/cards`, `/api/sync` | Legacy analytics/tools |
 
-`type` values: `'quiz'` (definition MC), `'scenario'`, `'pbq'`, `'full'` (90-quest exam).
+## Frontend Pages (Svelte 5 runes, Tailwind CSS v4)
 
-## Frontend Pages (all use Svelte 5 runes, Tailwind CSS v4)
+| Route | File | Purpose |
+| ----- | ---- | ------- |
+| `/` | `src/routes/+page.svelte` | **Course home** — banner w/ exam countdown, readiness ring, "What's due" to-do, module cards, recent sessions |
+| `/syllabus` | `src/routes/syllabus/+page.svelte` | Full schedule + exam-date editor |
+| `/modules/[id]` | `src/routes/modules/[id]/+page.svelte` | Module detail — lessons (expandable, mark read) + assignments |
+| `/assignments/[id]` | `src/routes/assignments/[id]/+page.svelte` | Assignment detail — due date, status, best submission, launch |
+| `/gradebook` | `src/routes/gradebook/+page.svelte` | Weighted grade, letter grade, category breakdown, per-assignment table |
+| `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Up next" list |
+| `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment |
+| `/progress` `/history` | existing | Legacy analytics |
 
-| Route        | File                                | Purpose                                                                                   |
-| ------------ | ----------------------------------- | ----------------------------------------------------------------------------------------- |
-| `/`          | `src/routes/+page.svelte`           | **Dashboard** — domain progress cards, quick-action buttons, recent sessions, weak topics |
-| `/quiz`      | `src/routes/quiz/+page.svelte`      | **Quiz** — domain/count setup → multiple-choice flow → results                            |
-| `/pbq`       | `src/routes/pbq/+page.svelte`       | **PBQ** — SortableJS drag-to-rank ordering → check answer → results                       |
-| `/scenarios` | `src/routes/scenarios/+page.svelte` | **Scenarios** — count setup → scenario MC flow → results                                  |
-| `/progress`  | `src/routes/progress/+page.svelte`  | **Progress** — domain breakdown, recent sessions, weak topics table                       |
+### Shared components
 
-All pages are single-file `+page.svelte` components — no shared component library, no stores, no SSR load functions. Data fetched via `fetch` in `onMount`/`$effect`.
+- `StatusChip.svelte` — assignment status badge.
+- `ProgressRing.svelte` — circular percentage (readiness/grade).
+- `BottomNav.svelte` / `MobileMenu.svelte` — course navigation (Home, Syllabus, Grades, Calendar).
 
 ### Key Patterns
 
-- **State**: `let x = $state(...)`
-- **Derived**: `let y = $derived(x * 2)`
-- **Effects** (SortableJS, etc.): `$effect(() => { /* setup */ return () => cleanup })`
-- **Props**: `let { prop } = $props()`
-- **Events**: `onclick={() => ...}` (not `on:click`)
-- **Conditionals**: `{#if}`, `{#each}` with keyed items
+- **State**: `let x = $state(...)`; **Derived**: `let y = $derived(...)`
+- **Props**: `let { prop } = $props()`; **Events**: `onclick={() => ...}`
 - **No legacy**: no `$:`, `export let`, `on:`, `<slot>`, stores
-
-## Sessions & State
-
-- Active quiz sessions live in server memory (max one per user).
-- `POST /api/quiz/start` creates both in-memory session and DB row.
-- `POST /api/quiz/answer` persists answer to DB and updates domain progress.
-- On `isComplete === true`, the session is auto-finalized in DB.
-- `POST /api/quiz/complete` manually finalizes if needed (returns `QuizResult`).
-- **Refresh loses in-memory session** — acceptable for MVP.
+- `{#each}` blocks must be keyed (`(item.id)`); lesson content uses `{@html}` over trusted static data
 
 ## Build & Test
 
@@ -101,30 +117,22 @@ All pages are single-file `+page.svelte` components — no shared component libr
 npm run dev          # dev server on localhost:5173
 npm run build        # production build (adapter-node)
 npm run check        # svelte-check type checking
-npm run lint         # prettier + eslint
-npm run format       # auto-format
+npm run test         # vitest (23 tests: quiz, scoring, question-bank, cards, course)
 ```
 
-## Distractor Algorithm
-
-`distractor.ts` tokenizes the correct answer's text, computes Jaccard similarity against all other cards in the same domain, and picks the 3 most similar-sounding wrong answers as distractors. Falls back to random cards from other domains if the domain has < 4 cards.
+`course.test.ts` covers the course definition, scheduling, assignment status, gradebook math,
+readiness, and the course service end-to-end. DB tests use `:memory:`; the module-level
+`quizRepository` singleton uses `:memory:` under vitest (`process.env.VITEST`) to avoid file races.
 
 ## Styling
 
 - Tailwind CSS v4 — `@import "tailwindcss"` in `app.css`, no config file.
-- Dark nav bar (`bg-slate-900`) with cyan accent hover.
-- Content area: `max-w-4xl mx-auto p-6`.
-- Progress colors: red (`<60%`), yellow (`60–84%`), green (`≥85%`).
-
-## Dependencies
-
-- Production: `better-sqlite3`, `sortablejs`
-- Dev: `@sveltejs/kit`, `@sveltejs/adapter-node`, `svelte` (v5), tailwindcss v4, prettier, eslint, typescript v6
+- Dark nav (`bg-surface-900`) with cyan accent; light/dark theme via `data-theme` + `ThemeToggle`.
+- Content area: `max-w-7xl mx-auto`; progress colors: red (<60%), yellow (60–84%), green (≥85%).
 
 ## Phase 2 Candidates (not yet implemented)
 
-- Per-question explanation display from optional CSV column.
-- Persistent answer review (review wrong answers after quiz).
-- Spaced-repetition scheduling (anki-like).
-- Mobile-responsive layout.
-- Drag-and-drop file import for custom card decks.
+- Per-question explanation display from optional CSV column (question bank already has rationales).
+- Spaced-repetition scheduling (anki-like) for weak topics.
+- Drag-and-drop file import for custom question decks.
+- Calendar "week" view; assignment resubmission history table.

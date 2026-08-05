@@ -18,10 +18,27 @@
 	let mode = $state<'practice' | 'exam'>(
 		(page.url.searchParams.get('mode') as 'practice' | 'exam') || 'practice'
 	);
+	let assignmentId = $state<string | undefined>(
+		page.url.searchParams.get('assignment') ?? undefined
+	);
+
+	function onDone() {
+		goto(assignmentId ? `/assignments/${assignmentId}` : '/');
+	}
 </script>
 
 {#if started}
-	<ExamFlow type={sessionType} {count} {domain} {mode} onDone={() => goto('/')} />
+	<ExamFlow
+		type={sessionType}
+		{count}
+		{domain}
+		{mode}
+		{assignmentId}
+		onDone={() => {
+			onDone();
+			return;
+		}}
+	/>
 {:else}
 	<div class="mx-auto max-w-lg space-y-6 px-4 py-8">
 		<div>
@@ -37,9 +54,10 @@
 					/></svg
 				>
 			</div>
-			<h1 class="text-2xl font-bold text-text-primary sm:text-3xl">Objective Quiz</h1>
+			<h1 class="text-2xl font-bold text-text-primary sm:text-3xl">Free Practice Quiz</h1>
 			<p class="mt-2 text-sm text-text-secondary">
-				Build confidence across Security+ objectives with focused, adaptive practice.
+				Build confidence across Security+ objectives with focused, adaptive practice. Free practice
+				sessions don't count toward your course grade.
 			</p>
 		</div>
 		<div class="glass space-y-5 rounded-2xl p-6 sm:p-8">
@@ -77,7 +95,8 @@
 			</fieldset>
 			<button
 				class="h-12 w-full rounded-xl bg-gradient-to-r from-accent to-info px-8 font-semibold text-white transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
-				onclick={() => goto(`/quiz?start=1&count=${count}&domain=${domain ?? ''}&mode=${mode}`)}>Start quiz</button
+				onclick={() => goto(`/quiz?start=1&count=${count}&domain=${domain ?? ''}&mode=${mode}`)}
+				>Start quiz</button
 			>
 		</div>
 	</div>

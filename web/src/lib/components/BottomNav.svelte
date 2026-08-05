@@ -3,9 +3,9 @@
 
 	const items = [
 		{ href: '/', label: 'Home', icon: 'home' },
-		{ href: '/quiz', label: 'Quiz', icon: 'quiz' },
-		{ href: '/scenarios', label: 'Scenarios', icon: 'scenarios' },
-		{ href: '/progress', label: 'Progress', icon: 'progress' }
+		{ href: '/syllabus', label: 'Syllabus', icon: 'syllabus' },
+		{ href: '/gradebook', label: 'Grades', icon: 'grades' },
+		{ href: '/calendar', label: 'Calendar', icon: 'calendar' }
 	];
 
 	function isActive(path: string) {
@@ -37,25 +37,24 @@
 						stroke-width="1.8"
 						><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10Z" /></svg
 					>
-				{:else if item.icon === 'quiz'}
+				{:else if item.icon === 'syllabus'}
 					<svg
 						viewBox="0 0 24 24"
 						class="h-5 w-5"
 						fill="none"
 						stroke="currentColor"
 						stroke-width="1.8"
-						><rect x="5" y="3" width="14" height="18" rx="2" /><path
-							d="M9 3h6v3H9zM9 11h6M9 15h4"
-						/></svg
+						><path
+							d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"
+						/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" /></svg
 					>
-				{:else if item.icon === 'scenarios'}
+				{:else if item.icon === 'grades'}
 					<svg
 						viewBox="0 0 24 24"
 						class="h-5 w-5"
-						fill={isActive(item.href) ? 'currentColor' : 'none'}
+						fill="none"
 						stroke="currentColor"
-						stroke-width="1.8"
-						><path d="M20 11.5a7.5 7.5 0 0 1-11.6 6.3L4 19l1.2-3.6A7.5 7.5 0 1 1 20 11.5Z" /></svg
+						stroke-width="1.8"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" /></svg
 					>
 				{:else}
 					<svg
@@ -63,7 +62,10 @@
 						class="h-5 w-5"
 						fill="none"
 						stroke="currentColor"
-						stroke-width="1.8"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" /></svg
+						stroke-width="1.8"
+						><rect x="3" y="5" width="18" height="16" rx="2" /><path
+							d="M8 3v4M16 3v4M3 10h18"
+						/></svg
 					>
 				{/if}
 				<span>{item.label}</span>

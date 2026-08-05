@@ -1,43 +1,74 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { DOMAIN_NAMES, getBarColor } from '$lib/utils';
+	import ProgressRing from '$lib/components/ProgressRing.svelte';
+	import StatusChip from '$lib/components/StatusChip.svelte';
+	import { formatDate, relativeDue } from '$lib/utils';
 
-	type Progress = Record<
-		number,
-		{ attempted: number; earnedPoints: number; possiblePoints: number; percentage: number }
-	>;
+	type AssignmentView = {
+		assignment: {
+			id: string;
+			title: string;
+			kind: string;
+			points: number;
+			description: string;
+		};
+		dueDateLabel: string;
+		daysUntilDue: number;
+		status: 'open' | 'due-soon' | 'overdue' | 'in-progress' | 'submitted';
+		bestSubmission: { percentage: number } | null;
+	};
+	type ModuleView = {
+		module: { id: string; week: number; title: string; description: string };
+		lessonsCompleted: number;
+		lessonsTotal: number;
+		assignmentsSubmitted: number;
+		assignmentsTotal: number;
+	};
+	type Overview = {
+		examDate: string;
+		examDateLabel: string;
+		daysUntilExam: number;
+		readiness: {
+			score: number;
+			label: string;
+			domainMastery: number | null;
+			examAverage: number | null;
+			examCount: number;
+			passingScale: number;
+			ready: boolean;
+		};
+		gradebook: {
+			weightedPercentage: number | null;
+			letterGrade: string;
+			submittedAssignments: number;
+			totalAssignments: number;
+		};
+		modules: ModuleView[];
+		toDo: AssignmentView[];
+		recentSessions: { id: string; date: string; type: string; percentage: number }[];
+		activeSessionId: string | null;
+	};
 
-	const modes = [
-		{
-			type: 'quiz' as const,
-			title: 'Objective Quiz',
-			description: '20 focused multiple-choice questions',
-			accent: 'border-accent',
-			icon: 'quiz'
-		},
-		{
-			type: 'scenario' as const,
-			title: 'Scenario Quiz',
-			description: '10 applied security scenarios',
-			accent: 'border-accent-secondary',
-			icon: 'scenario'
-		},
-		{
-			type: 'pbq' as const,
-			title: 'PBQ Practice',
-			description: 'Hands-on performance-based questions',
-			accent: 'border-orange-500',
-			icon: 'pbq'
-		},
-		{
-			type: 'full' as const,
-			title: 'Practice Exam',
-			description: '90 questions · 90 minutes',
-			accent: 'border-accent-warm',
-			icon: 'exam'
-		}
-	];
+	let overview = $state<Overview | null>(null);
+	let error = $state('');
+
+	onMount(async () => {
+		const response = await fetch('/api/course/overview');
+		if (response.ok) overview = await response.json();
+		else error = 'Unable to load course overview.';
+	});
+
+	function kindLabel(kind: string): string {
+		return kind === 'quiz'
+			? 'Quiz'
+			: kind === 'scenario'
+				? 'Scenario'
+				: kind === 'pbq'
+					? 'PBQ'
+					: 'Full Exam';
+	}
+
 	const domainColors = [
 		'bg-accent',
 		'bg-accent-secondary',
@@ -45,179 +76,303 @@
 		'bg-success',
 		'bg-accent-warm'
 	];
-
-	let progress = $state<Progress>({});
-	let active = $state<{
-		sessionId: string;
-		type: string;
-		answeredCount: number;
-		totalQuestions: number;
-		deadlineAt?: string;
-	} | null>(null);
-
-	onMount(async () => {
-		const response = await fetch('/api/progress');
-		if (response.ok) {
-			const data = await response.json();
-			progress = data.progress;
-			active = data.activeSession;
-		}
-	});
-
-	async function abandon() {
-		if (!active) return;
-		await fetch(`/api/quiz/session/${active.sessionId}`, { method: 'DELETE' });
-		active = null;
-	}
-
-	function open(type: 'quiz' | 'scenario' | 'pbq' | 'full') {
-		goto(
-			type === 'full'
-				? '/quiz?start=1&type=full&mode=exam'
-				: `/${type === 'quiz' ? 'quiz' : type === 'scenario' ? 'scenarios' : 'pbq'}?start=1`
-		);
-	}
 </script>
 
 <div class="space-y-8">
-	<section class="py-8 text-center sm:py-12">
-		<svg
-			viewBox="0 0 48 48"
-			class="mx-auto mb-4 h-12 w-12 text-accent"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			><path d="M24 4 40 10v11c0 10.3-6.8 18.5-16 23C14.8 39.5 8 31.3 8 21V10l16-6Z" /><path
-				d="m17 24 4.5 4.5L31 19"
-			/></svg
-		>
-		<h1 class="gradient-text text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-			Security+ Practice Lab
-		</h1>
-		<p class="mx-auto mt-3 max-w-2xl text-base text-text-secondary sm:text-lg">
-			Objective-aligned MCQs, realistic scenarios, and performance-based questions for focused
-			study.
-		</p>
-	</section>
-
-	{#if active}
-		<section
-			class="glass flex flex-col gap-4 rounded-2xl border-l-4 border-l-accent-warm p-5 sm:flex-row sm:items-center sm:justify-between"
-		>
-			<div class="flex items-start gap-3">
-				<span class="mt-1.5 h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-success"></span>
-				<div>
-					<strong class="text-text-primary">Active {active.type} session</strong>
-					<p class="mt-1 text-sm text-text-muted">
-						{active.answeredCount}/{active.totalQuestions} answered
-					</p>
-				</div>
-			</div>
-			<div class="flex gap-2">
-				<button
-					class="min-h-11 rounded-xl bg-accent px-4 font-semibold text-white transition hover:brightness-110 active:scale-[0.98]"
-					onclick={() => goto(`/quiz?session=${active?.sessionId}`)}>Resume</button
-				>
-				<button
-					class="min-h-11 rounded-xl border border-border px-4 font-medium text-text-secondary transition hover:border-border-strong hover:text-text-primary"
-					onclick={abandon}>Abandon</button
-				>
-			</div>
-		</section>
-	{/if}
-
-	<section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-		{#each modes as mode}
-			<button
-				class="glass min-h-[72px] rounded-2xl border-l-4 {mode.accent} p-5 text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
-				onclick={() => open(mode.type)}
-			>
-				<div class="flex items-start gap-3">
-					<div
-						class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-surface-700 text-accent"
-					>
-						{#if mode.icon === 'quiz'}<svg
-								viewBox="0 0 24 24"
-								class="h-6 w-6"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="1.8"
-								><rect x="5" y="3" width="14" height="18" rx="2" /><path
-									d="M9 3h6v3H9zM9 11h6M9 15h4"
-								/></svg
-							>
-						{:else if mode.icon === 'scenario'}<svg
-								viewBox="0 0 24 24"
-								class="h-6 w-6 text-accent-secondary"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="1.8"
-								><path
-									d="M20 11.5a7.5 7.5 0 0 1-11.6 6.3L4 19l1.2-3.6A7.5 7.5 0 1 1 20 11.5Z"
-								/></svg
-							>
-						{:else if mode.icon === 'pbq'}<svg
-								viewBox="0 0 24 24"
-								class="h-6 w-6 text-orange-500"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="1.8"
-								><path
-									d="M8 5.5 10.5 3l2.5 2.5L15.5 3 18 5.5 15.5 8 18 10.5 15.5 13 18 15.5 15.5 18 13 15.5 10.5 18 8 15.5 5.5 18 3 15.5 5.5 13 3 10.5 5.5 8 3 5.5 5.5 3 8 5.5Z"
-								/></svg
-							>
-						{:else}<svg
-								viewBox="0 0 24 24"
-								class="h-6 w-6 text-accent-warm"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="1.8"
-								><path d="M12 3v18M3 12h18" /><circle cx="12" cy="12" r="8" /></svg
-							>{/if}
-					</div>
-					<div>
-						<div class="flex items-center gap-2">
-							<h2 class="font-semibold text-text-primary">{mode.title}</h2>
-							<span class="text-text-subtle">→</span>
-						</div>
-						<p class="mt-1 text-sm text-text-muted">{mode.description}</p>
-					</div>
-				</div>
-			</button>
-		{/each}
-	</section>
-
-	<section>
-		<div class="mb-4 flex items-center justify-between">
-			<h2 class="text-xl font-bold text-text-primary">Domain progress</h2>
-			<div class="flex items-center gap-4">
-				<a class="text-sm font-medium text-accent hover:underline" href="/history">History</a>
-				<a class="text-sm font-medium text-accent hover:underline" href="/progress">View details</a>
+	{#if error}
+		<section class="glass rounded-2xl p-6 text-danger">{error}</section>
+	{:else if !overview}
+		<div class="grid min-h-64 place-items-center">
+			<div class="text-center">
+				<span
+					class="mx-auto block h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
+				></span>
+				<p class="mt-4 text-text-secondary">Loading course…</p>
 			</div>
 		</div>
-		<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-			{#each [1, 2, 3, 4, 5] as domain}
-				{@const entry = progress[domain]}
-				{@const percentage = entry?.percentage ?? 0}
-				<div class="glass rounded-2xl p-4">
-					<div class="flex items-start gap-2">
-						<span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full {domainColors[domain - 1]}"></span>
-						<p class="min-h-10 text-xs font-medium leading-5 text-text-secondary">
-							{DOMAIN_NAMES[domain]}
+	{:else}
+		<!-- Course banner -->
+		<section
+			class="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-surface-800 via-surface-900 to-surface-800 p-6 sm:p-8"
+		>
+			<div
+				class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
+			></div>
+			<div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+				<div>
+					<p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">
+						SEC+ 701 · Course Home
+					</p>
+					<h1 class="mt-2 text-2xl font-extrabold text-text-primary sm:text-3xl">
+						CompTIA Security+ (SY0-701)
+					</h1>
+					<p class="mt-2 max-w-xl text-sm text-text-secondary sm:text-base">
+						Exam: {overview.examDateLabel}
+						<span class="mx-2 text-text-subtle">·</span>
+						<span
+							class="font-semibold {overview.daysUntilExam < 7
+								? 'text-accent-warm'
+								: 'text-text-primary'}"
+						>
+							{overview.daysUntilExam < 0
+								? `Exam passed ${-overview.daysUntilExam} days ago`
+								: overview.daysUntilExam === 0
+									? 'Exam is today'
+									: `${overview.daysUntilExam} days until the exam`}
+						</span>
+					</p>
+					<div class="mt-5 flex flex-wrap gap-3">
+						<a
+							href="/syllabus"
+							class="inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-white transition hover:brightness-110 active:scale-[0.98]"
+						>
+							<svg
+								viewBox="0 0 24 24"
+								class="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								><path
+									d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"
+								/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" /></svg
+							>
+							View syllabus
+						</a>
+						<a
+							href="/gradebook"
+							class="inline-flex h-11 items-center gap-2 rounded-xl border border-border bg-surface-800/60 px-5 text-sm font-semibold text-text-secondary transition hover:border-border-strong hover:text-text-primary"
+						>
+							<svg
+								viewBox="0 0 24 24"
+								class="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" /></svg
+							>
+							Gradebook
+						</a>
+					</div>
+				</div>
+				<div class="flex items-center gap-6">
+					<div class="text-center">
+						<ProgressRing
+							value={overview.readiness.score}
+							size={120}
+							stroke={12}
+							label="Readiness"
+						/>
+						<p
+							class="mt-2 text-sm font-semibold {overview.readiness.ready
+								? 'text-success'
+								: 'text-accent-warm'}"
+						>
+							{overview.readiness.label}
+						</p>
+						<p class="mt-1 text-xs text-text-muted">
+							Projected scaled score: {overview.readiness.passingScale}/900
 						</p>
 					</div>
-					<p class="mt-3 text-3xl font-bold text-text-primary">{percentage}%</p>
-					<div class="mt-3 h-1.5 overflow-hidden rounded-full bg-surface-600">
-						<div
-							class="animate-progress h-full rounded-full {getBarColor(percentage)}"
-							style={`width: ${percentage}%`}
-						></div>
+					<div class="hidden h-24 w-px bg-border sm:block"></div>
+					<div class="text-center">
+						<p class="text-3xl font-extrabold text-text-primary">
+							{overview.gradebook.letterGrade}
+						</p>
+						<p class="mt-1 text-xs text-text-muted">Course grade</p>
+						<p class="mt-2 text-sm font-semibold text-text-secondary">
+							{overview.gradebook.submittedAssignments}/{overview.gradebook.totalAssignments} assignments
+						</p>
 					</div>
-					<p class="mt-2 text-xs text-text-muted">
-						{entry?.earnedPoints ?? 0}/{entry?.possiblePoints ?? 0} points
-					</p>
 				</div>
-			{/each}
+			</div>
+		</section>
+
+		<!-- To-do + readiness panel -->
+		<div class="grid gap-6 lg:grid-cols-3">
+			<section class="glass rounded-2xl p-5 sm:p-6 lg:col-span-2">
+				<div class="flex items-center justify-between">
+					<h2 class="flex items-center gap-2 text-lg font-bold text-text-primary">
+						<svg
+							viewBox="0 0 24 24"
+							class="h-5 w-5 text-accent"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg
+						>
+						What's due
+					</h2>
+					<a class="text-sm font-medium text-accent hover:underline" href="/calendar">Calendar →</a>
+				</div>
+				{#if overview.toDo.length === 0}
+					<p class="mt-5 rounded-xl bg-success/10 p-4 text-sm text-success">
+						🎉 Everything is submitted. Great work — keep the momentum with a practice session.
+					</p>
+				{:else}
+					<div class="mt-4 space-y-2">
+						{#each overview.toDo as item (item.assignment.id)}
+							<a
+								href="/assignments/{item.assignment.id}"
+								class="flex items-center justify-between gap-3 rounded-xl bg-surface-700/50 p-3.5 transition hover:bg-surface-700/80"
+							>
+								<div class="flex min-w-0 items-center gap-3">
+									<span
+										class="shrink-0 rounded-lg bg-surface-800 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-text-muted"
+										>{kindLabel(item.assignment.kind)}</span
+									>
+									<div class="min-w-0">
+										<p class="truncate text-sm font-semibold text-text-primary">
+											{item.assignment.title}
+										</p>
+										<p
+											class="mt-0.5 text-xs {item.daysUntilDue < 0
+												? 'text-danger'
+												: item.daysUntilDue <= 2
+													? 'text-accent-warm'
+													: 'text-text-muted'}"
+										>
+											{relativeDue(item.daysUntilDue)} · {item.assignment.points} pts
+										</p>
+									</div>
+								</div>
+								<StatusChip status={item.status} />
+							</a>
+						{/each}
+					</div>
+				{/if}
+			</section>
+
+			<section class="glass rounded-2xl p-5 sm:p-6">
+				<h2 class="text-lg font-bold text-text-primary">Exam readiness</h2>
+				<div class="mt-4 space-y-4">
+					<div>
+						<div class="flex justify-between text-sm">
+							<span class="text-text-muted">Domain mastery</span>
+							<span class="font-semibold text-text-secondary"
+								>{overview.readiness.domainMastery ?? '—'}%</span
+							>
+						</div>
+						<div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-600">
+							<div
+								class="h-full rounded-full bg-info"
+								style="width: {overview.readiness.domainMastery ?? 0}%"
+							></div>
+						</div>
+					</div>
+					<div>
+						<div class="flex justify-between text-sm">
+							<span class="text-text-muted">Full-exam average</span>
+							<span class="font-semibold text-text-secondary"
+								>{overview.readiness.examAverage ?? '—'}%</span
+							>
+						</div>
+						<div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-600">
+							<div
+								class="h-full rounded-full bg-accent-secondary"
+								style="width: {overview.readiness.examAverage ?? 0}%"
+							></div>
+						</div>
+					</div>
+					{#if overview.readiness.examCount === 0}
+						<p class="rounded-xl bg-surface-700/60 p-3 text-xs text-text-muted">
+							No full-length exams yet. Take one to unlock a reliable readiness estimate — target
+							85%+.
+						</p>
+					{:else if !overview.readiness.ready}
+						<p class="rounded-xl bg-surface-700/60 p-3 text-xs text-text-muted">
+							Keep pushing — you need <strong class="text-text-secondary">83.3%</strong> (750/900) to
+							pass. Focus on your weak objectives and retake a full exam.
+						</p>
+					{:else}
+						<p class="rounded-xl bg-success/10 p-3 text-xs text-success">
+							You're scoring above the passing threshold. Keep the streak and book that exam!
+						</p>
+					{/if}
+					<a
+						href="/quiz?start=1&type=full&mode=exam"
+						class="block h-11 rounded-xl bg-gradient-to-r from-accent to-accent-secondary text-center font-semibold leading-[44px] text-white transition hover:brightness-110"
+						>Take a full exam now</a
+					>
+				</div>
+			</section>
 		</div>
-	</section>
+
+		<!-- Modules -->
+		<section>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-xl font-bold text-text-primary">Course modules</h2>
+				<a class="text-sm font-medium text-accent hover:underline" href="/syllabus">Full syllabus</a
+				>
+			</div>
+			<div class="grid gap-4 md:grid-cols-2">
+				{#each overview.modules as module (module.module.id)}
+					<a
+						href="/modules/{module.module.id}"
+						class="glass group rounded-2xl p-5 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg"
+					>
+						<div class="flex items-start justify-between gap-3">
+							<div class="flex items-center gap-3">
+								<span
+									class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-surface-700 text-sm font-bold text-accent"
+									>W{module.module.week}</span
+								>
+								<div>
+									<h3 class="font-semibold text-text-primary group-hover:text-accent">
+										{module.module.title}
+									</h3>
+									<p class="mt-0.5 text-xs text-text-muted">
+										{module.lessonsCompleted}/{module.lessonsTotal} lessons · {module.assignmentsSubmitted}/{module.assignmentsTotal}
+										assignments
+									</p>
+								</div>
+							</div>
+							<span class="text-text-subtle transition group-hover:text-accent">→</span>
+						</div>
+						<p class="mt-3 line-clamp-2 text-xs leading-5 text-text-secondary">
+							{module.module.description}
+						</p>
+						<div class="mt-4 h-1.5 overflow-hidden rounded-full bg-surface-600">
+							<div
+								class="animate-progress h-full rounded-full bg-gradient-to-r from-accent to-accent-secondary"
+								style="width: {module.assignmentsTotal
+									? (module.assignmentsSubmitted / module.assignmentsTotal) * 100
+									: 0}%"
+							></div>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</section>
+
+		<!-- Recent sessions -->
+		{#if overview.recentSessions.length}
+			<section class="glass rounded-2xl p-5 sm:p-6">
+				<div class="flex items-center justify-between">
+					<h2 class="text-lg font-bold text-text-primary">Recent sessions</h2>
+					<a class="text-sm font-medium text-accent hover:underline" href="/history">View all</a>
+				</div>
+				<div class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+					{#each overview.recentSessions as session (session.id)}
+						<a
+							href="/history/{session.id}"
+							class="flex items-center justify-between rounded-xl bg-surface-700/50 p-3 transition hover:bg-surface-700/80"
+						>
+							<div class="flex items-center gap-3">
+								<span
+									class="rounded-full bg-surface-800 px-2.5 py-1 text-xs font-medium text-text-secondary"
+									>{kindLabel(session.type)}</span
+								>
+								<span class="text-sm text-text-muted">{formatDate(session.date)}</span>
+							</div>
+							<span
+								class="text-sm font-semibold {session.percentage >= 85
+									? 'text-success'
+									: session.percentage >= 60
+										? 'text-accent-warm'
+										: 'text-danger'}">{session.percentage}%</span
+							>
+						</a>
+					{/each}
+				</div>
+			</section>
+		{/if}
+	{/if}
 </div>
