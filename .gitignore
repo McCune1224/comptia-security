@@ -1,0 +1,6 @@
+# Linked git worktrees (repo-local metadata, not content)
+.worktrees/
+
+# Python
+__pycache__/
+*.pyc

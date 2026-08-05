@@ -39,9 +39,12 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   - `quiz` (6) — 20-question objective quizzes, 30% weight
   - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
   - `full` (4) — 90-question timed full exams + week-1 checkpoint, 50% weight
+- **Question bank:** 280 MCQs (40/60/52/72/56 across Domains 1–5, all scenario-format) + 50 PBQs
+  (matching, ordering, evidence, configuration, numeric, multi-step). Bank expansion scripts live in
+  `web/scripts/expand-d*.py` + `expand-pbqs.py`; `bank-lib.py` merges them idempotently.
 - **Scheduling:** every assignment has a `dueOffsetDays` (negative = days before exam). The exam
-  date lives in `course_meta` (`exam_date`, default: today + 28 days) and can be changed from the
-  Syllabus page — changing it reschedules every due date.
+  date lives in `course_meta` (`exam_date`, default: **last day of the current month**) and can be
+  changed from the Syllabus page — changing it reschedules every due date.
 
 ### Gradebook
 

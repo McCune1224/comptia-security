@@ -89,11 +89,11 @@ const objectivesByDomain: Record<Domain, ObjectiveId[]> = {
 };
 
 const mcqObjectiveTotals: Record<ObjectiveId, number> = {
-	'1.1': 6, '1.2': 6, '1.3': 6, '1.4': 6,
-	'2.1': 8, '2.2': 9, '2.3': 9, '2.4': 9, '2.5': 9,
-	'3.1': 9, '3.2': 9, '3.3': 9, '3.4': 9,
-	'4.1': 6, '4.2': 6, '4.3': 6, '4.4': 6, '4.5': 7, '4.6': 6, '4.7': 6, '4.8': 7, '4.9': 6,
-	'5.1': 7, '5.2': 7, '5.3': 7, '5.4': 7, '5.5': 6, '5.6': 6
+	'1.1': 10, '1.2': 10, '1.3': 10, '1.4': 10,
+	'2.1': 12, '2.2': 12, '2.3': 12, '2.4': 12, '2.5': 12,
+	'3.1': 13, '3.2': 13, '3.3': 13, '3.4': 13,
+	'4.1': 8, '4.2': 8, '4.3': 8, '4.4': 8, '4.5': 9, '4.6': 8, '4.7': 8, '4.8': 8, '4.9': 7,
+	'5.1': 9, '5.2': 9, '5.3': 9, '5.4': 9, '5.5': 10, '5.6': 10
 };
 
 function fail(id: string, message: string): never {
@@ -105,14 +105,14 @@ function hasUniqueIds(items: { id: string }[]): boolean {
 }
 
 export function validateQuestionBank(bank: QuestionBank): void {
-	if (bank.mcqs.length !== 200) fail('mcqs', `expected 200 items, found ${bank.mcqs.length}`);
-	if (bank.pbqs.length !== 30) fail('pbqs', `expected 30 items, found ${bank.pbqs.length}`);
+	if (bank.mcqs.length !== 280) fail('mcqs', `expected 280 items, found ${bank.mcqs.length}`);
+	if (bank.pbqs.length !== 50) fail('pbqs', `expected 50 items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
 	if (new Set(all.map((question) => question.prompt.trim())).size !== all.length) fail('bank', 'prompts must be unique');
-	const mcqDomainTotals: Record<Domain, number> = { 1: 24, 2: 44, 3: 36, 4: 56, 5: 40 };
-	const multiTotals: Record<Domain, number> = { 1: 4, 2: 7, 3: 4, 4: 8, 5: 6 };
-	const scenarioTotals: Record<Domain, number> = { 1: 24, 2: 44, 3: 36, 4: 56, 5: 40 };
+	const mcqDomainTotals: Record<Domain, number> = { 1: 40, 2: 60, 3: 52, 4: 72, 5: 56 };
+	const multiTotals: Record<Domain, number> = { 1: 4, 2: 9, 3: 6, 4: 9, 5: 6 };
+	const scenarioTotals: Record<Domain, number> = { 1: 40, 2: 60, 3: 52, 4: 72, 5: 56 };
 	for (const domain of [1, 2, 3, 4, 5] as Domain[]) {
 		const mcqs = bank.mcqs.filter((question) => question.domain === domain);
 		if (mcqs.length !== mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected ${mcqDomainTotals[domain]} items`);

@@ -199,8 +199,9 @@ describe('CourseService', () => {
 		expect(overview.toDo.length).toBeGreaterThan(0);
 		expect(overview.examDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 		expect(overview.gradebook.totalAssignments).toBe(12);
-		// Default exam date is 28 days out.
-		expect(overview.daysUntilExam).toBeGreaterThanOrEqual(27);
+		// Default exam date is the end of the current month.
+		expect(overview.daysUntilExam).toBeGreaterThanOrEqual(0);
+		expect(overview.daysUntilExam).toBeLessThanOrEqual(31);
 		repository.close();
 	});
 
@@ -265,8 +266,10 @@ describe('CourseService', () => {
 		repository.close();
 	});
 
-	it('defaults the exam date to 28 days from now', () => {
+	it('defaults the exam date to the end of the current month', () => {
 		const date = defaultExamDate(new Date('2026-08-01T12:00:00.000Z'));
-		expect(date).toBe('2026-08-29');
+		expect(date).toBe('2026-08-31');
+		expect(defaultExamDate(new Date('2026-12-15T12:00:00.000Z'))).toBe('2026-12-31');
+		expect(defaultExamDate(new Date('2027-02-10T12:00:00.000Z'))).toBe('2027-02-28');
 	});
 });

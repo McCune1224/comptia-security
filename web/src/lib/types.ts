@@ -43,7 +43,7 @@ export type SessionStatus = 'active' | 'completed' | 'abandoned';
 export type QuestionFormat = 'standard' | 'scenario' | 'pbq';
 
 export interface SourceRef {
-	source: 'exam-objectives' | 'study-guide';
+	source: 'exam-objectives' | 'study-guide' | 'nist' | 'owasp' | 'mitre' | 'comptia' | 'cisa';
 	section: string;
 }
 

@@ -33,7 +33,7 @@ SY0-701 (2026 refresh) — 5 domains:
 | 4.0 Security Operations | 28% |
 | 5.0 Security Program Management & Oversight | 20% |
 
-90 max questions, 85 min, 750/900 to pass.
+90 max questions, 90 min, 750/900 to pass.
 
 ## Study Materials Available in This Vault
 
