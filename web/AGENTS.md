@@ -39,10 +39,15 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   - `quiz` (6) — 20-question objective quizzes, 30% weight
   - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
   - `full` (4) — 90-question timed full exams + week-1 checkpoint, 50% weight
-- **Question bank:** 300 MCQs (45/66/55/77/57 across Domains 1–5, all scenario-format) + 73 PBQs
+- **Question bank:** 300 MCQs (45/66/55/77/57 across Domains 1–5, all scenario-format) + 88 PBQs
   (matching, ordering, evidence, configuration, numeric, multi-step, **fill-blank**, **word-bank**).
   Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`, `expand-interactive.py`,
-  `expand-exam-aligned.py`; `bank-lib.py` merges them idempotently.
+  `expand-exam-aligned.py`, `expand-pbqs-exam-style.py`; `bank-lib.py` merges them idempotently.
+  PBQ coverage spans all 28 objectives; real-exam formats include firewall ACL rule ordering,
+  certificate-type matching, crypto-algorithm selection, SQLi/Windows-event log analysis,
+  vulnerability-scan prioritization, device-placement/segmentation, least-privilege permissions,
+  MFA/SSO configuration, SOAR/automation matching, investigation data sources, sensitive-data
+  handling, and recovery metrics.
 - **Interactive kinds:** `fill-blank` (typed recall, case/whitespace-insensitive, partial credit per
   blank; `____` markers in the prompt, one per blank) and `word-bank` (sentence blanks + word chips
   with distractors, click-to-fill, partial credit per assignment). Both also work as multi-step

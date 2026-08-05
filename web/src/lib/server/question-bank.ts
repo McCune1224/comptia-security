@@ -124,7 +124,7 @@ function hasUniqueIds(items: { id: string }[]): boolean {
 
 export function validateQuestionBank(bank: QuestionBank): void {
 	if (bank.mcqs.length !== 300) fail('mcqs', `expected 300 items, found ${bank.mcqs.length}`);
-	if (bank.pbqs.length !== 73) fail('pbqs', `expected 73 items, found ${bank.pbqs.length}`);
+	if (bank.pbqs.length !== 88) fail('pbqs', `expected 88 items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
 	if (new Set(all.map((question) => question.prompt.trim())).size !== all.length) fail('bank', 'prompts must be unique');
