@@ -92,6 +92,12 @@ Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `cour
 | `PUT`  | `/api/quiz/answer` | Save answer (practice returns feedback) |
 | `POST` | `/api/quiz/complete` | Finalize; records assignment submission when linked |
 | `GET`  | `/api/progress`, `/api/history`, `/api/cards`, `/api/sync` | Legacy analytics/tools |
+| `GET`  | `/api/calendar/google/status` | Google Calendar connection status (`configured`, `connected`, `email`, `syncedCount`, `lastSyncAt`) |
+| `GET`  | `/api/calendar/google/auth-url` | Starts OAuth: returns auth URL, sets `gcal_oauth_state` cookie (PKCE + state) |
+| `GET`  | `/api/calendar/google/callback` | OAuth callback: exchanges code, stores token, redirects to `/calendar?connected=1` |
+| `GET`  | `/api/calendar/google/events?start&end` | Merged events from the user's visible calendars (server-side proxy) |
+| `POST` | `/api/calendar/google/sync` | Pushes exam + assignment deadlines into the "Security+ Prep" calendar (create/update/delete) |
+| `POST` | `/api/calendar/google/disconnect` | Clears the stored OAuth token + sync tracking |
 
 ## Frontend Pages (Svelte 5 runes, Tailwind CSS v4)
 
@@ -102,7 +108,7 @@ Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `cour
 | `/modules/[id]` | `src/routes/modules/[id]/+page.svelte` | Module detail — lessons (expandable, mark read) + assignments |
 | `/assignments/[id]` | `src/routes/assignments/[id]/+page.svelte` | Assignment detail — due date, status, best submission, launch |
 | `/gradebook` | `src/routes/gradebook/+page.svelte` | Weighted grade, letter grade, category breakdown, per-assignment table |
-| `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Up next" list |
+| `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`) |
 | `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment |
 | `/progress` `/history` | existing | Legacy analytics |
 

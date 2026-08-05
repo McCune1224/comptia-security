@@ -14,6 +14,22 @@ type SessionRow = {
 };
 type StateRow = { deadline_at: string | null; current_index: number; questions_json: string; result_json: string | null };
 
+export interface StoredGoogleOAuth {
+	accessToken: string;
+	refreshToken: string;
+	expiresAt: number; // epoch ms
+	email: string;
+	calendarId: string | null;
+}
+
+export interface StoredSyncedEvent {
+	source: string;
+	eventId: string;
+	summary: string;
+	dueDate: string;
+	syncedAt: string;
+}
+
 export interface StoredSession {
 	summary: SessionRow;
 	deadlineAt: string | null;
@@ -45,6 +61,12 @@ export interface QuizRepository {
 	setLessonCompleted(lessonId: string, completed: boolean): void;
 	getSubmissions(): SubmissionRecord[];
 	recordSubmission(submission: SubmissionRecord): void;
+	getGoogleOAuth(): StoredGoogleOAuth | null;
+	saveGoogleOAuth(oauth: { accessToken: string; refreshToken: string; expiresAt: number; email: string; calendarId?: string | null }): void;
+	clearGoogleOAuth(): void;
+	getSyncedEvents(): StoredSyncedEvent[];
+	recordSyncedEvent(source: string, eventId: string, summary: string, dueDate: string, syncedAt: string): void;
+	removeSyncedEvent(source: string): void;
 	close(): void;
 }
 
@@ -98,12 +120,14 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_assignments (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, kind TEXT NOT NULL, category TEXT NOT NULL, points REAL NOT NULL, count INTEGER NOT NULL, domain INTEGER, mode TEXT NOT NULL, duration_minutes INTEGER NOT NULL, due_offset_days INTEGER NOT NULL, position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_assignment_submissions (assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (assignment_id, session_id));
-		CREATE TABLE IF NOT EXISTS course_lesson_completions (lesson_id TEXT PRIMARY KEY, completed_at TEXT NOT NULL);`);
+		CREATE TABLE IF NOT EXISTS course_lesson_completions (lesson_id TEXT PRIMARY KEY, completed_at TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS google_oauth (id INTEGER PRIMARY KEY CHECK (id = 1), access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS google_synced_events (source TEXT PRIMARY KEY, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL);`);
 		db.prepare("UPDATE quiz_sessions SET mode = COALESCE(NULLIF(mode, ''), 'practice'), status = CASE WHEN completed_at IS NOT NULL THEN 'completed' WHEN id NOT IN (SELECT session_id FROM quiz_session_state) THEN 'abandoned' ELSE 'active' END, points_earned = CASE WHEN completed_at IS NOT NULL THEN correct_answers ELSE points_earned END, points_possible = CASE WHEN completed_at IS NOT NULL THEN total_questions ELSE points_possible END, updated_at = COALESCE(NULLIF(updated_at, ''), started_at)").run();
 		db.prepare('UPDATE quiz_answers SET points_earned = is_correct, points_possible = 1 WHERE points_possible = 0').run();
-		db.pragma('user_version = 3');
+		db.pragma('user_version = 4');
 	});
-	if (db.pragma('user_version', { simple: true }) !== 3) migrate();
+	if (db.pragma('user_version', { simple: true }) !== 4) migrate();
 	seedCourse(db);
 	const readSession = (id: string): StoredSession | null => {
 		const row = db.prepare('SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ?').get(id) as (SessionRow & StateRow) | undefined;
@@ -155,6 +179,20 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		setLessonCompleted(lessonId, completed) { if (completed) db.prepare('INSERT INTO course_lesson_completions (lesson_id, completed_at) VALUES (?, ?) ON CONFLICT(lesson_id) DO UPDATE SET completed_at = excluded.completed_at').run(lessonId, new Date().toISOString()); else db.prepare('DELETE FROM course_lesson_completions WHERE lesson_id = ?').run(lessonId); },
 		getSubmissions() { return db.prepare('SELECT assignment_id AS assignmentId, session_id AS sessionId, earned, percentage, completed_at AS completedAt FROM course_assignment_submissions').all() as unknown as SubmissionRecord[]; },
 		recordSubmission(submission) { db.prepare('INSERT INTO course_assignment_submissions (assignment_id, session_id, earned, percentage, completed_at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(assignment_id, session_id) DO UPDATE SET earned = excluded.earned, percentage = excluded.percentage, completed_at = excluded.completed_at').run(submission.assignmentId, submission.sessionId, submission.earned, submission.percentage, submission.completedAt); },
+		getGoogleOAuth() {
+			const row = db
+				.prepare('SELECT access_token AS accessToken, refresh_token AS refreshToken, expires_at AS expiresAt, email, calendar_id AS calendarId FROM google_oauth WHERE id = 1')
+				.get() as StoredGoogleOAuth | undefined;
+			return row ?? null;
+		},
+		saveGoogleOAuth(oauth) {
+			const now = new Date().toISOString();
+			db.prepare('INSERT INTO google_oauth (id, access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at) VALUES (1, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET access_token = excluded.access_token, refresh_token = excluded.refresh_token, expires_at = excluded.expires_at, email = excluded.email, calendar_id = COALESCE(excluded.calendar_id, google_oauth.calendar_id), updated_at = excluded.updated_at').run(oauth.accessToken, oauth.refreshToken, oauth.expiresAt, oauth.email, oauth.calendarId ?? null, now, now);
+		},
+		clearGoogleOAuth() { db.prepare('DELETE FROM google_oauth WHERE id = 1').run(); },
+		getSyncedEvents() { return db.prepare('SELECT source, event_id AS eventId, summary, due_date AS dueDate, synced_at AS syncedAt FROM google_synced_events ORDER BY source').all() as StoredSyncedEvent[]; },
+		recordSyncedEvent(source, eventId, summary, dueDate, syncedAt) { db.prepare('INSERT INTO google_synced_events (source, event_id, summary, due_date, synced_at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(source) DO UPDATE SET event_id = excluded.event_id, summary = excluded.summary, due_date = excluded.due_date, synced_at = excluded.synced_at').run(source, eventId, summary, dueDate, syncedAt); },
+		removeSyncedEvent(source) { db.prepare('DELETE FROM google_synced_events WHERE source = ?').run(source); },
 		close() { db.close(); }
 	};
 }
