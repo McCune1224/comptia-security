@@ -1,0 +1,1599 @@
+{
+  "mcqs": [
+    {
+      "id": "a2-3-001",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A Windows 11 PC shows a blue screen with the stop code DRIVER_IRQL_NOT_LESS_OR_EQUAL immediately after installing a new GPU driver. What is the MOST likely cause?",
+      "context": "A BSOD with a driver-related stop code occurred after a GPU driver install.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The newly installed GPU driver is faulty",
+          "rationale": "The stop code and the timing (right after a driver install) point directly to the new GPU driver."
+        },
+        {
+          "id": "b",
+          "text": "The hard drive is full",
+          "rationale": "A full drive causes slow performance and write failures, not this stop code."
+        },
+        {
+          "id": "c",
+          "text": "The system time is incorrect",
+          "rationale": "Incorrect time causes certificate and sync issues, not BSODs."
+        },
+        {
+          "id": "d",
+          "text": "The display brightness is too high",
+          "rationale": "Brightness is a display setting, unrelated to stop codes."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "DRIVER_IRQL_NOT_LESS_OR_EQUAL is a driver fault; occurring right after a GPU driver install makes the new driver the prime suspect. Roll back the driver in Device Manager or safe mode.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-002",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A user reports their Windows PC takes several minutes to become usable after sign-in. Which tool shows which programs are slowing startup?",
+      "context": "Windows startup is slow; startup programs must be identified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Task Manager (Startup tab)",
+          "rationale": "Task Manager's Startup tab lists each startup app with its impact — the tool for diagnosing slow sign-in."
+        },
+        {
+          "id": "b",
+          "text": "Disk Management",
+          "rationale": "Disk Management handles partitions, not startup apps."
+        },
+        {
+          "id": "c",
+          "text": "Event Viewer",
+          "rationale": "Event Viewer logs events; it does not show startup impact."
+        },
+        {
+          "id": "d",
+          "text": "Performance Monitor",
+          "rationale": "Performance Monitor tracks counters; Task Manager is the direct startup tool."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Task Manager > Startup shows startup applications and their boot impact, allowing users to disable the offenders (msconfig's Startup tab is legacy).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-003",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "An application fails to launch with an error about a missing DLL file. Which is the BEST first step?",
+      "context": "An app fails with a missing-DLL error.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reinstall the application",
+          "rationale": "Reinstalling restores the missing DLL and its dependencies — the standard first fix for missing-file errors."
+        },
+        {
+          "id": "b",
+          "text": "Delete the application's registry keys",
+          "rationale": "Deleting registry keys breaks the app further."
+        },
+        {
+          "id": "c",
+          "text": "Format the hard drive",
+          "rationale": "Formatting is drastic and unrelated to a single missing DLL."
+        },
+        {
+          "id": "d",
+          "text": "Increase virtual memory",
+          "rationale": "Virtual memory relates to RAM exhaustion, not missing DLLs."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Missing-DLL errors are usually a broken installation — reinstalling the application (or its required runtime) restores the file. Registry deletion and formatting are harmful overreactions.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-004",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user receives an alert that someone logged into their account from a different country at 3 AM. The user was asleep. What is the BEST immediate action?",
+      "context": "An account shows a suspicious login from another country at night.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Change the password and enable MFA immediately",
+          "rationale": "A suspicious login means the account is compromised — change credentials and add MFA right away."
+        },
+        {
+          "id": "b",
+          "text": "Ignore the alert",
+          "rationale": "Ignoring a compromise leaves the account exposed."
+        },
+        {
+          "id": "c",
+          "text": "Reply to the alert email asking for details",
+          "rationale": "Alert emails may be phishing; never reply with details."
+        },
+        {
+          "id": "d",
+          "text": "Format the hard drive",
+          "rationale": "Formatting the drive does not secure the online account."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An unrecognized login indicates account compromise: change the password, enable MFA, review active sessions, and report the incident. Never ignore or reply to alert emails.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-005",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A user's Windows profile is corrupted: their desktop icons, settings, and files appear missing. Which approach preserves the user's data while fixing the profile?",
+      "context": "A corrupted user profile hides desktop icons, settings, and files.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create a new user profile and copy data from the old profile folder",
+          "rationale": "Creating a fresh profile and migrating the user's data from the old profile folder restores access without data loss."
+        },
+        {
+          "id": "b",
+          "text": "Format the hard drive",
+          "rationale": "Formatting destroys the data."
+        },
+        {
+          "id": "c",
+          "text": "Disable the user account",
+          "rationale": "Disabling the account blocks access entirely."
+        },
+        {
+          "id": "d",
+          "text": "Change the system theme",
+          "rationale": "Themes do not fix corrupted profiles."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A corrupted profile is fixed by creating a new profile and copying data (Desktop, Documents, etc.) from the old profile folder. Data is preserved, and the new profile loads cleanly.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-006",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A technician needs to verify whether protected system files are corrupted on a Windows PC. Which command performs this check?",
+      "context": "Protected system file integrity must be verified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "sfc /scannow",
+          "rationale": "sfc /scannow scans and repairs protected system files — the integrity check command."
+        },
+        {
+          "id": "b",
+          "text": "ipconfig /all",
+          "rationale": "ipconfig shows network configuration."
+        },
+        {
+          "id": "c",
+          "text": "netstat -a",
+          "rationale": "netstat lists connections and ports."
+        },
+        {
+          "id": "d",
+          "text": "gpresult",
+          "rationale": "gpresult shows applied Group Policy."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "sfc /scannow (System File Checker) verifies and repairs protected system files. If the component store itself is corrupt, DISM /RestoreHealth must repair it first.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-007",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A Windows PC reports 'Low memory' warnings while the user runs several applications. Which TWO actions can relieve the memory pressure?",
+      "context": "Windows shows low-memory warnings under heavy app load.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Close unused applications",
+          "rationale": "Closing unused apps frees RAM immediately."
+        },
+        {
+          "id": "b",
+          "text": "Add more physical RAM",
+          "rationale": "Adding RAM increases available memory — the hardware fix for chronic pressure."
+        },
+        {
+          "id": "c",
+          "text": "Disable the page file",
+          "rationale": "Disabling the page file removes virtual-memory headroom, worsening the problem."
+        },
+        {
+          "id": "d",
+          "text": "Increase the display resolution",
+          "rationale": "Resolution affects GPU, not system RAM pressure."
+        },
+        {
+          "id": "e",
+          "text": "Defragment the hard drive",
+          "rationale": "Defragmentation reorganizes disk data; it does not free memory."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Low-memory warnings are addressed by closing apps (immediate) and adding RAM (permanent). Disabling the page file removes virtual-memory headroom and makes things worse.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-008",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A user's desktop icons and taskbar disappear and Windows Explorer keeps restarting. Which action restarts the shell cleanly?",
+      "context": "Explorer crashes repeatedly; desktop icons and taskbar vanish.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Restart the explorer.exe process in Task Manager",
+          "rationale": "Ending and restarting explorer.exe reloads the shell — the direct fix for a crashed desktop."
+        },
+        {
+          "id": "b",
+          "text": "Disable the network adapter",
+          "rationale": "Networking is unrelated to the Explorer shell crash."
+        },
+        {
+          "id": "c",
+          "text": "Change the desktop wallpaper",
+          "rationale": "Wallpaper changes do not fix shell crashes."
+        },
+        {
+          "id": "d",
+          "text": "Run a disk defragmenter",
+          "rationale": "Defragmentation is unrelated to Explorer stability."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Explorer.exe is the Windows shell; when it crashes, ending and restarting the process from Task Manager restores the desktop, taskbar, and icons.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-009",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A user's phone displays an app requesting access to the microphone even when the app is closed. Which mobile security concern does this raise?",
+      "context": "An app requests microphone access while not in use.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Unauthorized access to sensitive device features",
+          "rationale": "Microphone access while unused indicates an overprivileged or malicious app — a privacy/security concern."
+        },
+        {
+          "id": "b",
+          "text": "The battery needs calibration",
+          "rationale": "Battery calibration is unrelated to microphone permissions."
+        },
+        {
+          "id": "c",
+          "text": "The screen digitizer is faulty",
+          "rationale": "Digitizer faults affect touch, not permissions."
+        },
+        {
+          "id": "d",
+          "text": "The phone is due for an OS update",
+          "rationale": "Updates do not cause permission requests."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Apps requesting sensitive permissions (microphone, camera, location) without a clear need are a security concern — review permissions and revoke or uninstall the app.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-010",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A mobile app freezes and crashes repeatedly on a user's phone. Which TWO steps should the technician try FIRST?",
+      "context": "A mobile app crashes and freezes repeatedly.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Force-stop the app and restart it",
+          "rationale": "Force-stopping clears the app's crashed state — the first troubleshooting step."
+        },
+        {
+          "id": "b",
+          "text": "Update the app to the latest version",
+          "rationale": "Updates fix known bugs — a standard early step for app crashes."
+        },
+        {
+          "id": "c",
+          "text": "Factory-reset the phone immediately",
+          "rationale": "A factory reset is a last resort, not a first step."
+        },
+        {
+          "id": "d",
+          "text": "Replace the phone's battery",
+          "rationale": "Battery replacement addresses battery issues, not app crashes."
+        },
+        {
+          "id": "e",
+          "text": "Uninstall the operating system",
+          "rationale": "Uninstalling the OS destroys the device software."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "App crashes are first addressed by force-stopping/restarting and updating the app. Factory resets and hardware replacement are last resorts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-011",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A user's phone battery drains unusually fast even when idle. Which setting is the MOST likely contributor?",
+      "context": "A phone battery drains fast while idle.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Background app refresh and location services",
+          "rationale": "Background refresh, location, and push sync are the main idle-time battery drains."
+        },
+        {
+          "id": "b",
+          "text": "The screen timeout set to 15 seconds",
+          "rationale": "A SHORT screen timeout saves battery; it is not the drain."
+        },
+        {
+          "id": "c",
+          "text": "Airplane mode enabled",
+          "rationale": "Airplane mode disables radios and SAVES battery."
+        },
+        {
+          "id": "d",
+          "text": "Low screen brightness",
+          "rationale": "Low brightness saves battery."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Background app refresh, location services, and push sync consume battery while idle. Disabling unnecessary background activity is the fix.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-012",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A user cannot install a new app and receives a 'storage full' error, but the phone's photo gallery looks empty. What is the MOST likely explanation?",
+      "context": "An app install fails with a storage-full error despite an empty-looking gallery.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hidden caches and large media files are consuming the storage",
+          "rationale": "App caches, downloaded media, and hidden files can consume storage even when galleries look empty."
+        },
+        {
+          "id": "b",
+          "text": "The phone needs a new battery",
+          "rationale": "Battery health is unrelated to storage errors."
+        },
+        {
+          "id": "c",
+          "text": "The screen brightness is too low",
+          "rationale": "Brightness does not affect storage."
+        },
+        {
+          "id": "d",
+          "text": "The phone is not connected to Wi-Fi",
+          "rationale": "Wi-Fi affects downloads, not storage capacity."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Storage-full errors with empty-looking galleries usually mean hidden caches, large downloads, or undeleted media are consuming space. Check storage settings and clear caches.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-013",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A user's phone cannot connect to a previously working Wi-Fi network. Which step should be tried FIRST?",
+      "context": "A phone cannot connect to a previously working Wi-Fi network.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Toggle Wi-Fi off and on (or airplane mode)",
+          "rationale": "Toggling the radio re-initiates the connection — the quickest first step."
+        },
+        {
+          "id": "b",
+          "text": "Factory-reset the phone",
+          "rationale": "A factory reset is a drastic last resort."
+        },
+        {
+          "id": "c",
+          "text": "Replace the SIM card",
+          "rationale": "The SIM affects cellular, not Wi-Fi."
+        },
+        {
+          "id": "d",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness is unrelated to connectivity."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Toggle the Wi-Fi radio first; if that fails, forget and re-add the network. Factory resets and SIM replacements are last resorts or unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-014",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A user's phone contacts and calendar stopped syncing after a password change. What is the MOST likely cause?",
+      "context": "Contacts/calendar sync stopped after a password change.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The account credentials need to be re-entered",
+          "rationale": "After a password change, the phone's stored credentials are stale and must be updated — the standard cause."
+        },
+        {
+          "id": "b",
+          "text": "The screen is cracked",
+          "rationale": "Display damage does not stop cloud sync."
+        },
+        {
+          "id": "c",
+          "text": "The battery is swelling",
+          "rationale": "Battery issues do not stop account sync."
+        },
+        {
+          "id": "d",
+          "text": "The phone needs a new SIM",
+          "rationale": "The SIM does not affect account sync."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "When an account password changes, devices with stored credentials fail to sync until the new password is entered (or OAuth re-authorized).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-015",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "An Android user's phone shows an app using an excessive amount of battery in the settings. Which action directly limits the app's background battery use?",
+      "context": "An app consumes excessive background battery on Android.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Restrict the app's background activity",
+          "rationale": "Restricting background activity stops the app from running/syncing in the background — the direct fix."
+        },
+        {
+          "id": "b",
+          "text": "Increase the screen timeout",
+          "rationale": "Longer screen timeout increases battery use."
+        },
+        {
+          "id": "c",
+          "text": "Enable location services",
+          "rationale": "Location services consume more battery."
+        },
+        {
+          "id": "d",
+          "text": "Raise the screen brightness",
+          "rationale": "Higher brightness uses more battery."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Battery settings let users restrict an app's background activity, stopping background sync/processing — the direct way to curb battery drain from a specific app.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-016",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A mobile app displays a 'This app is not compatible with your device' error during install. What is the MOST likely reason?",
+      "context": "A mobile app refuses to install as incompatible.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The device OS version or hardware does not meet the app's requirements",
+          "rationale": "Incompatibility errors mean the app requires a newer OS or specific hardware the device lacks."
+        },
+        {
+          "id": "b",
+          "text": "The screen resolution is too high",
+          "rationale": "Higher resolution does not block app installs."
+        },
+        {
+          "id": "c",
+          "text": "The device is fully charged",
+          "rationale": "Charge level does not affect compatibility."
+        },
+        {
+          "id": "d",
+          "text": "Bluetooth is enabled",
+          "rationale": "Bluetooth does not affect app compatibility."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Compatibility errors occur when the app's minimum OS version or hardware requirements (RAM, sensors, architecture) exceed what the device provides.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-017",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A user's phone overheats while charging and using navigation. Which TWO actions should be taken?",
+      "context": "A phone overheats while charging and navigating.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Remove the phone case and stop using it while charging",
+          "rationale": "Cases trap heat and charging plus heavy use generate heat — remove the case and pause use."
+        },
+        {
+          "id": "b",
+          "text": "Close the navigation app",
+          "rationale": "Navigation (screen + GPS) is a major heat source; closing it cools the device."
+        },
+        {
+          "id": "c",
+          "text": "Increase the screen brightness",
+          "rationale": "Higher brightness generates MORE heat."
+        },
+        {
+          "id": "d",
+          "text": "Keep it in direct sunlight",
+          "rationale": "Sunlight adds heat."
+        },
+        {
+          "id": "e",
+          "text": "Use a non-certified fast charger",
+          "rationale": "Uncertified chargers can overheat the battery — a risk, not a cooling step."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Overheating while charging + navigating is addressed by removing the case, pausing heavy use, and closing heat-generating apps. Brightness, sunlight, and uncertified chargers add heat.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.2 Mobile OS Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-018",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A user notices an app has access to their location even when not in use, and they never granted it knowingly. Which mobile security issue does this represent?",
+      "context": "An app accesses location without clear user consent.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Unauthorized location tracking",
+          "rationale": "An app reading location in the background without consent is unauthorized location tracking — a mobile privacy/security issue."
+        },
+        {
+          "id": "b",
+          "text": "A battery calibration problem",
+          "rationale": "Battery calibration is unrelated to location access."
+        },
+        {
+          "id": "c",
+          "text": "A screen digitizer fault",
+          "rationale": "Digitizer faults affect touch input, not permissions."
+        },
+        {
+          "id": "d",
+          "text": "An OS update requirement",
+          "rationale": "Updates do not cause unauthorized location access."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Background location access without consent is unauthorized location tracking. The fix: review app permissions and revoke location (or uninstall the app).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-019",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A user's phone was rooted, and now a banking app refuses to open. Why would the banking app block a rooted device?",
+      "context": "A banking app blocks a rooted phone.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Rooting bypasses OS security, so the app cannot trust the device",
+          "rationale": "Rooting/jailbreaking removes OS security controls; sensitive apps block rooted devices to protect accounts."
+        },
+        {
+          "id": "b",
+          "text": "The phone's battery is low",
+          "rationale": "Battery level does not trigger app blocks."
+        },
+        {
+          "id": "c",
+          "text": "The screen is too small",
+          "rationale": "Screen size is unrelated."
+        },
+        {
+          "id": "d",
+          "text": "Bluetooth is enabled",
+          "rationale": "Bluetooth does not cause rooted-device blocks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Rooted/jailbroken devices bypass security controls (sandboxing, code signing), so banking apps refuse to run on them. The remedy is restoring the stock OS.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-020",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A user receives a text message claiming their package is delayed, with a link to 'track' it. Which mobile security threat is this?",
+      "context": "A package-delivery text with a tracking link arrives.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Smishing",
+          "rationale": "Smishing is SMS phishing — fraudulent texts with malicious links, often impersonating delivery services."
+        },
+        {
+          "id": "b",
+          "text": "Shoulder surfing",
+          "rationale": "Shoulder surfing observes credentials being typed."
+        },
+        {
+          "id": "c",
+          "text": "Bluejacking",
+          "rationale": "Bluejacking sends unsolicited Bluetooth messages."
+        },
+        {
+          "id": "d",
+          "text": "Tailgating",
+          "rationale": "Tailgating follows someone through a door."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Smishing (SMS phishing) uses texts impersonating trusted services to deliver malicious links. Users should verify with the carrier directly and not click.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-021",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A technician discovers an app on a corporate phone that was sideloaded from an unknown source. Which action BEST addresses the security risk?",
+      "context": "A sideloaded app from an unknown source is found on a corporate phone.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Uninstall the app and disable unknown sources",
+          "rationale": "Removing the untrusted app and blocking sideloading eliminates the risk — the direct remediation."
+        },
+        {
+          "id": "b",
+          "text": "Move the app to a different folder",
+          "rationale": "Moving the app does not remove the risk."
+        },
+        {
+          "id": "c",
+          "text": "Increase the screen timeout",
+          "rationale": "Screen timeout is unrelated to sideloaded apps."
+        },
+        {
+          "id": "d",
+          "text": "Clear the phone's cache",
+          "rationale": "Clearing cache does not remove the app."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Sideloaded apps bypass app-store security checks. Uninstall the app and disable unknown sources (or enforce MDM app allow-lists) to remediate.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-022",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A user's phone shows a warning that a 'security certificate is not trusted' when opening the corporate email app. What is the MOST likely cause?",
+      "context": "A phone warns that a certificate is not trusted in the email app.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The server certificate is expired or from an untrusted CA",
+          "rationale": "Certificate warnings mean the presented certificate failed validation — expired, self-signed, or untrusted CA."
+        },
+        {
+          "id": "b",
+          "text": "The phone battery is low",
+          "rationale": "Battery level does not trigger certificate warnings."
+        },
+        {
+          "id": "c",
+          "text": "The screen is cracked",
+          "rationale": "Display damage is unrelated to certificates."
+        },
+        {
+          "id": "d",
+          "text": "Bluetooth is disabled",
+          "rationale": "Bluetooth state does not affect certificate validation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Untrusted-certificate warnings indicate the server's certificate is expired, self-signed, or issued by an untrusted CA. Verify the certificate chain rather than blindly accepting.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-023",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A corporate phone was lost, and the user had not enrolled it in MDM. Which consequence is MOST likely?",
+      "context": "A lost corporate phone was never MDM-enrolled.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The device cannot be remotely locked or wiped",
+          "rationale": "Without MDM enrollment, there is no management channel to remotely lock or wipe the device."
+        },
+        {
+          "id": "b",
+          "text": "The phone charges slower",
+          "rationale": "MDM enrollment is unrelated to charging."
+        },
+        {
+          "id": "c",
+          "text": "The screen locks automatically",
+          "rationale": "A screen lock exists locally, but remote management requires MDM."
+        },
+        {
+          "id": "d",
+          "text": "The battery lasts longer",
+          "rationale": "MDM does not affect battery life."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Remote lock/wipe requires MDM enrollment. Unenrolled devices cannot be managed remotely, so corporate data on a lost phone is at risk.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-024",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A user's email account was compromised and sent spam to contacts. After resetting the password and enabling MFA, what ELSE should be checked?",
+      "context": "A compromised email account was secured; follow-up is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Review signed-in devices and revoke unknown sessions",
+          "rationale": "Attackers may leave active sessions; reviewing and revoking unknown sign-ins closes those backdoors."
+        },
+        {
+          "id": "b",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness is unrelated to account security."
+        },
+        {
+          "id": "c",
+          "text": "Change the wallpaper",
+          "rationale": "Wallpaper is cosmetic."
+        },
+        {
+          "id": "d",
+          "text": "Clear the browser's zoom settings",
+          "rationale": "Zoom settings are unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "After a compromise: reset the password, enable MFA, review active sessions/devices, and revoke anything unknown. This removes the attacker's lingering access.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.3 Mobile Security Troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-025",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user's PC shows constant pop-up advertisements even when no browser is open. Which TWO steps are appropriate?",
+      "context": "Pop-up ads appear even without a browser open.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Run a full anti-malware scan",
+          "rationale": "Pop-ups without a browser indicate adware; a full scan detects and removes it."
+        },
+        {
+          "id": "b",
+          "text": "Review and remove recently installed programs/extensions",
+          "rationale": "Adware is often bundled with recent installs; removing them eliminates the source."
+        },
+        {
+          "id": "c",
+          "text": "Increase the page file size",
+          "rationale": "Page file size is unrelated to pop-ups."
+        },
+        {
+          "id": "d",
+          "text": "Disable the firewall",
+          "rationale": "Disabling the firewall increases risk and does not stop adware."
+        },
+        {
+          "id": "e",
+          "text": "Change the desktop theme",
+          "rationale": "Themes do not cause or stop pop-ups."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Persistent pop-ups point to adware/PUPs: run a full scan and remove recently installed suspicious programs or browser extensions. Firewall, page file, and theme are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-026",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user's files have been renamed with a .encrypted extension and a ransom note demands payment. What is the BEST first response?",
+      "context": "Files are encrypted and a ransom note demands payment.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Isolate the system from the network immediately",
+          "rationale": "Containing the infection stops ransomware from spreading to other systems — the first step."
+        },
+        {
+          "id": "b",
+          "text": "Pay the ransom promptly",
+          "rationale": "Paying funds criminals and does not guarantee decryption."
+        },
+        {
+          "id": "c",
+          "text": "Format the drive and reinstall",
+          "rationale": "Reimaging is a later recovery step, after containment and evidence preservation."
+        },
+        {
+          "id": "d",
+          "text": "Delete the encrypted files",
+          "rationale": "Deleting encrypted files destroys the only copies of the data."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Ransomware response: isolate/contain first, preserve evidence, report, then restore from backups. Never pay — it funds attackers and does not guarantee recovery.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-027",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user reports their browser homepage and search engine changed and they see new toolbars. Which PC security issue is this?",
+      "context": "Browser homepage/search changed with new toolbars.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Browser hijacking",
+          "rationale": "Browser hijacking changes homepage/search and installs toolbars/extensions without consent — the described issue."
+        },
+        {
+          "id": "b",
+          "text": "A hardware failure",
+          "rationale": "Hardware failures do not change browser settings."
+        },
+        {
+          "id": "c",
+          "text": "An overheating CPU",
+          "rationale": "Overheating causes shutdowns, not browser changes."
+        },
+        {
+          "id": "d",
+          "text": "A failing power supply",
+          "rationale": "PSU failures cause power issues, not browser changes."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Browser hijacking (often via bundled installs) changes the homepage/search and adds toolbars. Fix: remove suspicious extensions/programs and reset browser settings.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-028",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user's PC shows a full-screen warning claiming their computer is infected and to call a toll-free number for help. Which threat is this?",
+      "context": "A full-screen infection warning instructs the user to call a number.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fake antivirus / scareware",
+          "rationale": "Scareware shows fake infection warnings to pressure users into calling paid 'support' — the described threat."
+        },
+        {
+          "id": "b",
+          "text": "A rootkit",
+          "rationale": "Rootkits hide in the OS; they do not display support-scam warnings."
+        },
+        {
+          "id": "c",
+          "text": "Ransomware",
+          "rationale": "Ransomware encrypts files; scareware is a fake warning without encryption."
+        },
+        {
+          "id": "d",
+          "text": "A worm",
+          "rationale": "Worms self-propagate; the warning is a social-engineering scam."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Scareware (fake antivirus) displays alarming fake warnings to drive calls to paid support. Do not call the number; close the browser and run a real anti-malware scan.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-029",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user notices unknown processes running at startup and unusual network activity. Which tool helps identify the processes before removing them?",
+      "context": "Unknown startup processes and network activity need identification.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Task Manager (processes and startup)",
+          "rationale": "Task Manager shows process names, publishers, and startup entries, letting the technician identify and investigate unknown processes."
+        },
+        {
+          "id": "b",
+          "text": "Disk Management",
+          "rationale": "Disk Management handles partitions."
+        },
+        {
+          "id": "c",
+          "text": "Defragmenter",
+          "rationale": "Defragmentation optimizes disk layout."
+        },
+        {
+          "id": "d",
+          "text": "Device Manager",
+          "rationale": "Device Manager manages hardware drivers, not running processes."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Task Manager's Processes and Startup tabs show running/startup processes with publishers, enabling identification of suspicious entries before removal.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-030",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A technician finds that a USB drive's autorun launched malware when plugged in. Which preventive measure MOST directly stops this from recurring?",
+      "context": "USB autorun launched malware; prevention is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Disable AutoRun/AutoPlay for removable media",
+          "rationale": "Disabling AutoRun stops removable media from launching content automatically — the direct prevention."
+        },
+        {
+          "id": "b",
+          "text": "Increase the display resolution",
+          "rationale": "Resolution is unrelated to autorun."
+        },
+        {
+          "id": "c",
+          "text": "Disable the firewall",
+          "rationale": "Disabling the firewall increases risk."
+        },
+        {
+          "id": "d",
+          "text": "Change the system theme",
+          "rationale": "Themes are cosmetic."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Disabling AutoRun/AutoPlay for removable media prevents USB-borne malware from launching automatically. Scanning drives before opening is a complementary habit.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-031",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user's social media account posted spam messages without their knowledge. What is the MOST likely cause?",
+      "context": "A social media account posts spam without the user's knowledge.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The account was compromised and is being used to spread spam",
+          "rationale": "Accounts that post spam without the owner's knowledge are compromised (or an authorized malicious app is connected)."
+        },
+        {
+          "id": "b",
+          "text": "The screen needs calibration",
+          "rationale": "Screen calibration is unrelated to social media activity."
+        },
+        {
+          "id": "c",
+          "text": "The browser cache is full",
+          "rationale": "Cache fullness does not post to social media."
+        },
+        {
+          "id": "d",
+          "text": "The PC needs defragmenting",
+          "rationale": "Defragmentation is unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Spam posts from an account indicate compromise or a malicious connected app. Change the password, enable MFA, revoke suspicious app access, and sign out of unknown sessions.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-032",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user clicked a link in a phishing email and entered their work password. Which TWO actions should be taken immediately?",
+      "context": "A user entered their work password on a phishing site.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Change the password immediately",
+          "rationale": "Changing the password invalidates the stolen credential."
+        },
+        {
+          "id": "b",
+          "text": "Enable MFA on the account",
+          "rationale": "MFA blocks attackers even if the password is compromised."
+        },
+        {
+          "id": "c",
+          "text": "Continue entering more credentials",
+          "rationale": "Entering more credentials feeds the attacker."
+        },
+        {
+          "id": "d",
+          "text": "Ignore the incident",
+          "rationale": "Ignoring it leaves the account exposed."
+        },
+        {
+          "id": "e",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness is unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "After a phishing credential entry: change the password and enable MFA immediately, then report the incident. Never continue entering credentials or ignore the compromise.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.4 Troubleshooting Security Issues"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-033",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A Windows PC shows the wrong time after every reboot, and the BIOS clock also resets. What is the MOST likely cause?",
+      "context": "System time resets after every reboot; BIOS clock also resets.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A dead CMOS battery",
+          "rationale": "The CMOS battery maintains the hardware clock when power is off; when it dies, time resets at every boot."
+        },
+        {
+          "id": "b",
+          "text": "A failing hard drive",
+          "rationale": "Drive failures do not reset the hardware clock."
+        },
+        {
+          "id": "c",
+          "text": "Incorrect display settings",
+          "rationale": "Display settings do not affect the clock."
+        },
+        {
+          "id": "d",
+          "text": "A corrupted user profile",
+          "rationale": "A corrupted profile affects settings, not the BIOS clock."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A dead CMOS battery (CR2032) loses the hardware clock when the system is unpowered, so time resets at every boot. Replace the battery.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    },
+    {
+      "id": "a2-3-034",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A technician suspects Windows system files are corrupted AND the component store (image) is also damaged. Which command sequence repairs the image first?",
+      "context": "Both system files and the component store are corrupted.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "DISM /Online /Cleanup-Image /RestoreHealth, then sfc /scannow",
+          "rationale": "DISM repairs the component store/image first; sfc then repairs system files against the healthy image — the correct order."
+        },
+        {
+          "id": "b",
+          "text": "sfc /scannow, then DISM /RestoreHealth",
+          "rationale": "Running sfc first fails when the image it relies on is also corrupt — DISM comes first."
+        },
+        {
+          "id": "c",
+          "text": "chkdsk /f, then format",
+          "rationale": "chkdsk handles disk errors; formatting destroys data."
+        },
+        {
+          "id": "d",
+          "text": "gpupdate /force, then gpresult",
+          "rationale": "Group Policy commands do not repair system files."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "When the component store is damaged, DISM /Online /Cleanup-Image /RestoreHealth repairs it first; then sfc /scannow can repair system files against the restored image.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Troubleshooting Windows"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

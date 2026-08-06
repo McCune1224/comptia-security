@@ -1,0 +1,29 @@
+{
+  "_comment": "A+ bank authoring fragment template. Write one file per domain: web/scripts/data/frags/aplus-1201-d1.json etc. Merge with: python3 web/scripts/merge-aplus-fragments.py 1201",
+  "_schema": "mcqs: scenario-format multiple choice. single-choice = exactly 4 options, correctOptionIds = 1 id, selectCount = 1. multiple-choice ('Which TWO') = 5-6 options, correctOptionIds = 2 ids, selectCount = 2. IDs: a1-<domain>-<3-digit> (1201) / a2-<domain>-<3-digit> (1202), sequential from 001 within the domain. Every MCQ: format 'scenario', kind 'single-choice'|'multiple-choice', domain int, objective string, prompt (the QUESTION - scenario style, ends with a question), context (2-3 sentence scenario restatement), options (id 'a'-'f', text, rationale for EACH option incl. correct), correctOptionIds, selectCount, explanation (why correct + why distractors wrong), sourceRefs [{source: 'comptia', section: 'Objective X.Y'}, {source: 'professor-messer', section: '220-1201 <objective short name>'}]. ALL TEXT MUST BE ORIGINAL - never copy vendor question text. Fact-check numbers (ports, speeds, capacities) against the official objectives.",
+  "mcqs": [
+    {
+      "id": "a1-4-001",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A technician is provisioning a new server that will run four virtual machines for a small business. The technician installs a hypervisor directly on the server hardware, with no host operating system underneath. Which hypervisor type is being deployed?",
+      "context": "A new server runs four VMs; the hypervisor is installed directly on the hardware with no host OS underneath.",
+      "kind": "single-choice",
+      "options": [
+        {"id": "a", "text": "Type 2 hypervisor", "rationale": "A Type 2 hypervisor runs as an application on top of a host operating system (e.g., VirtualBox, VMware Workstation)."},
+        {"id": "b", "text": "Type 1 hypervisor", "rationale": "A Type 1 (bare-metal) hypervisor installs directly on the hardware and manages VMs without a host OS — the deployment described."},
+        {"id": "c", "text": "Container engine", "rationale": "Containers share the host kernel rather than virtualizing hardware; no hypervisor is involved."},
+        {"id": "d", "text": "Emulator", "rationale": "Emulators translate instructions for a different CPU architecture; a native hypervisor virtualizes the same architecture."}
+      ],
+      "correctOptionIds": ["b"],
+      "selectCount": 1,
+      "explanation": "Type 1 (bare-metal) hypervisors such as VMware ESXi, Microsoft Hyper-V, and Proxmox install directly on hardware and provide the VM management layer without a host OS. Type 2 hypervisors run inside a general-purpose OS.",
+      "sourceRefs": [
+        {"source": "comptia", "section": "Objective 4.1"},
+        {"source": "professor-messer", "section": "220-1201 4.1 Virtualization"}
+      ]
+    }
+  ],
+  "pbqs": []
+}

@@ -1,0 +1,1973 @@
+{
+  "mcqs": [
+    {
+      "id": "a2-2-001",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A security administrator wants to ensure that if a laptop is stolen, the data on the drive cannot be read. Which security measure addresses this concern?",
+      "context": "A stolen laptop's drive data must be unreadable.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Full-disk encryption (BitLocker)",
+          "rationale": "Full-disk encryption renders the drive unreadable without the key — the direct protection against theft."
+        },
+        {
+          "id": "b",
+          "text": "A strong screen-lock password",
+          "rationale": "A screen lock delays access but does not protect the drive from removal and offline analysis."
+        },
+        {
+          "id": "c",
+          "text": "A privacy screen filter",
+          "rationale": "A filter limits viewing angles; it does not protect stored data."
+        },
+        {
+          "id": "d",
+          "text": "A cable lock",
+          "rationale": "A cable lock deters theft of the device but does not protect data once stolen."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Full-disk encryption (BitLocker with TPM) encrypts all drive contents so stolen media is unreadable. Screen locks and cable locks deter access but do not protect the data itself.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.1 Security Measures"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-002",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "An organization requires employees to provide a password AND a one-time code from an authenticator app to log in. Which security concept is being implemented?",
+      "context": "Login requires a password plus a one-time code from an authenticator app.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Multifactor authentication (MFA)",
+          "rationale": "MFA combines two different factors — knowledge (password) and possession (the authenticator app) — as required here."
+        },
+        {
+          "id": "b",
+          "text": "Single sign-on (SSO)",
+          "rationale": "SSO lets one login reach many apps; it does not add a second factor."
+        },
+        {
+          "id": "c",
+          "text": "Role-based access control",
+          "rationale": "RBAC assigns permissions by role; it is not an authentication method."
+        },
+        {
+          "id": "d",
+          "text": "Least privilege",
+          "rationale": "Least privilege limits permissions; unrelated to how users authenticate."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "MFA requires two or more factors from different categories: something you know (password), have (authenticator app code), or are (biometric). Password + one-time code is classic MFA.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.1 Authentication"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-003",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A technician is securing a server room and needs a control that PREVENTS unauthorized people from entering while someone else is let in. Which physical control addresses tailgating?",
+      "context": "A server room needs protection against tailgating.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Access control vestibule (mantrap)",
+          "rationale": "A mantrap has two interlocked doors, so only one person can enter per credential use — the direct tailgating defense."
+        },
+        {
+          "id": "b",
+          "text": "CCTV cameras",
+          "rationale": "CCTV records incidents but does not prevent tailgating."
+        },
+        {
+          "id": "c",
+          "text": "A privacy screen",
+          "rationale": "Privacy screens protect displays, not doorways."
+        },
+        {
+          "id": "d",
+          "text": "A surge suppressor",
+          "rationale": "Surge suppressors protect power, not physical access."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A mantrap (access control vestibule) uses two doors that cannot both open at once, forcing one-person-per-authentication and blocking tailgating. CCTV is detective, not preventive.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.1 Physical Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-004",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "An administrator needs to restrict a finance user so they can access ONLY the accounting application and nothing else on their workstation. Which logical access concept applies?",
+      "context": "A finance user should access only the accounting app.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Least privilege",
+          "rationale": "Least privilege grants only the minimum permissions needed — the accounting app and nothing more."
+        },
+        {
+          "id": "b",
+          "text": "Full disk encryption",
+          "rationale": "Encryption protects data at rest; it does not restrict which apps a user runs."
+        },
+        {
+          "id": "c",
+          "text": "MFA",
+          "rationale": "MFA strengthens authentication but does not limit access scope."
+        },
+        {
+          "id": "d",
+          "text": "Screen lock",
+          "rationale": "Screen locks protect an unattended session; they do not scope permissions."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Least privilege gives users only the access their job requires. Restricting the finance user to the accounting app is a textbook least-privilege implementation.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.1 Logical Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-005",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A user's Windows PC is running slowly and shows frequent pop-up ads. Which Windows built-in component provides real-time virus and threat protection?",
+      "context": "A Windows PC shows ad pop-ups and runs slowly; built-in protection is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Windows Security (Defender Antivirus)",
+          "rationale": "Windows Security includes Defender Antivirus real-time protection, firewall, and threat history — the built-in tool to scan and clean."
+        },
+        {
+          "id": "b",
+          "text": "Task Manager",
+          "rationale": "Task Manager shows processes but does not remove malware."
+        },
+        {
+          "id": "c",
+          "text": "Disk Management",
+          "rationale": "Disk Management handles partitions, not threats."
+        },
+        {
+          "id": "d",
+          "text": "Registry Editor",
+          "rationale": "Registry Editor edits configuration; it is not a security scanner."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Windows Security (formerly Windows Defender) provides real-time antivirus, firewall, and app/browser controls. The pop-ups suggest adware, which Defender can scan for and remove.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Windows Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-006",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A technician configures a Windows firewall rule that allows a specific application to accept inbound connections. What type of rule is this?",
+      "context": "A firewall rule allows one application to accept inbound traffic.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Application exception",
+          "rationale": "An application exception permits a specific program through the firewall — exactly what was configured."
+        },
+        {
+          "id": "b",
+          "text": "Network profile",
+          "rationale": "Profiles (Domain/Private/Public) group rules by network type; they are not the rule itself."
+        },
+        {
+          "id": "c",
+          "text": "Port forwarding",
+          "rationale": "Port forwarding is a router NAT function, not a Windows firewall app rule."
+        },
+        {
+          "id": "d",
+          "text": "Group policy restriction",
+          "rationale": "Group policy enforces settings; the firewall rule here is an app exception."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Windows Defender Firewall uses application exceptions (app-based rules) to allow or block specific programs. Port-based rules and profiles are separate concepts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Windows Firewall"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-007",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "An organization centralizes user accounts, passwords, and Group Policy in a directory so users can log in to any domain computer. Which technology provides this?",
+      "context": "Centralized accounts and Group Policy across domain computers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Active Directory",
+          "rationale": "Active Directory centralizes accounts, authentication, and Group Policy for domain-joined computers."
+        },
+        {
+          "id": "b",
+          "text": "Windows Defender",
+          "rationale": "Defender is antivirus/firewall, not a directory service."
+        },
+        {
+          "id": "c",
+          "text": "BitLocker",
+          "rationale": "BitLocker encrypts drives."
+        },
+        {
+          "id": "d",
+          "text": "UAC",
+          "rationale": "UAC prompts for elevation; it does not centralize accounts."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Active Directory (AD) is Microsoft's directory service: centralized user/computer accounts, authentication, and Group Policy for domain members.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Active Directory"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-008",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A technician wants to prevent standard users from making unauthorized system changes when an installer runs. Which Windows feature prompts for administrator approval?",
+      "context": "Standard users must be prompted before system changes.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "User Account Control (UAC)",
+          "rationale": "UAC prompts for admin approval when programs attempt system changes — the control described."
+        },
+        {
+          "id": "b",
+          "text": "Device Manager",
+          "rationale": "Device Manager manages drivers, not elevation prompts."
+        },
+        {
+          "id": "c",
+          "text": "Event Viewer",
+          "rationale": "Event Viewer logs events."
+        },
+        {
+          "id": "d",
+          "text": "msconfig",
+          "rationale": "msconfig configures boot/startup options."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "UAC requires confirmation (or an admin credential) before elevated actions, protecting against silent system changes. Standard users must supply an admin password at the prompt.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Windows Security Settings"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-009",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A technician is asked to select the MOST secure wireless encryption for a new office access point. All client devices support the latest standard. Which option should be selected?",
+      "context": "The strongest wireless encryption supported by all clients is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "WPA3",
+          "rationale": "WPA3 (SAE) is the strongest wireless encryption, resistant to offline dictionary attacks — the correct choice."
+        },
+        {
+          "id": "b",
+          "text": "WPA2",
+          "rationale": "WPA2 is strong but predates WPA3's SAE improvements."
+        },
+        {
+          "id": "c",
+          "text": "WPA",
+          "rationale": "WPA uses TKIP, which is deprecated and weak."
+        },
+        {
+          "id": "d",
+          "text": "WEP",
+          "rationale": "WEP is broken and must never be used."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "WPA3 (Wi-Fi Protected Access 3, using SAE) is the strongest available standard. Order: WPA3 > WPA2 > WPA > WEP.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.3 Wireless Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-010",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A company requires employees to authenticate with a username and password against a central RADIUS server before joining the corporate Wi-Fi. Which authentication framework enables this?",
+      "context": "Wi-Fi access requires centralized RADIUS authentication.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "802.1X (enterprise authentication)",
+          "rationale": "802.1X is the port-based authentication framework that uses RADIUS and EAP for enterprise Wi-Fi."
+        },
+        {
+          "id": "b",
+          "text": "WPA3-Personal",
+          "rationale": "Personal mode uses a shared passphrase, not per-user RADIUS authentication."
+        },
+        {
+          "id": "c",
+          "text": "MAC filtering",
+          "rationale": "MAC filtering allows/denies by MAC address and is spoofable, not an authentication framework."
+        },
+        {
+          "id": "d",
+          "text": "Captive portal",
+          "rationale": "A captive portal is a web login page, not RADIUS-based 802.1X."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "802.1X (WPA2/WPA3-Enterprise) authenticates each user via RADIUS and EAP before granting network access. Personal mode uses a single shared key; MAC filtering is not authentication.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.3 Authentication Methods"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-011",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A user's PC is suddenly slow, shows unfamiliar pop-ups, and the browser homepage changed without permission. Which type of malware is MOST likely present?",
+      "context": "Slow PC, pop-ups, and a changed browser homepage suggest unwanted software.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Adware/PUP",
+          "rationale": "Pop-ups plus a hijacked homepage point to adware or a potentially unwanted program (PUP) bundled with other software."
+        },
+        {
+          "id": "b",
+          "text": "Rootkit",
+          "rationale": "Rootkits hide deep in the OS; they do not typically produce pop-ups."
+        },
+        {
+          "id": "c",
+          "text": "Worm",
+          "rationale": "Worms self-propagate across networks; the symptoms here are adware-style."
+        },
+        {
+          "id": "d",
+          "text": "Ransomware",
+          "rationale": "Ransomware encrypts files and demands payment; no encryption is mentioned."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Adware/PUPs cause pop-ups, homepage hijacking, and slowdowns — often bundled with free software. Rootkits, worms, and ransomware have different signatures.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.4 Malware"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-012",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "An endpoint security tool monitors process behavior and can automatically isolate a workstation that exhibits ransomware-like activity. Which class of tool provides this?",
+      "context": "A tool monitors behavior and isolates endpoints on ransomware-like activity.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Endpoint detection and response (EDR)",
+          "rationale": "EDR monitors endpoint behavior, detects threats, and can contain/isolate systems — the described capability."
+        },
+        {
+          "id": "b",
+          "text": "Signature-based antivirus",
+          "rationale": "Signature AV matches known file signatures; it lacks behavioral isolation."
+        },
+        {
+          "id": "c",
+          "text": "A packet sniffer",
+          "rationale": "A sniffer captures traffic; it does not isolate endpoints."
+        },
+        {
+          "id": "d",
+          "text": "A backup utility",
+          "rationale": "Backups restore data; they do not detect or contain threats."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "EDR uses behavioral monitoring and automated response (isolation, rollback) against threats like ransomware. Signature AV only matches known malware.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.4 Anti-malware Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-013",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "An employee receives an urgent email from their 'bank' asking them to verify account details by clicking a link. The sender address is a free webmail account. Which attack is this?",
+      "context": "An urgent fake bank email asks for account verification via a link.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phishing",
+          "rationale": "Phishing is a mass email impersonating a trusted entity to steal credentials — the free-webmail sender is a tell."
+        },
+        {
+          "id": "b",
+          "text": "Whaling",
+          "rationale": "Whaling targets executives specifically; this is a generic bank phishing email."
+        },
+        {
+          "id": "c",
+          "text": "Vishing",
+          "rationale": "Vishing is voice phishing over the phone."
+        },
+        {
+          "id": "d",
+          "text": "Smishing",
+          "rationale": "Smishing is phishing via SMS text messages."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Phishing = fraudulent email impersonating a trusted entity (bank, vendor) to harvest credentials. Whaling targets executives; vishing/smishing use voice/SMS.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.5 Social Engineering"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-014",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "An attacker leaves USB flash drives labeled 'Executive Bonuses 2026' in a company parking lot, hoping employees plug them in. Which social engineering technique is being used?",
+      "context": "Tempting USB drives are planted to lure employees into plugging them in.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Baiting",
+          "rationale": "Baiting uses a tempting lure (like a labeled USB drive) to trigger an action — exactly this scenario."
+        },
+        {
+          "id": "b",
+          "text": "Tailgating",
+          "rationale": "Tailgating is following someone through a secured door."
+        },
+        {
+          "id": "c",
+          "text": "Pretexting",
+          "rationale": "Pretexting uses a fabricated story to gain information."
+        },
+        {
+          "id": "d",
+          "text": "Impersonation",
+          "rationale": "Impersonation poses as someone else; the USB lure is baiting."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Baiting offers a physical or digital lure (USB drop, free gift) to get victims to act. Tailgating, pretexting, and impersonation are different techniques.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.5 Social Engineering"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-015",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A user follows a link in an email and lands on a website that looks exactly like their company's login page, but the URL is misspelled. Which TWO techniques are combined in this attack?",
+      "context": "A lookalike login page at a misspelled URL after an email link.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phishing",
+          "rationale": "The email link is phishing — luring the user to a fake site."
+        },
+        {
+          "id": "b",
+          "text": "Typosquatting",
+          "rationale": "The misspelled lookalike domain is typosquatting (URL hijacking)."
+        },
+        {
+          "id": "c",
+          "text": "Shoulder surfing",
+          "rationale": "Shoulder surfing is watching someone type credentials."
+        },
+        {
+          "id": "d",
+          "text": "Dumpster diving",
+          "rationale": "Dumpster diving retrieves discarded documents."
+        },
+        {
+          "id": "e",
+          "text": "Tailgating",
+          "rationale": "Tailgating follows someone through a door."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "The attack combines phishing (luring via email) with typosquatting (a misspelled lookalike domain) to harvest credentials. The other options are unrelated techniques.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.5 Social Engineering"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-016",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician is starting the malware removal process on an infected SOHO workstation. What should be done FIRST, before any scanning begins?",
+      "context": "Malware removal is starting on an infected SOHO workstation.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Investigate and verify the malware symptoms",
+          "rationale": "The process starts by investigating and verifying symptoms, then quarantining the system."
+        },
+        {
+          "id": "b",
+          "text": "Reimage the system",
+          "rationale": "Reimaging comes late in the process, only if removal fails."
+        },
+        {
+          "id": "c",
+          "text": "Create a restore point",
+          "rationale": "System Restore is DISABLED during removal (so malware cannot restore itself) and re-enabled at the end."
+        },
+        {
+          "id": "d",
+          "text": "Update anti-malware definitions",
+          "rationale": "Updating anti-malware comes AFTER quarantine and remediation steps in the official order."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The official SOHO malware removal order: 1 investigate/verify symptoms, 2 quarantine, 3 disable System Restore, 4 remediate, 5 update anti-malware, 6 scan/remove, 7 reimage if needed, 8 schedule scans, 9 re-enable System Restore + educate.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.6 Malware Removal"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-017",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "During malware removal, the technician disables System Restore on the infected Windows PC. Why is this done?",
+      "context": "System Restore is disabled during malware removal.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "To prevent malware from restoring itself from restore points",
+          "rationale": "Malware can hide in restore points and reappear after removal — disabling System Restore prevents that."
+        },
+        {
+          "id": "b",
+          "text": "To free disk space for the scan",
+          "rationale": "Disk space is not the reason; restore points are disabled to break persistence."
+        },
+        {
+          "id": "c",
+          "text": "To speed up the antivirus scan",
+          "rationale": "Scan speed is not affected by restore points."
+        },
+        {
+          "id": "d",
+          "text": "To allow Windows Update to run",
+          "rationale": "Updates are unrelated to System Restore being disabled."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "System Restore is disabled early in the removal process so malware hidden in restore points cannot restore itself; it is re-enabled and a fresh restore point created at the end.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.6 Malware Removal"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-018",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A security policy requires workstations to lock after 5 minutes of inactivity. Which TWO mechanisms can enforce this policy?",
+      "context": "Workstations must lock after 5 idle minutes; enforcement mechanisms are needed.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Screen lock timeout in power settings",
+          "rationale": "The screen lock timeout setting locks the session after the configured idle time."
+        },
+        {
+          "id": "b",
+          "text": "Group Policy security setting for interactive logon",
+          "rationale": "Group Policy can enforce the machine inactivity limit across domain computers."
+        },
+        {
+          "id": "c",
+          "text": "Failed-attempt account lockout",
+          "rationale": "Account lockout triggers on failed logins, not inactivity."
+        },
+        {
+          "id": "d",
+          "text": "Account expiration",
+          "rationale": "Expiration disables accounts on a date; unrelated to idle locking."
+        },
+        {
+          "id": "e",
+          "text": "Disabling the guest account",
+          "rationale": "Disabling guest removes an access path; it does not lock idle sessions."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Screen lock timeout (power settings) and the Group Policy interactive-logon machine inactivity limit both enforce idle locking. Lockout, expiration, and guest disabling address other controls.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.7 Security Best Practices"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-019",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A technician hardens a new workstation. Which TWO actions reduce the attack surface for autorun-based malware?",
+      "context": "Workstation hardening against autorun malware.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Disable AutoRun/AutoPlay",
+          "rationale": "Disabling AutoRun/AutoPlay stops removable media from launching programs automatically."
+        },
+        {
+          "id": "b",
+          "text": "Change the default administrator account",
+          "rationale": "Renaming/renaming the admin account is good hardening but does not stop autorun."
+        },
+        {
+          "id": "c",
+          "text": "Restrict login times",
+          "rationale": "Login-time restrictions limit when accounts can log in, not autorun."
+        },
+        {
+          "id": "d",
+          "text": "Disable the guest account",
+          "rationale": "Disabling guest removes an access path, not autorun."
+        },
+        {
+          "id": "e",
+          "text": "Scan removable media before opening",
+          "rationale": "Scanning USB media before use catches malware that autorun would otherwise launch."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "e"
+      ],
+      "selectCount": 2,
+      "explanation": "Disabling AutoRun/AutoPlay and scanning removable media directly address autorun-based malware. Admin account changes and guest disabling are separate hardening steps.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.7 Workstation Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-020",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "An employee's phone was jailbroken and now runs apps from unknown sources. What is the primary security implication?",
+      "context": "A jailbroken phone runs apps from unknown sources.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "OS security protections have been bypassed",
+          "rationale": "Jailbreaking/rooting removes OS security controls (code signing, sandboxing), so the device cannot be trusted."
+        },
+        {
+          "id": "b",
+          "text": "The device charges faster",
+          "rationale": "Jailbreaking has no effect on charging speed."
+        },
+        {
+          "id": "c",
+          "text": "The device is fully protected by the jailbreak",
+          "rationale": "Jailbreaking reduces security; it does not protect."
+        },
+        {
+          "id": "d",
+          "text": "MDM policies still fully apply",
+          "rationale": "Jailbroken devices can evade MDM controls; many MDMs flag them as non-compliant."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Jailbreaking/rooting bypasses the OS security model (code signing, sandboxing, app store controls), allowing malware and making the device untrusted for corporate data.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.8 Mobile Device Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-021",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A company wants to enforce a passcode, remote wipe capability, and app restrictions on employee-owned phones used for work. Which technology provides centralized policy enforcement?",
+      "context": "Policy enforcement on employee-owned mobile devices.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mobile device management (MDM)",
+          "rationale": "MDM enrolls devices and enforces passcode, remote wipe, and app policies centrally — the described capability."
+        },
+        {
+          "id": "b",
+          "text": "A biometric scanner",
+          "rationale": "Biometrics authenticate users; they do not enforce device policy."
+        },
+        {
+          "id": "c",
+          "text": "A captive portal",
+          "rationale": "A captive portal gates Wi-Fi access with a login page."
+        },
+        {
+          "id": "d",
+          "text": "A VPN client",
+          "rationale": "A VPN encrypts traffic; it does not enforce device policies."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "MDM (mobile device management) centrally enforces passcodes, remote wipe/lock, app restrictions, and compliance on enrolled devices — including BYOD via containers.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.8 Mobile Device Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-022",
+      "domain": 2,
+      "objective": "2.9",
+      "format": "scenario",
+      "prompt": "A company must dispose of magnetic hard drives that contained confidential data. Which destruction method is MOST appropriate for HDDs?",
+      "context": "Magnetic HDDs with confidential data must be destroyed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Degaussing or physical shredding",
+          "rationale": "Degaussing destroys the magnetic field and shredding physically destroys HDDs — both are appropriate for magnetic media."
+        },
+        {
+          "id": "b",
+          "text": "Secure erase only",
+          "rationale": "Secure erase works but degaussing/shredding is the stronger physical guarantee for disposal."
+        },
+        {
+          "id": "c",
+          "text": "Factory reset",
+          "rationale": "Factory reset is for mobile devices, not HDDs."
+        },
+        {
+          "id": "d",
+          "text": "Deleting the files",
+          "rationale": "Deleting files leaves recoverable data on the platters."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Magnetic HDDs are destroyed by degaussing (wiping the magnetic field) or physical shredding. File deletion leaves recoverable data; factory reset is for mobile devices.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.9 Data Destruction"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-023",
+      "domain": 2,
+      "objective": "2.9",
+      "format": "scenario",
+      "prompt": "A technician must securely dispose of a solid-state drive (SSD). Which method is MOST effective for SSDs?",
+      "context": "An SSD must be securely erased before disposal.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Secure erase / crypto-shred (destroy the encryption keys)",
+          "rationale": "SSDs need secure erase or crypto-shred because degaussing does not affect flash memory and data may persist in wear-leveled cells."
+        },
+        {
+          "id": "b",
+          "text": "Degaussing",
+          "rationale": "Degaussing is ineffective on flash-based SSDs."
+        },
+        {
+          "id": "c",
+          "text": "Formatting",
+          "rationale": "Formatting does not reliably erase SSD cells; data may remain."
+        },
+        {
+          "id": "d",
+          "text": "Deleting files",
+          "rationale": "Deleting files leaves recoverable data."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SSDs require secure erase (ATA secure erase) or crypto-shred (destroying the encryption key makes data unrecoverable). Degaussing only affects magnetic media.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.9 Data Destruction"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-024",
+      "domain": 2,
+      "objective": "2.10",
+      "format": "scenario",
+      "prompt": "A technician configures a SOHO wireless router for the first time. Which action should be taken FIRST for security?",
+      "context": "A new SOHO router needs its first security configuration.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Change the default administrator password",
+          "rationale": "Changing the default admin password is the first hardening step — default credentials are a known entry point."
+        },
+        {
+          "id": "b",
+          "text": "Disable SSID broadcast",
+          "rationale": "Hiding the SSID is weak security theater; the admin password comes first."
+        },
+        {
+          "id": "c",
+          "text": "Enable MAC filtering",
+          "rationale": "MAC filtering is spoofable and secondary to credential changes."
+        },
+        {
+          "id": "d",
+          "text": "Set up port forwarding",
+          "rationale": "Port forwarding EXPOSES services; it is not a first-step hardening action."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The first SOHO router hardening step is changing the default administrator password, followed by WPA2/WPA3, firmware updates, and disabling WPS. SSID hiding and MAC filtering are weak controls.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.10 SOHO Network Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-025",
+      "domain": 2,
+      "objective": "2.10",
+      "format": "scenario",
+      "prompt": "A SOHO router supports WPS. A security review recommends disabling it. Why?",
+      "context": "WPS should be disabled on a SOHO router.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "WPS PINs are vulnerable to brute-force attacks",
+          "rationale": "WPS's PIN method can be brute-forced (8-digit PIN, ~11,000 effective combinations), letting attackers recover the passphrase."
+        },
+        {
+          "id": "b",
+          "text": "WPS increases Wi-Fi speed",
+          "rationale": "WPS is a setup convenience, not a speed feature."
+        },
+        {
+          "id": "c",
+          "text": "WPS is required for WPA3",
+          "rationale": "WPA3 does not require WPS."
+        },
+        {
+          "id": "d",
+          "text": "WPS blocks guest networks",
+          "rationale": "WPS does not block guest networks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "WPS (Wi-Fi Protected Setup) PIN mode is vulnerable to offline brute-force attacks that reveal the network passphrase — disabling it is standard hardening.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.10 SOHO Network Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-026",
+      "domain": 2,
+      "objective": "2.11",
+      "format": "scenario",
+      "prompt": "A user reports that their browser homepage and search engine changed without their consent after installing a free utility. Which browser security action should be taken?",
+      "context": "A browser was hijacked after a free utility install.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reset browser settings and remove suspicious extensions",
+          "rationale": "Browser hijacking is fixed by removing malicious extensions and resetting settings (homepage/search)."
+        },
+        {
+          "id": "b",
+          "text": "Increase the browser zoom level",
+          "rationale": "Zoom affects display size, not hijacking."
+        },
+        {
+          "id": "c",
+          "text": "Clear the browser cache only",
+          "rationale": "Cache clearing does not remove the hijacker or its extension."
+        },
+        {
+          "id": "d",
+          "text": "Disable JavaScript entirely",
+          "rationale": "Disabling JavaScript is drastic and does not remove the hijacking extension."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Browser hijackers install extensions and change settings; resetting the browser and removing suspicious extensions restores control. Cache clearing alone is insufficient.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.11 Browser Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-027",
+      "domain": 2,
+      "objective": "2.11",
+      "format": "scenario",
+      "prompt": "A user wants to browse without the browser storing history, cookies, or site data after the session. Which browser feature provides this?",
+      "context": "Browsing should leave no history or site data behind.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Private/incognito browsing",
+          "rationale": "Private browsing does not persist history, cookies, or site data after the session closes."
+        },
+        {
+          "id": "b",
+          "text": "Increasing the cache size",
+          "rationale": "A larger cache stores MORE site data."
+        },
+        {
+          "id": "c",
+          "text": "Disabling the pop-up blocker",
+          "rationale": "Pop-up blockers are unrelated to history persistence."
+        },
+        {
+          "id": "d",
+          "text": "Autofill",
+          "rationale": "Autofill stores form data; it does not clear session data."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Private/incognito mode discards history, cookies, and site data at session end. Cache growth, pop-up blockers, and autofill do the opposite or are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.11 Browser Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-028",
+      "domain": 2,
+      "objective": "2.11",
+      "format": "scenario",
+      "prompt": "A user's browser displays a certificate warning on a trusted website. Which browser security mechanism is alerting them?",
+      "context": "A browser certificate warning appears for a trusted site.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "TLS/HTTPS certificate validation",
+          "rationale": "Browsers validate TLS certificates; a warning means the certificate is invalid, expired, or mismatched."
+        },
+        {
+          "id": "b",
+          "text": "The pop-up blocker",
+          "rationale": "Pop-up blockers stop pop-ups, not certificate warnings."
+        },
+        {
+          "id": "c",
+          "text": "Password manager autofill",
+          "rationale": "Autofill fills credentials; it does not validate certificates."
+        },
+        {
+          "id": "d",
+          "text": "Incognito mode",
+          "rationale": "Incognito mode does not change certificate validation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Certificate warnings come from TLS validation — the server's certificate failed checks (expired, untrusted CA, name mismatch). Users should not bypass the warning.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.11 Browser Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-029",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "An organization issues smart cards to employees for building access and computer login. Which TWO authentication factors does a smart card combine?",
+      "context": "Smart cards are used for building and computer access.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Something you have (the card)",
+          "rationale": "The physical card is a possession factor."
+        },
+        {
+          "id": "b",
+          "text": "Something you know (the PIN)",
+          "rationale": "Smart cards require a PIN, adding a knowledge factor."
+        },
+        {
+          "id": "c",
+          "text": "Something you are (biometric)",
+          "rationale": "The card/PIN combination does not include biometrics."
+        },
+        {
+          "id": "d",
+          "text": "Somewhere you are (location)",
+          "rationale": "Location is not part of smart-card authentication."
+        },
+        {
+          "id": "e",
+          "text": "Something you do (behavior)",
+          "rationale": "Behavioral factors are not part of smart-card auth."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Smart-card authentication combines possession (the card) with knowledge (the PIN) — two different factors, hence multifactor. Biometrics and location are not involved.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.1 Authentication and Access"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-030",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "Malware encrypts a user's documents and displays a message demanding payment in cryptocurrency to restore them. Which type of malware is this?",
+      "context": "Files are encrypted and payment is demanded.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ransomware",
+          "rationale": "Ransomware encrypts data and demands payment — exactly the described behavior."
+        },
+        {
+          "id": "b",
+          "text": "Spyware",
+          "rationale": "Spyware secretly monitors activity; it does not encrypt files."
+        },
+        {
+          "id": "c",
+          "text": "A logic bomb",
+          "rationale": "A logic bomb triggers on a condition; it is not typically a file-encrypting extortion tool."
+        },
+        {
+          "id": "d",
+          "text": "Adware",
+          "rationale": "Adware shows ads; it does not encrypt files."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Ransomware encrypts victim data and demands payment (usually cryptocurrency). The correct response: isolate, report, and restore from backups — never pay.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.4 Malware"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-031",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "An attacker calls the help desk pretending to be a remote employee and asks for a password reset. Which social engineering technique is being used?",
+      "context": "An attacker impersonates a remote employee to get a password reset.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pretexting",
+          "rationale": "Pretexting uses a fabricated scenario (the 'remote employee') to obtain information or actions — the described attack."
+        },
+        {
+          "id": "b",
+          "text": "Baiting",
+          "rationale": "Baiting uses a lure; no lure is involved here."
+        },
+        {
+          "id": "c",
+          "text": "Phishing",
+          "rationale": "Phishing is email-based; this is a phone call."
+        },
+        {
+          "id": "d",
+          "text": "Shoulder surfing",
+          "rationale": "Shoulder surfing observes credentials being typed."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Pretexting invents a believable scenario to manipulate the target into providing access or information. Phone-based pretexting against help desks is common (also called vishing when phone-phishing).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.5 Social Engineering"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-032",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician finishes removing malware from a SOHO workstation. Which step completes the process?",
+      "context": "Malware removal is finishing on a SOHO workstation.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable System Restore, create a restore point, and educate the end user",
+          "rationale": "The process ends by re-enabling System Restore, creating a clean restore point, and educating the user."
+        },
+        {
+          "id": "b",
+          "text": "Disable the antivirus to improve performance",
+          "rationale": "Antivirus stays enabled; disabling it invites re-infection."
+        },
+        {
+          "id": "c",
+          "text": "Delete all restore points permanently",
+          "rationale": "Restore points are re-enabled and a fresh one created, not deleted."
+        },
+        {
+          "id": "d",
+          "text": "Format the hard drive immediately",
+          "rationale": "Formatting is unnecessary when removal succeeded."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The final malware-removal step re-enables System Restore (disabled earlier), creates a clean restore point, and educates the user to prevent recurrence.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.6 Malware Removal"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-033",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A workstation security policy requires password history and minimum length. Which tool enforces these password policies on a domain-joined Windows PC?",
+      "context": "Password history and length policies must be enforced on domain PCs.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Group Policy (password policy)",
+          "rationale": "Group Policy enforces password length, history, complexity, and age centrally on domain members."
+        },
+        {
+          "id": "b",
+          "text": "BitLocker",
+          "rationale": "BitLocker encrypts drives; it does not set password policies."
+        },
+        {
+          "id": "c",
+          "text": "Device Manager",
+          "rationale": "Device Manager manages drivers."
+        },
+        {
+          "id": "d",
+          "text": "Disk Management",
+          "rationale": "Disk Management handles partitions."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Group Policy (Security Settings > Account Policies > Password Policy) enforces minimum length, history, complexity, and age domain-wide.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.7 Security Best Practices"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-034",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician configures a corporate-owned tablet so it can ONLY install apps approved by the company and cannot change critical settings. Which mobile security approach is this?",
+      "context": "A corporate tablet is restricted to approved apps and locked settings.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "App allow-listing via MDM",
+          "rationale": "MDM app allow-listing restricts installation to approved apps and locks settings — the described control."
+        },
+        {
+          "id": "b",
+          "text": "Jailbreaking",
+          "rationale": "Jailbreaking REMOVES restrictions; it does not enforce them."
+        },
+        {
+          "id": "c",
+          "text": "A captive portal",
+          "rationale": "A captive portal gates Wi-Fi login, not app installs."
+        },
+        {
+          "id": "d",
+          "text": "MAC filtering",
+          "rationale": "MAC filtering controls network access by MAC, not apps."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "MDM app allow-listing and configuration profiles restrict a managed device to approved apps and enforce settings — standard corporate-owned device hardening.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.8 Mobile Device Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-035",
+      "domain": 2,
+      "objective": "2.9",
+      "format": "scenario",
+      "prompt": "A technician must dispose of documents containing customer names and account numbers. Which disposal method is appropriate for paper records?",
+      "context": "Sensitive paper documents must be disposed of.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cross-cut shredding",
+          "rationale": "Cross-cut shredding destroys paper records into small pieces — the appropriate physical method."
+        },
+        {
+          "id": "b",
+          "text": "Degaussing",
+          "rationale": "Degaussing affects magnetic media, not paper."
+        },
+        {
+          "id": "c",
+          "text": "Secure erase",
+          "rationale": "Secure erase applies to digital storage."
+        },
+        {
+          "id": "d",
+          "text": "Factory reset",
+          "rationale": "Factory reset is for mobile devices."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Paper records are destroyed by cross-cut shredding (or incineration). Degaussing, secure erase, and factory reset apply to electronic media.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.9 Data Destruction"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-036",
+      "domain": 2,
+      "objective": "2.10",
+      "format": "scenario",
+      "prompt": "A small office router has been running the factory firmware for years. Which security action is MOST important for the router?",
+      "context": "A SOHO router runs old factory firmware.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Update the firmware to the latest vendor release",
+          "rationale": "Firmware updates patch known vulnerabilities — the most important action for an aging router."
+        },
+        {
+          "id": "b",
+          "text": "Disable the SSID broadcast",
+          "rationale": "SSID hiding is weak security compared to patching known firmware flaws."
+        },
+        {
+          "id": "c",
+          "text": "Enable MAC filtering",
+          "rationale": "MAC filtering is spoofable and secondary to firmware patching."
+        },
+        {
+          "id": "d",
+          "text": "Open port forwarding for the cameras",
+          "rationale": "Port forwarding increases exposure."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Updating router firmware patches known vulnerabilities (the top SOHO hardening item). SSID hiding and MAC filtering are weak controls; port forwarding increases exposure.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.10 SOHO Network Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-037",
+      "domain": 2,
+      "objective": "2.9",
+      "format": "scenario",
+      "prompt": "A company must dispose of optical discs that contain an old client database. Which method is appropriate for destroying optical media?",
+      "context": "Optical discs with a client database must be destroyed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Physical shredding",
+          "rationale": "Shredding physically destroys optical discs — the appropriate disposal method for CDs/DVDs."
+        },
+        {
+          "id": "b",
+          "text": "Degaussing",
+          "rationale": "Degaussing affects magnetic media; optical discs store data as pits, not magnetic fields."
+        },
+        {
+          "id": "c",
+          "text": "Secure erase",
+          "rationale": "Secure erase applies to flash/SSD storage, not optical discs."
+        },
+        {
+          "id": "d",
+          "text": "Factory reset",
+          "rationale": "Factory reset is for mobile devices."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Optical discs are destroyed by physical shredding or incineration. Degaussing and secure erase do not apply to optical media; factory reset is for mobile devices.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.11 Browser Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-038",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician has removed malware from a SOHO workstation. Which step should be taken to prevent recurrence and keep the system protected going forward?",
+      "context": "Malware removal succeeded; ongoing protection is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Schedule scans and run updates regularly",
+          "rationale": "Scheduled scans and regular updates maintain protection — the follow-up step in the removal process."
+        },
+        {
+          "id": "b",
+          "text": "Disable the antivirus real-time protection",
+          "rationale": "Disabling protection invites re-infection."
+        },
+        {
+          "id": "c",
+          "text": "Delete the anti-malware software",
+          "rationale": "Removing the scanner removes protection."
+        },
+        {
+          "id": "d",
+          "text": "Disable Windows Update",
+          "rationale": "Updates patch vulnerabilities; disabling them increases risk."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "After removal: schedule scans, keep anti-malware and OS updates current, and educate the user — the ongoing-protection steps that close the process.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Windows Firewall"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-039",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A technician compares WPA2 and WPA3 for a new wireless deployment. Which TWO advantages does WPA3 provide over WPA2?",
+      "context": "WPA3's advantages over WPA2 are being compared.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Resistance to offline dictionary attacks (SAE)",
+          "rationale": "WPA3's SAE handshake resists offline dictionary attacks — a key improvement over WPA2's PSK."
+        },
+        {
+          "id": "b",
+          "text": "Forward secrecy for session keys",
+          "rationale": "WPA3 provides forward secrecy, so captured traffic cannot be decrypted later if the passphrase leaks."
+        },
+        {
+          "id": "c",
+          "text": "It uses WEP for compatibility",
+          "rationale": "WPA3 never uses WEP; WEP is broken."
+        },
+        {
+          "id": "d",
+          "text": "It requires no passphrase at all",
+          "rationale": "Personal mode still uses a passphrase; enterprise uses 802.1X."
+        },
+        {
+          "id": "e",
+          "text": "It is faster than any wired connection",
+          "rationale": "Wireless speed is unrelated to the security standard."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "WPA3 (SAE) resists offline dictionary attacks and provides forward secrecy. WEP compatibility and passphrase-free claims are false; speed is not a security-standard property.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.3 Wireless Security"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-040",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "An antivirus scan flags a file that appears legitimate to the user. The file was downloaded from a well-known software vendor's site. What is the MOST likely explanation?",
+      "context": "A legitimate-looking file is flagged by antivirus.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A false positive",
+          "rationale": "Antivirus sometimes flags legitimate files (false positives), especially for heuristic or behavioral detection."
+        },
+        {
+          "id": "b",
+          "text": "The file is always malware",
+          "rationale": "Flags can be false positives; verification is needed before assuming malware."
+        },
+        {
+          "id": "c",
+          "text": "The antivirus is broken",
+          "rationale": "A single flag does not mean the AV is broken."
+        },
+        {
+          "id": "d",
+          "text": "The file must be deleted immediately",
+          "rationale": "Deleting a false-positive file harms the user; verify first (upload to VirusTotal or check the vendor)."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Heuristic/behavioral detection can produce false positives on legitimate files. Verify the file's hash/source before acting; do not blindly delete or trust.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.4 Malware Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-041",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A technician applies a security baseline to a Windows workstation. Which TWO settings are part of standard workstation hardening?",
+      "context": "Standard Windows workstation hardening settings are being applied.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Disable the guest account",
+          "rationale": "Disabling the guest account removes an unauthenticated access path — standard hardening."
+        },
+        {
+          "id": "b",
+          "text": "Set failed-attempt account lockout",
+          "rationale": "Account lockout after failed attempts blocks brute-force login attempts."
+        },
+        {
+          "id": "c",
+          "text": "Enable AutoPlay for all media",
+          "rationale": "AutoPlay should be DISABLED, not enabled — it is a malware vector."
+        },
+        {
+          "id": "d",
+          "text": "Make all users administrators",
+          "rationale": "Administrator for everyone violates least privilege."
+        },
+        {
+          "id": "e",
+          "text": "Disable the firewall",
+          "rationale": "The firewall should stay enabled."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Hardening includes disabling the guest account and enabling account lockout. AutoPlay should be off, users should be standard (least privilege), and the firewall stays on.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.7 Hardening"
+        }
+      ]
+    },
+    {
+      "id": "a2-2-042",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "An employee lost their company smartphone, which contains work email and client contacts. Which mobile security capability lets the administrator protect the data on the lost device?",
+      "context": "A lost company smartphone holds work email and contacts.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Remote lock and wipe via MDM",
+          "rationale": "MDM remote lock/wipe protects data on a lost or stolen device — the standard response."
+        },
+        {
+          "id": "b",
+          "text": "A screen brightness setting",
+          "rationale": "Brightness is a display setting, not a security control."
+        },
+        {
+          "id": "c",
+          "text": "Bluetooth pairing",
+          "rationale": "Bluetooth pairing connects peripherals; unrelated to data protection."
+        },
+        {
+          "id": "d",
+          "text": "A captive portal",
+          "rationale": "A captive portal gates Wi-Fi access; it cannot wipe a lost phone."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "MDM provides remote lock and remote wipe, protecting corporate data on lost/stolen devices. Brightness, Bluetooth, and captive portals are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.11 Browser Security"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

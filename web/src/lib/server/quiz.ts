@@ -26,7 +26,7 @@ export interface QuizService {
  */
 export interface ExamConfig {
 	domains: Domain[];
-	quotas: Record<Domain, number>;
+	quotas: Record<number, number>;
 }
 
 export const DEFAULT_EXAM_CONFIG: ExamConfig = {

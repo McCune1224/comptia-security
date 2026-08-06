@@ -1,4 +1,5 @@
 import type {
+	CourseId,
 	Domain,
 	ObjectiveId,
 	PublicQuestion,
@@ -106,12 +107,46 @@ export const objectivesByDomain: Record<Domain, ObjectiveId[]> = {
 	5: ['5.1', '5.2', '5.3', '5.4', '5.5', '5.6']
 };
 
-const mcqObjectiveTotals: Record<ObjectiveId, number> = {
-	'1.1': 10, '1.2': 12, '1.3': 10, '1.4': 13,
-	'2.1': 12, '2.2': 14, '2.3': 12, '2.4': 16, '2.5': 12,
-	'3.1': 13, '3.2': 16, '3.3': 13, '3.4': 13,
-	'4.1': 8, '4.2': 8, '4.3': 11, '4.4': 8, '4.5': 9, '4.6': 8, '4.7': 8, '4.8': 10, '4.9': 7,
-	'5.1': 9, '5.2': 10, '5.3': 9, '5.4': 9, '5.5': 10, '5.6': 10
+/**
+ * Per-course validation constants. Each course bank registers its own spec
+ * (locked counts at module load) — see bank-aplus-1201.ts / bank-aplus-1202.ts.
+ */
+export interface CourseBankSpec {
+	courseId: CourseId;
+	mcqTotal: number;
+	pbqTotal: number;
+	mcqIdPattern: RegExp;
+	pbqIdPattern: RegExp;
+	domains: Domain[];
+	objectivesByDomain: Record<number, ObjectiveId[]>;
+	mcqObjectiveTotals: Record<ObjectiveId, number>;
+	mcqDomainTotals: Record<number, number>;
+	/** multiple-choice (multi-select) kind count per domain */
+	multiTotals: Record<number, number>;
+	/** scenario-format count per domain (all A+ MCQs are scenario) */
+	scenarioTotals: Record<number, number>;
+	/** optional per-domain PBQ floor (checked when provided) */
+	pbqDomainTotals?: Record<number, number>;
+}
+
+export const SECP701_BANK_SPEC: CourseBankSpec = {
+	courseId: 'secp-701',
+	mcqTotal: 300,
+	pbqTotal: 88,
+	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
+	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
+	domains: [1, 2, 3, 4, 5],
+	objectivesByDomain,
+	mcqObjectiveTotals: {
+		'1.1': 10, '1.2': 12, '1.3': 10, '1.4': 13,
+		'2.1': 12, '2.2': 14, '2.3': 12, '2.4': 16, '2.5': 12,
+		'3.1': 13, '3.2': 16, '3.3': 13, '3.4': 13,
+		'4.1': 8, '4.2': 8, '4.3': 11, '4.4': 8, '4.5': 9, '4.6': 8, '4.7': 8, '4.8': 10, '4.9': 7,
+		'5.1': 9, '5.2': 10, '5.3': 9, '5.4': 9, '5.5': 10, '5.6': 10
+	},
+	mcqDomainTotals: { 1: 45, 2: 66, 3: 55, 4: 77, 5: 57 },
+	multiTotals: { 1: 5, 2: 10, 3: 7, 4: 10, 5: 6 },
+	scenarioTotals: { 1: 45, 2: 66, 3: 55, 4: 77, 5: 57 }
 };
 
 function fail(id: string, message: string): never {
@@ -122,27 +157,30 @@ function hasUniqueIds(items: { id: string }[]): boolean {
 	return new Set(items.map((item) => item.id)).size === items.length;
 }
 
-export function validateQuestionBank(bank: QuestionBank): void {
-	if (bank.mcqs.length !== 300) fail('mcqs', `expected 300 items, found ${bank.mcqs.length}`);
-	if (bank.pbqs.length !== 88) fail('pbqs', `expected 88 items, found ${bank.pbqs.length}`);
+export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = SECP701_BANK_SPEC): void {
+	if (bank.mcqs.length !== spec.mcqTotal) fail('mcqs', `expected ${spec.mcqTotal} items, found ${bank.mcqs.length}`);
+	if (bank.pbqs.length !== spec.pbqTotal) fail('pbqs', `expected ${spec.pbqTotal} items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
 	if (new Set(all.map((question) => question.prompt.trim())).size !== all.length) fail('bank', 'prompts must be unique');
-	const mcqDomainTotals: Record<Domain, number> = { 1: 45, 2: 66, 3: 55, 4: 77, 5: 57 };
-	const multiTotals: Record<Domain, number> = { 1: 5, 2: 10, 3: 7, 4: 10, 5: 6 };
-	const scenarioTotals: Record<Domain, number> = { 1: 45, 2: 66, 3: 55, 4: 77, 5: 57 };
-	for (const domain of [1, 2, 3, 4, 5] as Domain[]) {
+	for (const domain of spec.domains) {
 		const mcqs = bank.mcqs.filter((question) => question.domain === domain);
-		if (mcqs.length !== mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected ${mcqDomainTotals[domain]} items`);
-		if (mcqs.filter((question) => question.kind === 'multiple-choice').length !== multiTotals[domain]) fail(`mcq-${domain}`, 'invalid multiple-choice count');
-		if (mcqs.filter((question) => question.format === 'scenario').length !== scenarioTotals[domain]) fail(`mcq-${domain}`, 'invalid scenario count');
+		if (mcqs.length !== spec.mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected ${spec.mcqDomainTotals[domain]} items`);
+		if (mcqs.filter((question) => question.kind === 'multiple-choice').length !== spec.multiTotals[domain]) fail(`mcq-${domain}`, 'invalid multiple-choice count');
+		if (mcqs.filter((question) => question.format === 'scenario').length !== spec.scenarioTotals[domain]) fail(`mcq-${domain}`, 'invalid scenario count');
 	}
-	for (const [objective, expected] of Object.entries(mcqObjectiveTotals) as [ObjectiveId, number][]) {
+	if (spec.pbqDomainTotals) {
+		for (const domain of spec.domains) {
+			const pbqs = bank.pbqs.filter((question) => question.domain === domain);
+			if (pbqs.length !== spec.pbqDomainTotals[domain]) fail(`pbq-${domain}`, `expected ${spec.pbqDomainTotals[domain]} items`);
+		}
+	}
+	for (const [objective, expected] of Object.entries(spec.mcqObjectiveTotals) as [ObjectiveId, number][]) {
 		if (bank.mcqs.filter((question) => question.objective === objective).length !== expected) fail(objective, `expected ${expected} MCQs`);
 	}
 	for (const question of all) {
-		if (!objectivesByDomain[question.domain].includes(question.objective)) fail(question.id, 'objective does not belong to domain');
-		if (!question.id.match(question.format === 'pbq' ? /^pbq-[1-5]-\d{3}$/ : /^mcq-[1-5]-\d{3}$/)) fail(question.id, 'invalid ID or format');
+		if (!spec.objectivesByDomain[question.domain].includes(question.objective)) fail(question.id, 'objective does not belong to domain');
+		if (!question.id.match(question.format === 'pbq' ? spec.pbqIdPattern : spec.mcqIdPattern)) fail(question.id, 'invalid ID or format');
 		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0) fail(question.id, 'missing authored content or source reference');
 		if (question.kind === 'single-choice' || question.kind === 'multiple-choice') {
 			if (question.options.length !== (question.kind === 'single-choice' ? 4 : question.options.length) || (question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))) fail(question.id, 'invalid option count');

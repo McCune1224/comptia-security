@@ -1,0 +1,199 @@
+{
+  "1.1": {
+    "title": "Laptop Hardware",
+    "topics": [
+      "Laptop Hardware"
+    ]
+  },
+  "1.2": {
+    "title": "Mobile Device Configuration",
+    "topics": [
+      "Connecting Mobile Devices",
+      "Mobile Device Accessories"
+    ]
+  },
+  "1.3": {
+    "title": "Mobile Connectivity",
+    "topics": [
+      "Mobile Device Networks",
+      "Mobile Device Management"
+    ]
+  },
+  "2.1": {
+    "title": "Ports and Protocols",
+    "topics": [
+      "Introduction to IP",
+      "Common Ports"
+    ]
+  },
+  "2.2": {
+    "title": "Wireless Networks",
+    "topics": [
+      "Wireless Network Technologies"
+    ]
+  },
+  "2.3": {
+    "title": "Network Services",
+    "topics": [
+      "Network Services"
+    ]
+  },
+  "2.4": {
+    "title": "Network Configurations",
+    "topics": [
+      "DNS Configuration",
+      "DHCP",
+      "VLANs and VPNs"
+    ]
+  },
+  "2.5": {
+    "title": "Network Devices",
+    "topics": [
+      "Network Devices"
+    ]
+  },
+  "2.6": {
+    "title": "Network Configurations",
+    "topics": [
+      "IPv4 and IPv6",
+      "Assigning IP Addresses"
+    ]
+  },
+  "2.7": {
+    "title": "Network Connections",
+    "topics": [
+      "Internet Connection Types",
+      "Network Types"
+    ]
+  },
+  "2.8": {
+    "title": "Network Tools",
+    "topics": [
+      "Network Tools"
+    ]
+  },
+  "3.1": {
+    "title": "Displays",
+    "topics": [
+      "Display Types",
+      "Display Attributes"
+    ]
+  },
+  "3.2": {
+    "title": "Cables and Connectors",
+    "topics": [
+      "Network Cables",
+      "568A and 568B Colors",
+      "Optical Fiber",
+      "Peripheral Cables",
+      "Video Cables",
+      "Storage Cables",
+      "Adapters and Converters",
+      "Copper Connectors",
+      "Fiber Connectors"
+    ]
+  },
+  "3.3": {
+    "title": "Memory",
+    "topics": [
+      "An Overview of Memory",
+      "Memory Technologies"
+    ]
+  },
+  "3.4": {
+    "title": "Storage Devices",
+    "topics": [
+      "Storage Devices",
+      "RAID"
+    ]
+  },
+  "3.5": {
+    "title": "Motherboards",
+    "topics": [
+      "Motherboard Form Factors",
+      "Motherboard Expansion Slots",
+      "Motherboard Connections",
+      "Motherboard Compatibility",
+      "The BIOS",
+      "BIOS Settings",
+      "HSM and TPM",
+      "CPU Features",
+      "Expansion Cards",
+      "Cooling"
+    ]
+  },
+  "3.6": {
+    "title": "Power",
+    "topics": [
+      "Computer Power"
+    ]
+  },
+  "3.7": {
+    "title": "Multifunction Devices",
+    "topics": [
+      "Multifunction Devices"
+    ]
+  },
+  "3.8": {
+    "title": "Printers",
+    "topics": [
+      "Laser Printer Maintenance",
+      "Inkjet Printers",
+      "Inkjet Printer Maintenance",
+      "Thermal Printers",
+      "Thermal Printer Maintenance",
+      "Impact Printers",
+      "Impact Printer Maintenance"
+    ]
+  },
+  "4.1": {
+    "title": "Virtualization",
+    "topics": [
+      "Virtualization Concepts",
+      "Virtualization Services"
+    ]
+  },
+  "4.2": {
+    "title": "Cloud Computing",
+    "topics": [
+      "Cloud Models",
+      "Cloud Characteristics"
+    ]
+  },
+  "5.1": {
+    "title": "Troubleshooting Hardware",
+    "topics": [
+      "Troubleshooting Hardware"
+    ]
+  },
+  "5.2": {
+    "title": "Troubleshooting Storage",
+    "topics": [
+      "Troubleshooting Storage Devices"
+    ]
+  },
+  "5.3": {
+    "title": "Troubleshooting Displays",
+    "topics": [
+      "Troubleshooting Display Issues"
+    ]
+  },
+  "5.4": {
+    "title": "Troubleshooting Mobile Devices",
+    "topics": [
+      "Troubleshooting Mobile Devices"
+    ]
+  },
+  "5.5": {
+    "title": "Troubleshooting Networks",
+    "topics": [
+      "Troubleshooting Networks"
+    ]
+  },
+  "5.6": {
+    "title": "Troubleshooting Printers",
+    "topics": [
+      "Troubleshooting Printers"
+    ]
+  }
+}

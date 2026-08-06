@@ -1,0 +1,1599 @@
+{
+  "mcqs": [
+    {
+      "id": "a1-2-001",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A support technician needs to securely administer a Linux server remotely from a Windows workstation. Which port should the technician use for the secure administration connection?",
+      "context": "Remote administration of a Linux server is needed; the connection must be encrypted.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "22",
+          "rationale": "Port 22 is SSH, the encrypted remote-administration protocol — the secure choice."
+        },
+        {
+          "id": "b",
+          "text": "23",
+          "rationale": "Port 23 is Telnet, which sends credentials and data in plaintext."
+        },
+        {
+          "id": "c",
+          "text": "3389",
+          "rationale": "Port 3389 is RDP, used for Windows remote desktop sessions."
+        },
+        {
+          "id": "d",
+          "text": "445",
+          "rationale": "Port 445 is SMB/CIFS, used for Windows file sharing."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SSH (port 22) provides encrypted remote administration of Unix/Linux systems. Telnet (23) is its insecure predecessor; RDP (3389) is Windows-specific; SMB (445) is file sharing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-002",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A user reports that they can send email but cannot receive it from their mail server, which downloads messages to the local client. Which port is MOST likely blocked on the corporate firewall?",
+      "context": "Outgoing mail works; incoming mail download to the client does not.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "25",
+          "rationale": "Port 25 (SMTP) sends mail; since sending works, it is not the blocked port."
+        },
+        {
+          "id": "b",
+          "text": "110",
+          "rationale": "Port 110 (POP3) downloads mail to the client — a blocked receive path matches the symptom."
+        },
+        {
+          "id": "c",
+          "text": "143",
+          "rationale": "Port 143 (IMAP) also receives mail, but it keeps messages on the server rather than downloading them to the client."
+        },
+        {
+          "id": "d",
+          "text": "53",
+          "rationale": "Port 53 (DNS) resolves names; a DNS block would break web browsing too."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "POP3 (port 110) downloads messages to the local client; SMTP (25) handles sending. IMAP (143) keeps mail server-side, so a client that downloads to local storage points to POP3.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-003",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A network engineer needs to transfer files between two servers using a protocol that encrypts both the authentication and the data in transit. Which ports should be permitted?",
+      "context": "Encrypted file transfer is required between two servers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "20 and 21",
+          "rationale": "Ports 20/21 are FTP, which transmits credentials and data in plaintext."
+        },
+        {
+          "id": "b",
+          "text": "22",
+          "rationale": "SSH on port 22 supports SFTP/SCP, encrypting both authentication and data — the secure file-transfer path."
+        },
+        {
+          "id": "c",
+          "text": "80 and 443",
+          "rationale": "HTTP/HTTPS serve web content; not a general server-to-server file-transfer method."
+        },
+        {
+          "id": "d",
+          "text": "137 and 139",
+          "rationale": "NetBIOS/NetBT ports are legacy Windows naming/file-sharing with weak security."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "SFTP and SCP run over SSH (port 22) and encrypt both authentication and data. FTP (20/21) is plaintext and insecure.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-004",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A VoIP phone intermittently drops audio quality when the network is busy, but a file download that uses TCP continues without issue. Which characteristic of the voice traffic explains why it degrades first?",
+      "context": "VoIP audio degrades under load while TCP file transfers continue.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "UDP does not retransmit lost packets, so dropped packets become gaps in audio",
+          "rationale": "VoIP uses UDP: no retransmission means lost packets are simply missing from the audio stream — quality degrades under congestion."
+        },
+        {
+          "id": "b",
+          "text": "UDP performs a three-way handshake before each call",
+          "rationale": "The three-way handshake is a TCP behavior; UDP is connectionless."
+        },
+        {
+          "id": "c",
+          "text": "TCP provides lower latency than UDP",
+          "rationale": "TCP adds overhead and retransmission; it is NOT lower latency than UDP for real-time traffic."
+        },
+        {
+          "id": "d",
+          "text": "VoIP traffic is always sent over port 443",
+          "rationale": "VoIP uses a range of UDP ports; 443 is HTTPS."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "VoIP uses UDP for low latency. When the network congests, UDP packets are dropped without retransmission, causing audio gaps — while TCP recovers through retransmission at the cost of latency.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 TCP vs UDP"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-005",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A technician is configuring a Windows workstation so it can access shared folders on a departmental file server. Which TWO ports must be open on the firewall for SMB/CIFS file sharing to work?",
+      "context": "Windows file sharing to a departmental server requires SMB/CIFS traffic.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "445",
+          "rationale": "Port 445 is the direct SMB/CIFS port used by modern Windows file sharing."
+        },
+        {
+          "id": "b",
+          "text": "139",
+          "rationale": "Port 139 (NetBIOS session) is the legacy fallback used alongside SMB on Windows networks."
+        },
+        {
+          "id": "c",
+          "text": "389",
+          "rationale": "Port 389 is LDAP, used for directory services, not file sharing."
+        },
+        {
+          "id": "d",
+          "text": "53",
+          "rationale": "Port 53 is DNS; needed for name resolution but not for the SMB session itself."
+        },
+        {
+          "id": "e",
+          "text": "80",
+          "rationale": "Port 80 is HTTP web traffic."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Modern Windows file sharing uses SMB directly on port 445; legacy NetBIOS-based SMB sessions use port 139. LDAP (389), DNS (53), and HTTP (80) are unrelated to the file-sharing session.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-006",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A homeowner complains that their wireless devices frequently disconnect near the microwave in the kitchen. Which wireless frequency is MOST likely being disrupted?",
+      "context": "Wireless disconnects occur near a microwave oven.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "2.4 GHz",
+          "rationale": "Microwave ovens emit interference in the 2.4 GHz band, which overlaps Wi-Fi channels — the likely culprit."
+        },
+        {
+          "id": "b",
+          "text": "5 GHz",
+          "rationale": "5 GHz is less affected by microwave interference, though it has shorter range."
+        },
+        {
+          "id": "c",
+          "text": "6 GHz",
+          "rationale": "6 GHz (Wi-Fi 6E) is far from microwave emissions."
+        },
+        {
+          "id": "d",
+          "text": "900 MHz",
+          "rationale": "900 MHz is not a Wi-Fi band and is not used by the kitchen microwave."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Microwave ovens radiate in the 2.4 GHz range, directly overlapping Wi-Fi channels 1-11. Moving to 5 GHz or 6 GHz avoids most of this interference.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.2 Wireless Frequencies"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-007",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A technician is choosing a Wi-Fi standard for a small office that wants the fastest possible speeds on the 5 GHz band with support for the newest clients. Which standard should be selected?",
+      "context": "A new access point should support the fastest 5 GHz connections.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "802.11ax (Wi-Fi 6)",
+          "rationale": "802.11ax is the newest mainstream standard, supporting 2.4/5/6 GHz with higher throughput and efficiency."
+        },
+        {
+          "id": "b",
+          "text": "802.11b",
+          "rationale": "802.11b is a legacy 2.4 GHz standard at 11 Mbps."
+        },
+        {
+          "id": "c",
+          "text": "802.11g",
+          "rationale": "802.11g is 2.4 GHz only, up to 54 Mbps."
+        },
+        {
+          "id": "d",
+          "text": "802.11a",
+          "rationale": "802.11a is an early 5 GHz standard at 54 Mbps — fast for its era but far slower than modern standards."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "802.11ax (Wi-Fi 6) provides the highest throughput and supports 2.4, 5, and 6 GHz bands. 802.11b/g are legacy 2.4 GHz; 802.11a is the old 5 GHz standard.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.2 802.11 Standards"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-008",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A warehouse uses handheld scanners to read inventory tags as items pass through a doorway. The tags are passive and powered by the reader's signal. Which wireless technology is in use?",
+      "context": "Passive tags on inventory are read at a doorway by a handheld scanner.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "RFID",
+          "rationale": "RFID uses radio tags that can be passive (powered by the reader's field) — the standard technology for inventory tracking."
+        },
+        {
+          "id": "b",
+          "text": "NFC",
+          "rationale": "NFC works at a range of only a few centimeters; doorway scanning needs more distance."
+        },
+        {
+          "id": "c",
+          "text": "Bluetooth",
+          "rationale": "Bluetooth is a two-way personal-area connection, not passive tag reading."
+        },
+        {
+          "id": "d",
+          "text": "Infrared",
+          "rationale": "Infrared requires line of sight and is not used for passive inventory tags at doorways."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RFID (radio-frequency identification) reads passive tags powered by the reader at ranges of a meter or more — ideal for doorway inventory scanning. NFC is an RFID variant limited to a few centimeters.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.2 RFID and NFC"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-009",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A small business wants a single network appliance that combines firewall, intrusion prevention, antivirus, and content filtering for its internet connection. Which type of device should be purchased?",
+      "context": "One appliance should provide firewall, IPS, antivirus, and content filtering.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "UTM appliance",
+          "rationale": "A unified threat management (UTM) appliance bundles firewall, IPS, antivirus, and filtering in one device."
+        },
+        {
+          "id": "b",
+          "text": "Load balancer",
+          "rationale": "A load balancer distributes traffic across servers; it does not filter threats."
+        },
+        {
+          "id": "c",
+          "text": "Proxy server",
+          "rationale": "A proxy caches and filters web requests but does not provide IPS or antivirus."
+        },
+        {
+          "id": "d",
+          "text": "Spam gateway",
+          "rationale": "A spam gateway filters email only."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A UTM (unified threat management) appliance combines multiple security functions — firewall, intrusion prevention, antivirus, content filtering — into a single device, ideal for SMBs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 Internet Appliances"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-010",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "An administrator needs all servers on the network to agree on the current time for accurate log correlation. Which server role should be deployed?",
+      "context": "Servers must synchronize their clocks for accurate log correlation.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NTP server",
+          "rationale": "An NTP (Network Time Protocol) server distributes accurate time so all devices stay synchronized."
+        },
+        {
+          "id": "b",
+          "text": "DNS server",
+          "rationale": "DNS resolves hostnames to IP addresses; it does not provide time."
+        },
+        {
+          "id": "c",
+          "text": "Syslog server",
+          "rationale": "A syslog server collects logs; it relies on accurate time but does not provide it."
+        },
+        {
+          "id": "d",
+          "text": "DHCP server",
+          "rationale": "DHCP assigns IP addresses; it does not synchronize clocks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NTP (Network Time Protocol) synchronizes clocks across devices, which is essential for correlating logs and authentication timestamps.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 Network Services"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-011",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A technician notices that a manufacturing plant runs a 20-year-old control system that monitors and controls industrial equipment, and it cannot be patched. Which term describes this type of system?",
+      "context": "An unpatched industrial control system monitors plant equipment.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "SCADA system",
+          "rationale": "SCADA (supervisory control and data acquisition) systems monitor and control industrial processes and are often legacy and unpatched."
+        },
+        {
+          "id": "b",
+          "text": "UTM appliance",
+          "rationale": "A UTM is a security appliance, not an industrial control system."
+        },
+        {
+          "id": "c",
+          "text": "Load balancer",
+          "rationale": "A load balancer distributes traffic; unrelated to industrial control."
+        },
+        {
+          "id": "d",
+          "text": "SAN",
+          "rationale": "A SAN is a storage area network."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SCADA systems control industrial processes (power, manufacturing, water). They are frequently legacy, unpatched, and need special segmentation and security attention.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 SCADA and IoT"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-012",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A company deploys dozens of internet-connected thermostats, door locks, and light switches across its offices. Employees control them from a central app. Which term describes these devices?",
+      "context": "Internet-connected building devices are managed from a central app.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "IoT devices",
+          "rationale": "Internet of Things (IoT) devices are networked smart devices — thermostats, locks, lights — managed remotely."
+        },
+        {
+          "id": "b",
+          "text": "SCADA endpoints",
+          "rationale": "SCADA is for industrial control, not office building automation."
+        },
+        {
+          "id": "c",
+          "text": "Thin clients",
+          "rationale": "Thin clients are lightweight PCs that connect to a server; unrelated."
+        },
+        {
+          "id": "d",
+          "text": "PBX endpoints",
+          "rationale": "PBX endpoints are telephone system extensions."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "IoT devices are smart, internet-connected devices (thermostats, locks, sensors) that can be monitored and controlled centrally — and they introduce security considerations like weak default credentials.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 IoT Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-013",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A web administrator adds a DNS record so that mail sent to the domain is accepted by the correct mail server. Which record type is being configured?",
+      "context": "A DNS record directs email for the domain to the mail server.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "MX",
+          "rationale": "An MX (mail exchanger) record identifies which servers accept mail for a domain."
+        },
+        {
+          "id": "b",
+          "text": "A",
+          "rationale": "An A record maps a hostname to an IPv4 address."
+        },
+        {
+          "id": "c",
+          "text": "CNAME",
+          "rationale": "A CNAME creates an alias from one hostname to another."
+        },
+        {
+          "id": "d",
+          "text": "AAAA",
+          "rationale": "An AAAA record maps a hostname to an IPv6 address."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The MX record advertises the mail servers for a domain, with priority values. A/AAAA handle IP mapping and CNAME creates aliases.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DNS Configuration"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-014",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A mail administrator wants other mail servers to verify that messages claiming to be from the company's domain actually originate from its authorized servers. Which DNS record should be published?",
+      "context": "Mail servers should verify the origin of messages from the company domain.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "TXT with SPF",
+          "rationale": "An SPF TXT record lists the servers authorized to send mail for the domain, enabling verification."
+        },
+        {
+          "id": "b",
+          "text": "MX",
+          "rationale": "MX records identify receiving mail servers, not sending authorization."
+        },
+        {
+          "id": "c",
+          "text": "CNAME",
+          "rationale": "CNAME is a hostname alias and has nothing to do with mail authentication."
+        },
+        {
+          "id": "d",
+          "text": "AAAA",
+          "rationale": "AAAA maps names to IPv6 addresses."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SPF (Sender Policy Framework) is published as a TXT record listing authorized sending servers. DKIM and DMARC complement SPF to fight email spoofing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DNS Configuration"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-015",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A network administrator needs the printer in the lobby to always receive the same IP address from the DHCP server, even though it uses DHCP. Which DHCP feature should be configured?",
+      "context": "A printer must always receive the same DHCP-assigned IP.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reservation",
+          "rationale": "A DHCP reservation binds a specific IP to the device's MAC address, so it always gets the same address."
+        },
+        {
+          "id": "b",
+          "text": "Scope",
+          "rationale": "The scope is the range of addresses DHCP can hand out."
+        },
+        {
+          "id": "c",
+          "text": "Exclusion",
+          "rationale": "An exclusion removes addresses from the pool so DHCP does not assign them."
+        },
+        {
+          "id": "d",
+          "text": "Lease",
+          "rationale": "A lease is the temporary assignment duration for an IP address."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A DHCP reservation permanently maps a MAC address to a fixed IP within the scope. Exclusions prevent assignment, and leases control how long an assignment lasts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DHCP"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-016",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A company separates its marketing and engineering departments so that broadcast traffic from one group cannot reach the other, while both keep using the same switch hardware. Which technology makes this possible?",
+      "context": "Two departments must be isolated from each other's broadcast traffic on shared switch hardware.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VLAN",
+          "rationale": "VLANs partition a switch into separate broadcast domains, isolating departments on shared hardware."
+        },
+        {
+          "id": "b",
+          "text": "VPN",
+          "rationale": "A VPN is an encrypted tunnel over a public network, not a switch segmentation tool."
+        },
+        {
+          "id": "c",
+          "text": "NAT",
+          "rationale": "NAT translates private/public IP addresses."
+        },
+        {
+          "id": "d",
+          "text": "DHCP reservation",
+          "rationale": "DHCP reservations fix IP assignments; they do not segment traffic."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "VLANs (virtual LANs) create separate broadcast domains on the same physical switch, isolating traffic between departments while sharing hardware.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 VLANs and VPNs"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-017",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A salesperson working from a hotel needs to access internal company applications securely. Which TWO technologies should be combined for the connection?",
+      "context": "A remote user needs secure access to internal applications from a hotel network.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VPN client",
+          "rationale": "A VPN client creates an encrypted tunnel from the hotel network to the company network."
+        },
+        {
+          "id": "b",
+          "text": "Encrypted tunnel",
+          "rationale": "The VPN establishes an encrypted tunnel so hotel traffic cannot be intercepted."
+        },
+        {
+          "id": "c",
+          "text": "Public DNS server",
+          "rationale": "Public DNS resolves names; it does not secure the connection."
+        },
+        {
+          "id": "d",
+          "text": "DHCP reservation",
+          "rationale": "DHCP reservations fix IPs on the local LAN; irrelevant to a hotel connection."
+        },
+        {
+          "id": "e",
+          "text": "Port forwarding",
+          "rationale": "Port forwarding exposes internal services; it is not a secure remote-access method."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "A VPN client establishes an encrypted tunnel (IPSec, TLS, or WireGuard) protecting traffic on untrusted networks like hotel Wi-Fi. DNS/DHCP/port-forwarding do not provide this protection.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 VLANs and VPNs"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-018",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A technician is selecting a switch for a growing office and needs to segment departments later. Which TWO features does a MANAGED switch provide that an unmanaged switch does not?",
+      "context": "A switch is needed that can later segment departments.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VLAN configuration",
+          "rationale": "Managed switches support VLANs to segment broadcast domains — the key requirement."
+        },
+        {
+          "id": "b",
+          "text": "Remote management (SNMP/web/CLI)",
+          "rationale": "Managed switches offer remote administration, monitoring, and port configuration."
+        },
+        {
+          "id": "c",
+          "text": "Plug-and-play operation only",
+          "rationale": "Plug-and-play with no configuration is the defining trait of an UNMANAGED switch."
+        },
+        {
+          "id": "d",
+          "text": "No configuration options",
+          "rationale": "Unmanaged switches have no configuration; managed ones do."
+        },
+        {
+          "id": "e",
+          "text": "Automatic VLAN creation",
+          "rationale": "VLANs must be created by an administrator; no switch creates them automatically."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Managed switches provide VLAN support and remote management (web/SNMP/CLI). Unmanaged switches are plug-and-play with no configuration. PoE and port security are also managed-switch features.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.5 Network Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-019",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A network camera is installed on a ceiling far from any power outlet, and the only nearby cable is an Ethernet drop. Which technology lets the camera receive both data and power over that single cable?",
+      "context": "A ceiling camera needs power but only has an Ethernet cable nearby.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "PoE",
+          "rationale": "Power over Ethernet (PoE) delivers both data and power over a single twisted-pair cable — perfect for ceiling devices."
+        },
+        {
+          "id": "b",
+          "text": "VPN",
+          "rationale": "A VPN is an encrypted tunnel, not a power delivery method."
+        },
+        {
+          "id": "c",
+          "text": "VLAN",
+          "rationale": "A VLAN segments traffic; it does not provide power."
+        },
+        {
+          "id": "d",
+          "text": "NAT",
+          "rationale": "NAT translates IP addresses."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "PoE (IEEE 802.3af/at) delivers up to 15.4W/30W over Ethernet cabling via an injector or PoE switch, powering cameras, APs, and VoIP phones without separate outlets.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.5 Power over Ethernet"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-020",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A new building's data cabling terminates in the server room at a wall-mounted panel where each run is punched down to a numbered port. What is this panel called?",
+      "context": "Cable runs terminate at a numbered wall panel in the server room.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Patch panel",
+          "rationale": "A patch panel is the termination point where structured cabling is punched down and patched to switches."
+        },
+        {
+          "id": "b",
+          "text": "Punchdown block",
+          "rationale": "A punchdown block (like a 110 block) is the older voice/data termination, but the wall-mounted numbered panel for network cabling is the patch panel."
+        },
+        {
+          "id": "c",
+          "text": "Switch",
+          "rationale": "A switch forwards traffic; cabling terminates at the patch panel before reaching it."
+        },
+        {
+          "id": "d",
+          "text": "Firewall",
+          "rationale": "A firewall filters traffic between networks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A patch panel provides a fixed termination point for structured cabling; short patch cables connect it to the switch. It makes moves/adds/changes clean and organized.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.5 Network Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-021",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A technician is troubleshooting why a device cannot reach the network and wants to confirm the NIC is functioning at the physical layer by testing its transmit/receive path locally. Which tool should be used?",
+      "context": "The NIC's local transmit/receive path needs a physical-layer test.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Loopback plug",
+          "rationale": "A loopback plug connects the transmit pins back to the receive pins, letting the NIC test its own path."
+        },
+        {
+          "id": "b",
+          "text": "Toner probe",
+          "rationale": "A toner probe traces cables through walls; it does not test a NIC."
+        },
+        {
+          "id": "c",
+          "text": "Crimper",
+          "rationale": "A crimper attaches connectors to cable; it does not test."
+        },
+        {
+          "id": "d",
+          "text": "Wi-Fi analyzer",
+          "rationale": "A Wi-Fi analyzer surveys wireless signals."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A loopback plug shorts the transmit pair back to receive, so a device can verify its NIC and port are functional without a network. Toner probes trace cables; crimpers terminate them.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-022",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician configures a SOHO router and needs to identify which addresses the router hands out to devices automatically. The office uses the 192.168.1.x range. Which addressing method is the router using?",
+      "context": "A SOHO router assigns 192.168.1.x addresses to devices automatically.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dynamic (DHCP)",
+          "rationale": "DHCP automatically assigns addresses from a pool — the standard SOHO router behavior."
+        },
+        {
+          "id": "b",
+          "text": "Static",
+          "rationale": "Static addressing requires manual configuration on each device."
+        },
+        {
+          "id": "c",
+          "text": "APIPA",
+          "rationale": "APIPA (169.254.x.x) is the link-local fallback when DHCP is unavailable."
+        },
+        {
+          "id": "d",
+          "text": "IPv6 SLAAC",
+          "rationale": "SLAAC is IPv6 stateless auto-configuration, not IPv4 DHCP."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SOHO routers run a DHCP server that dynamically assigns addresses from the LAN pool. APIPA addresses (169.254.x.x) appear only when DHCP fails.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 Assigning IP Addresses"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-023",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A user's PC shows an IP address of 169.254.14.77 after connecting to the office network. Which TWO statements about this address are correct?",
+      "context": "A PC received a 169.254.x.x address on the office network.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "It is an APIPA link-local address",
+          "rationale": "169.254.x.x is the APIPA range a device self-assigns."
+        },
+        {
+          "id": "b",
+          "text": "It indicates the device could not reach a DHCP server",
+          "rationale": "APIPA appears when DHCP fails, leaving the device without a usable configuration."
+        },
+        {
+          "id": "c",
+          "text": "It is a routable public address",
+          "rationale": "169.254 is link-local and never routed on the internet."
+        },
+        {
+          "id": "d",
+          "text": "It is a valid static address for the office subnet",
+          "rationale": "A static address would be in the office's configured subnet, not link-local."
+        },
+        {
+          "id": "e",
+          "text": "It is assigned by the router's DHCP scope",
+          "rationale": "DHCP scopes do not hand out APIPA addresses; the NIC self-assigns them."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "169.254.x.x is Automatic Private IP Addressing — the NIC self-assigns a link-local address when DHCP is unreachable. The address is not routable and not from the office's DHCP scope.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 Assigning IP Addresses"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-024",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician is setting up a small office and needs devices on the internal LAN to share one public internet address. Which technology on the SOHO router makes this possible?",
+      "context": "Multiple internal devices must share one public internet address.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NAT/PAT",
+          "rationale": "NAT (with PAT) maps many private addresses to one public address — the standard SOHO internet-sharing mechanism."
+        },
+        {
+          "id": "b",
+          "text": "VLAN",
+          "rationale": "VLANs segment broadcast domains; they do not translate addresses."
+        },
+        {
+          "id": "c",
+          "text": "VPN",
+          "rationale": "A VPN is an encrypted tunnel, not an address translation method."
+        },
+        {
+          "id": "d",
+          "text": "APIPA",
+          "rationale": "APIPA is a link-local fallback address."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NAT (network address translation) with PAT (port address translation) lets many private IPs share one public IP — how SOHO routers provide internet to the whole LAN.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 IP Addressing"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-025",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A user wants to connect a wireless headset to their laptop for the first time. The laptop shows the headset in the list of discovered devices. Which step completes the pairing?",
+      "context": "A Bluetooth headset appears in the laptop's discovered-devices list.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Select the headset and confirm the pairing PIN/code",
+          "rationale": "After discovery, the user selects the device and confirms the PIN or code shown on both devices to complete pairing."
+        },
+        {
+          "id": "b",
+          "text": "Enter the office Wi-Fi passphrase",
+          "rationale": "Wi-Fi credentials are unrelated to Bluetooth pairing."
+        },
+        {
+          "id": "c",
+          "text": "Configure a static IP address on the headset",
+          "rationale": "Bluetooth is a PAN technology; no IP configuration is involved."
+        },
+        {
+          "id": "d",
+          "text": "Enable NFC on the laptop",
+          "rationale": "NFC is a separate technology; Bluetooth pairing does not require it."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Bluetooth pairing ends with selecting the discovered device and confirming the PIN/code (or 'pair' confirmation) on both devices. Wi-Fi, IP configuration, and NFC are not part of Bluetooth pairing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 IP Addressing"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-026",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician secures a new wireless router and needs to select the strongest available wireless encryption that the router and all clients support. Which option should be chosen?",
+      "context": "The strongest wireless encryption supported by router and clients is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "WPA3",
+          "rationale": "WPA3 (SAE) is the strongest current wireless encryption; choose it when all devices support it."
+        },
+        {
+          "id": "b",
+          "text": "WPA2",
+          "rationale": "WPA2 is strong but older; WPA3 supersedes it."
+        },
+        {
+          "id": "c",
+          "text": "WPA",
+          "rationale": "WPA uses TKIP, which is deprecated and weak."
+        },
+        {
+          "id": "d",
+          "text": "WEP",
+          "rationale": "WEP is broken and must never be used."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "WPA3 (Wi-Fi Protected Access 3, using SAE) provides the strongest encryption and resists offline dictionary attacks. Order of strength: WPA3 > WPA2 > WPA > WEP.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 SOHO Wireless Security"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-027",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A rural business has no access to cable or fiber internet, and cellular coverage is poor. Which internet connection type is MOST likely to be available?",
+      "context": "Rural location with no cable, fiber, or reliable cellular.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Satellite",
+          "rationale": "Satellite internet is available nearly anywhere with a clear view of the sky — the typical rural fallback."
+        },
+        {
+          "id": "b",
+          "text": "Fiber",
+          "rationale": "Fiber requires physical infrastructure rarely present in rural areas."
+        },
+        {
+          "id": "c",
+          "text": "Cable",
+          "rationale": "Cable requires coax plant, usually absent in remote areas."
+        },
+        {
+          "id": "d",
+          "text": "DSL",
+          "rationale": "DSL needs a telephone line with a nearby central office; many rural areas lack it."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Satellite internet works almost anywhere with sky access, making it the common choice for rural locations lacking wired or cellular infrastructure. It has higher latency (~500-700 ms).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Internet Connection Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-028",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A user's smartphone, wireless headset, and smartwatch exchange data over short-range connections. Which network type connects these personal devices?",
+      "context": "A phone, headset, and watch connect over short-range links.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "PAN",
+          "rationale": "A personal area network (PAN) links personal devices over short range — Bluetooth/Wi-Fi Direct."
+        },
+        {
+          "id": "b",
+          "text": "LAN",
+          "rationale": "A LAN covers a building or office."
+        },
+        {
+          "id": "c",
+          "text": "WAN",
+          "rationale": "A WAN spans cities or countries."
+        },
+        {
+          "id": "d",
+          "text": "MAN",
+          "rationale": "A MAN covers a metropolitan area."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A PAN connects an individual's devices (phone, headset, watch) over a few meters, typically via Bluetooth. LAN/WAN/MAN cover progressively larger geographic areas.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Network Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-029",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A hospital needs a high-speed dedicated network connecting its storage arrays to application servers so block-level data can be moved at very high speeds. Which network type is designed for this?",
+      "context": "High-speed block-level storage traffic between arrays and servers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "SAN",
+          "rationale": "A storage area network (SAN) is a dedicated high-speed network for block-level storage traffic (Fibre Channel/iSCSI)."
+        },
+        {
+          "id": "b",
+          "text": "WLAN",
+          "rationale": "A WLAN is a wireless LAN for client access."
+        },
+        {
+          "id": "c",
+          "text": "PAN",
+          "rationale": "A PAN connects personal devices."
+        },
+        {
+          "id": "d",
+          "text": "MAN",
+          "rationale": "A MAN covers a metropolitan region."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A SAN (storage area network) is a specialized high-speed network carrying block-level storage traffic between servers and arrays, using technologies like Fibre Channel or iSCSI.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Network Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-030",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A company's offices in two different states connect through their ISP, and a city government links its downtown buildings across a metro area. Which TWO network types describe these two scenarios respectively?",
+      "context": "Offices in two states + city buildings across a metro area.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "WAN",
+          "rationale": "The two-state connection spans a wide geographic area — a WAN."
+        },
+        {
+          "id": "b",
+          "text": "MAN",
+          "rationale": "A metro-area network (MAN) connects sites across a city."
+        },
+        {
+          "id": "c",
+          "text": "LAN",
+          "rationale": "A LAN covers a single building or campus, not states or metros."
+        },
+        {
+          "id": "d",
+          "text": "PAN",
+          "rationale": "A PAN covers a few meters around a person."
+        },
+        {
+          "id": "e",
+          "text": "SAN",
+          "rationale": "A SAN is a storage network."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "WANs span states/countries via ISP backbones; MANs span a metropolitan area. LANs are local, PANs are personal, SANs carry storage traffic.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Network Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-031",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician must identify which wall jack a specific cable run terminates at, in a bundle of dozens of unlabeled cables. Which tool should be used?",
+      "context": "One specific cable must be traced among many unlabeled runs.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Toner probe",
+          "rationale": "A toner probe sends a tone down one cable so it can be identified at the other end — the tool for tracing runs."
+        },
+        {
+          "id": "b",
+          "text": "Cable tester",
+          "rationale": "A cable tester verifies wiring order and continuity but cannot identify which cable is which in a bundle."
+        },
+        {
+          "id": "c",
+          "text": "Loopback plug",
+          "rationale": "A loopback plug tests a NIC, not cable identification."
+        },
+        {
+          "id": "d",
+          "text": "Crimper",
+          "rationale": "A crimper terminates connectors; it does not trace cables."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A toner (fox and hound) sends an audible tone down a specific cable; the probe detects it at the far end, identifying the run among many. Cable testers verify wiring, not identity.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-032",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician suspects a newly terminated Ethernet cable has a wiring error because the link does not come up. Which tool verifies the pin-to-pin continuity and wire order of the cable?",
+      "context": "A terminated Ethernet cable fails to link; wiring must be verified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cable tester",
+          "rationale": "A cable tester checks continuity and pin mapping (T568A/B) of each pair — the tool for verifying a termination."
+        },
+        {
+          "id": "b",
+          "text": "Toner probe",
+          "rationale": "A toner probe identifies cables, not wire order."
+        },
+        {
+          "id": "c",
+          "text": "Wi-Fi analyzer",
+          "rationale": "A Wi-Fi analyzer surveys wireless channels."
+        },
+        {
+          "id": "d",
+          "text": "Punchdown tool",
+          "rationale": "A punchdown tool terminates wires into blocks; it does not test them."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A cable tester verifies continuity, shorts, and correct pair wiring against T568A/T568B. A punchdown tool installs terminations; a toner probe traces cable identity.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-033",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician must create custom-length Ethernet patch cables for a new server rack. After stripping the cable jacket and arranging the pairs in the correct T568B order, which tool attaches the RJ-45 connector?",
+      "context": "Custom Ethernet patch cables need RJ-45 connectors attached after stripping.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Crimper",
+          "rationale": "A crimper presses the RJ-45 connector's pins into the wire ends, securing the connector — the final termination step."
+        },
+        {
+          "id": "b",
+          "text": "Punchdown tool",
+          "rationale": "A punchdown tool terminates wires into 110-style blocks and keystones, not RJ-45 plugs."
+        },
+        {
+          "id": "c",
+          "text": "Toner probe",
+          "rationale": "A toner probe identifies cables after installation."
+        },
+        {
+          "id": "d",
+          "text": "Cable tester",
+          "rationale": "A cable tester verifies the finished cable; it does not attach connectors."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A crimper attaches and secures RJ-45 connectors. Stripping the jacket is done with a cable stripper first; a cable tester verifies the result afterward.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-034",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician is diagnosing weak Wi-Fi coverage and wants to identify the least congested channel in the office before changing the access point settings. Which tool provides this information?",
+      "context": "The least congested Wi-Fi channel must be identified for an office.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Wi-Fi analyzer",
+          "rationale": "A Wi-Fi analyzer surveys nearby networks, signal strength, and channel usage — exactly what channel planning needs."
+        },
+        {
+          "id": "b",
+          "text": "Toner probe",
+          "rationale": "A toner probe traces wired cables."
+        },
+        {
+          "id": "c",
+          "text": "Cable tester",
+          "rationale": "A cable tester verifies wired cabling, not wireless channels."
+        },
+        {
+          "id": "d",
+          "text": "Network tap",
+          "rationale": "A network tap passively captures wired traffic."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A Wi-Fi analyzer shows SSIDs, channels, and signal levels in the area, letting you pick the least congested channel (e.g., 1, 6, or 11 on 2.4 GHz).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

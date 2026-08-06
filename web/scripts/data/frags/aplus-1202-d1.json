@@ -1,0 +1,1973 @@
+{
+  "mcqs": [
+    {
+      "id": "a2-1-001",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "prompt": "A technician must recommend a filesystem for a new Windows server that needs per-file permissions, built-in encryption, and disk quotas for users. Which filesystem supports all three?",
+      "context": "A Windows server filesystem is needed with permissions, encryption, and quotas.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NTFS",
+          "rationale": "NTFS supports ACL permissions, EFS encryption, compression, and quotas — the full requirement set."
+        },
+        {
+          "id": "b",
+          "text": "FAT32",
+          "rationale": "FAT32 has no permissions, encryption, or quotas, and caps files at 4 GB."
+        },
+        {
+          "id": "c",
+          "text": "exFAT",
+          "rationale": "exFAT lifts the 4 GB file limit but has no permissions, encryption, or quotas."
+        },
+        {
+          "id": "d",
+          "text": "ext4",
+          "rationale": "ext4 is the Linux default filesystem, not native to Windows."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NTFS provides ACL-based permissions, EFS file encryption, compression, and disk quotas — why it is the default for Windows system drives and servers.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.1 File Systems"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-002",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "prompt": "A user needs to move a 12 GB video file between a Windows PC and a macOS laptop using a USB flash drive. Which filesystem should the drive use so BOTH operating systems can read and write it?",
+      "context": "A flash drive must move a 12 GB file between Windows and macOS.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "exFAT",
+          "rationale": "exFAT is natively readable/writable by both Windows and macOS and supports files larger than 4 GB — the right choice."
+        },
+        {
+          "id": "b",
+          "text": "NTFS",
+          "rationale": "macOS can read NTFS but cannot natively write to it without extra software."
+        },
+        {
+          "id": "c",
+          "text": "FAT32",
+          "rationale": "FAT32 works on both but has a 4 GB per-file limit, so the 12 GB video will not fit."
+        },
+        {
+          "id": "d",
+          "text": "APFS",
+          "rationale": "APFS is macOS-native; Windows cannot read it without third-party tools."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "exFAT is the cross-platform flash-drive format: both Windows and macOS read/write it natively, and it supports files beyond FAT32's 4 GB limit.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.1 File Systems"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-003",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "prompt": "A company discovers that a legacy Windows application stores its configuration in the registry and only runs on Windows. The IT team is evaluating Linux as a replacement platform. Which concern is MOST relevant?",
+      "context": "A Windows-only app with registry config is being evaluated against Linux migration.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Application compatibility",
+          "rationale": "Windows applications that depend on the registry and Windows APIs generally do not run natively on Linux — the primary migration concern."
+        },
+        {
+          "id": "b",
+          "text": "File extension case sensitivity",
+          "rationale": "Case sensitivity is a minor file-handling difference, not the main blocker."
+        },
+        {
+          "id": "c",
+          "text": "NTFS disk format",
+          "rationale": "Linux can read NTFS; the app itself is the problem."
+        },
+        {
+          "id": "d",
+          "text": "Screen resolution support",
+          "rationale": "Resolution support is not a migration blocker."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "OS compatibility is the key migration concern: registry-based Windows applications typically need Windows or a compatibility layer (Wine/VM) to run on Linux.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.1 OS Compatibility"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-004",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "prompt": "A user's aging Windows 10 PC is still receiving security updates, but the manufacturer has stopped releasing new hardware drivers. Which term BEST describes this stage of the product lifecycle?",
+      "context": "An OS still gets security updates, but the vendor has stopped new hardware drivers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Update limitations",
+          "rationale": "The vendor stopped releasing new drivers — an update limitation that constrains support even while security patches continue."
+        },
+        {
+          "id": "b",
+          "text": "End-of-life (EOL)",
+          "rationale": "EOL means NO more updates at all, including security patches; that is not yet the case here."
+        },
+        {
+          "id": "c",
+          "text": "Compatibility mode",
+          "rationale": "Compatibility mode is a Windows execution setting, not a lifecycle stage."
+        },
+        {
+          "id": "d",
+          "text": "Multiboot",
+          "rationale": "Multiboot is running multiple OSes; unrelated to lifecycle."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Update limitations describe a product that still receives some updates (security) but no longer gets new features or drivers. EOL means all updates cease.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.1 Vendor Life Cycle"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-005",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "prompt": "A technician is installing Windows on a new PC that has an empty 3 TB drive and UEFI firmware. Which partition scheme should be used so the full capacity is available?",
+      "context": "A 3 TB drive with UEFI firmware needs a partition scheme supporting the full capacity.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "GPT",
+          "rationale": "GPT supports drives larger than 2 TB and is required for UEFI boot — the right scheme here."
+        },
+        {
+          "id": "b",
+          "text": "MBR",
+          "rationale": "MBR is limited to 2 TB and 4 primary partitions, so a 3 TB drive would lose capacity."
+        },
+        {
+          "id": "c",
+          "text": "FAT32",
+          "rationale": "FAT32 is a filesystem, not a partition scheme."
+        },
+        {
+          "id": "d",
+          "text": "APFS",
+          "rationale": "APFS is a macOS filesystem."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "GPT (GUID Partition Table) supports disks over 2 TB and pairs with UEFI. MBR tops out at 2 TB and belongs with legacy BIOS.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.2 Partitioning"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-006",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "prompt": "A user's Windows PC fails to boot after a failed update. The technician wants to fix the OS installation while keeping the user's files and applications. Which installation type accomplishes this?",
+      "context": "A failed update left Windows unbootable; files and apps must be preserved.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Repair installation (in-place upgrade)",
+          "rationale": "An in-place repair/upgrade reinstalls system files while preserving files, settings, and applications."
+        },
+        {
+          "id": "b",
+          "text": "Clean install",
+          "rationale": "A clean install wipes the partition, losing files and applications."
+        },
+        {
+          "id": "c",
+          "text": "Multiboot configuration",
+          "rationale": "Multiboot adds another OS; it does not repair the existing one."
+        },
+        {
+          "id": "d",
+          "text": "Network install",
+          "rationale": "A network (PXE) install deploys a fresh image, not a file-preserving repair."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A repair installation (in-place upgrade from media) replaces Windows system files while keeping user data, settings, and apps. Clean installs erase everything.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.2 Installation Types"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-007",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "prompt": "A company needs to deploy the same configured Windows image to 100 identical workstations. Which deployment method is MOST efficient?",
+      "context": "100 identical workstations need the same Windows configuration.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Image deployment",
+          "rationale": "Image deployment clones a prepared, configured image to many identical machines — the efficient choice."
+        },
+        {
+          "id": "b",
+          "text": "Clean install on each machine",
+          "rationale": "Installing manually on 100 machines is slow and inconsistent."
+        },
+        {
+          "id": "c",
+          "text": "Internet-based recovery",
+          "rationale": "Internet recovery reinstalls a stock OS, not the company configuration."
+        },
+        {
+          "id": "d",
+          "text": "Multiboot",
+          "rationale": "Multiboot configures multiple OSes on one machine; unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Image deployment (e.g., with MDT/SCCM or third-party imaging) clones a golden image to many identical workstations quickly and consistently.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.2 Image Deployment"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-008",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "prompt": "Before upgrading a user's PC from Windows 10 to Windows 11, the technician runs a compatibility check and finds the PC lacks TPM 2.0. What is the significance of this finding?",
+      "context": "A Windows 11 upgrade check shows the PC lacks TPM 2.0.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The PC does not meet a Windows 11 hardware requirement",
+          "rationale": "TPM 2.0 is a mandatory Windows 11 hardware requirement — the upgrade cannot proceed as-is."
+        },
+        {
+          "id": "b",
+          "text": "The upgrade will run slower without TPM",
+          "rationale": "TPM absence is a blocking requirement, not a performance issue."
+        },
+        {
+          "id": "c",
+          "text": "The PC needs a larger drive instead",
+          "rationale": "TPM is a security chip requirement, unrelated to drive size."
+        },
+        {
+          "id": "d",
+          "text": "The technician should use a repair installation",
+          "rationale": "Repair installations do not bypass hardware requirements."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Windows 11 requires TPM 2.0 (plus a supported CPU, 4 GB RAM, and 64 GB storage). Without TPM 2.0, the machine cannot be upgraded to Windows 11.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.2 Upgrade Considerations"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-009",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "prompt": "A small business wants to join its Windows PCs to a central domain for centralized user management. Which Windows edition supports joining an Active Directory domain?",
+      "context": "Windows PCs must join an Active Directory domain.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Windows 11 Pro",
+          "rationale": "Windows Pro editions support domain join, BitLocker, and Group Policy — required for AD membership."
+        },
+        {
+          "id": "b",
+          "text": "Windows 11 Home",
+          "rationale": "Windows Home cannot join an Active Directory domain."
+        },
+        {
+          "id": "c",
+          "text": "Windows 11 N",
+          "rationale": "N editions differ in media features, not domain support."
+        },
+        {
+          "id": "d",
+          "text": "Windows 10 Home",
+          "rationale": "Windows Home editions do not support domain join."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Windows Pro (and Enterprise) editions support domain join, BitLocker, RDP hosting, and gpedit. Home editions do not join Active Directory domains.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.3 Windows Editions"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-010",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "prompt": "A technician compares Windows editions for a user who needs full-disk encryption and Remote Desktop hosting on a work laptop. Which edition is the MINIMUM that provides both features?",
+      "context": "A work laptop needs BitLocker and Remote Desktop hosting.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Windows Pro",
+          "rationale": "Windows Pro includes BitLocker and can host Remote Desktop sessions — the minimum edition with both."
+        },
+        {
+          "id": "b",
+          "text": "Windows Home",
+          "rationale": "Windows Home lacks BitLocker and RDP hosting."
+        },
+        {
+          "id": "c",
+          "text": "Windows N",
+          "rationale": "N editions are feature variants (no media player), not the edition determining BitLocker/RDP."
+        },
+        {
+          "id": "d",
+          "text": "Windows SE",
+          "rationale": "Windows SE is a classroom/education edition with limited features."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "BitLocker full-disk encryption and hosting Remote Desktop sessions require Windows Pro or better. Home editions can only connect TO remote desktops, not host them.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.3 Windows Editions"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-011",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "A user reports that an application launches automatically every time they sign in to Windows, and they want to stop it. Which tool should the technician use?",
+      "context": "An app auto-launches at sign-in and must be disabled.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Task Manager (Startup tab)",
+          "rationale": "Task Manager's Startup tab lists and disables sign-in apps — the modern location for this setting."
+        },
+        {
+          "id": "b",
+          "text": "Event Viewer",
+          "rationale": "Event Viewer shows logs, not startup apps."
+        },
+        {
+          "id": "c",
+          "text": "Disk Management",
+          "rationale": "Disk Management handles partitions."
+        },
+        {
+          "id": "d",
+          "text": "Certificate Manager",
+          "rationale": "Certificate Manager manages certificates, not startup entries."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Task Manager > Startup shows every sign-in application with its impact and a Disable button — the current Windows way to manage startup apps (msconfig's Startup tab is legacy).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 Task Manager"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-012",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "A technician needs to shrink a partition and create a new one for a second OS. Which administrative tool performs partition management?",
+      "context": "A partition must be shrunk and a new partition created.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Disk Management (diskmgmt.msc)",
+          "rationale": "Disk Management shrinks, extends, formats, and creates partitions."
+        },
+        {
+          "id": "b",
+          "text": "Device Manager",
+          "rationale": "Device Manager handles drivers and hardware."
+        },
+        {
+          "id": "c",
+          "text": "Task Scheduler",
+          "rationale": "Task Scheduler runs scheduled tasks."
+        },
+        {
+          "id": "d",
+          "text": "Resource Monitor",
+          "rationale": "Resource Monitor shows live system resource usage."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Disk Management (diskmgmt.msc) is the MMC snap-in for partition operations: shrink, extend, create, format, and assign drive letters.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 MMC Snap-ins"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-013",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "A Windows device shows a yellow exclamation mark next to an unknown device in Device Manager. What does this indicate?",
+      "context": "An unknown device shows a yellow exclamation mark in Device Manager.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The device has a driver problem",
+          "rationale": "A yellow exclamation mark in Device Manager means the device is not working properly, usually a driver issue."
+        },
+        {
+          "id": "b",
+          "text": "The device is disabled by policy",
+          "rationale": "A down-arrow icon indicates a disabled device; the exclamation mark means a driver problem."
+        },
+        {
+          "id": "c",
+          "text": "The device is working normally",
+          "rationale": "Working devices show no warning icon."
+        },
+        {
+          "id": "d",
+          "text": "The device needs a firmware update",
+          "rationale": "Firmware updates are not indicated by the exclamation mark."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "In Device Manager, a yellow exclamation mark (or question mark for unknown devices) indicates a driver or configuration problem. A disabled device shows a downward arrow.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 Device Manager"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-014",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "prompt": "A school district is choosing a Windows edition for student laptops that will run only store-provided apps and cannot install arbitrary desktop software. Which edition is designed for this locked-down education scenario?",
+      "context": "Student laptops need a locked-down Windows edition that only runs Store apps.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Windows SE",
+          "rationale": "Windows 11 SE is the education edition that runs only approved apps from the Store — built for locked-down student devices."
+        },
+        {
+          "id": "b",
+          "text": "Windows Pro",
+          "rationale": "Pro is the full business edition with unrestricted desktop app installation."
+        },
+        {
+          "id": "c",
+          "text": "Windows N",
+          "rationale": "N editions omit media features; they do not restrict app installation."
+        },
+        {
+          "id": "d",
+          "text": "Windows Enterprise",
+          "rationale": "Enterprise is a full-featured volume edition, not app-restricted."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Windows 11 SE (and the older Windows 10 S mode) restrict installation to Store apps, ideal for managed student devices. Pro/Enterprise/N editions allow traditional desktop software.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 Event Viewer"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-015",
+      "domain": 1,
+      "objective": "1.5",
+      "format": "scenario",
+      "prompt": "A user's web browsing works but their PC cannot resolve new hostnames. The technician wants to clear the cached name-resolution records. Which command accomplishes this?",
+      "context": "Hostname resolution is failing; the DNS cache needs clearing.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "ipconfig /flushdns",
+          "rationale": "ipconfig /flushdns clears the local DNS resolver cache — the fix for stale name records."
+        },
+        {
+          "id": "b",
+          "text": "ipconfig /release",
+          "rationale": "Releasing the DHCP lease drops the IP address; unrelated to DNS cache."
+        },
+        {
+          "id": "c",
+          "text": "netstat -a",
+          "rationale": "netstat lists connections and ports."
+        },
+        {
+          "id": "d",
+          "text": "gpupdate /force",
+          "rationale": "gpupdate refreshes Group Policy, not DNS."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "ipconfig /flushdns clears the DNS resolver cache, fixing stale or corrupted name resolutions. /release and /renew manage the DHCP lease.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.5 Command-Line Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-016",
+      "domain": 1,
+      "objective": "1.5",
+      "format": "scenario",
+      "prompt": "A technician needs to verify which TCP ports are currently listening on a Windows server. Which command shows active connections and listening ports?",
+      "context": "Listening TCP ports on a Windows server must be identified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "netstat",
+          "rationale": "netstat displays active connections and listening ports with their state."
+        },
+        {
+          "id": "b",
+          "text": "ping",
+          "rationale": "ping tests reachability; it does not list ports."
+        },
+        {
+          "id": "c",
+          "text": "chkdsk",
+          "rationale": "chkdsk checks disk integrity."
+        },
+        {
+          "id": "d",
+          "text": "winver",
+          "rationale": "winver shows the Windows version."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "netstat (e.g., netstat -an) lists listening and established TCP/UDP endpoints, identifying which services are bound to which ports.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.5 Network Command Line"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-017",
+      "domain": 1,
+      "objective": "1.5",
+      "format": "scenario",
+      "prompt": "Windows reports that protected system files are corrupted and some applications fail. Which TWO commands should the technician run, in order, to repair the system image and system files?",
+      "context": "Corrupted protected system files need repair.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "DISM /Online /Cleanup-Image /RestoreHealth",
+          "rationale": "DISM repairs the Windows system image that sfc relies on — run it first when the image is damaged."
+        },
+        {
+          "id": "b",
+          "text": "sfc /scannow",
+          "rationale": "sfc /scannow verifies and repairs protected system files using the repaired image."
+        },
+        {
+          "id": "c",
+          "text": "chkdsk /f",
+          "rationale": "chkdsk checks disk integrity, not system files."
+        },
+        {
+          "id": "d",
+          "text": "diskpart",
+          "rationale": "diskpart manages partitions."
+        },
+        {
+          "id": "e",
+          "text": "format C:",
+          "rationale": "Formatting destroys the system; never a repair step."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "The correct repair sequence is DISM to restore the component store/image first, then sfc /scannow to repair system files against it. chkdsk handles disk errors, not file corruption.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.5 Command-Line Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-018",
+      "domain": 1,
+      "objective": "1.5",
+      "format": "scenario",
+      "prompt": "A technician needs to map a network share on a file server to the drive letter S: for a user. Which command maps a network drive?",
+      "context": "A network share must be mapped to drive letter S:.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "net use S: \\\\server\\share",
+          "rationale": "net use maps a network share to a drive letter — the command for this task."
+        },
+        {
+          "id": "b",
+          "text": "robocopy S: \\\\server\\share",
+          "rationale": "robocopy copies files; it does not map drives."
+        },
+        {
+          "id": "c",
+          "text": "nslookup S:",
+          "rationale": "nslookup queries DNS."
+        },
+        {
+          "id": "d",
+          "text": "pathping S:",
+          "rationale": "pathping traces routes with latency stats."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "net use maps network shares to drive letters (e.g., net use S: \\\\server\\share). robocopy is a file-copy tool; nslookup and pathping are network diagnostics.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.5 Command-Line Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-019",
+      "domain": 1,
+      "objective": "1.6",
+      "format": "scenario",
+      "prompt": "A user wants the OS to remember their session and start quickly after shutdown, but they sometimes need a full power-off for hardware changes. Which two power options address these needs?",
+      "context": "A user wants fast startup but also occasional full shutdowns.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fast startup",
+          "rationale": "Fast startup hibernates the kernel so the PC boots quickly after shutdown."
+        },
+        {
+          "id": "b",
+          "text": "Full shutdown (Shift + Shut down)",
+          "rationale": "A Shift+Shut-down performs a full shutdown, clearing the hibernated kernel — needed for hardware changes."
+        },
+        {
+          "id": "c",
+          "text": "Hibernate",
+          "rationale": "Hibernate saves the session to disk for later resume, but does not give a full power-off."
+        },
+        {
+          "id": "d",
+          "text": "USB selective suspend",
+          "rationale": "USB selective suspend powers down idle USB devices; unrelated to boot speed."
+        },
+        {
+          "id": "e",
+          "text": "Screen timeout",
+          "rationale": "Screen timeout turns off the display, not the system."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Fast startup gives quick boots via kernel hibernation; a Shift+Shut-down performs a true full shutdown when needed (e.g., before hardware work). Hibernate and USB selective suspend are different power features.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.6 Power Options"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-020",
+      "domain": 1,
+      "objective": "1.6",
+      "format": "scenario",
+      "prompt": "A technician is configuring File Explorer on a shared PC to reduce the risk of users double-clicking dangerous attachments. Which TWO File Explorer options support this goal?",
+      "context": "File Explorer settings should reduce dangerous-file risk on a shared PC.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Show file extensions for known file types",
+          "rationale": "Visible extensions help users spot dangerous double-extension files (e.g., .pdf.exe)."
+        },
+        {
+          "id": "b",
+          "text": "Show hidden files and folders",
+          "rationale": "Revealing hidden files helps users notice hidden malware files in folders."
+        },
+        {
+          "id": "c",
+          "text": "Hide file extensions for known file types",
+          "rationale": "Hiding extensions hides the .exe in .pdf.exe — the opposite of the goal."
+        },
+        {
+          "id": "d",
+          "text": "Disable the Recycle Bin",
+          "rationale": "The Recycle Bin is unrelated to file-extension visibility."
+        },
+        {
+          "id": "e",
+          "text": "Enable 'Hide protected operating system files'",
+          "rationale": "Hiding protected OS files conceals system files; it does not reveal extensions."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Showing extensions (so .pdf.exe is visible) and showing hidden files (so hidden malware is visible) reduce the risk of opening dangerous files. Hiding extensions does the opposite.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.6 File Explorer Options"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-021",
+      "domain": 1,
+      "objective": "1.6",
+      "format": "scenario",
+      "prompt": "A user's laptop does not respond when the lid is closed and wants it to sleep automatically. Where is this configured?",
+      "context": "The laptop lid-closing action needs to be set to sleep.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Power Options (Choose what closing the lid does)",
+          "rationale": "Power Options includes the lid-closing action setting — the correct configuration location."
+        },
+        {
+          "id": "b",
+          "text": "Sound settings",
+          "rationale": "Sound settings manage audio devices."
+        },
+        {
+          "id": "c",
+          "text": "Mail settings",
+          "rationale": "Mail settings configure email accounts."
+        },
+        {
+          "id": "d",
+          "text": "Gaming settings",
+          "rationale": "Gaming settings configure game bar and modes."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Power Options > Choose what closing the lid does sets the lid action (sleep, hibernate, shut down, do nothing) for battery and plugged-in modes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.6 Power Options"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-022",
+      "domain": 1,
+      "objective": "1.6",
+      "format": "scenario",
+      "prompt": "A technician needs to uninstall a legacy application that does not appear in the Settings > Apps list. Which alternative tool can remove it?",
+      "context": "A legacy app must be uninstalled but does not appear in Settings > Apps.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Programs and Features (Control Panel)",
+          "rationale": "Programs and Features lists traditional (Win32) installed programs — legacy apps often appear here even when missing from Settings > Apps."
+        },
+        {
+          "id": "b",
+          "text": "Device Manager",
+          "rationale": "Device Manager manages hardware, not installed software."
+        },
+        {
+          "id": "c",
+          "text": "Event Viewer",
+          "rationale": "Event Viewer shows logs."
+        },
+        {
+          "id": "d",
+          "text": "Task Scheduler",
+          "rationale": "Task Scheduler runs scheduled tasks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Programs and Features (Control Panel) lists traditional Win32 applications; some legacy apps only appear there, not in the newer Settings > Apps page.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.6 Programs and Features"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-023",
+      "domain": 1,
+      "objective": "1.7",
+      "format": "scenario",
+      "prompt": "A technician explains Windows network profiles to a user who travels with a laptop. Which TWO statements about Public vs Private network profiles are correct?",
+      "context": "Windows Public vs Private network profile behavior is being explained.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Public profiles block file and printer sharing by default",
+          "rationale": "The Public profile is the most restrictive — discovery and sharing are off."
+        },
+        {
+          "id": "b",
+          "text": "Private profiles allow file sharing and device discovery",
+          "rationale": "Private is for trusted networks (home/office) where sharing is permitted."
+        },
+        {
+          "id": "c",
+          "text": "Public profiles are used only on domain networks",
+          "rationale": "Domain networks use the Domain profile; Public is for untrusted networks like coffee-shop Wi-Fi."
+        },
+        {
+          "id": "d",
+          "text": "Private profiles disable the firewall entirely",
+          "rationale": "The firewall stays on for every profile; rules differ, not the firewall itself."
+        },
+        {
+          "id": "e",
+          "text": "Profiles have no effect on firewall rules",
+          "rationale": "Each profile carries its own firewall rule set — that is the entire point of profiles."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Public = restrictive (no sharing/discovery) for untrusted networks; Private = permissive for trusted LANs; Domain is for AD networks. The firewall remains on in all profiles.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.7 Windows Firewall"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-024",
+      "domain": 1,
+      "objective": "1.7",
+      "format": "scenario",
+      "prompt": "A user's PC is a member of a workgroup. What does this imply about authentication?",
+      "context": "A PC in a workgroup needs local authentication.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Each PC maintains its own local user accounts",
+          "rationale": "Workgroups are peer-to-peer: every PC has its own local accounts and there is no central directory."
+        },
+        {
+          "id": "b",
+          "text": "Accounts are centralized in Active Directory",
+          "rationale": "Centralized AD accounts are a domain feature, not a workgroup."
+        },
+        {
+          "id": "c",
+          "text": "Group Policy is applied from a domain controller",
+          "rationale": "Group Policy from domain controllers requires domain membership."
+        },
+        {
+          "id": "d",
+          "text": "SSO works across all workgroup PCs",
+          "rationale": "Workgroups have no single sign-on; each machine has separate credentials."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "In a workgroup, each PC has its own local user database — no central authentication. Domains centralize accounts in Active Directory with Group Policy and SSO.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.7 Domain vs Workgroup"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-025",
+      "domain": 1,
+      "objective": "1.7",
+      "format": "scenario",
+      "prompt": "A remote user needs secure access to internal resources and will authenticate with a company-issued smart card. Which TWO technologies are involved?",
+      "context": "A remote user needs secure, smart-card-authenticated access to internal resources.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VPN",
+          "rationale": "A VPN creates the encrypted tunnel for secure remote access to internal resources."
+        },
+        {
+          "id": "b",
+          "text": "Certificate-based authentication (smart card)",
+          "rationale": "Smart cards authenticate via certificates — the credential the user presents."
+        },
+        {
+          "id": "c",
+          "text": "Workgroup membership",
+          "rationale": "Workgroups provide no centralized secure remote access."
+        },
+        {
+          "id": "d",
+          "text": "MAC filtering",
+          "rationale": "MAC filtering is a wireless access control, not remote-access authentication."
+        },
+        {
+          "id": "e",
+          "text": "APIPA",
+          "rationale": "APIPA is link-local addressing; unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Remote secure access combines a VPN tunnel with strong authentication — here, certificate-based smart card authentication (e.g., 802.1X or VPN certificate auth).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.7 VPN"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-026",
+      "domain": 1,
+      "objective": "1.8",
+      "format": "scenario",
+      "prompt": "A macOS user needs to back up the entire system automatically to an external drive. Which built-in tool provides scheduled full-system backups?",
+      "context": "Automatic full-system backups on macOS to an external drive.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Time Machine",
+          "rationale": "Time Machine automatically backs up the Mac to an external drive with hourly snapshots."
+        },
+        {
+          "id": "b",
+          "text": "Disk Utility",
+          "rationale": "Disk Utility formats and repairs disks; it does not back up."
+        },
+        {
+          "id": "c",
+          "text": "Keychain",
+          "rationale": "Keychain stores passwords and certificates."
+        },
+        {
+          "id": "d",
+          "text": "Mission Control",
+          "rationale": "Mission Control manages windows and desktops."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Time Machine is macOS's built-in automatic backup tool, keeping hourly, daily, and weekly snapshots on an external drive.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.8 macOS"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-027",
+      "domain": 1,
+      "objective": "1.8",
+      "format": "scenario",
+      "prompt": "A Mac user wants to find which application is consuming the most CPU. Which built-in tool shows live process resource usage?",
+      "context": "The CPU-hungry application on a Mac must be identified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Activity Monitor",
+          "rationale": "Activity Monitor shows live CPU, memory, energy, disk, and network usage per process — the macOS equivalent of Task Manager."
+        },
+        {
+          "id": "b",
+          "text": "Finder",
+          "rationale": "Finder is the file manager."
+        },
+        {
+          "id": "c",
+          "text": "Spotlight",
+          "rationale": "Spotlight is search."
+        },
+        {
+          "id": "d",
+          "text": "Gatekeeper",
+          "rationale": "Gatekeeper controls app installation security."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Activity Monitor displays per-process CPU/memory usage on macOS, letting users find and quit resource hogs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.8 macOS"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-028",
+      "domain": 1,
+      "objective": "1.8",
+      "format": "scenario",
+      "prompt": "A technician is helping a macOS user install an application downloaded from the internet, but macOS refuses to open it, citing an unidentified developer. Which feature is blocking the app?",
+      "context": "macOS blocks an app from an unidentified developer.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Gatekeeper",
+          "rationale": "Gatekeeper enforces app signing and notarization checks, blocking unsigned/unidentified-developer apps."
+        },
+        {
+          "id": "b",
+          "text": "Time Machine",
+          "rationale": "Time Machine is backups."
+        },
+        {
+          "id": "c",
+          "text": "Keychain",
+          "rationale": "Keychain stores credentials."
+        },
+        {
+          "id": "d",
+          "text": "Spotlight",
+          "rationale": "Spotlight is search."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Gatekeeper blocks apps not signed by an identified developer (or not notarized); users can override via right-click > Open or Security settings when they trust the source.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.8 macOS Features"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-029",
+      "domain": 1,
+      "objective": "1.9",
+      "format": "scenario",
+      "prompt": "A Linux administrator needs to change the permissions of a script so the owner can read/write/execute, the group can read/execute, and others have no access. Which chmod value achieves this?",
+      "context": "A script needs 750-style permissions: owner rwx, group r-x, others none.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "750",
+          "rationale": "750 = owner rwx (7), group r-x (5), others none (0) — exactly the required permissions."
+        },
+        {
+          "id": "b",
+          "text": "755",
+          "rationale": "755 gives others read/execute; here others need no access."
+        },
+        {
+          "id": "c",
+          "text": "700",
+          "rationale": "700 gives the group no access; the group needs read/execute."
+        },
+        {
+          "id": "d",
+          "text": "777",
+          "rationale": "777 grants everyone full access — far too permissive."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "chmod numeric modes: 7=rwx, 5=r-x, 0=---. 750 grants owner rwx, group r-x, others none — the correct minimal permissions.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.9 Linux"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-030",
+      "domain": 1,
+      "objective": "1.9",
+      "format": "scenario",
+      "prompt": "A technician is following a Linux guide that says to install a package using the system's package manager on a Debian-based distribution. Which command installs a package on Debian/Ubuntu?",
+      "context": "A package must be installed on Debian/Ubuntu Linux.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "sudo apt install <package>",
+          "rationale": "apt is the Debian/Ubuntu package manager; sudo grants the needed admin rights."
+        },
+        {
+          "id": "b",
+          "text": "sudo dnf install <package>",
+          "rationale": "dnf is the Red Hat/Fedora package manager, not Debian."
+        },
+        {
+          "id": "c",
+          "text": "chmod +x <package>",
+          "rationale": "chmod changes permissions; it does not install packages."
+        },
+        {
+          "id": "d",
+          "text": "grep <package> /etc",
+          "rationale": "grep searches file contents; unrelated to installation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "apt (with sudo) installs packages on Debian/Ubuntu. dnf/yum serve Red Hat-family distributions; chmod and grep do unrelated tasks.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.9 Linux"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-031",
+      "domain": 1,
+      "objective": "1.9",
+      "format": "scenario",
+      "prompt": "A Linux user needs to find every line containing the word 'ERROR' inside a large log file. Which command-line tool filters lines by pattern?",
+      "context": "Lines containing 'ERROR' must be found in a log file.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "grep",
+          "rationale": "grep searches files for lines matching a pattern — the standard log-filtering tool."
+        },
+        {
+          "id": "b",
+          "text": "ls",
+          "rationale": "ls lists directory contents."
+        },
+        {
+          "id": "c",
+          "text": "chmod",
+          "rationale": "chmod changes file permissions."
+        },
+        {
+          "id": "d",
+          "text": "df",
+          "rationale": "df reports disk space usage."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "grep 'ERROR' /var/log/app.log prints matching lines. ls, chmod, and df serve listing, permissions, and disk-space tasks.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.9 Linux Commands"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-032",
+      "domain": 1,
+      "objective": "1.9",
+      "format": "scenario",
+      "prompt": "A Linux technician needs to see how much free space remains on the root filesystem. Which command reports disk usage by filesystem?",
+      "context": "Free space on the root filesystem must be checked.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "df -h",
+          "rationale": "df -h reports filesystem disk usage in human-readable sizes — the right command."
+        },
+        {
+          "id": "b",
+          "text": "ps aux",
+          "rationale": "ps lists running processes."
+        },
+        {
+          "id": "c",
+          "text": "top",
+          "rationale": "top shows live process/resource monitoring."
+        },
+        {
+          "id": "d",
+          "text": "whoami",
+          "rationale": "whoami prints the current user."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "df -h shows mounted filesystems with used/available space. ps/top monitor processes; whoami shows the current user.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.9 Linux Commands"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-033",
+      "domain": 1,
+      "objective": "1.10",
+      "format": "scenario",
+      "prompt": "A technician is installing a 32-bit legacy application on a 64-bit Windows 11 PC. Which consideration is MOST important?",
+      "context": "A 32-bit legacy app is being installed on 64-bit Windows 11.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "32-bit apps generally run on 64-bit Windows via WOW64 compatibility",
+          "rationale": "Windows runs 32-bit apps on 64-bit systems through WOW64 — the app will typically install and run."
+        },
+        {
+          "id": "b",
+          "text": "The PC must be reinstalled with 32-bit Windows",
+          "rationale": "No — 64-bit Windows runs 32-bit applications natively via WOW64."
+        },
+        {
+          "id": "c",
+          "text": "The app needs a new filesystem",
+          "rationale": "Filesystems are unrelated to 32/64-bit app compatibility."
+        },
+        {
+          "id": "d",
+          "text": "The technician must enable Secure Boot first",
+          "rationale": "Secure Boot affects booting, not application execution."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "64-bit Windows includes WOW64, running 32-bit applications without reinstallation. Compatibility problems usually come from the app's OS version, not the bitness.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.10 Installing Applications"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-034",
+      "domain": 1,
+      "objective": "1.10",
+      "format": "scenario",
+      "prompt": "A Windows installer triggers a UAC prompt asking for administrator permission. What does granting it allow the installer to do?",
+      "context": "A UAC prompt asks for admin permission during installation.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Make system-wide changes with elevated privileges",
+          "rationale": "Granting the UAC prompt elevates the installer so it can write to protected system locations and install for all users."
+        },
+        {
+          "id": "b",
+          "text": "Bypass all Windows security features",
+          "rationale": "UAC elevation grants admin rights for that process only, not a security bypass."
+        },
+        {
+          "id": "c",
+          "text": "Disable the firewall permanently",
+          "rationale": "Elevation does not disable security features."
+        },
+        {
+          "id": "d",
+          "text": "Skip the hardware requirements check",
+          "rationale": "UAC has nothing to do with hardware requirements."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "UAC prompts elevate a single process to administrator so it can modify system areas. Denying it restricts the installer to per-user scope.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.10 Installing Applications"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-035",
+      "domain": 1,
+      "objective": "1.10",
+      "format": "scenario",
+      "prompt": "A technician installs an application from the Microsoft Store on a Windows PC. Which TWO characteristics apply to Store apps?",
+      "context": "Installing an app from the Microsoft Store.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "They install per-user without a separate installer wizard",
+          "rationale": "Store apps install in a sandboxed per-user container without traditional setup wizards."
+        },
+        {
+          "id": "b",
+          "text": "They receive automatic updates from the Store",
+          "rationale": "Store apps update automatically through the Store — a key management benefit."
+        },
+        {
+          "id": "c",
+          "text": "They require manual driver installation",
+          "rationale": "Store apps do not install drivers."
+        },
+        {
+          "id": "d",
+          "text": "They cannot be uninstalled",
+          "rationale": "Store apps can be uninstalled from Settings > Apps."
+        },
+        {
+          "id": "e",
+          "text": "They always require an MSI installer",
+          "rationale": "Store apps use the APPX/MSIX packaging, not MSI."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Microsoft Store apps install per-user, update automatically, and use APPX/MSIX packaging. They are uninstallable and do not install drivers or use MSI installers.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.10 Installing Applications"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-036",
+      "domain": 1,
+      "objective": "1.11",
+      "format": "scenario",
+      "prompt": "A sales team collaborates on a spreadsheet simultaneously from different offices, with changes syncing instantly. Which type of tool provides this capability?",
+      "context": "A spreadsheet must support real-time multi-user collaboration.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cloud productivity suite (e.g., Google Sheets / Microsoft 365)",
+          "rationale": "Cloud productivity suites provide real-time co-editing, version history, and instant sync."
+        },
+        {
+          "id": "b",
+          "text": "Local office suite with manual file sharing",
+          "rationale": "Local suites require manual file transfers and do not co-edit in real time."
+        },
+        {
+          "id": "c",
+          "text": "A print server",
+          "rationale": "A print server shares printers, not documents."
+        },
+        {
+          "id": "d",
+          "text": "An offline installer",
+          "rationale": "An installer deploys software; it does not enable collaboration."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Cloud productivity tools (Google Workspace, Microsoft 365) offer real-time collaboration, version history, and cloud sync — the described capability.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.11 Cloud Productivity Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-037",
+      "domain": 1,
+      "objective": "1.11",
+      "format": "scenario",
+      "prompt": "A user edits a document on their phone while commuting, then opens the same document on their desktop and sees the changes. Which feature of cloud storage makes this possible?",
+      "context": "Edits made on a phone appear on the desktop document.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Automatic file sync",
+          "rationale": "Cloud storage syncs files across devices automatically, so edits propagate to every signed-in device."
+        },
+        {
+          "id": "b",
+          "text": "Disk partitioning",
+          "rationale": "Partitioning divides a drive; unrelated."
+        },
+        {
+          "id": "c",
+          "text": "Print spooling",
+          "rationale": "Spooling queues print jobs."
+        },
+        {
+          "id": "d",
+          "text": "Defragmentation",
+          "rationale": "Defragmentation optimizes drive layout."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Cloud file sync (OneDrive, Google Drive, iCloud Drive) keeps files current across devices — edit on one device, see it on all.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.11 Cloud Productivity Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-038",
+      "domain": 1,
+      "objective": "1.11",
+      "format": "scenario",
+      "prompt": "A company needs employees to share a document with an external contractor for VIEWING ONLY. Which cloud-sharing permission should be applied?",
+      "context": "An external contractor should view a shared document without editing.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "View-only (read-only) link",
+          "rationale": "A view-only share grants read access, preventing edits — the correct permission."
+        },
+        {
+          "id": "b",
+          "text": "Full edit link",
+          "rationale": "Edit access lets the contractor modify the document."
+        },
+        {
+          "id": "c",
+          "text": "Owner transfer",
+          "rationale": "Transferring ownership gives full control."
+        },
+        {
+          "id": "d",
+          "text": "Public publish without restrictions",
+          "rationale": "Unrestricted publishing exposes the document broadly."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Cloud sharing supports granular permissions; a view-only link lets external users read without editing. Least privilege dictates read-only for viewing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.11"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.11 Cloud Productivity Tools"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-039",
+      "domain": 1,
+      "objective": "1.8",
+      "format": "scenario",
+      "prompt": "A macOS user cannot remember their saved Wi-Fi passwords and wants to review them. Which built-in tool stores and displays saved credentials?",
+      "context": "Saved Wi-Fi passwords must be reviewed on macOS.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Keychain Access",
+          "rationale": "Keychain Access stores and displays saved passwords, certificates, and Wi-Fi credentials."
+        },
+        {
+          "id": "b",
+          "text": "Activity Monitor",
+          "rationale": "Activity Monitor shows process resource usage."
+        },
+        {
+          "id": "c",
+          "text": "Disk Utility",
+          "rationale": "Disk Utility manages disks."
+        },
+        {
+          "id": "d",
+          "text": "Finder",
+          "rationale": "Finder is the file manager."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Keychain Access is the macOS credential store — passwords, certificates, and Wi-Fi network keys can be viewed (with the user's login password).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.8 macOS"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-040",
+      "domain": 1,
+      "objective": "1.7",
+      "format": "scenario",
+      "prompt": "A technician needs to check whether a remote server is reachable and measure round-trip time. Which command-line tool sends ICMP echo requests?",
+      "context": "Remote server reachability and round-trip time must be tested.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "ping",
+          "rationale": "ping sends ICMP echo requests and reports round-trip times and packet loss — the reachability tool."
+        },
+        {
+          "id": "b",
+          "text": "nslookup",
+          "rationale": "nslookup queries DNS records."
+        },
+        {
+          "id": "c",
+          "text": "diskpart",
+          "rationale": "diskpart manages disk partitions."
+        },
+        {
+          "id": "d",
+          "text": "robocopy",
+          "rationale": "robocopy copies files."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "ping tests reachability via ICMP echo and measures latency/loss. nslookup handles DNS; diskpart and robocopy serve storage and file tasks.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.5 Network Command Line"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-041",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "An administrator needs to schedule a script to run every night at 2 AM on a Windows server. Which tool schedules tasks?",
+      "context": "A nightly 2 AM script run must be scheduled on Windows.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Task Scheduler (taskschd.msc)",
+          "rationale": "Task Scheduler creates and manages scheduled tasks with triggers like daily time — the right tool."
+        },
+        {
+          "id": "b",
+          "text": "Performance Monitor",
+          "rationale": "Performance Monitor tracks system counters."
+        },
+        {
+          "id": "c",
+          "text": "Event Viewer",
+          "rationale": "Event Viewer shows logs."
+        },
+        {
+          "id": "d",
+          "text": "Registry Editor",
+          "rationale": "Registry Editor edits configuration keys, not schedules."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Task Scheduler (taskschd.msc) runs scripts and programs on triggers (time, event, logon). Performance Monitor, Event Viewer, and regedit serve other purposes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 Task Scheduler"
+        }
+      ]
+    },
+    {
+      "id": "a2-1-042",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "prompt": "A technician is comparing Windows 10 and Windows 11 for a new deployment. Which difference is a characteristic of Windows 11?",
+      "context": "Windows 11 deployment characteristics are being reviewed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Centered Start menu and rounded window corners",
+          "rationale": "Windows 11 introduced the centered Start menu, rounded corners, and a redesigned taskbar."
+        },
+        {
+          "id": "b",
+          "text": "The Start menu is always on the left with live tiles",
+          "rationale": "Live tiles and the left-aligned Start menu are Windows 10 characteristics."
+        },
+        {
+          "id": "c",
+          "text": "It requires only 2 GB of RAM",
+          "rationale": "Windows 11 requires 4 GB minimum."
+        },
+        {
+          "id": "d",
+          "text": "It supports only 32-bit processors",
+          "rationale": "Windows 11 is 64-bit only."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Windows 11's UI changes include the centered Start menu, rounded corners, and Snap Layouts. Windows 10 has left-aligned Start with live tiles; Windows 11 needs 4 GB RAM and is 64-bit only.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.3 Windows Features"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

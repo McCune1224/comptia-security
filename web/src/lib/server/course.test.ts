@@ -191,14 +191,19 @@ describe('LetterGrade', () => {
 });
 
 describe('CourseService', () => {
-	it('seeds the course and reports an overview with deadlines', () => {
+	it('seeds all active courses and reports an overview with deadlines', () => {
 		const repository = createQuizRepository(':memory:');
 		const service = createCourseService({ repository });
 		const overview = service.getOverview();
-		expect(overview.modules).toHaveLength(4);
+		// ACTIVE_COURSES seeds every registered course into the shared tables:
+		// 3 courses x 4 modules x 12 assignments.
+		expect(overview.modules).toHaveLength(12);
+		expect(new Set(overview.modules.map((m) => m.module.id))).toEqual(
+			new Set(['week-1', 'week-2', 'week-3', 'week-4', 'ap1-week-1', 'ap1-week-2', 'ap1-week-3', 'ap1-week-4', 'ap2-week-1', 'ap2-week-2', 'ap2-week-3', 'ap2-week-4'])
+		);
 		expect(overview.toDo.length).toBeGreaterThan(0);
 		expect(overview.examDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-		expect(overview.gradebook.totalAssignments).toBe(12);
+		expect(overview.gradebook.totalAssignments).toBe(36);
 		// Default exam date is the end of the current month.
 		expect(overview.daysUntilExam).toBeGreaterThanOrEqual(0);
 		expect(overview.daysUntilExam).toBeLessThanOrEqual(31);
