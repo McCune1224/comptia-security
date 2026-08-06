@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import Sortable from 'sortablejs';
+	import MatchConnect from '$lib/components/MatchConnect.svelte';
 	import type {
 		ActiveSessionSummary,
 		QuestionFeedback,
@@ -64,6 +65,12 @@
 		for (let i = 0; i < steps; i++) stepResponses[i] = prev[i] ?? null;
 		stepResponses[subStep] = response;
 		draft = { kind: 'multi-step', stepResponses } as QuestionResponse;
+	}
+
+	function stepFeedbackMatches(): Record<string, string> | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'matching') return null;
+		return stepFeedback.correctResponse.matches;
 	}
 
 	function moveSubStep(dir: number) {
@@ -271,12 +278,6 @@
 		});
 		return () => instance.destroy();
 	});
-
-	function updateMatch(premiseId: string, value: string) {
-		const matches = draft?.kind === 'matching' ? { ...draft.matches } : {};
-		matches[premiseId] = value;
-		draft = { kind: 'matching', matches };
-	}
 
 	function updateConfiguration(fieldId: string, value: string) {
 		const values = draft?.kind === 'configuration' ? { ...draft.values } : {};
@@ -646,25 +647,14 @@
 						</div>{/each}
 				</div>
 			{:else if question.kind === 'matching'}
-				{@const allTargets = [...question.targets, ...(question.extraTargets ?? [])]}
-				<div class="space-y-3">
-					{#each question.premises as premise}<div
-							class="flex flex-col gap-3 rounded-md bg-surface-700/60 p-4 sm:flex-row sm:items-center"
-						>
-							<span class="flex-1 text-text-primary">{premise.text}</span><select
-								class="sm:w-56"
-								value={draft?.kind === 'matching' ? draft.matches[premise.id] : ''}
-								onchange={(event) => updateMatch(premise.id, event.currentTarget.value)}
-								><option value="">Select target</option>{#each allTargets as target}<option
-										value={target.id}
-										disabled={draft?.kind === 'matching' &&
-											Object.entries(draft.matches).some(
-												([key, value]) => key !== premise.id && value === target.id
-											)}>{target.text}</option
-									>{/each}</select
-							>
-						</div>{/each}
-				</div>
+				<MatchConnect
+					premises={question.premises}
+					targets={[...question.targets, ...(question.extraTargets ?? [])]}
+					matches={draft?.kind === 'matching' ? draft.matches : {}}
+					feedbackMatches={feedback?.correctResponse.kind === 'matching' ? feedback.correctResponse.matches : null}
+					disabled={!!feedback}
+					onchange={(m) => (draft = { kind: 'matching', matches: m })}
+				/>
 			{:else if question.kind === 'numeric'}
 				<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 					<input
@@ -876,33 +866,15 @@
 							{/each}
 						</div>
 					{:else if step.kind === 'matching'}
-						{@const allTargets = [...step.targets, ...(step.extraTargets ?? [])]}
-						<div class="space-y-3">
-							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
-							{#each step.premises as premise}
-								<div
-									class="flex flex-col gap-3 rounded-md bg-surface-700/60 p-4 sm:flex-row sm:items-center"
-								>
-									<span class="flex-1 text-text-primary">{premise.text}</span>
-									<select
-										class="sm:w-56"
-										value={subDraft?.kind === 'matching' ? subDraft.matches[premise.id] : ''}
-										onchange={(e) => {
-											const matches = {
-												...(subDraft?.kind === 'matching' ? subDraft.matches : {})
-											};
-											matches[premise.id] = e.currentTarget.value;
-											updateSubResponse({ kind: 'matching', matches });
-										}}
-									>
-										<option value="">Select target</option>
-										{#each allTargets as target}
-											<option value={target.id}>{target.text}</option>
-										{/each}
-									</select>
-								</div>
-							{/each}
-						</div>
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<MatchConnect
+							premises={step.premises}
+							targets={[...step.targets, ...(step.extraTargets ?? [])]}
+							matches={subDraft?.kind === 'matching' ? subDraft.matches : {}}
+							feedbackMatches={stepFeedbackMatches()}
+							disabled={!!feedback}
+							onchange={(m) => updateSubResponse({ kind: 'matching', matches: m })}
+						/>
 					{:else if step.kind === 'numeric'}
 						<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 							<p class="font-medium text-text-primary">{step.prompt}</p>
