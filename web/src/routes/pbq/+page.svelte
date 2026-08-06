@@ -1,12 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 	import ExamFlow from '$lib/components/ExamFlow.svelte';
 
 	let started = $derived(
 		Boolean(page.url.searchParams.get('session')) || page.url.searchParams.get('start') === '1'
 	);
 	let count = $state(Number(page.url.searchParams.get('count')) || 5);
+	let pbqTotal = $state(30);
+
+	onMount(async () => {
+		const response = await fetch('/api/quiz/catalog');
+		if (response.ok) pbqTotal = (await response.json()).pbqTotal;
+	});
 </script>
 
 {#if started}
@@ -38,7 +45,7 @@
 				>PBQ count<select class="mt-1.5" bind:value={count}
 					><option value={1}>1 PBQ</option><option value={3}>3 PBQs</option><option value={5}
 						>5 PBQs</option
-					><option value={10}>10 PBQs</option><option value={30}>All 30 PBQs</option></select
+					><option value={10}>10 PBQs</option><option value={pbqTotal}>All {pbqTotal} PBQs</option></select
 				></label
 			>
 			<button
