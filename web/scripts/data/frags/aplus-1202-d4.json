@@ -1,0 +1,1507 @@
+{
+  "mcqs": [
+    {
+      "id": "a2-4-001",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A technician resolves a user's issue and wants to help future technicians solve similar problems faster. Which documentation practice is BEST?",
+      "context": "A resolved ticket should help future technicians with similar issues.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Write clear progress notes and a resolution summary in the ticket",
+          "rationale": "Documenting the symptoms, steps, and resolution in the ticket builds a searchable knowledge base for future cases."
+        },
+        {
+          "id": "b",
+          "text": "Delete the ticket after resolving the issue",
+          "rationale": "Deleting the ticket destroys the record and the reusable knowledge."
+        },
+        {
+          "id": "c",
+          "text": "Close the ticket without notes",
+          "rationale": "No notes means future technicians repeat the investigation."
+        },
+        {
+          "id": "d",
+          "text": "Document only the user's name",
+          "rationale": "The user's name alone provides no troubleshooting value."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Thorough ticket documentation — symptoms, actions, resolution — is how support teams build knowledge. This is a core documentation/support-systems practice.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.1 Ticketing Systems"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-002",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "An IT department needs to track device information centrally. Which TWO data points belong in an asset management system?",
+      "context": "Device data must be tracked in asset management.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Warranty expiration and licensing",
+          "rationale": "Warranty and licensing are core asset-management fields."
+        },
+        {
+          "id": "b",
+          "text": "Assigned user and procurement date",
+          "rationale": "Assignment and procurement lifecycle data belong in the asset record."
+        },
+        {
+          "id": "c",
+          "text": "The user's favorite color",
+          "rationale": "Personal preferences are not asset data."
+        },
+        {
+          "id": "d",
+          "text": "The building's paint color",
+          "rationale": "Facility aesthetics are unrelated to device tracking."
+        },
+        {
+          "id": "e",
+          "text": "The technician's lunch order",
+          "rationale": "Unrelated personal data."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Asset management tracks warranty, licensing, assigned users, procurement lifecycle, and asset tags/IDs. Personal preferences and facility details are not asset data.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.1 Asset Management"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-003",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A new technician needs to know the approved step-by-step procedure for onboarding a new employee's equipment. Which document type defines this?",
+      "context": "The approved onboarding equipment procedure is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Standard operating procedure (SOP) or onboarding checklist",
+          "rationale": "An SOP or onboarding checklist documents the approved step-by-step procedure."
+        },
+        {
+          "id": "b",
+          "text": "A service-level agreement",
+          "rationale": "An SLA defines response commitments, not procedures."
+        },
+        {
+          "id": "c",
+          "text": "An incident report",
+          "rationale": "Incident reports document past incidents, not procedures."
+        },
+        {
+          "id": "d",
+          "text": "A firewall rule",
+          "rationale": "Firewall rules are network configuration, not procedures."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SOPs and onboarding/off-boarding checklists document approved step-by-step processes. SLAs and incident reports serve different purposes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.1 Document Types"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-004",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A company plans to replace its file server. Which change management step should occur BEFORE the change is implemented?",
+      "context": "A file server replacement is planned; pre-implementation steps are needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Assess the risk and create a backout (rollback) plan",
+          "rationale": "Risk assessment and a backout plan are required before implementing any significant change."
+        },
+        {
+          "id": "b",
+          "text": "Delete the old server's data",
+          "rationale": "Deleting data before a backout plan is destructive and premature."
+        },
+        {
+          "id": "c",
+          "text": "Skip documentation to save time",
+          "rationale": "Change management requires documentation, including emergency changes."
+        },
+        {
+          "id": "d",
+          "text": "Implement during peak business hours",
+          "rationale": "Changes are scheduled in maintenance windows, not peak hours."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Change management: request → review/approval → risk/impact assessment with a backout plan → schedule → implement → verify → document. The backout plan is mandatory before implementation.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.2 Change Management"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-005",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "An urgent security patch must be applied to stop an active breach. Which TWO change management requirements still apply to this emergency change?",
+      "context": "An emergency security patch is needed to stop an active breach.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Documentation of the change",
+          "rationale": "Emergency changes must be documented, with a post-implementation review."
+        },
+        {
+          "id": "b",
+          "text": "A backout (rollback) plan",
+          "rationale": "Emergency changes still need a rollback path if the patch causes issues."
+        },
+        {
+          "id": "c",
+          "text": "Waiting for the next scheduled maintenance window",
+          "rationale": "Emergency changes bypass normal scheduling to stop active harm."
+        },
+        {
+          "id": "d",
+          "text": "Skipping all approval",
+          "rationale": "Emergency changes get expedited approval, not no approval."
+        },
+        {
+          "id": "e",
+          "text": "Implementing during peak business hours",
+          "rationale": "Emergencies may require immediate action, but the other requirements still stand."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Emergency changes bypass the normal schedule with expedited approval but still require documentation and a backout plan, plus post-implementation review.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.2 Change Management"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-006",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A change request is submitted by one technician, approved by a manager, and will be implemented by a different technician. Which principle does this separation support?",
+      "context": "The requester, approver, and implementer of a change are different people.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Separation of duties",
+          "rationale": "Separation of duties prevents one person from controlling a change end-to-end, reducing error and fraud risk."
+        },
+        {
+          "id": "b",
+          "text": "Least privilege",
+          "rationale": "Least privilege limits permissions; the change workflow is about role separation."
+        },
+        {
+          "id": "c",
+          "text": "Full disk encryption",
+          "rationale": "Encryption is unrelated to change workflows."
+        },
+        {
+          "id": "d",
+          "text": "MFA",
+          "rationale": "MFA authenticates users; it does not separate change roles."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Requester ≠ approver ≠ implementer is separation of duties — a core control ensuring changes are reviewed independently.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.2 Change Management"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-007",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "A company backs up nightly: a full backup on Sunday and backups that capture only files changed since the previous backup on other days. Which backup type is used on weekdays?",
+      "context": "Nightly backups: full on Sunday, then only files changed since the last backup.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Incremental",
+          "rationale": "Incremental backups capture changes since the last backup of ANY type — matching the description."
+        },
+        {
+          "id": "b",
+          "text": "Differential",
+          "rationale": "Differential captures changes since the last FULL backup, not the previous backup."
+        },
+        {
+          "id": "c",
+          "text": "Full",
+          "rationale": "Full copies everything every time."
+        },
+        {
+          "id": "d",
+          "text": "System image",
+          "rationale": "A system image captures the whole OS state, not changed files."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Incremental = changes since the last backup of any type (smallest, fastest; restore needs full + all incrementals). Differential = changes since the last full.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.3 Backup and Recovery"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-008",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "A business keeps three copies of its data: the working copy, a local backup, and an offsite backup. Which principle does this follow?",
+      "context": "Three copies of data: working, local backup, offsite backup.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The 3-2-1 backup rule",
+          "rationale": "3-2-1 = three copies, on two different media types, with one offsite — exactly this setup."
+        },
+        {
+          "id": "b",
+          "text": "RAID 1",
+          "rationale": "RAID 1 mirrors drives but is not an offsite backup strategy."
+        },
+        {
+          "id": "c",
+          "text": "Change management",
+          "rationale": "Change management governs changes, not backup copies."
+        },
+        {
+          "id": "d",
+          "text": "Least privilege",
+          "rationale": "Least privilege limits access; unrelated to backups."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The 3-2-1 rule: three total copies, on two different media, with one copy offsite. It protects against device loss, media failure, and site-level disasters.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.3 Backup and Recovery"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-009",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "A technician wants to confirm the backup system actually works. Which practice verifies backups?",
+      "context": "Backup reliability must be verified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Perform regular test restores",
+          "rationale": "Test restores verify that backups can actually recover data — the only reliable verification."
+        },
+        {
+          "id": "b",
+          "text": "Trust the backup software's success message",
+          "rationale": "Success messages do not prove the data is restorable."
+        },
+        {
+          "id": "c",
+          "text": "Check backup file sizes only",
+          "rationale": "File sizes do not verify integrity or restorability."
+        },
+        {
+          "id": "d",
+          "text": "Verify only after a data loss",
+          "rationale": "Discovering a bad backup during an emergency is the worst time."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Regular restore testing is the only way to verify backups work. Many organizations discover broken backups only when they try to restore.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.3 Backup and Recovery"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-010",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "A technician is about to install RAM in a desktop. Which safety practice prevents electrostatic discharge damage?",
+      "context": "RAM installation requires ESD protection.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Wear an anti-static wrist strap connected to ground",
+          "rationale": "An ESD wrist strap grounds the technician, equalizing charge and protecting sensitive components."
+        },
+        {
+          "id": "b",
+          "text": "Work on carpeted floors",
+          "rationale": "Carpet generates static; avoid it when working on components."
+        },
+        {
+          "id": "c",
+          "text": "Leave the PC plugged in",
+          "rationale": "Unplug the PC; ESD straps, not power, prevent static damage."
+        },
+        {
+          "id": "d",
+          "text": "Touch the RAM pins repeatedly",
+          "rationale": "Touching pins transfers static and damages the module; handle by edges."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An anti-static wrist strap (or mat) grounds the technician to prevent ESD damage. Work on hard surfaces, unplugged, handling components by their edges.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.4 Safety Procedures"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-011",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "A technician needs to open a malfunctioning power supply to inspect it. What should the technician do FIRST?",
+      "context": "A power supply needs internal inspection.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Do not open it — replace the PSU instead",
+          "rationale": "PSUs contain charged capacitors that can hold lethal voltage even when unplugged; technicians replace them rather than opening them."
+        },
+        {
+          "id": "b",
+          "text": "Open it after unplugging",
+          "rationale": "Even unplugged, PSU capacitors store dangerous charge."
+        },
+        {
+          "id": "c",
+          "text": "Short the capacitors with a screwdriver",
+          "rationale": "Shorting capacitors is dangerous and can cause sparks/injury."
+        },
+        {
+          "id": "d",
+          "text": "Open it while it is running",
+          "rationale": "Opening a running PSU is extremely dangerous."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "PSUs (and CRT monitors) contain capacitors that retain lethal charge after unplugging. The safe practice is to replace them, never open them.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.4 Safety Procedures"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-012",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "An electrical fire starts near a server rack. Which fire extinguisher class is appropriate for energized electrical equipment?",
+      "context": "An electrical fire near a server rack needs the right extinguisher.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Class C (or ABC multi-purpose)",
+          "rationale": "Class C extinguishers are rated for energized electrical equipment; ABC covers most fire types including electrical."
+        },
+        {
+          "id": "b",
+          "text": "Class A only",
+          "rationale": "Class A is for ordinary combustibles (wood, paper), not electrical."
+        },
+        {
+          "id": "c",
+          "text": "Class B only",
+          "rationale": "Class B is for flammable liquids."
+        },
+        {
+          "id": "d",
+          "text": "Water-based extinguisher",
+          "rationale": "Water conducts electricity and is dangerous on electrical fires."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Class C extinguishers (or ABC multi-purpose) are safe for energized electrical equipment. Water-based extinguishers conduct electricity and must never be used on electrical fires.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.4 Safety Procedures"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-013",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "prompt": "A company is disposing of old monitors, batteries, and toner cartridges. Which environmental practice applies?",
+      "context": "Old monitors, batteries, and toner cartridges must be disposed of.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Recycle e-waste and hazardous materials through approved programs",
+          "rationale": "Monitors, batteries, and toner are e-waste/hazardous materials that must be recycled through approved channels."
+        },
+        {
+          "id": "b",
+          "text": "Throw them in the regular trash",
+          "rationale": "Hazardous e-waste must not go to landfills."
+        },
+        {
+          "id": "c",
+          "text": "Burn them on-site",
+          "rationale": "Burning releases toxic fumes."
+        },
+        {
+          "id": "d",
+          "text": "Bury them on company property",
+          "rationale": "Burial contaminates soil and groundwater."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "E-waste (monitors, batteries, toner) contains hazardous materials (lead, mercury, lithium, toner dust) and must be recycled via approved programs per local regulations.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.5 Environmental Impacts"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-014",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "prompt": "A server room's cooling fails and the temperature climbs. Which environmental control protects the equipment?",
+      "context": "Server room cooling has failed; equipment must be protected.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Maintain temperature and humidity within vendor ranges (HVAC/airflow)",
+          "rationale": "Proper temperature/humidity control and airflow keep servers within operating ranges."
+        },
+        {
+          "id": "b",
+          "text": "Increase the server fan speed only",
+          "rationale": "Fan speed helps but cannot compensate for total cooling failure."
+        },
+        {
+          "id": "c",
+          "text": "Seal the room to trap heat",
+          "rationale": "Sealing traps heat and worsens the problem."
+        },
+        {
+          "id": "d",
+          "text": "Disable the alarms",
+          "rationale": "Alarms warn of failures; disabling them hides the problem."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Environmental controls (HVAC, humidity, airflow, cable management) keep equipment within operating ranges. Cooling failure must be fixed, not masked.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.5 Environmental Controls"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-015",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "prompt": "A company installs battery backup units so servers keep running through brief power outages. Which control does this represent?",
+      "context": "Battery backup keeps servers running through brief outages.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "An uninterruptible power supply (UPS)",
+          "rationale": "A UPS provides battery backup during outages — the described control."
+        },
+        {
+          "id": "b",
+          "text": "A surge suppressor",
+          "rationale": "Surge suppressors block spikes but do not provide battery runtime."
+        },
+        {
+          "id": "c",
+          "text": "A power supply tester",
+          "rationale": "A tester verifies PSU rails; it does not provide power."
+        },
+        {
+          "id": "d",
+          "text": "An air filter",
+          "rationale": "Air filters clean airflow; unrelated to power."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A UPS combines surge protection with battery power, keeping systems running through short outages and enabling clean shutdowns. Surge suppressors only block spikes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.5 Environmental Controls"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-016",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "A support ticket contains a customer's name, address, and phone number. Which TWO practices should the technician follow with this PII?",
+      "context": "A ticket contains customer PII that must be handled properly.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Access it only as needed for the ticket",
+          "rationale": "Least-privilege access to PII minimizes exposure."
+        },
+        {
+          "id": "b",
+          "text": "Protect it per privacy policy (e.g., encryption, secure storage)",
+          "rationale": "PII must be protected per policy and regulation."
+        },
+        {
+          "id": "c",
+          "text": "Share it publicly for troubleshooting convenience",
+          "rationale": "Sharing PII publicly violates privacy."
+        },
+        {
+          "id": "d",
+          "text": "Post it on social media",
+          "rationale": "Publishing PII is a serious violation."
+        },
+        {
+          "id": "e",
+          "text": "Keep it indefinitely in logs",
+          "rationale": "Data retention policies limit how long PII is kept."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "PII is handled with least-privilege access and protected per policy (encryption, retention limits). Sharing or publishing PII is prohibited.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.6 Privacy and Policies"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-017",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "A company operating in the EU must let customers request deletion of their personal data. Which regulation grants this right?",
+      "context": "EU customers can request deletion of their personal data.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "GDPR",
+          "rationale": "GDPR (General Data Protection Regulation) grants EU data subjects rights including erasure ('right to be forgotten')."
+        },
+        {
+          "id": "b",
+          "text": "EULA",
+          "rationale": "A EULA is a software license agreement, not a privacy regulation."
+        },
+        {
+          "id": "c",
+          "text": "DRM",
+          "rationale": "DRM protects digital media rights."
+        },
+        {
+          "id": "d",
+          "text": "AUP",
+          "rationale": "An acceptable use policy governs how resources are used, not data rights."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "GDPR protects EU personal data with rights including access, rectification, and erasure. EULA, DRM, and AUP are license/policy concepts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.6 Privacy and Licensing"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-018",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "A user installs software and clicks through a license agreement without reading it. Later they find the agreement prohibits commercial use of the software. Which document contained this restriction?",
+      "context": "A software license agreement prohibits commercial use.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "EULA (end-user license agreement)",
+          "rationale": "A EULA defines permitted use, restrictions, and terms of the software — the document the user accepted."
+        },
+        {
+          "id": "b",
+          "text": "GDPR",
+          "rationale": "GDPR is a data-protection regulation, not a software license."
+        },
+        {
+          "id": "c",
+          "text": "An SLA",
+          "rationale": "An SLA defines service levels, not software usage terms."
+        },
+        {
+          "id": "d",
+          "text": "A knowledge base article",
+          "rationale": "Knowledge base articles are documentation, not license terms."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The EULA is the binding license agreement defining permitted use and restrictions. Accepting it without reading does not void the terms.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.6 Licensing"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-019",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "An employee installs pirated software on a work PC. Which TWO concerns does this raise for the organization?",
+      "context": "Pirated software is installed on a work PC.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Software licensing compliance",
+          "rationale": "Using unlicensed software violates license agreements and can incur legal penalties."
+        },
+        {
+          "id": "b",
+          "text": "Security risk from tampered software",
+          "rationale": "Pirated software may contain malware or backdoors."
+        },
+        {
+          "id": "c",
+          "text": "Improved system performance",
+          "rationale": "Pirated software does not improve performance and may harm it."
+        },
+        {
+          "id": "d",
+          "text": "Full vendor support",
+          "rationale": "Unlicensed software gets no vendor support."
+        },
+        {
+          "id": "e",
+          "text": "Guaranteed updates",
+          "rationale": "Pirated software cannot reliably receive updates."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Pirated software creates licensing/compliance exposure and security risk (tampered binaries often carry malware). It offers no support or guaranteed updates.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.6 Licensing"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-020",
+      "domain": 4,
+      "objective": "4.7",
+      "format": "scenario",
+      "prompt": "A user describes a problem using technical jargon incorrectly. Which communication technique BEST clarifies the actual issue?",
+      "context": "A user misuses technical jargon when describing a problem.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ask clarifying questions in plain language",
+          "rationale": "Active listening with plain-language clarifying questions surfaces the real issue without alienating the user."
+        },
+        {
+          "id": "b",
+          "text": "Correct the user's terminology harshly",
+          "rationale": "Correcting harshly damages rapport; clarifying is the professional approach."
+        },
+        {
+          "id": "c",
+          "text": "Assume you know the issue from the jargon",
+          "rationale": "Assuming wastes time and may fix the wrong problem."
+        },
+        {
+          "id": "d",
+          "text": "End the call quickly",
+          "rationale": "Ending the call leaves the issue unresolved."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Active listening and plain-language clarifying questions get to the real problem while keeping the user comfortable — core communication/professionalism.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.7 Communication"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-021",
+      "domain": 4,
+      "objective": "4.7",
+      "format": "scenario",
+      "prompt": "A technician cannot resolve a complex issue and the user is getting frustrated. What is the appropriate action?",
+      "context": "A complex issue exceeds the technician's ability and the user is frustrated.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Escalate the issue per procedure and set expectations",
+          "rationale": "Escalating to a higher tier while keeping the user informed is the professional response."
+        },
+        {
+          "id": "b",
+          "text": "Pretend it is resolved",
+          "rationale": "Falsely claiming resolution erodes trust and leaves the issue unfixed."
+        },
+        {
+          "id": "c",
+          "text": "Blame the user's hardware",
+          "rationale": "Blaming the user is unprofessional and unhelpful."
+        },
+        {
+          "id": "d",
+          "text": "Close the ticket silently",
+          "rationale": "Silently closing abandons the user without resolution."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Proper escalation (with communication and expectation-setting) is the professional approach when a technician cannot resolve an issue.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.7 Professionalism"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-022",
+      "domain": 4,
+      "objective": "4.7",
+      "format": "scenario",
+      "prompt": "A technician asks permission before taking control of a user's screen for remote support. Which professional principle does this follow?",
+      "context": "A technician asks before taking remote control of a user's screen.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Respect for the user's privacy and consent",
+          "rationale": "Asking before controlling a screen respects user privacy and consent — a core remote-support etiquette."
+        },
+        {
+          "id": "b",
+          "text": "Least privilege",
+          "rationale": "Least privilege limits permissions; the consent is about privacy etiquette."
+        },
+        {
+          "id": "c",
+          "text": "Change management",
+          "rationale": "Change management governs system changes, not remote sessions."
+        },
+        {
+          "id": "d",
+          "text": "Data destruction",
+          "rationale": "Data destruction is unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Remote-support etiquette requires asking before controlling the user's screen, explaining actions, and keeping the user informed — professional courtesy and privacy respect.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.7 Professionalism"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-023",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "scenario",
+      "prompt": "A technician writes a batch script that repeats the same block of commands for each file in a folder. Which scripting concept is being used?",
+      "context": "A batch script repeats commands for each file in a folder.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A loop",
+          "rationale": "A loop repeats a block of code — here, once per file — the concept in use."
+        },
+        {
+          "id": "b",
+          "text": "A variable",
+          "rationale": "A variable stores a value; repetition is a loop."
+        },
+        {
+          "id": "c",
+          "text": "A conditional",
+          "rationale": "A conditional branches on a condition; repetition is a loop."
+        },
+        {
+          "id": "d",
+          "text": "A function",
+          "rationale": "A function is a reusable named block; iterating per file is a loop."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Loops repeat code blocks (for each file, while a condition holds). Variables store values, conditionals branch, and functions package reusable logic.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.8 Scripting"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-024",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "scenario",
+      "prompt": "A technician needs to automate user account creation on Windows systems. Which scripting language is BEST suited for Windows automation?",
+      "context": "User account creation must be automated on Windows.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "PowerShell",
+          "rationale": "PowerShell is Microsoft's automation language with deep Windows management (AD, accounts) integration — the best fit."
+        },
+        {
+          "id": "b",
+          "text": "Bash",
+          "rationale": "Bash is the Unix/Linux shell; it is not native to Windows automation."
+        },
+        {
+          "id": "c",
+          "text": "Python",
+          "rationale": "Python can script, but PowerShell is the native Windows management language."
+        },
+        {
+          "id": "d",
+          "text": "JavaScript",
+          "rationale": "JavaScript is web-oriented, not the Windows admin automation choice."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "PowerShell provides native Windows management (Active Directory, accounts, services) and is the standard for Windows automation. Bash is Linux/macOS; Python and JS are general-purpose.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.8 Scripting Languages"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-025",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "scenario",
+      "prompt": "A script stores the current date in a named value and later uses it to name a log file. Which scripting element stores the value?",
+      "context": "A script stores the current date in a named value for a log filename.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A variable",
+          "rationale": "A variable stores a named value (like a date) for later use — the element described."
+        },
+        {
+          "id": "b",
+          "text": "A loop",
+          "rationale": "A loop repeats code; it does not store values."
+        },
+        {
+          "id": "c",
+          "text": "A conditional",
+          "rationale": "A conditional branches; it does not store values."
+        },
+        {
+          "id": "d",
+          "text": "A comment",
+          "rationale": "Comments annotate code; they are not stored values."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Variables store named values (strings, numbers, dates) that scripts can reference later — exactly what holds the date for the log filename.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.8 Scripting"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-026",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "scenario",
+      "prompt": "A PowerShell script will create user accounts across the domain. Which practice should the technician follow BEFORE running it?",
+      "context": "A PowerShell script creates domain user accounts.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Test the script in a staging environment first",
+          "rationale": "Testing in staging validates the script before touching production — a core scripting best practice."
+        },
+        {
+          "id": "b",
+          "text": "Run it immediately on all users",
+          "rationale": "Running untested scripts on production can cause mass errors."
+        },
+        {
+          "id": "c",
+          "text": "Delete the script after one use",
+          "rationale": "Keeping a versioned script enables review and reuse."
+        },
+        {
+          "id": "d",
+          "text": "Disable logging",
+          "rationale": "Logging helps verify what the script did."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Scripts that make bulk changes should be tested in staging, reviewed, and run with logging — especially those touching Active Directory.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.8 Scripting Use Cases"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-027",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "scenario",
+      "prompt": "A technician needs to remotely administer a Linux server over an encrypted connection. Which protocol should be used?",
+      "context": "Encrypted remote administration of a Linux server.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "SSH",
+          "rationale": "SSH provides encrypted remote shell access — the standard for Linux administration."
+        },
+        {
+          "id": "b",
+          "text": "Telnet",
+          "rationale": "Telnet is unencrypted and insecure."
+        },
+        {
+          "id": "c",
+          "text": "RDP",
+          "rationale": "RDP is Windows remote desktop."
+        },
+        {
+          "id": "d",
+          "text": "SMTP",
+          "rationale": "SMTP sends email; unrelated to remote administration."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SSH (port 22) provides encrypted remote administration of Linux/Unix systems. Telnet is its insecure predecessor; RDP is Windows-specific.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.9 Remote Access"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-028",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "scenario",
+      "prompt": "A technician must provide remote support on a user's Windows PC. Which tool offers a native Windows remote desktop session?",
+      "context": "Remote support on a user's Windows PC is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Remote Desktop Protocol (RDP)",
+          "rationale": "RDP is Windows' native remote desktop protocol (port 3389) for interactive sessions."
+        },
+        {
+          "id": "b",
+          "text": "SSH",
+          "rationale": "SSH is a command-line protocol for Unix/Linux."
+        },
+        {
+          "id": "c",
+          "text": "SMTP",
+          "rationale": "SMTP is email."
+        },
+        {
+          "id": "d",
+          "text": "FTP",
+          "rationale": "FTP transfers files, not desktop sessions."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RDP (port 3389) provides native Windows remote desktop. SSH is for Unix/Linux shells; FTP and SMTP serve file transfer and mail.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.9 Remote Access"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-029",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "scenario",
+      "prompt": "A company enables remote access for employees working from home. Which TWO practices secure that remote access?",
+      "context": "Home-worker remote access must be secured.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Require MFA for remote connections",
+          "rationale": "MFA blocks credential-based attacks on remote access — essential for VPN/RDP."
+        },
+        {
+          "id": "b",
+          "text": "Use a VPN for encrypted connectivity",
+          "rationale": "A VPN encrypts traffic between the home network and the office."
+        },
+        {
+          "id": "c",
+          "text": "Disable all firewalls",
+          "rationale": "Disabling firewalls removes a key control."
+        },
+        {
+          "id": "d",
+          "text": "Use Telnet for simplicity",
+          "rationale": "Telnet is unencrypted and insecure."
+        },
+        {
+          "id": "e",
+          "text": "Share passwords openly",
+          "rationale": "Shared passwords violate least privilege and accountability."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Secure remote access pairs a VPN tunnel with strong authentication (MFA). Firewalls stay enabled, Telnet is never used, and passwords are never shared.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.9 Remote Access"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-030",
+      "domain": 4,
+      "objective": "4.10",
+      "format": "scenario",
+      "prompt": "An AI chatbot answers a customer's question with a confident but incorrect statement. Which AI concept does this illustrate?",
+      "context": "An AI chatbot gives a confident but wrong answer.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hallucination",
+          "rationale": "A hallucination is a confidently generated but factually incorrect AI output — exactly this behavior."
+        },
+        {
+          "id": "b",
+          "text": "RAG",
+          "rationale": "RAG (retrieval-augmented generation) grounds answers in documents to REDUCE hallucinations."
+        },
+        {
+          "id": "c",
+          "text": "A deepfake",
+          "rationale": "A deepfake is fabricated media (image/video/audio), not a text answer."
+        },
+        {
+          "id": "d",
+          "text": "Tokenization",
+          "rationale": "Tokenization is how models process text into tokens; unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Hallucinations are AI-generated statements that are confidently wrong. Grounding techniques like RAG and human verification reduce their impact.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.10 AI Concepts"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-031",
+      "domain": 4,
+      "objective": "4.10",
+      "format": "scenario",
+      "prompt": "A company wants its AI support bot to answer questions using ONLY the contents of its official product documentation, reducing wrong answers. Which AI technique achieves this?",
+      "context": "An AI bot should answer only from official product documentation.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Retrieval-augmented generation (RAG)",
+          "rationale": "RAG retrieves relevant documents and grounds the answer in them — the technique that constrains answers to the documentation."
+        },
+        {
+          "id": "b",
+          "text": "A deepfake",
+          "rationale": "Deepfakes are fabricated media, not answer grounding."
+        },
+        {
+          "id": "c",
+          "text": "Prompt injection",
+          "rationale": "Prompt injection is an attack, not a grounding technique."
+        },
+        {
+          "id": "d",
+          "text": "Tokenization",
+          "rationale": "Tokenization processes text; it does not ground answers."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RAG retrieves relevant source documents and feeds them to the model, grounding answers in the documentation and reducing hallucinations.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.10 AI Concepts"
+        }
+      ]
+    },
+    {
+      "id": "a2-4-032",
+      "domain": 4,
+      "objective": "4.10",
+      "format": "scenario",
+      "prompt": "A user receives a video of their CEO announcing a merger, but the voice and facial movements seem slightly off. The video is likely fabricated. Which AI concept applies?",
+      "context": "A suspicious CEO video appears fabricated.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A deepfake",
+          "rationale": "Deepfakes are AI-generated or manipulated media (video/audio) impersonating real people — the described video."
+        },
+        {
+          "id": "b",
+          "text": "A hallucination",
+          "rationale": "Hallucinations are incorrect text answers, not media."
+        },
+        {
+          "id": "c",
+          "text": "RAG",
+          "rationale": "RAG grounds AI answers in documents."
+        },
+        {
+          "id": "d",
+          "text": "A prompt injection",
+          "rationale": "Prompt injection is a text attack on AI systems."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Deepfakes are AI-fabricated/manipulated media impersonating people. Verify identity through trusted channels and apply media literacy.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.10"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.10 AI Concepts"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

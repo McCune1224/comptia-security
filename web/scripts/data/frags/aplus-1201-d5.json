@@ -1,0 +1,1973 @@
+{
+  "mcqs": [
+    {
+      "id": "a1-5-001",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A desktop emits a series of short beeps at power-on and the screen stays blank. Which component is MOST likely faulty?",
+      "context": "Repeating short POST beeps with no video output.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "RAM",
+          "rationale": "On most boards, repeating short beeps during POST indicate a memory failure."
+        },
+        {
+          "id": "b",
+          "text": "The power supply",
+          "rationale": "A PSU failure usually produces no beeps and no power at all."
+        },
+        {
+          "id": "c",
+          "text": "The hard drive",
+          "rationale": "A bad drive typically appears after POST, not as a beep code."
+        },
+        {
+          "id": "d",
+          "text": "The CMOS battery",
+          "rationale": "A dead CMOS battery resets the clock; it does not cause beep codes."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "POST beep codes signal hardware faults found before video initializes; repeating short beeps most commonly mean a RAM failure. Reseat or replace the memory modules.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-002",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A PC powers on, fans spin, but there is no video and no beeps. Which step should the technician take FIRST?",
+      "context": "Fans spin, no video, no beeps.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the monitor cable and input source",
+          "rationale": "The cheapest, most common cause of no video with a running system is a loose cable or wrong monitor input — check it first."
+        },
+        {
+          "id": "b",
+          "text": "Replace the motherboard",
+          "rationale": "Replacing the board is a last resort, not a first step."
+        },
+        {
+          "id": "c",
+          "text": "Replace the power supply",
+          "rationale": "The fans spin, so the PSU is supplying power."
+        },
+        {
+          "id": "d",
+          "text": "Reinstall the operating system",
+          "rationale": "An OS reinstall does not fix no-video-at-POST."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "No video with spinning fans is often a cable/input issue — verify the monitor connection and source before any hardware replacement.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-003",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A laptop randomly shuts down during heavy use and the bottom feels very hot. Which TWO actions should the technician take?",
+      "context": "A laptop shuts down under load and runs hot.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Clean the cooling fans and vents",
+          "rationale": "Dust-clogged fans cause overheating — cleaning them restores cooling."
+        },
+        {
+          "id": "b",
+          "text": "Reapply thermal paste on the CPU",
+          "rationale": "Dried thermal paste reduces heat transfer; reapplying it improves cooling."
+        },
+        {
+          "id": "c",
+          "text": "Replace the hard drive",
+          "rationale": "The drive is unrelated to thermal shutdowns."
+        },
+        {
+          "id": "d",
+          "text": "Disable the cooling fan in BIOS",
+          "rationale": "Disabling the fan would worsen overheating."
+        },
+        {
+          "id": "e",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness has little effect on CPU temperature."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Heat-related shutdowns point to cooling failure: clean fans/vents and refresh the thermal paste. Drive replacement and fan disabling do not address overheating.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-004",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A user reports the PC's date and time reset to January 1 every time the computer is unplugged. Which component is failing?",
+      "context": "System date/time resets whenever the PC loses power.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The CMOS battery",
+          "rationale": "The CMOS battery keeps the hardware clock running when unpowered; a dead battery resets the clock at every boot."
+        },
+        {
+          "id": "b",
+          "text": "The RAM",
+          "rationale": "RAM is volatile but does not store the clock."
+        },
+        {
+          "id": "c",
+          "text": "The power supply",
+          "rationale": "A failing PSU causes power issues, not clock resets."
+        },
+        {
+          "id": "d",
+          "text": "The CPU",
+          "rationale": "The CPU does not maintain the clock when unpowered."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The CMOS battery (typically CR2032) powers the real-time clock when the system is off. When it dies, the clock resets at every boot — replace the battery.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-005",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A technician opens a desktop that has been randomly restarting and notices several bulging, dome-shaped capacitors on the motherboard. What is the BEST course of action?",
+      "context": "Bulging capacitors are found on a randomly restarting motherboard.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the motherboard",
+          "rationale": "Bulging capacitors indicate failing motherboard components — the board should be replaced."
+        },
+        {
+          "id": "b",
+          "text": "Reinstall the OS",
+          "rationale": "An OS reinstall will not fix failed motherboard capacitors."
+        },
+        {
+          "id": "c",
+          "text": "Replace the CMOS battery",
+          "rationale": "The CMOS battery is separate from the power-delivery capacitors."
+        },
+        {
+          "id": "d",
+          "text": "Update the BIOS",
+          "rationale": "Firmware updates cannot repair physical capacitor damage."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Bulging/swollen capacitors are a physical failure of the motherboard's power delivery, causing instability. The board must be replaced.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-006",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A desktop has no power at all: no fans, no lights, nothing when the power button is pressed. Which is the MOST logical first check?",
+      "context": "A desktop is completely dead when powered on.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the wall outlet, power cord, and PSU switch",
+          "rationale": "Start with the simplest causes: a dead outlet, loose cord, or the PSU's on/off switch."
+        },
+        {
+          "id": "b",
+          "text": "Replace the CPU",
+          "rationale": "A CPU failure does not cause a completely dead system with no fan spin."
+        },
+        {
+          "id": "c",
+          "text": "Replace the RAM",
+          "rationale": "RAM failure produces beeps or POST failure, not zero power."
+        },
+        {
+          "id": "d",
+          "text": "Reinstall the operating system",
+          "rationale": "An OS issue cannot cause zero power at the button."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Zero power is a power-path problem: check the outlet, cord, and PSU switch before suspecting internal components.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-007",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A technician smells a burning odor coming from a desktop and the system shuts down. Which component is the MOST likely source?",
+      "context": "A burning smell accompanies a shutdown.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The power supply",
+          "rationale": "A burning smell with a shutdown classically points to a failing power supply (or a shorted component)."
+        },
+        {
+          "id": "b",
+          "text": "The CMOS battery",
+          "rationale": "A CMOS battery does not burn; it just dies."
+        },
+        {
+          "id": "c",
+          "text": "The front panel LED",
+          "rationale": "An LED would not cause a burning smell."
+        },
+        {
+          "id": "d",
+          "text": "The network cable",
+          "rationale": "Network cables do not produce burning odors."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A burning smell followed by shutdown typically means a failing PSU or a shorted component — power down immediately and replace the PSU.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-008",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A user's drive begins making a loud clicking sound. What should the technician do FIRST?",
+      "context": "A drive makes a clicking noise.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Back up the data immediately",
+          "rationale": "Clicking indicates failing read/write heads — back up the data before the drive fails completely."
+        },
+        {
+          "id": "b",
+          "text": "Defragment the drive",
+          "rationale": "Defragmenting stresses a failing drive and risks data loss."
+        },
+        {
+          "id": "c",
+          "text": "Run chkdsk /f",
+          "rationale": "Running repairs on a mechanically failing drive can accelerate failure."
+        },
+        {
+          "id": "d",
+          "text": "Ignore the noise",
+          "rationale": "Clicking is a serious failure indicator, not something to ignore."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Clicking/grinding sounds are a mechanical failure sign (heads/platters). Back up data immediately; repairs and defragmentation risk losing everything.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-009",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A server's RAID 5 array shows a degraded status and an audible alarm after one drive failed. What should the technician do?",
+      "context": "A RAID 5 array is degraded after a drive failure.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the failed drive and rebuild the array",
+          "rationale": "RAID 5 survives one drive failure — replace the failed drive and let the array rebuild."
+        },
+        {
+          "id": "b",
+          "text": "Replace all drives at once",
+          "rationale": "Replacing multiple drives at once can cause a second failure during rebuild."
+        },
+        {
+          "id": "c",
+          "text": "Ignore the alarm",
+          "rationale": "Ignoring a degraded array risks a second failure and total data loss."
+        },
+        {
+          "id": "d",
+          "text": "Format the array",
+          "rationale": "Formatting destroys the data the array was protecting."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RAID 5 tolerates one drive failure. Replace the failed drive promptly and rebuild; ignoring it risks a second failure and data loss.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-010",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A PC reports 'Bootable device not found' at startup. Which TWO checks are appropriate?",
+      "context": "A PC cannot find a bootable device.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the drive's data and power cables are connected",
+          "rationale": "Loose SATA/power cables are a common cause of a missing boot device."
+        },
+        {
+          "id": "b",
+          "text": "Check the boot order in BIOS/UEFI",
+          "rationale": "The boot order may point to a non-bootable device or the wrong disk."
+        },
+        {
+          "id": "c",
+          "text": "Replace the monitor",
+          "rationale": "The monitor is unrelated to boot device detection."
+        },
+        {
+          "id": "d",
+          "text": "Replace the CMOS battery",
+          "rationale": "A CMOS battery affects the clock, not boot device detection."
+        },
+        {
+          "id": "e",
+          "text": "Increase the RAM",
+          "rationale": "RAM amount is unrelated to finding a boot device."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "'Bootable device not found' is typically a loose drive cable or wrong boot order. Verify cabling and the UEFI boot order before suspecting the drive.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-011",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A technician checks drive health and finds the S.M.A.R.T. status reports many reallocated sectors. Which action is appropriate?",
+      "context": "S.M.A.R.T. shows many reallocated sectors.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Back up the data and replace the drive",
+          "rationale": "Reallocated sectors are a strong failure indicator — back up and replace."
+        },
+        {
+          "id": "b",
+          "text": "Defragment the drive",
+          "rationale": "Defragmenting stresses the failing drive."
+        },
+        {
+          "id": "c",
+          "text": "Ignore the reading",
+          "rationale": "Reallocated sectors indicate physical damage and impending failure."
+        },
+        {
+          "id": "d",
+          "text": "Increase the partition size",
+          "rationale": "Partition changes do not fix failing sectors."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "S.M.A.R.T. reallocated sectors show the drive remapping bad areas — an early failure sign. Back up and replace the drive.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-012",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A user reports files that previously opened quickly now take a very long time to read, and the drive light stays on constantly. What does this suggest?",
+      "context": "Reads are slow and the drive light is constantly active.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The drive may be failing or heavily fragmented",
+          "rationale": "Extended read times with constant drive activity suggest mechanical degradation or severe fragmentation."
+        },
+        {
+          "id": "b",
+          "text": "The monitor is failing",
+          "rationale": "The monitor does not affect drive reads."
+        },
+        {
+          "id": "c",
+          "text": "The keyboard is faulty",
+          "rationale": "Input devices are unrelated to storage performance."
+        },
+        {
+          "id": "d",
+          "text": "The network is saturated",
+          "rationale": "Local file reads do not use the network."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Extended read/write times with constant drive activity point to a degrading HDD (or heavy fragmentation) — check S.M.A.R.T. and back up.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-013",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A RAID controller's alarm sounds and the array shows 'missing drive'. The technician reseats the drive and it is recognized again. Which step should follow?",
+      "context": "A reseated drive rejoins a RAID array.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the array rebuilds and monitor drive health",
+          "rationale": "After a drive rejoins, confirm the rebuild completes and watch S.M.A.R.T. for further issues."
+        },
+        {
+          "id": "b",
+          "text": "Format the array",
+          "rationale": "Formatting destroys data."
+        },
+        {
+          "id": "c",
+          "text": "Remove the other drives",
+          "rationale": "Removing healthy drives risks array failure."
+        },
+        {
+          "id": "d",
+          "text": "Ignore the event",
+          "rationale": "A dropped drive warrants verification, not ignoring."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "After a drive rejoins an array, confirm the rebuild completes and monitor for repeat failures — the drive may be intermittently failing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-014",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A server is experiencing very low IOPS and sluggish database performance. Which TWO factors are MOST likely responsible?",
+      "context": "A server shows low IOPS and slow database performance.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A failing or degraded drive",
+          "rationale": "Failing drives deliver poor random I/O, tanking IOPS."
+        },
+        {
+          "id": "b",
+          "text": "An undersized or exhausted RAID array",
+          "rationale": "Insufficient spindles/SSDs or a rebuilding array limits IOPS."
+        },
+        {
+          "id": "c",
+          "text": "The monitor refresh rate",
+          "rationale": "Display settings do not affect storage IOPS."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard layout",
+          "rationale": "Input configuration is unrelated."
+        },
+        {
+          "id": "e",
+          "text": "The case color",
+          "rationale": "Cosmetic attributes are irrelevant."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Low IOPS points to storage bottlenecks: failing drives or an array with too few drives/rebuilding. Display and input settings are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-015",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A projector displays 'No Signal' even though the laptop is connected. Which is the MOST likely cause?",
+      "context": "A projector shows no signal with a laptop connected.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The incorrect input source is selected",
+          "rationale": "Projectors have multiple inputs (HDMI/VGA); the wrong source selected shows 'No Signal'."
+        },
+        {
+          "id": "b",
+          "text": "The projector bulb is burnt out",
+          "rationale": "A burnt-out bulb shows a dark screen or lamp warning, not 'No Signal'."
+        },
+        {
+          "id": "c",
+          "text": "The laptop's RAM is low",
+          "rationale": "RAM does not affect video output detection."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard is unplugged",
+          "rationale": "The keyboard is unrelated to projector input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "'No Signal' on a projector usually means the wrong input source is selected (or the cable is loose). Check the input button before anything else.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-016",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A laptop screen shows a dim, faint image that is barely visible in bright light. Which component is MOST likely failing?",
+      "context": "A laptop display is very dim with a faint image.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The backlight/inverter",
+          "rationale": "A faint image means the LCD works but the backlight (or its inverter) has failed."
+        },
+        {
+          "id": "b",
+          "text": "The GPU",
+          "rationale": "A GPU fault distorts or blanks output, not just dims it."
+        },
+        {
+          "id": "c",
+          "text": "The digitizer",
+          "rationale": "The digitizer handles touch, not brightness."
+        },
+        {
+          "id": "d",
+          "text": "The RAM",
+          "rationale": "RAM does not control display brightness."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A dim-but-visible image signals backlight failure (or inverter on older CCFL panels). The LCD panel itself still works.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-017",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A monitor shows a permanent ghost of the Windows taskbar even after the PC is turned off. Which display issue is this?",
+      "context": "A permanent taskbar ghost remains on a monitor.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Burn-in",
+          "rationale": "Burn-in (image persistence) leaves a permanent ghost of static content — common on OLED and older plasma/CRT displays."
+        },
+        {
+          "id": "b",
+          "text": "Dead pixels",
+          "rationale": "Dead pixels are individual stuck dots, not a full taskbar ghost."
+        },
+        {
+          "id": "c",
+          "text": "Incorrect color display",
+          "rationale": "Color issues change hues; they do not leave static ghosts."
+        },
+        {
+          "id": "d",
+          "text": "Fuzzy image",
+          "rationale": "Fuzziness is a resolution/sharpness issue, not persistence."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Burn-in permanently etches static images into the panel — common with OLED displays showing fixed taskbars/UI. Dead pixels are single dots; color and fuzz are different faults.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-018",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A user's monitor shows a fuzzy, blurry image at 1920x1080. Which is the MOST likely cause?",
+      "context": "A monitor image is fuzzy at 1080p.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Running at a non-native resolution",
+          "rationale": "LCD panels look blurry at any resolution other than their native one — set the native resolution."
+        },
+        {
+          "id": "b",
+          "text": "The backlight is failing",
+          "rationale": "Backlight failure dims the image; it does not blur it."
+        },
+        {
+          "id": "c",
+          "text": "Burn-in",
+          "rationale": "Burn-in leaves ghosts, not fuzziness."
+        },
+        {
+          "id": "d",
+          "text": "Dead pixels",
+          "rationale": "Dead pixels are individual dots."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "LCDs have one native resolution; any other resolution is scaled and looks fuzzy. Set the display to its native resolution (and use a digital connection).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-019",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A screen has several small black dots that never change regardless of the image displayed. Which issue is this?",
+      "context": "Fixed black dots remain on screen in all images.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dead pixels",
+          "rationale": "Dead pixels are individual dots that stay dark permanently — matching the symptom."
+        },
+        {
+          "id": "b",
+          "text": "Burn-in",
+          "rationale": "Burn-in is a large ghost, not small dots."
+        },
+        {
+          "id": "c",
+          "text": "Incorrect input source",
+          "rationale": "Input selection affects the whole signal, not individual dots."
+        },
+        {
+          "id": "d",
+          "text": "A failing inverter",
+          "rationale": "The inverter dims the whole backlight, not single pixels."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Small permanent dark dots are dead pixels — individual sub-pixels that no longer change. Unlike burn-in, they are point faults.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-020",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A projector shuts down intermittently after running for an hour. What is the MOST likely cause?",
+      "context": "A projector shuts down intermittently after an hour.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The projector is overheating and triggering thermal shutdown",
+          "rationale": "Intermittent shutdown after sustained use classically means overheating — check the air filter and vents."
+        },
+        {
+          "id": "b",
+          "text": "The input source is wrong",
+          "rationale": "A wrong input shows no signal, not a shutdown."
+        },
+        {
+          "id": "c",
+          "text": "The resolution is too high",
+          "rationale": "Resolution affects sharpness, not thermal shutdown."
+        },
+        {
+          "id": "d",
+          "text": "The remote control batteries",
+          "rationale": "Remote batteries do not shut down the projector."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Intermittent projector shutdown after prolonged use points to overheating — clean the air filter and ensure vent clearance.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-021",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A laptop's display flashes and flickers while moving the lid. Which is the MOST likely cause?",
+      "context": "A laptop display flickers when the lid moves.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A loose or damaged video cable between the board and panel",
+          "rationale": "Flicker that tracks lid movement points to a damaged display/video cable flexing with the hinge."
+        },
+        {
+          "id": "b",
+          "text": "The keyboard",
+          "rationale": "The keyboard is unrelated to display flicker."
+        },
+        {
+          "id": "c",
+          "text": "The touchpad",
+          "rationale": "The touchpad does not affect the display."
+        },
+        {
+          "id": "d",
+          "text": "Low RAM",
+          "rationale": "RAM does not cause motion-dependent flicker."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Flicker that appears when the lid moves indicates a loose/damaged display cable (or hinge pinch). Reseat or replace the cable.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-022",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone's battery bulges and the back cover no longer sits flat. What should the user do?",
+      "context": "A phone battery is visibly swollen.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Stop using the device and have the battery replaced",
+          "rationale": "A swollen lithium battery is a safety hazard — stop using the device and replace the battery."
+        },
+        {
+          "id": "b",
+          "text": "Continue using it until it dies",
+          "rationale": "A swollen battery can rupture or catch fire."
+        },
+        {
+          "id": "c",
+          "text": "Puncture it to release the gas",
+          "rationale": "Puncturing a lithium battery is extremely dangerous."
+        },
+        {
+          "id": "d",
+          "text": "Charge it overnight",
+          "rationale": "Charging a swollen battery increases the hazard."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A swollen battery indicates cell damage and a fire/rupture hazard — stop using the device and replace the battery immediately.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-023",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone's touchscreen does not respond to fingers, but the display works fine and a stylus does not work either. Which component is MOST likely faulty?",
+      "context": "Touch input fails while the display works.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The digitizer",
+          "rationale": "The digitizer handles touch input; a dead digitizer leaves the display working but input dead."
+        },
+        {
+          "id": "b",
+          "text": "The LCD panel",
+          "rationale": "The display works, so the LCD panel is fine."
+        },
+        {
+          "id": "c",
+          "text": "The battery",
+          "rationale": "The battery powers the device; it does not control touch."
+        },
+        {
+          "id": "d",
+          "text": "The Wi-Fi antenna",
+          "rationale": "The antenna affects connectivity, not touch."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Touch failure with a working display points to the digitizer (touch layer). The LCD panel renders the image; the digitizer senses input.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-024",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A user's phone was dropped in water. What is the BEST immediate action?",
+      "context": "A phone was dropped in water.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Power it off, dry the exterior, and do not charge it",
+          "rationale": "Power off immediately, dry the outside, and avoid charging — moisture plus power causes shorts."
+        },
+        {
+          "id": "b",
+          "text": "Plug it in to charge immediately",
+          "rationale": "Charging a wet phone risks short-circuit damage."
+        },
+        {
+          "id": "c",
+          "text": "Turn it on to test it",
+          "rationale": "Powering a wet device can short components."
+        },
+        {
+          "id": "d",
+          "text": "Put it in the microwave",
+          "rationale": "Microwaving destroys electronics and is a fire hazard."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "For liquid damage: power off, dry the exterior, remove the SIM/battery if possible, and wait before charging or powering on.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-025",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone's on-screen cursor drifts and taps register in the wrong places. Which TWO actions may fix the touch calibration?",
+      "context": "A phone's touch input drifts and registers incorrectly.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Recalibrate the touchscreen",
+          "rationale": "Recalibration realigns touch coordinates to the display."
+        },
+        {
+          "id": "b",
+          "text": "Remove a poorly fitting screen protector",
+          "rationale": "Air bubbles or thick protectors can cause errant touch registration."
+        },
+        {
+          "id": "c",
+          "text": "Replace the battery",
+          "rationale": "The battery does not affect touch calibration."
+        },
+        {
+          "id": "d",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness does not affect touch input."
+        },
+        {
+          "id": "e",
+          "text": "Change the wallpaper",
+          "rationale": "Wallpaper is cosmetic and unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Cursor drift/touch miscalibration is fixed by recalibration and by removing protectors that interfere with touch. Battery, brightness, and wallpaper are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-026",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone charges very slowly and only when the cable is held at an angle. What is the MOST likely cause?",
+      "context": "A phone charges slowly and only at a certain cable angle.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A damaged charge port or cable",
+          "rationale": "Angle-dependent charging indicates a loose/damaged port or worn cable."
+        },
+        {
+          "id": "b",
+          "text": "The screen resolution",
+          "rationale": "Resolution does not affect charging."
+        },
+        {
+          "id": "c",
+          "text": "The phone case color",
+          "rationale": "Cosmetic attributes are irrelevant."
+        },
+        {
+          "id": "d",
+          "text": "The SIM card",
+          "rationale": "The SIM affects cellular service, not charging."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Charging only at certain angles points to a damaged charge port, worn cable, or debris in the port — inspect and clean/replace.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-027",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A user's phone cannot install new applications and reports degraded performance. The phone shows unusual data usage. What is the MOST likely cause?",
+      "context": "A phone cannot install apps, runs slowly, and uses unusual data.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Malware infection",
+          "rationale": "Inability to install apps, degraded performance, and unusual data usage are classic mobile-malware symptoms."
+        },
+        {
+          "id": "b",
+          "text": "A cracked screen",
+          "rationale": "A cracked screen does not block installs or cause data usage."
+        },
+        {
+          "id": "c",
+          "text": "A dead battery",
+          "rationale": "A dead battery prevents power, not just app installs."
+        },
+        {
+          "id": "d",
+          "text": "The wrong charger",
+          "rationale": "The charger does not affect app installation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Malware on mobile devices blocks installs, degrades performance, and generates unusual data/network activity. Scan and remove, or factory reset.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-028",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A stylus no longer works on a tablet, though finger touch works normally. Which component is MOST likely at fault?",
+      "context": "A stylus stops working while finger touch works.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The active digitizer (or the stylus itself)",
+          "rationale": "Finger touch uses the capacitive layer; stylus input needs the active digitizer — its failure (or a dead stylus battery) explains the symptom."
+        },
+        {
+          "id": "b",
+          "text": "The LCD panel",
+          "rationale": "The display works (touch works), so the panel is fine."
+        },
+        {
+          "id": "c",
+          "text": "The Wi-Fi antenna",
+          "rationale": "The antenna affects connectivity, not stylus input."
+        },
+        {
+          "id": "d",
+          "text": "The speakers",
+          "rationale": "Speakers are unrelated to stylus input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Finger touch works via the capacitive layer; a stylus needs the active digitizer. If the stylus fails but fingers work, the digitizer or stylus is faulty.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-029",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user's Wi-Fi drops intermittently when moving between rooms in a large house. Which TWO solutions BEST address weak-signal drops?",
+      "context": "Wi-Fi drops when moving between rooms in a large house.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reposition the access point centrally",
+          "rationale": "Central placement reduces distance and obstacle issues — the primary fix for weak-signal drops."
+        },
+        {
+          "id": "b",
+          "text": "Add a mesh extender or additional access point",
+          "rationale": "Additional APs/mesh cover dead zones in larger homes."
+        },
+        {
+          "id": "c",
+          "text": "Replace the DNS server",
+          "rationale": "DNS failures break name resolution, not the wireless link."
+        },
+        {
+          "id": "d",
+          "text": "Replace the power supply",
+          "rationale": "The PSU does not affect Wi-Fi signal."
+        },
+        {
+          "id": "e",
+          "text": "Replace the CMOS battery",
+          "rationale": "The CMOS battery affects the clock, not Wi-Fi."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Location-based Wi-Fi drops are signal-strength issues — reposition the AP centrally and add mesh/extenders for coverage. DNS, PSU, and CMOS are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-030",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user has 'limited connectivity' and an IP of 169.254.25.10. Which service is the MOST likely problem?",
+      "context": "Limited connectivity with a 169.254.x.x address.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "DHCP",
+          "rationale": "169.254.x.x is APIPA — the device self-assigned because no DHCP server responded."
+        },
+        {
+          "id": "b",
+          "text": "DNS",
+          "rationale": "DNS failure would break name resolution but the IP would come from DHCP."
+        },
+        {
+          "id": "c",
+          "text": "NTP",
+          "rationale": "NTP synchronizes time, not IP assignment."
+        },
+        {
+          "id": "d",
+          "text": "HTTP",
+          "rationale": "HTTP is an application protocol, not the addressing issue."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An APIPA address (169.254.x.x) means DHCP failed. Check the DHCP server, the network cable, and the switch port.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-031",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "VoIP calls have choppy audio with high jitter values. Which TWO factors contribute MOST to jitter?",
+      "context": "VoIP audio is choppy with high jitter.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Network congestion",
+          "rationale": "Congested links cause variable queuing delays — the primary jitter source."
+        },
+        {
+          "id": "b",
+          "text": "Lack of QoS for voice traffic",
+          "rationale": "Without QoS, voice packets compete with bulk traffic and arrive unevenly."
+        },
+        {
+          "id": "c",
+          "text": "The monitor refresh rate",
+          "rationale": "Display settings do not affect network jitter."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard layout",
+          "rationale": "Input configuration is unrelated."
+        },
+        {
+          "id": "e",
+          "text": "The hard drive size",
+          "rationale": "Drive capacity does not cause jitter."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Jitter is packet-delay variation — caused by congestion and lack of QoS prioritization for voice. Display, input, and storage settings are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-032",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A switch port's link LED blinks on and off repeatedly ('port flapping'). What is the MOST likely cause?",
+      "context": "A switch port flaps between up and down.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A faulty cable or NIC",
+          "rationale": "Port flapping usually means a marginal cable or NIC causing intermittent link loss."
+        },
+        {
+          "id": "b",
+          "text": "The DNS server is down",
+          "rationale": "DNS does not affect the physical link state."
+        },
+        {
+          "id": "c",
+          "text": "The DHCP scope is exhausted",
+          "rationale": "DHCP exhaustion affects addressing, not the link state."
+        },
+        {
+          "id": "d",
+          "text": "The monitor is unplugged",
+          "rationale": "The monitor is unrelated to switch ports."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Port flapping is a physical-layer symptom — replace/test the cable and NIC (and check for duplex mismatch).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-033",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user reports very slow internet speeds, but local network file transfers are fast. What does this pattern suggest?",
+      "context": "Internet is slow while LAN transfers are fast.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The WAN/ISP connection is the bottleneck",
+          "rationale": "Fast LAN + slow internet isolates the problem to the internet/WAN path (ISP, modem, or WAN link)."
+        },
+        {
+          "id": "b",
+          "text": "The switch is failing",
+          "rationale": "A failing switch would slow LAN transfers too."
+        },
+        {
+          "id": "c",
+          "text": "The NIC is faulty",
+          "rationale": "A faulty NIC slows all traffic, local and internet."
+        },
+        {
+          "id": "d",
+          "text": "The monitor is old",
+          "rationale": "The monitor is unrelated to network speed."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Fast LAN with slow internet isolates the fault to the WAN path — check the ISP connection, modem, and WAN link rather than local hardware.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-034",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A laptop frequently disconnects from Wi-Fi at the office, but other devices on the same AP stay connected. Which is the MOST likely cause?",
+      "context": "One laptop disconnects while other devices stay connected.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A problem with the laptop's wireless adapter or drivers",
+          "rationale": "If other devices stay connected, the fault is on the laptop side — adapter, driver, or power management."
+        },
+        {
+          "id": "b",
+          "text": "The access point is overloaded",
+          "rationale": "An overloaded AP would affect other devices too."
+        },
+        {
+          "id": "c",
+          "text": "The ISP is down",
+          "rationale": "An ISP outage affects all devices."
+        },
+        {
+          "id": "d",
+          "text": "The DHCP scope is full",
+          "rationale": "DHCP exhaustion affects new connections, not an established session."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A single device disconnecting while others stay connected points to the client: update the wireless driver and check adapter power-saving settings.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-035",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A laser printer prints pages with a vertical black line down the same position on every page. Which component is MOST likely damaged?",
+      "context": "A vertical black line appears on every laser print.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The imaging drum",
+          "rationale": "A scratch or defect on the imaging drum creates a repeating vertical line on every page."
+        },
+        {
+          "id": "b",
+          "text": "The paper tray",
+          "rationale": "The tray affects feeding, not image defects."
+        },
+        {
+          "id": "c",
+          "text": "The fuser",
+          "rationale": "Fuser issues cause smearing/creases, not a sharp vertical line."
+        },
+        {
+          "id": "d",
+          "text": "The network card",
+          "rationale": "The network card affects connectivity, not print quality."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A repeating vertical line on laser output indicates a damaged imaging drum (or dirty wiper blade). Replace the drum.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-036",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer outputs garbled text and symbols instead of the document. What is the MOST likely cause?",
+      "context": "A printer outputs garbled text and symbols.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The wrong printer driver",
+          "rationale": "Garbled output usually means the wrong driver is sending incompatible commands to the printer."
+        },
+        {
+          "id": "b",
+          "text": "Low toner",
+          "rationale": "Low toner fades output; it does not garble it."
+        },
+        {
+          "id": "c",
+          "text": "A paper jam",
+          "rationale": "Jams stop printing; they do not garble text."
+        },
+        {
+          "id": "d",
+          "text": "An empty tray",
+          "rationale": "An empty tray stops printing entirely."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Garbled/incorrect output is classically a driver mismatch — install the correct driver for the printer model.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-037",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer picks up multiple sheets at once and jams frequently. Which component is MOST likely worn?",
+      "context": "A printer misfeeds multiple sheets and jams.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The separation pad",
+          "rationale": "A worn separation pad fails to separate sheets, causing multipage misfeeds and jams."
+        },
+        {
+          "id": "b",
+          "text": "The fuser",
+          "rationale": "The fuser melts toner; it does not control sheet feeding."
+        },
+        {
+          "id": "c",
+          "text": "The imaging drum",
+          "rationale": "The drum creates the image; it does not feed paper."
+        },
+        {
+          "id": "d",
+          "text": "The toner cartridge",
+          "rationale": "Toner affects output quality, not feeding."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Multipage misfeeds indicate a worn separation pad (or pickup roller) — replace the feed assembly.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-038",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A user prints a 20-page document but the printer produces only 3 pages and the rest stay 'pending' in the queue. Which issue is this?",
+      "context": "A print job stalls with pages pending in the queue.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A stuck print queue/spooler",
+          "rationale": "Jobs stuck pending in the queue indicate a hung spooler — restart the spooler service."
+        },
+        {
+          "id": "b",
+          "text": "Low toner",
+          "rationale": "Low toner fades output; it does not stall the queue."
+        },
+        {
+          "id": "c",
+          "text": "A dirty printhead",
+          "rationale": "Printheads affect inkjet quality, not queue processing."
+        },
+        {
+          "id": "d",
+          "text": "Wrong paper size",
+          "rationale": "Paper size prompts a tray error, not a pending queue."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Print jobs stuck 'pending' mean the print spooler is hung — restart the Print Spooler service and clear the queue.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-039",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "An inkjet printer leaves speckles and smudges on the page edges. What is the MOST likely cause?",
+      "context": "Inkjet output has speckles and edge smudges.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dirty printhead or excess ink on the rollers",
+          "rationale": "Speckling and smudges on inkjets come from a dirty printhead or ink-contaminated rollers."
+        },
+        {
+          "id": "b",
+          "text": "The fuser is too hot",
+          "rationale": "The fuser is a laser component."
+        },
+        {
+          "id": "c",
+          "text": "The drum is scratched",
+          "rationale": "The drum is a laser component."
+        },
+        {
+          "id": "d",
+          "text": "The network is slow",
+          "rationale": "Network speed does not cause ink smudges."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Speckling/smudging on inkjet pages points to a dirty printhead or ink on the paper path — clean the printhead and rollers.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-040",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer makes a grinding noise when printing. What is the MOST likely cause?",
+      "context": "A printer makes a grinding noise during printing.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Worn gears or a foreign object in the paper path",
+          "rationale": "Grinding noises indicate gear wear or debris in the mechanism — inspect and clear."
+        },
+        {
+          "id": "b",
+          "text": "Low toner",
+          "rationale": "Low toner fades prints; it does not grind."
+        },
+        {
+          "id": "c",
+          "text": "A wrong driver",
+          "rationale": "Drivers garble output; they do not cause mechanical noise."
+        },
+        {
+          "id": "d",
+          "text": "The network cable",
+          "rationale": "Cabling is unrelated to mechanical noise."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Grinding noises come from mechanical parts — worn gears or an obstruction in the paper path. Inspect and clear the mechanism.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-041",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer prints pages with a double/echo image offset slightly. Which component is MOST likely at fault?",
+      "context": "A laser printer outputs double/echo images.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The imaging drum",
+          "rationale": "A failing drum that does not fully discharge creates ghost/double images on the page."
+        },
+        {
+          "id": "b",
+          "text": "The paper tray",
+          "rationale": "The tray feeds paper; it does not create ghosting."
+        },
+        {
+          "id": "c",
+          "text": "The toner cartridge's chip",
+          "rationale": "The chip tracks toner level, not image quality."
+        },
+        {
+          "id": "d",
+          "text": "The network card",
+          "rationale": "The NIC affects connectivity, not image quality."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Double/echo images on laser output indicate a drum that fails to discharge fully, leaving a residual latent image — replace the drum.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-042",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user can see the office Wi-Fi network but cannot connect, and the phone shows an authentication error. Other users connect fine. Which is the MOST likely cause?",
+      "context": "A user's device fails Wi-Fi authentication while others connect.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The user is entering the wrong passphrase",
+          "rationale": "An authentication error on one device while others connect usually means the wrong passphrase (or a stale saved password)."
+        },
+        {
+          "id": "b",
+          "text": "The access point is overloaded",
+          "rationale": "An overloaded AP affects everyone, not one device."
+        },
+        {
+          "id": "c",
+          "text": "The ISP is down",
+          "rationale": "An ISP outage does not block Wi-Fi authentication."
+        },
+        {
+          "id": "d",
+          "text": "The DHCP scope is exhausted",
+          "rationale": "DHCP exhaustion affects addressing after association, not authentication."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Authentication failures on a single device with others connected fine point to credentials — forget the network and re-enter the correct passphrase (or check 802.1X credentials).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

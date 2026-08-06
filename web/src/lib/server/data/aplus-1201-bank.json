@@ -1700,6 +1700,5346 @@
           "section": "220-1201 1.3 Mobile Devices"
         }
       ]
+    },
+    {
+      "id": "a1-2-001",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A support technician needs to securely administer a Linux server remotely from a Windows workstation. Which port should the technician use for the secure administration connection?",
+      "context": "Remote administration of a Linux server is needed; the connection must be encrypted.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "22",
+          "rationale": "Port 22 is SSH, the encrypted remote-administration protocol — the secure choice."
+        },
+        {
+          "id": "b",
+          "text": "23",
+          "rationale": "Port 23 is Telnet, which sends credentials and data in plaintext."
+        },
+        {
+          "id": "c",
+          "text": "3389",
+          "rationale": "Port 3389 is RDP, used for Windows remote desktop sessions."
+        },
+        {
+          "id": "d",
+          "text": "445",
+          "rationale": "Port 445 is SMB/CIFS, used for Windows file sharing."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SSH (port 22) provides encrypted remote administration of Unix/Linux systems. Telnet (23) is its insecure predecessor; RDP (3389) is Windows-specific; SMB (445) is file sharing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-002",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A user reports that they can send email but cannot receive it from their mail server, which downloads messages to the local client. Which port is MOST likely blocked on the corporate firewall?",
+      "context": "Outgoing mail works; incoming mail download to the client does not.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "25",
+          "rationale": "Port 25 (SMTP) sends mail; since sending works, it is not the blocked port."
+        },
+        {
+          "id": "b",
+          "text": "110",
+          "rationale": "Port 110 (POP3) downloads mail to the client — a blocked receive path matches the symptom."
+        },
+        {
+          "id": "c",
+          "text": "143",
+          "rationale": "Port 143 (IMAP) also receives mail, but it keeps messages on the server rather than downloading them to the client."
+        },
+        {
+          "id": "d",
+          "text": "53",
+          "rationale": "Port 53 (DNS) resolves names; a DNS block would break web browsing too."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "POP3 (port 110) downloads messages to the local client; SMTP (25) handles sending. IMAP (143) keeps mail server-side, so a client that downloads to local storage points to POP3.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-003",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A network engineer needs to transfer files between two servers using a protocol that encrypts both the authentication and the data in transit. Which ports should be permitted?",
+      "context": "Encrypted file transfer is required between two servers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "20 and 21",
+          "rationale": "Ports 20/21 are FTP, which transmits credentials and data in plaintext."
+        },
+        {
+          "id": "b",
+          "text": "22",
+          "rationale": "SSH on port 22 supports SFTP/SCP, encrypting both authentication and data — the secure file-transfer path."
+        },
+        {
+          "id": "c",
+          "text": "80 and 443",
+          "rationale": "HTTP/HTTPS serve web content; not a general server-to-server file-transfer method."
+        },
+        {
+          "id": "d",
+          "text": "137 and 139",
+          "rationale": "NetBIOS/NetBT ports are legacy Windows naming/file-sharing with weak security."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "SFTP and SCP run over SSH (port 22) and encrypt both authentication and data. FTP (20/21) is plaintext and insecure.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-004",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A VoIP phone intermittently drops audio quality when the network is busy, but a file download that uses TCP continues without issue. Which characteristic of the voice traffic explains why it degrades first?",
+      "context": "VoIP audio degrades under load while TCP file transfers continue.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "UDP does not retransmit lost packets, so dropped packets become gaps in audio",
+          "rationale": "VoIP uses UDP: no retransmission means lost packets are simply missing from the audio stream — quality degrades under congestion."
+        },
+        {
+          "id": "b",
+          "text": "UDP performs a three-way handshake before each call",
+          "rationale": "The three-way handshake is a TCP behavior; UDP is connectionless."
+        },
+        {
+          "id": "c",
+          "text": "TCP provides lower latency than UDP",
+          "rationale": "TCP adds overhead and retransmission; it is NOT lower latency than UDP for real-time traffic."
+        },
+        {
+          "id": "d",
+          "text": "VoIP traffic is always sent over port 443",
+          "rationale": "VoIP uses a range of UDP ports; 443 is HTTPS."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "VoIP uses UDP for low latency. When the network congests, UDP packets are dropped without retransmission, causing audio gaps — while TCP recovers through retransmission at the cost of latency.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 TCP vs UDP"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-005",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "scenario",
+      "prompt": "A technician is configuring a Windows workstation so it can access shared folders on a departmental file server. Which TWO ports must be open on the firewall for SMB/CIFS file sharing to work?",
+      "context": "Windows file sharing to a departmental server requires SMB/CIFS traffic.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "445",
+          "rationale": "Port 445 is the direct SMB/CIFS port used by modern Windows file sharing."
+        },
+        {
+          "id": "b",
+          "text": "139",
+          "rationale": "Port 139 (NetBIOS session) is the legacy fallback used alongside SMB on Windows networks."
+        },
+        {
+          "id": "c",
+          "text": "389",
+          "rationale": "Port 389 is LDAP, used for directory services, not file sharing."
+        },
+        {
+          "id": "d",
+          "text": "53",
+          "rationale": "Port 53 is DNS; needed for name resolution but not for the SMB session itself."
+        },
+        {
+          "id": "e",
+          "text": "80",
+          "rationale": "Port 80 is HTTP web traffic."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Modern Windows file sharing uses SMB directly on port 445; legacy NetBIOS-based SMB sessions use port 139. LDAP (389), DNS (53), and HTTP (80) are unrelated to the file-sharing session.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-006",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A homeowner complains that their wireless devices frequently disconnect near the microwave in the kitchen. Which wireless frequency is MOST likely being disrupted?",
+      "context": "Wireless disconnects occur near a microwave oven.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "2.4 GHz",
+          "rationale": "Microwave ovens emit interference in the 2.4 GHz band, which overlaps Wi-Fi channels — the likely culprit."
+        },
+        {
+          "id": "b",
+          "text": "5 GHz",
+          "rationale": "5 GHz is less affected by microwave interference, though it has shorter range."
+        },
+        {
+          "id": "c",
+          "text": "6 GHz",
+          "rationale": "6 GHz (Wi-Fi 6E) is far from microwave emissions."
+        },
+        {
+          "id": "d",
+          "text": "900 MHz",
+          "rationale": "900 MHz is not a Wi-Fi band and is not used by the kitchen microwave."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Microwave ovens radiate in the 2.4 GHz range, directly overlapping Wi-Fi channels 1-11. Moving to 5 GHz or 6 GHz avoids most of this interference.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.2 Wireless Frequencies"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-007",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A technician is choosing a Wi-Fi standard for a small office that wants the fastest possible speeds on the 5 GHz band with support for the newest clients. Which standard should be selected?",
+      "context": "A new access point should support the fastest 5 GHz connections.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "802.11ax (Wi-Fi 6)",
+          "rationale": "802.11ax is the newest mainstream standard, supporting 2.4/5/6 GHz with higher throughput and efficiency."
+        },
+        {
+          "id": "b",
+          "text": "802.11b",
+          "rationale": "802.11b is a legacy 2.4 GHz standard at 11 Mbps."
+        },
+        {
+          "id": "c",
+          "text": "802.11g",
+          "rationale": "802.11g is 2.4 GHz only, up to 54 Mbps."
+        },
+        {
+          "id": "d",
+          "text": "802.11a",
+          "rationale": "802.11a is an early 5 GHz standard at 54 Mbps — fast for its era but far slower than modern standards."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "802.11ax (Wi-Fi 6) provides the highest throughput and supports 2.4, 5, and 6 GHz bands. 802.11b/g are legacy 2.4 GHz; 802.11a is the old 5 GHz standard.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.2 802.11 Standards"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-008",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A warehouse uses handheld scanners to read inventory tags as items pass through a doorway. The tags are passive and powered by the reader's signal. Which wireless technology is in use?",
+      "context": "Passive tags on inventory are read at a doorway by a handheld scanner.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "RFID",
+          "rationale": "RFID uses radio tags that can be passive (powered by the reader's field) — the standard technology for inventory tracking."
+        },
+        {
+          "id": "b",
+          "text": "NFC",
+          "rationale": "NFC works at a range of only a few centimeters; doorway scanning needs more distance."
+        },
+        {
+          "id": "c",
+          "text": "Bluetooth",
+          "rationale": "Bluetooth is a two-way personal-area connection, not passive tag reading."
+        },
+        {
+          "id": "d",
+          "text": "Infrared",
+          "rationale": "Infrared requires line of sight and is not used for passive inventory tags at doorways."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RFID (radio-frequency identification) reads passive tags powered by the reader at ranges of a meter or more — ideal for doorway inventory scanning. NFC is an RFID variant limited to a few centimeters.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.2 RFID and NFC"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-009",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A small business wants a single network appliance that combines firewall, intrusion prevention, antivirus, and content filtering for its internet connection. Which type of device should be purchased?",
+      "context": "One appliance should provide firewall, IPS, antivirus, and content filtering.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "UTM appliance",
+          "rationale": "A unified threat management (UTM) appliance bundles firewall, IPS, antivirus, and filtering in one device."
+        },
+        {
+          "id": "b",
+          "text": "Load balancer",
+          "rationale": "A load balancer distributes traffic across servers; it does not filter threats."
+        },
+        {
+          "id": "c",
+          "text": "Proxy server",
+          "rationale": "A proxy caches and filters web requests but does not provide IPS or antivirus."
+        },
+        {
+          "id": "d",
+          "text": "Spam gateway",
+          "rationale": "A spam gateway filters email only."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A UTM (unified threat management) appliance combines multiple security functions — firewall, intrusion prevention, antivirus, content filtering — into a single device, ideal for SMBs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 Internet Appliances"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-010",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "An administrator needs all servers on the network to agree on the current time for accurate log correlation. Which server role should be deployed?",
+      "context": "Servers must synchronize their clocks for accurate log correlation.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NTP server",
+          "rationale": "An NTP (Network Time Protocol) server distributes accurate time so all devices stay synchronized."
+        },
+        {
+          "id": "b",
+          "text": "DNS server",
+          "rationale": "DNS resolves hostnames to IP addresses; it does not provide time."
+        },
+        {
+          "id": "c",
+          "text": "Syslog server",
+          "rationale": "A syslog server collects logs; it relies on accurate time but does not provide it."
+        },
+        {
+          "id": "d",
+          "text": "DHCP server",
+          "rationale": "DHCP assigns IP addresses; it does not synchronize clocks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NTP (Network Time Protocol) synchronizes clocks across devices, which is essential for correlating logs and authentication timestamps.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 Network Services"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-011",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A technician notices that a manufacturing plant runs a 20-year-old control system that monitors and controls industrial equipment, and it cannot be patched. Which term describes this type of system?",
+      "context": "An unpatched industrial control system monitors plant equipment.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "SCADA system",
+          "rationale": "SCADA (supervisory control and data acquisition) systems monitor and control industrial processes and are often legacy and unpatched."
+        },
+        {
+          "id": "b",
+          "text": "UTM appliance",
+          "rationale": "A UTM is a security appliance, not an industrial control system."
+        },
+        {
+          "id": "c",
+          "text": "Load balancer",
+          "rationale": "A load balancer distributes traffic; unrelated to industrial control."
+        },
+        {
+          "id": "d",
+          "text": "SAN",
+          "rationale": "A SAN is a storage area network."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SCADA systems control industrial processes (power, manufacturing, water). They are frequently legacy, unpatched, and need special segmentation and security attention.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 SCADA and IoT"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-012",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "A company deploys dozens of internet-connected thermostats, door locks, and light switches across its offices. Employees control them from a central app. Which term describes these devices?",
+      "context": "Internet-connected building devices are managed from a central app.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "IoT devices",
+          "rationale": "Internet of Things (IoT) devices are networked smart devices — thermostats, locks, lights — managed remotely."
+        },
+        {
+          "id": "b",
+          "text": "SCADA endpoints",
+          "rationale": "SCADA is for industrial control, not office building automation."
+        },
+        {
+          "id": "c",
+          "text": "Thin clients",
+          "rationale": "Thin clients are lightweight PCs that connect to a server; unrelated."
+        },
+        {
+          "id": "d",
+          "text": "PBX endpoints",
+          "rationale": "PBX endpoints are telephone system extensions."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "IoT devices are smart, internet-connected devices (thermostats, locks, sensors) that can be monitored and controlled centrally — and they introduce security considerations like weak default credentials.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.3 IoT Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-013",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A web administrator adds a DNS record so that mail sent to the domain is accepted by the correct mail server. Which record type is being configured?",
+      "context": "A DNS record directs email for the domain to the mail server.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "MX",
+          "rationale": "An MX (mail exchanger) record identifies which servers accept mail for a domain."
+        },
+        {
+          "id": "b",
+          "text": "A",
+          "rationale": "An A record maps a hostname to an IPv4 address."
+        },
+        {
+          "id": "c",
+          "text": "CNAME",
+          "rationale": "A CNAME creates an alias from one hostname to another."
+        },
+        {
+          "id": "d",
+          "text": "AAAA",
+          "rationale": "An AAAA record maps a hostname to an IPv6 address."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The MX record advertises the mail servers for a domain, with priority values. A/AAAA handle IP mapping and CNAME creates aliases.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DNS Configuration"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-014",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A mail administrator wants other mail servers to verify that messages claiming to be from the company's domain actually originate from its authorized servers. Which DNS record should be published?",
+      "context": "Mail servers should verify the origin of messages from the company domain.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "TXT with SPF",
+          "rationale": "An SPF TXT record lists the servers authorized to send mail for the domain, enabling verification."
+        },
+        {
+          "id": "b",
+          "text": "MX",
+          "rationale": "MX records identify receiving mail servers, not sending authorization."
+        },
+        {
+          "id": "c",
+          "text": "CNAME",
+          "rationale": "CNAME is a hostname alias and has nothing to do with mail authentication."
+        },
+        {
+          "id": "d",
+          "text": "AAAA",
+          "rationale": "AAAA maps names to IPv6 addresses."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SPF (Sender Policy Framework) is published as a TXT record listing authorized sending servers. DKIM and DMARC complement SPF to fight email spoofing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DNS Configuration"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-015",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A network administrator needs the printer in the lobby to always receive the same IP address from the DHCP server, even though it uses DHCP. Which DHCP feature should be configured?",
+      "context": "A printer must always receive the same DHCP-assigned IP.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reservation",
+          "rationale": "A DHCP reservation binds a specific IP to the device's MAC address, so it always gets the same address."
+        },
+        {
+          "id": "b",
+          "text": "Scope",
+          "rationale": "The scope is the range of addresses DHCP can hand out."
+        },
+        {
+          "id": "c",
+          "text": "Exclusion",
+          "rationale": "An exclusion removes addresses from the pool so DHCP does not assign them."
+        },
+        {
+          "id": "d",
+          "text": "Lease",
+          "rationale": "A lease is the temporary assignment duration for an IP address."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A DHCP reservation permanently maps a MAC address to a fixed IP within the scope. Exclusions prevent assignment, and leases control how long an assignment lasts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DHCP"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-016",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A company separates its marketing and engineering departments so that broadcast traffic from one group cannot reach the other, while both keep using the same switch hardware. Which technology makes this possible?",
+      "context": "Two departments must be isolated from each other's broadcast traffic on shared switch hardware.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VLAN",
+          "rationale": "VLANs partition a switch into separate broadcast domains, isolating departments on shared hardware."
+        },
+        {
+          "id": "b",
+          "text": "VPN",
+          "rationale": "A VPN is an encrypted tunnel over a public network, not a switch segmentation tool."
+        },
+        {
+          "id": "c",
+          "text": "NAT",
+          "rationale": "NAT translates private/public IP addresses."
+        },
+        {
+          "id": "d",
+          "text": "DHCP reservation",
+          "rationale": "DHCP reservations fix IP assignments; they do not segment traffic."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "VLANs (virtual LANs) create separate broadcast domains on the same physical switch, isolating traffic between departments while sharing hardware.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 VLANs and VPNs"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-017",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "A salesperson working from a hotel needs to access internal company applications securely. Which TWO technologies should be combined for the connection?",
+      "context": "A remote user needs secure access to internal applications from a hotel network.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VPN client",
+          "rationale": "A VPN client creates an encrypted tunnel from the hotel network to the company network."
+        },
+        {
+          "id": "b",
+          "text": "Encrypted tunnel",
+          "rationale": "The VPN establishes an encrypted tunnel so hotel traffic cannot be intercepted."
+        },
+        {
+          "id": "c",
+          "text": "Public DNS server",
+          "rationale": "Public DNS resolves names; it does not secure the connection."
+        },
+        {
+          "id": "d",
+          "text": "DHCP reservation",
+          "rationale": "DHCP reservations fix IPs on the local LAN; irrelevant to a hotel connection."
+        },
+        {
+          "id": "e",
+          "text": "Port forwarding",
+          "rationale": "Port forwarding exposes internal services; it is not a secure remote-access method."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "A VPN client establishes an encrypted tunnel (IPSec, TLS, or WireGuard) protecting traffic on untrusted networks like hotel Wi-Fi. DNS/DHCP/port-forwarding do not provide this protection.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 VLANs and VPNs"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-018",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A technician is selecting a switch for a growing office and needs to segment departments later. Which TWO features does a MANAGED switch provide that an unmanaged switch does not?",
+      "context": "A switch is needed that can later segment departments.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VLAN configuration",
+          "rationale": "Managed switches support VLANs to segment broadcast domains — the key requirement."
+        },
+        {
+          "id": "b",
+          "text": "Remote management (SNMP/web/CLI)",
+          "rationale": "Managed switches offer remote administration, monitoring, and port configuration."
+        },
+        {
+          "id": "c",
+          "text": "Plug-and-play operation only",
+          "rationale": "Plug-and-play with no configuration is the defining trait of an UNMANAGED switch."
+        },
+        {
+          "id": "d",
+          "text": "No configuration options",
+          "rationale": "Unmanaged switches have no configuration; managed ones do."
+        },
+        {
+          "id": "e",
+          "text": "Automatic VLAN creation",
+          "rationale": "VLANs must be created by an administrator; no switch creates them automatically."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Managed switches provide VLAN support and remote management (web/SNMP/CLI). Unmanaged switches are plug-and-play with no configuration. PoE and port security are also managed-switch features.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.5 Network Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-019",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A network camera is installed on a ceiling far from any power outlet, and the only nearby cable is an Ethernet drop. Which technology lets the camera receive both data and power over that single cable?",
+      "context": "A ceiling camera needs power but only has an Ethernet cable nearby.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "PoE",
+          "rationale": "Power over Ethernet (PoE) delivers both data and power over a single twisted-pair cable — perfect for ceiling devices."
+        },
+        {
+          "id": "b",
+          "text": "VPN",
+          "rationale": "A VPN is an encrypted tunnel, not a power delivery method."
+        },
+        {
+          "id": "c",
+          "text": "VLAN",
+          "rationale": "A VLAN segments traffic; it does not provide power."
+        },
+        {
+          "id": "d",
+          "text": "NAT",
+          "rationale": "NAT translates IP addresses."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "PoE (IEEE 802.3af/at) delivers up to 15.4W/30W over Ethernet cabling via an injector or PoE switch, powering cameras, APs, and VoIP phones without separate outlets.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.5 Power over Ethernet"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-020",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A new building's data cabling terminates in the server room at a wall-mounted panel where each run is punched down to a numbered port. What is this panel called?",
+      "context": "Cable runs terminate at a numbered wall panel in the server room.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Patch panel",
+          "rationale": "A patch panel is the termination point where structured cabling is punched down and patched to switches."
+        },
+        {
+          "id": "b",
+          "text": "Punchdown block",
+          "rationale": "A punchdown block (like a 110 block) is the older voice/data termination, but the wall-mounted numbered panel for network cabling is the patch panel."
+        },
+        {
+          "id": "c",
+          "text": "Switch",
+          "rationale": "A switch forwards traffic; cabling terminates at the patch panel before reaching it."
+        },
+        {
+          "id": "d",
+          "text": "Firewall",
+          "rationale": "A firewall filters traffic between networks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A patch panel provides a fixed termination point for structured cabling; short patch cables connect it to the switch. It makes moves/adds/changes clean and organized.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.5 Network Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-021",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "A technician is troubleshooting why a device cannot reach the network and wants to confirm the NIC is functioning at the physical layer by testing its transmit/receive path locally. Which tool should be used?",
+      "context": "The NIC's local transmit/receive path needs a physical-layer test.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Loopback plug",
+          "rationale": "A loopback plug connects the transmit pins back to the receive pins, letting the NIC test its own path."
+        },
+        {
+          "id": "b",
+          "text": "Toner probe",
+          "rationale": "A toner probe traces cables through walls; it does not test a NIC."
+        },
+        {
+          "id": "c",
+          "text": "Crimper",
+          "rationale": "A crimper attaches connectors to cable; it does not test."
+        },
+        {
+          "id": "d",
+          "text": "Wi-Fi analyzer",
+          "rationale": "A Wi-Fi analyzer surveys wireless signals."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A loopback plug shorts the transmit pair back to receive, so a device can verify its NIC and port are functional without a network. Toner probes trace cables; crimpers terminate them.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-022",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician configures a SOHO router and needs to identify which addresses the router hands out to devices automatically. The office uses the 192.168.1.x range. Which addressing method is the router using?",
+      "context": "A SOHO router assigns 192.168.1.x addresses to devices automatically.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dynamic (DHCP)",
+          "rationale": "DHCP automatically assigns addresses from a pool — the standard SOHO router behavior."
+        },
+        {
+          "id": "b",
+          "text": "Static",
+          "rationale": "Static addressing requires manual configuration on each device."
+        },
+        {
+          "id": "c",
+          "text": "APIPA",
+          "rationale": "APIPA (169.254.x.x) is the link-local fallback when DHCP is unavailable."
+        },
+        {
+          "id": "d",
+          "text": "IPv6 SLAAC",
+          "rationale": "SLAAC is IPv6 stateless auto-configuration, not IPv4 DHCP."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "SOHO routers run a DHCP server that dynamically assigns addresses from the LAN pool. APIPA addresses (169.254.x.x) appear only when DHCP fails.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 Assigning IP Addresses"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-023",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A user's PC shows an IP address of 169.254.14.77 after connecting to the office network. Which TWO statements about this address are correct?",
+      "context": "A PC received a 169.254.x.x address on the office network.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "It is an APIPA link-local address",
+          "rationale": "169.254.x.x is the APIPA range a device self-assigns."
+        },
+        {
+          "id": "b",
+          "text": "It indicates the device could not reach a DHCP server",
+          "rationale": "APIPA appears when DHCP fails, leaving the device without a usable configuration."
+        },
+        {
+          "id": "c",
+          "text": "It is a routable public address",
+          "rationale": "169.254 is link-local and never routed on the internet."
+        },
+        {
+          "id": "d",
+          "text": "It is a valid static address for the office subnet",
+          "rationale": "A static address would be in the office's configured subnet, not link-local."
+        },
+        {
+          "id": "e",
+          "text": "It is assigned by the router's DHCP scope",
+          "rationale": "DHCP scopes do not hand out APIPA addresses; the NIC self-assigns them."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "169.254.x.x is Automatic Private IP Addressing — the NIC self-assigns a link-local address when DHCP is unreachable. The address is not routable and not from the office's DHCP scope.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 Assigning IP Addresses"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-024",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician is setting up a small office and needs devices on the internal LAN to share one public internet address. Which technology on the SOHO router makes this possible?",
+      "context": "Multiple internal devices must share one public internet address.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NAT/PAT",
+          "rationale": "NAT (with PAT) maps many private addresses to one public address — the standard SOHO internet-sharing mechanism."
+        },
+        {
+          "id": "b",
+          "text": "VLAN",
+          "rationale": "VLANs segment broadcast domains; they do not translate addresses."
+        },
+        {
+          "id": "c",
+          "text": "VPN",
+          "rationale": "A VPN is an encrypted tunnel, not an address translation method."
+        },
+        {
+          "id": "d",
+          "text": "APIPA",
+          "rationale": "APIPA is a link-local fallback address."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NAT (network address translation) with PAT (port address translation) lets many private IPs share one public IP — how SOHO routers provide internet to the whole LAN.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 IP Addressing"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-025",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "A user wants to connect a wireless headset to their laptop for the first time. The laptop shows the headset in the list of discovered devices. Which step completes the pairing?",
+      "context": "A Bluetooth headset appears in the laptop's discovered-devices list.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Select the headset and confirm the pairing PIN/code",
+          "rationale": "After discovery, the user selects the device and confirms the PIN or code shown on both devices to complete pairing."
+        },
+        {
+          "id": "b",
+          "text": "Enter the office Wi-Fi passphrase",
+          "rationale": "Wi-Fi credentials are unrelated to Bluetooth pairing."
+        },
+        {
+          "id": "c",
+          "text": "Configure a static IP address on the headset",
+          "rationale": "Bluetooth is a PAN technology; no IP configuration is involved."
+        },
+        {
+          "id": "d",
+          "text": "Enable NFC on the laptop",
+          "rationale": "NFC is a separate technology; Bluetooth pairing does not require it."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Bluetooth pairing ends with selecting the discovered device and confirming the PIN/code (or 'pair' confirmation) on both devices. Wi-Fi, IP configuration, and NFC are not part of Bluetooth pairing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 IP Addressing"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-026",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "scenario",
+      "prompt": "A technician secures a new wireless router and needs to select the strongest available wireless encryption that the router and all clients support. Which option should be chosen?",
+      "context": "The strongest wireless encryption supported by router and clients is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "WPA3",
+          "rationale": "WPA3 (SAE) is the strongest current wireless encryption; choose it when all devices support it."
+        },
+        {
+          "id": "b",
+          "text": "WPA2",
+          "rationale": "WPA2 is strong but older; WPA3 supersedes it."
+        },
+        {
+          "id": "c",
+          "text": "WPA",
+          "rationale": "WPA uses TKIP, which is deprecated and weak."
+        },
+        {
+          "id": "d",
+          "text": "WEP",
+          "rationale": "WEP is broken and must never be used."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "WPA3 (Wi-Fi Protected Access 3, using SAE) provides the strongest encryption and resists offline dictionary attacks. Order of strength: WPA3 > WPA2 > WPA > WEP.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 SOHO Wireless Security"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-027",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A rural business has no access to cable or fiber internet, and cellular coverage is poor. Which internet connection type is MOST likely to be available?",
+      "context": "Rural location with no cable, fiber, or reliable cellular.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Satellite",
+          "rationale": "Satellite internet is available nearly anywhere with a clear view of the sky — the typical rural fallback."
+        },
+        {
+          "id": "b",
+          "text": "Fiber",
+          "rationale": "Fiber requires physical infrastructure rarely present in rural areas."
+        },
+        {
+          "id": "c",
+          "text": "Cable",
+          "rationale": "Cable requires coax plant, usually absent in remote areas."
+        },
+        {
+          "id": "d",
+          "text": "DSL",
+          "rationale": "DSL needs a telephone line with a nearby central office; many rural areas lack it."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Satellite internet works almost anywhere with sky access, making it the common choice for rural locations lacking wired or cellular infrastructure. It has higher latency (~500-700 ms).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Internet Connection Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-028",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A user's smartphone, wireless headset, and smartwatch exchange data over short-range connections. Which network type connects these personal devices?",
+      "context": "A phone, headset, and watch connect over short-range links.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "PAN",
+          "rationale": "A personal area network (PAN) links personal devices over short range — Bluetooth/Wi-Fi Direct."
+        },
+        {
+          "id": "b",
+          "text": "LAN",
+          "rationale": "A LAN covers a building or office."
+        },
+        {
+          "id": "c",
+          "text": "WAN",
+          "rationale": "A WAN spans cities or countries."
+        },
+        {
+          "id": "d",
+          "text": "MAN",
+          "rationale": "A MAN covers a metropolitan area."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A PAN connects an individual's devices (phone, headset, watch) over a few meters, typically via Bluetooth. LAN/WAN/MAN cover progressively larger geographic areas.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Network Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-029",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A hospital needs a high-speed dedicated network connecting its storage arrays to application servers so block-level data can be moved at very high speeds. Which network type is designed for this?",
+      "context": "High-speed block-level storage traffic between arrays and servers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "SAN",
+          "rationale": "A storage area network (SAN) is a dedicated high-speed network for block-level storage traffic (Fibre Channel/iSCSI)."
+        },
+        {
+          "id": "b",
+          "text": "WLAN",
+          "rationale": "A WLAN is a wireless LAN for client access."
+        },
+        {
+          "id": "c",
+          "text": "PAN",
+          "rationale": "A PAN connects personal devices."
+        },
+        {
+          "id": "d",
+          "text": "MAN",
+          "rationale": "A MAN covers a metropolitan region."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A SAN (storage area network) is a specialized high-speed network carrying block-level storage traffic between servers and arrays, using technologies like Fibre Channel or iSCSI.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Network Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-030",
+      "domain": 2,
+      "objective": "2.7",
+      "format": "scenario",
+      "prompt": "A company's offices in two different states connect through their ISP, and a city government links its downtown buildings across a metro area. Which TWO network types describe these two scenarios respectively?",
+      "context": "Offices in two states + city buildings across a metro area.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "WAN",
+          "rationale": "The two-state connection spans a wide geographic area — a WAN."
+        },
+        {
+          "id": "b",
+          "text": "MAN",
+          "rationale": "A metro-area network (MAN) connects sites across a city."
+        },
+        {
+          "id": "c",
+          "text": "LAN",
+          "rationale": "A LAN covers a single building or campus, not states or metros."
+        },
+        {
+          "id": "d",
+          "text": "PAN",
+          "rationale": "A PAN covers a few meters around a person."
+        },
+        {
+          "id": "e",
+          "text": "SAN",
+          "rationale": "A SAN is a storage network."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "WANs span states/countries via ISP backbones; MANs span a metropolitan area. LANs are local, PANs are personal, SANs carry storage traffic.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.7 Network Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-031",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician must identify which wall jack a specific cable run terminates at, in a bundle of dozens of unlabeled cables. Which tool should be used?",
+      "context": "One specific cable must be traced among many unlabeled runs.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Toner probe",
+          "rationale": "A toner probe sends a tone down one cable so it can be identified at the other end — the tool for tracing runs."
+        },
+        {
+          "id": "b",
+          "text": "Cable tester",
+          "rationale": "A cable tester verifies wiring order and continuity but cannot identify which cable is which in a bundle."
+        },
+        {
+          "id": "c",
+          "text": "Loopback plug",
+          "rationale": "A loopback plug tests a NIC, not cable identification."
+        },
+        {
+          "id": "d",
+          "text": "Crimper",
+          "rationale": "A crimper terminates connectors; it does not trace cables."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A toner (fox and hound) sends an audible tone down a specific cable; the probe detects it at the far end, identifying the run among many. Cable testers verify wiring, not identity.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-032",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician suspects a newly terminated Ethernet cable has a wiring error because the link does not come up. Which tool verifies the pin-to-pin continuity and wire order of the cable?",
+      "context": "A terminated Ethernet cable fails to link; wiring must be verified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cable tester",
+          "rationale": "A cable tester checks continuity and pin mapping (T568A/B) of each pair — the tool for verifying a termination."
+        },
+        {
+          "id": "b",
+          "text": "Toner probe",
+          "rationale": "A toner probe identifies cables, not wire order."
+        },
+        {
+          "id": "c",
+          "text": "Wi-Fi analyzer",
+          "rationale": "A Wi-Fi analyzer surveys wireless channels."
+        },
+        {
+          "id": "d",
+          "text": "Punchdown tool",
+          "rationale": "A punchdown tool terminates wires into blocks; it does not test them."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A cable tester verifies continuity, shorts, and correct pair wiring against T568A/T568B. A punchdown tool installs terminations; a toner probe traces cable identity.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-033",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician must create custom-length Ethernet patch cables for a new server rack. After stripping the cable jacket and arranging the pairs in the correct T568B order, which tool attaches the RJ-45 connector?",
+      "context": "Custom Ethernet patch cables need RJ-45 connectors attached after stripping.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Crimper",
+          "rationale": "A crimper presses the RJ-45 connector's pins into the wire ends, securing the connector — the final termination step."
+        },
+        {
+          "id": "b",
+          "text": "Punchdown tool",
+          "rationale": "A punchdown tool terminates wires into 110-style blocks and keystones, not RJ-45 plugs."
+        },
+        {
+          "id": "c",
+          "text": "Toner probe",
+          "rationale": "A toner probe identifies cables after installation."
+        },
+        {
+          "id": "d",
+          "text": "Cable tester",
+          "rationale": "A cable tester verifies the finished cable; it does not attach connectors."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A crimper attaches and secures RJ-45 connectors. Stripping the jacket is done with a cable stripper first; a cable tester verifies the result afterward.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-2-034",
+      "domain": 2,
+      "objective": "2.8",
+      "format": "scenario",
+      "prompt": "A technician is diagnosing weak Wi-Fi coverage and wants to identify the least congested channel in the office before changing the access point settings. Which tool provides this information?",
+      "context": "The least congested Wi-Fi channel must be identified for an office.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Wi-Fi analyzer",
+          "rationale": "A Wi-Fi analyzer surveys nearby networks, signal strength, and channel usage — exactly what channel planning needs."
+        },
+        {
+          "id": "b",
+          "text": "Toner probe",
+          "rationale": "A toner probe traces wired cables."
+        },
+        {
+          "id": "c",
+          "text": "Cable tester",
+          "rationale": "A cable tester verifies wired cabling, not wireless channels."
+        },
+        {
+          "id": "d",
+          "text": "Network tap",
+          "rationale": "A network tap passively captures wired traffic."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A Wi-Fi analyzer shows SSIDs, channels, and signal levels in the area, letting you pick the least congested channel (e.g., 1, 6, or 11 on 2.4 GHz).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.8 Network Tools"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-001",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A graphic designer needs a monitor with the most accurate and consistent colors when viewed from different angles. Which LCD panel technology should be selected?",
+      "context": "A monitor is needed with accurate colors from wide viewing angles.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "IPS",
+          "rationale": "IPS (in-plane switching) offers the best color accuracy and wide viewing angles — the designer's choice."
+        },
+        {
+          "id": "b",
+          "text": "TN",
+          "rationale": "TN panels have poor color and narrow angles; they are cheap and fast but not color-accurate."
+        },
+        {
+          "id": "c",
+          "text": "VA",
+          "rationale": "VA offers good contrast but weaker viewing angles and color consistency than IPS."
+        },
+        {
+          "id": "d",
+          "text": "OLED",
+          "rationale": "OLED is excellent but the question asks for LCD panel technology; IPS is the LCD answer."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "IPS panels provide the widest viewing angles and best color accuracy among LCD technologies, making them standard for design work. TN is budget/fast, VA sits in between.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Display Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-002",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A user wants a new TV with true black levels and vibrant colors for movies, and understands the risk of image retention. Which display technology BEST fits?",
+      "context": "A TV with true blacks is wanted; image-retention risk is accepted.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "OLED",
+          "rationale": "OLED pixels emit their own light, giving true blacks and vivid colors — with the known burn-in risk."
+        },
+        {
+          "id": "b",
+          "text": "TN LCD",
+          "rationale": "TN LCD has poor color and requires a backlight, so blacks are never true."
+        },
+        {
+          "id": "c",
+          "text": "IPS LCD",
+          "rationale": "IPS LCD has good color but a backlight, so blacks are not truly black."
+        },
+        {
+          "id": "d",
+          "text": "Mini-LED LCD",
+          "rationale": "Mini-LED improves contrast with local dimming but still uses a backlight."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "OLED is self-emissive: each pixel lights itself, producing true blacks and vibrant colors. It also carries burn-in/image-retention risk with static content.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Display Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-003",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A technician is repairing a laptop whose screen is very dim but shows a faint image when a flashlight is held to it. Which component is MOST likely faulty?",
+      "context": "A laptop screen is dim but shows a faint image with backlight.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The backlight/inverter",
+          "rationale": "A faint image that only appears with external light means the backlight (or its inverter) has failed."
+        },
+        {
+          "id": "b",
+          "text": "The LCD panel itself",
+          "rationale": "If the panel were dead, no faint image would appear even with a flashlight."
+        },
+        {
+          "id": "c",
+          "text": "The graphics card",
+          "rationale": "A GPU fault would distort or blank the output entirely, not just the backlight."
+        },
+        {
+          "id": "d",
+          "text": "The digitizer",
+          "rationale": "The digitizer handles touch input, not display brightness."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A dim-but-visible image signals backlight failure: the LCD panel works, but the backlight (or its inverter on older CCFL panels) does not.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Display Attributes"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-004",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A gamer wants a monitor that updates the picture 144 times per second for smooth motion. Which display attribute should the gamer look for?",
+      "context": "A monitor must update the image 144 times per second.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A 144 Hz refresh rate",
+          "rationale": "Refresh rate (Hz) is how many times per second the display redraws — 144 Hz = 144 updates/sec."
+        },
+        {
+          "id": "b",
+          "text": "High pixel density (PPI)",
+          "rationale": "PPI measures sharpness, not motion smoothness."
+        },
+        {
+          "id": "c",
+          "text": "Wide color gamut",
+          "rationale": "Color gamut affects color range, not refresh."
+        },
+        {
+          "id": "d",
+          "text": "A large screen resolution",
+          "rationale": "Resolution defines pixel count, not refresh speed."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Refresh rate (measured in Hz) is the number of image updates per second. 144 Hz displays redraw 144 times per second for smooth gaming motion.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Display Attributes"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-005",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "A user asks about monitors that respond to a stylus for drawing. Which display component enables pressure-sensitive stylus input?",
+      "context": "A display that supports stylus drawing is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "An active digitizer",
+          "rationale": "An active digitizer detects stylus position and pressure — the component for drawing displays."
+        },
+        {
+          "id": "b",
+          "text": "An inverter",
+          "rationale": "An inverter powers the backlight; it has nothing to do with input."
+        },
+        {
+          "id": "c",
+          "text": "A TN panel",
+          "rationale": "TN is a panel type; it does not add stylus support."
+        },
+        {
+          "id": "d",
+          "text": "A color gamut",
+          "rationale": "Color gamut is a color-range attribute, not input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Active digitizers track stylus position and pressure, enabling drawing. Capacitive touch handles fingers; inverters and gamut relate to display output.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Touch Screen and Digitizer"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-006",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A technician is running new network cable through an office ceiling plenum space. Which cable rating is REQUIRED for air-handling spaces?",
+      "context": "Network cable must run through a plenum ceiling space.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Plenum-rated",
+          "rationale": "Plenum-rated cable has a fire-retardant, low-smoke jacket required in air-handling spaces."
+        },
+        {
+          "id": "b",
+          "text": "Direct burial",
+          "rationale": "Direct burial cable is for outdoor underground runs, not plenums."
+        },
+        {
+          "id": "c",
+          "text": "Shielded (STP)",
+          "rationale": "STP reduces interference; it does not satisfy plenum fire codes."
+        },
+        {
+          "id": "d",
+          "text": "Cat 5e unshielded",
+          "rationale": "Category rating is about speed; plenum is about the jacket material."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Plenum-rated cable uses fire-retardant, low-smoke jackets mandated for air-handling spaces (plenums). Direct burial, STP, and category ratings address other needs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Network Cables"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-007",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A data center needs a cable that can carry 10 Gbps over long distances with immunity to electromagnetic interference. Which cable type is BEST?",
+      "context": "A 10 Gbps link over long distance with EMI immunity is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fiber optic (single-mode)",
+          "rationale": "Single-mode fiber carries high speeds over long distances and is immune to EMI."
+        },
+        {
+          "id": "b",
+          "text": "Cat 6a copper",
+          "rationale": "Cat 6a handles 10 Gbps but only to ~100 m and remains susceptible to EMI."
+        },
+        {
+          "id": "c",
+          "text": "Coaxial",
+          "rationale": "Coaxial is used for cable TV/internet, not data-center 10 Gbps links."
+        },
+        {
+          "id": "d",
+          "text": "USB-C",
+          "rationale": "USB-C is a peripheral connector, not a data-center backbone cable."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Single-mode fiber carries 10+ Gbps over kilometers with complete EMI immunity. Copper (even Cat 6a) is limited to ~100 m and can pick up interference.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Optical Fiber"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-008",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A technician terminates an Ethernet cable and needs to know which wire pairs go in which positions. Which TWO wiring standards define the RJ-45 pinouts?",
+      "context": "Ethernet cable termination requires a known pinout standard.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "T568A",
+          "rationale": "T568A is one of the two standard RJ-45 wiring schemes (orange/green pair positions swapped vs B)."
+        },
+        {
+          "id": "b",
+          "text": "T568B",
+          "rationale": "T568B is the other standard scheme — the most common in the US."
+        },
+        {
+          "id": "c",
+          "text": "IEEE 802.3",
+          "rationale": "802.3 defines Ethernet standards, not cable pinouts."
+        },
+        {
+          "id": "d",
+          "text": "RJ-11",
+          "rationale": "RJ-11 is the 6-pin telephone connector standard."
+        },
+        {
+          "id": "e",
+          "text": "USB-IF",
+          "rationale": "USB-IF governs USB connectors, not Ethernet."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "T568A and T568B are the two RJ-45 wiring standards; they differ only in the orange and green pair positions. Both ends of a run must use the same standard.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 T568A and T568B"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-009",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A user wants to connect a laptop to a 4K TV with a single cable carrying BOTH video and audio. Which connector supports this?",
+      "context": "One cable must carry video and audio to a 4K TV.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "HDMI",
+          "rationale": "HDMI carries high-definition video AND audio over one cable — the TV connection standard."
+        },
+        {
+          "id": "b",
+          "text": "VGA",
+          "rationale": "VGA is analog video only; it carries no audio."
+        },
+        {
+          "id": "c",
+          "text": "DVI",
+          "rationale": "DVI is digital video only; it carries no audio."
+        },
+        {
+          "id": "d",
+          "text": "SATA",
+          "rationale": "SATA connects internal storage drives."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "HDMI carries video and audio over a single cable — the standard for TVs and monitors. VGA and DVI are video-only; SATA is storage.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Peripheral Cables"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-010",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "A technician needs a connector that is reversible, carries data and video, and can deliver power to charge a laptop. Which connector should be used?",
+      "context": "A reversible connector with data, video, and power delivery is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "USB-C",
+          "rationale": "USB-C is reversible, carries data/video (DisplayPort/TB alt modes), and supports Power Delivery — the full package."
+        },
+        {
+          "id": "b",
+          "text": "microUSB",
+          "rationale": "microUSB is an older reversible-ish connector with no video or high-power support."
+        },
+        {
+          "id": "c",
+          "text": "Lightning",
+          "rationale": "Lightning is Apple-proprietary and does not carry video natively."
+        },
+        {
+          "id": "d",
+          "text": "RJ-45",
+          "rationale": "RJ-45 is Ethernet networking, not a peripheral connector."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "USB-C is reversible and supports data, video (alt modes), and USB Power Delivery — why modern laptops charge and connect through a single USB-C port.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Peripheral Cables"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-011",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A technician is upgrading a desktop's memory and finds the motherboard supports DDR4. Which RAM module type should be purchased?",
+      "context": "A DDR4 desktop motherboard needs compatible RAM.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "288-pin DIMM",
+          "rationale": "DDR4 desktop modules are 288-pin DIMMs — the correct form factor."
+        },
+        {
+          "id": "b",
+          "text": "260-pin SODIMM",
+          "rationale": "260-pin SODIMM is DDR4 LAPTOP memory, not desktop."
+        },
+        {
+          "id": "c",
+          "text": "204-pin SODIMM",
+          "rationale": "204-pin SODIMM is DDR3 laptop memory."
+        },
+        {
+          "id": "d",
+          "text": "240-pin DIMM",
+          "rationale": "240-pin DIMM is DDR3 desktop memory, not DDR4."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "DDR4 desktop RAM is a 288-pin DIMM; DDR4 laptop RAM is 260-pin SODIMM. DDR3 uses 240-pin DIMM / 204-pin SODIMM. The notch positions differ between generations.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.3 Memory"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-012",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A server administrator wants memory that detects and corrects single-bit errors to prevent data corruption. Which RAM type provides this?",
+      "context": "Memory must detect and correct single-bit errors on a server.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "ECC RAM",
+          "rationale": "ECC (error-correcting code) RAM detects and corrects single-bit memory errors — the server choice."
+        },
+        {
+          "id": "b",
+          "text": "Non-ECC RAM",
+          "rationale": "Standard non-ECC RAM has no error correction."
+        },
+        {
+          "id": "c",
+          "text": "SODIMM",
+          "rationale": "SODIMM is a form factor (laptop), not an error-correcting feature."
+        },
+        {
+          "id": "d",
+          "text": "DDR5 unbuffered",
+          "rationale": "DDR5 has on-die ECC for its own integrity but not the full ECC capability for system data."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "ECC RAM detects and corrects single-bit errors and flags multi-bit errors, protecting server data integrity. Consumer desktops typically use non-ECC.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.3 Memory"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-013",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A technician installs two identical RAM sticks into matching-colored slots on a motherboard to improve memory bandwidth. Which technology is being used?",
+      "context": "Two matched RAM sticks in matching slots improve bandwidth.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dual-channel memory",
+          "rationale": "Dual-channel mode runs two matched modules in parallel, doubling memory bandwidth."
+        },
+        {
+          "id": "b",
+          "text": "ECC",
+          "rationale": "ECC corrects errors; it does not increase bandwidth."
+        },
+        {
+          "id": "c",
+          "text": "Virtual memory",
+          "rationale": "Virtual memory uses disk as RAM overflow; unrelated."
+        },
+        {
+          "id": "d",
+          "text": "Overclocking",
+          "rationale": "Overclocking raises clock speeds; it is not dual-channel."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Dual-channel mode pairs matched modules in alternating (matching-color) slots to double memory bandwidth. Matching size/speed is required for best compatibility.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.3 Memory"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-014",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A technician finds a laptop with one open SODIMM slot and one occupied slot with 8 GB. The user wants the maximum upgrade. Which TWO checks are needed before buying more RAM?",
+      "context": "A laptop RAM upgrade requires compatibility checks.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The correct DDR generation and form factor",
+          "rationale": "DDR generation (DDR3/4/5) and SODIMM form factor must match the board."
+        },
+        {
+          "id": "b",
+          "text": "The motherboard's maximum supported capacity",
+          "rationale": "The board has a max capacity (often 16/32/64 GB) that limits the upgrade."
+        },
+        {
+          "id": "c",
+          "text": "The screen resolution",
+          "rationale": "Display resolution is unrelated to RAM compatibility."
+        },
+        {
+          "id": "d",
+          "text": "The hard drive brand",
+          "rationale": "Drive brand is unrelated to memory."
+        },
+        {
+          "id": "e",
+          "text": "The laptop's color",
+          "rationale": "Cosmetic attributes do not affect RAM."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "RAM upgrades require the right generation/form factor (SODIMM, DDR-x) and respecting the board's maximum capacity. Resolution, drive brand, and color are irrelevant.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.3 Memory"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-015",
+      "domain": 3,
+      "objective": "3.3",
+      "format": "scenario",
+      "prompt": "A technician must NOT mix two different RAM speeds in a PC. What is the MOST likely consequence of mismatched modules?",
+      "context": "Two different-speed RAM modules are being considered in one PC.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The system runs at the speed of the slower module",
+          "rationale": "Mismatched modules force the memory controller to run at the slower module's speed (or cause instability)."
+        },
+        {
+          "id": "b",
+          "text": "The system runs faster",
+          "rationale": "Mixing does not increase speed; it lowers to the slower module."
+        },
+        {
+          "id": "c",
+          "text": "The hard drive speeds up",
+          "rationale": "RAM speed does not affect drive speed."
+        },
+        {
+          "id": "d",
+          "text": "The GPU gets more memory",
+          "rationale": "System RAM is not added to GPU memory."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "With mismatched RAM, the memory controller runs both modules at the slower speed (or fails to boot). Matching speed and capacity avoids instability.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.3 Memory"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-016",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A user's PC is slow to boot and load applications. The technician recommends replacing the aging 5400 RPM HDD with an M.2 NVMe SSD. Which benefit does NVMe provide over SATA SSDs?",
+      "context": "An M.2 NVMe SSD is recommended over a SATA drive.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Much higher throughput via the PCIe bus",
+          "rationale": "NVMe connects over PCIe, achieving 4-7 GB/s vs SATA's 600 MB/s — the performance win."
+        },
+        {
+          "id": "b",
+          "text": "It stores data magnetically like an HDD",
+          "rationale": "NVMe is flash storage, not magnetic."
+        },
+        {
+          "id": "c",
+          "text": "It reduces RAM usage",
+          "rationale": "Storage type does not reduce RAM usage."
+        },
+        {
+          "id": "d",
+          "text": "It requires no power",
+          "rationale": "NVMe drives still draw power."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NVMe SSDs use the PCIe bus directly, delivering 4-7 GB/s — several times faster than SATA SSDs (600 MB/s) and far faster than HDDs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 Storage Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-017",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A server has four 2 TB drives. The administrator needs maximum usable capacity with protection against a single drive failure. Which RAID level fits?",
+      "context": "Four 2 TB drives need max capacity with single-drive fault tolerance.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "RAID 5",
+          "rationale": "RAID 5 stripes with distributed parity: 4 drives → 3 drives of usable capacity (6 TB), surviving one failure."
+        },
+        {
+          "id": "b",
+          "text": "RAID 0",
+          "rationale": "RAID 0 gives full capacity (8 TB) but NO fault tolerance."
+        },
+        {
+          "id": "c",
+          "text": "RAID 1",
+          "rationale": "RAID 1 mirrors pairs: 4 drives → 2 TB usable."
+        },
+        {
+          "id": "d",
+          "text": "RAID 10",
+          "rationale": "RAID 10 mirrors stripes: 4 drives → 4 TB usable (2-way)."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RAID 5 uses one drive's worth of parity across the array: 4×2TB → 6 TB usable, surviving a single drive failure. RAID 0 has no parity; RAID 1/10 sacrifice more capacity.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 RAID"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-018",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A technician checks a drive's health and sees S.M.A.R.T. warnings for reallocated sectors. What does this indicate?",
+      "context": "S.M.A.R.T. reports reallocated sectors on a drive.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The drive is beginning to fail and should be replaced",
+          "rationale": "Reallocated sectors mean the drive is remapping damaged areas — an early sign of failure; back up and replace."
+        },
+        {
+          "id": "b",
+          "text": "The drive is healthy and fast",
+          "rationale": "Reallocated sectors indicate damage, not health."
+        },
+        {
+          "id": "c",
+          "text": "The RAM is faulty",
+          "rationale": "S.M.A.R.T. monitors the drive, not RAM."
+        },
+        {
+          "id": "d",
+          "text": "The power supply is weak",
+          "rationale": "S.M.A.R.T. does not measure power."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "S.M.A.R.T. reallocated-sector counts show the drive remapping failing areas — a classic early-failure indicator. Back up data and plan replacement.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 Storage Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-019",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A video editor needs very fast random-access storage for active project files. Which drive type delivers the BEST random read/write performance?",
+      "context": "Fast random-access storage for active video project files.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NVMe SSD",
+          "rationale": "NVMe SSDs offer the lowest latency and highest random I/O — ideal for active project files."
+        },
+        {
+          "id": "b",
+          "text": "5400 RPM HDD",
+          "rationale": "HDDs have slow random access due to mechanical seek times."
+        },
+        {
+          "id": "c",
+          "text": "Optical disc",
+          "rationale": "Optical media is slow and sequential."
+        },
+        {
+          "id": "d",
+          "text": "Tape",
+          "rationale": "Tape is for archival backups, not active editing."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NVMe SSDs excel at random I/O with microsecond latency — ideal for active editing. HDDs, optical, and tape are slower or archival-only.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 Storage Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-020",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "A technician compares HDD and SSD reliability metrics. Which metric measures storage performance in operations per second?",
+      "context": "A storage performance metric in operations per second is needed.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "IOPS",
+          "rationale": "IOPS (input/output operations per second) measures storage performance — especially for random I/O."
+        },
+        {
+          "id": "b",
+          "text": "Refresh rate",
+          "rationale": "Refresh rate is a display attribute."
+        },
+        {
+          "id": "c",
+          "text": "Color gamut",
+          "rationale": "Color gamut is a display color attribute."
+        },
+        {
+          "id": "d",
+          "text": "Pixel density",
+          "rationale": "Pixel density is a display sharpness metric."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "IOPS measures input/output operations per second — the standard storage performance metric, especially meaningful for random workloads.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 Storage Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-021",
+      "domain": 3,
+      "objective": "3.5",
+      "format": "scenario",
+      "prompt": "A technician is building a PC and must choose a motherboard that fits the case and accepts the selected CPU. Which TWO compatibility checks are essential?",
+      "context": "A motherboard must fit the case and accept the CPU.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The form factor matches the case (ATX/microATX/ITX)",
+          "rationale": "The board's form factor must fit the case's mounting layout."
+        },
+        {
+          "id": "b",
+          "text": "The CPU socket matches the motherboard socket",
+          "rationale": "The CPU must match the board's socket and chipset support."
+        },
+        {
+          "id": "c",
+          "text": "The monitor brand",
+          "rationale": "Monitor brand is irrelevant to motherboard selection."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard layout",
+          "rationale": "Keyboard layout is unrelated."
+        },
+        {
+          "id": "e",
+          "text": "The desk size",
+          "rationale": "Desk size is unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Motherboard selection hinges on case form-factor fit and CPU socket/chipset compatibility. Peripherals and furniture are irrelevant.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.5 Motherboards"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-022",
+      "domain": 3,
+      "objective": "3.5",
+      "format": "scenario",
+      "prompt": "A technician installs a high-end graphics card that requires more power than the PCIe slot provides. Which power connector supplies the GPU?",
+      "context": "A GPU needs extra power beyond the slot.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "6/8-pin PCIe power",
+          "rationale": "GPUs draw extra power through 6-pin or 8-pin PCIe power connectors from the PSU."
+        },
+        {
+          "id": "b",
+          "text": "4-pin EPS",
+          "rationale": "EPS (4/8-pin) powers the CPU, not the GPU."
+        },
+        {
+          "id": "c",
+          "text": "SATA power",
+          "rationale": "SATA power feeds drives, not graphics cards."
+        },
+        {
+          "id": "d",
+          "text": "Molex",
+          "rationale": "Molex is a legacy peripheral connector, not the modern GPU power standard."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "High-end GPUs use 6-pin and 8-pin PCIe power connectors (often 6+2-pin) from the PSU. EPS powers the CPU; SATA and Molex serve drives/peripherals.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.5 Expansion Cards"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-023",
+      "domain": 3,
+      "objective": "3.5",
+      "format": "scenario",
+      "prompt": "A company requires Windows 11 with BitLocker and device-health attestation. Which motherboard security feature must be enabled in UEFI?",
+      "context": "Windows 11 BitLocker requires a hardware security feature.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "TPM",
+          "rationale": "TPM (Trusted Platform Module) provides hardware key storage and attestation — required for BitLocker and Windows 11."
+        },
+        {
+          "id": "b",
+          "text": "XMP",
+          "rationale": "XMP is a RAM overclocking profile, not security."
+        },
+        {
+          "id": "c",
+          "text": "UEFI boot only",
+          "rationale": "UEFI boot is needed, but TPM is the security chip for BitLocker/attestation."
+        },
+        {
+          "id": "d",
+          "text": "Virtualization",
+          "rationale": "Virtualization (VT-x/AMD-V) enables VMs, not BitLocker attestation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "TPM 2.0 stores BitLocker keys in hardware and supports device attestation — a Windows 11 requirement. XMP, boot mode, and virtualization are separate settings.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.5 BIOS and TPM"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-024",
+      "domain": 3,
+      "objective": "3.5",
+      "format": "scenario",
+      "prompt": "A technician upgrades a CPU and the system refuses to post. Which UEFI setting is MOST likely needed?",
+      "context": "A CPU upgrade causes a no-POST condition.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A BIOS/UEFI update to support the new CPU",
+          "rationale": "Newer CPUs often require a firmware (BIOS/UEFI) update for the motherboard to recognize them."
+        },
+        {
+          "id": "b",
+          "text": "Disabling Secure Boot",
+          "rationale": "Secure Boot affects boot validation, not CPU recognition."
+        },
+        {
+          "id": "c",
+          "text": "Enabling the onboard audio",
+          "rationale": "Audio is unrelated to CPU support."
+        },
+        {
+          "id": "d",
+          "text": "Changing the boot order",
+          "rationale": "Boot order matters after POST, but the board does not POST at all."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "No-POST after a CPU swap usually means the motherboard firmware predates the CPU — a BIOS/UEFI update adds support. Secure Boot, audio, and boot order are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.5 CPU Features"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-025",
+      "domain": 3,
+      "objective": "3.5",
+      "format": "scenario",
+      "prompt": "A technician applies thermal paste between a CPU and its cooler. What is the purpose of thermal paste?",
+      "context": "Thermal paste is applied between CPU and cooler.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fill microscopic gaps to improve heat transfer",
+          "rationale": "Thermal paste fills air gaps between the CPU die and heat sink, improving thermal conduction."
+        },
+        {
+          "id": "b",
+          "text": "Glue the CPU to the socket",
+          "rationale": "Paste conducts heat; it does not hold the CPU in place."
+        },
+        {
+          "id": "c",
+          "text": "Lubricate the fan bearings",
+          "rationale": "Fan bearings use lubricant, not thermal paste."
+        },
+        {
+          "id": "d",
+          "text": "Prevent electrostatic discharge",
+          "rationale": "ESD protection comes from wrist straps, not paste."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Thermal paste fills microscopic imperfections between CPU and heat sink, ensuring efficient heat transfer. Too much or too little hurts cooling.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.5 Cooling"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-026",
+      "domain": 3,
+      "objective": "3.6",
+      "format": "scenario",
+      "prompt": "A PC randomly shuts down under load. The technician calculates the system draws 550 W under full load. Which PSU rating is the MINIMUM safe choice?",
+      "context": "A system draws 550 W; the PSU must safely cover it with headroom.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "650 W",
+          "rationale": "A 650 W PSU provides ~100 W headroom over the 550 W load — a safe minimum with margin."
+        },
+        {
+          "id": "b",
+          "text": "450 W",
+          "rationale": "450 W is below the draw; the PSU would overload and shut down."
+        },
+        {
+          "id": "c",
+          "text": "500 W",
+          "rationale": "500 W is too close to the 550 W draw with no headroom for spikes."
+        },
+        {
+          "id": "d",
+          "text": "550 W exactly",
+          "rationale": "Exactly at the draw leaves no headroom for transient spikes; 650 W is safer."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "PSUs should be rated above the system's peak draw (typically 20-30% headroom). For a 550 W load, 650 W is the safe minimum; undersized PSUs cause shutdowns.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.6 Power Supplies"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-027",
+      "domain": 3,
+      "objective": "3.6",
+      "format": "scenario",
+      "prompt": "A business wants to keep servers running through brief power outages so they can shut down cleanly. Which device should be installed?",
+      "context": "Servers must keep running through brief outages for clean shutdown.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A UPS",
+          "rationale": "A UPS (uninterruptible power supply) provides battery power during outages, enabling continued operation and clean shutdown."
+        },
+        {
+          "id": "b",
+          "text": "A surge suppressor",
+          "rationale": "Surge suppressors block spikes but provide no battery runtime."
+        },
+        {
+          "id": "c",
+          "text": "A power supply tester",
+          "rationale": "A tester verifies PSU outputs; it does not supply power."
+        },
+        {
+          "id": "d",
+          "text": "A voltage converter",
+          "rationale": "Converters change voltage levels; they do not provide backup runtime."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A UPS combines surge protection with battery backup, keeping systems running through brief outages. Surge suppressors only clamp spikes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.6 Power"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-028",
+      "domain": 3,
+      "objective": "3.6",
+      "format": "scenario",
+      "prompt": "A technician opens a PC and needs to verify the main motherboard power connector is fully seated. Which connector is the primary 24-pin ATX power?",
+      "context": "The main motherboard power connector must be identified.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The 24-pin ATX connector",
+          "rationale": "The 24-pin ATX connector is the primary motherboard power feed."
+        },
+        {
+          "id": "b",
+          "text": "The 8-pin EPS connector",
+          "rationale": "EPS (4/8-pin) powers the CPU, not the main board feed."
+        },
+        {
+          "id": "c",
+          "text": "The 6-pin PCIe connector",
+          "rationale": "PCIe power feeds graphics cards."
+        },
+        {
+          "id": "d",
+          "text": "The SATA power connector",
+          "rationale": "SATA power feeds drives."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The 24-pin ATX connector is the main motherboard power. EPS feeds the CPU, PCIe feeds GPUs, and SATA feeds drives.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.6 Power Supplies"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-029",
+      "domain": 3,
+      "objective": "3.6",
+      "format": "scenario",
+      "prompt": "A technician is choosing a PSU and wants the highest efficiency certification to reduce heat and power cost. Which 80 Plus tier is the MOST efficient?",
+      "context": "The most efficient 80 Plus PSU certification is wanted.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "80 Plus Platinum",
+          "rationale": "Platinum (≥90% at 50% load) is more efficient than Bronze/Silver/Gold — the top tier here."
+        },
+        {
+          "id": "b",
+          "text": "80 Plus Bronze",
+          "rationale": "Bronze is the entry efficiency tier (~85%)."
+        },
+        {
+          "id": "c",
+          "text": "80 Plus Silver",
+          "rationale": "Silver (~88%) sits between Bronze and Gold."
+        },
+        {
+          "id": "d",
+          "text": "80 Plus Gold",
+          "rationale": "Gold (~90%) is efficient but Platinum is higher."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "80 Plus tiers in ascending efficiency: Standard, Bronze, Silver, Gold, Platinum, Titanium. Platinum delivers ≥90% efficiency at typical loads.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.6 Power Supplies"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-030",
+      "domain": 3,
+      "objective": "3.7",
+      "format": "scenario",
+      "prompt": "An office needs a device that prints, scans, copies, and faxes from one machine to save space. Which type of device should be purchased?",
+      "context": "One device must print, scan, copy, and fax.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A multifunction device (MFD)",
+          "rationale": "An MFD combines printing, scanning, copying, and faxing in one unit."
+        },
+        {
+          "id": "b",
+          "text": "A dedicated laser printer",
+          "rationale": "A dedicated printer only prints."
+        },
+        {
+          "id": "c",
+          "text": "A thermal printer",
+          "rationale": "Thermal printers output receipts with heat-sensitive paper."
+        },
+        {
+          "id": "d",
+          "text": "An impact printer",
+          "rationale": "Impact printers are for multi-part forms, not scanning/copying."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An MFD (multifunction device) combines print/scan/copy/fax. Dedicated printers, thermal printers, and impact printers serve narrower roles.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.7 Multifunction Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-031",
+      "domain": 3,
+      "objective": "3.7",
+      "format": "scenario",
+      "prompt": "A user needs to scan a stack of 30 two-sided pages quickly. Which TWO MFD features automate this task?",
+      "context": "A stack of 30 two-sided pages must be scanned automatically.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Automatic document feeder (ADF)",
+          "rationale": "The ADF feeds the multi-page stack automatically without manual page placement."
+        },
+        {
+          "id": "b",
+          "text": "Duplexer",
+          "rationale": "The duplexer scans both sides of each page automatically."
+        },
+        {
+          "id": "c",
+          "text": "A flatbed scanner",
+          "rationale": "A flatbed scans one page at a time manually — not suitable for a 30-page stack."
+        },
+        {
+          "id": "d",
+          "text": "A print spooler",
+          "rationale": "The spooler queues print jobs; it does not scan."
+        },
+        {
+          "id": "e",
+          "text": "A toner cartridge",
+          "rationale": "Toner is for printing, not scanning."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "An ADF feeds multi-page stacks automatically, and a duplexer enables two-sided scanning — together they automate a 30-page two-sided job. Flatbeds are manual; spooler/toner are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.7 Multifunction Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-032",
+      "domain": 3,
+      "objective": "3.7",
+      "format": "scenario",
+      "prompt": "Users report print jobs disappear and nothing prints. Which component MOST likely holds the stuck jobs?",
+      "context": "Print jobs vanish and nothing prints.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The print spooler/queue",
+          "rationale": "Stuck or hung print jobs sit in the spooler queue — restarting the spooler service clears them."
+        },
+        {
+          "id": "b",
+          "text": "The toner cartridge",
+          "rationale": "Toner affects output quality, not job queuing."
+        },
+        {
+          "id": "c",
+          "text": "The duplexer",
+          "rationale": "The duplexer handles two-sided printing, not job queues."
+        },
+        {
+          "id": "d",
+          "text": "The ADF",
+          "rationale": "The ADF feeds scans, not print jobs."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The print spooler holds jobs in the queue; a hung spooler makes jobs disappear. Restarting the Print Spooler service and clearing the queue is the fix.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.7 Multifunction Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-033",
+      "domain": 3,
+      "objective": "3.7",
+      "format": "scenario",
+      "prompt": "A technician installs a new network printer on a Windows workstation. Which TWO connection options are typical for a shared office printer?",
+      "context": "A network printer is being installed on a Windows workstation.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ethernet to the office network",
+          "rationale": "Ethernet connects the printer to the LAN for shared access."
+        },
+        {
+          "id": "b",
+          "text": "Wi-Fi to the wireless network",
+          "rationale": "Wireless connectivity lets devices print without cables."
+        },
+        {
+          "id": "c",
+          "text": "VGA cable",
+          "rationale": "VGA is a video connector, not a printer interface."
+        },
+        {
+          "id": "d",
+          "text": "HDMI cable",
+          "rationale": "HDMI carries audio/video, not print data."
+        },
+        {
+          "id": "e",
+          "text": "DVI cable",
+          "rationale": "DVI is a display connector."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Office printers connect via Ethernet or Wi-Fi for network sharing (plus USB for direct attach). VGA/HDMI/DVI are display connectors.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.7 Multifunction Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-034",
+      "domain": 3,
+      "objective": "3.7",
+      "format": "scenario",
+      "prompt": "A user wants to print from their phone by tapping the printer. Which MFD connectivity feature enables tap-to-print?",
+      "context": "Tap-to-print from a phone is wanted.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "NFC",
+          "rationale": "NFC (near-field communication) enables tap-to-pair printing from phones."
+        },
+        {
+          "id": "b",
+          "text": "VGA",
+          "rationale": "VGA is analog video output."
+        },
+        {
+          "id": "c",
+          "text": "SATA",
+          "rationale": "SATA connects internal storage."
+        },
+        {
+          "id": "d",
+          "text": "Molex",
+          "rationale": "Molex is a legacy power connector."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "NFC lets a phone tap the printer to establish a connection and print. VGA/SATA/Molex are video/storage/power connectors.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.7"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.7 Multifunction Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-035",
+      "domain": 3,
+      "objective": "3.8",
+      "format": "scenario",
+      "prompt": "A laser printer produces pages with faded print. Which component is MOST likely the cause?",
+      "context": "Laser printer output is faded.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Low toner",
+          "rationale": "Faded output on a laser printer most commonly means the toner cartridge is running low."
+        },
+        {
+          "id": "b",
+          "text": "A clogged printhead",
+          "rationale": "Clogged printheads are an INKJET issue, not laser."
+        },
+        {
+          "id": "c",
+          "text": "An empty paper tray",
+          "rationale": "An empty tray stops printing entirely."
+        },
+        {
+          "id": "d",
+          "text": "A loose network cable",
+          "rationale": "Connectivity issues prevent printing, not fade output."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Faded laser prints point to low toner. Clogged printheads belong to inkjet printers; paper and connectivity cause different symptoms.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.8 Printer Maintenance"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-036",
+      "domain": 3,
+      "objective": "3.8",
+      "format": "scenario",
+      "prompt": "An inkjet printer prints with horizontal streaks missing from text. Which maintenance action is MOST likely to fix it?",
+      "context": "Inkjet output has missing horizontal streaks.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Clean the printhead",
+          "rationale": "Clogged inkjet nozzles cause streaky/missing output; cleaning the printhead clears them."
+        },
+        {
+          "id": "b",
+          "text": "Replace the fuser",
+          "rationale": "The fuser is a laser-printer component (heat/pressure)."
+        },
+        {
+          "id": "c",
+          "text": "Replace the imaging drum",
+          "rationale": "The drum is a laser-printer component."
+        },
+        {
+          "id": "d",
+          "text": "Reset the network settings",
+          "rationale": "Network settings do not cause printhead streaks."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Streaky inkjet output indicates clogged nozzles — running the printhead cleaning cycle (and alignment) is the fix. Fuser and drum are laser components.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.8 Inkjet Maintenance"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-037",
+      "domain": 3,
+      "objective": "3.8",
+      "format": "scenario",
+      "prompt": "A laser printer's maintenance kit is due. Which components does a typical laser maintenance kit include?",
+      "context": "A laser printer maintenance kit replacement is due.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fuser, rollers, and pickup assembly",
+          "rationale": "A laser maintenance kit typically includes the fuser, feed rollers, and pickup assembly."
+        },
+        {
+          "id": "b",
+          "text": "Ink cartridges and printhead",
+          "rationale": "Ink and printheads are inkjet components."
+        },
+        {
+          "id": "c",
+          "text": "Thermal paper roll",
+          "rationale": "Thermal paper belongs to thermal printers."
+        },
+        {
+          "id": "d",
+          "text": "Ribbon cartridge",
+          "rationale": "Ribbons belong to impact printers."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Laser maintenance kits replace wear items — the fuser, feed/separation rollers, and pickup assembly. Ink/printheads, thermal paper, and ribbons belong to other printer types.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.8 Laser Printer Maintenance"
+        }
+      ]
+    },
+    {
+      "id": "a1-3-038",
+      "domain": 3,
+      "objective": "3.8",
+      "format": "scenario",
+      "prompt": "A technician must clear a paper jam inside a laser printer. Which safety precaution is MOST important?",
+      "context": "Clearing a jam inside a laser printer.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Let the printer cool — the fuser is very hot",
+          "rationale": "The fuser operates at high temperatures; waiting for it to cool prevents burns."
+        },
+        {
+          "id": "b",
+          "text": "Wear an anti-static strap only",
+          "rationale": "ESD protection matters for electronics, but the burn risk is the priority here."
+        },
+        {
+          "id": "c",
+          "text": "Remove the toner with bare hands",
+          "rationale": "Toner should be handled carefully, but heat is the immediate hazard."
+        },
+        {
+          "id": "d",
+          "text": "Pull the paper backward forcefully",
+          "rationale": "Forcing paper backward can damage rollers; remove in the direction of travel after cooling."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Laser fusers reach ~200°C; opening the printer right after use risks burns. Let it cool, then remove jammed paper in the direction of travel.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.8 Printer Maintenance"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-001",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A desktop emits a series of short beeps at power-on and the screen stays blank. Which component is MOST likely faulty?",
+      "context": "Repeating short POST beeps with no video output.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "RAM",
+          "rationale": "On most boards, repeating short beeps during POST indicate a memory failure."
+        },
+        {
+          "id": "b",
+          "text": "The power supply",
+          "rationale": "A PSU failure usually produces no beeps and no power at all."
+        },
+        {
+          "id": "c",
+          "text": "The hard drive",
+          "rationale": "A bad drive typically appears after POST, not as a beep code."
+        },
+        {
+          "id": "d",
+          "text": "The CMOS battery",
+          "rationale": "A dead CMOS battery resets the clock; it does not cause beep codes."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "POST beep codes signal hardware faults found before video initializes; repeating short beeps most commonly mean a RAM failure. Reseat or replace the memory modules.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-002",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A PC powers on, fans spin, but there is no video and no beeps. Which step should the technician take FIRST?",
+      "context": "Fans spin, no video, no beeps.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the monitor cable and input source",
+          "rationale": "The cheapest, most common cause of no video with a running system is a loose cable or wrong monitor input — check it first."
+        },
+        {
+          "id": "b",
+          "text": "Replace the motherboard",
+          "rationale": "Replacing the board is a last resort, not a first step."
+        },
+        {
+          "id": "c",
+          "text": "Replace the power supply",
+          "rationale": "The fans spin, so the PSU is supplying power."
+        },
+        {
+          "id": "d",
+          "text": "Reinstall the operating system",
+          "rationale": "An OS reinstall does not fix no-video-at-POST."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "No video with spinning fans is often a cable/input issue — verify the monitor connection and source before any hardware replacement.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-003",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A laptop randomly shuts down during heavy use and the bottom feels very hot. Which TWO actions should the technician take?",
+      "context": "A laptop shuts down under load and runs hot.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Clean the cooling fans and vents",
+          "rationale": "Dust-clogged fans cause overheating — cleaning them restores cooling."
+        },
+        {
+          "id": "b",
+          "text": "Reapply thermal paste on the CPU",
+          "rationale": "Dried thermal paste reduces heat transfer; reapplying it improves cooling."
+        },
+        {
+          "id": "c",
+          "text": "Replace the hard drive",
+          "rationale": "The drive is unrelated to thermal shutdowns."
+        },
+        {
+          "id": "d",
+          "text": "Disable the cooling fan in BIOS",
+          "rationale": "Disabling the fan would worsen overheating."
+        },
+        {
+          "id": "e",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness has little effect on CPU temperature."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Heat-related shutdowns point to cooling failure: clean fans/vents and refresh the thermal paste. Drive replacement and fan disabling do not address overheating.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-004",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A user reports the PC's date and time reset to January 1 every time the computer is unplugged. Which component is failing?",
+      "context": "System date/time resets whenever the PC loses power.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The CMOS battery",
+          "rationale": "The CMOS battery keeps the hardware clock running when unpowered; a dead battery resets the clock at every boot."
+        },
+        {
+          "id": "b",
+          "text": "The RAM",
+          "rationale": "RAM is volatile but does not store the clock."
+        },
+        {
+          "id": "c",
+          "text": "The power supply",
+          "rationale": "A failing PSU causes power issues, not clock resets."
+        },
+        {
+          "id": "d",
+          "text": "The CPU",
+          "rationale": "The CPU does not maintain the clock when unpowered."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The CMOS battery (typically CR2032) powers the real-time clock when the system is off. When it dies, the clock resets at every boot — replace the battery.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-005",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A technician opens a desktop that has been randomly restarting and notices several bulging, dome-shaped capacitors on the motherboard. What is the BEST course of action?",
+      "context": "Bulging capacitors are found on a randomly restarting motherboard.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the motherboard",
+          "rationale": "Bulging capacitors indicate failing motherboard components — the board should be replaced."
+        },
+        {
+          "id": "b",
+          "text": "Reinstall the OS",
+          "rationale": "An OS reinstall will not fix failed motherboard capacitors."
+        },
+        {
+          "id": "c",
+          "text": "Replace the CMOS battery",
+          "rationale": "The CMOS battery is separate from the power-delivery capacitors."
+        },
+        {
+          "id": "d",
+          "text": "Update the BIOS",
+          "rationale": "Firmware updates cannot repair physical capacitor damage."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Bulging/swollen capacitors are a physical failure of the motherboard's power delivery, causing instability. The board must be replaced.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-006",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A desktop has no power at all: no fans, no lights, nothing when the power button is pressed. Which is the MOST logical first check?",
+      "context": "A desktop is completely dead when powered on.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the wall outlet, power cord, and PSU switch",
+          "rationale": "Start with the simplest causes: a dead outlet, loose cord, or the PSU's on/off switch."
+        },
+        {
+          "id": "b",
+          "text": "Replace the CPU",
+          "rationale": "A CPU failure does not cause a completely dead system with no fan spin."
+        },
+        {
+          "id": "c",
+          "text": "Replace the RAM",
+          "rationale": "RAM failure produces beeps or POST failure, not zero power."
+        },
+        {
+          "id": "d",
+          "text": "Reinstall the operating system",
+          "rationale": "An OS issue cannot cause zero power at the button."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Zero power is a power-path problem: check the outlet, cord, and PSU switch before suspecting internal components.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-007",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "prompt": "A technician smells a burning odor coming from a desktop and the system shuts down. Which component is the MOST likely source?",
+      "context": "A burning smell accompanies a shutdown.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The power supply",
+          "rationale": "A burning smell with a shutdown classically points to a failing power supply (or a shorted component)."
+        },
+        {
+          "id": "b",
+          "text": "The CMOS battery",
+          "rationale": "A CMOS battery does not burn; it just dies."
+        },
+        {
+          "id": "c",
+          "text": "The front panel LED",
+          "rationale": "An LED would not cause a burning smell."
+        },
+        {
+          "id": "d",
+          "text": "The network cable",
+          "rationale": "Network cables do not produce burning odors."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A burning smell followed by shutdown typically means a failing PSU or a shorted component — power down immediately and replace the PSU.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-008",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A user's drive begins making a loud clicking sound. What should the technician do FIRST?",
+      "context": "A drive makes a clicking noise.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Back up the data immediately",
+          "rationale": "Clicking indicates failing read/write heads — back up the data before the drive fails completely."
+        },
+        {
+          "id": "b",
+          "text": "Defragment the drive",
+          "rationale": "Defragmenting stresses a failing drive and risks data loss."
+        },
+        {
+          "id": "c",
+          "text": "Run chkdsk /f",
+          "rationale": "Running repairs on a mechanically failing drive can accelerate failure."
+        },
+        {
+          "id": "d",
+          "text": "Ignore the noise",
+          "rationale": "Clicking is a serious failure indicator, not something to ignore."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Clicking/grinding sounds are a mechanical failure sign (heads/platters). Back up data immediately; repairs and defragmentation risk losing everything.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-009",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A server's RAID 5 array shows a degraded status and an audible alarm after one drive failed. What should the technician do?",
+      "context": "A RAID 5 array is degraded after a drive failure.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the failed drive and rebuild the array",
+          "rationale": "RAID 5 survives one drive failure — replace the failed drive and let the array rebuild."
+        },
+        {
+          "id": "b",
+          "text": "Replace all drives at once",
+          "rationale": "Replacing multiple drives at once can cause a second failure during rebuild."
+        },
+        {
+          "id": "c",
+          "text": "Ignore the alarm",
+          "rationale": "Ignoring a degraded array risks a second failure and total data loss."
+        },
+        {
+          "id": "d",
+          "text": "Format the array",
+          "rationale": "Formatting destroys the data the array was protecting."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "RAID 5 tolerates one drive failure. Replace the failed drive promptly and rebuild; ignoring it risks a second failure and data loss.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-010",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A PC reports 'Bootable device not found' at startup. Which TWO checks are appropriate?",
+      "context": "A PC cannot find a bootable device.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the drive's data and power cables are connected",
+          "rationale": "Loose SATA/power cables are a common cause of a missing boot device."
+        },
+        {
+          "id": "b",
+          "text": "Check the boot order in BIOS/UEFI",
+          "rationale": "The boot order may point to a non-bootable device or the wrong disk."
+        },
+        {
+          "id": "c",
+          "text": "Replace the monitor",
+          "rationale": "The monitor is unrelated to boot device detection."
+        },
+        {
+          "id": "d",
+          "text": "Replace the CMOS battery",
+          "rationale": "A CMOS battery affects the clock, not boot device detection."
+        },
+        {
+          "id": "e",
+          "text": "Increase the RAM",
+          "rationale": "RAM amount is unrelated to finding a boot device."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "'Bootable device not found' is typically a loose drive cable or wrong boot order. Verify cabling and the UEFI boot order before suspecting the drive.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-011",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A technician checks drive health and finds the S.M.A.R.T. status reports many reallocated sectors. Which action is appropriate?",
+      "context": "S.M.A.R.T. shows many reallocated sectors.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Back up the data and replace the drive",
+          "rationale": "Reallocated sectors are a strong failure indicator — back up and replace."
+        },
+        {
+          "id": "b",
+          "text": "Defragment the drive",
+          "rationale": "Defragmenting stresses the failing drive."
+        },
+        {
+          "id": "c",
+          "text": "Ignore the reading",
+          "rationale": "Reallocated sectors indicate physical damage and impending failure."
+        },
+        {
+          "id": "d",
+          "text": "Increase the partition size",
+          "rationale": "Partition changes do not fix failing sectors."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "S.M.A.R.T. reallocated sectors show the drive remapping bad areas — an early failure sign. Back up and replace the drive.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-012",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A user reports files that previously opened quickly now take a very long time to read, and the drive light stays on constantly. What does this suggest?",
+      "context": "Reads are slow and the drive light is constantly active.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The drive may be failing or heavily fragmented",
+          "rationale": "Extended read times with constant drive activity suggest mechanical degradation or severe fragmentation."
+        },
+        {
+          "id": "b",
+          "text": "The monitor is failing",
+          "rationale": "The monitor does not affect drive reads."
+        },
+        {
+          "id": "c",
+          "text": "The keyboard is faulty",
+          "rationale": "Input devices are unrelated to storage performance."
+        },
+        {
+          "id": "d",
+          "text": "The network is saturated",
+          "rationale": "Local file reads do not use the network."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Extended read/write times with constant drive activity point to a degrading HDD (or heavy fragmentation) — check S.M.A.R.T. and back up.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-013",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A RAID controller's alarm sounds and the array shows 'missing drive'. The technician reseats the drive and it is recognized again. Which step should follow?",
+      "context": "A reseated drive rejoins a RAID array.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Verify the array rebuilds and monitor drive health",
+          "rationale": "After a drive rejoins, confirm the rebuild completes and watch S.M.A.R.T. for further issues."
+        },
+        {
+          "id": "b",
+          "text": "Format the array",
+          "rationale": "Formatting destroys data."
+        },
+        {
+          "id": "c",
+          "text": "Remove the other drives",
+          "rationale": "Removing healthy drives risks array failure."
+        },
+        {
+          "id": "d",
+          "text": "Ignore the event",
+          "rationale": "A dropped drive warrants verification, not ignoring."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "After a drive rejoins an array, confirm the rebuild completes and monitor for repeat failures — the drive may be intermittently failing.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-014",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "A server is experiencing very low IOPS and sluggish database performance. Which TWO factors are MOST likely responsible?",
+      "context": "A server shows low IOPS and slow database performance.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A failing or degraded drive",
+          "rationale": "Failing drives deliver poor random I/O, tanking IOPS."
+        },
+        {
+          "id": "b",
+          "text": "An undersized or exhausted RAID array",
+          "rationale": "Insufficient spindles/SSDs or a rebuilding array limits IOPS."
+        },
+        {
+          "id": "c",
+          "text": "The monitor refresh rate",
+          "rationale": "Display settings do not affect storage IOPS."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard layout",
+          "rationale": "Input configuration is unrelated."
+        },
+        {
+          "id": "e",
+          "text": "The case color",
+          "rationale": "Cosmetic attributes are irrelevant."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Low IOPS points to storage bottlenecks: failing drives or an array with too few drives/rebuilding. Display and input settings are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-015",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A projector displays 'No Signal' even though the laptop is connected. Which is the MOST likely cause?",
+      "context": "A projector shows no signal with a laptop connected.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The incorrect input source is selected",
+          "rationale": "Projectors have multiple inputs (HDMI/VGA); the wrong source selected shows 'No Signal'."
+        },
+        {
+          "id": "b",
+          "text": "The projector bulb is burnt out",
+          "rationale": "A burnt-out bulb shows a dark screen or lamp warning, not 'No Signal'."
+        },
+        {
+          "id": "c",
+          "text": "The laptop's RAM is low",
+          "rationale": "RAM does not affect video output detection."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard is unplugged",
+          "rationale": "The keyboard is unrelated to projector input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "'No Signal' on a projector usually means the wrong input source is selected (or the cable is loose). Check the input button before anything else.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-016",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A laptop screen shows a dim, faint image that is barely visible in bright light. Which component is MOST likely failing?",
+      "context": "A laptop display is very dim with a faint image.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The backlight/inverter",
+          "rationale": "A faint image means the LCD works but the backlight (or its inverter) has failed."
+        },
+        {
+          "id": "b",
+          "text": "The GPU",
+          "rationale": "A GPU fault distorts or blanks output, not just dims it."
+        },
+        {
+          "id": "c",
+          "text": "The digitizer",
+          "rationale": "The digitizer handles touch, not brightness."
+        },
+        {
+          "id": "d",
+          "text": "The RAM",
+          "rationale": "RAM does not control display brightness."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A dim-but-visible image signals backlight failure (or inverter on older CCFL panels). The LCD panel itself still works.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-017",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A monitor shows a permanent ghost of the Windows taskbar even after the PC is turned off. Which display issue is this?",
+      "context": "A permanent taskbar ghost remains on a monitor.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Burn-in",
+          "rationale": "Burn-in (image persistence) leaves a permanent ghost of static content — common on OLED and older plasma/CRT displays."
+        },
+        {
+          "id": "b",
+          "text": "Dead pixels",
+          "rationale": "Dead pixels are individual stuck dots, not a full taskbar ghost."
+        },
+        {
+          "id": "c",
+          "text": "Incorrect color display",
+          "rationale": "Color issues change hues; they do not leave static ghosts."
+        },
+        {
+          "id": "d",
+          "text": "Fuzzy image",
+          "rationale": "Fuzziness is a resolution/sharpness issue, not persistence."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Burn-in permanently etches static images into the panel — common with OLED displays showing fixed taskbars/UI. Dead pixels are single dots; color and fuzz are different faults.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-018",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A user's monitor shows a fuzzy, blurry image at 1920x1080. Which is the MOST likely cause?",
+      "context": "A monitor image is fuzzy at 1080p.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Running at a non-native resolution",
+          "rationale": "LCD panels look blurry at any resolution other than their native one — set the native resolution."
+        },
+        {
+          "id": "b",
+          "text": "The backlight is failing",
+          "rationale": "Backlight failure dims the image; it does not blur it."
+        },
+        {
+          "id": "c",
+          "text": "Burn-in",
+          "rationale": "Burn-in leaves ghosts, not fuzziness."
+        },
+        {
+          "id": "d",
+          "text": "Dead pixels",
+          "rationale": "Dead pixels are individual dots."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "LCDs have one native resolution; any other resolution is scaled and looks fuzzy. Set the display to its native resolution (and use a digital connection).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-019",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A screen has several small black dots that never change regardless of the image displayed. Which issue is this?",
+      "context": "Fixed black dots remain on screen in all images.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dead pixels",
+          "rationale": "Dead pixels are individual dots that stay dark permanently — matching the symptom."
+        },
+        {
+          "id": "b",
+          "text": "Burn-in",
+          "rationale": "Burn-in is a large ghost, not small dots."
+        },
+        {
+          "id": "c",
+          "text": "Incorrect input source",
+          "rationale": "Input selection affects the whole signal, not individual dots."
+        },
+        {
+          "id": "d",
+          "text": "A failing inverter",
+          "rationale": "The inverter dims the whole backlight, not single pixels."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Small permanent dark dots are dead pixels — individual sub-pixels that no longer change. Unlike burn-in, they are point faults.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-020",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A projector shuts down intermittently after running for an hour. What is the MOST likely cause?",
+      "context": "A projector shuts down intermittently after an hour.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The projector is overheating and triggering thermal shutdown",
+          "rationale": "Intermittent shutdown after sustained use classically means overheating — check the air filter and vents."
+        },
+        {
+          "id": "b",
+          "text": "The input source is wrong",
+          "rationale": "A wrong input shows no signal, not a shutdown."
+        },
+        {
+          "id": "c",
+          "text": "The resolution is too high",
+          "rationale": "Resolution affects sharpness, not thermal shutdown."
+        },
+        {
+          "id": "d",
+          "text": "The remote control batteries",
+          "rationale": "Remote batteries do not shut down the projector."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Intermittent projector shutdown after prolonged use points to overheating — clean the air filter and ensure vent clearance.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-021",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "A laptop's display flashes and flickers while moving the lid. Which is the MOST likely cause?",
+      "context": "A laptop display flickers when the lid moves.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A loose or damaged video cable between the board and panel",
+          "rationale": "Flicker that tracks lid movement points to a damaged display/video cable flexing with the hinge."
+        },
+        {
+          "id": "b",
+          "text": "The keyboard",
+          "rationale": "The keyboard is unrelated to display flicker."
+        },
+        {
+          "id": "c",
+          "text": "The touchpad",
+          "rationale": "The touchpad does not affect the display."
+        },
+        {
+          "id": "d",
+          "text": "Low RAM",
+          "rationale": "RAM does not cause motion-dependent flicker."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Flicker that appears when the lid moves indicates a loose/damaged display cable (or hinge pinch). Reseat or replace the cable.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.3 Troubleshooting Displays"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-022",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone's battery bulges and the back cover no longer sits flat. What should the user do?",
+      "context": "A phone battery is visibly swollen.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Stop using the device and have the battery replaced",
+          "rationale": "A swollen lithium battery is a safety hazard — stop using the device and replace the battery."
+        },
+        {
+          "id": "b",
+          "text": "Continue using it until it dies",
+          "rationale": "A swollen battery can rupture or catch fire."
+        },
+        {
+          "id": "c",
+          "text": "Puncture it to release the gas",
+          "rationale": "Puncturing a lithium battery is extremely dangerous."
+        },
+        {
+          "id": "d",
+          "text": "Charge it overnight",
+          "rationale": "Charging a swollen battery increases the hazard."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A swollen battery indicates cell damage and a fire/rupture hazard — stop using the device and replace the battery immediately.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-023",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone's touchscreen does not respond to fingers, but the display works fine and a stylus does not work either. Which component is MOST likely faulty?",
+      "context": "Touch input fails while the display works.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The digitizer",
+          "rationale": "The digitizer handles touch input; a dead digitizer leaves the display working but input dead."
+        },
+        {
+          "id": "b",
+          "text": "The LCD panel",
+          "rationale": "The display works, so the LCD panel is fine."
+        },
+        {
+          "id": "c",
+          "text": "The battery",
+          "rationale": "The battery powers the device; it does not control touch."
+        },
+        {
+          "id": "d",
+          "text": "The Wi-Fi antenna",
+          "rationale": "The antenna affects connectivity, not touch."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Touch failure with a working display points to the digitizer (touch layer). The LCD panel renders the image; the digitizer senses input.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-024",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A user's phone was dropped in water. What is the BEST immediate action?",
+      "context": "A phone was dropped in water.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Power it off, dry the exterior, and do not charge it",
+          "rationale": "Power off immediately, dry the outside, and avoid charging — moisture plus power causes shorts."
+        },
+        {
+          "id": "b",
+          "text": "Plug it in to charge immediately",
+          "rationale": "Charging a wet phone risks short-circuit damage."
+        },
+        {
+          "id": "c",
+          "text": "Turn it on to test it",
+          "rationale": "Powering a wet device can short components."
+        },
+        {
+          "id": "d",
+          "text": "Put it in the microwave",
+          "rationale": "Microwaving destroys electronics and is a fire hazard."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "For liquid damage: power off, dry the exterior, remove the SIM/battery if possible, and wait before charging or powering on.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-025",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone's on-screen cursor drifts and taps register in the wrong places. Which TWO actions may fix the touch calibration?",
+      "context": "A phone's touch input drifts and registers incorrectly.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Recalibrate the touchscreen",
+          "rationale": "Recalibration realigns touch coordinates to the display."
+        },
+        {
+          "id": "b",
+          "text": "Remove a poorly fitting screen protector",
+          "rationale": "Air bubbles or thick protectors can cause errant touch registration."
+        },
+        {
+          "id": "c",
+          "text": "Replace the battery",
+          "rationale": "The battery does not affect touch calibration."
+        },
+        {
+          "id": "d",
+          "text": "Increase the screen brightness",
+          "rationale": "Brightness does not affect touch input."
+        },
+        {
+          "id": "e",
+          "text": "Change the wallpaper",
+          "rationale": "Wallpaper is cosmetic and unrelated."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Cursor drift/touch miscalibration is fixed by recalibration and by removing protectors that interfere with touch. Battery, brightness, and wallpaper are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-026",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A phone charges very slowly and only when the cable is held at an angle. What is the MOST likely cause?",
+      "context": "A phone charges slowly and only at a certain cable angle.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A damaged charge port or cable",
+          "rationale": "Angle-dependent charging indicates a loose/damaged port or worn cable."
+        },
+        {
+          "id": "b",
+          "text": "The screen resolution",
+          "rationale": "Resolution does not affect charging."
+        },
+        {
+          "id": "c",
+          "text": "The phone case color",
+          "rationale": "Cosmetic attributes are irrelevant."
+        },
+        {
+          "id": "d",
+          "text": "The SIM card",
+          "rationale": "The SIM affects cellular service, not charging."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Charging only at certain angles points to a damaged charge port, worn cable, or debris in the port — inspect and clean/replace.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-027",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A user's phone cannot install new applications and reports degraded performance. The phone shows unusual data usage. What is the MOST likely cause?",
+      "context": "A phone cannot install apps, runs slowly, and uses unusual data.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Malware infection",
+          "rationale": "Inability to install apps, degraded performance, and unusual data usage are classic mobile-malware symptoms."
+        },
+        {
+          "id": "b",
+          "text": "A cracked screen",
+          "rationale": "A cracked screen does not block installs or cause data usage."
+        },
+        {
+          "id": "c",
+          "text": "A dead battery",
+          "rationale": "A dead battery prevents power, not just app installs."
+        },
+        {
+          "id": "d",
+          "text": "The wrong charger",
+          "rationale": "The charger does not affect app installation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Malware on mobile devices blocks installs, degrades performance, and generates unusual data/network activity. Scan and remove, or factory reset.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-028",
+      "domain": 5,
+      "objective": "5.4",
+      "format": "scenario",
+      "prompt": "A stylus no longer works on a tablet, though finger touch works normally. Which component is MOST likely at fault?",
+      "context": "A stylus stops working while finger touch works.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The active digitizer (or the stylus itself)",
+          "rationale": "Finger touch uses the capacitive layer; stylus input needs the active digitizer — its failure (or a dead stylus battery) explains the symptom."
+        },
+        {
+          "id": "b",
+          "text": "The LCD panel",
+          "rationale": "The display works (touch works), so the panel is fine."
+        },
+        {
+          "id": "c",
+          "text": "The Wi-Fi antenna",
+          "rationale": "The antenna affects connectivity, not stylus input."
+        },
+        {
+          "id": "d",
+          "text": "The speakers",
+          "rationale": "Speakers are unrelated to stylus input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Finger touch works via the capacitive layer; a stylus needs the active digitizer. If the stylus fails but fingers work, the digitizer or stylus is faulty.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.4 Troubleshooting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-029",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user's Wi-Fi drops intermittently when moving between rooms in a large house. Which TWO solutions BEST address weak-signal drops?",
+      "context": "Wi-Fi drops when moving between rooms in a large house.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reposition the access point centrally",
+          "rationale": "Central placement reduces distance and obstacle issues — the primary fix for weak-signal drops."
+        },
+        {
+          "id": "b",
+          "text": "Add a mesh extender or additional access point",
+          "rationale": "Additional APs/mesh cover dead zones in larger homes."
+        },
+        {
+          "id": "c",
+          "text": "Replace the DNS server",
+          "rationale": "DNS failures break name resolution, not the wireless link."
+        },
+        {
+          "id": "d",
+          "text": "Replace the power supply",
+          "rationale": "The PSU does not affect Wi-Fi signal."
+        },
+        {
+          "id": "e",
+          "text": "Replace the CMOS battery",
+          "rationale": "The CMOS battery affects the clock, not Wi-Fi."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Location-based Wi-Fi drops are signal-strength issues — reposition the AP centrally and add mesh/extenders for coverage. DNS, PSU, and CMOS are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-030",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user has 'limited connectivity' and an IP of 169.254.25.10. Which service is the MOST likely problem?",
+      "context": "Limited connectivity with a 169.254.x.x address.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "DHCP",
+          "rationale": "169.254.x.x is APIPA — the device self-assigned because no DHCP server responded."
+        },
+        {
+          "id": "b",
+          "text": "DNS",
+          "rationale": "DNS failure would break name resolution but the IP would come from DHCP."
+        },
+        {
+          "id": "c",
+          "text": "NTP",
+          "rationale": "NTP synchronizes time, not IP assignment."
+        },
+        {
+          "id": "d",
+          "text": "HTTP",
+          "rationale": "HTTP is an application protocol, not the addressing issue."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An APIPA address (169.254.x.x) means DHCP failed. Check the DHCP server, the network cable, and the switch port.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-031",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "VoIP calls have choppy audio with high jitter values. Which TWO factors contribute MOST to jitter?",
+      "context": "VoIP audio is choppy with high jitter.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Network congestion",
+          "rationale": "Congested links cause variable queuing delays — the primary jitter source."
+        },
+        {
+          "id": "b",
+          "text": "Lack of QoS for voice traffic",
+          "rationale": "Without QoS, voice packets compete with bulk traffic and arrive unevenly."
+        },
+        {
+          "id": "c",
+          "text": "The monitor refresh rate",
+          "rationale": "Display settings do not affect network jitter."
+        },
+        {
+          "id": "d",
+          "text": "The keyboard layout",
+          "rationale": "Input configuration is unrelated."
+        },
+        {
+          "id": "e",
+          "text": "The hard drive size",
+          "rationale": "Drive capacity does not cause jitter."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Jitter is packet-delay variation — caused by congestion and lack of QoS prioritization for voice. Display, input, and storage settings are unrelated.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-032",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A switch port's link LED blinks on and off repeatedly ('port flapping'). What is the MOST likely cause?",
+      "context": "A switch port flaps between up and down.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A faulty cable or NIC",
+          "rationale": "Port flapping usually means a marginal cable or NIC causing intermittent link loss."
+        },
+        {
+          "id": "b",
+          "text": "The DNS server is down",
+          "rationale": "DNS does not affect the physical link state."
+        },
+        {
+          "id": "c",
+          "text": "The DHCP scope is exhausted",
+          "rationale": "DHCP exhaustion affects addressing, not the link state."
+        },
+        {
+          "id": "d",
+          "text": "The monitor is unplugged",
+          "rationale": "The monitor is unrelated to switch ports."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Port flapping is a physical-layer symptom — replace/test the cable and NIC (and check for duplex mismatch).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-033",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user reports very slow internet speeds, but local network file transfers are fast. What does this pattern suggest?",
+      "context": "Internet is slow while LAN transfers are fast.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The WAN/ISP connection is the bottleneck",
+          "rationale": "Fast LAN + slow internet isolates the problem to the internet/WAN path (ISP, modem, or WAN link)."
+        },
+        {
+          "id": "b",
+          "text": "The switch is failing",
+          "rationale": "A failing switch would slow LAN transfers too."
+        },
+        {
+          "id": "c",
+          "text": "The NIC is faulty",
+          "rationale": "A faulty NIC slows all traffic, local and internet."
+        },
+        {
+          "id": "d",
+          "text": "The monitor is old",
+          "rationale": "The monitor is unrelated to network speed."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Fast LAN with slow internet isolates the fault to the WAN path — check the ISP connection, modem, and WAN link rather than local hardware.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-034",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A laptop frequently disconnects from Wi-Fi at the office, but other devices on the same AP stay connected. Which is the MOST likely cause?",
+      "context": "One laptop disconnects while other devices stay connected.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A problem with the laptop's wireless adapter or drivers",
+          "rationale": "If other devices stay connected, the fault is on the laptop side — adapter, driver, or power management."
+        },
+        {
+          "id": "b",
+          "text": "The access point is overloaded",
+          "rationale": "An overloaded AP would affect other devices too."
+        },
+        {
+          "id": "c",
+          "text": "The ISP is down",
+          "rationale": "An ISP outage affects all devices."
+        },
+        {
+          "id": "d",
+          "text": "The DHCP scope is full",
+          "rationale": "DHCP exhaustion affects new connections, not an established session."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A single device disconnecting while others stay connected points to the client: update the wireless driver and check adapter power-saving settings.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-035",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A laser printer prints pages with a vertical black line down the same position on every page. Which component is MOST likely damaged?",
+      "context": "A vertical black line appears on every laser print.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The imaging drum",
+          "rationale": "A scratch or defect on the imaging drum creates a repeating vertical line on every page."
+        },
+        {
+          "id": "b",
+          "text": "The paper tray",
+          "rationale": "The tray affects feeding, not image defects."
+        },
+        {
+          "id": "c",
+          "text": "The fuser",
+          "rationale": "Fuser issues cause smearing/creases, not a sharp vertical line."
+        },
+        {
+          "id": "d",
+          "text": "The network card",
+          "rationale": "The network card affects connectivity, not print quality."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A repeating vertical line on laser output indicates a damaged imaging drum (or dirty wiper blade). Replace the drum.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-036",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer outputs garbled text and symbols instead of the document. What is the MOST likely cause?",
+      "context": "A printer outputs garbled text and symbols.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The wrong printer driver",
+          "rationale": "Garbled output usually means the wrong driver is sending incompatible commands to the printer."
+        },
+        {
+          "id": "b",
+          "text": "Low toner",
+          "rationale": "Low toner fades output; it does not garble it."
+        },
+        {
+          "id": "c",
+          "text": "A paper jam",
+          "rationale": "Jams stop printing; they do not garble text."
+        },
+        {
+          "id": "d",
+          "text": "An empty tray",
+          "rationale": "An empty tray stops printing entirely."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Garbled/incorrect output is classically a driver mismatch — install the correct driver for the printer model.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-037",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer picks up multiple sheets at once and jams frequently. Which component is MOST likely worn?",
+      "context": "A printer misfeeds multiple sheets and jams.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The separation pad",
+          "rationale": "A worn separation pad fails to separate sheets, causing multipage misfeeds and jams."
+        },
+        {
+          "id": "b",
+          "text": "The fuser",
+          "rationale": "The fuser melts toner; it does not control sheet feeding."
+        },
+        {
+          "id": "c",
+          "text": "The imaging drum",
+          "rationale": "The drum creates the image; it does not feed paper."
+        },
+        {
+          "id": "d",
+          "text": "The toner cartridge",
+          "rationale": "Toner affects output quality, not feeding."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Multipage misfeeds indicate a worn separation pad (or pickup roller) — replace the feed assembly.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-038",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A user prints a 20-page document but the printer produces only 3 pages and the rest stay 'pending' in the queue. Which issue is this?",
+      "context": "A print job stalls with pages pending in the queue.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A stuck print queue/spooler",
+          "rationale": "Jobs stuck pending in the queue indicate a hung spooler — restart the spooler service."
+        },
+        {
+          "id": "b",
+          "text": "Low toner",
+          "rationale": "Low toner fades output; it does not stall the queue."
+        },
+        {
+          "id": "c",
+          "text": "A dirty printhead",
+          "rationale": "Printheads affect inkjet quality, not queue processing."
+        },
+        {
+          "id": "d",
+          "text": "Wrong paper size",
+          "rationale": "Paper size prompts a tray error, not a pending queue."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Print jobs stuck 'pending' mean the print spooler is hung — restart the Print Spooler service and clear the queue.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-039",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "An inkjet printer leaves speckles and smudges on the page edges. What is the MOST likely cause?",
+      "context": "Inkjet output has speckles and edge smudges.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dirty printhead or excess ink on the rollers",
+          "rationale": "Speckling and smudges on inkjets come from a dirty printhead or ink-contaminated rollers."
+        },
+        {
+          "id": "b",
+          "text": "The fuser is too hot",
+          "rationale": "The fuser is a laser component."
+        },
+        {
+          "id": "c",
+          "text": "The drum is scratched",
+          "rationale": "The drum is a laser component."
+        },
+        {
+          "id": "d",
+          "text": "The network is slow",
+          "rationale": "Network speed does not cause ink smudges."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Speckling/smudging on inkjet pages points to a dirty printhead or ink on the paper path — clean the printhead and rollers.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-040",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer makes a grinding noise when printing. What is the MOST likely cause?",
+      "context": "A printer makes a grinding noise during printing.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Worn gears or a foreign object in the paper path",
+          "rationale": "Grinding noises indicate gear wear or debris in the mechanism — inspect and clear."
+        },
+        {
+          "id": "b",
+          "text": "Low toner",
+          "rationale": "Low toner fades prints; it does not grind."
+        },
+        {
+          "id": "c",
+          "text": "A wrong driver",
+          "rationale": "Drivers garble output; they do not cause mechanical noise."
+        },
+        {
+          "id": "d",
+          "text": "The network cable",
+          "rationale": "Cabling is unrelated to mechanical noise."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Grinding noises come from mechanical parts — worn gears or an obstruction in the paper path. Inspect and clear the mechanism.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-041",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "scenario",
+      "prompt": "A printer prints pages with a double/echo image offset slightly. Which component is MOST likely at fault?",
+      "context": "A laser printer outputs double/echo images.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The imaging drum",
+          "rationale": "A failing drum that does not fully discharge creates ghost/double images on the page."
+        },
+        {
+          "id": "b",
+          "text": "The paper tray",
+          "rationale": "The tray feeds paper; it does not create ghosting."
+        },
+        {
+          "id": "c",
+          "text": "The toner cartridge's chip",
+          "rationale": "The chip tracks toner level, not image quality."
+        },
+        {
+          "id": "d",
+          "text": "The network card",
+          "rationale": "The NIC affects connectivity, not image quality."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Double/echo images on laser output indicate a drum that fails to discharge fully, leaving a residual latent image — replace the drum.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-5-042",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "prompt": "A user can see the office Wi-Fi network but cannot connect, and the phone shows an authentication error. Other users connect fine. Which is the MOST likely cause?",
+      "context": "A user's device fails Wi-Fi authentication while others connect.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The user is entering the wrong passphrase",
+          "rationale": "An authentication error on one device while others connect usually means the wrong passphrase (or a stale saved password)."
+        },
+        {
+          "id": "b",
+          "text": "The access point is overloaded",
+          "rationale": "An overloaded AP affects everyone, not one device."
+        },
+        {
+          "id": "c",
+          "text": "The ISP is down",
+          "rationale": "An ISP outage does not block Wi-Fi authentication."
+        },
+        {
+          "id": "d",
+          "text": "The DHCP scope is exhausted",
+          "rationale": "DHCP exhaustion affects addressing after association, not authentication."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Authentication failures on a single device with others connected fine point to credentials — forget the network and re-enter the correct passphrase (or check 802.1X credentials).",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
     }
   ],
   "pbqs": [
@@ -2895,7 +8235,8 @@
           "source": "professor-messer",
           "section": "220-1201 5.5 Troubleshooting Networks"
         }
-      ]
+      ],
+      "prompt": "A workstation in a small office lost all network connectivity. Work through the diagnosis steps in order."
     },
     {
       "id": "a1-pbq-5-003",

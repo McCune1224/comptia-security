@@ -2,10 +2,16 @@
 
 ## Overview
 
-A Blackboard-style **course learning system** for CompTIA Security+ (SY0-701) exam prep, built with
+A Blackboard-style **course learning system** for CompTIA certification exam prep, built with
 SvelteKit 5 (runes) and SQLite. It combines a structured course (4 weekly modules, lessons, and
 deadline-driven graded assignments) with the quiz engine (MCQs, scenarios, PBQs, full-length exams)
 and rigorous evaluation (weighted gradebook, exam-readiness meter).
+
+**Three courses are registered** in the shared registry (`COURSES` / `COURSE_META` /
+`ACTIVE_COURSES` in `course.ts`): Security+ SY0-701 (`secp-701`), A+ Core 1 220-1201
+(`aplus-1201`), and A+ Core 2 220-1202 (`aplus-1202`). The UI is still single-course
+(Security+) until the profiles branch lands the course switcher — the A+ definitions, banks,
+and registry wiring are data/service-level and verified by tests and the smoke suite.
 
 ## Architecture
 
@@ -39,8 +45,18 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   - `quiz` (6) — 20-question objective quizzes, 30% weight
   - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
   - `full` (4) — 90-question timed full exams + week-1 checkpoint, 50% weight
-- **Question bank:** 300 MCQs (45/66/55/77/57 across Domains 1–5, all scenario-format) + 88 PBQs
-  (matching, ordering, evidence, configuration, numeric, multi-step, **fill-blank**, **word-bank**).
+- **Question banks:** Security+ 300 MCQs (45/66/55/77/57 across Domains 1–5, all scenario-format)
+  + 88 PBQs (matching, ordering, evidence, configuration, numeric, multi-step, **fill-blank**,
+  **word-bank**). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
+  multi-selects) **+ 20 PBQs** (3/5/4/2/6 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
+  MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 20 PBQs** (5/6/4/5 per domain,
+  8 kinds). Bank ids: `mcq-/pbq-` (Security+), `a1-`/`a1-pbq-` (A+ Core 1), `a2-`/`a2-pbq-`
+  (A+ Core 2). A+ banks validate against per-course `CourseBankSpec` constants in
+  `bank-aplus-1201.ts` / `bank-aplus-1202.ts` (validator generalized in `question-bank.ts`).
+  A+ authoring pipeline: `web/scripts/aplus-lib.py` + `merge-aplus-fragments.py` merge JSON
+  fragments from `web/scripts/data/frags/` (fragments are authored directly; the expand-*.py
+  scripts merge PBQs). Exam specs: A+ Core 1 90Q/90min pass 675; Core 2 90Q/90min pass 700 —
+  both read from `COURSE_META.passingScore` (readiness thresholds 675/900 and 700/900).
   Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`, `expand-interactive.py`,
   `expand-exam-aligned.py`, `expand-pbqs-exam-style.py`; `bank-lib.py` merges them idempotently.
   PBQ coverage spans all 28 objectives; real-exam formats include firewall ACL rule ordering,
