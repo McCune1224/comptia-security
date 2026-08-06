@@ -1,5 +1,7 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { createQuizRepository, type QuizRepository } from './db';
 import { createQuizService } from './quiz';
 import { createReviewService } from './review';
@@ -9,7 +11,11 @@ import { APLUS_1201_EXAM_CONFIG, APLUS_1202_EXAM_CONFIG } from './aplus-courses'
 import { correctResponse, type QuestionBank } from './question-bank';
 import type { PublicQuestion, QuestionResponse } from '$lib/types';
 
-const SMOKE_DB = '/tmp/smoke-aplus.db';
+// Per-worker path: vitest runs test FILES in parallel workers, and a fixed
+// /tmp path meant two workers (e.g. primary + a linked worktree copy) shared
+// one SQLite file — one worker's active session tripped the other's
+// startSession. PID-scoping keeps each worker on its own throwaway DB.
+const SMOKE_DB = path.join(os.tmpdir(), `smoke-aplus-${process.pid}.db`);
 
 function makeService(course: '1201' | '1202') {
 	const repository = createQuizRepository(SMOKE_DB);

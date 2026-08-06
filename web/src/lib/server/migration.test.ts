@@ -98,10 +98,11 @@ describe('v5 → v6 migration', () => {
 		expect((db.prepare("SELECT COUNT(*) c FROM google_oauth WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
 		expect((db.prepare("SELECT COUNT(*) c FROM google_synced_events WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
 
-		// The user's exam date survives, now scoped.
+		// The user's exam date survives, now scoped (one row per active course
+		// after seeding — this asserts the migrated secp-701 row).
 		const exam = db.prepare("SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { value: string };
 		expect(exam.value).toBe('2026-09-30');
-		expect((db.prepare("SELECT COUNT(*) c FROM course_meta WHERE key = 'exam_date'").get() as { c: number }).c).toBe(1);
+		expect((db.prepare("SELECT COUNT(*) c FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { c: number }).c).toBe(1);
 
 		// Default profile seeded; content tables carry course_id.
 		expect(db.prepare("SELECT name FROM profiles WHERE id = 'default'").get()).toMatchObject({ name: 'Default' });

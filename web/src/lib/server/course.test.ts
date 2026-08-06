@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { CourseId } from '$lib/types';
 import {
 	COURSE_DEFINITION,
 	assignmentDueDate,
@@ -191,19 +192,29 @@ describe('LetterGrade', () => {
 });
 
 describe('CourseService', () => {
-	it('seeds all active courses and reports an overview with deadlines', () => {
+	it('seeds every active course and reports a scoped overview with deadlines', () => {
 		const repository = createQuizRepository(':memory:');
+		// ACTIVE_COURSES seeds every registered course into the shared tables.
+		// The repository default view is bound to the default scope (secp-701),
+		// so verify each course's seed through its own scoped view.
+		const expectedSeeds: Record<CourseId, string[]> = {
+			'secp-701': ['week-1', 'week-2', 'week-3', 'week-4'],
+			'aplus-1201': ['ap1-week-1', 'ap1-week-2', 'ap1-week-3', 'ap1-week-4'],
+			'aplus-1202': ['ap2-week-1', 'ap2-week-2', 'ap2-week-3', 'ap2-week-4']
+		};
+		for (const [courseId, moduleIds] of Object.entries(expectedSeeds)) {
+			const scoped = repository.forScope({ profileId: 'default', courseId: courseId as CourseId });
+			expect(scoped.getCourseModules().map((m) => m.id)).toEqual(moduleIds);
+			expect(scoped.getCourseAssignments()).toHaveLength(12);
+		}
+
+		// Default-scope overview: secp-701's 4 modules + 12 assignments.
 		const service = createCourseService({ repository });
 		const overview = service.getOverview();
-		// ACTIVE_COURSES seeds every registered course into the shared tables:
-		// 3 courses x 4 modules x 12 assignments.
-		expect(overview.modules).toHaveLength(12);
-		expect(new Set(overview.modules.map((m) => m.module.id))).toEqual(
-			new Set(['week-1', 'week-2', 'week-3', 'week-4', 'ap1-week-1', 'ap1-week-2', 'ap1-week-3', 'ap1-week-4', 'ap2-week-1', 'ap2-week-2', 'ap2-week-3', 'ap2-week-4'])
-		);
+		expect(overview.modules).toHaveLength(4);
 		expect(overview.toDo.length).toBeGreaterThan(0);
 		expect(overview.examDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-		expect(overview.gradebook.totalAssignments).toBe(36);
+		expect(overview.gradebook.totalAssignments).toBe(12);
 		// Default exam date is the end of the current month.
 		expect(overview.daysUntilExam).toBeGreaterThanOrEqual(0);
 		expect(overview.daysUntilExam).toBeLessThanOrEqual(31);
