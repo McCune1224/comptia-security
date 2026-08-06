@@ -142,11 +142,18 @@ function parseStoredSession(row: SessionRow & StateRow, responseRows: { question
 function seedCourse(db: Database.Database): void {
 	const seed = db.transaction(() => {
 		const now = new Date().toISOString();
-		db.prepare("INSERT INTO profiles (id, name, color, created_at) VALUES ('default', 'Default', '#b7f04c', ?) ON CONFLICT(id) DO NOTHING").run(now);
+		// Two profiles out of the box: Alex (default / Security+) and Ash (A+).
+		// ON CONFLICT DO NOTHING keeps later user renames intact on reseed.
+		db.prepare("INSERT INTO profiles (id, name, color, created_at) VALUES ('default', 'Alex', '#b7f04c', ?) ON CONFLICT(id) DO NOTHING").run(now);
+		db.prepare("INSERT INTO profiles (id, name, color, created_at) VALUES ('ash', 'Ash', '#4cc9f0', ?) ON CONFLICT(id) DO NOTHING").run(now);
 		const insertExamDate = db.prepare("INSERT INTO course_meta (profile_id, course_id, key, value) VALUES ('default', ?, 'exam_date', ?) ON CONFLICT(profile_id, course_id, key) DO NOTHING");
-		const insertModule = db.prepare('INSERT OR IGNORE INTO course_modules (id, course_id, week, title, description, position) VALUES (?, ?, ?, ?, ?, ?)');
+		// Upsert (not INSERT OR IGNORE): content updates must reach existing DBs,
+		// and a mis-stamped course_id (rows seeded before the v6 scope column
+		// existed, then backfilled with the 'secp-701' DEFAULT) is healed on the
+		// next open. The lessons statement below already follows this pattern.
+		const insertModule = db.prepare('INSERT INTO course_modules (id, course_id, week, title, description, position) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, week = excluded.week, title = excluded.title, description = excluded.description, position = excluded.position');
 		const insertLesson = db.prepare('INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, position) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, position = excluded.position');
-		const insertAssignment = db.prepare('INSERT OR IGNORE INTO course_assignments (id, course_id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		const insertAssignment = db.prepare('INSERT INTO course_assignments (id, course_id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, description = excluded.description, kind = excluded.kind, category = excluded.category, points = excluded.points, count = excluded.count, domain = excluded.domain, mode = excluded.mode, duration_minutes = excluded.duration_minutes, due_offset_days = excluded.due_offset_days, position = excluded.position');
 		for (const courseId of ACTIVE_COURSES) {
 			const definition = COURSES[courseId];
 			if (!definition) continue;

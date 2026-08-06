@@ -104,8 +104,9 @@ describe('v5 → v6 migration', () => {
 		expect(exam.value).toBe('2026-09-30');
 		expect((db.prepare("SELECT COUNT(*) c FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { c: number }).c).toBe(1);
 
-		// Default profile seeded; content tables carry course_id.
-		expect(db.prepare("SELECT name FROM profiles WHERE id = 'default'").get()).toMatchObject({ name: 'Default' });
+		// Profiles seeded; content tables carry course_id.
+		expect(db.prepare("SELECT name FROM profiles WHERE id = 'default'").get()).toMatchObject({ name: 'Alex' });
+		expect(db.prepare("SELECT name FROM profiles WHERE id = 'ash'").get()).toMatchObject({ name: 'Ash' });
 		expect((db.prepare("SELECT COUNT(*) c FROM course_modules WHERE course_id = 'secp-701'").get() as { c: number }).c).toBe(4);
 		expect((db.prepare("SELECT COUNT(*) c FROM course_lessons WHERE course_id = 'secp-701'").get() as { c: number }).c).toBe(7);
 		db.close();
@@ -126,10 +127,12 @@ describe('v5 → v6 migration', () => {
 });
 
 describe('fresh databases', () => {
-	it('reach the v6 shape directly with the default profile and exam date seeded', () => {
+	it('reaches the v6 shape directly with both profiles and exam dates seeded', () => {
 		const repo = createQuizRepository(':memory:');
-		expect(repo.getProfiles()).toHaveLength(1);
-		expect(repo.getProfiles()[0]).toMatchObject({ id: 'default', name: 'Default' });
+		expect(repo.getProfiles()).toHaveLength(2);
+		expect(repo.getProfiles().map((p) => p.id)).toEqual(['default', 'ash']);
+		expect(repo.getProfiles().find((p) => p.id === 'default')).toMatchObject({ id: 'default', name: 'Alex' });
+		expect(repo.getProfiles().find((p) => p.id === 'ash')).toMatchObject({ id: 'ash', name: 'Ash' });
 		expect(repo.getExamDate()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 		expect(repo.getCourseModules()).toHaveLength(4);
 		expect(repo.getCourseLessons()).toHaveLength(7);
@@ -204,34 +207,64 @@ describe('scope isolation', () => {
 });
 
 describe('profile management', () => {
-	it('enforces the hard cap of two profiles', () => {
+	it('enforces the hard cap of two profiles (Alex + Ash seeded)', () => {
 		const repo = createQuizRepository(':memory:');
-		expect(repo.getProfiles()).toHaveLength(1);
-		const second = repo.createProfile('Alex', '#4cc9f0');
 		expect(repo.getProfiles()).toHaveLength(2);
 		expect(() => repo.createProfile('Third', '#f0b04c')).toThrow(`cap of ${MAX_PROFILES}`);
-		repo.renameProfile(second.id, 'Alex B');
-		expect(repo.getProfiles().find((p) => p.id === second.id)?.name).toBe('Alex B');
+		repo.renameProfile('ash', 'Ash B');
+		expect(repo.getProfiles().find((p) => p.id === 'ash')?.name).toBe('Ash B');
 		repo.close();
 	});
 
 	it('deleting a profile removes its data and frees the cap; default is protected', () => {
 		const repo = createQuizRepository(':memory:');
-		const scope = createScopedRepo(repo, { profileId: 'x', courseId: 'secp-701' });
+		const scope = createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' });
 		scope.setExamDate('2026-11-01');
 		scope.recordStudyDay('2026-08-05', 5, '2026-08-05T00:00:00.000Z');
-		scope.createSession({ id: 'x-sess', type: 'quiz', mode: 'practice', domain: null, startedAt: '2026-08-05T10:00:00.000Z', deadlineAt: null, questions: [] });
+		scope.createSession({ id: 'ash-sess', type: 'quiz', mode: 'practice', domain: null, startedAt: '2026-08-05T10:00:00.000Z', deadlineAt: null, questions: [] });
 
 		expect(() => repo.deleteProfile('default')).toThrow('default profile cannot be deleted');
-		repo.deleteProfile('x');
+		repo.deleteProfile('ash');
 		expect(repo.getProfiles().map((p) => p.id)).toEqual(['default']);
 		expect(repo.getProfiles()).toHaveLength(1);
 		// Data for the deleted profile is gone.
-		expect(createScopedRepo(repo, { profileId: 'x', courseId: 'secp-701' }).getStudyLog()).toHaveLength(0);
-		expect(createScopedRepo(repo, { profileId: 'x', courseId: 'secp-701' }).getActiveSession()).toBeNull();
+		expect(createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getStudyLog()).toHaveLength(0);
+		expect(createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getActiveSession()).toBeNull();
 		// Cap freed.
 		repo.createProfile('New', '#b7f04c');
 		expect(repo.getProfiles()).toHaveLength(2);
 		repo.close();
+	});
+});
+
+describe('seed upsert healing', () => {
+	it('re-stamps course_ids on rows backfilled with the default scope during the v5→v6 window', () => {
+		const file = tempDb();
+		const repo = createQuizRepository(file);
+		repo.close();
+		// Simulate the hot-reload accident that produced the empty A+ syllabus:
+		// A+ module/assignment rows were seeded into the v5 schema (no scope
+		// columns), then the v6 ALTER backfilled them with the 'secp-701'
+		// DEFAULT. INSERT OR IGNORE could never repair that; the seed upsert can.
+		const db = new Database(file);
+		db.prepare("UPDATE course_modules SET course_id = 'secp-701' WHERE id LIKE 'ap1-%' OR id LIKE 'ap2-%'").run();
+		db.prepare("UPDATE course_assignments SET course_id = 'secp-701' WHERE id LIKE 'ap1-%' OR id LIKE 'ap2-%'").run();
+		db.close();
+
+		// Reopen: seeding must upsert the correct course_id back, not ignore.
+		createQuizRepository(file).close();
+
+		const healed = new Database(file, { readonly: true });
+		expect(healed.prepare('SELECT course_id, COUNT(*) c FROM course_modules GROUP BY course_id ORDER BY course_id').all()).toEqual([
+			{ course_id: 'aplus-1201', c: 4 },
+			{ course_id: 'aplus-1202', c: 4 },
+			{ course_id: 'secp-701', c: 4 }
+		]);
+		expect(healed.prepare('SELECT course_id, COUNT(*) c FROM course_assignments GROUP BY course_id ORDER BY course_id').all()).toEqual([
+			{ course_id: 'aplus-1201', c: 12 },
+			{ course_id: 'aplus-1202', c: 12 },
+			{ course_id: 'secp-701', c: 12 }
+		]);
+		healed.close();
 	});
 });
