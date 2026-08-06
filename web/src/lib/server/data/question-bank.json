@@ -22612,6 +22612,780 @@
           "section": "Disaster Recovery and Continuity"
         }
       ]
+    },
+    {
+      "id": "pbq-2-801",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "pbq",
+      "prompt": "Classify each attack by its primary technique category.",
+      "context": "An analyst is categorizing recent incidents by how the attacker gained access.",
+      "explanation": "Password spray and session hijacking abuse credentials/sessions; SQL injection abuses input handling; smishing and spear phishing manipulate people.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "2.4"
+        },
+        {
+          "source": "comptia",
+          "section": "SY0-701"
+        }
+      ],
+      "kind": "sort",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Password spray"
+        },
+        {
+          "id": "i2",
+          "text": "SQL injection"
+        },
+        {
+          "id": "i3",
+          "text": "Smishing"
+        },
+        {
+          "id": "i4",
+          "text": "Session hijacking"
+        },
+        {
+          "id": "i5",
+          "text": "Spear phishing"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "b1",
+          "label": "Credential & session theft"
+        },
+        {
+          "id": "b2",
+          "label": "Injection & code"
+        },
+        {
+          "id": "b3",
+          "label": "Social engineering"
+        },
+        {
+          "id": "b4",
+          "label": "Physical attacks"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b2",
+        "i3": "b3",
+        "i4": "b1",
+        "i5": "b3"
+      }
+    },
+    {
+      "id": "pbq-5-801",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "pbq",
+      "prompt": "Classify each security control by its primary function.",
+      "explanation": "Firewalls and training stop incidents (preventive); log review and scans surface them (detective); backups restore operations (corrective).",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "5.1"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-53"
+        }
+      ],
+      "kind": "sort",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Firewall ruleset"
+        },
+        {
+          "id": "i2",
+          "text": "Log review"
+        },
+        {
+          "id": "i3",
+          "text": "Backup restoration"
+        },
+        {
+          "id": "i4",
+          "text": "Vulnerability scan"
+        },
+        {
+          "id": "i5",
+          "text": "User security training"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "b1",
+          "label": "Preventive"
+        },
+        {
+          "id": "b2",
+          "label": "Detective"
+        },
+        {
+          "id": "b3",
+          "label": "Corrective"
+        },
+        {
+          "id": "b4",
+          "label": "Deterrent"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b2",
+        "i3": "b3",
+        "i4": "b2",
+        "i5": "b1"
+      }
+    },
+    {
+      "id": "pbq-4-801",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "pbq",
+      "prompt": "Order these vulnerability-scan findings by remediation priority.",
+      "context": "A scan of the environment returned the following findings. Triage them from the highest priority (fix first) to lowest (fix last).",
+      "explanation": "Remote code execution on an internet-facing host and default database credentials are critical; missing MFA on admin portals is high; unpatched internal workstations and banner grabs are lower priority.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "4.3"
+        },
+        {
+          "source": "cisa",
+          "section": "KEV catalog"
+        }
+      ],
+      "kind": "sort",
+      "items": [
+        {
+          "id": "i1",
+          "text": "RCE on internet-facing web server"
+        },
+        {
+          "id": "i2",
+          "text": "Unpatched internal workstation"
+        },
+        {
+          "id": "i3",
+          "text": "Default credentials on database"
+        },
+        {
+          "id": "i4",
+          "text": "Missing MFA on admin portal"
+        },
+        {
+          "id": "i5",
+          "text": "TLS banner discloses server version"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "b1",
+          "label": "Fix first"
+        },
+        {
+          "id": "b2",
+          "label": "Fix second"
+        },
+        {
+          "id": "b3",
+          "label": "Fix last"
+        },
+        {
+          "id": "b4",
+          "label": "Defer indefinitely"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b3",
+        "i3": "b1",
+        "i4": "b2",
+        "i5": "b3"
+      }
+    },
+    {
+      "id": "pbq-4-802",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "pbq",
+      "prompt": "Match each protocol to its default port.",
+      "explanation": "SSH uses 22, HTTPS 443, RDP 3389, MySQL 3306, and SNMP 161 by default.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "4.1"
+        }
+      ],
+      "kind": "matching",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "SSH"
+        },
+        {
+          "id": "p2",
+          "text": "HTTPS"
+        },
+        {
+          "id": "p3",
+          "text": "RDP"
+        },
+        {
+          "id": "p4",
+          "text": "MySQL"
+        },
+        {
+          "id": "p5",
+          "text": "SNMP"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "22"
+        },
+        {
+          "id": "t2",
+          "text": "443"
+        },
+        {
+          "id": "t3",
+          "text": "3389"
+        },
+        {
+          "id": "t4",
+          "text": "3306"
+        },
+        {
+          "id": "t5",
+          "text": "161"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "x1",
+          "text": "25"
+        },
+        {
+          "id": "x2",
+          "text": "69"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      }
+    },
+    {
+      "id": "pbq-2-802",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "pbq",
+      "prompt": "Match each attack to its best description.",
+      "explanation": "Pass-the-hash reuses harvested NTLM hashes; kerberoasting cracks service-account tickets; DLL hijacking plants a malicious DLL in the search path; DNS poisoning redirects resolution; vishing is voice phishing.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "2.4"
+        },
+        {
+          "source": "mitre",
+          "section": "ATT&CK"
+        }
+      ],
+      "kind": "matching",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "Pass-the-hash"
+        },
+        {
+          "id": "p2",
+          "text": "Kerberoasting"
+        },
+        {
+          "id": "p3",
+          "text": "DLL hijacking"
+        },
+        {
+          "id": "p4",
+          "text": "DNS poisoning"
+        },
+        {
+          "id": "p5",
+          "text": "Vishing"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Replays a harvested NTLM hash to authenticate"
+        },
+        {
+          "id": "t2",
+          "text": "Requests service tickets then cracks them offline"
+        },
+        {
+          "id": "t3",
+          "text": "Places a malicious DLL where an app searches first"
+        },
+        {
+          "id": "t4",
+          "text": "Corrupts name resolution to redirect traffic"
+        },
+        {
+          "id": "t5",
+          "text": "Uses phone calls to trick victims"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "x1",
+          "text": "Guesses every password against one account"
+        },
+        {
+          "id": "x2",
+          "text": "Watches a victim type a PIN"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      }
+    },
+    {
+      "id": "pbq-4-803",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "pbq",
+      "prompt": "Match each insecure protocol to its secure replacement.",
+      "explanation": "Replace Telnet with SSH, FTP with SFTP, HTTP with HTTPS, SNMPv2c with SNMPv3, and SMBv1 with SMBv3.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "4.1"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-52"
+        }
+      ],
+      "kind": "matching",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "Telnet"
+        },
+        {
+          "id": "p2",
+          "text": "FTP"
+        },
+        {
+          "id": "p3",
+          "text": "HTTP"
+        },
+        {
+          "id": "p4",
+          "text": "SNMPv2c"
+        },
+        {
+          "id": "p5",
+          "text": "SMBv1"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "SSH"
+        },
+        {
+          "id": "t2",
+          "text": "SFTP"
+        },
+        {
+          "id": "t3",
+          "text": "HTTPS"
+        },
+        {
+          "id": "t4",
+          "text": "SNMPv3"
+        },
+        {
+          "id": "t5",
+          "text": "SMBv3"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "x1",
+          "text": "TFTP"
+        },
+        {
+          "id": "x2",
+          "text": "LDAPS"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      }
+    },
+    {
+      "id": "pbq-4-804",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "pbq",
+      "prompt": "Complete each statement about federated identity protocols.\n\n1. SAML transports identity assertions in ____ format.\n2. OIDC issues ____ tokens that clients present to APIs.\n3. The protocol most commonly used to federate with Microsoft services is ____.",
+      "explanation": "SAML uses XML assertions, OIDC uses JWT tokens, and WS-Fed is Microsoft's federation protocol; Kerberos is a domain authentication protocol, not a federation one.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "4.6"
+        }
+      ],
+      "kind": "word-bank",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "SAML assertion format"
+        },
+        {
+          "id": "b2",
+          "label": "OIDC token type"
+        },
+        {
+          "id": "b3",
+          "label": "Microsoft federation protocol"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "XML"
+        },
+        {
+          "id": "w2",
+          "word": "JWT"
+        },
+        {
+          "id": "w3",
+          "word": "WS-Fed"
+        },
+        {
+          "id": "d1",
+          "word": "Kerberos"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3"
+      }
+    },
+    {
+      "id": "pbq-3-801",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "prompt": "Complete each statement about zero-trust principles.\n\n1. Zero trust verifies ____ every access request rather than trusting the network.\n2. Microsegmentation limits ____ movement inside the environment.\n3. Every identity is validated with strong ____ before access is granted.",
+      "explanation": "Zero trust continuously verifies every request, microsegmentation contains lateral movement, and strong MFA validates identities; perimeter-only controls are the opposite model.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "3.2"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-207"
+        }
+      ],
+      "kind": "word-bank",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Verification model"
+        },
+        {
+          "id": "b2",
+          "label": "Contained movement"
+        },
+        {
+          "id": "b3",
+          "label": "Identity validation"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "continuously"
+        },
+        {
+          "id": "w2",
+          "word": "lateral"
+        },
+        {
+          "id": "w3",
+          "word": "MFA"
+        },
+        {
+          "id": "d1",
+          "word": "perimeter"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3"
+      }
+    },
+    {
+      "id": "pbq-4-805",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "pbq",
+      "prompt": "An administrator is enabling MFA for a VPN. Configure the policy with the most secure settings.",
+      "explanation": "Password + TOTP is the standard secure pairing, a 15-minute token lifetime limits replay window, and a lockout threshold of 5 stops brute force without excessive lockouts.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "4.6"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-63B"
+        }
+      ],
+      "kind": "configuration",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Primary authentication factor",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Password"
+            },
+            {
+              "id": "o2",
+              "text": "PIN"
+            },
+            {
+              "id": "o3",
+              "text": "Biometric"
+            },
+            {
+              "id": "o4",
+              "text": "Smart card"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Second factor",
+          "options": [
+            {
+              "id": "o1",
+              "text": "TOTP"
+            },
+            {
+              "id": "o2",
+              "text": "SMS code"
+            },
+            {
+              "id": "o3",
+              "text": "Email code"
+            },
+            {
+              "id": "o4",
+              "text": "No second factor"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Token lifetime",
+          "options": [
+            {
+              "id": "o1",
+              "text": "5 minutes"
+            },
+            {
+              "id": "o2",
+              "text": "15 minutes"
+            },
+            {
+              "id": "o3",
+              "text": "60 minutes"
+            },
+            {
+              "id": "o4",
+              "text": "24 hours"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Lockout threshold",
+          "options": [
+            {
+              "id": "o1",
+              "text": "3 attempts"
+            },
+            {
+              "id": "o2",
+              "text": "5 attempts"
+            },
+            {
+              "id": "o3",
+              "text": "10 attempts"
+            },
+            {
+              "id": "o4",
+              "text": "No lockout"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o1",
+        "f2": "o1",
+        "f3": "o2",
+        "f4": "o2"
+      }
+    },
+    {
+      "id": "pbq-4-806",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "pbq",
+      "prompt": "A SOC is tuning a SIEM rule that detects credential-stuffing bursts. Configure the correlation rule.",
+      "explanation": "A 15-minute correlation window catches bursts, high severity escalates them, grouping by source IP pinpoints the attacker, and blocking the source is the appropriate automated response.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "4.3"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-61"
+        }
+      ],
+      "kind": "configuration",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Correlation window",
+          "options": [
+            {
+              "id": "o1",
+              "text": "5 minutes"
+            },
+            {
+              "id": "o2",
+              "text": "15 minutes"
+            },
+            {
+              "id": "o3",
+              "text": "60 minutes"
+            },
+            {
+              "id": "o4",
+              "text": "24 hours"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Alert severity",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Low"
+            },
+            {
+              "id": "o2",
+              "text": "Medium"
+            },
+            {
+              "id": "o3",
+              "text": "High"
+            },
+            {
+              "id": "o4",
+              "text": "Critical"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Aggregation key",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Source IP"
+            },
+            {
+              "id": "o2",
+              "text": "Destination IP"
+            },
+            {
+              "id": "o3",
+              "text": "User"
+            },
+            {
+              "id": "o4",
+              "text": "No aggregation"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Automated response",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Email the analyst"
+            },
+            {
+              "id": "o2",
+              "text": "Block the source IP"
+            },
+            {
+              "id": "o3",
+              "text": "Isolate the host"
+            },
+            {
+              "id": "o4",
+              "text": "No response"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o2",
+        "f2": "o3",
+        "f3": "o1",
+        "f4": "o2"
+      }
     }
   ]
 }
