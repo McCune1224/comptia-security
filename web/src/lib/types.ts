@@ -7,35 +7,27 @@ export interface Card {
 
 export type Domain = 1 | 2 | 3 | 4 | 5;
 
-export type ObjectiveId =
-	| '1.1'
-	| '1.2'
-	| '1.3'
-	| '1.4'
-	| '2.1'
-	| '2.2'
-	| '2.3'
-	| '2.4'
-	| '2.5'
-	| '3.1'
-	| '3.2'
-	| '3.3'
-	| '3.4'
-	| '4.1'
-	| '4.2'
-	| '4.3'
-	| '4.4'
-	| '4.5'
-	| '4.6'
-	| '4.7'
-	| '4.8'
-	| '4.9'
-	| '5.1'
-	| '5.2'
-	| '5.3'
-	| '5.4'
-	| '5.5'
-	| '5.6';
+/** Courses in the app. The A+ worktree registers 'aplus-1201' and 'aplus-1202'. */
+export type CourseId = 'secp-701' | 'aplus-1201' | 'aplus-1202';
+
+/**
+ * Per-course objective ids. Validity is enforced per course by the bank validator
+ * (each course owns its objectives map), not by the TS union.
+ */
+export type ObjectiveId = string;
+
+/** Per-course metadata — drives mastery grids, readiness math, and UI labels. */
+export interface CourseMeta {
+	id: CourseId;
+	title: string;
+	code: string;
+	examName: string;
+	passingScore: number; // scaled passing score (750 sec+, 675 / 700 A+)
+	scaleMax: number; // 900
+	domainWeights: Record<number, number>; // domain -> % of exam
+	domains: number[]; // domain ids present (A+ Core 2 has only 4)
+	objectives: Record<number, ObjectiveId[]>; // domain -> objective ids
+}
 
 export type SessionType = 'quiz' | 'scenario' | 'pbq' | 'full' | 'review';
 export type SessionMode = 'practice' | 'exam';
@@ -43,7 +35,7 @@ export type SessionStatus = 'active' | 'completed' | 'abandoned';
 export type QuestionFormat = 'standard' | 'scenario' | 'pbq';
 
 export interface SourceRef {
-	source: 'exam-objectives' | 'study-guide' | 'nist' | 'owasp' | 'mitre' | 'comptia' | 'cisa';
+	source: 'exam-objectives' | 'study-guide' | 'nist' | 'owasp' | 'mitre' | 'comptia' | 'cisa' | 'professor-messer';
 	section: string;
 }
 

@@ -20,6 +20,20 @@ export interface QuizService {
 	completeSession(sessionId: string): QuizResult;
 }
 
+/**
+ * Per-course full-exam assembly: one PBQ per domain (distinct kinds) plus a
+ * per-domain MCQ quota (incl. the PBQ) summing to 90. Defaults mirror SY0-701.
+ */
+export interface ExamConfig {
+	domains: Domain[];
+	quotas: Record<Domain, number>;
+}
+
+export const DEFAULT_EXAM_CONFIG: ExamConfig = {
+	domains: [1, 2, 3, 4, 5],
+	quotas: { 1: 11, 2: 20, 3: 16, 4: 25, 5: 18 }
+};
+
 function shuffle<T>(items: T[], rng: () => number): T[] {
 	const result = [...items];
 	for (let index = result.length - 1; index > 0; index--) { const selected = Math.floor(rng() * (index + 1)); [result[index], result[selected]] = [result[selected], result[index]]; }
@@ -67,7 +81,32 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	throw new QuizServiceError('INVALID_REQUEST', 'Response does not match the question interaction.');
 }
 
-export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date(), reviewSvc = reviewService }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date; reviewSvc?: ReviewService }): QuizService {
+/**
+ * Picks one PBQ per domain with pairwise-distinct kinds (the real exam's
+ * "five distinct PBQ interactions"), searching in domain order — equivalent to
+ * the original nested-loop product for the 5-domain default.
+ */
+function assemblePbqSet(bank: QuestionBank, domains: Domain[]): QuestionDefinition[] | undefined {
+	const pool = domains.map((domain) => bank.pbqs.filter((question) => question.domain === domain));
+	if (pool.some((questions) => questions.length === 0)) return undefined;
+	const chosen: QuestionDefinition[] = [];
+	const usedKinds = new Set<string>();
+	const search = (level: number): boolean => {
+		if (level === domains.length) return true;
+		for (const pbq of pool[level]) {
+			if (usedKinds.has(pbq.kind)) continue;
+			usedKinds.add(pbq.kind);
+			chosen.push(pbq);
+			if (search(level + 1)) return true;
+			chosen.pop();
+			usedKinds.delete(pbq.kind);
+		}
+		return false;
+	};
+	return search(0) ? [...chosen] : undefined;
+}
+
+export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date(), reviewSvc = reviewService, examConfig = DEFAULT_EXAM_CONFIG }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date; reviewSvc?: ReviewService; examConfig?: ExamConfig }): QuizService {
 	const expire = (stored: StoredSession): StoredSession => {
 		if (stored.summary.status === 'active' && stored.deadlineAt && new Date(stored.deadlineAt) <= now()) { complete(stored); return repository.getSession(stored.summary.id)!; }
 		return stored;
@@ -104,7 +143,7 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 				if (current.summary.status === 'active') throw new QuizServiceError('ACTIVE_SESSION_EXISTS', 'Resume or abandon the active session first.', { session: summary(current) });
 			}
 			const mode: SessionMode = input.type === 'full' ? 'exam' : input.mode ?? 'practice';
-			if (!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined) || (input.objective !== undefined && (input.type !== 'quiz' || !/^[1-5]\.[1-9]$/.test(input.objective))) || (input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall')) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
+			if (!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) || !['practice', 'exam'].includes(mode) || (input.type !== 'quiz' && input.domain !== undefined) || (input.objective !== undefined && (input.type !== 'quiz' || !/^[1-5]\.[1-9]\d?$/.test(input.objective))) || (input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall')) throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
 			const source = input.type === 'pbq' ? bank.pbqs : input.type === 'scenario' ? bank.mcqs.filter((question) => question.format === 'scenario') : bank.mcqs;
 			const count = input.type === 'full' ? 90 : input.count ?? (input.type === 'quiz' ? 20 : input.type === 'scenario' ? 10 : input.type === 'review' ? 10 : 5);
 			let selected: QuestionDefinition[];
@@ -112,12 +151,10 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 				if (count < 1 || count > 20) throw new QuizServiceError('INVALID_REQUEST', 'Review count must be between 1 and 20.');
 				selected = reviewSvc.composeQueue({ source: input.reviewSource!, count }, now());
 			} else if (input.type === 'full') {
-				let pbqs: QuestionDefinition[] | undefined;
-				for (const first of bank.pbqs.filter((question) => question.domain === 1)) for (const second of bank.pbqs.filter((question) => question.domain === 2)) for (const third of bank.pbqs.filter((question) => question.domain === 3)) for (const fourth of bank.pbqs.filter((question) => question.domain === 4)) for (const fifth of bank.pbqs.filter((question) => question.domain === 5)) if (new Set([first.kind, second.kind, third.kind, fourth.kind, fifth.kind]).size === 5) { pbqs = [first, second, third, fourth, fifth]; break; }
-				if (!pbqs) throw new QuizServiceError('INVALID_REQUEST', 'Bank cannot assemble five distinct PBQ interactions.');
-				const quotas: Record<Domain, number> = { 1: 11, 2: 20, 3: 16, 4: 25, 5: 18 };
+				const pbqs = assemblePbqSet(bank, examConfig.domains);
+				if (!pbqs) throw new QuizServiceError('INVALID_REQUEST', `Bank cannot assemble ${examConfig.domains.length} distinct PBQ interactions.`);
 				selected = [...pbqs];
-				for (const domain of [1, 2, 3, 4, 5] as Domain[]) selected.push(...shuffle(bank.mcqs.filter((question) => question.domain === domain), rng).slice(0, quotas[domain] - 1));
+				for (const domain of examConfig.domains) selected.push(...shuffle(bank.mcqs.filter((question) => question.domain === domain), rng).slice(0, examConfig.quotas[domain] - 1));
 			} else {
 				const filtered = source.filter((question) => (!input.domain || question.domain === input.domain) && (!input.objective || question.objective === input.objective));
 				const valid = input.type === 'quiz' ? count >= 5 && count <= 50 : input.type === 'scenario' ? count >= 5 && count <= 30 : count >= 1 && (count <= 10 || count === 30);

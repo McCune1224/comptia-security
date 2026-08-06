@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { QuestionResponse, QuizResult, SessionMode, SessionStatus, SessionType } from '$lib/types';
 import type { QuestionDefinition } from './question-bank';
-import { COURSE_DEFINITION, defaultExamDate, type CourseAssignment, type CourseLesson, type CourseModule, type SubmissionRecord } from './course';
+import { ACTIVE_COURSES, COURSES, defaultExamDate, type CourseAssignment, type CourseLesson, type CourseModule, type SubmissionRecord } from './course';
 
 export const DB_PATH = path.resolve(process.cwd(), 'data/quiz.db');
 
@@ -117,11 +117,15 @@ function seedCourse(db: Database.Database): void {
 			db.prepare('INSERT INTO course_meta (key, value) VALUES (?, ?)').run('exam_date', defaultExamDate());
 		}
 		const insertModule = db.prepare('INSERT OR IGNORE INTO course_modules (id, week, title, description, position) VALUES (?, ?, ?, ?, ?)');
-		for (const module of COURSE_DEFINITION.modules) insertModule.run(module.id, module.week, module.title, module.description, module.position);
 		const insertLesson = db.prepare('INSERT INTO course_lessons (id, module_id, title, summary, content, position) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, position = excluded.position');
-		for (const lesson of COURSE_DEFINITION.lessons) insertLesson.run(lesson.id, lesson.moduleId, lesson.title, lesson.summary, lesson.content, lesson.position);
 		const insertAssignment = db.prepare('INSERT OR IGNORE INTO course_assignments (id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-		for (const assignment of COURSE_DEFINITION.assignments) insertAssignment.run(assignment.id, assignment.moduleId, assignment.title, assignment.description, assignment.kind, assignment.category, assignment.points, assignment.count, assignment.domain, assignment.mode, assignment.durationMinutes, assignment.dueOffsetDays, assignment.position);
+		for (const courseId of ACTIVE_COURSES) {
+			const definition = COURSES[courseId];
+			if (!definition) continue;
+			for (const module of definition.modules) insertModule.run(module.id, module.week, module.title, module.description, module.position);
+			for (const lesson of definition.lessons) insertLesson.run(lesson.id, lesson.moduleId, lesson.title, lesson.summary, lesson.content, lesson.position);
+			for (const assignment of definition.assignments) insertAssignment.run(assignment.id, assignment.moduleId, assignment.title, assignment.description, assignment.kind, assignment.category, assignment.points, assignment.count, assignment.domain, assignment.mode, assignment.durationMinutes, assignment.dueOffsetDays, assignment.position);
+		}
 	});
 	seed();
 }

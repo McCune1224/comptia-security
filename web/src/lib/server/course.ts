@@ -1,4 +1,5 @@
-import type { Domain, SessionMode, SessionType } from '$lib/types';
+import type { CourseId, CourseMeta, Domain, SessionMode, SessionType } from '$lib/types';
+import { objectivesByDomain } from './question-bank';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Course definition — Security+ SY0-701, structured like a college course.
@@ -697,6 +698,31 @@ If you can't do all three, that objective goes on today's targeted review list. 
 	]
 };
 
+// ── Course registry (multi-course) ───────────────────────────────────────────
+// The app is single-course today; the registry is the seam the A+ worktree
+// appends to ('aplus-1201' | 'aplus-1202') and the profiles worktree scopes by.
+
+export const COURSES: Partial<Record<CourseId, CourseDefinition>> = {
+	'secp-701': COURSE_DEFINITION
+};
+
+export const COURSE_META: Partial<Record<CourseId, CourseMeta>> = {
+	'secp-701': {
+		id: 'secp-701',
+		title: COURSE_DEFINITION.title,
+		code: COURSE_DEFINITION.code,
+		examName: COURSE_DEFINITION.examName,
+		passingScore: COURSE_DEFINITION.passingScore,
+		scaleMax: COURSE_DEFINITION.scaleMax,
+		domainWeights: { 1: 12, 2: 22, 3: 18, 4: 28, 5: 20 },
+		domains: [1, 2, 3, 4, 5],
+		objectives: objectivesByDomain
+	}
+};
+
+/** Courses available in the app. The A+ worktree appends the two A+ cores. */
+export const ACTIVE_COURSES: CourseId[] = ['secp-701'];
+
 // ── Scheduling helpers ───────────────────────────────────────────────────────
 
 /** Returns the due date (local midnight) for an assignment given the exam date (YYYY-MM-DD). */
@@ -884,20 +910,20 @@ export function computeReadiness(
 	domainProgress: Record<number, { percentage: number; possiblePoints: number }>,
 	completedFullExams: { percentage: number }[],
 	passingScore = COURSE_DEFINITION.passingScore,
-	scaleMax = COURSE_DEFINITION.scaleMax
+	scaleMax = COURSE_DEFINITION.scaleMax,
+	domains: number[] = [1, 2, 3, 4, 5],
+	domainQuotas: Record<number, number> = EXAM_DOMAIN_QUOTAS
 ): Readiness {
-	const domainsWithData = ([1, 2, 3, 4, 5] as Domain[]).filter(
-		(d) => domainProgress[d]?.possiblePoints > 0
-	);
+	const domainsWithData = domains.filter((d) => domainProgress[d]?.possiblePoints > 0);
 	const domainMastery =
 		domainsWithData.length === 0
 			? null
 			: Math.round(
 					(domainsWithData.reduce(
-						(sum, d) => sum + domainProgress[d].percentage * EXAM_DOMAIN_QUOTAS[d],
+						(sum, d) => sum + domainProgress[d].percentage * domainQuotas[d],
 						0
 					) /
-						domainsWithData.reduce((sum, d) => sum + EXAM_DOMAIN_QUOTAS[d], 0)) *
+						domainsWithData.reduce((sum, d) => sum + domainQuotas[d], 0)) *
 						10
 				) / 10;
 
