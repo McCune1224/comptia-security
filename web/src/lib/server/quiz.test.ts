@@ -27,6 +27,52 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('allows two practice retries with point decay and locks the third', () => {
+		const repository = createQuizRepository(':memory:');
+		const choicePbq: QuestionDefinition = {
+			id: 'pbq-1-999',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Which control BEST prevents credential replay?',
+			explanation: 'MFA stops replayed stolen credentials.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Patching', rationale: 'No.' },
+				{ id: 'c', text: 'Backups', rationale: 'No.' },
+				{ id: 'd', text: 'Ping sweep', rationale: 'No.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [choicePbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		// Attempt 1: wrong -> 0 points, retry unlocked.
+		const first = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
+		expect(first.feedback?.earnedPoints).toBe(0);
+		expect((service.getSession(session.sessionId) as typeof session).retries[0]).toBe(0);
+		// Retry 1: correct -> 60%.
+		const second = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		expect(second.feedback?.earnedPoints).toBeCloseTo(0.6);
+		// Retry 2 (third attempt): correct -> 30%.
+		const third = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		expect(third.feedback?.earnedPoints).toBeCloseTo(0.3);
+		// Fourth attempt is locked.
+		expect(() => service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] })).toThrow('Practice responses are locked after feedback.');
+		// Completion applies the final attempt's factor; full correctness is preserved.
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBeCloseTo(0.3);
+		expect(result.review[0].feedback.fullyCorrect).toBe(true);
+		repository.close();
+	});
+
 	it('round-trips sort responses through a PBQ session with an injected bank', () => {
 		const repository = createQuizRepository(':memory:');
 		const sortPbq: QuestionDefinition = {

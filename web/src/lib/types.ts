@@ -177,6 +177,8 @@ export interface SessionView extends ActiveSessionSummary {
 	status: SessionStatus;
 	questions: PublicQuestion[];
 	responses: Record<number, QuestionResponse>;
+	/** Practice-mode retry count per question index (0 = first attempt). */
+	retries: Record<number, number>;
 	flaggedQuestionIndexes: number[];
 }
 

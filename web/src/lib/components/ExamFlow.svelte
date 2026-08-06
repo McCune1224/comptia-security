@@ -42,6 +42,13 @@
 	let timer = $state('');
 	let activeConflict = $state<ActiveSessionSummary | null>(null);
 	let question = $derived(session?.questions[index]);
+	const MAX_PRACTICE_RETRIES = 2;
+	let streak = $state(0);
+	let sessionScore = $state(0);
+	const scoreByIndex = new Map<number, number>();
+	let retriesLeft = $derived(
+		session ? Math.max(0, MAX_PRACTICE_RETRIES - (session.retries[index] ?? 0)) : 0
+	);
 
 	function formatTimer(deadline: string | undefined) {
 		if (!deadline) return '';
@@ -196,6 +203,13 @@
 			const data = await response.json();
 			if (!response.ok) throw new Error(data.error?.message ?? 'Unable to save response');
 			feedback = data.feedback ?? null;
+			if (data.feedback) {
+				const previous = scoreByIndex.get(index) ?? 0;
+				sessionScore += data.feedback.earnedPoints - previous;
+				scoreByIndex.set(index, data.feedback.earnedPoints);
+				if (data.feedback.fullyCorrect) streak += 1;
+				else streak = 0;
+			}
 			session.responses[index] = draft;
 			session.answeredCount = Object.keys(session.responses).length;
 		} catch (cause) {
@@ -234,6 +248,11 @@
 		const data = await response.json();
 		if (response.ok) result = data;
 		else error = data.error?.message ?? 'Unable to complete session';
+	}
+
+	function retryQuestion() {
+		draft = null;
+		feedback = null;
 	}
 
 	function choose(optionId: string, multi: boolean) {
@@ -535,6 +554,27 @@
 					class="chip bg-surface-700 text-text-muted">{question.kind.replace('-', ' ')}</span
 				>
 			</div>
+			{#if session.mode === 'practice' && streak > 1}
+				<span
+					class="chip flex items-center gap-1.5 bg-surface-700 text-accent-warm"
+					title="Answer streak"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-4 w-4"
+						fill="currentColor"
+						><path
+							d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
+						/></svg
+					>
+					{streak}
+				</span>
+			{/if}
+			{#if session.mode === 'practice' && sessionScore > 0}
+				<span class="chip bg-surface-700 text-text-secondary"
+					>{Math.round(sessionScore)} pts</span
+				>
+			{/if}
 			{#if timer}<span
 					class="chip flex items-center gap-1.5 bg-surface-700 font-mono font-semibold {isLowTime()
 						? 'text-danger'
@@ -1106,6 +1146,26 @@
 						>
 					</div>
 					<p class="mt-2 leading-relaxed text-text-secondary">{feedback.explanation}</p>
+
+					{#if session.mode === 'practice' && !feedback.fullyCorrect && retriesLeft > 0}
+						<div class="mt-3 flex flex-wrap gap-2">
+							<button
+								class="btn btn-ghost h-11 px-4 text-sm"
+								type="button"
+								onclick={retryQuestion}
+								>Try again — {retriesLeft === 2 ? '60' : '30'}%</button
+							>
+						</div>
+					{/if}
+					{#if session.mode === 'practice' && question.objective}
+						<div class="mt-3">
+							<a
+								class="text-sm font-bold text-accent hover:underline"
+								href="/quiz?start=1&type=quiz&objective={question.objective}&count=5"
+								>More like this →</a
+							>
+						</div>
+					{/if}
 
 					{#if feedback.optionRationales && (question?.kind === 'single-choice' || question?.kind === 'multiple-choice')}
 						<div class="mt-3 space-y-2">
