@@ -1,11 +1,30 @@
 import Database from 'better-sqlite3';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { QuestionResponse, QuizResult, SessionMode, SessionStatus, SessionType } from '$lib/types';
+import type { CourseId, QuestionResponse, QuizResult, SessionMode, SessionStatus, SessionType } from '$lib/types';
 import type { QuestionDefinition } from './question-bank';
 import { ACTIVE_COURSES, COURSES, defaultExamDate, type CourseAssignment, type CourseLesson, type CourseModule, type SubmissionRecord } from './course';
 
 export const DB_PATH = path.resolve(process.cwd(), 'data/quiz.db');
+
+/** Hard cap on profiles (local study app; two users). */
+export const MAX_PROFILES = 2;
+
+/** Who the current request is acting as: a profile plus a course. */
+export interface Scope {
+	profileId: string;
+	courseId: CourseId;
+}
+
+export const DEFAULT_SCOPE: Scope = { profileId: 'default', courseId: 'secp-701' };
+
+export interface ProfileRow {
+	id: string;
+	name: string;
+	color: string;
+	createdAt: string;
+}
 
 type SessionRow = {
 	id: string; started_at: string; completed_at: string | null; type: SessionType; domain: number | null;
@@ -65,6 +84,14 @@ export interface AnswerHistoryRow {
 }
 
 export interface QuizRepository {
+	// Profile management (global — not scope-filtered).
+	getProfiles(): ProfileRow[];
+	createProfile(name: string, color: string): ProfileRow;
+	renameProfile(id: string, name: string): void;
+	deleteProfile(id: string): void;
+	/** Returns a view of the same connection bound to a different scope. */
+	forScope(scope: Scope): QuizRepository;
+
 	createSession(session: { id: string; type: SessionType; mode: SessionMode; domain: number | null; startedAt: string; deadlineAt: string | null; questions: QuestionDefinition[]; assignmentId?: string | null }): void;
 	getSession(id: string): StoredSession | null;
 	getActiveSession(): StoredSession | null;
@@ -111,20 +138,22 @@ function parseStoredSession(row: SessionRow & StateRow, responseRows: { question
 	return { summary: row, deadlineAt: row.deadline_at, currentIndex: row.current_index, questions: JSON.parse(row.questions_json) as QuestionDefinition[], result: row.result_json ? JSON.parse(row.result_json) as QuizResult : null, responses, flags };
 }
 
+/** Content + default-profile seeding. Runs after migration; idempotent by design. */
 function seedCourse(db: Database.Database): void {
 	const seed = db.transaction(() => {
-		if (!db.prepare("SELECT 1 FROM course_meta WHERE key = 'exam_date'").get()) {
-			db.prepare('INSERT INTO course_meta (key, value) VALUES (?, ?)').run('exam_date', defaultExamDate());
-		}
-		const insertModule = db.prepare('INSERT OR IGNORE INTO course_modules (id, week, title, description, position) VALUES (?, ?, ?, ?, ?)');
-		const insertLesson = db.prepare('INSERT INTO course_lessons (id, module_id, title, summary, content, position) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, position = excluded.position');
-		const insertAssignment = db.prepare('INSERT OR IGNORE INTO course_assignments (id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		const now = new Date().toISOString();
+		db.prepare("INSERT INTO profiles (id, name, color, created_at) VALUES ('default', 'Default', '#b7f04c', ?) ON CONFLICT(id) DO NOTHING").run(now);
+		const insertExamDate = db.prepare("INSERT INTO course_meta (profile_id, course_id, key, value) VALUES ('default', ?, 'exam_date', ?) ON CONFLICT(profile_id, course_id, key) DO NOTHING");
+		const insertModule = db.prepare('INSERT OR IGNORE INTO course_modules (id, course_id, week, title, description, position) VALUES (?, ?, ?, ?, ?, ?)');
+		const insertLesson = db.prepare('INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, position) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, position = excluded.position');
+		const insertAssignment = db.prepare('INSERT OR IGNORE INTO course_assignments (id, course_id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		for (const courseId of ACTIVE_COURSES) {
 			const definition = COURSES[courseId];
 			if (!definition) continue;
-			for (const module of definition.modules) insertModule.run(module.id, module.week, module.title, module.description, module.position);
-			for (const lesson of definition.lessons) insertLesson.run(lesson.id, lesson.moduleId, lesson.title, lesson.summary, lesson.content, lesson.position);
-			for (const assignment of definition.assignments) insertAssignment.run(assignment.id, assignment.moduleId, assignment.title, assignment.description, assignment.kind, assignment.category, assignment.points, assignment.count, assignment.domain, assignment.mode, assignment.durationMinutes, assignment.dueOffsetDays, assignment.position);
+			insertExamDate.run(courseId, defaultExamDate());
+			for (const module of definition.modules) insertModule.run(module.id, courseId, module.week, module.title, module.description, module.position);
+			for (const lesson of definition.lessons) insertLesson.run(lesson.id, courseId, lesson.moduleId, lesson.title, lesson.summary, lesson.content, lesson.position);
+			for (const assignment of definition.assignments) insertAssignment.run(assignment.id, courseId, assignment.moduleId, assignment.title, assignment.description, assignment.kind, assignment.category, assignment.points, assignment.count, assignment.domain, assignment.mode, assignment.durationMinutes, assignment.dueOffsetDays, assignment.position);
 		}
 	});
 	seed();
@@ -135,110 +164,210 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 	const db = new Database(filename);
 	db.pragma('foreign_keys = ON');
 	db.pragma('journal_mode = WAL');
+
+	// Fresh databases are created directly in the v6 shape; the migrate block
+	// below upgrades v5 files in place and no-ops on anything already v6.
 	db.exec(`
-		CREATE TABLE IF NOT EXISTS quiz_sessions (id TEXT PRIMARY KEY, started_at TEXT NOT NULL, completed_at TEXT, type TEXT NOT NULL, domain INTEGER, total_questions INTEGER NOT NULL DEFAULT 0, correct_answers INTEGER NOT NULL DEFAULT 0);
-		CREATE TABLE IF NOT EXISTS quiz_answers (id INTEGER PRIMARY KEY AUTOINCREMENT, session_id TEXT NOT NULL, question_index INTEGER NOT NULL, prompt TEXT NOT NULL DEFAULT '', domain INTEGER NOT NULL, category TEXT, correct_answer TEXT NOT NULL DEFAULT '', user_answer TEXT NOT NULL DEFAULT '', is_correct INTEGER NOT NULL DEFAULT 0, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
-		CREATE TABLE IF NOT EXISTS domain_progress (domain INTEGER PRIMARY KEY, total_attempted INTEGER NOT NULL DEFAULT 0, total_correct INTEGER NOT NULL DEFAULT 0, last_reviewed_at TEXT);
-	`);
-	const columns = (table: string) => new Set((db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]).map((column) => column.name));
-	const sessionColumns = columns('quiz_sessions');
-	const answerColumns = columns('quiz_answers');
-	const progressColumns = columns('domain_progress');
-	const migrate = db.transaction(() => {
-		for (const [name, sql] of [['mode', "TEXT NOT NULL DEFAULT 'practice'"], ['status', "TEXT NOT NULL DEFAULT 'active'"], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0'], ['updated_at', "TEXT NOT NULL DEFAULT ''"], ['assignment_id', 'TEXT']] as const) if (!sessionColumns.has(name)) db.exec(`ALTER TABLE quiz_sessions ADD COLUMN ${name} ${sql}`);
-		for (const [name, sql] of [['question_id', 'TEXT'], ['objective', 'TEXT'], ['response_json', 'TEXT'], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!answerColumns.has(name)) db.exec(`ALTER TABLE quiz_answers ADD COLUMN ${name} ${sql}`);
-		for (const [name, sql] of [['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!progressColumns.has(name)) db.exec(`ALTER TABLE domain_progress ADD COLUMN ${name} ${sql}`);
-		db.exec(`CREATE TABLE IF NOT EXISTS quiz_session_state (session_id TEXT PRIMARY KEY, schema_version INTEGER NOT NULL, deadline_at TEXT, current_index INTEGER NOT NULL DEFAULT 0, questions_json TEXT NOT NULL, result_json TEXT, updated_at TEXT NOT NULL, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
+		CREATE TABLE IF NOT EXISTS quiz_sessions (id TEXT PRIMARY KEY, started_at TEXT NOT NULL, completed_at TEXT, type TEXT NOT NULL, domain INTEGER, total_questions INTEGER NOT NULL DEFAULT 0, correct_answers INTEGER NOT NULL DEFAULT 0, mode TEXT NOT NULL DEFAULT 'practice', status TEXT NOT NULL DEFAULT 'active', points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT '', assignment_id TEXT, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701');
+		CREATE TABLE IF NOT EXISTS quiz_answers (id INTEGER PRIMARY KEY AUTOINCREMENT, session_id TEXT NOT NULL, question_index INTEGER NOT NULL, prompt TEXT NOT NULL DEFAULT '', domain INTEGER NOT NULL, category TEXT, correct_answer TEXT NOT NULL DEFAULT '', user_answer TEXT NOT NULL DEFAULT '', is_correct INTEGER NOT NULL DEFAULT 0, question_id TEXT, objective TEXT, response_json TEXT, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701', FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
+		CREATE TABLE IF NOT EXISTS domain_progress (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, domain INTEGER NOT NULL, total_attempted INTEGER NOT NULL DEFAULT 0, total_correct INTEGER NOT NULL DEFAULT 0, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, last_reviewed_at TEXT, PRIMARY KEY (profile_id, course_id, domain));
+		CREATE TABLE IF NOT EXISTS quiz_session_state (session_id TEXT PRIMARY KEY, schema_version INTEGER NOT NULL, deadline_at TEXT, current_index INTEGER NOT NULL DEFAULT 0, questions_json TEXT NOT NULL, result_json TEXT, updated_at TEXT NOT NULL, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
 		CREATE TABLE IF NOT EXISTS quiz_session_responses (session_id TEXT NOT NULL, question_index INTEGER NOT NULL, response_json TEXT, flagged INTEGER NOT NULL DEFAULT 0, answered_at TEXT, PRIMARY KEY(session_id, question_index), FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
-		CREATE TABLE IF NOT EXISTS review_cards (question_id TEXT PRIMARY KEY, interval_days REAL NOT NULL DEFAULT 0, ease REAL NOT NULL DEFAULT 2.5, lapses INTEGER NOT NULL DEFAULT 0, due_at TEXT NOT NULL, last_result TEXT, review_count INTEGER NOT NULL DEFAULT 0, first_seen_at TEXT NOT NULL);
-		CREATE TABLE IF NOT EXISTS study_log (date_key TEXT PRIMARY KEY, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_modules (id TEXT PRIMARY KEY, week INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, position INTEGER NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', position INTEGER NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_assignments (id TEXT PRIMARY KEY, module_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, kind TEXT NOT NULL, category TEXT NOT NULL, points REAL NOT NULL, count INTEGER NOT NULL, domain INTEGER, mode TEXT NOT NULL, duration_minutes INTEGER NOT NULL, due_offset_days INTEGER NOT NULL, position INTEGER NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_assignment_submissions (assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (assignment_id, session_id));
-		CREATE TABLE IF NOT EXISTS course_lesson_completions (lesson_id TEXT PRIMARY KEY, completed_at TEXT NOT NULL);
-		CREATE TABLE IF NOT EXISTS google_oauth (id INTEGER PRIMARY KEY CHECK (id = 1), access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
-		CREATE TABLE IF NOT EXISTS google_synced_events (source TEXT PRIMARY KEY, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL);`);
+		CREATE TABLE IF NOT EXISTS review_cards (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, question_id TEXT NOT NULL, interval_days REAL NOT NULL DEFAULT 0, ease REAL NOT NULL DEFAULT 2.5, lapses INTEGER NOT NULL DEFAULT 0, due_at TEXT NOT NULL, last_result TEXT, review_count INTEGER NOT NULL DEFAULT 0, first_seen_at TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, question_id));
+		CREATE TABLE IF NOT EXISTS study_log (profile_id TEXT NOT NULL, date_key TEXT NOT NULL, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL, PRIMARY KEY (profile_id, date_key));
+		CREATE TABLE IF NOT EXISTS course_meta (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, key));
+		CREATE TABLE IF NOT EXISTS course_modules (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', week INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_assignments (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, kind TEXT NOT NULL, category TEXT NOT NULL, points REAL NOT NULL, count INTEGER NOT NULL, domain INTEGER, mode TEXT NOT NULL, duration_minutes INTEGER NOT NULL, due_offset_days INTEGER NOT NULL, position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_assignment_submissions (profile_id TEXT NOT NULL, assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, assignment_id, session_id));
+		CREATE TABLE IF NOT EXISTS course_lesson_completions (profile_id TEXT NOT NULL, lesson_id TEXT NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, lesson_id));
+		CREATE TABLE IF NOT EXISTS google_oauth (profile_id TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS google_synced_events (profile_id TEXT NOT NULL, source TEXT NOT NULL, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL, PRIMARY KEY (profile_id, source));
+		CREATE TABLE IF NOT EXISTS profiles (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL DEFAULT '#b7f04c', created_at TEXT NOT NULL);
+	`);
+
+	const columns = (table: string) => new Set((db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]).map((column) => column.name));
+
+	// ── v5 → v6 migration ────────────────────────────────────────────────────
+	// Runs once per database (guarded by user_version) inside a single
+	// transaction. Every step is additionally guarded by a shape check so the
+	// block is idempotent and safe on fresh databases. Tables whose primary key
+	// changes are rebuilt with the SQLite 12-step pattern; simple column adds
+	// use guarded ALTER (existing rows backfill via the column DEFAULT).
+	const migrate = db.transaction(() => {
+		const has = (table: string, column: string) => columns(table).has(column);
+
+		// A. Simple column adds (v5 additions first, then the v6 scope columns).
+		for (const [name, sql] of [['mode', "TEXT NOT NULL DEFAULT 'practice'"], ['status', "TEXT NOT NULL DEFAULT 'active'"], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0'], ['updated_at', "TEXT NOT NULL DEFAULT ''"], ['assignment_id', 'TEXT']] as const) if (!has('quiz_sessions', name)) db.exec(`ALTER TABLE quiz_sessions ADD COLUMN ${name} ${sql}`);
+		for (const [name, sql] of [['question_id', 'TEXT'], ['objective', 'TEXT'], ['response_json', 'TEXT'], ['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!has('quiz_answers', name)) db.exec(`ALTER TABLE quiz_answers ADD COLUMN ${name} ${sql}`);
+		for (const [name, sql] of [['points_earned', 'REAL NOT NULL DEFAULT 0'], ['points_possible', 'REAL NOT NULL DEFAULT 0']] as const) if (!has('domain_progress', name)) db.exec(`ALTER TABLE domain_progress ADD COLUMN ${name} ${sql}`);
+		if (!has('quiz_sessions', 'profile_id')) db.exec("ALTER TABLE quiz_sessions ADD COLUMN profile_id TEXT NOT NULL DEFAULT 'default'");
+		if (!has('quiz_sessions', 'course_id')) db.exec("ALTER TABLE quiz_sessions ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
+		if (!has('quiz_answers', 'profile_id')) db.exec("ALTER TABLE quiz_answers ADD COLUMN profile_id TEXT NOT NULL DEFAULT 'default'");
+		if (!has('quiz_answers', 'course_id')) db.exec("ALTER TABLE quiz_answers ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
+		for (const table of ['course_modules', 'course_lessons', 'course_assignments'] as const) if (!has(table, 'course_id')) db.exec(`ALTER TABLE ${table} ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'`);
+
+		// B. Primary-key rebuilds — SQLite 12-step, backfilling all existing
+		// rows to the seeded default profile / Security+ course.
+		const rebuild = (table: string, createSql: string, insertSql: string) => {
+			db.exec(createSql);
+			db.exec(insertSql);
+			db.exec(`DROP TABLE ${table}`);
+			db.exec(`ALTER TABLE ${table}_new RENAME TO ${table}`);
+		};
+		if (!has('domain_progress', 'profile_id')) rebuild(
+			'domain_progress',
+			'CREATE TABLE domain_progress_new (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, domain INTEGER NOT NULL, total_attempted INTEGER NOT NULL DEFAULT 0, total_correct INTEGER NOT NULL DEFAULT 0, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, last_reviewed_at TEXT, PRIMARY KEY (profile_id, course_id, domain))',
+			"INSERT INTO domain_progress_new (profile_id, course_id, domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at) SELECT 'default', 'secp-701', domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at FROM domain_progress"
+		);
+		if (!has('review_cards', 'profile_id')) rebuild(
+			'review_cards',
+			'CREATE TABLE review_cards_new (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, question_id TEXT NOT NULL, interval_days REAL NOT NULL DEFAULT 0, ease REAL NOT NULL DEFAULT 2.5, lapses INTEGER NOT NULL DEFAULT 0, due_at TEXT NOT NULL, last_result TEXT, review_count INTEGER NOT NULL DEFAULT 0, first_seen_at TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, question_id))',
+			"INSERT INTO review_cards_new (profile_id, course_id, question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at) SELECT 'default', 'secp-701', question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at FROM review_cards"
+		);
+		if (!has('study_log', 'profile_id')) rebuild(
+			'study_log',
+			'CREATE TABLE study_log_new (profile_id TEXT NOT NULL, date_key TEXT NOT NULL, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL, PRIMARY KEY (profile_id, date_key))',
+			"INSERT INTO study_log_new (profile_id, date_key, questions, sessions, updated_at) SELECT 'default', date_key, questions, sessions, updated_at FROM study_log"
+		);
+		if (!has('course_meta', 'profile_id')) rebuild(
+			'course_meta',
+			'CREATE TABLE course_meta_new (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, key))',
+			"INSERT INTO course_meta_new (profile_id, course_id, key, value) SELECT 'default', 'secp-701', key, value FROM course_meta"
+		);
+		if (!has('course_assignment_submissions', 'profile_id')) rebuild(
+			'course_assignment_submissions',
+			'CREATE TABLE course_assignment_submissions_new (profile_id TEXT NOT NULL, assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, assignment_id, session_id))',
+			"INSERT INTO course_assignment_submissions_new (profile_id, assignment_id, session_id, earned, percentage, completed_at) SELECT 'default', assignment_id, session_id, earned, percentage, completed_at FROM course_assignment_submissions"
+		);
+		if (!has('course_lesson_completions', 'profile_id')) rebuild(
+			'course_lesson_completions',
+			'CREATE TABLE course_lesson_completions_new (profile_id TEXT NOT NULL, lesson_id TEXT NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, lesson_id))',
+			"INSERT INTO course_lesson_completions_new (profile_id, lesson_id, completed_at) SELECT 'default', lesson_id, completed_at FROM course_lesson_completions"
+		);
+		if (!has('google_oauth', 'profile_id')) rebuild(
+			'google_oauth',
+			'CREATE TABLE google_oauth_new (profile_id TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)',
+			"INSERT INTO google_oauth_new (profile_id, access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at) SELECT 'default', access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at FROM google_oauth"
+		);
+		if (!has('google_synced_events', 'profile_id')) rebuild(
+			'google_synced_events',
+			'CREATE TABLE google_synced_events_new (profile_id TEXT NOT NULL, source TEXT NOT NULL, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL, PRIMARY KEY (profile_id, source))',
+			"INSERT INTO google_synced_events_new (profile_id, source, event_id, summary, due_date, synced_at) SELECT 'default', source, event_id, summary, due_date, synced_at FROM google_synced_events"
+		);
+
+		// C. Data fixes (idempotent — no-op on already-fixed rows).
 		db.prepare("UPDATE quiz_sessions SET mode = COALESCE(NULLIF(mode, ''), 'practice'), status = CASE WHEN completed_at IS NOT NULL THEN 'completed' WHEN id NOT IN (SELECT session_id FROM quiz_session_state) THEN 'abandoned' ELSE 'active' END, points_earned = CASE WHEN completed_at IS NOT NULL THEN correct_answers ELSE points_earned END, points_possible = CASE WHEN completed_at IS NOT NULL THEN total_questions ELSE points_possible END, updated_at = COALESCE(NULLIF(updated_at, ''), started_at)").run();
 		db.prepare('UPDATE quiz_answers SET points_earned = is_correct, points_possible = 1 WHERE points_possible = 0').run();
-		db.pragma('user_version = 5');
+		db.pragma('user_version = 6');
 	});
-	if (db.pragma('user_version', { simple: true }) !== 5) migrate();
+	if (db.pragma('user_version', { simple: true }) !== 6) migrate();
 	seedCourse(db);
-	const readSession = (id: string): StoredSession | null => {
-		const row = db.prepare('SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ?').get(id) as (SessionRow & StateRow) | undefined;
-		if (!row) return null;
-		return parseStoredSession(row, db.prepare('SELECT question_index, response_json, flagged FROM quiz_session_responses WHERE session_id = ?').all(id) as { question_index: number; response_json: string; flagged: number }[]);
+
+	const make = (scope: Scope): QuizRepository => {
+		const readSession = (id: string): StoredSession | null => {
+			const row = db.prepare('SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ? AND s.profile_id = ? AND s.course_id = ?').get(id, scope.profileId, scope.courseId) as (SessionRow & StateRow) | undefined;
+			if (!row) return null;
+			return parseStoredSession(row, db.prepare('SELECT question_index, response_json, flagged FROM quiz_session_responses WHERE session_id = ?').all(id) as { question_index: number; response_json: string; flagged: number }[]);
+		};
+		return {
+			getProfiles() { return db.prepare('SELECT id, name, color, created_at AS createdAt FROM profiles ORDER BY created_at').all() as ProfileRow[]; },
+			createProfile(name, color) {
+				if ((db.prepare('SELECT COUNT(*) AS c FROM profiles').get() as { c: number }).c >= MAX_PROFILES) throw new Error(`Profile cap of ${MAX_PROFILES} reached.`);
+				const id = crypto.randomUUID();
+				const createdAt = new Date().toISOString();
+				db.prepare('INSERT INTO profiles (id, name, color, created_at) VALUES (?, ?, ?, ?)').run(id, name, color, createdAt);
+				return { id, name, color, createdAt };
+			},
+			renameProfile(id, name) { db.prepare('UPDATE profiles SET name = ? WHERE id = ?').run(name, id); },
+			deleteProfile(id) {
+				if (id === DEFAULT_SCOPE.profileId) throw new Error('The default profile cannot be deleted.');
+				db.transaction(() => {
+					db.prepare('DELETE FROM quiz_session_responses WHERE session_id IN (SELECT id FROM quiz_sessions WHERE profile_id = ?)').run(id);
+					db.prepare('DELETE FROM quiz_session_state WHERE session_id IN (SELECT id FROM quiz_sessions WHERE profile_id = ?)').run(id);
+					for (const table of ['quiz_sessions', 'quiz_answers', 'domain_progress', 'review_cards', 'study_log', 'course_meta', 'course_assignment_submissions', 'course_lesson_completions', 'google_oauth', 'google_synced_events'] as const) db.prepare(`DELETE FROM ${table} WHERE profile_id = ?`).run(id);
+					db.prepare('DELETE FROM profiles WHERE id = ?').run(id);
+				})();
+			},
+			forScope: make,
+			createSession(session) {
+				const create = db.transaction(() => {
+					db.prepare('INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id, profile_id, course_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(session.id, session.startedAt, session.type, session.domain, session.questions.length, session.mode, 'active', session.startedAt, session.assignmentId ?? null, scope.profileId, scope.courseId);
+					db.prepare('INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, updated_at) VALUES (?, 1, ?, 0, ?, ?)').run(session.id, session.deadlineAt, JSON.stringify(session.questions), session.startedAt);
+				}); create();
+			},
+			getSession: readSession,
+			getActiveSession() {
+				const row = db.prepare("SELECT id FROM quiz_sessions WHERE status = 'active' AND profile_id = ? AND course_id = ? ORDER BY started_at DESC LIMIT 1").get(scope.profileId, scope.courseId) as { id: string } | undefined;
+				return row ? readSession(row.id) : null;
+			},
+			saveResponse(id, index, response, answeredAt) { db.prepare('INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, answered_at) VALUES (?, ?, ?, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at').run(id, index, JSON.stringify(response), answeredAt); db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(answeredAt, id); },
+			updateState(id, currentIndex, flag, updatedAt = new Date().toISOString()) {
+				const update = db.transaction(() => {
+					if (currentIndex !== undefined) db.prepare('UPDATE quiz_session_state SET current_index = ?, updated_at = ? WHERE session_id = ?').run(currentIndex, updatedAt, id);
+					if (flag) db.prepare('INSERT INTO quiz_session_responses (session_id, question_index, flagged) VALUES (?, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET flagged = excluded.flagged').run(id, flag.questionIndex, flag.value ? 1 : 0);
+					db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(updatedAt, id);
+				}); update();
+			},
+			abandon(id, updatedAt) { return db.prepare("UPDATE quiz_sessions SET status = 'abandoned', updated_at = ? WHERE id = ? AND status = 'active' AND profile_id = ? AND course_id = ?").run(updatedAt, id, scope.profileId, scope.courseId).changes === 1; },
+			complete(id, result, answers, completedAt) {
+				const finalize = db.transaction(() => {
+					const existing = db.prepare('SELECT result_json FROM quiz_session_state WHERE session_id = ?').get(id) as { result_json: string | null } | undefined;
+					if (existing?.result_json) return JSON.parse(existing.result_json) as QuizResult;
+					// Answers + domain progress follow the session's own scope.
+					const sessionScope = (db.prepare('SELECT profile_id, course_id FROM quiz_sessions WHERE id = ?').get(id) as { profile_id: string; course_id: string } | undefined) ?? { profile_id: scope.profileId, course_id: scope.courseId };
+					for (const answer of answers) db.prepare('INSERT INTO quiz_answers (session_id, question_index, prompt, domain, category, correct_answer, user_answer, is_correct, question_id, objective, response_json, points_earned, points_possible, profile_id, course_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(id, answer.index, answer.question.prompt, answer.question.domain, answer.question.objective, '', JSON.stringify(answer.response), answer.points === 1 ? 1 : 0, answer.question.id, answer.question.objective, JSON.stringify(answer.response), answer.points, 1, sessionScope.profile_id, sessionScope.course_id);
+					for (const domain of [1, 2, 3, 4, 5]) { const breakdown = result.domainBreakdown[domain as 1 | 2 | 3 | 4 | 5]; if (breakdown.possiblePoints) db.prepare('INSERT INTO domain_progress (profile_id, course_id, domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(profile_id, course_id, domain) DO UPDATE SET total_attempted = total_attempted + excluded.total_attempted, total_correct = total_correct + excluded.total_correct, points_earned = points_earned + excluded.points_earned, points_possible = points_possible + excluded.points_possible, last_reviewed_at = excluded.last_reviewed_at').run(sessionScope.profile_id, sessionScope.course_id, domain, breakdown.totalQuestions, breakdown.fullyCorrect, breakdown.earnedPoints, breakdown.possiblePoints, completedAt); }
+					db.prepare("UPDATE quiz_sessions SET status = 'completed', completed_at = ?, points_earned = ?, points_possible = ?, correct_answers = ?, total_questions = ?, updated_at = ? WHERE id = ? AND status = 'active'").run(completedAt, result.earnedPoints, result.possiblePoints, result.fullyCorrect, result.totalQuestions, completedAt, id);
+					db.prepare('UPDATE quiz_session_state SET result_json = ?, updated_at = ? WHERE session_id = ?').run(JSON.stringify(result), completedAt, id);
+					return result;
+				}); return finalize();
+			},
+			getAllDomainProgress() { const result: Record<number, { attempted: number; correct: number; earnedPoints: number; possiblePoints: number; percentage: number; lastReviewed: string | null }> = {}; for (const row of db.prepare('SELECT * FROM domain_progress WHERE profile_id = ? AND course_id = ?').all(scope.profileId, scope.courseId) as { domain: number; total_attempted: number; total_correct: number; points_earned: number; points_possible: number; last_reviewed_at: string | null }[]) result[row.domain] = { attempted: row.total_attempted, correct: row.total_correct, earnedPoints: row.points_earned, possiblePoints: row.points_possible, percentage: row.points_possible ? Math.round(row.points_earned / row.points_possible * 1000) / 10 : 0, lastReviewed: row.last_reviewed_at }; return result; },
+			getRecentSessions(limit = 10) { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' AND profile_id = ? AND course_id = ? ORDER BY completed_at DESC LIMIT ?").all(scope.profileId, scope.courseId, limit) as SessionRow[]; },
+			getAllCompletedSessions() { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' AND profile_id = ? AND course_id = ? ORDER BY completed_at DESC").all(scope.profileId, scope.courseId) as SessionRow[]; },
+			getWeakTopics() { return (db.prepare("SELECT domain, objective, SUM(points_earned) earnedPoints, SUM(points_possible) possiblePoints FROM quiz_answers WHERE objective IS NOT NULL AND profile_id = ? AND course_id = ? GROUP BY domain, objective HAVING SUM(points_possible) >= 3 AND SUM(points_earned) * 1.0 / SUM(points_possible) < .85 ORDER BY earnedPoints * 1.0 / possiblePoints").all(scope.profileId, scope.courseId) as { domain: number; objective: string; earnedPoints: number; possiblePoints: number }[]).map((row) => ({ ...row, percentage: Math.round(row.earnedPoints / row.possiblePoints * 1000) / 10, severity: row.earnedPoints / row.possiblePoints < .7 ? 'high' : 'review' })); },
+			getReviewCards() { return db.prepare('SELECT question_id AS questionId, interval_days AS intervalDays, ease, lapses, due_at AS dueAt, last_result AS lastResult, review_count AS reviewCount, first_seen_at AS firstSeenAt FROM review_cards WHERE profile_id = ? AND course_id = ?').all(scope.profileId, scope.courseId) as unknown as ReviewCardRow[]; },
+			upsertReviewCard(card) { db.prepare('INSERT INTO review_cards (profile_id, course_id, question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(profile_id, course_id, question_id) DO UPDATE SET interval_days = excluded.interval_days, ease = excluded.ease, lapses = excluded.lapses, due_at = excluded.due_at, last_result = excluded.last_result, review_count = excluded.review_count').run(scope.profileId, scope.courseId, card.questionId, card.intervalDays, card.ease, card.lapses, card.dueAt, card.lastResult, card.reviewCount, card.firstSeenAt); },
+			getStudyLog() { return db.prepare('SELECT date_key AS dateKey, questions, sessions, updated_at AS updatedAt FROM study_log WHERE profile_id = ? ORDER BY date_key').all(scope.profileId) as unknown as StudyDayRow[]; },
+			recordStudyDay(dateKey, questions, updatedAt) { db.prepare('INSERT INTO study_log (profile_id, date_key, questions, sessions, updated_at) VALUES (?, ?, ?, 1, ?) ON CONFLICT(profile_id, date_key) DO UPDATE SET questions = questions + excluded.questions, sessions = sessions + 1, updated_at = excluded.updated_at').run(scope.profileId, dateKey, questions, updatedAt); },
+			getAnswerHistory() { return db.prepare("SELECT a.question_id AS questionId, a.is_correct AS isCorrect, s.completed_at AS completedAt FROM quiz_answers a JOIN quiz_sessions s ON s.id = a.session_id WHERE a.question_id IS NOT NULL AND s.status = 'completed' AND a.profile_id = ? AND a.course_id = ?").all(scope.profileId, scope.courseId) as unknown as AnswerHistoryRow[]; },
+			getAnsweredQuestionIds() { return (db.prepare('SELECT DISTINCT question_id FROM quiz_answers WHERE question_id IS NOT NULL AND profile_id = ? AND course_id = ?').all(scope.profileId, scope.courseId) as { question_id: string }[]).map((row) => row.question_id); },
+			getObjectiveProgress() { return db.prepare('SELECT objective, COUNT(*) AS attempted, SUM(points_earned) AS earnedPoints, SUM(points_possible) AS possiblePoints FROM quiz_answers WHERE objective IS NOT NULL AND profile_id = ? AND course_id = ? GROUP BY objective').all(scope.profileId, scope.courseId) as { objective: string; attempted: number; earnedPoints: number; possiblePoints: number }[]; },
+			getExamDate() { return (db.prepare("SELECT value FROM course_meta WHERE profile_id = ? AND course_id = ? AND key = 'exam_date'").get(scope.profileId, scope.courseId) as { value: string } | undefined)?.value ?? defaultExamDate(); },
+			setExamDate(examDate) { db.prepare("INSERT INTO course_meta (profile_id, course_id, key, value) VALUES (?, ?, 'exam_date', ?) ON CONFLICT(profile_id, course_id, key) DO UPDATE SET value = excluded.value").run(scope.profileId, scope.courseId, examDate); },
+			getCourseModules() { return db.prepare('SELECT id, week, title, description, position FROM course_modules WHERE course_id = ? ORDER BY position').all(scope.courseId) as CourseModule[]; },
+			getCourseLessons() { return db.prepare('SELECT id, module_id AS moduleId, title, summary, content, position FROM course_lessons WHERE course_id = ? ORDER BY position').all(scope.courseId) as unknown as CourseLesson[]; },
+			getCourseAssignments() { return db.prepare('SELECT id, module_id AS moduleId, title, description, kind, category, points, count, domain, mode, duration_minutes AS durationMinutes, due_offset_days AS dueOffsetDays, position FROM course_assignments WHERE course_id = ? ORDER BY position').all(scope.courseId) as unknown as CourseAssignment[]; },
+			getLessonCompletions() { return new Set((db.prepare('SELECT lesson_id FROM course_lesson_completions WHERE profile_id = ?').all(scope.profileId) as { lesson_id: string }[]).map((row) => row.lesson_id)); },
+			setLessonCompleted(lessonId, completed) { if (completed) db.prepare('INSERT INTO course_lesson_completions (profile_id, lesson_id, completed_at) VALUES (?, ?, ?) ON CONFLICT(profile_id, lesson_id) DO UPDATE SET completed_at = excluded.completed_at').run(scope.profileId, lessonId, new Date().toISOString()); else db.prepare('DELETE FROM course_lesson_completions WHERE profile_id = ? AND lesson_id = ?').run(scope.profileId, lessonId); },
+			getSubmissions() { return db.prepare('SELECT assignment_id AS assignmentId, session_id AS sessionId, earned, percentage, completed_at AS completedAt FROM course_assignment_submissions WHERE profile_id = ?').all(scope.profileId) as unknown as SubmissionRecord[]; },
+			recordSubmission(submission) { db.prepare('INSERT INTO course_assignment_submissions (profile_id, assignment_id, session_id, earned, percentage, completed_at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(profile_id, assignment_id, session_id) DO UPDATE SET earned = excluded.earned, percentage = excluded.percentage, completed_at = excluded.completed_at').run(scope.profileId, submission.assignmentId, submission.sessionId, submission.earned, submission.percentage, submission.completedAt); },
+			getGoogleOAuth() {
+				const row = db
+					.prepare('SELECT access_token AS accessToken, refresh_token AS refreshToken, expires_at AS expiresAt, email, calendar_id AS calendarId FROM google_oauth WHERE profile_id = ?')
+					.get(scope.profileId) as StoredGoogleOAuth | undefined;
+				return row ?? null;
+			},
+			saveGoogleOAuth(oauth) {
+				const now = new Date().toISOString();
+				db.prepare('INSERT INTO google_oauth (profile_id, access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(profile_id) DO UPDATE SET access_token = excluded.access_token, refresh_token = excluded.refresh_token, expires_at = excluded.expires_at, email = excluded.email, calendar_id = COALESCE(excluded.calendar_id, google_oauth.calendar_id), updated_at = excluded.updated_at').run(scope.profileId, oauth.accessToken, oauth.refreshToken, oauth.expiresAt, oauth.email, oauth.calendarId ?? null, now, now);
+			},
+			clearGoogleOAuth() { db.prepare('DELETE FROM google_oauth WHERE profile_id = ?').run(scope.profileId); },
+			getSyncedEvents() { return db.prepare('SELECT source, event_id AS eventId, summary, due_date AS dueDate, synced_at AS syncedAt FROM google_synced_events WHERE profile_id = ? ORDER BY source').all(scope.profileId) as StoredSyncedEvent[]; },
+			recordSyncedEvent(source, eventId, summary, dueDate, syncedAt) { db.prepare('INSERT INTO google_synced_events (profile_id, source, event_id, summary, due_date, synced_at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(profile_id, source) DO UPDATE SET event_id = excluded.event_id, summary = excluded.summary, due_date = excluded.due_date, synced_at = excluded.synced_at').run(scope.profileId, source, eventId, summary, dueDate, syncedAt); },
+			removeSyncedEvent(source) { db.prepare('DELETE FROM google_synced_events WHERE profile_id = ? AND source = ?').run(scope.profileId, source); },
+			close() { db.close(); }
+		};
 	};
-	return {
-		createSession(session) {
-			const create = db.transaction(() => {
-				db.prepare('INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)').run(session.id, session.startedAt, session.type, session.domain, session.questions.length, session.mode, 'active', session.startedAt, session.assignmentId ?? null);
-				db.prepare('INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, updated_at) VALUES (?, 1, ?, 0, ?, ?)').run(session.id, session.deadlineAt, JSON.stringify(session.questions), session.startedAt);
-			}); create();
-		},
-		getSession: readSession,
-		getActiveSession() {
-			const row = db.prepare("SELECT id FROM quiz_sessions WHERE status = 'active' ORDER BY started_at DESC LIMIT 1").get() as { id: string } | undefined;
-			return row ? readSession(row.id) : null;
-		},
-		saveResponse(id, index, response, answeredAt) { db.prepare('INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, answered_at) VALUES (?, ?, ?, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at').run(id, index, JSON.stringify(response), answeredAt); db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(answeredAt, id); },
-		updateState(id, currentIndex, flag, updatedAt = new Date().toISOString()) {
-			const update = db.transaction(() => {
-				if (currentIndex !== undefined) db.prepare('UPDATE quiz_session_state SET current_index = ?, updated_at = ? WHERE session_id = ?').run(currentIndex, updatedAt, id);
-				if (flag) db.prepare('INSERT INTO quiz_session_responses (session_id, question_index, flagged) VALUES (?, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET flagged = excluded.flagged').run(id, flag.questionIndex, flag.value ? 1 : 0);
-				db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(updatedAt, id);
-			}); update();
-		},
-		abandon(id, updatedAt) { return db.prepare("UPDATE quiz_sessions SET status = 'abandoned', updated_at = ? WHERE id = ? AND status = 'active'").run(updatedAt, id).changes === 1; },
-		complete(id, result, answers, completedAt) {
-			const finalize = db.transaction(() => {
-				const existing = db.prepare('SELECT result_json FROM quiz_session_state WHERE session_id = ?').get(id) as { result_json: string | null } | undefined;
-				if (existing?.result_json) return JSON.parse(existing.result_json) as QuizResult;
-				for (const answer of answers) db.prepare('INSERT INTO quiz_answers (session_id, question_index, prompt, domain, category, correct_answer, user_answer, is_correct, question_id, objective, response_json, points_earned, points_possible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(id, answer.index, answer.question.prompt, answer.question.domain, answer.question.objective, '', JSON.stringify(answer.response), answer.points === 1 ? 1 : 0, answer.question.id, answer.question.objective, JSON.stringify(answer.response), answer.points, 1);
-				for (const domain of [1, 2, 3, 4, 5]) { const breakdown = result.domainBreakdown[domain as 1 | 2 | 3 | 4 | 5]; if (breakdown.possiblePoints) db.prepare('INSERT INTO domain_progress (domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(domain) DO UPDATE SET total_attempted = total_attempted + excluded.total_attempted, total_correct = total_correct + excluded.total_correct, points_earned = points_earned + excluded.points_earned, points_possible = points_possible + excluded.points_possible, last_reviewed_at = excluded.last_reviewed_at').run(domain, breakdown.totalQuestions, breakdown.fullyCorrect, breakdown.earnedPoints, breakdown.possiblePoints, completedAt); }
-				db.prepare("UPDATE quiz_sessions SET status = 'completed', completed_at = ?, points_earned = ?, points_possible = ?, correct_answers = ?, total_questions = ?, updated_at = ? WHERE id = ? AND status = 'active'").run(completedAt, result.earnedPoints, result.possiblePoints, result.fullyCorrect, result.totalQuestions, completedAt, id);
-				db.prepare('UPDATE quiz_session_state SET result_json = ?, updated_at = ? WHERE session_id = ?').run(JSON.stringify(result), completedAt, id);
-				return result;
-			}); return finalize();
-		},
-		getAllDomainProgress() { const result: Record<number, { attempted: number; correct: number; earnedPoints: number; possiblePoints: number; percentage: number; lastReviewed: string | null }> = {}; for (const row of db.prepare('SELECT * FROM domain_progress').all() as { domain: number; total_attempted: number; total_correct: number; points_earned: number; points_possible: number; last_reviewed_at: string | null }[]) result[row.domain] = { attempted: row.total_attempted, correct: row.total_correct, earnedPoints: row.points_earned, possiblePoints: row.points_possible, percentage: row.points_possible ? Math.round(row.points_earned / row.points_possible * 1000) / 10 : 0, lastReviewed: row.last_reviewed_at }; return result; },
-		getRecentSessions(limit = 10) { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC LIMIT ?").all(limit) as SessionRow[]; },
-		getAllCompletedSessions() { return db.prepare("SELECT * FROM quiz_sessions WHERE status = 'completed' ORDER BY completed_at DESC").all() as SessionRow[]; },
-		getWeakTopics() { return (db.prepare("SELECT domain, objective, SUM(points_earned) earnedPoints, SUM(points_possible) possiblePoints FROM quiz_answers WHERE objective IS NOT NULL GROUP BY domain, objective HAVING SUM(points_possible) >= 3 AND SUM(points_earned) * 1.0 / SUM(points_possible) < .85 ORDER BY earnedPoints * 1.0 / possiblePoints").all() as { domain: number; objective: string; earnedPoints: number; possiblePoints: number }[]).map((row) => ({ ...row, percentage: Math.round(row.earnedPoints / row.possiblePoints * 1000) / 10, severity: row.earnedPoints / row.possiblePoints < .7 ? 'high' : 'review' })); },
-		getReviewCards() { return db.prepare('SELECT question_id AS questionId, interval_days AS intervalDays, ease, lapses, due_at AS dueAt, last_result AS lastResult, review_count AS reviewCount, first_seen_at AS firstSeenAt FROM review_cards').all() as unknown as ReviewCardRow[]; },
-		upsertReviewCard(card) { db.prepare('INSERT INTO review_cards (question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(question_id) DO UPDATE SET interval_days = excluded.interval_days, ease = excluded.ease, lapses = excluded.lapses, due_at = excluded.due_at, last_result = excluded.last_result, review_count = excluded.review_count').run(card.questionId, card.intervalDays, card.ease, card.lapses, card.dueAt, card.lastResult, card.reviewCount, card.firstSeenAt); },
-		getStudyLog() { return db.prepare('SELECT date_key AS dateKey, questions, sessions, updated_at AS updatedAt FROM study_log ORDER BY date_key').all() as unknown as StudyDayRow[]; },
-		recordStudyDay(dateKey, questions, updatedAt) { db.prepare('INSERT INTO study_log (date_key, questions, sessions, updated_at) VALUES (?, ?, 1, ?) ON CONFLICT(date_key) DO UPDATE SET questions = questions + excluded.questions, sessions = sessions + 1, updated_at = excluded.updated_at').run(dateKey, questions, updatedAt); },
-		getAnswerHistory() { return db.prepare("SELECT a.question_id AS questionId, a.is_correct AS isCorrect, s.completed_at AS completedAt FROM quiz_answers a JOIN quiz_sessions s ON s.id = a.session_id WHERE a.question_id IS NOT NULL AND s.status = 'completed'").all() as unknown as AnswerHistoryRow[]; },
-		getAnsweredQuestionIds() { return (db.prepare('SELECT DISTINCT question_id FROM quiz_answers WHERE question_id IS NOT NULL').all() as { question_id: string }[]).map((row) => row.question_id); },
-		getObjectiveProgress() { return db.prepare('SELECT objective, COUNT(*) AS attempted, SUM(points_earned) AS earnedPoints, SUM(points_possible) AS possiblePoints FROM quiz_answers WHERE objective IS NOT NULL GROUP BY objective').all() as { objective: string; attempted: number; earnedPoints: number; possiblePoints: number }[]; },
-		getExamDate() { return (db.prepare("SELECT value FROM course_meta WHERE key = 'exam_date'").get() as { value: string } | undefined)?.value ?? defaultExamDate(); },
-		setExamDate(examDate) { db.prepare("INSERT INTO course_meta (key, value) VALUES ('exam_date', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(examDate); },
-		getCourseModules() { return db.prepare('SELECT id, week, title, description, position FROM course_modules ORDER BY position').all() as CourseModule[]; },
-		getCourseLessons() { return db.prepare('SELECT id, module_id AS moduleId, title, summary, content, position FROM course_lessons ORDER BY position').all() as unknown as CourseLesson[]; },
-		getCourseAssignments() { return db.prepare('SELECT id, module_id AS moduleId, title, description, kind, category, points, count, domain, mode, duration_minutes AS durationMinutes, due_offset_days AS dueOffsetDays, position FROM course_assignments ORDER BY position').all() as unknown as CourseAssignment[]; },
-		getLessonCompletions() { return new Set((db.prepare('SELECT lesson_id FROM course_lesson_completions').all() as { lesson_id: string }[]).map((row) => row.lesson_id)); },
-		setLessonCompleted(lessonId, completed) { if (completed) db.prepare('INSERT INTO course_lesson_completions (lesson_id, completed_at) VALUES (?, ?) ON CONFLICT(lesson_id) DO UPDATE SET completed_at = excluded.completed_at').run(lessonId, new Date().toISOString()); else db.prepare('DELETE FROM course_lesson_completions WHERE lesson_id = ?').run(lessonId); },
-		getSubmissions() { return db.prepare('SELECT assignment_id AS assignmentId, session_id AS sessionId, earned, percentage, completed_at AS completedAt FROM course_assignment_submissions').all() as unknown as SubmissionRecord[]; },
-		recordSubmission(submission) { db.prepare('INSERT INTO course_assignment_submissions (assignment_id, session_id, earned, percentage, completed_at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(assignment_id, session_id) DO UPDATE SET earned = excluded.earned, percentage = excluded.percentage, completed_at = excluded.completed_at').run(submission.assignmentId, submission.sessionId, submission.earned, submission.percentage, submission.completedAt); },
-		getGoogleOAuth() {
-			const row = db
-				.prepare('SELECT access_token AS accessToken, refresh_token AS refreshToken, expires_at AS expiresAt, email, calendar_id AS calendarId FROM google_oauth WHERE id = 1')
-				.get() as StoredGoogleOAuth | undefined;
-			return row ?? null;
-		},
-		saveGoogleOAuth(oauth) {
-			const now = new Date().toISOString();
-			db.prepare('INSERT INTO google_oauth (id, access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at) VALUES (1, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET access_token = excluded.access_token, refresh_token = excluded.refresh_token, expires_at = excluded.expires_at, email = excluded.email, calendar_id = COALESCE(excluded.calendar_id, google_oauth.calendar_id), updated_at = excluded.updated_at').run(oauth.accessToken, oauth.refreshToken, oauth.expiresAt, oauth.email, oauth.calendarId ?? null, now, now);
-		},
-		clearGoogleOAuth() { db.prepare('DELETE FROM google_oauth WHERE id = 1').run(); },
-		getSyncedEvents() { return db.prepare('SELECT source, event_id AS eventId, summary, due_date AS dueDate, synced_at AS syncedAt FROM google_synced_events ORDER BY source').all() as StoredSyncedEvent[]; },
-		recordSyncedEvent(source, eventId, summary, dueDate, syncedAt) { db.prepare('INSERT INTO google_synced_events (source, event_id, summary, due_date, synced_at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(source) DO UPDATE SET event_id = excluded.event_id, summary = excluded.summary, due_date = excluded.due_date, synced_at = excluded.synced_at').run(source, eventId, summary, dueDate, syncedAt); },
-		removeSyncedEvent(source) { db.prepare('DELETE FROM google_synced_events WHERE source = ?').run(source); },
-		close() { db.close(); }
-	};
+
+	const base = make(DEFAULT_SCOPE);
+	return base;
+}
+
+/** Binds an existing repository to a different scope (same underlying connection). */
+export function createScopedRepo(repo: QuizRepository, scope: Scope): QuizRepository {
+	return repo.forScope(scope);
 }
 
 export const quizRepository = createQuizRepository(process.env.VITEST ? ':memory:' : undefined);
