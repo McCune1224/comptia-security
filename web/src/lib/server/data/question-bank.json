@@ -19471,53 +19471,25 @@
       "domain": 1,
       "objective": "1.4",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Complete each statement about cryptography by typing the missing term.\n\n1. The cipher that uses the same key to encrypt and decrypt is called ____ encryption.\n\n2. A ____ is a one-way mathematical function used to verify data integrity.\n\n3. The protocol that provides confidentiality, integrity, and authentication for web traffic is ____.\n\n4. Adding a random value to each password before hashing is called ____.",
       "context": "Type your answer in each blank. Spelling must be exact (case-insensitive).",
       "blanks": [
         {
           "id": "b1",
-          "label": "1. Symmetric/Asymmetric?",
-          "placeholder": "e.g., symmetric",
-          "acceptedAnswers": [
-            "symmetric",
-            "symmetrical",
-            "secret key"
-          ]
+          "label": "1. Symmetric/Asymmetric?"
         },
         {
           "id": "b2",
-          "label": "2. Integrity function",
-          "placeholder": "e.g., hash",
-          "acceptedAnswers": [
-            "hash",
-            "hash function",
-            "hash algorithm",
-            "cryptographic hash",
-            "digest"
-          ]
+          "label": "2. Integrity function"
         },
         {
           "id": "b3",
-          "label": "3. Web security protocol",
-          "placeholder": "e.g., TLS",
-          "acceptedAnswers": [
-            "tls",
-            "ssl/tls",
-            "transport layer security",
-            "https"
-          ]
+          "label": "3. Web security protocol"
         },
         {
           "id": "b4",
-          "label": "4. Random value added to passwords",
-          "placeholder": "e.g., salt",
-          "acceptedAnswers": [
-            "salt",
-            "salting",
-            "a salt",
-            "random salt"
-          ]
+          "label": "4. Random value added to passwords"
         }
       ],
       "explanation": "Symmetric crypto uses one shared key; hashes provide one-way integrity; TLS secures web traffic; salting defeats rainbow tables and identical-password detection.",
@@ -19530,55 +19502,64 @@
           "source": "study-guide",
           "section": "Performance-Based Questions"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "symmetric"
+        },
+        {
+          "id": "w2",
+          "word": "hash"
+        },
+        {
+          "id": "w3",
+          "word": "tls"
+        },
+        {
+          "id": "w4",
+          "word": "salt"
+        },
+        {
+          "id": "d1",
+          "word": "asymmetric"
+        },
+        {
+          "id": "d2",
+          "word": "nonce"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "pbq-2-012",
       "domain": 2,
       "objective": "2.4",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Complete each statement about common attacks by typing the missing term.\n\n1. An attack that tries a few common passwords against many accounts to avoid lockouts is called password ____.\n\n2. Reusing a captured login session to impersonate a user is called session ____.\n\n3. Forcing a client to use an older, weaker protocol version is a ____ attack.\n\n4. An attack that replays a previously captured authentication exchange is called a ____ attack.",
       "context": "Type your answer in each blank. Spelling must be exact (case-insensitive).",
       "blanks": [
         {
           "id": "b1",
-          "label": "1. Many accounts, few passwords",
-          "placeholder": "e.g., spraying",
-          "acceptedAnswers": [
-            "spraying",
-            "password spraying"
-          ]
+          "label": "1. Many accounts, few passwords"
         },
         {
           "id": "b2",
-          "label": "2. Stealing an active session",
-          "placeholder": "e.g., hijacking",
-          "acceptedAnswers": [
-            "hijacking",
-            "session hijacking",
-            "hijack"
-          ]
+          "label": "2. Stealing an active session"
         },
         {
           "id": "b3",
-          "label": "3. Weaker protocol version",
-          "placeholder": "e.g., downgrade",
-          "acceptedAnswers": [
-            "downgrade",
-            "downgrade attack",
-            "protocol downgrade",
-            "version rollback"
-          ]
+          "label": "3. Weaker protocol version"
         },
         {
           "id": "b4",
-          "label": "4. Replayed authentication",
-          "placeholder": "e.g., replay",
-          "acceptedAnswers": [
-            "replay",
-            "replay attack"
-          ]
+          "label": "4. Replayed authentication"
         }
       ],
       "explanation": "Password spraying stays below lockout thresholds; session hijacking steals cookies/tokens; downgrade attacks force weak protocols (e.g., SSLv3/POODLE); replay attacks resend captured exchanges — blocked by nonces and timestamps.",
@@ -19591,49 +19572,64 @@
           "source": "study-guide",
           "section": "Performance-Based Questions"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "spraying"
+        },
+        {
+          "id": "w2",
+          "word": "hijacking"
+        },
+        {
+          "id": "w3",
+          "word": "downgrade"
+        },
+        {
+          "id": "w4",
+          "word": "replay"
+        },
+        {
+          "id": "d1",
+          "word": "phishing"
+        },
+        {
+          "id": "d2",
+          "word": "smishing"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "pbq-3-010",
       "domain": 3,
       "objective": "3.4",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Complete each statement about backups and disaster recovery by typing the missing term.\n\n1. The maximum acceptable amount of data loss, measured in time, is the recovery ____ objective (RPO).\n\n2. A backup that copies all changes since the last full backup is called a ____ backup.\n\n3. The maximum acceptable downtime before systems must be restored is the recovery ____ objective (RTO).\n\n4. A disaster recovery site that is fully equipped and continuously replicated, able to take over in minutes, is called a ____ site.",
       "context": "Type your answer in each blank. Spelling must be exact (case-insensitive).",
       "blanks": [
         {
           "id": "b1",
-          "label": "1. RPO full word",
-          "placeholder": "e.g., point",
-          "acceptedAnswers": [
-            "point"
-          ]
+          "label": "1. RPO full word"
         },
         {
           "id": "b2",
-          "label": "2. Since last full",
-          "placeholder": "e.g., differential",
-          "acceptedAnswers": [
-            "differential"
-          ]
+          "label": "2. Since last full"
         },
         {
           "id": "b3",
-          "label": "3. RTO full word",
-          "placeholder": "e.g., time",
-          "acceptedAnswers": [
-            "time"
-          ]
+          "label": "3. RTO full word"
         },
         {
           "id": "b4",
-          "label": "4. Fastest failover site",
-          "placeholder": "e.g., hot",
-          "acceptedAnswers": [
-            "hot",
-            "hot site"
-          ]
+          "label": "4. Fastest failover site"
         }
       ],
       "explanation": "RPO = max data loss (drives backup frequency); RTO = max downtime (drives recovery strategy). Differentials capture changes since the last full; hot sites are continuously replicated for near-zero downtime.",
@@ -19646,63 +19642,68 @@
           "source": "study-guide",
           "section": "Performance-Based Questions"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "point"
+        },
+        {
+          "id": "w2",
+          "word": "differential"
+        },
+        {
+          "id": "w3",
+          "word": "time"
+        },
+        {
+          "id": "w4",
+          "word": "hot"
+        },
+        {
+          "id": "d1",
+          "word": "warm"
+        },
+        {
+          "id": "d2",
+          "word": "maximum tolerable downtime"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "pbq-4-013",
       "domain": 4,
       "objective": "4.6",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Complete each statement about identity and access management by typing the missing term.\n\n1. Proving who you are is called ____; determining what you may do is called ____.\n\n2. The AAA model's third 'A' — recording what users did — is ____.\n\n3. A system that lets users authenticate once and access many applications is called single ____-on (SSO).\n\n4. The protocol family that exchanges XML security assertions between an identity provider and a service provider is ____.",
       "context": "Type your answer in each blank. Spelling must be exact (case-insensitive).",
       "blanks": [
         {
           "id": "b1",
-          "label": "1a. Proving identity",
-          "placeholder": "e.g., authentication",
-          "acceptedAnswers": [
-            "authentication",
-            "authn"
-          ]
+          "label": "1a. Proving identity"
         },
         {
           "id": "b2",
-          "label": "1b. What you may do",
-          "placeholder": "e.g., authorization",
-          "acceptedAnswers": [
-            "authorization",
-            "authz"
-          ]
+          "label": "1b. What you may do"
         },
         {
           "id": "b3",
-          "label": "2. Third A of AAA",
-          "placeholder": "e.g., accounting",
-          "acceptedAnswers": [
-            "accounting",
-            "auditing",
-            "audit"
-          ]
+          "label": "2. Third A of AAA"
         },
         {
           "id": "b4",
-          "label": "3. SSO full word",
-          "placeholder": "e.g., sign",
-          "acceptedAnswers": [
-            "sign",
-            "sign-on",
-            "signon"
-          ]
+          "label": "3. SSO full word"
         },
         {
           "id": "b5",
-          "label": "4. XML assertions",
-          "placeholder": "e.g., SAML",
-          "acceptedAnswers": [
-            "saml",
-            "security assertion markup language"
-          ]
+          "label": "4. XML assertions"
         }
       ],
       "explanation": "Authentication proves identity; authorization grants permissions; accounting logs activity (AAA). SSO means one sign-on; SAML (Security Assertion Markup Language) carries XML assertions between IdP and SP.",
@@ -19715,51 +19716,69 @@
           "source": "study-guide",
           "section": "Performance-Based Questions"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "authentication"
+        },
+        {
+          "id": "w2",
+          "word": "authorization"
+        },
+        {
+          "id": "w3",
+          "word": "accounting"
+        },
+        {
+          "id": "w4",
+          "word": "sign-on"
+        },
+        {
+          "id": "w5",
+          "word": "saml"
+        },
+        {
+          "id": "d1",
+          "word": "identification"
+        },
+        {
+          "id": "d2",
+          "word": "federation"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      }
     },
     {
       "id": "pbq-5-011",
       "domain": 5,
       "objective": "5.2",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Complete each statement about risk management by typing the missing term.\n\n1. The expected monetary loss from a single occurrence of a risk is the single loss ____ (SLE).\n\n2. The number of times a risk is expected to occur each year is the annualized rate of ____ (ARO).\n\n3. SLE multiplied by ARO gives the annualized loss ____ (ALE).\n\n4. The risk that remains after controls are applied is called ____ risk.",
       "context": "Type your answer in each blank. Spelling must be exact (case-insensitive).",
       "blanks": [
         {
           "id": "b1",
-          "label": "1. SLE full word",
-          "placeholder": "e.g., expectancy",
-          "acceptedAnswers": [
-            "expectancy",
-            "exposure"
-          ]
+          "label": "1. SLE full word"
         },
         {
           "id": "b2",
-          "label": "2. ARO full word",
-          "placeholder": "e.g., occurrence",
-          "acceptedAnswers": [
-            "occurrence",
-            "occurrence (aro)"
-          ]
+          "label": "2. ARO full word"
         },
         {
           "id": "b3",
-          "label": "3. ALE full word",
-          "placeholder": "e.g., expectancy",
-          "acceptedAnswers": [
-            "expectancy"
-          ]
+          "label": "3. ALE full word"
         },
         {
           "id": "b4",
-          "label": "4. Risk after controls",
-          "placeholder": "e.g., residual",
-          "acceptedAnswers": [
-            "residual",
-            "residual risk"
-          ]
+          "label": "4. Risk after controls"
         }
       ],
       "explanation": "SLE = AV × EF; ARO = expected occurrences per year; ALE = SLE × ARO. Residual risk remains after controls; inherent risk exists before them.",
@@ -19772,7 +19791,39 @@
           "source": "study-guide",
           "section": "Performance-Based Questions"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "expectancy"
+        },
+        {
+          "id": "w2",
+          "word": "occurrence"
+        },
+        {
+          "id": "w3",
+          "word": "expectancy"
+        },
+        {
+          "id": "w4",
+          "word": "residual"
+        },
+        {
+          "id": "d1",
+          "word": "inherent"
+        },
+        {
+          "id": "d2",
+          "word": "single loss expectancy"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "pbq-1-010",
@@ -20473,44 +20524,25 @@
       "domain": 1,
       "objective": "1.4",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Complete each statement about public key infrastructure (PKI) by typing the missing term.\n\n1. The trusted entity that issues and revokes digital certificates is called a certificate ____ (CA).\n\n2. The message containing a public key and identity information sent to a CA is a certificate signing ____ (CSR).\n\n3. The real-time protocol used to check a certificate's revocation status is ____.\n\n4. A published list of revoked certificates is the certificate ____ list (CRL).",
       "context": "Type your answer in each blank. Spelling must be exact (case-insensitive).",
       "blanks": [
         {
           "id": "b1",
-          "label": "1. CA full word",
-          "placeholder": "e.g., authority",
-          "acceptedAnswers": [
-            "authority",
-            "authorities"
-          ]
+          "label": "1. CA full word"
         },
         {
           "id": "b2",
-          "label": "2. CSR full word",
-          "placeholder": "e.g., request",
-          "acceptedAnswers": [
-            "request",
-            "requests"
-          ]
+          "label": "2. CSR full word"
         },
         {
           "id": "b3",
-          "label": "3. Real-time status protocol",
-          "placeholder": "e.g., OCSP",
-          "acceptedAnswers": [
-            "ocsp",
-            "online certificate status protocol"
-          ]
+          "label": "3. Real-time status protocol"
         },
         {
           "id": "b4",
-          "label": "4. CRL full word",
-          "placeholder": "e.g., revocation",
-          "acceptedAnswers": [
-            "revocation"
-          ]
+          "label": "4. CRL full word"
         }
       ],
       "explanation": "CA = certificate authority (issues/revokes certs); CSR = certificate signing request (public key + identity to the CA); OCSP provides real-time revocation status; CRL = certificate revocation list.",
@@ -20523,7 +20555,39 @@
           "source": "study-guide",
           "section": "Public Key Infrastructure"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "authority"
+        },
+        {
+          "id": "w2",
+          "word": "request"
+        },
+        {
+          "id": "w3",
+          "word": "ocsp"
+        },
+        {
+          "id": "w4",
+          "word": "revocation"
+        },
+        {
+          "id": "d1",
+          "word": "certificate pinning"
+        },
+        {
+          "id": "d2",
+          "word": "key escrow"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "pbq-2-014",

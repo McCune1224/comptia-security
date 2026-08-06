@@ -21,7 +21,20 @@ describe('scoreQuestion', () => {
 	});
 
 	it('scores fill-blank with case-insensitive normalization and partial credit', () => {
-		const fill = bank.pbqs.find((question): question is FillBlankDefinition => question.kind === 'fill-blank')!;
+		const fill: FillBlankDefinition = {
+			id: 'pbq-1-998',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt: 'The cipher that uses the same key to encrypt and decrypt is called ____.',
+			explanation: 'Symmetric ciphers use one shared key.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'fill-blank',
+			blanks: [
+				{ id: 'b1', label: 'Cipher type', placeholder: 'term', acceptedAnswers: ['symmetric', 'symmetrical'] },
+				{ id: 'b2', label: 'Integrity function', placeholder: 'term', acceptedAnswers: ['hash', 'hash function'] }
+			]
+		};
 		const values = Object.fromEntries(fill.blanks.map((blank) => [blank.id, blank.acceptedAnswers[0]]));
 		expect(scoreQuestion(fill, { kind: 'fill-blank', values }).earnedPoints).toBe(1);
 		// Case + whitespace-insensitive: answer in different case still fully correct
