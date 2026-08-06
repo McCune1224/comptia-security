@@ -4,14 +4,14 @@ import { validateQuestionBank, type CourseBankSpec, type QuestionBank } from './
 import { APLUS_1201_OBJECTIVES } from './aplus-meta';
 
 /**
- * CompTIA A+ Core 1 (220-1201) bank — 150 MCQs + 20 PBQs (baseline v1).
+ * CompTIA A+ Core 1 (220-1201) bank — 150 MCQs + 28 PBQs (baseline v1).
  * MCQ quotas proportional to exam weights (13/23/25/11/28%): D1 20, D2 34,
  * D3 38, D4 16, D5 42. All MCQs are scenario-format (real-exam style).
  */
 export const APLUS_1201_BANK_SPEC: CourseBankSpec = {
 	courseId: 'aplus-1201',
 	mcqTotal: 150,
-	pbqTotal: 20,
+	pbqTotal: 28,
 	mcqIdPattern: /^a1-[1-5]-\d{3}$/,
 	pbqIdPattern: /^a1-pbq-[1-5]-\d{3}$/,
 	domains: [1, 2, 3, 4, 5],
@@ -26,7 +26,7 @@ export const APLUS_1201_BANK_SPEC: CourseBankSpec = {
 	mcqDomainTotals: { 1: 20, 2: 34, 3: 38, 4: 16, 5: 42 },
 	multiTotals: { 1: 3, 2: 5, 3: 5, 4: 2, 5: 6 },
 	scenarioTotals: { 1: 20, 2: 34, 3: 38, 4: 16, 5: 42 },
-	pbqDomainTotals: { 1: 3, 2: 5, 3: 4, 4: 2, 5: 6 }
+	pbqDomainTotals: { 1: 3, 2: 6, 3: 9, 4: 2, 5: 8 }
 };
 
 export function loadAplus1201Bank(): QuestionBank {

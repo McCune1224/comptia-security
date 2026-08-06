@@ -7193,40 +7193,24 @@
       "domain": 1,
       "objective": "1.3",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Type the acronym that matches each definition.\n\n1. ____ — a programmable card profile built into a phone that can activate cellular service without a physical card.\n2. ____ — satellite-based positioning used by navigation apps.\n3. ____ — the platform IT uses to enroll, configure, and wipe corporate mobile devices.\n4. ____ — the ownership model where employees use their personal devices for work.",
       "blanks": [
         {
           "id": "b1",
-          "label": "Programmable cellular profile",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "eSIM"
-          ]
+          "label": "Programmable cellular profile"
         },
         {
           "id": "b2",
-          "label": "Satellite positioning",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "GPS"
-          ]
+          "label": "Satellite positioning"
         },
         {
           "id": "b3",
-          "label": "Corporate mobile device platform",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "MDM"
-          ]
+          "label": "Corporate mobile device platform"
         },
         {
           "id": "b4",
-          "label": "Personal devices for work",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "BYOD"
-          ]
+          "label": "Personal devices for work"
         }
       ],
       "explanation": "eSIM is the embedded programmable SIM profile; GPS provides satellite positioning. MDM (mobile device management) enforces corporate policy and can remote-wipe; BYOD means employees use personal devices for work.",
@@ -7239,7 +7223,39 @@
           "source": "professor-messer",
           "section": "220-1201 1.3 Mobile Device Management"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "eSIM"
+        },
+        {
+          "id": "w2",
+          "word": "GPS"
+        },
+        {
+          "id": "w3",
+          "word": "MDM"
+        },
+        {
+          "id": "w4",
+          "word": "BYOD"
+        },
+        {
+          "id": "d1",
+          "word": "NFC"
+        },
+        {
+          "id": "d2",
+          "word": "QR code"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "a1-pbq-2-001",
@@ -8425,43 +8441,24 @@
       "domain": 5,
       "objective": "5.2",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Type the term that matches each definition.\n\n1. ____ — the drive self-diagnostics standard that reports reallocated sectors and pending failures.\n2. ____ — the firmware self-test that runs when a PC powers on.\n3. ____ — a measure of storage performance expressed in operations per second.\n4. ____ — a RAID level that mirrors data across pairs of drives for redundancy.",
       "blanks": [
         {
           "id": "b1",
-          "label": "Drive self-diagnostics",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "S.M.A.R.T.",
-            "SMART"
-          ]
+          "label": "Drive self-diagnostics"
         },
         {
           "id": "b2",
-          "label": "Power-on self-test",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "POST"
-          ]
+          "label": "Power-on self-test"
         },
         {
           "id": "b3",
-          "label": "Operations per second metric",
-          "placeholder": "Acronym",
-          "acceptedAnswers": [
-            "IOPS"
-          ]
+          "label": "Operations per second metric"
         },
         {
           "id": "b4",
-          "label": "Mirroring RAID level",
-          "placeholder": "Level",
-          "acceptedAnswers": [
-            "RAID 1",
-            "RAID1",
-            "1"
-          ]
+          "label": "Mirroring RAID level"
         }
       ],
       "explanation": "S.M.A.R.T. monitors drive health indicators; POST is the firmware power-on test; IOPS measures storage performance; RAID 1 mirrors pairs of drives for fault tolerance.",
@@ -8473,6 +8470,703 @@
         {
           "source": "professor-messer",
           "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "S.M.A.R.T."
+        },
+        {
+          "id": "w2",
+          "word": "POST"
+        },
+        {
+          "id": "w3",
+          "word": "IOPS"
+        },
+        {
+          "id": "w4",
+          "word": "RAID 1"
+        },
+        {
+          "id": "d1",
+          "word": "UEFI"
+        },
+        {
+          "id": "d2",
+          "word": "NVMe"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
+    },
+    {
+      "id": "a1-pbq-3-005",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "kind": "sort",
+      "prompt": "A technician is organizing a shelf of loose cabling and connectors into labeled bins. Drag each item into the bin that best describes it.",
+      "context": "The bins have been labeled by the shop lead: twisted-pair copper, fiber, and everything else. One bin on the shelf is a decoy that nothing belongs in.",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Cat 6a"
+        },
+        {
+          "id": "i2",
+          "text": "Fiber optic LC"
+        },
+        {
+          "id": "i3",
+          "text": "Coaxial (RG-6)"
+        },
+        {
+          "id": "i4",
+          "text": "Cat 5e"
+        },
+        {
+          "id": "i5",
+          "text": "USB-C"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "b1",
+          "label": "Copper twisted-pair"
+        },
+        {
+          "id": "b2",
+          "label": "Fiber"
+        },
+        {
+          "id": "b3",
+          "label": "Other"
+        },
+        {
+          "id": "b4",
+          "label": "DISTRACTOR: Wireless RF"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b2",
+        "i3": "b3",
+        "i4": "b1",
+        "i5": "b3"
+      },
+      "explanation": "Cat 5e and Cat 6a are copper twisted-pair Ethernet cabling (UTP/STP). Fiber optic cabling with LC connectors carries light and is immune to EMI. Coaxial cable (RG-6) and USB-C are neither twisted-pair Ethernet nor fiber, so they belong in Other. Nothing maps to the Wireless RF bucket.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Copper Cabling and Fiber"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-006",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "pbq",
+      "kind": "sort",
+      "prompt": "A technician is pulling parts out of a bin for a new desktop build. Sort each component into the correct category: RAM or storage.",
+      "items": [
+        {
+          "id": "i1",
+          "text": "DDR5"
+        },
+        {
+          "id": "i2",
+          "text": "SODIMM"
+        },
+        {
+          "id": "i3",
+          "text": "NVMe"
+        },
+        {
+          "id": "i4",
+          "text": "SATA SSD"
+        },
+        {
+          "id": "i5",
+          "text": "HDD"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "b1",
+          "label": "RAM"
+        },
+        {
+          "id": "b2",
+          "label": "Storage"
+        },
+        {
+          "id": "b3",
+          "label": "DISTRACTOR: Expansion card"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b1",
+        "i3": "b2",
+        "i4": "b2",
+        "i5": "b2"
+      },
+      "explanation": "DDR5 is the current desktop RAM standard, and SODIMM is the smaller RAM module form factor used in laptops — both are memory, not storage. NVMe drives, SATA SSDs, and HDDs are persistent storage devices that hold data when the system is off. Nothing is an expansion card.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 Storage Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-007",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "Match each connector to its primary use.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "RJ45"
+        },
+        {
+          "id": "p2",
+          "text": "RJ11"
+        },
+        {
+          "id": "p3",
+          "text": "USB-C"
+        },
+        {
+          "id": "p4",
+          "text": "DisplayPort"
+        },
+        {
+          "id": "p5",
+          "text": "SATA"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Ethernet network connections"
+        },
+        {
+          "id": "t2",
+          "text": "Telephone (POTS) lines"
+        },
+        {
+          "id": "t3",
+          "text": "Modern reversible data/charging for peripherals"
+        },
+        {
+          "id": "t4",
+          "text": "Video output to a monitor"
+        },
+        {
+          "id": "t5",
+          "text": "Internal storage drives"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "External SATA drives (eSATA)"
+        },
+        {
+          "id": "t7",
+          "text": "Apple mobile devices (Lightning)"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "RJ45 terminates twisted-pair Ethernet; RJ11 is the smaller telephone connector. USB-C is the reversible modern port for data and charging, DisplayPort carries video (and audio), and SATA connects internal drives. eSATA and Lightning are similar connectors used elsewhere.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Connectors"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-2-006",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "A technician is running new cabling for a small office network and must pick the right category for each link's speed requirement. Match each cable type to its maximum rated throughput.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "Cat 5e"
+        },
+        {
+          "id": "p2",
+          "text": "Cat 6"
+        },
+        {
+          "id": "p3",
+          "text": "Cat 6a"
+        },
+        {
+          "id": "p4",
+          "text": "Cat 8"
+        },
+        {
+          "id": "p5",
+          "text": "Single-mode fiber"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "1 Gbps (up to 100 m)"
+        },
+        {
+          "id": "t2",
+          "text": "10 Gbps (up to 55 m)"
+        },
+        {
+          "id": "t3",
+          "text": "10 Gbps (up to 100 m)"
+        },
+        {
+          "id": "t4",
+          "text": "40 Gbps (up to 30 m)"
+        },
+        {
+          "id": "t5",
+          "text": "100+ Gbps over long distances"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "100 Mbps (up to 100 m)"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "Cat 5e handles 1 Gbps at 100 m; Cat 6 reaches 10 Gbps only over short runs (55 m); Cat 6a sustains 10 Gbps at the full 100 m; Cat 8 is a data-center cable rated for 40 Gbps over short distances; single-mode fiber supports 100+ Gbps over long distances. Plain Cat 5 tops out at 100 Mbps.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 Wired SOHO Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-008",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "A technician is helping a customer choose a monitor. Complete each statement with the correct display technology or interface.\n\n1. The ____ interface carries uncompressed digital audio and video over a single cable and is standard on TVs and monitors.\n2. ____ is the modern PC video interface that supports high refresh rates and multi-monitor daisy-chaining.\n3. An ____ panel produces its own light per pixel, delivering true blacks and vibrant contrast.\n4. An ____ panel offers wide viewing angles and accurate color and is the most common LCD panel type in modern monitors.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Consumer AV digital interface"
+        },
+        {
+          "id": "b2",
+          "label": "PC-first video interface"
+        },
+        {
+          "id": "b3",
+          "label": "Self-emissive panel"
+        },
+        {
+          "id": "b4",
+          "label": "Wide-angle LCD panel"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "HDMI"
+        },
+        {
+          "id": "w2",
+          "word": "DisplayPort"
+        },
+        {
+          "id": "w3",
+          "word": "VGA"
+        },
+        {
+          "id": "w4",
+          "word": "OLED"
+        },
+        {
+          "id": "w5",
+          "word": "IPS"
+        },
+        {
+          "id": "w6",
+          "word": "TN"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w4",
+        "b4": "w5"
+      },
+      "explanation": "HDMI carries digital audio and video to TVs and monitors; DisplayPort is the PC-first interface with high refresh rates and daisy-chaining. OLED panels are self-emissive for true blacks, while IPS is the LCD panel type with wide viewing angles and accurate color. VGA is an analog connector and TN is an older narrow-viewing-angle LCD panel.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Display Connectors and Panel Types"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-007",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "A technician is troubleshooting a laser printer with several print-quality complaints. Complete each statement with the correct component.\n\n1. Faded, light print usually means the ____ cartridge is running low or the imaging drum is worn.\n2. If toner smears when touched, the ____ assembly is not reaching the temperature needed to fuse the toner to the paper.\n3. The ____ holds the electrostatic latent image that attracts toner before it is transferred to the paper.\n4. Repeating marks at regular intervals down the page often point to a damaged ____, which moves toner from the drum to the paper.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Low supply causing faded output"
+        },
+        {
+          "id": "b2",
+          "label": "Heat/pressure assembly"
+        },
+        {
+          "id": "b3",
+          "label": "Image carrier"
+        },
+        {
+          "id": "b4",
+          "label": "Drum-to-paper transfer part"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "toner"
+        },
+        {
+          "id": "w2",
+          "word": "fuser"
+        },
+        {
+          "id": "w3",
+          "word": "imaging drum"
+        },
+        {
+          "id": "w4",
+          "word": "transfer roller"
+        },
+        {
+          "id": "w5",
+          "word": "ink cartridge"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      },
+      "explanation": "Low toner or a worn drum causes faded output; a fuser that runs too cool leaves toner smearing because it never melts onto the page. The imaging drum carries the latent electrostatic image, and the transfer roller (or corona/transfer belt) moves toner from drum to paper. Ink cartridges belong to inkjet printers, not laser printers.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-008",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "pbq",
+      "kind": "configuration",
+      "prompt": "A technician is troubleshooting a desktop that intermittently boots into a network recovery environment instead of Windows. The PC should always start from its internal SSD first, fall back to a USB recovery drive, then network boot (PXE), and use the optical drive as the last resort. Configure the UEFI boot order.",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Boot Option 1",
+          "options": [
+            {
+              "id": "o1",
+              "text": "UEFI: Windows Boot Manager (SSD)"
+            },
+            {
+              "id": "o2",
+              "text": "USB Flash Drive"
+            },
+            {
+              "id": "o3",
+              "text": "PXE Network Boot"
+            },
+            {
+              "id": "o4",
+              "text": "Optical Drive"
+            },
+            {
+              "id": "o5",
+              "text": "Legacy HDD"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Boot Option 2",
+          "options": [
+            {
+              "id": "o1",
+              "text": "UEFI: Windows Boot Manager (SSD)"
+            },
+            {
+              "id": "o2",
+              "text": "USB Flash Drive"
+            },
+            {
+              "id": "o3",
+              "text": "PXE Network Boot"
+            },
+            {
+              "id": "o4",
+              "text": "Optical Drive"
+            },
+            {
+              "id": "o5",
+              "text": "Legacy HDD"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Boot Option 3",
+          "options": [
+            {
+              "id": "o1",
+              "text": "UEFI: Windows Boot Manager (SSD)"
+            },
+            {
+              "id": "o2",
+              "text": "USB Flash Drive"
+            },
+            {
+              "id": "o3",
+              "text": "PXE Network Boot"
+            },
+            {
+              "id": "o4",
+              "text": "Optical Drive"
+            },
+            {
+              "id": "o5",
+              "text": "Legacy HDD"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Boot Option 4",
+          "options": [
+            {
+              "id": "o1",
+              "text": "UEFI: Windows Boot Manager (SSD)"
+            },
+            {
+              "id": "o2",
+              "text": "USB Flash Drive"
+            },
+            {
+              "id": "o3",
+              "text": "PXE Network Boot"
+            },
+            {
+              "id": "o4",
+              "text": "Optical Drive"
+            },
+            {
+              "id": "o5",
+              "text": "Legacy HDD"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o1",
+        "f2": "o2",
+        "f3": "o3",
+        "f4": "o4"
+      },
+      "explanation": "The boot order is evaluated top-down: Windows Boot Manager on the SSD must be first so the PC starts normally, with the USB recovery drive second for repair scenarios, PXE network boot third for imaging/recovery, and the optical drive last as a fallback. Legacy HDD mode would bypass the UEFI boot manager entirely.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Motherboards and Boot Issues"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-009",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "pbq",
+      "kind": "configuration",
+      "prompt": "A user connects a new 27-inch monitor that natively supports 2560x1440 at 144 Hz, but Windows is showing blurry text at a lower resolution. Configure the display settings for the native resolution and maximum refresh rate, 125% scaling for comfortable text size, and standard landscape orientation.",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Resolution",
+          "options": [
+            {
+              "id": "o1",
+              "text": "1366x768"
+            },
+            {
+              "id": "o2",
+              "text": "1920x1080"
+            },
+            {
+              "id": "o3",
+              "text": "3840x2160"
+            },
+            {
+              "id": "o4",
+              "text": "2560x1440"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Refresh rate",
+          "options": [
+            {
+              "id": "o1",
+              "text": "60 Hz"
+            },
+            {
+              "id": "o2",
+              "text": "75 Hz"
+            },
+            {
+              "id": "o3",
+              "text": "144 Hz"
+            },
+            {
+              "id": "o4",
+              "text": "240 Hz"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Scaling",
+          "options": [
+            {
+              "id": "o1",
+              "text": "100%"
+            },
+            {
+              "id": "o2",
+              "text": "125%"
+            },
+            {
+              "id": "o3",
+              "text": "150%"
+            },
+            {
+              "id": "o4",
+              "text": "200%"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Orientation",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Landscape"
+            },
+            {
+              "id": "o2",
+              "text": "Portrait"
+            },
+            {
+              "id": "o3",
+              "text": "Landscape (flipped)"
+            },
+            {
+              "id": "o4",
+              "text": "Portrait (flipped)"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o4",
+        "f2": "o3",
+        "f3": "o2",
+        "f4": "o1"
+      },
+      "explanation": "The monitor's native resolution is 2560x1440 (QHD) — matching the native resolution eliminates the blur. The panel supports up to 144 Hz, so that is the maximum refresh rate to select. Scaling at 125% enlarges text while keeping the native resolution, and standard landscape orientation matches a normal desktop monitor.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.1 Display Attributes"
         }
       ]
     }
