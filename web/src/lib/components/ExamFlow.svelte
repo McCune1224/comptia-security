@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import Sortable from 'sortablejs';
+	import MatchConnect from '$lib/components/MatchConnect.svelte';
+	import SortBoard from '$lib/components/SortBoard.svelte';
 	import type {
 		ActiveSessionSummary,
 		QuestionFeedback,
@@ -40,6 +42,13 @@
 	let timer = $state('');
 	let activeConflict = $state<ActiveSessionSummary | null>(null);
 	let question = $derived(session?.questions[index]);
+	const MAX_PRACTICE_RETRIES = 2;
+	let streak = $state(0);
+	let sessionScore = $state(0);
+	const scoreByIndex = new Map<number, number>();
+	let retriesLeft = $derived(
+		session ? Math.max(0, MAX_PRACTICE_RETRIES - (session.retries[index] ?? 0)) : 0
+	);
 
 	function formatTimer(deadline: string | undefined) {
 		if (!deadline) return '';
@@ -64,6 +73,25 @@
 		for (let i = 0; i < steps; i++) stepResponses[i] = prev[i] ?? null;
 		stepResponses[subStep] = response;
 		draft = { kind: 'multi-step', stepResponses } as QuestionResponse;
+	}
+
+	function stepFeedbackMatches(): Record<string, string> | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'matching') return null;
+		return stepFeedback.correctResponse.matches;
+	}
+
+	function sortAnswered(): boolean {
+		if (question?.kind !== 'sort') return true;
+		const response = draft?.kind === 'sort' ? draft : null;
+		if (!response) return false;
+		return question.items.every((item) => (response.assignments[item.id] ?? '').length > 0);
+	}
+
+	function stepSortAssignments(): Record<string, string> | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'sort') return null;
+		return stepFeedback.correctResponse.assignments;
 	}
 
 	function moveSubStep(dir: number) {
@@ -175,6 +203,13 @@
 			const data = await response.json();
 			if (!response.ok) throw new Error(data.error?.message ?? 'Unable to save response');
 			feedback = data.feedback ?? null;
+			if (data.feedback) {
+				const previous = scoreByIndex.get(index) ?? 0;
+				sessionScore += data.feedback.earnedPoints - previous;
+				scoreByIndex.set(index, data.feedback.earnedPoints);
+				if (data.feedback.fullyCorrect) streak += 1;
+				else streak = 0;
+			}
 			session.responses[index] = draft;
 			session.answeredCount = Object.keys(session.responses).length;
 		} catch (cause) {
@@ -213,6 +248,11 @@
 		const data = await response.json();
 		if (response.ok) result = data;
 		else error = data.error?.message ?? 'Unable to complete session';
+	}
+
+	function retryQuestion() {
+		draft = null;
+		feedback = null;
 	}
 
 	function choose(optionId: string, multi: boolean) {
@@ -271,12 +311,6 @@
 		});
 		return () => instance.destroy();
 	});
-
-	function updateMatch(premiseId: string, value: string) {
-		const matches = draft?.kind === 'matching' ? { ...draft.matches } : {};
-		matches[premiseId] = value;
-		draft = { kind: 'matching', matches };
-	}
 
 	function updateConfiguration(fieldId: string, value: string) {
 		const values = draft?.kind === 'configuration' ? { ...draft.values } : {};
@@ -520,6 +554,27 @@
 					class="chip bg-surface-700 text-text-muted">{question.kind.replace('-', ' ')}</span
 				>
 			</div>
+			{#if session.mode === 'practice' && streak > 1}
+				<span
+					class="chip flex items-center gap-1.5 bg-surface-700 text-accent-warm"
+					title="Answer streak"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-4 w-4"
+						fill="currentColor"
+						><path
+							d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
+						/></svg
+					>
+					{streak}
+				</span>
+			{/if}
+			{#if session.mode === 'practice' && sessionScore > 0}
+				<span class="chip bg-surface-700 text-text-secondary"
+					>{Math.round(sessionScore)} pts</span
+				>
+			{/if}
 			{#if timer}<span
 					class="chip flex items-center gap-1.5 bg-surface-700 font-mono font-semibold {isLowTime()
 						? 'text-danger'
@@ -646,25 +701,14 @@
 						</div>{/each}
 				</div>
 			{:else if question.kind === 'matching'}
-				{@const allTargets = [...question.targets, ...(question.extraTargets ?? [])]}
-				<div class="space-y-3">
-					{#each question.premises as premise}<div
-							class="flex flex-col gap-3 rounded-md bg-surface-700/60 p-4 sm:flex-row sm:items-center"
-						>
-							<span class="flex-1 text-text-primary">{premise.text}</span><select
-								class="sm:w-56"
-								value={draft?.kind === 'matching' ? draft.matches[premise.id] : ''}
-								onchange={(event) => updateMatch(premise.id, event.currentTarget.value)}
-								><option value="">Select target</option>{#each allTargets as target}<option
-										value={target.id}
-										disabled={draft?.kind === 'matching' &&
-											Object.entries(draft.matches).some(
-												([key, value]) => key !== premise.id && value === target.id
-											)}>{target.text}</option
-									>{/each}</select
-							>
-						</div>{/each}
-				</div>
+				<MatchConnect
+					premises={question.premises}
+					targets={[...question.targets, ...(question.extraTargets ?? [])]}
+					matches={draft?.kind === 'matching' ? draft.matches : {}}
+					feedbackMatches={feedback?.correctResponse.kind === 'matching' ? feedback.correctResponse.matches : null}
+					disabled={!!feedback}
+					onchange={(m) => (draft = { kind: 'matching', matches: m })}
+				/>
 			{:else if question.kind === 'numeric'}
 				<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 					<input
@@ -788,6 +832,15 @@
 						</div>
 					</div>
 				</div>
+			{:else if question.kind === 'sort'}
+				<SortBoard
+					items={question.items}
+					buckets={question.buckets}
+					assignments={draft?.kind === 'sort' ? draft.assignments : {}}
+					feedbackAssignments={feedback?.correctResponse.kind === 'sort' ? feedback.correctResponse.assignments : null}
+					disabled={!!feedback}
+					onchange={(a) => (draft = { kind: 'sort', assignments: a })}
+				/>
 			{:else if question.kind === 'multi-step'}
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
@@ -876,33 +929,15 @@
 							{/each}
 						</div>
 					{:else if step.kind === 'matching'}
-						{@const allTargets = [...step.targets, ...(step.extraTargets ?? [])]}
-						<div class="space-y-3">
-							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
-							{#each step.premises as premise}
-								<div
-									class="flex flex-col gap-3 rounded-md bg-surface-700/60 p-4 sm:flex-row sm:items-center"
-								>
-									<span class="flex-1 text-text-primary">{premise.text}</span>
-									<select
-										class="sm:w-56"
-										value={subDraft?.kind === 'matching' ? subDraft.matches[premise.id] : ''}
-										onchange={(e) => {
-											const matches = {
-												...(subDraft?.kind === 'matching' ? subDraft.matches : {})
-											};
-											matches[premise.id] = e.currentTarget.value;
-											updateSubResponse({ kind: 'matching', matches });
-										}}
-									>
-										<option value="">Select target</option>
-										{#each allTargets as target}
-											<option value={target.id}>{target.text}</option>
-										{/each}
-									</select>
-								</div>
-							{/each}
-						</div>
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<MatchConnect
+							premises={step.premises}
+							targets={[...step.targets, ...(step.extraTargets ?? [])]}
+							matches={subDraft?.kind === 'matching' ? subDraft.matches : {}}
+							feedbackMatches={stepFeedbackMatches()}
+							disabled={!!feedback}
+							onchange={(m) => updateSubResponse({ kind: 'matching', matches: m })}
+						/>
 					{:else if step.kind === 'numeric'}
 						<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 							<p class="font-medium text-text-primary">{step.prompt}</p>
@@ -1029,6 +1064,16 @@
 								{/each}
 							</div>
 						</div>
+					{:else if step.kind === 'sort'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<SortBoard
+							items={step.items}
+							buckets={step.buckets}
+							assignments={subDraft?.kind === 'sort' ? subDraft.assignments : {}}
+							feedbackAssignments={stepSortAssignments()}
+							disabled={!!feedback}
+							onchange={(a) => updateSubResponse({ kind: 'sort', assignments: a })}
+						/>
 					{/if}
 
 					<div class="flex gap-2">
@@ -1059,7 +1104,7 @@
 					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered()}
+					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'
@@ -1101,6 +1146,26 @@
 						>
 					</div>
 					<p class="mt-2 leading-relaxed text-text-secondary">{feedback.explanation}</p>
+
+					{#if session.mode === 'practice' && !feedback.fullyCorrect && retriesLeft > 0}
+						<div class="mt-3 flex flex-wrap gap-2">
+							<button
+								class="btn btn-ghost h-11 px-4 text-sm"
+								type="button"
+								onclick={retryQuestion}
+								>Try again — {retriesLeft === 2 ? '60' : '30'}%</button
+							>
+						</div>
+					{/if}
+					{#if session.mode === 'practice' && question.objective}
+						<div class="mt-3">
+							<a
+								class="text-sm font-bold text-accent hover:underline"
+								href="/quiz?start=1&type=quiz&objective={question.objective}&count=5"
+								>More like this →</a
+							>
+						</div>
+					{/if}
 
 					{#if feedback.optionRationales && (question?.kind === 'single-choice' || question?.kind === 'multiple-choice')}
 						<div class="mt-3 space-y-2">

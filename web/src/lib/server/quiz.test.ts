@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ObjectiveId, PublicChoiceQuestion } from '$lib/types';
 import { createQuizRepository } from './db';
-import { loadQuestionBank } from './question-bank';
+import { loadQuestionBank, type QuestionDefinition } from './question-bank';
 import { createQuizService } from './quiz';
 
 describe('QuizService', () => {
@@ -24,6 +24,98 @@ describe('QuizService', () => {
 		expect(service.getActiveSession()).toMatchObject({ sessionId: session.sessionId, type: 'full', totalQuestions: 90 });
 		service.abandonSession(session.sessionId);
 		expect(service.startSession({ type: 'pbq', count: 5 }).questions).toHaveLength(5);
+		repository.close();
+	});
+
+	it('allows two practice retries with point decay and locks the third', () => {
+		const repository = createQuizRepository(':memory:');
+		const choicePbq: QuestionDefinition = {
+			id: 'pbq-1-999',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Which control BEST prevents credential replay?',
+			explanation: 'MFA stops replayed stolen credentials.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Patching', rationale: 'No.' },
+				{ id: 'c', text: 'Backups', rationale: 'No.' },
+				{ id: 'd', text: 'Ping sweep', rationale: 'No.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [choicePbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		// Attempt 1: wrong -> 0 points, retry unlocked.
+		const first = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
+		expect(first.feedback?.earnedPoints).toBe(0);
+		expect((service.getSession(session.sessionId) as typeof session).retries[0]).toBe(0);
+		// Retry 1: correct -> 60%.
+		const second = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		expect(second.feedback?.earnedPoints).toBeCloseTo(0.6);
+		// Retry 2 (third attempt): correct -> 30%.
+		const third = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		expect(third.feedback?.earnedPoints).toBeCloseTo(0.3);
+		// Fourth attempt is locked.
+		expect(() => service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] })).toThrow('Practice responses are locked after feedback.');
+		// Completion applies the final attempt's factor; full correctness is preserved.
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBeCloseTo(0.3);
+		expect(result.review[0].feedback.fullyCorrect).toBe(true);
+		repository.close();
+	});
+
+	it('round-trips sort responses through a PBQ session with an injected bank', () => {
+		const repository = createQuizRepository(':memory:');
+		const sortPbq: QuestionDefinition = {
+			id: 'pbq-5-999',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Classify each security control by type.',
+			explanation: 'Controls map to preventive, detective, or corrective categories.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'sort',
+			items: [
+				{ id: 'i1', text: 'Firewall ruleset' },
+				{ id: 'i2', text: 'Log review' },
+				{ id: 'i3', text: 'Backup restoration' },
+				{ id: 'i4', text: 'Vulnerability scan' }
+			],
+			buckets: [
+				{ id: 'b1', label: 'Preventive' },
+				{ id: 'b2', label: 'Detective' },
+				{ id: 'b3', label: 'Corrective' },
+				{ id: 'b4', label: 'Neither' }
+			],
+			correctBuckets: { i1: 'b1', i2: 'b2', i3: 'b3', i4: 'b2' }
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [sortPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		expect(session.questions[0].kind).toBe('sort');
+		service.saveResponse(session.sessionId, 0, { kind: 'sort', assignments: sortPbq.correctBuckets });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		const wrong = service.startSession({ type: 'pbq', count: 1 });
+		service.saveResponse(wrong.sessionId, 0, {
+			kind: 'sort',
+			assignments: { i1: 'b2', i2: 'b1', i3: 'b3', i4: 'b1' }
+		});
+		const wrongResult = service.completeSession(wrong.sessionId);
+		expect(wrongResult.review[0].feedback.earnedPoints).toBe(1 / 4);
 		repository.close();
 	});
 

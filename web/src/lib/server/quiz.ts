@@ -34,6 +34,10 @@ export const DEFAULT_EXAM_CONFIG: ExamConfig = {
 	quotas: { 1: 11, 2: 20, 3: 16, 4: 25, 5: 18 }
 };
 
+export const MAX_PRACTICE_RETRIES = 2;
+/** Points factor per attempt: attempt 1 = 100%, retry 1 = 60%, retry 2 = 30%. */
+export const RETRY_FACTORS = [1, 0.6, 0.3];
+
 function shuffle<T>(items: T[], rng: () => number): T[] {
 	const result = [...items];
 	for (let index = result.length - 1; index > 0; index--) { const selected = Math.floor(rng() * (index + 1)); [result[index], result[selected]] = [result[selected], result[index]]; }
@@ -46,18 +50,19 @@ function presentation(question: QuestionDefinition, rng: () => number): Question
 	if (cloned.kind === 'ordering') cloned.items = shuffle(cloned.items, rng);
 	if (cloned.kind === 'matching') cloned.targets = shuffle(cloned.targets, rng);
 	if (cloned.kind === 'word-bank') cloned.bank = shuffle(cloned.bank, rng);
+	if (cloned.kind === 'sort') cloned.items = shuffle(cloned.items, rng);
 	if (cloned.kind === 'multi-step') cloned.steps = cloned.steps.map((step) => presentation(step, rng)) as typeof cloned.steps;
 	return cloned;
 }
 
 function asView(stored: StoredSession): SessionView {
 	const questions = stored.questions.map(toPublicQuestion);
-	return { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, startedAt: stored.summary.started_at, ...(stored.deadlineAt ? { deadlineAt: stored.deadlineAt } : {}), answeredCount: Object.keys(stored.responses).length, totalQuestions: questions.length, currentIndex: stored.currentIndex, status: stored.summary.status, questions, responses: stored.responses, flaggedQuestionIndexes: stored.flags };
+	return { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, startedAt: stored.summary.started_at, ...(stored.deadlineAt ? { deadlineAt: stored.deadlineAt } : {}), answeredCount: Object.keys(stored.responses).length, totalQuestions: questions.length, currentIndex: stored.currentIndex, status: stored.summary.status, questions, responses: stored.responses, retries: stored.retries, flaggedQuestionIndexes: stored.flags };
 }
 
 function summary(stored: StoredSession): ActiveSessionSummary {
 	const view = asView(stored);
-	const { status: _status, questions: _questions, responses: _responses, flaggedQuestionIndexes: _flags, ...active } = view;
+	const { status: _status, questions: _questions, responses: _responses, retries: _retries, flaggedQuestionIndexes: _flags, ...active } = view;
 	return active;
 }
 
@@ -74,6 +79,7 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	if (question.kind === 'configuration' && response.kind === 'configuration' && Object.keys(response.values).length === question.fields.length && question.fields.every((field) => field.options.some((option) => option.id === response.values[field.id]))) return;
 	if (question.kind === 'fill-blank' && response.kind === 'fill-blank' && Object.keys(response.values).length === question.blanks.length && question.blanks.every((blank) => typeof response.values[blank.id] === 'string')) return;
 	if (question.kind === 'word-bank' && response.kind === 'word-bank' && Object.keys(response.assignments).length === question.blanks.length && question.blanks.every((blank) => question.bank.some((word) => word.id === response.assignments[blank.id])) && new Set(Object.values(response.assignments)).size === question.blanks.length) return;
+	if (question.kind === 'sort' && response.kind === 'sort' && Object.keys(response.assignments).length === question.items.length && question.items.every((item) => question.buckets.some((bucket) => bucket.id === response.assignments[item.id]))) return;
 	if (question.kind === 'multi-step' && response.kind === 'multi-step' && response.stepResponses.length === question.steps.length) {
 		for (let i = 0; i < question.steps.length; i++) { validateResponse(question.steps[i], response.stepResponses[i]); }
 		return;
@@ -117,9 +123,11 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 		if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is not active.');
 		const domainBreakdown = { 1: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 2: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 3: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 4: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 5: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 } } as QuizResult['domainBreakdown'];
 		const objectiveBreakdown: QuizResult['objectiveBreakdown'] = {};
+		const attemptFactor = (retries: number) => (stored.summary.mode === 'practice' ? RETRY_FACTORS[Math.min(retries, MAX_PRACTICE_RETRIES)] : 1);
 		const review = stored.questions.map((question, index) => {
 			const response = stored.responses[index] ?? null;
 			const feedback = scoreQuestion(question, response);
+			feedback.earnedPoints *= attemptFactor(stored.retries[index] ?? 0);
 			const domain = domainBreakdown[question.domain]; domain.earnedPoints += feedback.earnedPoints; domain.possiblePoints++; domain.totalQuestions++; if (feedback.fullyCorrect) domain.fullyCorrect++;
 			const objective = objectiveBreakdown[question.objective] ?? { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }; objective.earnedPoints += feedback.earnedPoints; objective.possiblePoints++; objective.totalQuestions++; if (feedback.fullyCorrect) objective.fullyCorrect++; objectiveBreakdown[question.objective] = objective;
 			return { question: toPublicQuestion(question), response, feedback };
@@ -168,7 +176,19 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 		},
 		getSession(id) { const stored = requireStored(id); return stored.summary.status === 'completed' && stored.result ? stored.result : asView(stored); },
 		getActiveSession() { const stored = repository.getActiveSession(); return stored ? summary(expire(stored)) : null; },
-		saveResponse(id, questionIndex, response) { const stored = requireStored(id); if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.'); if (!Number.isInteger(questionIndex) || questionIndex < 0 || questionIndex >= stored.questions.length) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.'); if (stored.summary.mode === 'practice' && stored.responses[questionIndex]) throw new QuizServiceError('RESPONSE_LOCKED', 'Practice responses are locked after feedback.'); const question = stored.questions[questionIndex]; validateResponse(question, response); repository.saveResponse(id, questionIndex, response, now().toISOString()); return { saved: true as const, ...(stored.summary.mode === 'practice' ? { feedback: scoreQuestion(question, response) } : {}) }; },
+		saveResponse(id, questionIndex, response) {
+			const stored = requireStored(id);
+			if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
+			if (!Number.isInteger(questionIndex) || questionIndex < 0 || questionIndex >= stored.questions.length) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.');
+			if (stored.summary.mode === 'practice' && stored.responses[questionIndex] && (stored.retries[questionIndex] ?? 0) >= MAX_PRACTICE_RETRIES) throw new QuizServiceError('RESPONSE_LOCKED', 'Practice responses are locked after feedback.');
+			const question = stored.questions[questionIndex];
+			validateResponse(question, response);
+			repository.saveResponse(id, questionIndex, response, now().toISOString());
+			if (stored.summary.mode !== 'practice') return { saved: true as const };
+			const feedback = scoreQuestion(question, response);
+			feedback.earnedPoints *= RETRY_FACTORS[Math.min((stored.retries[questionIndex] ?? 0) + 1, MAX_PRACTICE_RETRIES)];
+			return { saved: true as const, feedback };
+		},
 		updateSession(id, update) { const stored = requireStored(id); if (stored.summary.status !== 'active') throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.'); if (update.currentIndex !== undefined && (!Number.isInteger(update.currentIndex) || update.currentIndex < 0 || update.currentIndex >= stored.questions.length)) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.'); if (update.flag && (!Number.isInteger(update.flag.questionIndex) || update.flag.questionIndex < 0 || update.flag.questionIndex >= stored.questions.length)) throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.'); repository.updateState(id, update.currentIndex, update.flag, now().toISOString()); return asView(requireStored(id)); },
 		abandonSession(id) { const stored = requireStored(id); if (!repository.abandon(id, now().toISOString())) throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.'); },
 		completeSession(id) { return complete(requireStored(id)); }

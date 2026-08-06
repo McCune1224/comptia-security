@@ -344,7 +344,53 @@
 			</section>
 		</div>
 
-		<!-- Modules -->
+		<!-- Quick drills -->
+	<section>
+		<div class="mb-4 flex items-center justify-between">
+			<h2 class="h-display text-xl text-text-primary">Quick drills</h2>
+			<a class="text-sm font-bold text-accent hover:underline" href="/history">History →</a>
+		</div>
+		<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+			<a
+				href="/pbq"
+				class="card group p-4 transition-all duration-200 hover:border-accent/50"
+			>
+				<p class="eyebrow">Hands-on</p>
+				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">PBQs</p>
+				<p class="mt-1 text-xs text-text-muted">Connect, sort, configure</p>
+			</a>
+			<a
+				href="/scenarios"
+				class="card group p-4 transition-all duration-200 hover:border-accent/50"
+			>
+				<p class="eyebrow">Scenario</p>
+				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">Scenarios</p>
+				<p class="mt-1 text-xs text-text-muted">Applied judgment</p>
+			</a>
+			<a
+				href="/mastery"
+				class="card group p-4 transition-all duration-200 hover:border-accent/50"
+			>
+				<p class="eyebrow">Weak spots</p>
+				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent"
+					>Mastery drill</p
+				>
+				<p class="mt-1 text-xs text-text-muted">Objective grid</p>
+			</a>
+			<a
+				href="/review"
+				class="card group p-4 transition-all duration-200 hover:border-accent/50"
+			>
+				<p class="eyebrow">Recall</p>
+				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent"
+					>Daily review</p
+				>
+				<p class="mt-1 text-xs text-text-muted">Spaced cards</p>
+			</a>
+		</div>
+	</section>
+
+	<!-- Modules -->
 		<section>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="h-display text-xl text-text-primary">Course modules</h2>

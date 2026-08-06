@@ -58,6 +58,8 @@ export interface StoredSession {
 	questions: QuestionDefinition[];
 	result: QuizResult | null;
 	responses: Record<number, QuestionResponse>;
+	/** Practice-mode retry count per question index (0 = first attempt). */
+	retries: Record<number, number>;
 	flags: number[];
 }
 
@@ -132,14 +134,16 @@ export interface QuizRepository {
 	close(): void;
 }
 
-function parseStoredSession(row: SessionRow & StateRow, responseRows: { question_index: number; response_json: string; flagged: number }[]): StoredSession {
+function parseStoredSession(row: SessionRow & StateRow, responseRows: { question_index: number; response_json: string; flagged: number; retries: number }[]): StoredSession {
 	const responses: Record<number, QuestionResponse> = {};
+	const retries: Record<number, number> = {};
 	const flags: number[] = [];
 	for (const response of responseRows) {
 		if (response.response_json) responses[response.question_index] = JSON.parse(response.response_json) as QuestionResponse;
+		retries[response.question_index] = response.retries;
 		if (response.flagged) flags.push(response.question_index);
 	}
-	return { summary: row, deadlineAt: row.deadline_at, currentIndex: row.current_index, questions: JSON.parse(row.questions_json) as QuestionDefinition[], result: row.result_json ? JSON.parse(row.result_json) as QuizResult : null, responses, flags };
+	return { summary: row, deadlineAt: row.deadline_at, currentIndex: row.current_index, questions: JSON.parse(row.questions_json) as QuestionDefinition[], result: row.result_json ? JSON.parse(row.result_json) as QuizResult : null, responses, retries, flags };
 }
 
 /** Content + default-profile seeding. Runs after migration; idempotent by design. */
@@ -183,7 +187,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		CREATE TABLE IF NOT EXISTS quiz_answers (id INTEGER PRIMARY KEY AUTOINCREMENT, session_id TEXT NOT NULL, question_index INTEGER NOT NULL, prompt TEXT NOT NULL DEFAULT '', domain INTEGER NOT NULL, category TEXT, correct_answer TEXT NOT NULL DEFAULT '', user_answer TEXT NOT NULL DEFAULT '', is_correct INTEGER NOT NULL DEFAULT 0, question_id TEXT, objective TEXT, response_json TEXT, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701', FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
 		CREATE TABLE IF NOT EXISTS domain_progress (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, domain INTEGER NOT NULL, total_attempted INTEGER NOT NULL DEFAULT 0, total_correct INTEGER NOT NULL DEFAULT 0, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, last_reviewed_at TEXT, PRIMARY KEY (profile_id, course_id, domain));
 		CREATE TABLE IF NOT EXISTS quiz_session_state (session_id TEXT PRIMARY KEY, schema_version INTEGER NOT NULL, deadline_at TEXT, current_index INTEGER NOT NULL DEFAULT 0, questions_json TEXT NOT NULL, result_json TEXT, updated_at TEXT NOT NULL, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
-		CREATE TABLE IF NOT EXISTS quiz_session_responses (session_id TEXT NOT NULL, question_index INTEGER NOT NULL, response_json TEXT, flagged INTEGER NOT NULL DEFAULT 0, answered_at TEXT, PRIMARY KEY(session_id, question_index), FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
+		CREATE TABLE IF NOT EXISTS quiz_session_responses (session_id TEXT NOT NULL, question_index INTEGER NOT NULL, response_json TEXT, flagged INTEGER NOT NULL DEFAULT 0, retries INTEGER NOT NULL DEFAULT 0, answered_at TEXT, PRIMARY KEY(session_id, question_index), FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
 		CREATE TABLE IF NOT EXISTS review_cards (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, question_id TEXT NOT NULL, interval_days REAL NOT NULL DEFAULT 0, ease REAL NOT NULL DEFAULT 2.5, lapses INTEGER NOT NULL DEFAULT 0, due_at TEXT NOT NULL, last_result TEXT, review_count INTEGER NOT NULL DEFAULT 0, first_seen_at TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, question_id));
 		CREATE TABLE IF NOT EXISTS study_log (profile_id TEXT NOT NULL, date_key TEXT NOT NULL, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL, PRIMARY KEY (profile_id, date_key));
 		CREATE TABLE IF NOT EXISTS course_meta (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, key));
@@ -220,6 +224,9 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		// v7: per-profile preferred course — switching profiles restores the
 		// course that profile was studying, instead of leaking the last course.
 		if (!has('profiles', 'course_id')) db.exec("ALTER TABLE profiles ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
+		// v8: practice-mode retry counter per question (no user_version bump needed —
+		// guarded column add, idempotent on every open).
+		if (!has('quiz_session_responses', 'retries')) db.exec('ALTER TABLE quiz_session_responses ADD COLUMN retries INTEGER NOT NULL DEFAULT 0');
 
 		// B. Primary-key rebuilds — SQLite 12-step, backfilling all existing
 		// rows to the seeded default profile / Security+ course.
@@ -282,7 +289,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		const readSession = (id: string): StoredSession | null => {
 			const row = db.prepare('SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ? AND s.profile_id = ? AND s.course_id = ?').get(id, scope.profileId, scope.courseId) as (SessionRow & StateRow) | undefined;
 			if (!row) return null;
-			return parseStoredSession(row, db.prepare('SELECT question_index, response_json, flagged FROM quiz_session_responses WHERE session_id = ?').all(id) as { question_index: number; response_json: string; flagged: number }[]);
+			return parseStoredSession(row, db.prepare('SELECT question_index, response_json, flagged, retries FROM quiz_session_responses WHERE session_id = ?').all(id) as { question_index: number; response_json: string; flagged: number; retries: number }[]);
 		};
 		return {
 			getProfiles() { return db.prepare('SELECT id, name, color, course_id AS courseId, created_at AS createdAt FROM profiles ORDER BY created_at').all() as ProfileRow[]; },
@@ -316,7 +323,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 				const row = db.prepare("SELECT id FROM quiz_sessions WHERE status = 'active' AND profile_id = ? AND course_id = ? ORDER BY started_at DESC LIMIT 1").get(scope.profileId, scope.courseId) as { id: string } | undefined;
 				return row ? readSession(row.id) : null;
 			},
-			saveResponse(id, index, response, answeredAt) { db.prepare('INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, answered_at) VALUES (?, ?, ?, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at').run(id, index, JSON.stringify(response), answeredAt); db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(answeredAt, id); },
+			saveResponse(id, index, response, answeredAt) { db.prepare('INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, answered_at) VALUES (?, ?, ?, 0, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1').run(id, index, JSON.stringify(response), answeredAt); db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(answeredAt, id); },
 			updateState(id, currentIndex, flag, updatedAt = new Date().toISOString()) {
 				const update = db.transaction(() => {
 					if (currentIndex !== undefined) db.prepare('UPDATE quiz_session_state SET current_index = ?, updated_at = ? WHERE session_id = ?').run(currentIndex, updatedAt, id);

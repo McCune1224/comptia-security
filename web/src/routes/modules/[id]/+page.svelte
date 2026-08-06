@@ -127,11 +127,20 @@
 					>{moduleView.lessonsCompleted}/{moduleView.lessonsTotal} lessons</span
 				>
 			</div>
+			<div class="mt-5 flex flex-wrap gap-3">
+				<a class="btn btn-primary" href="/quiz?start=1&type=quiz&count=10"
+					>Drill this module</a
+				>
+				<a class="btn btn-ghost" href="/pbq">PBQ drills</a>
+			</div>
 		</div>
 
 		{#if moduleView.lessons.length}
 			<section class="card p-5 sm:p-6">
-				<h2 class="h-display mb-4 text-xl text-text-primary">Lessons</h2>
+				<h2 class="h-display text-xl text-text-primary">Quick reference</h2>
+				<p class="mb-4 mt-1 text-xs text-text-muted">
+					Skim-only — the real work happens in the drills and assignments.
+				</p>
 				<div class="space-y-3">
 					{#each moduleView.lessons as lesson (lesson.id)}
 						<div class="overflow-hidden rounded-md border border-border bg-surface-800/60">

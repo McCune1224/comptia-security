@@ -90,6 +90,8 @@
 				return 'See correct answers below.';
 			case 'word-bank':
 				return 'See correct words below.';
+			case 'sort':
+				return 'See correct buckets below.';
 			case 'numeric':
 				return `${cr.value}`;
 			case 'multi-step':
@@ -122,6 +124,8 @@
 			case 'fill-blank':
 				return Object.values(review.response.values).join(' | ');
 			case 'word-bank':
+				return Object.values(review.response.assignments).join(' | ');
+			case 'sort':
 				return Object.values(review.response.assignments).join(' | ');
 			case 'numeric':
 				return `${review.response.value}`;
@@ -494,6 +498,37 @@
 										{#if !isWordCorrect && correctWordId}
 											<span class="text-xs text-text-muted"
 												>(correct: {q.bank.find((w) => w.id === correctWordId)?.word})</span
+											>
+										{/if}
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else if q.kind === 'sort'}
+						<div class="space-y-2">
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+								Your buckets
+							</p>
+							{#each q.items as item}
+								{@const userBucket =
+									review.response?.kind === 'sort'
+										? (review.response.assignments[item.id] ?? '')
+										: ''}
+								{@const correctBucket =
+									review.feedback.correctResponse.kind === 'sort'
+										? (review.feedback.correctResponse.assignments[item.id] ?? '')
+										: ''}
+								{@const isSortCorrect = userBucket === correctBucket}
+								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+									<div class="flex items-center gap-2">
+										<span class="flex-1 text-text-primary">{item.text}</span>
+										<span class="font-medium {isSortCorrect ? 'text-success' : 'text-danger'}"
+											>{q.buckets.find((b) => b.id === (userBucket || correctBucket))?.label ??
+												'—'}</span
+										>
+										{#if !isSortCorrect && correctBucket}
+											<span class="text-xs text-text-muted"
+												>(correct: {q.buckets.find((b) => b.id === correctBucket)?.label})</span
 											>
 										{/if}
 									</div>

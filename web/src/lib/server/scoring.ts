@@ -58,6 +58,12 @@ export function scoreQuestion(
 						(blank) => response.assignments[blank.id] === question.correctAssignments[blank.id]
 					).length / question.blanks.length;
 				break;
+			case 'sort':
+				if (response.kind === 'sort')
+					earnedPoints = question.items.filter(
+						(item) => response.assignments[item.id] === question.correctBuckets[item.id]
+					).length / question.items.length;
+				break;
 			case 'multi-step':
 				if (response.kind === 'multi-step') {
 					const stepScores = question.steps.map((step, i) => scoreQuestion(step, response.stepResponses[i] ?? null));
