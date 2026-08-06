@@ -8691,6 +8691,692 @@
           "section": "220-1202 4.10 Basic AI Concepts"
         }
       ]
+    },
+    {
+      "id": "a2-pbq-1-006",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "pbq",
+      "kind": "sort",
+      "prompt": "A technician supports a fleet of Windows workstations, USB drives, and a storage array. Drag each file system to the category that BEST describes its primary design goal.",
+      "context": "Microsoft's NTFS and ReFS are feature-rich file systems, while the FAT family trades features for maximum compatibility with older operating systems and consumer devices.",
+      "explanation": "NTFS supports per-file permissions (ACLs), EFS/BitLocker encryption, and journaling. ReFS adds resiliency and integrity checking for Storage Spaces. exFAT, FAT32, and FAT16 favor compatibility: FAT32/FAT16 cap file size at 4 GB and offer no permissions or encryption, and exFAT (no 4 GB limit) is the cross-platform choice for flash media.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 Windows Features and Tools"
+        }
+      ],
+      "items": [
+        {
+          "id": "i1",
+          "text": "NTFS"
+        },
+        {
+          "id": "i2",
+          "text": "ReFS"
+        },
+        {
+          "id": "i3",
+          "text": "exFAT"
+        },
+        {
+          "id": "i4",
+          "text": "FAT32"
+        },
+        {
+          "id": "i5",
+          "text": "FAT16"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "feat",
+          "label": "Feature-rich (permissions, encryption, journaling)"
+        },
+        {
+          "id": "compat",
+          "label": "Maximum compatibility (legacy OS and devices)"
+        },
+        {
+          "id": "dist",
+          "label": "Cloud-native (used only for Azure VM disks)"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "feat",
+        "i2": "feat",
+        "i3": "compat",
+        "i4": "compat",
+        "i5": "compat"
+      }
+    },
+    {
+      "id": "a2-pbq-1-007",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "pbq",
+      "kind": "sort",
+      "prompt": "A small business backs up its file server with Windows Backup every night. Classify each backup run by type.",
+      "context": "A full backup copies all selected data. An incremental backup copies only data changed since the last backup of ANY type. A differential backup copies all data changed since the last FULL backup.",
+      "explanation": "Sunday is the weekly full backup. Monday and Wednesday copy only what changed since the previous backup of any type, making them incremental. Tuesday and Thursday copy everything changed since Sunday's full backup, making them differential. No run in this schedule is a synthetic full backup.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.4 Windows Features and Tools"
+        }
+      ],
+      "items": [
+        {
+          "id": "i1",
+          "text": "Sunday 10 PM — every file in the sales folder is copied"
+        },
+        {
+          "id": "i2",
+          "text": "Monday 10 PM — only files changed since Sunday are copied"
+        },
+        {
+          "id": "i3",
+          "text": "Tuesday 10 PM — every file changed since Sunday is copied"
+        },
+        {
+          "id": "i4",
+          "text": "Wednesday 10 PM — only files changed since Tuesday are copied"
+        },
+        {
+          "id": "i5",
+          "text": "Thursday 10 PM — every file changed since Sunday is copied"
+        }
+      ],
+      "buckets": [
+        {
+          "id": "full",
+          "label": "Full"
+        },
+        {
+          "id": "incr",
+          "label": "Incremental"
+        },
+        {
+          "id": "diff",
+          "label": "Differential"
+        },
+        {
+          "id": "synth",
+          "label": "Synthetic full"
+        }
+      ],
+      "correctBuckets": {
+        "i1": "full",
+        "i2": "incr",
+        "i3": "diff",
+        "i4": "incr",
+        "i5": "diff"
+      }
+    },
+    {
+      "id": "a2-pbq-3-005",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "A technician is troubleshooting a Windows workstation. Match each command-line tool to its purpose.",
+      "explanation": "ipconfig displays and renews IP configuration, sfc /scannow verifies and repairs protected system files, chkdsk checks volumes for file system errors and bad sectors, gpupdate /force refreshes Group Policy immediately, and netstat shows active connections and listening ports. tracert traces the route to a destination and taskkill ends a process — both are useful troubleshooting tools but are not paired here.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Windows Troubleshooting"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 1.5 Command-Line Tools"
+        }
+      ],
+      "premises": [
+        {
+          "id": "p1",
+          "text": "ipconfig"
+        },
+        {
+          "id": "p2",
+          "text": "sfc"
+        },
+        {
+          "id": "p3",
+          "text": "chkdsk"
+        },
+        {
+          "id": "p4",
+          "text": "gpupdate"
+        },
+        {
+          "id": "p5",
+          "text": "netstat"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Displays TCP/IP configuration and renews the DHCP lease"
+        },
+        {
+          "id": "t2",
+          "text": "Scans protected system files and repairs corrupted ones"
+        },
+        {
+          "id": "t3",
+          "text": "Checks a volume for file system errors and bad sectors"
+        },
+        {
+          "id": "t4",
+          "text": "Refreshes Group Policy settings immediately"
+        },
+        {
+          "id": "t5",
+          "text": "Shows active TCP/UDP connections and listening ports"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "Traces the route packets take to a destination"
+        },
+        {
+          "id": "t7",
+          "text": "Ends a running process by PID or image name"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      }
+    },
+    {
+      "id": "a2-pbq-3-006",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "A technician is diagnosing several Windows workstations with different symptoms. Match each symptom to its MOST LIKELY cause.",
+      "explanation": "A BSOD right after a driver install points to an incompatible driver or failing hardware. A multi-minute wait at the desktop usually means too many startup programs. 'Not enough space on the disk' errors mean insufficient free space. Constant fan spin at 99% CPU indicates a runaway process, and a 'DLL not found' crash means a missing required library.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 3.1 Windows Troubleshooting"
+        }
+      ],
+      "premises": [
+        {
+          "id": "p1",
+          "text": "Blue screen (BSOD) moments after installing a new GPU driver"
+        },
+        {
+          "id": "p2",
+          "text": "PC takes several minutes to reach the desktop after login"
+        },
+        {
+          "id": "p3",
+          "text": "Application fails to save with \"There is not enough space on the disk\""
+        },
+        {
+          "id": "p4",
+          "text": "System fan spins constantly and Task Manager shows 99% CPU usage"
+        },
+        {
+          "id": "p5",
+          "text": "Program crashes on launch with a \"DLL not found\" error"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Incompatible device driver or failing hardware"
+        },
+        {
+          "id": "t2",
+          "text": "Excessive startup programs"
+        },
+        {
+          "id": "t3",
+          "text": "Insufficient free disk space"
+        },
+        {
+          "id": "t4",
+          "text": "Runaway process consuming CPU"
+        },
+        {
+          "id": "t5",
+          "text": "Missing required DLL file"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "Overheating CPU"
+        },
+        {
+          "id": "t7",
+          "text": "Expired software license"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      }
+    },
+    {
+      "id": "a2-pbq-2-007",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "A security analyst is reviewing the protection stack on a corporate network. Fill in each blank with the correct security technology.\n\n1. ____ software monitors endpoints and responds to malware in real time.\n2. A ____ centralizes and correlates security logs from firewalls, servers, and workstations.\n3. ____ policies prevent sensitive customer data from being emailed or copied to USB drives.\n4. ____ requires users to present a second credential, such as a one-time code, before access is granted.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Endpoint malware detection and response"
+        },
+        {
+          "id": "b2",
+          "label": "Centralized log analysis and correlation"
+        },
+        {
+          "id": "b3",
+          "label": "Prevents confidential data from leaving the network"
+        },
+        {
+          "id": "b4",
+          "label": "Second authentication factor beyond the password"
+        }
+      ],
+      "explanation": "EDR (endpoint detection and response) monitors endpoints and reacts to threats in real time. SIEM (security information and event management) collects and correlates logs centrally. DLP (data loss prevention) blocks unauthorized transfer of sensitive data. MFA (multi-factor authentication) adds a second factor such as a one-time code or biometric. VPN and UAC are real security technologies but do not match these descriptions.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.1 Security Measures"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "EDR"
+        },
+        {
+          "id": "w2",
+          "word": "SIEM"
+        },
+        {
+          "id": "w3",
+          "word": "DLP"
+        },
+        {
+          "id": "w4",
+          "word": "MFA"
+        },
+        {
+          "id": "d1",
+          "word": "VPN"
+        },
+        {
+          "id": "d2",
+          "word": "UAC"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
+    },
+    {
+      "id": "a2-pbq-4-006",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "A technician writes a PowerShell script to automate new-user onboarding. Fill in each blank with the correct scripting term.\n\n1. A ____ stores a value, such as the new user's name, so it can be reused throughout the script.\n2. A ____ repeats a block of commands until a condition is met.\n3. A named block of code that performs one task and can be called repeatedly is a ____.\n4. A ____ statement selects between different code paths based on a value or condition.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Stores a reusable value"
+        },
+        {
+          "id": "b2",
+          "label": "Repeats commands until a condition is met"
+        },
+        {
+          "id": "b3",
+          "label": "Named, callable block of code"
+        },
+        {
+          "id": "b4",
+          "label": "Selects code paths based on a condition"
+        }
+      ],
+      "explanation": "A variable stores values for reuse, a loop repeats a block while a condition holds, a function is a named reusable block that can take parameters, and a conditional (such as if/else) selects among code paths. Compiler and register are related to lower-level execution, not scripting constructs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 4.8 Scripting Basics"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "variable"
+        },
+        {
+          "id": "w2",
+          "word": "loop"
+        },
+        {
+          "id": "w3",
+          "word": "function"
+        },
+        {
+          "id": "w4",
+          "word": "conditional"
+        },
+        {
+          "id": "d1",
+          "word": "compiler"
+        },
+        {
+          "id": "d2",
+          "word": "register"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
+    },
+    {
+      "id": "a2-pbq-2-008",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "pbq",
+      "kind": "configuration",
+      "prompt": "A support engineer must remotely manage a finance workstation over Remote Desktop (RDP). Configure a new Windows Defender Firewall inbound rule so that RDP works ONLY from the trusted Private network profile and nothing else is opened.",
+      "explanation": "The rule must Allow (not block) inbound RDP on TCP port 3389, and it should apply only to the Private profile so the workstation stays locked down on Public networks. Direction Inbound is required because RDP is a remote-initiated connection.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Windows OS Security Settings"
+        }
+      ],
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Action",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Block the connection"
+            },
+            {
+              "id": "o2",
+              "text": "Allow the connection"
+            },
+            {
+              "id": "o3",
+              "text": "Allow the connection if it is secured"
+            },
+            {
+              "id": "o4",
+              "text": "Ask every time a connection is attempted"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Protocol",
+          "options": [
+            {
+              "id": "o1",
+              "text": "UDP"
+            },
+            {
+              "id": "o2",
+              "text": "Any"
+            },
+            {
+              "id": "o3",
+              "text": "TCP"
+            },
+            {
+              "id": "o4",
+              "text": "ICMP"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Local port",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Any"
+            },
+            {
+              "id": "o2",
+              "text": "445 (SMB)"
+            },
+            {
+              "id": "o3",
+              "text": "443 (HTTPS)"
+            },
+            {
+              "id": "o4",
+              "text": "3389 (RDP)"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Direction",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Outbound"
+            },
+            {
+              "id": "o2",
+              "text": "Inbound"
+            },
+            {
+              "id": "o3",
+              "text": "Both"
+            },
+            {
+              "id": "o4",
+              "text": "Not specified"
+            }
+          ]
+        },
+        {
+          "id": "f5",
+          "label": "Profile",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Public"
+            },
+            {
+              "id": "o2",
+              "text": "Domain"
+            },
+            {
+              "id": "o3",
+              "text": "All profiles"
+            },
+            {
+              "id": "o4",
+              "text": "Private"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o2",
+        "f2": "o3",
+        "f3": "o4",
+        "f4": "o2",
+        "f5": "o4"
+      }
+    },
+    {
+      "id": "a2-pbq-2-009",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "pbq",
+      "kind": "configuration",
+      "prompt": "A technician is hardening a new Windows 11 workstation for a standard user. Configure each security setting to the recommended secure value.",
+      "context": "Least privilege and defense-in-depth apply: the daily account should not be an administrator, UAC should stay at the recommended level, passwords should resist guessing, and the machine should re-lock when it wakes.",
+      "explanation": "Keep UAC at its recommended default (notify when apps try to change settings), give the user a Standard account for daily work, enable password complexity requirements, and require sign-in whenever the PC wakes from sleep. Disabling UAC or allowing administrator accounts for daily use violates least privilege.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1202 2.2 Windows OS Security Settings"
+        }
+      ],
+      "fields": [
+        {
+          "id": "f1",
+          "label": "User Account Control (UAC) notification level",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Never notify"
+            },
+            {
+              "id": "o2",
+              "text": "Always notify"
+            },
+            {
+              "id": "o3",
+              "text": "Notify me only when apps try to make changes to my computer"
+            },
+            {
+              "id": "o4",
+              "text": "Notify me only when apps try to make changes (do not dim my desktop)"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Daily user account type",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Standard user"
+            },
+            {
+              "id": "o2",
+              "text": "Administrator"
+            },
+            {
+              "id": "o3",
+              "text": "Guest"
+            },
+            {
+              "id": "o4",
+              "text": "Power user"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Password complexity requirement",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Disabled — any password is accepted"
+            },
+            {
+              "id": "o2",
+              "text": "Enabled — must mix letters, numbers, and symbols"
+            },
+            {
+              "id": "o3",
+              "text": "Enabled — numbers only"
+            },
+            {
+              "id": "o4",
+              "text": "Enabled — letters only"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Require sign-in on wake from sleep",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Never"
+            },
+            {
+              "id": "o2",
+              "text": "Only when on battery power"
+            },
+            {
+              "id": "o3",
+              "text": "Always when the PC wakes from sleep"
+            },
+            {
+              "id": "o4",
+              "text": "Only after a restart"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o3",
+        "f2": "o1",
+        "f3": "o2",
+        "f4": "o3"
+      }
     }
   ]
 }
