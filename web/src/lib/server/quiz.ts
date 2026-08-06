@@ -3,8 +3,8 @@ import type { ActiveSessionSummary, Domain, ObjectiveId, PublicQuestion, Questio
 import { quizRepository, type QuizRepository, type StoredSession } from './db';
 import { loadQuestionBank, toPublicQuestion, type QuestionBank, type QuestionDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
-import { courseService } from './course-service';
-import { reviewService, type ReviewService, type ReviewSource } from './review';
+import { createCourseService, type CourseService } from './course-service';
+import { createReviewService, type ReviewService, type ReviewSource } from './review';
 
 export class QuizServiceError extends Error {
 	constructor(public code: 'INVALID_REQUEST' | 'SESSION_NOT_FOUND' | 'ACTIVE_SESSION_EXISTS' | 'SESSION_CLOSED' | 'RESPONSE_LOCKED', message: string, public details?: Record<string, unknown>) { super(message); }
@@ -106,7 +106,7 @@ function assemblePbqSet(bank: QuestionBank, domains: Domain[]): QuestionDefiniti
 	return search(0) ? [...chosen] : undefined;
 }
 
-export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date(), reviewSvc = reviewService, examConfig = DEFAULT_EXAM_CONFIG }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date; reviewSvc?: ReviewService; examConfig?: ExamConfig }): QuizService {
+export function createQuizService({ repository, bank, rng = Math.random, now = () => new Date(), reviewSvc = createReviewService({ repository, bank }), examConfig = DEFAULT_EXAM_CONFIG, courseSvc = createCourseService({ repository }) }: { repository: QuizRepository; bank: QuestionBank; rng?: () => number; now?: () => Date; reviewSvc?: ReviewService; examConfig?: ExamConfig; courseSvc?: CourseService }): QuizService {
 	const expire = (stored: StoredSession): StoredSession => {
 		if (stored.summary.status === 'active' && stored.deadlineAt && new Date(stored.deadlineAt) <= now()) { complete(stored); return repository.getSession(stored.summary.id)!; }
 		return stored;
@@ -127,7 +127,7 @@ export function createQuizService({ repository, bank, rng = Math.random, now = (
 		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
 		const result: QuizResult = { sessionId: stored.summary.id, type: stored.summary.type, mode: stored.summary.mode, earnedPoints, possiblePoints: stored.questions.length, percentage: Math.round(earnedPoints / stored.questions.length * 1000) / 10, fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length, totalQuestions: stored.questions.length, flaggedQuestionIndexes: stored.flags, domainBreakdown, objectiveBreakdown, completedAt: now().toISOString(), review };
 		const finalized = repository.complete(stored.summary.id, result, review.map((item, index) => ({ index, question: stored.questions[index], response: item.response, points: item.feedback.earnedPoints })), result.completedAt);
-		if (stored.summary.assignment_id) courseService.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
+		if (stored.summary.assignment_id) courseSvc.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
 		reviewSvc.recordCompletion(
 			stored.questions.map((question, index) => ({ questionId: question.id, points: review[index].feedback.earnedPoints })),
 			result.completedAt,

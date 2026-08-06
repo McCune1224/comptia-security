@@ -1,6 +1,7 @@
-import { json } from '@sveltejs/kit';
-import { courseService } from '$lib/server/course-service';
+import { json, type RequestEvent } from '@sveltejs/kit';
+import { resolveScope } from '$lib/server/scope';
+import { scopedServices } from '$lib/server/services';
 
-export function GET() {
-	return json(courseService.getOverview());
+export function GET(event: RequestEvent) {
+	return json(scopedServices(resolveScope(event)).course.getOverview());
 }

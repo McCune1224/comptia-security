@@ -1,7 +1,9 @@
-import type { QuizResult, SessionType } from '$lib/types';
+import type { CourseId, QuizResult, SessionType } from '$lib/types';
 import { quizRepository, type QuizRepository } from './db';
 import {
 	COURSE_DEFINITION,
+	COURSES,
+	COURSE_META,
 	assignmentDueDate,
 	assignmentStatus,
 	computeGradebook,
@@ -85,7 +87,18 @@ function buildAssignmentView(
 	};
 }
 
-export function createCourseService({ repository }: { repository: QuizRepository }): CourseService {
+export function createCourseService({ repository, courseId }: { repository: QuizRepository; courseId?: CourseId }): CourseService {
+	// Per-course parameters: readiness math uses the course's domains + exam
+	// weights; the gradebook uses the course's category weights. Defaults to
+	// the Security+ definition when the course has no registry entry.
+	const meta = courseId ? COURSE_META[courseId] : undefined;
+	const definition = courseId ? COURSES[courseId] : undefined;
+	const readinessDomains = meta?.domains ?? [1, 2, 3, 4, 5];
+	const readinessQuotas = (meta?.domainWeights ?? { 1: 12, 2: 22, 3: 18, 4: 28, 5: 20 }) as Record<number, number>;
+	const gradeWeights = definition?.gradeWeights ?? COURSE_DEFINITION.gradeWeights;
+	const readinessFor = (domainProgress: Record<number, { percentage: number; possiblePoints: number }>, completedExams: { percentage: number }[]): Readiness =>
+		computeReadiness(domainProgress, completedExams, definition?.passingScore ?? COURSE_DEFINITION.passingScore, definition?.scaleMax ?? COURSE_DEFINITION.scaleMax, readinessDomains, readinessQuotas);
+
 	return {
 		getOverview() {
 			const examDate = repository.getExamDate();
@@ -96,7 +109,7 @@ export function createCourseService({ repository }: { repository: QuizRepository
 			const submissions = repository.getSubmissions();
 			const activeSession = repository.getActiveSession();
 			const activeAssignmentId = activeSession?.summary.assignment_id ?? null;
-			const gradebook = computeGradebook(assignments, submissions, examDate, activeAssignmentId);
+			const gradebook = computeGradebook(assignments, submissions, examDate, activeAssignmentId, gradeWeights);
 			const domainProgress = repository.getAllDomainProgress();
 			const completedExams = repository
 				.getAllCompletedSessions()
@@ -104,7 +117,7 @@ export function createCourseService({ repository }: { repository: QuizRepository
 				.map((s) => ({
 					percentage: Math.round((s.points_earned / s.points_possible) * 1000) / 10
 				}));
-			const readiness = computeReadiness(domainProgress, completedExams);
+			const readiness = readinessFor(domainProgress, completedExams);
 
 			const moduleViews: ModuleView[] = modules.map((module) => {
 				const moduleLessons = lessons.filter((l) => l.moduleId === module.id);
@@ -169,7 +182,7 @@ export function createCourseService({ repository }: { repository: QuizRepository
 			const assignments = repository.getCourseAssignments();
 			const submissions = repository.getSubmissions();
 			const activeAssignmentId = repository.getActiveSession()?.summary.assignment_id ?? null;
-			return computeGradebook(assignments, submissions, examDate, activeAssignmentId);
+			return computeGradebook(assignments, submissions, examDate, activeAssignmentId, gradeWeights);
 		},
 		getReadiness() {
 			const domainProgress = repository.getAllDomainProgress();
@@ -179,7 +192,7 @@ export function createCourseService({ repository }: { repository: QuizRepository
 				.map((s) => ({
 					percentage: Math.round((s.points_earned / s.points_possible) * 1000) / 10
 				}));
-			return computeReadiness(domainProgress, completedExams);
+			return readinessFor(domainProgress, completedExams);
 		},
 		setExamDate(examDate) {
 			repository.setExamDate(examDate);

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { QuizResult } from '$lib/types';
-import { quizRepository } from './db';
+import { createScopedRepo, DEFAULT_SCOPE, quizRepository, type Scope } from './db';
 
 const vault = path.resolve(import.meta.dirname, '../../../../notes');
 const syncFile = (relative: string, content: string, label: string) => {
@@ -11,13 +11,13 @@ const syncFile = (relative: string, content: string, label: string) => {
 	return `${label}: synced ${target}.`;
 };
 
-export function syncDashboard(): string {
-	const progress = quizRepository.getAllDomainProgress();
+export function syncDashboard(scope: Scope = DEFAULT_SCOPE): string {
+	const progress = createScopedRepo(quizRepository, scope).getAllDomainProgress();
 	return syncFile('QuizApp-Dashboard.md', `# Security+ Quiz Dashboard\n\n${Object.entries(progress).map(([domain, value]) => `- Domain ${domain}: ${value.earnedPoints.toFixed(2)}/${value.possiblePoints} (${value.percentage}%)`).join('\n')}\n`, 'Dashboard');
 }
 
-export function syncWeakTopics(): string {
-	const topics = quizRepository.getWeakTopics();
+export function syncWeakTopics(scope: Scope = DEFAULT_SCOPE): string {
+	const topics = createScopedRepo(quizRepository, scope).getWeakTopics();
 	return syncFile('QuizApp-Weak-Topics.md', `# Security+ Weak Topics\n\n${topics.map((topic) => `- Objective ${topic.objective}: ${topic.earnedPoints.toFixed(2)}/${topic.possiblePoints} (${topic.percentage}%, ${topic.severity})`).join('\n')}\n`, 'Weak topics');
 }
 

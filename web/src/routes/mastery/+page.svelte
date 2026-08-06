@@ -64,7 +64,9 @@
 	{:else}
 		<div>
 			<p class="eyebrow">Mastery matrix</p>
-			<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">All 28 objectives</h1>
+			<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">
+				All {data.objectives.length} objectives
+			</h1>
 			<p class="mt-3 text-text-secondary">
 				Accuracy per objective across every session you've completed. Tap any objective to drill
 				it with a 5-question practice session — the red ones are free points on exam day.
