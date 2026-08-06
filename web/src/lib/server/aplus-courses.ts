@@ -84,45 +84,51 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 
 ## 1.1 Mobile device hardware & replacement
 
-- **Battery** — lithium-ion; swollen battery = replace immediately (do not puncture). Laptop batteries are often internal (screw-down) or external (latch).
-- **Keyboard/keys** — laptop keyboards use scissors/butterfly mechanisms; key cap replacement via retainer clips; beware ribbon cables.
-- **RAM** — laptops use **SODIMM**; some are soldered (non-upgradable); check max supported and DDR generation before ordering.
-- **Storage** — 2.5" HDD/SSD (SATA), **M.2** (SATA or NVMe); upgrading HDD→SSD is the single biggest perceived speedup.
-- **Wireless cards** — Mini-PCIe/M.2 Wi-Fi cards with **antenna connectors** (U.FL/MHF tiny coax); re-seat antenna connectors after card swap.
-- **Physical privacy/security** — biometrics (fingerprint reader, IR camera for Windows Hello), NFC scanner features (contactless cards).
-- **Camera/webcam, microphone** — ribbon cables; camera privacy shutters; mic array location.
+Laptop and mobile hardware is built for serviceability (FRUs — field-replaceable units). Know what each part looks like, how it's secured, and the safe way to swap it.
 
-**Exam traps:** (1) NVMe M.2 keys — B-key (SATA) vs M-key (NVMe) vs B+M. (2) Laptop RAM is SODIMM, not DIMM. (3) A swollen battery is a safety issue — stop using the device.
+- **Battery** — lithium-ion; swollen battery = replace immediately (do not puncture). Laptop batteries are often internal (screw-down, connector + screws) or external (latch). When replacing, power off, unplug AC, and use a plastic spudger — never pry with metal near the cells.
+- **Keyboard/keys** — laptop keyboards use scissors/butterfly mechanisms; key cap replacement via retainer clips; beware ribbon cables (thin, fragile, ZIF connectors with a flip-up latch). A keyboard swap on many laptops means removing the whole palmrest.
+- **RAM** — laptops use **SODIMM**; some are soldered (non-upgradable); check max supported, DDR generation, and number of slots before ordering. Match speed and voltage; mixing DDR4/DDR5 physically won't fit (different notches).
+- **Storage** — 2.5" HDD/SSD (SATA), **M.2** (SATA or NVMe — check key: B-key SATA, M-key NVMe, B+M both); upgrading HDD→SSD is the single biggest perceived speedup. M.2 cards need a standoff screw; don't overtighten.
+- **Wireless cards** — Mini-PCIe/M.2 Wi-Fi cards with **antenna connectors** (U.FL/MHF tiny coax, color-coded main/aux); re-seat antenna connectors after a card swap — a loose antenna kills signal, not the card.
+- **Physical privacy/security** — biometrics (fingerprint reader, IR camera for Windows Hello), NFC scanner features (contactless cards); smart card readers (CAC/PIV) on business laptops.
+- **Camera/webcam, microphone** — ribbon cables; camera privacy shutters; mic array location; some webcams are modular (top bezel assembly).
+
+**Exam traps:** (1) NVMe M.2 keys — B-key (SATA) vs M-key (NVMe) vs B+M (either). (2) Laptop RAM is SODIMM, not DIMM. (3) A swollen battery is a safety issue — stop using the device. (4) After a Wi-Fi card swap, the FIRST suspect for no signal is the antenna connector.
 
 ## 1.2 Connections & accessories
 
 | Connection | Use | Notes |
 |---|---|---|
 | USB-C | Modern data/charging | Reversible, up to 40 Gbps (TB3/4), Power Delivery (PD) |
+| USB-A (3.x) | Peripherals/storage | 3.0 = 5 Gbps (blue insert), 3.1 = 10 Gbps, 3.2 = 20 Gbps |
 | microUSB/miniUSB | Legacy Android/accessories | Micro-USB B is the common legacy one |
 | Lightning | Apple devices (pre-USB-C) | Proprietary, 8-pin |
+| Thunderbolt | High-speed docking/display | TB1/2 = Mini-DP, TB3/4 = USB-C, 40 Gbps, daisy-chain |
 | NFC | Contactless payments/pairing | ~4 cm range, tap-to-pair |
-| Bluetooth | Wireless peripherals | Pairing via PIN; discoverable mode |
+| Bluetooth | Wireless peripherals | Pairing via PIN; discoverable mode; version matters (5.x = better range/LE) |
 | Tethering/hotspot | Share phone data | USB tethering, Bluetooth PAN, Wi-Fi hotspot (uses data cap!) |
+| HDMI/DisplayPort | External display | Video-out via adapter or native port |
 
-- **Accessories** — stylus (precision input), headsets (3.5mm/USB-C/Bluetooth), speakers, webcam, docking station (full expansion + power), port replicator (ports only, no expansion slot), trackpad/trackpoint, drawing pad (digitizer).
+- **Accessories** — stylus (precision input; active = pressure-sensitive digitizer, passive = any-touch), headsets (3.5mm/USB-C/Bluetooth), speakers, webcam, docking station (full expansion + power), port replicator (ports only, no expansion slot), trackpad/trackpoint, drawing pad (digitizer).
 
 **Exam trap:** Docking station ≠ port replicator — a dock adds expansion (eGPU, multiple monitors, charging), a replicator just mirrors existing ports.
 
 ## 1.3 Mobile connectivity, MDM, sync
 
-- **Cellular** — 3G/4G/5G; enable/disable data, **hotspot** shares the cellular connection (watch data caps). **SIM/eSIM** — eSIM is programmable without a physical card; IMEI identifies the device.
-- **Wi-Fi** — connect to SSID, WPA2/WPA3 passphrase; airplane mode disables radios.
-- **Bluetooth** — enable, pairing (discoverable → select device → PIN/confirm → test connectivity).
-- **Location services** — GPS (satellite, precise), cellular location (tower triangulation, works indoors).
-- **MDM** — mobile device management: enforce corporate policy on enrolled devices, push corporate apps, remote wipe/lock; **BYOD** (personal device, containerization) vs **corporate-owned** (full control).
-- **Sync** — calendar, contacts, mail, cloud storage; recognize **data caps** when syncing over cellular (sync on Wi-Fi).
+- **Cellular** — 3G/4G/5G; enable/disable data, **hotspot** shares the cellular connection (watch data caps). **SIM/eSIM** — eSIM is programmable without a physical card; IMEI identifies the device (report a stolen phone by IMEI). **APN** — the data profile (access point name) carriers use; wrong APN = no data but calls work.
+- **Wi-Fi** — connect to SSID, WPA2/WPA3 passphrase; airplane mode disables radios; forget/repair a network by forgetting the SSID.
+- **Bluetooth** — enable, pairing (discoverable → select device → PIN/confirm → test connectivity); unpair to fix connection loops.
+- **Location services** — GPS (satellite, precise), cellular location (tower triangulation, works indoors), Wi-Fi positioning (MAC-based, urban). Location privacy settings per app.
+- **MDM** — mobile device management: enforce corporate policy on enrolled devices, push corporate apps, remote wipe/lock, enforce screen locks/passcodes, block sideloading, geofencing. **BYOD** (personal device, containerization — corporate data in a sandbox) vs **corporate-owned** (full control), **COPE** (corporate-owned, personally enabled), **CYOD** (choose your own device from an approved list).
+- **Sync** — calendar, contacts, mail, cloud storage; recognize **data caps** when syncing over cellular (sync on Wi-Fi); account sync errors → check credentials, storage, and sync toggles.
 
 ## Sample questions
 
 1. **Q:** A user's 3-year-old laptop suddenly won't hold a charge and the trackpad area feels swollen. What's the FIRST action? **A:** Power down and replace the battery — swelling is a lithium-ion safety hazard.
 2. **Q:** Which mobile connection is BEST for contactless payments at a terminal? **A:** NFC — a few centimeters of range, tap-to-pay.
-3. **Q:** A company needs to enforce a screen-lock policy on employee-owned phones. Which technology? **A:** MDM enrollment with policy enforcement (BYOD container).`,
+3. **Q:** A company needs to enforce a screen-lock policy on employee-owned phones. Which technology? **A:** MDM enrollment with policy enforcement (BYOD container).
+4. **Q:** A laptop's Wi-Fi works at 1 meter but drops at 5 meters after a card swap. First suspect? **A:** The antenna connectors weren't re-seated.`,
 			position: 1
 		},
 		{
@@ -136,45 +142,56 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 ## 3.1 Display components & attributes
 
 - **LCD** — TN (cheap, fast, poor angles), IPS (good color/angles — most common), VA (contrast). Backlit by LEDs; **inverter** converts DC→AC for the backlight (older CCFL); a dim screen with faint image = backlight/inverter issue.
-- **OLED** — self-emissive (no backlight), true blacks, thin; burn-in risk. **Mini-LED** — many small LEDs for local dimming.
-- **Touch screen/digitizer** — capacitive (finger) vs active digitizer (stylus pressure).
-- **Attributes** — pixel density (PPI), refresh rate (Hz; 60/120/144+), resolution (1080p/1440p/4K), color gamut (sRGB/Adobe RGB/DCI-P3).
+- **OLED** — self-emissive (no backlight), true blacks, thin; burn-in risk. **Mini-LED** — many small LEDs for local dimming (better contrast than plain LED).
+- **Touch screen/digitizer** — capacitive (finger) vs active digitizer (stylus pressure). A dead touch layer with a working display = digitizer replacement; both dead = full LCD+digitizer assembly.
+- **Attributes** — pixel density (PPI), refresh rate (Hz; 60/120/144+), resolution (1080p/1440p/4K), aspect ratio (16:9, 16:10, 21:9 ultrawide), color gamut (sRGB/Adobe RGB/DCI-P3), brightness (nits), native resolution (always match it — non-native looks blurry).
+- **Projectors** — lamp vs laser; lamp hours burn out over time (dim/warm image → replace lamp); throw distance and ambient light affect image.
+
+**Exam trap:** "Native resolution" — an LCD always looks best at its native resolution; scaling to anything else softens text.
 
 ## 3.2 Cables & connectors
 
 | Cable/connector | Use | Notes |
 |---|---|---|
 | Cat 5e/6/6a twisted pair | Ethernet | RJ-45; 1/10 Gbps; **T568A vs T568B** wiring; **plenum-rated** for air-handling spaces; **STP** shielded vs **UTP**; **direct burial** for outdoor |
-| Coaxial | Cable internet/TV | F-type connectors |
-| Fiber | Long/fast links | **Single-mode** (laser, long) vs **multimode** (LED, short); LC/SC/ST |
-| HDMI | Audio+video | 19-pin; ARC/eARC |
-| DisplayPort | Audio+video | Daisy-chain, higher bandwidth |
-| DVI / VGA | Legacy video | DVI digital, VGA analog |
-| USB-C / Thunderbolt | Data+video+power | TB3/4 = 40 Gbps |
-| SATA | Internal drives | 6 Gbps |
-| M.2 | SSDs/Wi-Fi cards | SATA or NVMe |
+| Coaxial | Cable internet/TV | F-type connectors; RG-6 (better shielding) vs RG-59 |
+| Fiber | Long/fast links | **Single-mode** (laser, long, yellow) vs **multimode** (LED, short, orange/teal); LC/SC/ST connectors |
+| HDMI | Audio+video | 19-pin; ARC/eARC; versions add bandwidth (2.1 = 8K) |
+| DisplayPort | Audio+video | Daisy-chain, higher bandwidth; common on monitors |
+| DVI / VGA | Legacy video | DVI digital (DVI-D), VGA analog (blue, 15-pin) |
+| USB-C / Thunderbolt | Data+video+power | TB3/4 = 40 Gbps, single-cable docking |
+| SATA | Internal drives | 6 Gbps; data + power connectors |
+| M.2 | SSDs/Wi-Fi cards | SATA or NVMe; 2230/2242/2260/2280 lengths |
+| eSATA | External SATA drives | Legacy external storage |
 
-**Exam traps:** (1) T568A/B differ in the orange/green pair positions — never mix standards on one run. (2) Plenum cable = fire-retardant for ceilings, not "better speed". (3) VGA is analog — no digital signal.
+**Exam traps:** (1) T568A/B differ in the orange/green pair positions — never mix standards on one run. (2) Plenum cable = fire-retardant for ceilings, not "better speed". (3) VGA is analog — no digital signal. (4) Single-mode fiber = long distance + laser; multimode = short + LED.
 
 ## 3.3 RAM
 
-- **DDR generations** — DDR3 (240-pin DIMM / 204 SODIMM), DDR4 (288/260), DDR5 (288, different notch). Not interchangeable — notches differ.
-- **DIMM vs SODIMM** — desktop vs laptop. **ECC** (error-correcting, servers) vs non-ECC.
-- **Dual-channel** — matched pairs = more bandwidth; single stick = single channel.
-- **Speed/latency** — DDR4-3200 (MT/s), CAS latency; matching modules avoids instability.
+- **DDR generations** — DDR3 (240-pin DIMM / 204 SODIMM, 1.5V), DDR4 (288/260, 1.2V), DDR5 (288, different notch, 1.1V, on-die ECC). Not interchangeable — notches differ. **DDR5** doubles the prefetch and adds on-die ECC (not the same as system ECC).
+- **DIMM vs SODIMM** — desktop vs laptop. **ECC** (error-correcting, servers, usually registered/buffered) vs non-ECC. ECC RAM in a non-ECC board usually won't boot.
+- **Dual-channel** — matched pairs in the correct slots (usually color-coded A1/B1 or A2/B2) = more bandwidth; single stick = single channel. Quad-channel on high-end platforms.
+- **Speed/latency** — DDR4-3200 (MT/s), CAS latency (CL) — lower CL = lower latency; matching modules avoids instability. XMP/EXPO profiles overclock RAM to rated speeds.
+- **Upgrades** — check max capacity per slot, generation, and voltage; a 32GB max board with two slots = 16GB per slot.
+
+**Exam trap:** Speed (MT/s) and latency (CL) are separate — DDR4-3600 CL16 can be faster than DDR4-3600 CL18.
 
 ## 3.4 Storage
 
-- **HDD** — spinning platters, SATA 6 Gbps, cheap per GB, mechanical failure (clicking = heads). **SSD** — SATA SSD vs **NVMe** (PCIe, 4-7 GB/s). **Hybrid** (SSHD) — small flash cache.
-- **RAID** — 0 striping (speed, no redundancy), 1 mirroring (50% capacity), 5 striping+parity (n-1 capacity, 1-drive fault tolerance), 10 mirrored stripes (50%, survives multiple). **S.M.A.R.T.** — drive self-diagnostics. **IOPS** — operations per second.
+- **HDD** — spinning platters, SATA 6 Gbps, cheap per GB, mechanical failure (clicking = heads); 5400 (quiet/slow) vs 7200 RPM (faster).
+- **SSD** — SATA SSD (≈550 MB/s) vs **NVMe** (PCIe, 4-7 GB/s); no moving parts, silent, shock-resistant. **Hybrid (SSHD)** — small flash cache in front of a platter drive.
+- **Form factors** — 2.5"/3.5" SATA, M.2 (2230–2280), U.2 (enterprise).
+- **RAID** — 0 striping (speed, no redundancy), 1 mirroring (50% capacity), 5 striping+parity (n-1 capacity, 1-drive fault tolerance), 10 mirrored stripes (50%, survives multiple). Hardware RAID (controller card) vs software (OS).
+- **S.M.A.R.T.** — drive self-diagnostics (reallocated sectors, spin-up time); warnings = back up and replace. **IOPS** — operations per second (random I/O performance).
 
-**Exam trap:** RAID 5 with 3×1TB = 2TB usable (one drive for parity). RAID 1 with 2×1TB = 1TB.
+**Exam trap:** RAID 5 with 3×1TB = 2TB usable (one drive for parity). RAID 1 with 2×1TB = 1TB. RAID 0 with 2×1TB = 2TB but NO fault tolerance.
 
 ## Sample questions
 
 1. **Q:** A user's laptop screen is very dim but shows a faint image under a bright light. What's the likely fault? **A:** Backlight/inverter failure.
 2. **Q:** Which cable type is required for runs through a building's plenum ceiling space? **A:** Plenum-rated (fire-retardant jacket).
-3. **Q:** 3×2TB drives in RAID 5 — usable capacity? **A:** 4TB (n-1).`,
+3. **Q:** 3×2TB drives in RAID 5 — usable capacity? **A:** 4TB (n-1).
+4. **Q:** A server needs RAM that can detect and correct single-bit errors. Which type? **A:** ECC (error-correcting) memory.`,
 			position: 2
 		},
 		{
@@ -187,41 +204,47 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 
 ## 3.5 Motherboards, CPUs, add-on cards
 
-- **Form factors** — ATX, microATX (mATX), Mini-ITX (ITX). Smaller = fewer slots; case must match.
-- **Sockets/chipsets** — CPU socket must match CPU (LGA 1700, AM5…); chipset determines features (PCIe lanes, USB, SATA). **Compatibility first** — check CPU ↔ socket ↔ chipset ↔ RAM generation ↔ BIOS support.
-- **Slots** — PCIe x1/x4/x16 (GPU = x16), M.2 (SSD/Wi-Fi), DIMM slots (channel order).
-- **BIOS/UEFI** — **UEFI** (modern, Secure Boot, GPT) vs legacy BIOS (MBR). Settings: boot order, Secure Boot, **TPM** (hardware security chip — BitLocker, Windows 11 requirement), **XMP/EXPO** (RAM profile), virtualization (VT-x/AMD-V).
-- **CPU install** — socket lever, **thermal paste** (pea-size), heat sink/fan or liquid cooler; overheat = shutdowns.
-- **Expansion cards** — GPU, NIC, sound; match slot/lane; power (6/8-pin PCIe).
+- **Form factors** — ATX (12×9.6"), microATX (mATX, smaller, fewer slots), Mini-ITX (ITX, compact). Smaller = fewer slots; case and PSU must match the board.
+- **Sockets/chipsets** — CPU socket must match CPU (Intel LGA 1700/1851, AMD AM4/AM5…); chipset determines features (PCIe lanes, USB, SATA, overclocking). **Compatibility first** — check CPU ↔ socket ↔ chipset ↔ RAM generation ↔ BIOS support before ordering parts.
+- **Slots** — PCIe x1/x4/x16 (GPU = x16; lane width matters for bandwidth), M.2 (SSD/Wi-Fi), DIMM slots (channel order — install matched pairs in the correct slots), SATA ports, front-panel headers, 24-pin/8-pin power headers.
+- **BIOS/UEFI** — **UEFI** (modern, Secure Boot, GPT, mouse-driven) vs legacy BIOS (MBR, keyboard-only). Settings: boot order, Secure Boot on/off, **TPM** (hardware security chip — BitLocker, Windows 11 requirement; TPM 2.0), **XMP/EXPO** (RAM profile), virtualization (VT-x/AMD-V), secure boot keys, firmware updates (via USB or internet flash).
+- **CPU install** — socket lever, alignment notches/arrow, **thermal paste** (pea-size, no need to spread), heat sink/fan or liquid cooler with correct mounting pressure; overheat = shutdowns/throttling. Apply paste BEFORE mounting the cooler; replace on re-seats.
+- **Expansion cards** — GPU (PCIe x16 + 6/8-pin power), NIC, sound card, capture card; match slot/lane; secure with bracket screw; update drivers after install.
 
-**Exam trap:** Always check CPU socket compatibility before ordering — a CPU physically fits ONLY its socket family.
+**Exam trap:** Always check CPU socket compatibility before ordering — a CPU physically fits ONLY its socket family (and often only with a matching BIOS version).
 
 ## 3.6 Power
 
-- **PSU** — wattage must exceed total draw with headroom; **80 Plus** efficiency (Bronze/Silver/Gold/Platinum); **modular** (detachable cables) vs fixed.
-- **Connectors** — 24-pin ATX main, 4/8-pin **EPS** (CPU), SATA power, Molex (legacy), 6/8-pin PCIe (GPU).
-- **Protection** — surge suppressor (spikes) vs **UPS** (battery backup + surge; keeps PC running during outages). **Power supply tester** verifies rails.
-- **Safety** — never open a PSU (charged capacitors); ESD strap when working inside a case.
+- **PSU** — wattage must exceed total draw with headroom (add up components, aim 20-30% above); **80 Plus** efficiency (Bronze/Silver/Gold/Platinum — higher = less waste heat); **modular** (detachable cables) vs semi vs fixed.
+- **Connectors** — 24-pin ATX main, 4/8-pin **EPS** (CPU), SATA power, Molex (legacy drives/fans), 6/8-pin PCIe (GPU; 12VHPWR on newest GPUs).
+- **Protection** — surge suppressor (spikes only) vs **UPS** (battery backup + surge; keeps PC running through outages — size it for runtime), **line conditioner** (voltage regulation). A power supply tester verifies rail voltages.
+- **Safety** — never open a PSU (charged capacitors can hold lethal voltage for days); ESD strap when working inside a case; unplug before touching internals.
+
+**Exam trap:** A UPS ≠ surge protector — only a UPS keeps the machine running during an outage. Read PSU wattage from the label, never assume from size.
 
 ## 3.7 Multifunction devices
 
-- **MFD** — print/scan/copy/fax in one; **duplexer** (two-sided), **ADF** (automatic document feeder), flatbed scanner.
-- **Connectivity** — USB, Ethernet, Wi-Fi, NFC (tap-to-print), cloud printing; install driver; **print queue/spooler** (jobs stuck = spooler service/queue).
+- **MFD** — print/scan/copy/fax in one; **duplexer** (two-sided printing), **ADF** (automatic document feeder — multi-page scanning), flatbed scanner (books, thick originals), **finisher** (staple/hole-punch options on office models).
+- **Connectivity** — USB, Ethernet (wired network printing), Wi-Fi (WPS or SSID config), NFC (tap-to-print), cloud printing; install the right driver; **print queue/spooler** (jobs stuck = restart the spooler service or clear the queue).
+- **Scan features** — scan to email, scan to network folder (SMB), scan to cloud, OCR; **copy** — reduce/enlarge, collate, duplex.
 
 ## 3.8 Printer types & maintenance
 
-- **Laser** — toner (powder) + **imaging drum** + **fuser** (heat/pressure). Maintenance kit = fuser + rollers. Calibration; cleaning. Faded = low toner; lines = drum/wiper.
-- **Inkjet** — liquid ink, **printhead** (clog = streaks → clean printhead), ink cartridges; paper feed issues.
-- **Thermal** — heat + special paper (receipts); no ink/toner.
-- **Impact** — dot-matrix pins + ribbon (multi-part forms).
-- **3D printers** — filament; maintenance per vendor.
-- **General** — clear jams by opening access panels (follow the diagram), replace paper, run calibration/test pages; **fuser is HOT** — let it cool.
+- **Laser** — toner (powder) + **imaging drum** + **fuser** (heat/pressure bonds toner). Imaging process (know the order): charge → expose (laser writes image) → develop (toner sticks) → transfer (to paper) → fuse (heat seals it). Maintenance kit = fuser + rollers. Faded = low toner; vertical lines = drum/wiper; ghost images = drum not fully cleaned/old.
+- **Inkjet** — liquid ink, **printhead** (clog = streaks/missing colors → run the printhead cleaning cycle), ink cartridges; paper feed issues = rollers; **pigment vs dye** inks.
+- **Thermal** — heat + special paper (receipts, labels); no ink/toner; fading over time is normal for thermal paper.
+- **Impact** — dot-matrix pins + ribbon (multi-part forms, carbon copies); ribbon replacement.
+- **3D printers** — filament (FDM) or resin; bed leveling, nozzle cleaning, filament jams.
+- **General maintenance** — clear jams by opening access panels (follow the diagram — don't pull paper), replace paper (fan it first), run calibration/test pages, clean rollers, update firmware; **fuser is HOT** — let it cool before servicing.
+
+**Exam trap:** Laser = toner+drum+fuser (heat); inkjet = printhead (liquid); thermal = heat+paper only; impact = pins+ribbon.
 
 ## Sample questions
 
 1. **Q:** A new GPU needs more power than the motherboard slot provides. Which connector? **A:** 6/8-pin PCIe power from the PSU.
 2. **Q:** Windows 11 requires a security chip for BitLocker and device health. Which one? **A:** TPM 2.0.
-3. **Q:** A laser printer shows vertical lines on every page. What's most likely? **A:** Damaged imaging drum or dirty wiper blade.`,
+3. **Q:** A laser printer shows vertical lines on every page. What's most likely? **A:** Damaged imaging drum or dirty wiper blade.
+4. **Q:** Which device keeps a workstation running through a power outage? **A:** A UPS (uninterruptible power supply).`,
 			position: 3
 		},
 		{
@@ -241,7 +264,7 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 | 23 | Telnet | Plaintext remote shell (insecure) |
 | 25 | SMTP | Send email |
 | 53 | DNS | Name resolution |
-| 67/68 | DHCP | IP assignment |
+| 67/68 | DHCP | IP assignment (67 server, 68 client) |
 | 80 | HTTP | Web (plaintext) |
 | 110 | POP3 | Receive email (download) |
 | 143 | IMAP | Receive email (server-side folders) |
@@ -251,48 +274,53 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 | 445 | SMB/CIFS | Windows file sharing |
 | 3389 | RDP | Remote desktop |
 
-- **TCP** — connection-oriented (3-way handshake), reliable, ordered. **UDP** — connectionless, fast, no guarantee (streaming, VoIP, DHCP, DNS queries).
+- **TCP** — connection-oriented (3-way handshake: SYN, SYN-ACK, ACK), reliable, ordered, retransmits lost segments. **UDP** — connectionless, fast, no guarantee (streaming, VoIP, DHCP, DNS queries, TFTP).
+- Quick mnemonic: *email* = 25/110/143, *remote* = 22 (secure)/23 (insecure)/3389 (desktop), *files* = 20/21/445, *web* = 80/443.
 
 ## 2.2 Wireless
 
-- **Frequencies** — 2.4 GHz (longer range, more interference), 5 GHz (faster, shorter), 6 GHz (Wi-Fi 6E). **Channels** — regulations limit power/channels; select non-overlapping channels (1/6/11 on 2.4 GHz). **Channel width** — wider = faster but more interference.
-- **802.11 standards** — a (5GHz), b/g (2.4), n (dual), ac (5GHz), ax (Wi-Fi 6, dual+6E). **Bluetooth** — PAN, pairing. **NFC** — ~4cm contactless. **RFID** — tags/readers (access badges, inventory).
+- **Frequencies** — 2.4 GHz (longer range, more interference), 5 GHz (faster, shorter), 6 GHz (Wi-Fi 6E/7). **Channels** — regulations limit power/channels; select non-overlapping channels (1/6/11 on 2.4 GHz). **Channel width** — wider (40/80/160 MHz) = faster but more interference.
+- **802.11 standards** — a (5 GHz, 54 Mbps), b/g (2.4 GHz, 11/54 Mbps), n (dual-band, ~600 Mbps), ac (5 GHz, ~1.3+ Gbps), ax (Wi-Fi 6, dual + 6E, OFDMA/MU-MIMO), be (Wi-Fi 7).
+- **Bluetooth** — PAN, pairing, ~10 m; **NFC** — ~4 cm contactless; **RFID** — tags/readers (access badges, inventory); **infrared** — legacy line-of-sight.
 
 ## 2.3 Network services
 
-- **Server roles** — DNS (name→IP), DHCP (IP assignment), file share, print server, mail, **syslog** (log aggregation), web, **AAA** (auth/authorization/accounting), database, **NTP** (time sync).
-- **Internet appliances** — spam gateway, **UTM** (all-in-one firewall/IPS/AV), load balancer, proxy (forward/caching/filtering).
-- **Legacy/embedded** — **SCADA** (industrial control), IoT devices.
+- **Server roles** — DNS (name→IP), DHCP (IP assignment), file share (SMB), print server, mail, **syslog** (log aggregation), web, **AAA** (authentication/authorization/accounting), database, **NTP** (time sync — important for logs), **proxy** (forward/caching/filtering).
+- **Internet appliances** — spam gateway (email filtering), **UTM** (all-in-one firewall/IPS/AV/web filter), load balancer (distribute traffic), content filter (CIPA/parental controls).
+- **Legacy/embedded** — **SCADA** (industrial control systems), IoT devices (often insecure by default).
 
 ## 2.4 Network configuration
 
-- **DNS records** — A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail), TXT (SPF/DKIM/DMARC — anti-spoofing/email auth).
-- **DHCP** — scope (pool), **exclusions**, **reservations** (MAC→fixed IP), leases (renewal).
-- **VLAN** — segment broadcast domains on a switch. **VPN** — encrypted tunnel (client-to-site, site-to-site).
+- **DNS records** — A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail server), TXT (SPF/DKIM/DMARC — anti-spoofing/email auth), PTR (reverse lookup), SRV (service location).
+- **DHCP** — **DORA** (Discover → Offer → Request → Acknowledge); scope (address pool), **exclusions** (reserved out of pool), **reservations** (MAC→fixed IP), lease times (renewal at 50%).
+- **VLAN** — segment broadcast domains on a switch (security + performance). **VPN** — encrypted tunnel (client-to-site for remote users, site-to-site between offices; protocols: IPsec, WireGuard, SSL/TLS VPN).
 
 ## 2.5 Hardware devices
 
-- **Router** (routes between networks/NAT), **switch** (LAN forwarding; managed = configurable/VLANs, unmanaged = plug-and-play), **access point** (wireless), **patch panel** (cable termination point), **firewall**, **PoE** (power over Ethernet via injector or switch; 802.3af/at), **cable modem** (coax), **DSL modem** (phone line), **ONT** (fiber), **NIC** (has MAC address).
+- **Router** (routes between networks/NAT), **switch** (LAN forwarding; managed = configurable/VLANs/SNMP, unmanaged = plug-and-play), **access point** (wireless bridge to wired LAN), **patch panel** (cable termination point — punchdown), **firewall** (filter traffic), **PoE** (power over Ethernet via injector or switch; 802.3af ≈15W / at ≈30W / bt ≈60-90W), **cable modem** (coax), **DSL modem** (phone line), **ONT** (fiber — optical network terminal), **NIC** (has a MAC address; can be wired or wireless).
 
 ## 2.6 SOHO configuration
 
-- **IPv4** — private ranges: **10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16**; public = internet-routable. **IPv6** — 128-bit (fe80:: link-local). **APIPA** — 169.254.x.x when DHCP fails. **Static vs dynamic** (DHCP). **Subnet mask** (255.255.255.0 = /24). **Gateway** — next hop off the LAN.
-- SOHO router: WAN to modem, LAN to devices; configure SSID + **WPA2/WPA3**, change default admin password, update firmware.
+- **IPv4** — private ranges: **10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16**; public = internet-routable; **loopback** 127.0.0.1. **IPv6** — 128-bit (fe80:: link-local, ::1 loopback). **APIPA** — 169.254.x.x when DHCP fails. **Static vs dynamic** (DHCP). **Subnet mask** (255.255.255.0 = /24). **Gateway** — next hop off the LAN. **DNS servers** — resolver config.
+- SOHO router: WAN to modem, LAN to devices; configure SSID + **WPA2/WPA3**, change default admin password, update firmware, set DHCP pool, port forwarding (expose services), QoS (prioritize traffic), guest network isolation.
+
+**Exam trap:** 169.254.x.x (APIPA) ALWAYS means "couldn't reach a DHCP server" — check the cable/DHCP, not the internet.
 
 ## 2.7 Connection & network types
 
-- **Internet** — satellite (high latency), fiber (fast, symmetric), cable (coax, shared), DSL (phone), cellular (4G/5G), **WISP** (wireless ISP).
-- **Network types** — LAN, WAN, PAN (Bluetooth), MAN, SAN (storage), WLAN.
+- **Internet** — satellite (high latency, anywhere), fiber (fast, symmetric, expensive to install), cable (coax, shared bandwidth), DSL (phone line, distance-limited), cellular (4G/5G, mobile), **WISP** (wireless ISP — point-to-point microwave).
+- **Network types** — LAN (local), WAN (wide, internet-scale), PAN (Bluetooth personal), MAN (metro), SAN (storage area network), WLAN (wireless LAN), VPN (virtual overlay).
 
 ## 2.8 Network tools
 
-- **Crimper** (attach RJ-45), **cable stripper**, **Wi-Fi analyzer** (signal/channel survey), **toner probe** (trace cables), **punchdown tool** (patch panel/keystone), **cable tester** (wiring verify), **loopback plug** (test NIC), **network tap** (passive traffic capture).
+- **Crimper** (attach RJ-45/RJ-11 connectors), **cable stripper**, **Wi-Fi analyzer** (signal/channel survey — pick clean channels), **toner probe** (trace cables through walls/patch panels), **punchdown tool** (patch panel/keystone termination), **cable tester** (verify wiring/pinout), **loopback plug** (test NIC), **network tap** (passive traffic capture).
 
 ## Sample questions
 
 1. **Q:** Which port does encrypted remote administration of a server use? **A:** 22 (SSH).
 2. **Q:** A user's PC shows 169.254.x.x after boot. What happened? **A:** DHCP failed — APIPA link-local address.
-3. **Q:** Which device separates broadcast domains? **A:** A VLAN-capable (managed) switch.`,
+3. **Q:** Which device separates broadcast domains? **A:** A VLAN-capable (managed) switch.
+4. **Q:** A SOHO needs PoE for a ceiling AP. Which standard supplies ~30W per port? **A:** 802.3at (PoE+).`,
 			position: 4
 		},
 		{
@@ -305,27 +333,38 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 
 ## 4.1 Virtualization
 
-- **Hypervisor** — the VM management layer. **Type 1 (bare-metal)** — runs directly on hardware (ESXi, Hyper-V, Proxmox). **Type 2 (hosted)** — runs inside an OS (VirtualBox, Workstation).
-- **Host vs guest** — host = physical server; guest = VM. **VM resources** — virtual CPU/RAM/disk/NIC allocated from the host.
-- **Snapshot** — point-in-time VM state for rollback. **Clone** — identical copy. **Live migration** — move a running VM between hosts, zero downtime.
-- **Sandboxing** — isolate untrusted software in a VM. **VM escape** — a guest breaking out to the host (security risk).
-- **Resource allocation** — CPU/RAM reservations, **memory overcommitment** (ballooning), thin vs thick provisioning.
-- **VDI** — virtual desktop infrastructure (centralized desktops).
+- **Hypervisor** — the VM management layer. **Type 1 (bare-metal)** — runs directly on hardware (ESXi, Hyper-V, Proxmox, XenServer). **Type 2 (hosted)** — runs inside an OS (VirtualBox, VMware Workstation, Parallels). Type 1 is the datacenter standard; Type 2 is for testing/workstations.
+- **Host vs guest** — host = physical server; guest = VM. **VM resources** — virtual CPU/RAM/disk/NIC allocated from the host's physical pool. VMs are files on the host (disk images, config, NVRAM).
+- **Resource allocation** — **reservations** (guaranteed minimum), **limits** (cap), **shares** (priority), **memory overcommitment** (allocating more vRAM than physical; **ballooning** reclaims idle guest memory), thin vs thick provisioning (thin = grows on demand; thick = allocated up front).
+- **Snapshots** — point-in-time VM state for rollback (great before updates). **Clone** — identical copy (fast provisioning). **Template** — golden image for deploying many VMs. **Live migration** — move a running VM between hosts, zero downtime (vMotion). **Cold migration** — move a powered-off VM.
+- **Sandboxing** — isolate untrusted software in a VM (malware analysis, testing). **VM escape** — a guest breaking out to the host (critical security risk — patch hypervisors, keep isolation).
+- **Virtual switches** — vSwitch inside the host connecting VMs to each other and the physical NIC; VLAN tagging on virtual ports.
+- **VDI** — virtual desktop infrastructure: centralized desktops streamed to thin clients (management + security win); **DaaS** — the cloud-hosted version.
+- **Emulation vs virtualization** — emulation translates instructions (slow, cross-architecture); virtualization runs native instructions (fast).
+
+**Exam trap:** Type 1 = no host OS (ESXi/Hyper-V/Proxmox); Type 2 = an OS runs first (VirtualBox/Workstation). A snapshot ≠ a backup — snapshots depend on the host and don't protect against host loss.
 
 ## 4.2 Cloud computing
 
-- **Service models** — **IaaS** (rent VMs/storage/network; you manage OS), **PaaS** (managed platform for apps), **SaaS** (finished app — Microsoft 365, Google Workspace).
-- **Deployment models** — public, private (single org), **hybrid** (private + public), community (shared by orgs with common needs), **multi-cloud** (multiple public providers).
-- **Characteristics** — on-demand self-service, broad network access, **resource pooling**, **rapid elasticity** (auto-scale), **metered** (pay-per-use).
-- **Shared responsibility** — provider secures the cloud (physical/host), customer secures what's in it (OS, data, config).
+- **Service models** —
+  - **IaaS** (rent VMs/storage/network; you manage the OS, apps, data — e.g. AWS EC2, Azure VMs)
+  - **PaaS** (managed platform: runtime, DB, build tools; you bring the app — e.g. Heroku, Azure App Service)
+  - **SaaS** (finished application; provider does everything — e.g. Microsoft 365, Google Workspace, Salesforce)
+- **Deployment models** — public (shared provider infrastructure), private (single org, own or hosted), **hybrid** (private + public, workloads burst to cloud), community (shared by orgs with common needs, e.g. government/healthcare), **multi-cloud** (multiple public providers for resilience/avoiding lock-in), **on-premises** (no cloud).
+- **Characteristics** (NIST five) — on-demand self-service, broad network access, **resource pooling**, **rapid elasticity** (auto-scale with load), **metered/pay-per-use** (measured billing).
+- **Shared responsibility** — provider secures the cloud (physical, host, network); customer secures what's IN the cloud (OS, apps, data, access, config). The split moves up the stack: IaaS = customer does more; SaaS = provider does almost everything.
+- **Cloud migration** — lift-and-shift (rehost), replatform, refactor; **cloud bursting** — spill overflow to public cloud during peaks.
+- **Concepts to know** — availability zones/regions (redundancy), scaling (vertical = bigger VM, horizontal = more VMs), orchestration/automation (infrastructure as code), cost (pay-as-you-go vs reserved).
 
-**Exam trap:** IaaS = you patch the OS; SaaS = provider does everything. Hybrid = mix of private AND public.
+**Exam trap:** IaaS = you patch the OS; SaaS = provider does everything. Hybrid = mix of private AND public. Scaling UP = bigger machine; scaling OUT = more machines.
 
 ## Sample questions
 
 1. **Q:** A hypervisor installed directly on server hardware, no host OS. Which type? **A:** Type 1 (bare-metal).
 2. **Q:** A company rents VMs and manages the OS itself. Which model? **A:** IaaS.
-3. **Q:** What feature rolls a VM back after a bad update? **A:** Snapshot.`,
+3. **Q:** What feature rolls a VM back after a bad update? **A:** Snapshot.
+4. **Q:** An app must handle seasonal traffic spikes by adding temporary capacity from a public provider while keeping its private datacenter. Which deployment? **A:** Hybrid cloud (cloud bursting).
+5. **Q:** Which NIST characteristic lets users provision resources without waiting for IT? **A:** On-demand self-service.`,
 			position: 5
 		},
 		{
@@ -342,42 +381,54 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| POST beeps, no video | RAM/GPU fault | Reseat RAM/GPU, test one stick |
-| Blank screen, fans spin | GPU/display cable | Check cable, reseat GPU |
-| No power at all | PSU/cable/switch | Verify wall, PSU switch, test PSU |
-| Random shutdowns under load | Overheating | Clean fans, reapply thermal paste |
+| POST beeps, no video | RAM/GPU fault | Reseat RAM/GPU, test one stick at a time |
+| Blank screen, fans spin | GPU/display cable | Check cable, reseat GPU, test integrated video |
+| No power at all | PSU/cable/switch | Verify wall outlet, PSU switch, test PSU with tester |
+| Random shutdowns under load | Overheating | Clean fans, reapply thermal paste, check cooler mount |
+| Repeated reboots / BSOD | RAM or driver fault | Run memory test (memtest), update drivers |
 | Date/time resets | CMOS battery dead | Replace CR2032 |
 | Capacitor swelling | Failing board | Replace motherboard |
+| CPU fan error at POST | Fan unplugged/failed | Reseat fan header, replace fan |
+| Intermittent freezes | RAM/PSU/overheating | Check temps, test RAM, verify PSU rails |
+| No display, no beeps, fans spin | CPU/RAM/board | Remove all but CPU+1 stick, listen for beeps |
+
+**Method:** power off → unplug → check cables/connections → minimal boot (CPU + one RAM stick, no add-ons) → swap known-good parts one at a time.
 
 ## 5.2 Drive & RAID
 
 - **Grinding/clicking** — failing HDD heads: back up NOW, replace drive.
-- **S.M.A.R.T. warnings / reallocated sectors** — drive failing: replace.
-- **Bootable device not found** — boot order, dead drive, loose SATA/power cable.
-- **RAID** — array missing/offline: check drives, rebuild after replacement; degraded = one drive failed.
+- **S.M.A.R.T. warnings / reallocated sectors** — drive failing: replace (back up first).
+- **Bootable device not found** — check boot order, drive connection (SATA power+data), dead drive, BIOS drive detection.
+- **RAID** — array missing/offline: check drives; degraded = one drive failed (replace + rebuild); multiple failures = rebuild from backup. Controller battery/BBU failing = array may need forced mount.
+- **Slow performance** — near-full drive, failing sectors, wrong SATA mode (IDE vs AHCI).
+- **Not recognized / wrong capacity** — loose cable, driver, MBR/GPT or uninitialized disk (Disk Management).
 
 ## 5.3 Displays
 
-- **Incorrect input source** — check input button. **Fuzzy image** — resolution/cable. **Burnt-out bulb (projector)** — replace lamp. **Dim image** — backlight/inverter. **Burn-in** — OLED static image. **Dead pixels** — panel defect. **Flashing** — cable/refresh. **Audio issues** — default device/settings.
+- **Incorrect input source** — check input button. **Fuzzy image** — resolution/native res or cable. **Burnt-out bulb (projector)** — replace lamp. **Dim image** — backlight/inverter. **Burn-in** — OLED/plasma static image. **Dead pixels** — panel defect (warranty). **Flashing/flickering** — cable, refresh rate, GPU driver. **Audio issues** — default playback device, muted, wrong output. **Color issues** — calibration, cable, GPU settings. **Flicker on laptop** — inverter/backlight, display cable (hinge wear).
 
 ## 5.4 Mobile devices
 
-- **Poor battery health / swollen battery** — replace battery; swelling = safety issue.
-- **Broken screen** — digitizer vs LCD: touch dead but display fine = digitizer; both = LCD+digitizer assembly.
-- **Improper charging** — charge port debris/damage, wrong charger wattage.
-- **Poor/no connectivity** — airplane mode, Wi-Fi off, SIM seated, data cap.
-- **Liquid damage** — power off, dry, do not charge. **Overheating** — remove case, close apps.
-- **Cursor drift/touch calibration** — recalibrate digitizer, screen protector issues.
-- **Malware on mobile** — uninstall suspicious apps, factory reset if needed.
+- **Poor battery health / swollen battery** — replace battery; swelling = safety issue (stop using, don't puncture).
+- **Broken screen** — digitizer vs LCD: touch dead but display fine = digitizer; both dead = LCD+digitizer assembly.
+- **Improper charging** — charge port debris/damage, wrong charger wattage, cable quality.
+- **Poor/no connectivity** — airplane mode, Wi-Fi off, SIM seated, data cap, wrong APN.
+- **Liquid damage** — power off, dry, do NOT charge (corrosion).
+- **Overheating** — remove case, close apps, check charging while using.
+- **Cursor drift/touch calibration** — recalibrate digitizer, screen protector issues, palm rejection.
+- **Malware on mobile** — uninstall suspicious apps (especially sideloaded), revoke permissions, factory reset if needed.
+- **App crashes / battery drain by app** — update/clear cache/reinstall; check background data.
 
 ## 5.5 Networks
 
-- **Intermittent wireless** — channel interference, distance, AP placement, outdated drivers.
-- **Slow speeds** — bandwidth saturation, duplex mismatch, cabling, Wi-Fi signal.
-- **Limited connectivity** — APIPA 169.254 = DHCP failure; check DHCP server/cable.
+- **Intermittent wireless** — channel interference, distance, AP placement, outdated drivers, power saving.
+- **Slow speeds** — bandwidth saturation, duplex mismatch, bad cabling, weak Wi-Fi signal, ISP plan.
+- **Limited connectivity** — APIPA 169.254 = DHCP failure; check DHCP server, cable, NIC.
 - **Jitter / poor VoIP** — latency variation, QoS off, congestion.
-- **Port flapping** — bad cable/NIC, duplex mismatch. **High latency** — congestion, long path, ISP.
-- **Authentication failures** — wrong password, RADIUS/802.1X, roaming.
+- **Port flapping** — bad cable/NIC, duplex mismatch. **High latency** — congestion, long path, ISP issues.
+- **Authentication failures** — wrong password, RADIUS/802.1X, roaming between APs.
+- **IP conflict** — two devices same static IP (error 169.x or "address already in use") — check statics.
+- **DNS issues** — "server not found" but IP works: check DNS servers, flush cache, wrong proxy.
 
 ## 5.6 Printers
 
@@ -391,12 +442,15 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 | Multiple prints pending | Stuck print queue/spooler |
 | Grinding noise | Gear/roller issue |
 | Finishing (staple/hole punch) | Finisher jam |
+| No connectivity | Wrong IP, driver, firewall, offline printer |
+| Ghost images (laser) | Old drum, drum cleaning failed |
 
 ## Sample questions
 
 1. **Q:** A desktop beeps repeatedly at POST with no video. First step? **A:** Reseat/replace RAM modules.
 2. **Q:** A drive makes a clicking sound. What should the technician do FIRST? **A:** Back up the data immediately.
-3. **Q:** Pages have vertical black lines. What's the likely cause in a laser printer? **A:** Damaged imaging drum.`,
+3. **Q:** Pages have vertical black lines. What's the likely cause in a laser printer? **A:** Damaged imaging drum.
+4. **Q:** A laptop's battery area is swollen. What's the correct action? **A:** Power off, stop using it, and replace the battery — it's a safety hazard.`,
 			position: 6
 		},
 		{
@@ -420,11 +474,37 @@ export const APLUS_1201_COURSE: CourseDefinition = {
 - **90 questions / 90 minutes, pass = 675/900 (75%).** Domains: Mobile 13%, Networking 23%, Hardware 25%, Virtualization/Cloud 11%, Troubleshooting 28%.
 - **The troubleshooting methodology is NOT tested** in V15 — don't waste time memorizing the 6 steps; DO practice symptom→cause recognition.
 
-## Objective walkthrough drill
+## Objective walkthrough (all 27)
 
-For every objective (1.1 → 5.6) you should be able to: (1) say the title, (2) explain each bullet in 1-2 sentences, (3) give a concrete example. Miss any → targeted review.
-
-**Acronyms to know cold** — from the 1201 list: BIOS, UEFI, TPM, POST, S.M.A.R.T., RAID, NVMe, M.2, SATA, SODIMM, DIMM, DDR, ECC, HDMI, DP, DVI, VGA, USB, RJ-45, RJ-11, STP, UTP, PoE, ONT, DSL, WISP, APIPA, DHCP, DNS, NAT, PAT, SSID, WPA2/WPA3, MAC, IP, IPv6, VPN, VLAN, PAN, LAN, WAN, MAN, SAN, WLAN, FTP, SSH, SMTP, POP3, IMAP, LDAP, SMB, RDP, HTTP(S), NFC, RFID, SIM, eSIM, GPS, MDM, BYOD, IaaS, PaaS, SaaS, VDI, VM, UPS, PSU, LED, LCD, OLED, MFD, ADF, CPU, GPU, CMOS, ESD, UPS…
+| Objective | Key topics to be able to explain |
+|---|---|
+| 1.1 | Laptop FRUs: battery, keyboard, RAM (SODIMM), storage (2.5"/M.2), Wi-Fi cards, biometrics, webcam |
+| 1.2 | USB versions, Thunderbolt, Lightning, NFC, Bluetooth pairing, tethering/hotspot, docking vs port replicator |
+| 1.3 | Cellular (SIM/eSIM/IMEI/APN), Wi-Fi, GPS vs cellular location, MDM policies, BYOD/COPE/CYOD, sync + data caps |
+| 2.1 | Ports 20/21, 22, 23, 25, 53, 67/68, 80, 110, 143, 137-139, 389, 443, 445, 3389; TCP vs UDP |
+| 2.2 | 2.4/5/6 GHz, channels 1/6/11, 802.11 a/b/g/n/ac/ax, Bluetooth, NFC, RFID |
+| 2.3 | DNS, DHCP, file/print/mail, syslog, AAA, NTP, web, DB; spam gateway, UTM, load balancer, proxy |
+| 2.4 | DNS records (A/AAAA/CNAME/MX/TXT), DHCP DORA + reservations, VLANs, VPN types |
+| 2.5 | Router, switch (managed/unmanaged), AP, patch panel, firewall, PoE 802.3af/at/bt, modems, ONT, NIC |
+| 2.6 | Private ranges, IPv6 link-local, APIPA 169.254, subnet mask, gateway, SOHO router security config |
+| 2.7 | Satellite/fiber/cable/DSL/cellular/WISP; LAN/WAN/PAN/MAN/SAN/WLAN |
+| 2.8 | Crimper, stripper, Wi-Fi analyzer, toner probe, punchdown, cable tester, loopback, tap |
+| 3.1 | LCD (TN/IPS/VA), OLED, backlight/inverter, touch/digitizer, resolution/refresh/PPI, projectors |
+| 3.2 | Cat 5e/6/6a, T568A/B, plenum, coax, fiber single/multi-mode, HDMI/DP/DVI/VGA, USB-C/TB, SATA, M.2 |
+| 3.3 | DDR3/4/5, DIMM vs SODIMM, ECC, dual-channel, CAS latency, XMP/EXPO |
+| 3.4 | HDD vs SSD vs NVMe vs hybrid, RAID 0/1/5/10 capacity math, S.M.A.R.T., form factors |
+| 3.5 | Form factors, sockets/chipsets, PCIe, UEFI/Secure Boot/TPM, CPU install + thermal paste |
+| 3.6 | PSU wattage/80 Plus, 24-pin/EPS/SATA/Molex/PCIe connectors, surge vs UPS, safety |
+| 3.7 | MFD: duplexer, ADF, scan-to-email/folder, spooler, NFC/cloud printing |
+| 3.8 | Laser (charge→expose→develop→transfer→fuse), inkjet printhead, thermal, impact, 3D; jam/faded/lines fixes |
+| 4.1 | Hypervisor Type 1 vs 2, snapshots/clones/templates, live migration, overcommitment/ballooning, sandboxing, VDI |
+| 4.2 | IaaS/PaaS/SaaS, public/private/hybrid/multi-cloud, NIST five characteristics, shared responsibility |
+| 5.1 | POST beeps, no power, overheating, CMOS battery, capacitors, minimal-boot method |
+| 5.2 | Clicking drive, S.M.A.R.T., boot device not found, RAID degraded/rebuild |
+| 5.3 | Dim/backlight, fuzzy, projector lamp, burn-in, dead pixels, flicker |
+| 5.4 | Swollen battery, digitizer vs LCD, charging, connectivity, liquid, overheating, mobile malware |
+| 5.5 | Intermittent Wi-Fi, slow speeds, APIPA, jitter, port flapping, auth failures, IP conflict, DNS |
+| 5.6 | Lines, garbled, jams, faded, misfeed, queue, grinding, ghost images |
 
 ## PBQ strategy
 
@@ -699,28 +779,45 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 ## 1.1 OS types & filesystems
 
-- **Workstation OSes** — Windows (10/11), Linux (Ubuntu, Fedora, Debian), macOS, Chrome OS (cloud-centric, web apps).
-- **Mobile OSes** — iOS/iPadOS (Apple, App Store only), Android (open, sideloading possible, Google Play).
-- **Filesystems** — **NTFS** (Windows default: permissions, encryption EFS, compression, quotas), **ReFS** (server resilience), **FAT32** (legacy, 4 GB file limit, max 2 TB partition), **exFAT** (flash drives, no 4 GB limit), **ext4** (Linux default), **XFS** (Linux, large files), **APFS** (macOS/iOS default).
-- **Vendor life cycle** — **EOL** (end-of-life: no more patches — security risk), update limitations (unsupported hardware).
-- **Compatibility** — file format sharing across OSes (docx/xlsx, exFAT USB), case sensitivity (Linux), drive formats not readable cross-OS.
+- **Workstation OSes** — Windows (10/11 — the exam's primary focus), Linux (Ubuntu, Fedora, Debian, Mint — free, open-source, CLI-centric), macOS (Apple, Unix-based, polished GUI), Chrome OS (cloud-centric, web apps, cheap hardware, managed via Google Admin).
+- **Mobile OSes** — iOS/iPadOS (Apple, App Store only — no sideloading), Android (open, sideloading possible, Google Play, vendor skins).
+- **Filesystems** —
+  | FS | Where | Notes |
+  |---|---|---|
+  | NTFS | Windows default | Permissions, EFS encryption, compression, quotas, journaling |
+  | ReFS | Server | Resilience, large volumes, self-healing |
+  | FAT32 | Legacy/universal | 4 GB file limit, 2 TB partition max — no permissions |
+  | exFAT | Flash/USB | No 4 GB limit, cross-OS (Windows/macOS/Linux) |
+  | ext4 | Linux default | Journaling, permissions |
+  | XFS | Linux (large files) | High performance, scalability |
+  | APFS | macOS/iOS default | Snapshots, encryption, space sharing |
+- **Vendor life cycle** — **EOL** (end-of-life: no more patches — security risk), EOS dates matter for compliance; unsupported hardware blocks upgrades.
+- **Compatibility** — file format sharing across OSes (docx/xlsx, PDF), exFAT USB for cross-OS transfer, case sensitivity (Linux), drive formats not readable cross-OS (ext4 in Windows needs third-party tools).
 
 ## 1.2 Install & upgrade paths
 
-- **Boot methods** — USB, network (PXE), solid-state/flash, internet-based (cloud recovery), external/hot-swappable drive, internal partition, multiboot (dual-boot), **image deployment**, remote network install.
-- **Install types** — **clean install** (wipe + fresh), **upgrade/in-place** (keep files/apps), **repair installation** (fix OS files), recovery partition.
-- **Partitioning** — **GPT** (modern, UEFI, 128+ partitions, >2 TB) vs **MBR** (legacy BIOS, 4 primary partitions, 2 TB limit); drive format before install.
-- **Upgrade considerations** — backup files/preferences first, app/driver backward compatibility, hardware compatibility (TPM 2.0, RAM, CPU for Win 11).
-- **Windows 11 editions** — Home, Pro (BitLocker, RDP host, gpedit, domain join), Pro for Workstations; Windows 10 Home/Pro; N versions (no media player); feature differences (domain vs workgroup, RAM support limits, BitLocker, RDP availability, desktop styles).
-- **Enterprise deployment** — third-party drivers, mass deployment tools.
+- **Boot methods** — USB, network (**PXE**), solid-state/flash, internet-based (cloud recovery), external/hot-swappable drive, internal partition, **multiboot** (dual-boot — boot manager picks), **image deployment** (golden image → many machines), remote network install.
+- **Install types** — **clean install** (wipe + fresh — slowest but cleanest), **upgrade/in-place** (keep files/apps/settings), **repair installation** (fix corrupted OS files), recovery partition/Media Creation Tool.
+- **Partitioning** — **GPT** (modern, UEFI, 128+ partitions, >2 TB) vs **MBR** (legacy BIOS, 4 primary partitions, 2 TB limit); format the drive before install; check boot mode matches partition scheme (UEFI+GPT, BIOS+MBR).
+- **Upgrade considerations** — backup files/preferences first, app/driver backward compatibility, hardware compatibility (Windows 11: 64-bit CPU, 4 GB RAM, 64 GB storage, **TPM 2.0**, Secure Boot, UEFI), activation/licensing, 32→64-bit migration = clean install (no in-place).
+- **Windows 11 editions** —
+  | Edition | Key features |
+  |---|---|
+  | Home | Consumer baseline |
+  | Pro | BitLocker, RDP host, gpedit, domain join, Hyper-V |
+  | Pro for Workstations | ReFS, more RAM/CPUs, faster file sharing |
+  | Enterprise | Volume licensing, advanced management |
+  | N versions | EU — no media player |
+- **Enterprise deployment** — third-party drivers (slipstream), mass deployment tools (SCCM/MDT, imaging), unattended installs.
 
-**Exam traps:** (1) FAT32 ≠ exFAT — exFAT lifts the 4 GB file limit. (2) GPT needs UEFI; MBR pairs with legacy BIOS. (3) In-place upgrade ≠ clean install — upgrade preserves apps/settings.
+**Exam traps:** (1) FAT32 ≠ exFAT — exFAT lifts the 4 GB file limit. (2) GPT needs UEFI; MBR pairs with legacy BIOS. (3) In-place upgrade ≠ clean install — upgrade preserves apps/settings. (4) 32-bit → 64-bit always requires a clean install.
 
 ## Sample questions
 
 1. **Q:** Which filesystem is the default for modern Windows and supports per-file encryption (EFS)? **A:** NTFS.
 2. **Q:** A USB stick must carry a 6 GB video between Windows and macOS. Best format? **A:** exFAT.
-3. **Q:** Which partition scheme is required to boot from a >2 TB drive in UEFI mode? **A:** GPT.`,
+3. **Q:** Which partition scheme is required to boot from a >2 TB drive in UEFI mode? **A:** GPT.
+4. **Q:** A machine must run Windows 11. Which two hardware features are required beyond CPU/RAM? **A:** TPM 2.0 and UEFI with Secure Boot.`,
 			position: 1
 		},
 		{
@@ -733,34 +830,40 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 ## 1.4 Windows tools
 
-- **Task Manager** — processes, performance, startup apps, users, services (end task, startup disable).
-- **MMC snap-ins** — **Event Viewer** (eventvwr.msc — system/application/security logs), **Disk Management** (diskmgmt.msc — partitions, format, shrink/extend), **Task Scheduler** (taskschd.msc), **Device Manager** (devmgmt.msc — drivers, disable/update, exclamation = problem), **Certificate Manager** (certmgr.msc), **Local Users and Groups** (lusrmgr.msc), **Performance Monitor** (perfmon.msc), **Group Policy Editor** (gpedit.msc — Pro only), Registry Editor (regedit.exe).
-- **Additional tools** — System Information (msinfo32.exe), Resource Monitor (resmon.exe), System Configuration (**msconfig.exe** — startup, services, boot options; note: startup apps moved to Task Manager), Disk Defragmenter (dfrgui.exe), Indexing Options, Administrative Tools.
+- **Task Manager** — processes, performance, startup apps, users, services (end task, startup disable, app history, GPU usage).
+- **MMC snap-ins** — **Event Viewer** (eventvwr.msc — system/application/security logs; check error events near crash time), **Disk Management** (diskmgmt.msc — partitions, format, shrink/extend, assign letters), **Task Scheduler** (taskschd.msc — automated tasks), **Device Manager** (devmgmt.msc — drivers, disable/update/roll back; yellow exclamation = problem), **Certificate Manager** (certmgr.msc), **Local Users and Groups** (lusrmgr.msc — Pro), **Performance Monitor** (perfmon.msc), **Group Policy Editor** (gpedit.msc — Pro only), Registry Editor (regedit.exe).
+- **Additional tools** — System Information (msinfo32.exe — hardware/OS summary), Resource Monitor (resmon.exe — real-time CPU/RAM/disk/network per process), System Configuration (**msconfig.exe** — boot options, safe boot, services; note: startup apps moved to Task Manager), Disk Defragmenter (dfrgui.exe — HDDs; SSDs don't need defrag), Indexing Options, Administrative Tools.
+
+**Exam trap:** Device Manager shows a yellow triangle for driver problems; roll back a driver that worked before the update rather than reinstalling blindly.
 
 ## 1.5 Command line
 
-- **Navigation** — cd, dir, md, rmdir.
-- **Network** — **ipconfig** (IP config: /all, /release, /renew, /flushdns), **ping** (reachability), **netstat** (connections), **nslookup** (DNS queries), **pathping** (trace + latency stats), **net use** (map drives).
-- **Disk** — **chkdsk** (check/fix disk errors), **format**, **diskpart** (partition tool).
-- **File/info** — robocopy (robust copy), winver (Windows version), whoami (current user), hostname, **gpupdate** (refresh policy), **gpresult** (policy results), **sfc /scannow** (system file check), **net user** (user mgmt), **[cmd] /?** (help).
+- **Navigation** — cd, dir, md, rmdir, cls.
+- **Network** — **ipconfig** (IP config: /all for details, /release + /renew to re-lease, /flushdns to clear DNS cache), **ping** (reachability — ping 127.0.0.1 tests the local stack), **netstat** (connections: -ano shows PIDs), **nslookup** (DNS queries), **tracert** (route hops), **pathping** (trace + latency stats over time), **net use** (map/remove drive shares).
+- **Disk** — **chkdsk** (check/fix disk errors), **format**, **diskpart** (scriptable partition tool).
+- **File/info** — robocopy (robust copy with flags), winver (Windows version), whoami (current user), hostname, **gpupdate /force** (refresh policy), **gpresult** (policy results), **sfc /scannow** (system file check — needs DISM to repair the image first if corrupt), **DISM** (deployment image servicing), **net user** (user mgmt), **[cmd] /?** (help).
+
+**Exam trap:** sfc fixes system files; DISM /Online /Cleanup-Image /RestoreHealth repairs the component store that sfc depends on — run DISM first when sfc fails.
 
 ## 1.6 Windows settings
 
-- Network and Sharing Center, System, Device Manager, Indexing Options, Devices and Printers, Program and Features (uninstall), Internet Options, Windows Defender Firewall, Mail, Sound, User Accounts, File Explorer Options (hidden files, hide extensions), Power Options (**hibernate vs sleep/suspend vs standby**, power plans, closing-lid action, fast startup, USB selective suspend), Ease of Access, Time and Language, Update and Security, Personalization, Apps, Network and Internet, Gaming, Accounts.
+- Network and Sharing Center (connection status), System (about, display), Device Manager, Indexing Options, Devices and Printers, Program and Features (uninstall), Internet Options (proxy, security zones), Windows Defender Firewall, Mail, Sound, User Accounts, File Explorer Options (**show hidden files, hide extensions**, show file extensions), Power Options (**hibernate vs sleep/suspend vs standby**, power plans, closing-lid action, fast startup, USB selective suspend), Ease of Access, Time and Language (timezone!), Update and Security, Personalization, Apps (default apps), Network and Internet, Gaming, Accounts.
+- **Power states** — sleep (RAM-powered, fast resume), hibernate (disk — uses no power), hybrid sleep; fast startup = hybrid shutdown (can cause boot issues after updates).
 
 ## 1.7 Client networking
 
-- **Domain joined vs workgroup** — domain = centralized AD auth, group policy, shared printers/file servers, mapped drives; workgroup = peer-to-peer, local accounts.
-- **Connections** — VPN (client config), wireless (SSID/security), WWAN/cellular.
-- **Client IP config** — IP addressing scheme, subnet mask, gateway, static vs dynamic, DNS settings; **proxy settings** (system proxy); **public vs private network** (Windows firewall profile: private = file sharing allowed, public = locked down).
+- **Domain joined vs workgroup** — domain = centralized AD authentication, group policy, shared printers/file servers, mapped drives, roaming profiles; workgroup = peer-to-peer, local accounts only.
+- **Connections** — VPN (client config, username/password or cert), wireless (SSID/security type), WWAN/cellular (SIM).
+- **Client IP config** — IP addressing scheme, subnet mask, gateway, static vs dynamic, DNS settings; **proxy settings** (system proxy for browsers); **network profile** — **private** = file sharing allowed, **public** = locked down (most restrictive firewall profile), domain profile for AD networks.
 
-**Exam traps:** (1) msconfig startup tab is legacy — Task Manager > Startup is current. (2) sfc fixes system files; DISM repairs the image sfc relies on. (3) "Public" network profile = most restrictive firewall.
+**Exam traps:** (1) msconfig startup tab is legacy — Task Manager > Startup is current. (2) "Public" network profile = most restrictive firewall. (3) Sleep uses RAM; hibernate writes to disk.
 
 ## Sample questions
 
 1. **Q:** Which command refreshes Group Policy immediately? **A:** gpupdate /force.
 2. **Q:** Where do you disable a program that launches at sign-in? **A:** Task Manager > Startup.
-3. **Q:** A PC joined to a domain can log in with which type of account? **A:** Domain account (AD credentials).`,
+3. **Q:** A PC joined to a domain can log in with which type of account? **A:** Domain account (AD credentials).
+4. **Q:** Which two commands fix a corrupt system file when sfc alone fails? **A:** DISM /Online /Cleanup-Image /RestoreHealth, then sfc /scannow again.`,
 			position: 2
 		},
 		{
@@ -773,35 +876,39 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 ## 1.8 macOS
 
-- **Finder** (file manager), **Dock**, Spotlight (search), System Preferences/Settings, **Time Machine** (backups), **Disk Utility** (format/repair), **Keychain** (passwords/certs), **Activity Monitor** (processes), Terminal (Unix shell), Mission Control, Gatekeeper (app signing).
-- **File structure** — /Applications, /Users, /Library; APFS; **.dmg/.pkg** installers; drag-to-Applications.
-- **Remote** — Screen Sharing (VNC), iCloud sync. **Shortcuts** — Cmd+C/V, Cmd+Space (Spotlight).
+- **Core tools** — **Finder** (file manager), **Dock** (app launcher), Spotlight (search — Cmd+Space), System Settings, **Time Machine** (automatic local backups — the exam answer for "Mac backups"), **Disk Utility** (format/repair — first aid), **Keychain** (password/cert store), **Activity Monitor** (processes — the Mac Task Manager), Terminal (Unix shell), Mission Control (window management), **Gatekeeper** (blocks unsigned/unnotarized apps), App Store.
+- **File structure** — /Applications, /Users/<name> (home), /Library (system/user libraries); APFS default; **.dmg** (disk image — mount, drag app to Applications) and **.pkg** (installer) formats.
+- **Remote & sync** — Screen Sharing (VNC), iCloud (files, photos, keychain sync), Continuity (Handoff, AirDrop).
+- **Key differences vs Windows** — Cmd vs Ctrl, no C: drive lettering (mounted volumes), Unix file permissions, spotlight vs start menu.
 
 ## 1.9 Linux
 
-- **Distros** — Ubuntu, Fedora, Debian, Linux Mint, Kali.
-- **CLI basics** — ls, cd, pwd, cp, mv, rm, mkdir, **chmod** (permissions 755/644), **chown**, **grep** (search), **apt/apt-get** (package install), sudo (admin), **ps**, **top**, **df -h** (disk space), **ifconfig/ip addr** (network), man pages.
-- **GUI** — GNOME/KDE desktops, software centers, file managers.
-- **Filesystem** — ext4, XFS; /root /home /etc /var /tmp structure.
+- **Distros** — Ubuntu, Fedora, Debian, Linux Mint (desktop), Kali (security testing), CentOS/Rocky (server).
+- **CLI basics** — ls (list), cd, pwd (print working dir), cp, mv, rm, mkdir, **chmod** (permissions: 755 = rwxr-xr-x, 644 = rw-r--r--; owner/group/others), **chown** (change owner), **grep** (search text), **sudo** (admin), **apt/apt-get** (Debian-family packages), **dnf/yum** (Red Hat-family), **ps** (processes), **top** (live process monitor), **df -h** (disk free), **du** (disk usage), **ifconfig/ip addr** (network), **ping**, man pages (documentation).
+- **GUI** — GNOME/KDE desktops, software centers, file managers — Linux isn't only CLI.
+- **Filesystem** — ext4/XFS; structure: / (root), /home (users), /root (root's home), /etc (config), /var (logs/spool), /tmp (temp), /usr (programs), /bin (binaries).
+
+**Exam trap:** chmod 755 = owner rwx, group r-x, others r-x. apt is Debian-family; dnf/yum is Red Hat-family — the exam tests the concept, and Ubuntu (apt) is the common example.
 
 ## 1.10 Application install
 
-- **Windows** — MSI/EXE installers, UAC prompts, 32-bit vs 64-bit, per-user vs machine install, sideloading/Store apps, compatibility mode.
-- **macOS** — DMG/pkg, Gatekeeper; **Linux** — package manager (apt/dnf), repos, tarballs.
-- **Requirements** — check RAM/disk/OS version, license, driver dependencies, admin rights.
+- **Windows** — MSI/EXE installers, UAC prompts, 32-bit vs 64-bit, per-user vs machine install, Store apps (sideloading = install outside Store), compatibility mode (run old apps), uninstall via Programs and Features.
+- **macOS** — DMG/pkg, Gatekeeper approval, drag-to-Applications; **Linux** — package manager (apt/dnf), repos, tarballs (source), flatpak/snap.
+- **Requirements** — check RAM/disk/OS version, license key, driver dependencies, admin rights; close other apps during install; verify installer source (hash/checksum).
 
 ## 1.11 Cloud productivity tools
 
-- **SaaS apps** — Microsoft 365, Google Workspace (Docs/Sheets/Slides/Drive), Zoom/Teams (video).
-- **Features** — real-time collaboration, version history, file sync (OneDrive/Drive), sharing/permissions, offline mode, browser-based vs installed clients.
+- **SaaS apps** — Microsoft 365 (Word/Excel/Outlook/Teams), Google Workspace (Docs/Sheets/Slides/Drive), Zoom (video), Slack (chat).
+- **Features** — real-time collaboration (co-authoring), version history, file sync (OneDrive/Drive desktop clients), sharing/permissions (view/edit/comment), offline mode, browser-based vs installed clients, admin consoles for org management.
 
-**Exam traps:** (1) chmod 755 = owner rwx, group r-x, others r-x. (2) apt is Debian-family; dnf/yum is Red Hat-family. (3) 32-bit apps may not run on ARM Windows without emulation.
+**Exam traps:** (1) Time Machine = macOS backups; Disk Utility = format/repair. (2) 32-bit apps may not run on ARM Windows without emulation. (3) Cloud files sync locally — "offline mode" is the exam term for working without connectivity.
 
 ## Sample questions
 
 1. **Q:** Which Linux command changes file permissions? **A:** chmod.
 2. **Q:** A Mac user needs automatic local backups. Which built-in tool? **A:** Time Machine.
-3. **Q:** Which command installs packages on Ubuntu? **A:** sudo apt install <package>.`,
+3. **Q:** Which command installs packages on Ubuntu? **A:** sudo apt install <package>.
+4. **Q:** A downloaded Mac app is blocked by Gatekeeper. What's the safe way to handle it? **A:** Verify the source, then allow it via System Settings (or right-click → Open) — don't disable Gatekeeper globally.`,
 			position: 3
 		},
 		{
@@ -814,33 +921,57 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 ## 2.1 Security measures
 
-- **Physical** — locks, badges, biometrics, security cameras, RFID badges, mantrap, cable locks.
-- **Logical** — passwords/PINs, **MFA** (something you know/have/are), smart cards, **BitLocker** (full-disk encryption; needs TPM), EFS (file encryption), least privilege, user account control (**UAC**), **Active Directory** (central auth + group policy), access control lists, NTFS permissions, screen locks, trusted platform module (**TPM**).
+- **Physical** — door locks (smart locks), badges + **ID badges with photos**, biometrics (fingerprint/iris), security cameras, RFID badges, **mantrap** (two-door airlock), cable locks, safes, access control vestibules.
+- **Logical** — passwords/PINs, **MFA** (something you know/have/are — two factors minimum), smart cards (CAC/PIV), **BitLocker** (full-disk encryption; needs TPM), EFS (per-file encryption), **least privilege**, user account control (**UAC** — prompt on privilege changes), **Active Directory** (central auth + group policy), access control lists (ACLs), NTFS permissions (read/write/execute/full control), screen locks, trusted platform module (**TPM** — hardware key storage, measured boot).
+- **Best practices** — default-deny mentality, defense in depth (layered controls), data classification.
 
 ## 2.2 Windows security settings
 
-- **Defender** — antivirus, firewall (inbound/outbound rules, profiles), Windows Security Center.
-- **Accounts** — user accounts, admin vs standard, UAC levels, password policy (length/complexity/expiration), account lockout, disable guest.
-- **Active Directory** — domains, group policy, organizational units, domain vs local accounts.
+- **Defender** — antivirus + firewall (inbound/outbound rules, per-profile: domain/private/public), Windows Security Center (health dashboard), exploit protection, controlled folder access.
+- **Accounts** — user accounts (admin vs standard — standard by default), UAC levels, password policy (length/complexity/expiration/history), **account lockout** (failed attempts threshold), disable/rename guest, sign-in options (PIN, fingerprint, face).
+- **Active Directory** — domains, **Group Policy** (enforce security settings centrally), organizational units (OUs), domain vs local accounts, **BitLocker via GPO**.
 
 ## 2.3 Wireless security
 
-- **WEP** — broken, never use. **WPA** — TKIP, deprecated. **WPA2** — AES/CCMP, current baseline. **WPA3** — SAE, strongest (resists offline dictionary attacks).
-- **Authentication** — **802.1X** (enterprise: RADIUS + EAP — PEAP, EAP-TLS), captive portals, preshared key (PSK) vs enterprise mode, MAC filtering (weak — spoofable).
+| Protocol | Cipher | Status |
+|---|---|---|
+| WEP | RC4 (broken) | Never use — cracked in minutes |
+| WPA | TKIP | Deprecated — legacy only |
+| WPA2 | AES/CCMP | Current baseline — still common |
+| WPA3 | AES/GCMP + SAE | Strongest — resists offline dictionary attacks |
+
+- **Authentication** — **802.1X** (enterprise: RADIUS + EAP — PEAP, EAP-TLS; per-user certs), captive portals (hotel/airport web login), preshared key (PSK — home) vs enterprise mode (corporate), **MAC filtering** (weak — MACs are spoofable), WPS (Wi-Fi Protected Setup — PIN brute-forceable, disable it).
+
+**Exam trap:** 802.1X is enterprise *authentication*, not encryption — the encryption comes from WPA2/WPA3.
 
 ## 2.4 Malware & anti-malware
 
-- **Types** — virus (host file), worm (self-spreads), trojan (disguised), ransomware (encrypt + extort), spyware, adware, keylogger, rootkit (kernel), botnet, **PUP** (potentially unwanted program), logic bomb, **RAT** (remote access trojan).
-- **Indicators** — slow system, popups, unusual network traffic, browser redirects, new processes.
-- **Tools** — antivirus/anti-malware (real-time + on-demand), **EDR** (endpoint detection and response), Windows Defender, Malwarebytes-style scanners, quarantining, safe mode, System Restore.
+- **Types** —
+  | Type | What it does |
+  |---|---|
+  | Virus | Attaches to a host file, spreads with user action |
+  | Worm | Self-spreads across the network, no user action |
+  | Trojan | Disguised as something legit |
+  | Ransomware | Encrypts data, demands payment |
+  | Spyware | Covertly collects data |
+  | Adware | Unwanted ads (often bundled) |
+  | Keylogger | Captures keystrokes |
+  | Rootkit | Hides deep in the OS/kernel |
+  | Botnet | Enlisted for DDoS/spam |
+  | PUP | Potentially unwanted program (bundled junk) |
+  | Logic bomb | Triggers on a condition (date/event) |
+  | RAT | Remote access trojan — backdoor control |
+- **Indicators** — slow system, popups, unusual network traffic, browser redirects, new processes, disabled security tools, files renamed (ransomware).
+- **Tools** — antivirus/anti-malware (real-time + on-demand), **EDR** (endpoint detection and response — behavioral detection), Windows Defender, on-demand scanners, **quarantine**, safe mode (clean boot environment), System Restore, **removal workflow** (see the 2.6 nine-step process).
 
-**Exam traps:** (1) WPA3 > WPA2 > WPA > WEP — always the order for "most secure". (2) 802.1X is enterprise authentication, not encryption. (3) Ransomware removal is NOT just deleting files — see 2.6's 9-step process.
+**Exam traps:** (1) WPA3 > WPA2 > WPA > WEP — always the order for "most secure". (2) Ransomware removal is NOT just deleting files — see 2.6's 9-step process. (3) A worm needs no user action; a virus does.
 
 ## Sample questions
 
 1. **Q:** Which wireless protocol resists offline dictionary attacks? **A:** WPA3 (SAE).
 2. **Q:** Which technology encrypts an entire Windows system drive? **A:** BitLocker (with TPM).
-3. **Q:** Malware that spreads itself across the network without user action? **A:** Worm.`,
+3. **Q:** Malware that spreads itself across the network without user action? **A:** Worm.
+4. **Q:** An enterprise wants per-user certificate authentication on Wi-Fi. Which mode? **A:** WPA2/WPA3-Enterprise with 802.1X/EAP-TLS.`,
 			position: 4
 		},
 		{
@@ -853,9 +984,19 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 ## 2.5 Social engineering
 
-- **Phishing family** — phishing (mass email), spear phishing (targeted), whaling (executives), vishing (voice), smishing (SMS), **BEC** (business email compromise — fake invoice/exec request).
-- **Other** — pretexting (fabricated scenario), baiting (USB drop), tailgating (follow through door), impersonation, **DoS/DDoS**, on-path (MITM), zero-day, **SQL injection**, XSS, insider threat, supply chain attacks.
-- **Password attacks** — brute force, dictionary, password spraying (few passwords, many accounts), credential stuffing.
+- **Phishing family** —
+  | Type | Vector |
+  |---|---|
+  | Phishing | Mass email with fake login links |
+  | Spear phishing | Targeted at a specific person/org |
+  | Whaling | Executives / high-value targets |
+  | Vishing | Voice calls (fake support/IRS) |
+  | Smishing | SMS texts with malicious links |
+  | BEC | Business email compromise — fake invoice/"CEO asks for wire" |
+- **Other attacks** — pretexting (fabricated scenario to get info), baiting (USB drop — curiosity installs malware), tailgating/piggybacking (follow through the door), impersonation (fake tech support), shoulder surfing, dumpster diving, **on-path (MITM)**, zero-day, **SQL injection**, XSS, insider threat, supply chain attacks.
+- **Password attacks** — brute force, dictionary, password spraying (few passwords, many accounts), credential stuffing (reused creds from breaches).
+
+**Exam trap:** Spear phishing = targeted; whaling = targeted at executives; vishing = voice; smishing = SMS. BEC is the "urgent wire transfer" email.
 
 ## 2.6 SOHO malware removal — the 9-step process (ordering PBQ!)
 
@@ -875,12 +1016,19 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 ## 2.8 Mobile device security
 
-- Screen locks, remote wipe/locate, **MDM enrollment**, app allow-listing, update OS/apps, disable sideloading, **jailbreaking/rooting detection** (bypasses security), Bluetooth disable when unused, secure Wi-Fi, biometric locks, backup/encryption.
+- Screen locks (PIN/pattern/biometric), remote wipe/locate, **MDM enrollment**, app allow-listing, update OS/apps, disable sideloading, **jailbreaking/rooting detection** (bypasses security), Bluetooth disable when unused, secure Wi-Fi (WPA2/3, no public), backup/encryption, app permissions review.
 
 ## 2.9 Data destruction & disposal
 
-- **Physical** — shredding, degaussing (magnetic), incineration, drill. **Logical** — **overwrite/wipe** (multiple passes), **secure erase**, **factory reset** (mobile), **crypto-shred** (destroy encryption keys). Paper: shredder/cross-cut.
-- Match method to media: HDD = degauss/shred/overwrite; SSD = secure erase (degauss ineffective on flash); optical = shred; paper = shred.
+| Media | Methods (match!) |
+|---|---|
+| HDD | Degaussing, shredding, overwrite (multi-pass), incineration, drill |
+| SSD | **Secure erase** (degaussing ineffective on flash), crypto-shred (destroy keys), physical destruction |
+| Optical (CD/DVD) | Shredding, incineration |
+| Paper | Cross-cut shredder, incineration |
+| Mobile | Factory reset + encryption, secure wipe |
+
+- **Crypto-shred** — destroy the encryption keys so data is unrecoverable; the fastest "destruction" for encrypted drives.
 
 ## 2.10 SOHO network security
 
@@ -896,7 +1044,8 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 1. **Q:** In the SOHO malware removal process, when do you disable System Restore? **A:** Step 3, after quarantining — before remediation.
 2. **Q:** Which data destruction method works for SSDs but NOT for HDDs? **A:** Secure erase / crypto-shred (degaussing is ineffective on flash).
-3. **Q:** An email from the CEO asks finance to urgently wire funds. Which attack? **A:** Business email compromise (BEC).`,
+3. **Q:** An email from the CEO asks finance to urgently wire funds. Which attack? **A:** Business email compromise (BEC).
+4. **Q:** An attacker leaves infected USB drives in a parking lot. Which social engineering technique? **A:** Baiting.`,
 			position: 5
 		},
 		{
@@ -922,15 +1071,16 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 | Wrong time/date | CMOS, timezone, NTP | Set timezone, sync time |
 | System sluggish | Disk full, malware, HDD dying | Free space, scan, check S.M.A.R.T. |
 
-- **Tools** — sfc /scannow, DISM /Online /Cleanup-Image /RestoreHealth, chkdsk, System Restore, msconfig safe boot, Event Viewer, Task Manager, Device Manager (roll back driver).
+- **Tools** — sfc /scannow, DISM /Online /Cleanup-Image /RestoreHealth, chkdsk, System Restore, msconfig safe boot, Event Viewer, Task Manager, Device Manager (roll back driver), **Windows Recovery Environment** (WinRE — startup repair, command prompt).
+- **Process** — reproduce the issue, note error codes, check Event Viewer around the failure time, isolate (safe mode = clean drivers; clean boot = no startup apps), apply one fix at a time, verify.
 
 ## 3.2 Mobile OS & app issues
 
-- App crashes/freezes → update/reinstall, clear cache; **battery drain** → background apps, screen brightness, sync; **overheating**; connectivity (Wi-Fi/cellular toggle, airplane mode, forget/rejoin); sync failures (account re-auth, storage full); **app not installing** → storage, OS version, sideloading blocked.
+- App crashes/freezes → update/reinstall, clear cache; **battery drain** → background apps, screen brightness, sync, radios; **overheating**; connectivity (Wi-Fi/cellular toggle, airplane mode, forget/rejoin); sync failures (account re-auth, storage full, sync toggles); **app not installing** → storage, OS version, sideloading blocked; **unresponsive touchscreen** → restart, remove protector, check for damage.
 
 ## 3.3 Mobile OS & app SECURITY issues
 
-- **Unauthorized location tracking** → check app permissions, revoke; **malware/adware** → uninstall suspicious apps, factory reset if persistent; **jailbroken/rooted device** → cannot trust security, factory reset + don't restore; **sideloaded apps** → disable unknown sources; **phishing/SMishing** → educate; **unsecured Wi-Fi** → use VPN/HTTPS; **lost/stolen** → remote lock/wipe; **account compromise** → change password, MFA, sign out everywhere.
+- **Unauthorized location tracking** → check app permissions, revoke; **malware/adware** → uninstall suspicious apps, factory reset if persistent; **jailbroken/rooted device** → cannot trust security, factory reset + don't restore from compromised backup; **sideloaded apps** → disable unknown sources; **phishing/SMishing** → educate; **unsecured Wi-Fi** → use VPN/HTTPS; **lost/stolen** → remote lock/wipe; **account compromise** → change password, MFA, sign out everywhere; **unsolicited notifications/overlay** → check for malicious apps, revoke notification permissions.
 
 ## 3.4 PC security issues
 
@@ -942,7 +1092,8 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 
 1. **Q:** Windows updates keep failing with a corrupt cache. What should you try? **A:** Stop the update service, clear SoftwareDistribution, retry.
 2. **Q:** A user's phone was jailbroken and now shows unknown apps. What's the safest action? **A:** Factory reset and restore from a trusted backup (or don't restore).
-3. **Q:** A browser's homepage changed to an ad site after an install. First step? **A:** Remove suspicious extensions and reset browser settings.`,
+3. **Q:** A browser's homepage changed to an ad site after an install. First step? **A:** Remove suspicious extensions and reset browser settings.
+4. **Q:** An app crashes only after a recent Windows update. Which tool quickly tests whether a driver is at fault? **A:** Safe mode (or Device Manager driver rollback).`,
 			position: 6
 		},
 		{
@@ -1000,6 +1151,47 @@ export const APLUS_1202_COURSE: CourseDefinition = {
 ## Core 2 exam facts
 
 - **90 questions / 90 minutes, pass = 700/900 (77.8%).** Domains: OS 28%, Security 28%, Software Troubleshooting 23%, Operational Procedures 21%.
+
+## Objective walkthrough (all 36)
+
+| Objective | Key topics to be able to explain |
+|---|---|
+| 1.1 | Windows/Linux/macOS/Chrome OS, iOS/Android, NTFS/exFAT/ext4/APFS, EOL |
+| 1.2 | Boot methods (PXE, USB, image), clean vs in-place, GPT vs MBR, Win 11 requirements |
+| 1.3 | Windows editions: Home vs Pro (BitLocker, RDP host, gpedit, domain join), N versions |
+| 1.4 | Task Manager, Event Viewer, Disk Management, Device Manager, msconfig, regedit |
+| 1.5 | ipconfig, ping, netstat, nslookup, tracert, chkdsk, diskpart, sfc, DISM, gpupdate |
+| 1.6 | Network settings, Power Options (sleep vs hibernate), File Explorer Options, User Accounts |
+| 1.7 | Domain vs workgroup, VPN/wireless/WWAN, static vs DHCP, network profiles (public/private) |
+| 1.8 | Finder, Time Machine, Disk Utility, Keychain, Activity Monitor, Gatekeeper, .dmg/.pkg |
+| 1.9 | ls/cd/chmod/chown/grep/sudo/apt, /etc /var /home structure, GNOME/KDE |
+| 1.10 | MSI/EXE, UAC, 32 vs 64-bit, DMG/pkg, apt/dnf, compatibility, requirements |
+| 1.11 | M365, Google Workspace, real-time collaboration, sync, sharing permissions, offline |
+| 2.1 | Physical + logical controls, MFA factors, BitLocker/EFS, least privilege, UAC, TPM |
+| 2.2 | Defender, firewall profiles, admin vs standard, password policy, lockout, Group Policy |
+| 2.3 | WEP/WPA/WPA2/WPA3, 802.1X/EAP-TLS, PSK vs enterprise, MAC filtering, WPS |
+| 2.4 | Malware types (virus/worm/trojan/ransomware/rootkit), indicators, AV/EDR tools |
+| 2.5 | Phishing family (spear/whaling/vishing/smishing/BEC), pretexting, baiting, tailgating |
+| 2.6 | 9-step SOHO malware removal ORDER (System Restore off early, on last) |
+| 2.7 | BitLocker, password best practices, disable guest, lockout, screen lock, AutoRun |
+| 2.8 | Screen locks, remote wipe, MDM, sideloading, jailbreak/rooting, Bluetooth |
+| 2.9 | HDD (degauss/shred), SSD (secure erase/crypto-shred), optical, paper, mobile |
+| 2.10 | WPA2/3, disable WPS, firmware, guest network, MAC filtering, default admin |
+| 2.11 | Pop-up blocker, private browsing, HTTPS, extensions, phishing filter, DoH |
+| 3.1 | BSOD, slow startup, app crashes, update failures, sfc/DISM/chkdsk, safe mode |
+| 3.2 | Mobile app FUNCTION issues: crashes, battery drain, sync, connectivity |
+| 3.3 | Mobile app SECURITY issues: tracking, malware, rooting, sideloading, lost/stolen |
+| 3.4 | Pop-ups, browser hijacking, ransomware, scareware, unknown startup processes |
+| 4.1 | Ticketing, asset management/CMDB, SOPs, SLAs, onboarding/offboarding |
+| 4.2 | Change management flow: request → review → approve → plan → implement → document |
+| 4.3 | Full/incremental/differential, 3-2-1 rule, restore testing, WinRE |
+| 4.4 | ESD, electrical safety, fire extinguisher types, lifting |
+| 4.5 | E-waste, batteries, hazardous materials, temp/humidity, UPS |
+| 4.6 | PII, GDPR/HIPAA, EULA, per-seat vs per-device, DRM, data retention |
+| 4.7 | Active listening, no jargon, status updates, escalation, empathy |
+| 4.8 | PowerShell, bash, variables/loops, execution policy, test in staging |
+| 4.9 | RDP/VNC/SSH, VPN, remote support tools, RMM, DaaS; MFA + session logging |
+| 4.10 | LLMs, RAG, hallucinations, deepfakes, prompt injection, AI ethics |
 
 ## Readiness checklist
 
