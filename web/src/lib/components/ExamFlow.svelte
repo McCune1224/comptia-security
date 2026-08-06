@@ -2,6 +2,7 @@
 	import { onMount, tick } from 'svelte';
 	import Sortable from 'sortablejs';
 	import MatchConnect from '$lib/components/MatchConnect.svelte';
+	import SortBoard from '$lib/components/SortBoard.svelte';
 	import type {
 		ActiveSessionSummary,
 		QuestionFeedback,
@@ -71,6 +72,19 @@
 		const stepFeedback = feedback?.stepFeedback?.[subStep];
 		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'matching') return null;
 		return stepFeedback.correctResponse.matches;
+	}
+
+	function sortAnswered(): boolean {
+		if (question?.kind !== 'sort') return true;
+		const response = draft?.kind === 'sort' ? draft : null;
+		if (!response) return false;
+		return question.items.every((item) => (response.assignments[item.id] ?? '').length > 0);
+	}
+
+	function stepSortAssignments(): Record<string, string> | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'sort') return null;
+		return stepFeedback.correctResponse.assignments;
 	}
 
 	function moveSubStep(dir: number) {
@@ -778,6 +792,15 @@
 						</div>
 					</div>
 				</div>
+			{:else if question.kind === 'sort'}
+				<SortBoard
+					items={question.items}
+					buckets={question.buckets}
+					assignments={draft?.kind === 'sort' ? draft.assignments : {}}
+					feedbackAssignments={feedback?.correctResponse.kind === 'sort' ? feedback.correctResponse.assignments : null}
+					disabled={!!feedback}
+					onchange={(a) => (draft = { kind: 'sort', assignments: a })}
+				/>
 			{:else if question.kind === 'multi-step'}
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
@@ -1001,6 +1024,16 @@
 								{/each}
 							</div>
 						</div>
+					{:else if step.kind === 'sort'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<SortBoard
+							items={step.items}
+							buckets={step.buckets}
+							assignments={subDraft?.kind === 'sort' ? subDraft.assignments : {}}
+							feedbackAssignments={stepSortAssignments()}
+							disabled={!!feedback}
+							onchange={(a) => updateSubResponse({ kind: 'sort', assignments: a })}
+						/>
 					{/if}
 
 					<div class="flex gap-2">
@@ -1031,7 +1064,7 @@
 					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered()}
+					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'

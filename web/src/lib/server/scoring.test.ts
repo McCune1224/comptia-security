@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type NumericDefinition, type WordBankDefinition } from './question-bank';
+import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
 
 const bank = loadQuestionBank();
@@ -39,5 +39,35 @@ describe('scoreQuestion', () => {
 		const shuffled = { ...wordBank.correctAssignments, [wordBank.blanks[0].id]: wordBank.bank.find((w) => w.id !== wordBank.correctAssignments[wordBank.blanks[0].id])!.id };
 		expect(scoreQuestion(wordBank, { kind: 'word-bank', assignments: shuffled }).earnedPoints).toBe((wordBank.blanks.length - 1) / wordBank.blanks.length);
 		expect(scoreQuestion(wordBank, { kind: 'word-bank', assignments: {} }).earnedPoints).toBe(0);
+	});
+
+	it('scores sort bucket assignments with partial credit', () => {
+		const sort: SortDefinition = {
+			id: 'pbq-5-999',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Classify each security control by type.',
+			explanation: 'Controls map to preventive, detective, or corrective categories.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'sort',
+			items: [
+				{ id: 'i1', text: 'Firewall ruleset' },
+				{ id: 'i2', text: 'Log review' },
+				{ id: 'i3', text: 'Backup restoration' },
+				{ id: 'i4', text: 'Vulnerability scan' }
+			],
+			buckets: [
+				{ id: 'b1', label: 'Preventive' },
+				{ id: 'b2', label: 'Detective' },
+				{ id: 'b3', label: 'Corrective' },
+				{ id: 'b4', label: 'Neither' }
+			],
+			correctBuckets: { i1: 'b1', i2: 'b2', i3: 'b3', i4: 'b2' }
+		};
+		expect(scoreQuestion(sort, { kind: 'sort', assignments: sort.correctBuckets }).earnedPoints).toBe(1);
+		const oneWrong = { ...sort.correctBuckets, i4: 'b1' };
+		expect(scoreQuestion(sort, { kind: 'sort', assignments: oneWrong }).earnedPoints).toBe(3 / 4);
+		expect(scoreQuestion(sort, { kind: 'sort', assignments: {} }).earnedPoints).toBe(0);
 	});
 });

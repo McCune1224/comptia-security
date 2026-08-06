@@ -100,6 +100,14 @@ export interface PublicWordBankQuestion extends PublicQuestionBase {
 	bank: { id: string; word: string }[];
 }
 
+export interface PublicSortQuestion extends PublicQuestionBase {
+	kind: 'sort';
+	/** Items to classify (shown as tappable chips). */
+	items: { id: string; text: string }[];
+	/** Labeled buckets to drop items into. */
+	buckets: { id: string; label: string }[];
+}
+
 export interface PublicMultiStepPbqQuestion extends PublicQuestionBase {
 	kind: 'multi-step';
 	context: string;
@@ -115,6 +123,7 @@ export type PublicQuestion =
 	| PublicConfigurationQuestion
 	| PublicFillBlankQuestion
 	| PublicWordBankQuestion
+	| PublicSortQuestion
 	| PublicMultiStepPbqQuestion;
 
 export type QuestionResponse =
@@ -126,6 +135,7 @@ export type QuestionResponse =
 	| { kind: 'configuration'; values: Record<string, string> }
 	| { kind: 'fill-blank'; values: Record<string, string> }
 	| { kind: 'word-bank'; assignments: Record<string, string> }
+	| { kind: 'sort'; assignments: Record<string, string> }
 	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
 
 export interface QuestionFeedback {
