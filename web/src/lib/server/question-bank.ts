@@ -143,7 +143,7 @@ export interface CourseBankSpec {
 export const SECP701_BANK_SPEC: CourseBankSpec = {
 	courseId: 'secp-701',
 	mcqTotal: 300,
-	pbqTotal: 88,
+	pbqTotal: 98,
 	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
 	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
 	domains: [1, 2, 3, 4, 5],

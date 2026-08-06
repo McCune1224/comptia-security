@@ -121,31 +121,57 @@ describe('QuizService', () => {
 
 	it('round-trips fill-blank and word-bank responses through a PBQ session', () => {
 		const repository = createQuizRepository(':memory:');
-		const bank = loadQuestionBank();
-		const service = createQuizService({ repository, bank, rng: () => 0.5, now: () => new Date('2026-07-22T12:00:00.000Z') });
-		const session = service.startSession({ type: 'pbq', count: 30 });
+		const fillPbq: QuestionDefinition = {
+			id: 'pbq-1-997',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt:
+				'The cipher that uses the same key to encrypt and decrypt is called ____, and the value added to passwords before hashing is a ____.',
+			explanation: 'Symmetric ciphers share one key; salts randomize password hashes.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'fill-blank',
+			blanks: [
+				{ id: 'b1', label: 'Cipher type', placeholder: 'term', acceptedAnswers: ['symmetric', 'symmetrical'] },
+				{ id: 'b2', label: 'Password randomness', placeholder: 'term', acceptedAnswers: ['salt', 'salting'] }
+			]
+		};
+		const wbPbq: QuestionDefinition = {
+			id: 'pbq-1-996',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt:
+				'Complete each statement: symmetric ciphers use one ____; password hashes are randomized with a ____.',
+			explanation: 'Symmetric ciphers share one key; salts randomize password hashes.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'word-bank',
+			blanks: [
+				{ id: 'b1', label: 'Cipher type' },
+				{ id: 'b2', label: 'Password randomness' }
+			],
+			bank: [
+				{ id: 'w1', word: 'key' },
+				{ id: 'w2', word: 'salt' },
+				{ id: 'd1', word: 'nonce' }
+			],
+			correctAssignments: { b1: 'w1', b2: 'w2' }
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [fillPbq, wbPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 2 });
 		const fillIndex = session.questions.findIndex((q) => q.kind === 'fill-blank');
-		expect(fillIndex).toBeGreaterThanOrEqual(0);
-		const fillPublic = session.questions[fillIndex] as { id: string; kind: 'fill-blank'; blanks: { id: string }[] };
-		const fillDef = bank.pbqs.find((q) => q.id === fillPublic.id && q.kind === 'fill-blank');
-		expect(fillDef?.kind).toBe('fill-blank');
-		if (fillDef?.kind !== 'fill-blank') throw new Error('missing fill-blank definition');
-		const fillValues = Object.fromEntries(
-			fillDef.blanks.map((blank, i) => [
-				blank.id,
-				i === 0 ? `  ${blank.acceptedAnswers[0].toUpperCase()}  ` : blank.acceptedAnswers[0]
-			])
-		);
-		service.saveResponse(session.sessionId, fillIndex, { kind: 'fill-blank', values: fillValues } as never);
 		const wbIndex = session.questions.findIndex((q) => q.kind === 'word-bank');
+		expect(fillIndex).toBeGreaterThanOrEqual(0);
 		expect(wbIndex).toBeGreaterThanOrEqual(0);
-		const wbPublic = session.questions[wbIndex] as { id: string; kind: 'word-bank'; blanks: { id: string }[]; bank: { id: string; word: string }[] };
-		const wbDef = bank.pbqs.find((q) => q.id === wbPublic.id && q.kind === 'word-bank');
-		expect(wbDef?.kind).toBe('word-bank');
-		if (wbDef?.kind !== 'word-bank') throw new Error('missing word-bank definition');
-		service.saveResponse(session.sessionId, wbIndex, { kind: 'word-bank', assignments: wbDef.correctAssignments } as never);
+		// Case- and whitespace-insensitive normalization: padded uppercase is fully correct.
+		service.saveResponse(session.sessionId, fillIndex, { kind: 'fill-blank', values: { b1: '  SYMMETRIC  ', b2: 'salt' } });
+		service.saveResponse(session.sessionId, wbIndex, { kind: 'word-bank', assignments: wbPbq.correctAssignments });
 		const result = service.completeSession(session.sessionId);
-		// Case- and whitespace-insensitive normalization: uppercase padded answer is fully correct
 		expect(result.review[fillIndex].feedback.earnedPoints).toBe(1);
 		expect(result.review[wbIndex].feedback.earnedPoints).toBe(1);
 		repository.close();
