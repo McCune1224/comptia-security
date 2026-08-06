@@ -1,0 +1,256 @@
+{
+  "1.1": {
+    "title": "Operating Systems",
+    "topics": [
+      "Operating Systems Overview",
+      "File Systems"
+    ]
+  },
+  "1.2": {
+    "title": "Installing Operating Systems",
+    "topics": [
+      "Installing Operating Systems",
+      "Upgrading Windows"
+    ]
+  },
+  "1.3": {
+    "title": "Microsoft Windows",
+    "topics": [
+      "An Overview of Windows",
+      "Windows Features"
+    ]
+  },
+  "1.4": {
+    "title": "The Windows OS",
+    "topics": [
+      "Task Manager",
+      "The Microsoft Management Console",
+      "Additional Windows Tools"
+    ]
+  },
+  "1.5": {
+    "title": "The Windows Command Line",
+    "topics": [
+      "Windows Command Line Tools",
+      "The Windows Network Command Line"
+    ]
+  },
+  "1.6": {
+    "title": "Windows Settings",
+    "topics": [
+      "The Windows Control Panel",
+      "Windows Settings"
+    ]
+  },
+  "1.7": {
+    "title": "Windows Networking",
+    "topics": [
+      "Windows Network Technologies",
+      "Configuring Windows Firewall",
+      "Windows IP Address Configuration",
+      "Windows Network Connections"
+    ]
+  },
+  "1.8": {
+    "title": "macOS",
+    "topics": [
+      "macOS Overview",
+      "macOS System Preferences",
+      "macOS Features"
+    ]
+  },
+  "1.9": {
+    "title": "Linux",
+    "topics": [
+      "Linux",
+      "Linux Commands Part 1",
+      "Linux Commands Part 2"
+    ]
+  },
+  "1.10": {
+    "title": "Installing Applications",
+    "topics": [
+      "Installing Applications"
+    ]
+  },
+  "1.11": {
+    "title": "Cloud Productivity",
+    "topics": [
+      "Cloud Productivity Tools"
+    ]
+  },
+  "2.1": {
+    "title": "Security Measures",
+    "topics": [
+      "Physical Security",
+      "Physical Access Security",
+      "Logical Security",
+      "Authentication and Access"
+    ]
+  },
+  "2.2": {
+    "title": "Windows Security",
+    "topics": [
+      "Defender Antivirus",
+      "Windows Firewall",
+      "Windows Security Settings",
+      "Active Directory"
+    ]
+  },
+  "2.3": {
+    "title": "Wireless Security",
+    "topics": [
+      "Wireless Encryption",
+      "Authentication Methods"
+    ]
+  },
+  "2.4": {
+    "title": "Malware",
+    "topics": [
+      "Malware",
+      "Anti-malware Tools"
+    ]
+  },
+  "2.5": {
+    "title": "Social Engineering",
+    "topics": [
+      "Social Engineering",
+      "Denial of Service",
+      "On-Path Attacks",
+      "Zero-Day Attacks",
+      "Password Attacks",
+      "Insider Threats",
+      "SQL Injection Attacks",
+      "Cross-site Scripting",
+      "Business Email Compromise",
+      "Supply Chain Attacks",
+      "Security Vulnerabilities"
+    ]
+  },
+  "2.6": {
+    "title": "Malware Removal",
+    "topics": [
+      "Removing Malware"
+    ]
+  },
+  "2.7": {
+    "title": "Security Best Practices",
+    "topics": [
+      "Security Best Practices"
+    ]
+  },
+  "2.8": {
+    "title": "Mobile Device Security",
+    "topics": [
+      "Mobile Device Security"
+    ]
+  },
+  "2.9": {
+    "title": "Data Destruction",
+    "topics": [
+      "Data Destruction"
+    ]
+  },
+  "2.10": {
+    "title": "SOHO Networks",
+    "topics": [
+      "Securing a SOHO Network"
+    ]
+  },
+  "2.11": {
+    "title": "Browser Security",
+    "topics": [
+      "Browser Security"
+    ]
+  },
+  "3.1": {
+    "title": "Troubleshooting Windows",
+    "topics": [
+      "Troubleshooting Windows"
+    ]
+  },
+  "3.2": {
+    "title": "Troubleshooting Mobile Devices",
+    "topics": [
+      "Troubleshooting Mobile Devices"
+    ]
+  },
+  "3.3": {
+    "title": "Troubleshooting Mobile Device Security",
+    "topics": [
+      "Troubleshooting Mobile Device Security"
+    ]
+  },
+  "3.4": {
+    "title": "Troubleshooting Security",
+    "topics": [
+      "Troubleshooting Security Issues"
+    ]
+  },
+  "4.1": {
+    "title": "Documentation and Support Systems",
+    "topics": [
+      "Ticketing Systems",
+      "Asset Management",
+      "Document Types"
+    ]
+  },
+  "4.2": {
+    "title": "Change Management",
+    "topics": [
+      "Change Management"
+    ]
+  },
+  "4.3": {
+    "title": "Backup and Recovery",
+    "topics": [
+      "Managing Backups"
+    ]
+  },
+  "4.4": {
+    "title": "Safety",
+    "topics": [
+      "Managing Electrostatic Discharge",
+      "Safety Procedures"
+    ]
+  },
+  "4.5": {
+    "title": "Environmental Impacts",
+    "topics": [
+      "Environmental Impacts"
+    ]
+  },
+  "4.6": {
+    "title": "Privacy and Policies",
+    "topics": [
+      "Incident Response",
+      "Privacy, Licensing, and Policies"
+    ]
+  },
+  "4.7": {
+    "title": "Communication and Professionalism",
+    "topics": [
+      "Professionalism",
+      "Communication"
+    ]
+  },
+  "4.8": {
+    "title": "Scripting",
+    "topics": [
+      "Scripting Languages",
+      "Scripting Use Cases"
+    ]
+  },
+  "4.9": {
+    "title": "Remote Access",
+    "topics": [
+      "Remote Access"
+    ]
+  },
+  "4.10": {
+    "title": "Artificial Intelligence",
+    "topics": [
+      "Managing AI"
+    ]
+  }
+}

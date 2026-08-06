@@ -93,3 +93,22 @@ items or vendor question text (CompTIA IP / braindump policy).
 - Configuration: BIOS/UEFI settings, SOHO router security settings, Windows settings.
 - Evidence: interpret ping/tracert/ipconfig output, BSOD/error code → likely component.
 - Numeric: RAID capacity math, RAM/PSU specs. Fill-blank/word-bank: acronym drills.
+
+## Topic maps (Phase 2 output)
+
+- `web/scripts/data/aplus-topics-1201.json` — 27 objectives, 62 Messer video topics.
+- `web/scripts/data/aplus-topics-1202.json` — 36 objectives, 74 Messer video topics.
+- Gap report: every objective has ≥1 dedicated video (Messer's videos are long-form and
+  cover the full objective, e.g. Troubleshooting Hardware 25:15), and ExamCompass runs a
+  topic quiz for every objective on both cores — full coverage, no thin objectives.
+- ExamCompass cross-check quiz titles per core confirm topic relevance (see cached index):
+  Core 1 covers mobile servicing/connection/accessories, ports, wireless, services, config,
+  hardware, IP addressing, connection/network types, tools, displays, cabling/connectors,
+  RAM, storage, motherboard, BIOS, CPU, PSU, MFDs, printers, virtualization, cloud, and all
+  six troubleshooting topics. Core 2 covers OS types, filesystems, boot, install methods,
+  Windows editions/features/tools/settings/networking, macOS, Linux, physical/logical
+  security, Windows security, NTFS/share permissions, AD, wireless security, malware,
+  social engineering, malware removal, workstation/mobile/network security, data
+  destruction, browser security, all four troubleshooting topics, ticketing, asset mgmt,
+  change mgmt, backup/recovery, safety, environmental, incident response, licensing,
+  regulated data, communication, scripting, remote access, and AI basics.
