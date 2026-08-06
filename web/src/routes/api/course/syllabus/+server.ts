@@ -1,10 +1,12 @@
-import { json } from '@sveltejs/kit';
-import { courseService } from '$lib/server/course-service';
+import { json, type RequestEvent } from '@sveltejs/kit';
+import { resolveScope } from '$lib/server/scope';
+import { scopedServices } from '$lib/server/services';
 
-export function GET() {
+export function GET(event: RequestEvent) {
+	const overview = scopedServices(resolveScope(event)).course.getOverview();
 	return json({
-		modules: courseService.getSyllabus(),
-		examDate: courseService.getOverview().examDate,
-		daysUntilExam: courseService.getOverview().daysUntilExam
+		modules: overview.modules,
+		examDate: overview.examDate,
+		daysUntilExam: overview.daysUntilExam
 	});
 }

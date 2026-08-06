@@ -1,10 +1,12 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent } from '@sveltejs/kit';
 import { getOAuth, googleConfigured } from '$lib/server/google-calendar';
-import { quizRepository } from '$lib/server/db';
+import { resolveScope } from '$lib/server/scope';
+import { scopedServices } from '$lib/server/services';
 
-export async function GET() {
-	const oauth = await getOAuth();
-	const synced = quizRepository.getSyncedEvents();
+export async function GET(event: RequestEvent) {
+	const scope = resolveScope(event);
+	const oauth = await getOAuth(scope);
+	const synced = scopedServices(scope).repo.getSyncedEvents();
 	const lastSyncAt = synced.length ? synced.map((row) => row.syncedAt).sort().at(-1) ?? null : null;
 	return json({
 		configured: googleConfigured(),

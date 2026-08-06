@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import crypto from 'node:crypto';
-import { quizRepository, type StoredGoogleOAuth as GoogleOAuth, type StoredSyncedEvent as SyncedEvent } from './db';
-import { assignmentDueDate, COURSE_DEFINITION } from './course';
+import { createScopedRepo, DEFAULT_SCOPE, quizRepository, type Scope, type StoredGoogleOAuth as GoogleOAuth, type StoredSyncedEvent as SyncedEvent } from './db';
+import { assignmentDueDate, COURSE_META } from './course';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Google Calendar integration — OAuth2 (PKCE) + Calendar v3 API client.
@@ -21,7 +21,7 @@ const AUTH_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 const API_BASE = 'https://www.googleapis.com/calendar/v3';
 
-const PREP_CALENDAR_NAME = 'Security+ Prep';
+const PREP_CALENDAR_NAME = (courseId: string): string => `${COURSE_META[courseId as keyof typeof COURSE_META]?.title ?? 'Security+'} Prep`;
 
 export interface CalendarEventView {
 	id: string;
@@ -115,19 +115,19 @@ export async function exchangeCode(
 
 // ── Token management ─────────────────────────────────────────────────────────
 
-export async function getOAuth(): Promise<GoogleOAuth | null> {
-	return quizRepository.getGoogleOAuth();
+export async function getOAuth(scope: Scope = DEFAULT_SCOPE): Promise<GoogleOAuth | null> {
+	return createScopedRepo(quizRepository, scope).getGoogleOAuth();
 }
 
-export async function saveOAuth(token: Omit<GoogleOAuth, 'calendarId'> & { calendarId?: string | null }): Promise<void> {
-	quizRepository.saveGoogleOAuth(token);
+export async function saveOAuth(token: Omit<GoogleOAuth, 'calendarId'> & { calendarId?: string | null }, scope: Scope = DEFAULT_SCOPE): Promise<void> {
+	createScopedRepo(quizRepository, scope).saveGoogleOAuth(token);
 }
 
-export async function clearOAuth(): Promise<void> {
-	quizRepository.clearGoogleOAuth();
+export async function clearOAuth(scope: Scope = DEFAULT_SCOPE): Promise<void> {
+	createScopedRepo(quizRepository, scope).clearGoogleOAuth();
 }
 
-async function refreshAccessToken(oauth: GoogleOAuth): Promise<string> {
+async function refreshAccessToken(oauth: GoogleOAuth, scope: Scope): Promise<string> {
 	const { clientId, clientSecret } = credentials();
 	const body = new URLSearchParams({
 		client_id: clientId,
@@ -139,7 +139,7 @@ async function refreshAccessToken(oauth: GoogleOAuth): Promise<string> {
 	const data = (await response.json()) as { access_token?: string; expires_in?: number; error?: string };
 	if (!response.ok || !data.access_token)
 		throw new Error(`Google token refresh failed: ${data.error ?? response.status} — reconnect from the calendar page.`);
-	quizRepository.saveGoogleOAuth({
+	createScopedRepo(quizRepository, scope).saveGoogleOAuth({
 		...oauth,
 		accessToken: data.access_token,
 		expiresAt: Date.now() + (data.expires_in ?? 3600) * 1000 - 60_000
@@ -148,15 +148,15 @@ async function refreshAccessToken(oauth: GoogleOAuth): Promise<string> {
 }
 
 /** Calls fn with a valid access token; refreshes once on expiry, retries once on 401. */
-async function withToken<T>(fn: (token: string) => Promise<T>): Promise<T> {
-	const oauth = await getOAuth();
+async function withToken<T>(fn: (token: string) => Promise<T>, scope: Scope): Promise<T> {
+	const oauth = await getOAuth(scope);
 	if (!oauth) throw new GoogleCalendarError('NOT_CONNECTED', 'Connect a Google account first.');
 	let token = oauth.accessToken;
-	if (Date.now() >= oauth.expiresAt) token = await refreshAccessToken(oauth);
+	if (Date.now() >= oauth.expiresAt) token = await refreshAccessToken(oauth, scope);
 	try {
 		return await fn(token);
 	} catch (error) {
-		if (error instanceof GoogleApiError && error.status === 401) return await fn(await refreshAccessToken(oauth));
+		if (error instanceof GoogleApiError && error.status === 401) return await fn(await refreshAccessToken(oauth, scope));
 		throw error;
 	}
 }
@@ -216,7 +216,7 @@ export async function fetchPrimaryEmail(token: string): Promise<string> {
 }
 
 /** Events across all visible calendars in [startDate, endDate], deduped by id. */
-export async function fetchCalendarEvents(startDate: string, endDate: string): Promise<CalendarEventView[]> {
+export async function fetchCalendarEvents(startDate: string, endDate: string, scope: Scope = DEFAULT_SCOPE): Promise<CalendarEventView[]> {
 	return withToken(async (token) => {
 		const list = await api<{ items: CalendarListEntry[] }>(token, '/users/me/calendarList?maxResults=50');
 		const calendars = list.items.filter((entry) => entry.selected !== false && entry.accessRole !== 'freeBusyReader').slice(0, 8);
@@ -236,7 +236,7 @@ export async function fetchCalendarEvents(startDate: string, endDate: string): P
 		);
 		const seen = new Set<string>();
 		return results.flat().filter((event) => (seen.has(event.id) ? false : (seen.add(event.id), true))).sort((a, b) => a.start.localeCompare(b.start));
-	});
+	}, scope);
 }
 
 function toEventView(event: CalendarEvent, calendarName: string): CalendarEventView {
@@ -261,23 +261,24 @@ function toEventView(event: CalendarEvent, calendarName: string): CalendarEventV
 
 // ── Deadline sync (push course deadlines into a dedicated calendar) ─────────
 
-export function planSyncEvents(): PlannedEvent[] {
-	const examDate = quizRepository.getExamDate();
-	const examName = COURSE_DEFINITION.examName;
+export function planSyncEvents(scope: Scope = DEFAULT_SCOPE): PlannedEvent[] {
+	const repo = createScopedRepo(quizRepository, scope);
+	const examDate = repo.getExamDate();
+	const examName = COURSE_META[scope.courseId]?.examName ?? 'Certification Exam';
 	const planned: PlannedEvent[] = [
 		{
 			source: 'exam',
 			summary: `🎓 ${examName}`,
-			description: 'CompTIA Security+ exam day. You\'ve got this!',
+			description: 'CompTIA exam day. You\'ve got this!',
 			date: examDate
 		}
 	];
-	for (const assignment of quizRepository.getCourseAssignments()) {
+	for (const assignment of repo.getCourseAssignments()) {
 		const due = assignmentDueDate(assignment, examDate);
 		planned.push({
 			source: `assignment:${assignment.id}`,
 			summary: `📝 ${assignment.title}`,
-			description: `Due before the ${examName.split(' ')[0] ?? 'exam'} (${examDate}). From the Security+ course app.`,
+			description: `Due before the ${examName.split(' ')[0] ?? 'exam'} (${examDate}). From the ${COURSE_META[scope.courseId]?.title ?? 'Security+'} course app.`,
 			date: toDateKey(due)
 		});
 	}
@@ -316,24 +317,26 @@ export interface SyncResult {
 	syncedAt: string;
 }
 
-/** Pushes exam + assignment deadlines into a dedicated "Security+ Prep" calendar. */
-export async function syncDeadlinesToGoogle(): Promise<SyncResult> {
+/** Pushes exam + assignment deadlines into a dedicated per-course "… Prep" calendar. */
+export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promise<SyncResult> {
 	return withToken(async (token) => {
-		const oauth = await getOAuth();
+		const repo = createScopedRepo(quizRepository, scope);
+		const oauth = await getOAuth(scope);
 		if (!oauth) throw new GoogleCalendarError('NOT_CONNECTED', 'Connect a Google account first.');
 
+		const calendarName = PREP_CALENDAR_NAME(scope.courseId);
 		let calendarId = oauth.calendarId;
 		if (!calendarId) {
 			const created = await api<{ id: string }>(token, '/calendars', {
 				method: 'POST',
-				body: JSON.stringify({ summary: PREP_CALENDAR_NAME, description: 'Security+ course deadlines pushed by the study app.' })
+				body: JSON.stringify({ summary: calendarName, description: 'Course deadlines pushed by the study app.' })
 			});
 			calendarId = created.id;
-			quizRepository.saveGoogleOAuth({ ...oauth, calendarId });
+			repo.saveGoogleOAuth({ ...oauth, calendarId });
 		}
 
-		const planned = planSyncEvents();
-		const existing = new Map(quizRepository.getSyncedEvents().map((row) => [row.source, row]));
+		const planned = planSyncEvents(scope);
+		const existing = new Map(repo.getSyncedEvents().map((row) => [row.source, row]));
 		let created = 0;
 		let updated = 0;
 		const syncedAt = new Date().toISOString();
@@ -347,7 +350,7 @@ export async function syncDeadlinesToGoogle(): Promise<SyncResult> {
 				updated++;
 			} else {
 				const event = await api<{ id: string }>(token, `/calendars/${encodeURIComponent(calendarId)}/events`, { method: 'POST', body });
-				quizRepository.recordSyncedEvent(item.source, event.id, item.summary, item.date, syncedAt);
+				repo.recordSyncedEvent(item.source, event.id, item.summary, item.date, syncedAt);
 				created++;
 			}
 		}
@@ -362,12 +365,12 @@ export async function syncDeadlinesToGoogle(): Promise<SyncResult> {
 			} catch (error) {
 				if (!(error instanceof GoogleApiError && error.status === 404)) throw error; // already gone is fine
 			}
-			quizRepository.removeSyncedEvent(row.source);
+			repo.removeSyncedEvent(row.source);
 			deleted++;
 		}
 
-		return { created, updated, deleted, calendarId, calendarName: PREP_CALENDAR_NAME, syncedAt };
-	});
+		return { created, updated, deleted, calendarId, calendarName, syncedAt };
+	}, scope);
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────

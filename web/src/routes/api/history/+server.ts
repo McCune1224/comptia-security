@@ -1,8 +1,9 @@
-import { json } from '@sveltejs/kit';
-import { quizRepository } from '$lib/server/db';
+import { json, type RequestEvent } from '@sveltejs/kit';
+import { resolveScope } from '$lib/server/scope';
+import { scopedServices } from '$lib/server/services';
 
-export function GET() {
-	const sessions = quizRepository.getAllCompletedSessions().map((session) => ({
+export function GET(event: RequestEvent) {
+	const sessions = scopedServices(resolveScope(event)).repo.getAllCompletedSessions().map((session) => ({
 		id: session.id,
 		type: session.type,
 		startedAt: session.started_at,

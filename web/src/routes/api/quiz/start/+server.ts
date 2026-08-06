@@ -1,11 +1,12 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent } from '@sveltejs/kit';
 import type { Domain, SessionMode, SessionType } from '$lib/types';
 import { apiError, readJson } from '$lib/server/api';
-import { quizService } from '$lib/server/quiz';
+import { resolveScope } from '$lib/server/scope';
+import { scopedServices } from '$lib/server/services';
 
-export async function POST({ request }: { request: Request }) {
+export async function POST(event: RequestEvent) {
 	try {
-		const body = await readJson(request);
+		const body = await readJson(event.request);
 		const type = body.type;
 		const mode = body.mode;
 		const count = body.count;
@@ -31,7 +32,7 @@ export async function POST({ request }: { request: Request }) {
 				{ status: 400 }
 			);
 		return json({
-			session: quizService.startSession({
+			session: scopedServices(resolveScope(event)).quiz.startSession({
 				type: type as SessionType,
 				...(mode ? { mode: mode as SessionMode } : {}),
 				...(count ? { count } : {}),

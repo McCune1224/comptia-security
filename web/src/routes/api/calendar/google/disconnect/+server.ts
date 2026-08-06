@@ -1,9 +1,11 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent } from '@sveltejs/kit';
 import { clearOAuth } from '$lib/server/google-calendar';
-import { quizRepository } from '$lib/server/db';
+import { resolveScope } from '$lib/server/scope';
+import { scopedServices } from '$lib/server/services';
 
-export async function POST() {
-	await clearOAuth();
-	quizRepository.getSyncedEvents().forEach((row) => quizRepository.removeSyncedEvent(row.source));
+export async function POST(event: RequestEvent) {
+	const scope = resolveScope(event);
+	await clearOAuth(scope);
+	scopedServices(scope).repo.getSyncedEvents().forEach((row) => scopedServices(scope).repo.removeSyncedEvent(row.source));
 	return json({ ok: true });
 }
