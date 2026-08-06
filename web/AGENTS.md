@@ -22,8 +22,11 @@ API routes → SvelteKit pages (course home, syllabus, modules, assignments, gra
 ```
 
 - **No SSR needed** — all page data is fetched client-side via `fetch('/api/...')`.
-- **No authentication** — local-only single-user app.
-- **No ORM** — raw `better-sqlite3` queries; schema auto-created + migrated (user_version 5).
+- **No authentication** — local multi-profile app. Scope (which profile + course a
+  request acts as) comes from `profile_id` / `course_id` cookies, resolved by
+  `resolveScope(event)` in `src/lib/server/scope.ts`; every API route builds a
+  scoped view via `scopedServices(scope)` (`src/lib/server/services.ts`).
+- **No ORM** — raw `better-sqlite3` queries; schema auto-created + migrated (user_version 6).
 
 ## Course Model (`src/lib/server/course.ts`)
 
@@ -85,19 +88,36 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
 
 ## DB Tables
 
-Quiz engine (pre-existing): `quiz_sessions`, `quiz_answers`, `domain_progress`,
-`quiz_session_state`, `quiz_session_responses`.
+User data is scoped by `profile_id` (+ `course_id` where progress is per-course);
+`profiles` holds the (max 2) local users. The `quizRepository` singleton in
+`db.ts` is scope-agnostic — `createScopedRepo(repo, scope)` returns a bound view
+over the same connection, and all reads/writes filter by the scope.
 
-Course layer: `course_meta` (key/value — `exam_date`), `course_modules`, `course_lessons`,
-`course_assignments`, `course_assignment_submissions`, `course_lesson_completions`.
+- `profiles` — id, name, color (hard cap `MAX_PROFILES = 2`; `default` is seeded and undeletable).
+- Quiz engine: `quiz_sessions`, `quiz_answers`, `domain_progress` — scoped by
+  `(profile_id, course_id)`; `quiz_session_state`, `quiz_session_responses` keyed by session.
+- Course layer: `course_meta` (`(profile_id, course_id, key)` — per-scope
+  `exam_date`), `course_modules` / `course_lessons` / `course_assignments`
+  (content, `course_id` column), `course_assignment_submissions` and
+  `course_lesson_completions` (scoped by `profile_id`).
+- Review layer: `review_cards` (`(profile_id, course_id, question_id)`),
+  `study_log` (`(profile_id, date_key)` — streaks are per-profile, not per-course).
+- Google Calendar: `google_oauth` (one row per profile), `google_synced_events`
+  (`(profile_id, source)`).
 
-Review layer: `review_cards` (per-question spaced-repetition state), `study_log` (per-day
-question/session counts for streaks + heatmap).
+The v5 → v6 migration (transactional, idempotent, `user_version = 6`) adds the
+scope columns and rebuilds the 8 tables whose primary key changed, backfilling
+all pre-existing rows to `('default', 'secp-701')`. Fresh databases are created
+in the v6 shape directly; `seedCourse` seeds the default profile + exam date per
+active course. Migration/isolation coverage lives in `migration.test.ts`.
 
 ## API Routes
 
 | Method | Path | Purpose |
 | ------ | ---- | ------- |
+| `GET`  | `/api/scope` | Current scope + available profiles & courses (drives the header switchers) |
+| `POST` | `/api/scope` | `{action:'switch', profileId?, courseId?}` sets scope cookies; `{action:'create', name, color}` (400 past 2-profile cap); `{action:'rename', profileId, name}` |
+| `DELETE` | `/api/scope?profileId=` | Delete a profile (blocked while it is the active scope; `default` is protected) |
 | `GET`  | `/api/course/overview` | Home payload: exam date/countdown, readiness, gradebook summary, modules w/ progress, to-do list, recent sessions |
 | `GET`  | `/api/course/syllabus` | All modules with lessons + assignments + statuses |
 | `GET`  | `/api/course/modules/[id]` | Single module (lessons + assignments) |
@@ -116,7 +136,7 @@ question/session counts for streaks + heatmap).
 | `GET`  | `/api/calendar/google/auth-url` | Starts OAuth: returns auth URL, sets `gcal_oauth_state` cookie (PKCE + state) |
 | `GET`  | `/api/calendar/google/callback` | OAuth callback: exchanges code, stores token, redirects to `/calendar?connected=1` |
 | `GET`  | `/api/calendar/google/events?start&end` | Merged events from the user's visible calendars (server-side proxy) |
-| `POST` | `/api/calendar/google/sync` | Pushes exam + assignment deadlines into the "Security+ Prep" calendar (create/update/delete) |
+| `POST` | `/api/calendar/google/sync` | Pushes exam + assignment deadlines into the per-course "… Prep" calendar (create/update/delete) |
 | `POST` | `/api/calendar/google/disconnect` | Clears the stored OAuth token + sync tracking |
 
 ## Frontend Pages (Svelte 5 runes, Tailwind CSS v4)
@@ -131,7 +151,7 @@ question/session counts for streaks + heatmap).
 | `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`) |
 | `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session |
 | `/review` | `src/routes/review/+page.svelte` | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame |
-| `/mastery` | `src/routes/mastery/+page.svelte` | **Mastery matrix** — all 28 objectives color-coded by accuracy; tap any cell to drill it (5-question practice session filtered to that objective) |
+| `/mastery` | `src/routes/mastery/+page.svelte` | **Mastery matrix** — per-course objectives color-coded by accuracy (grid renders from `COURSE_META[course].objectives`); tap any cell to drill it (5-question practice session filtered to that objective) |
 | `/progress` `/history` | existing | Legacy analytics |
 
 ### Shared components
@@ -139,6 +159,9 @@ question/session counts for streaks + heatmap).
 - `StatusChip.svelte` — assignment status badge.
 - `ProgressRing.svelte` — circular percentage (readiness/grade).
 - `BottomNav.svelte` / `MobileMenu.svelte` — course navigation (Home, Syllabus, Grades, Calendar).
+- `ProfileSwitcher.svelte` / `CourseSwitcher.svelte` — header chips → bottom sheets
+  for profile (add/rename/delete, 2-profile cap) and course selection; switching
+  sets the scope cookies and reloads.
 
 ### Key Patterns
 
@@ -159,6 +182,8 @@ npm run test         # vitest (23 tests: quiz, scoring, question-bank, cards, co
 `course.test.ts` covers the course definition, scheduling, assignment status, gradebook math,
 readiness, and the course service end-to-end. DB tests use `:memory:`; the module-level
 `quizRepository` singleton uses `:memory:` under vitest (`process.env.VITEST`) to avoid file races.
+`migration.test.ts` covers the v5→v6 migration (fixture upgrade, idempotency, fresh-DB parity),
+scope isolation between profiles, and the 2-profile cap. 60 tests total.
 
 ## Styling
 
