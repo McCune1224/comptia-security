@@ -55,7 +55,7 @@ function createV5Fixture(file: string): void {
 const pkColumns = (db: Database.Database, table: string): string =>
 	(db.prepare(`SELECT group_concat(name, ',') AS cols FROM pragma_table_info('${table}') WHERE pk > 0`).get() as { cols: string }).cols;
 
-describe('v5 → v6 migration', () => {
+describe('v5 → v7 migration', () => {
 	it('upgrades a v5 database in place, preserving and backfilling all progress', () => {
 		const file = tempDb();
 		createV5Fixture(file);
@@ -65,7 +65,7 @@ describe('v5 → v6 migration', () => {
 		repo.close();
 
 		const db = new Database(file, { readonly: true });
-		expect(db.pragma('user_version', { simple: true })).toBe(6);
+		expect(db.pragma('user_version', { simple: true })).toBe(7);
 
 		// Row counts preserved.
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_sessions').get() as { c: number }).c).toBe(1);
@@ -112,13 +112,13 @@ describe('v5 → v6 migration', () => {
 		db.close();
 	});
 
-	it('is idempotent — reopening a v6 database is a no-op', () => {
+	it('is idempotent — reopening a v7 database is a no-op', () => {
 		const file = tempDb();
 		createV5Fixture(file);
 		createQuizRepository(file).close();
 		createQuizRepository(file).close();
 		const db = new Database(file, { readonly: true });
-		expect(db.pragma('user_version', { simple: true })).toBe(6);
+		expect(db.pragma('user_version', { simple: true })).toBe(7);
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_sessions').get() as { c: number }).c).toBe(1);
 		expect((db.prepare('SELECT COUNT(*) c FROM review_cards').get() as { c: number }).c).toBe(1);
 		expect((db.prepare("SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { value: string }).value).toBe('2026-09-30');
@@ -131,8 +131,8 @@ describe('fresh databases', () => {
 		const repo = createQuizRepository(':memory:');
 		expect(repo.getProfiles()).toHaveLength(2);
 		expect(repo.getProfiles().map((p) => p.id)).toEqual(['default', 'ash']);
-		expect(repo.getProfiles().find((p) => p.id === 'default')).toMatchObject({ id: 'default', name: 'Alex' });
-		expect(repo.getProfiles().find((p) => p.id === 'ash')).toMatchObject({ id: 'ash', name: 'Ash' });
+		expect(repo.getProfiles().find((p) => p.id === 'default')).toMatchObject({ id: 'default', name: 'Alex', courseId: 'secp-701' });
+		expect(repo.getProfiles().find((p) => p.id === 'ash')).toMatchObject({ id: 'ash', name: 'Ash', courseId: 'aplus-1201' });
 		expect(repo.getExamDate()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 		expect(repo.getCourseModules()).toHaveLength(4);
 		expect(repo.getCourseLessons()).toHaveLength(7);
@@ -213,6 +213,22 @@ describe('profile management', () => {
 		expect(() => repo.createProfile('Third', '#f0b04c')).toThrow(`cap of ${MAX_PROFILES}`);
 		repo.renameProfile('ash', 'Ash B');
 		expect(repo.getProfiles().find((p) => p.id === 'ash')?.name).toBe('Ash B');
+		repo.close();
+	});
+
+	it('remembers each profile\'s course (profile→course coupling)', () => {
+		const repo = createQuizRepository(':memory:');
+		expect(repo.getProfiles().find((p) => p.id === 'default')?.courseId).toBe('secp-701');
+		expect(repo.getProfiles().find((p) => p.id === 'ash')?.courseId).toBe('aplus-1201');
+
+		// Switching courses updates the active profile's preference.
+		repo.setProfileCourse('ash', 'aplus-1202');
+		expect(repo.getProfiles().find((p) => p.id === 'ash')?.courseId).toBe('aplus-1202');
+
+		// New profiles inherit the caller-provided course.
+		repo.deleteProfile('ash');
+		const created = repo.createProfile('New', '#f0b04c', 'aplus-1201');
+		expect(created.courseId).toBe('aplus-1201');
 		repo.close();
 	});
 

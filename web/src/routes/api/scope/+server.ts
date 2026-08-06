@@ -1,7 +1,7 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 import type { CourseId } from '$lib/types';
 import { ACTIVE_COURSES, COURSE_META } from '$lib/server/course';
-import { quizRepository } from '$lib/server/db';
+import { DEFAULT_SCOPE, quizRepository } from '$lib/server/db';
 import { resolveScope } from '$lib/server/scope';
 
 const SCOPE_COOKIE = {
@@ -33,29 +33,45 @@ export async function POST(event: RequestEvent) {
 		return json({ error: { code: 'INVALID_REQUEST', message: 'action is required.' } }, { status: 400 });
 
 	// Switch the active profile and/or course (cookies only — no auth).
+	// Profile and course are COUPLED: switching profiles restores that
+	// profile's own course; switching courses updates the active profile's
+	// preference, so the next profile switch comes back to the right course.
 	if (body.action === 'switch') {
 		const scope = resolveScope(event);
-		const profileId =
-			typeof body.profileId === 'string' &&
-			quizRepository.getProfiles().some((profile) => profile.id === body.profileId)
+		const profiles = quizRepository.getProfiles();
+		const switchProfile =
+			typeof body.profileId === 'string' && profiles.some((profile) => profile.id === body.profileId)
 				? body.profileId
-				: scope.profileId;
-		const courseId =
+				: undefined;
+		const switchCourse =
 			typeof body.courseId === 'string' && (ACTIVE_COURSES as string[]).includes(body.courseId)
 				? (body.courseId as CourseId)
-				: scope.courseId;
+				: undefined;
+
+		let profileId = switchProfile ?? scope.profileId;
+		let courseId = switchCourse ?? scope.courseId;
+		if (switchProfile && !switchCourse) {
+			// Profile switch with no explicit course: follow the profile's course.
+			courseId = profiles.find((p) => p.id === switchProfile)?.courseId ?? DEFAULT_SCOPE.courseId;
+		}
+		if (switchCourse) {
+			// Remember this course as the active profile's preference.
+			quizRepository.setProfileCourse(scope.profileId, switchCourse);
+		}
+
 		event.cookies.set('profile_id', profileId, SCOPE_COOKIE);
 		event.cookies.set('course_id', courseId, SCOPE_COOKIE);
 		return json({ ok: true, scope: { profileId, courseId } });
 	}
 
 	// Create a profile (hard cap of MAX_PROFILES enforced in the repo).
+	// The new profile inherits the active profile's current course.
 	if (body.action === 'create') {
 		if (typeof body.name !== 'string' || body.name.trim().length === 0)
 			return json({ error: { code: 'INVALID_REQUEST', message: 'name is required.' } }, { status: 400 });
 		const color = typeof body.color === 'string' ? body.color : '#b7f04c';
 		try {
-			const profile = quizRepository.createProfile(body.name.trim().slice(0, 24), color);
+			const profile = quizRepository.createProfile(body.name.trim().slice(0, 24), color, resolveScope(event).courseId);
 			return json({ ok: true, profile });
 		} catch (error) {
 			return json({ error: { code: 'PROFILE_CAP', message: (error as Error).message } }, { status: 400 });

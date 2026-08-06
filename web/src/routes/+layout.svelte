@@ -21,6 +21,10 @@
 	let currentPath = $derived($page.url.pathname);
 
 	let scopeInfo = $state<ScopeInfo | null>(null);
+	const activeCourse = $derived.by(() => {
+		const info = scopeInfo;
+		return info ? (info.courses.find((c) => c.id === info.scope.courseId) ?? null) : null;
+	});
 
 	async function loadScope() {
 		try {
@@ -107,15 +111,10 @@
 			aria-hidden="true"
 		></div>
 		<div class="relative mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-			<a href="/" class="flex min-h-11 items-center gap-2.5" aria-label="Security+ Course home">
-				<div
-					class="grid h-9 w-9 place-items-center rounded-md bg-accent font-display text-lg font-bold text-white"
-				>
-					S+
-				</div>
+			<a href="/" class="flex min-h-11 items-center gap-2.5" aria-label={`${activeCourse?.shortTitle ?? 'Course'} home`}>
 				<span
 					class="hidden h-display text-lg text-text-primary transition group-hover:text-accent min-[360px]:inline"
-					>Security+</span
+					>CompTIA</span
 				>
 			</a>
 
@@ -318,7 +317,7 @@
 	</main>
 
 	<footer class="hidden border-t border-border py-6 text-center text-xs text-text-subtle md:block">
-		Security+ SY0-701 Course · {new Date().getFullYear()}
+		CompTIA · {new Date().getFullYear()}
 	</footer>
 	<BottomNav {currentPath} />
 </div>

@@ -26,6 +26,7 @@
 		assignmentsTotal: number;
 	};
 	type Overview = {
+		course: { id: string; title: string; code: string; examName: string };
 		examDate: string;
 		examDateLabel: string;
 		daysUntilExam: number;
@@ -105,11 +106,18 @@
 		>
 			<div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 				<div>
-					<p class="eyebrow">SEC+ 701 · Course home</p>
+					<p class="eyebrow">{overview.course.code} · Course home</p>
 					<h1 class="h-display mt-2 text-3xl text-text-primary sm:text-4xl">
-						CompTIA Security+ <span class="text-accent">(SY0-701)</span>
+						{#if overview.course.title.includes(' (')}
+							{overview.course.title.split(' (')[0]}
+							<span class="text-accent">({overview.course.title.split(' (')[1]}</span>
+						{:else}
+							{overview.course.title}
+						{/if}
 					</h1>
 					<p class="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
+						{overview.course.examName}
+						<span class="mx-2 text-text-subtle">·</span>
 						Exam: <span class="font-semibold text-text-primary">{overview.examDateLabel}</span>
 						<span class="mx-2 text-text-subtle">·</span>
 						<span

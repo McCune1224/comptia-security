@@ -21,6 +21,7 @@ import {
 } from './course';
 
 export interface CourseOverview {
+	course: { id: CourseId; title: string; code: string; examName: string };
 	examDate: string;
 	examDateLabel: string;
 	daysUntilExam: number;
@@ -143,6 +144,12 @@ export function createCourseService({ repository, courseId }: { repository: Quiz
 				.slice(0, 5);
 
 			return {
+				course: {
+					id: courseId ?? ('secp-701' as CourseId),
+					title: meta?.title ?? COURSE_DEFINITION.title,
+					code: meta?.code ?? COURSE_DEFINITION.code,
+					examName: meta?.examName ?? COURSE_DEFINITION.examName
+				},
 				examDate,
 				examDateLabel: formatDate(examDate),
 				daysUntilExam: daysUntil(new Date(`${examDate}T00:00:00`)),

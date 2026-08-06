@@ -24,6 +24,8 @@ export interface ProfileRow {
 	name: string;
 	color: string;
 	createdAt: string;
+	/** The course this profile is currently studying (drives profile→course coupling). */
+	courseId: CourseId;
 }
 
 type SessionRow = {
@@ -86,8 +88,10 @@ export interface AnswerHistoryRow {
 export interface QuizRepository {
 	// Profile management (global — not scope-filtered).
 	getProfiles(): ProfileRow[];
-	createProfile(name: string, color: string): ProfileRow;
+	createProfile(name: string, color: string, courseId?: CourseId): ProfileRow;
 	renameProfile(id: string, name: string): void;
+	/** Persist which course a profile is studying (profile→course coupling). */
+	setProfileCourse(id: string, courseId: CourseId): void;
 	deleteProfile(id: string): void;
 	/** Returns a view of the same connection bound to a different scope. */
 	forScope(scope: Scope): QuizRepository;
@@ -143,9 +147,9 @@ function seedCourse(db: Database.Database): void {
 	const seed = db.transaction(() => {
 		const now = new Date().toISOString();
 		// Two profiles out of the box: Alex (default / Security+) and Ash (A+).
-		// ON CONFLICT DO NOTHING keeps later user renames intact on reseed.
-		db.prepare("INSERT INTO profiles (id, name, color, created_at) VALUES ('default', 'Alex', '#b7f04c', ?) ON CONFLICT(id) DO NOTHING").run(now);
-		db.prepare("INSERT INTO profiles (id, name, color, created_at) VALUES ('ash', 'Ash', '#4cc9f0', ?) ON CONFLICT(id) DO NOTHING").run(now);
+		// ON CONFLICT DO NOTHING keeps later user renames and course prefs intact.
+		db.prepare("INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('default', 'Alex', '#b7f04c', 'secp-701', ?) ON CONFLICT(id) DO NOTHING").run(now);
+		db.prepare("INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('ash', 'Ash', '#4cc9f0', 'aplus-1201', ?) ON CONFLICT(id) DO NOTHING").run(now);
 		const insertExamDate = db.prepare("INSERT INTO course_meta (profile_id, course_id, key, value) VALUES ('default', ?, 'exam_date', ?) ON CONFLICT(profile_id, course_id, key) DO NOTHING");
 		// Upsert (not INSERT OR IGNORE): content updates must reach existing DBs,
 		// and a mis-stamped course_id (rows seeded before the v6 scope column
@@ -190,7 +194,7 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		CREATE TABLE IF NOT EXISTS course_lesson_completions (profile_id TEXT NOT NULL, lesson_id TEXT NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, lesson_id));
 		CREATE TABLE IF NOT EXISTS google_oauth (profile_id TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
 		CREATE TABLE IF NOT EXISTS google_synced_events (profile_id TEXT NOT NULL, source TEXT NOT NULL, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL, PRIMARY KEY (profile_id, source));
-		CREATE TABLE IF NOT EXISTS profiles (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL DEFAULT '#b7f04c', created_at TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS profiles (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL DEFAULT '#b7f04c', course_id TEXT NOT NULL DEFAULT 'secp-701', created_at TEXT NOT NULL);
 	`);
 
 	const columns = (table: string) => new Set((db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]).map((column) => column.name));
@@ -213,6 +217,9 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		if (!has('quiz_answers', 'profile_id')) db.exec("ALTER TABLE quiz_answers ADD COLUMN profile_id TEXT NOT NULL DEFAULT 'default'");
 		if (!has('quiz_answers', 'course_id')) db.exec("ALTER TABLE quiz_answers ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
 		for (const table of ['course_modules', 'course_lessons', 'course_assignments'] as const) if (!has(table, 'course_id')) db.exec(`ALTER TABLE ${table} ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'`);
+		// v7: per-profile preferred course — switching profiles restores the
+		// course that profile was studying, instead of leaking the last course.
+		if (!has('profiles', 'course_id')) db.exec("ALTER TABLE profiles ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
 
 		// B. Primary-key rebuilds — SQLite 12-step, backfilling all existing
 		// rows to the seeded default profile / Security+ course.
@@ -266,9 +273,9 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 		// C. Data fixes (idempotent — no-op on already-fixed rows).
 		db.prepare("UPDATE quiz_sessions SET mode = COALESCE(NULLIF(mode, ''), 'practice'), status = CASE WHEN completed_at IS NOT NULL THEN 'completed' WHEN id NOT IN (SELECT session_id FROM quiz_session_state) THEN 'abandoned' ELSE 'active' END, points_earned = CASE WHEN completed_at IS NOT NULL THEN correct_answers ELSE points_earned END, points_possible = CASE WHEN completed_at IS NOT NULL THEN total_questions ELSE points_possible END, updated_at = COALESCE(NULLIF(updated_at, ''), started_at)").run();
 		db.prepare('UPDATE quiz_answers SET points_earned = is_correct, points_possible = 1 WHERE points_possible = 0').run();
-		db.pragma('user_version = 6');
+		db.pragma('user_version = 7');
 	});
-	if (db.pragma('user_version', { simple: true }) !== 6) migrate();
+	if (db.pragma('user_version', { simple: true }) !== 7) migrate();
 	seedCourse(db);
 
 	const make = (scope: Scope): QuizRepository => {
@@ -278,15 +285,16 @@ export function createQuizRepository(filename = process.env.QUIZ_DB_PATH ?? DB_P
 			return parseStoredSession(row, db.prepare('SELECT question_index, response_json, flagged FROM quiz_session_responses WHERE session_id = ?').all(id) as { question_index: number; response_json: string; flagged: number }[]);
 		};
 		return {
-			getProfiles() { return db.prepare('SELECT id, name, color, created_at AS createdAt FROM profiles ORDER BY created_at').all() as ProfileRow[]; },
-			createProfile(name, color) {
+			getProfiles() { return db.prepare('SELECT id, name, color, course_id AS courseId, created_at AS createdAt FROM profiles ORDER BY created_at').all() as ProfileRow[]; },
+			createProfile(name, color, courseId = DEFAULT_SCOPE.courseId) {
 				if ((db.prepare('SELECT COUNT(*) AS c FROM profiles').get() as { c: number }).c >= MAX_PROFILES) throw new Error(`Profile cap of ${MAX_PROFILES} reached.`);
 				const id = crypto.randomUUID();
 				const createdAt = new Date().toISOString();
-				db.prepare('INSERT INTO profiles (id, name, color, created_at) VALUES (?, ?, ?, ?)').run(id, name, color, createdAt);
-				return { id, name, color, createdAt };
+				db.prepare('INSERT INTO profiles (id, name, color, course_id, created_at) VALUES (?, ?, ?, ?, ?)').run(id, name, color, courseId, createdAt);
+				return { id, name, color, createdAt, courseId };
 			},
 			renameProfile(id, name) { db.prepare('UPDATE profiles SET name = ? WHERE id = ?').run(name, id); },
+			setProfileCourse(id, courseId) { db.prepare('UPDATE profiles SET course_id = ? WHERE id = ?').run(courseId, id); },
 			deleteProfile(id) {
 				if (id === DEFAULT_SCOPE.profileId) throw new Error('The default profile cannot be deleted.');
 				db.transaction(() => {
