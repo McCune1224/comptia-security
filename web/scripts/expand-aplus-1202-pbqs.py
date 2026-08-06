@@ -1,0 +1,536 @@
+#!/usr/bin/env python3
+"""Expand A+ 1202 PBQs: 20 total — D1 5, D2 6, D3 4, D4 5.
+Covers matching, ordering, configuration, evidence, multi-step, fill-blank,
+and word-bank kinds. All original text."""
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import importlib
+
+alib = importlib.import_module("aplus-lib")
+load_bank, merge, opt = alib.load_bank, alib.merge, alib.opt
+
+REFS = lambda obj, sec: [
+    {"source": "comptia", "section": f"Objective {obj}"},
+    {"source": "professor-messer", "section": sec},
+]
+
+NEW = []
+
+# ── D1 Operating Systems (5) ────────────────────────────────────────────────
+NEW.append({
+    "id": "a2-pbq-1-001", "domain": 1, "objective": "1.4", "format": "pbq",
+    "kind": "matching",
+    "prompt": "Match each Windows tool to its primary function.",
+    "premises": [
+        {"id": "p1", "text": "Task Manager"},
+        {"id": "p2", "text": "Disk Management (diskmgmt.msc)"},
+        {"id": "p3", "text": "Device Manager (devmgmt.msc)"},
+        {"id": "p4", "text": "Event Viewer (eventvwr.msc)"},
+        {"id": "p5", "text": "msconfig (System Configuration)"},
+    ],
+    "targets": [
+        {"id": "t1", "text": "Monitor processes, performance, and startup apps"},
+        {"id": "t2", "text": "Create, format, shrink, and extend partitions"},
+        {"id": "t3", "text": "View and update device drivers"},
+        {"id": "t4", "text": "Review application, system, and security logs"},
+        {"id": "t5", "text": "Configure boot options and selective startup"},
+    ],
+    "extraTargets": [{"id": "t6", "text": "Edit registry keys"}],
+    "correctMatches": {"p1": "t1", "p2": "t2", "p3": "t3", "p4": "t4", "p5": "t5"},
+    "explanation": "Task Manager handles processes/startup, Disk Management handles partitions, Device Manager handles drivers, Event Viewer handles logs, and msconfig handles boot/startup configuration. Registry editing is regedit's job.",
+    "sourceRefs": REFS("1.4", "220-1202 1.4 Windows Tools"),
+})
+NEW.append({
+    "id": "a2-pbq-1-002", "domain": 1, "objective": "1.2", "format": "pbq",
+    "kind": "ordering",
+    "prompt": "A technician is performing a clean install of Windows on a new PC. Place the steps in the correct order.",
+    "items": [
+        {"id": "i1", "text": "Boot the PC from the Windows installation media (USB)"},
+        {"id": "i2", "text": "Choose Custom install and select the target partition"},
+        {"id": "i3", "text": "Format the target partition"},
+        {"id": "i4", "text": "Complete the installation and initial setup (accounts, region)"},
+        {"id": "i5", "text": "Install hardware drivers and verify devices in Device Manager"},
+        {"id": "i6", "text": "Run Windows Update and install critical updates"},
+    ],
+    "correctOrder": ["i1", "i2", "i3", "i4", "i5", "i6"],
+    "explanation": "Boot from media first, then select and format the target partition, complete setup, install drivers, and finally patch the OS. Drivers before updates ensures the network hardware works to fetch them.",
+    "sourceRefs": REFS("1.2", "220-1202 1.2 Installing Operating Systems"),
+})
+NEW.append({
+    "id": "a2-pbq-1-003", "domain": 1, "objective": "1.6", "format": "pbq",
+    "kind": "configuration",
+    "prompt": "A technician is hardening a new Windows 11 workstation. Configure each setting appropriately.",
+    "fields": [
+        {"id": "f1", "label": "User Account Control (UAC) level", "options": [
+            {"id": "o1", "text": "Always notify"},
+            {"id": "o2", "text": "Notify me only when apps try to make changes (default)"},
+            {"id": "o3", "text": "Never notify"},
+            {"id": "o4", "text": "Notify me only when apps try to make changes (do not dim my desktop)"},
+        ]},
+        {"id": "f2", "label": "Windows Defender Firewall for the active network", "options": [
+            {"id": "o1", "text": "On for all three profiles (Domain, Private, Public)"},
+            {"id": "o2", "text": "On for Private, off for Public"},
+            {"id": "o3", "text": "Off for all profiles"},
+            {"id": "o4", "text": "On only for Domain profile"},
+        ]},
+        {"id": "f3", "label": "Standard user accounts", "options": [
+            {"id": "o1", "text": "Use standard accounts for daily work; admin only when needed"},
+            {"id": "o2", "text": "Make all users administrators"},
+            {"id": "o3", "text": "Use guest account for daily work"},
+            {"id": "o4", "text": "No user accounts needed"},
+        ]},
+        {"id": "f4", "label": "BitLocker drive encryption", "options": [
+            {"id": "o1", "text": "Enable with TPM + recovery key backup"},
+            {"id": "o2", "text": "Enable without TPM"},
+            {"id": "o3", "text": "Disable — encryption slows the PC"},
+            {"id": "o4", "text": "Only encrypt the user's Documents folder"},
+        ]},
+    ],
+    "correctValues": {"f1": "o2", "f2": "o1", "f3": "o1", "f4": "o1"},
+    "explanation": "Default UAC notification is the balanced setting; the firewall should be on for all profiles; daily work should use standard accounts (least privilege); BitLocker should be enabled with TPM and a backed-up recovery key.",
+    "sourceRefs": REFS("1.6", "220-1202 1.6 Windows Settings"),
+})
+NEW.append({
+    "id": "a2-pbq-1-004", "domain": 1, "objective": "1.5", "format": "pbq",
+    "kind": "evidence",
+    "prompt": "A user cannot reach a website by name but can reach it by IP address. Which command output line BEST identifies the fault as a DNS issue?",
+    "artifact": {
+        "label": "Diagnostic output",
+        "format": "command-output",
+        "lines": [
+            {"id": "l1", "text": "ping www.example.com — Ping request could not find host"},
+            {"id": "l2", "text": "ping 93.184.216.34 — Reply from 93.184.216.34: bytes=32 time=24ms"},
+            {"id": "l3", "text": "ipconfig /all — DNS Servers . . . . . : 192.168.1.1"},
+            {"id": "l4", "text": "netstat -n — established TCP connections listed"},
+            {"id": "l5", "text": "nslookup www.example.com — Server: dns.local; Address: 192.168.1.1#53"},
+        ],
+    },
+    "selectCount": 1,
+    "correctLineIds": ["l1"],
+    "explanation": "The hostname ping fails while the IP ping succeeds — that pair proves name resolution is broken while IP connectivity works. The fault is in DNS resolution.",
+    "sourceRefs": REFS("1.5", "220-1202 1.5 Windows Network Command Line"),
+})
+NEW.append({
+    "id": "a2-pbq-1-005", "domain": 1, "objective": "1.5", "format": "pbq",
+    "kind": "fill-blank",
+    "prompt": "Type the command that matches each description.\n\n1. ____ — displays and renews the IP configuration of a Windows NIC.\n2. ____ — scans and repairs system file integrity violations.\n3. ____ — checks a disk for errors and bad sectors.\n4. ____ — immediately refreshes Group Policy settings.",
+    "blanks": [
+        {"id": "b1", "label": "IP configuration tool", "placeholder": "Command", "acceptedAnswers": ["ipconfig"]},
+        {"id": "b2", "label": "System file checker", "placeholder": "Command", "acceptedAnswers": ["sfc", "sfc /scannow"]},
+        {"id": "b3", "label": "Disk check tool", "placeholder": "Command", "acceptedAnswers": ["chkdsk"]},
+        {"id": "b4", "label": "Group Policy refresh", "placeholder": "Command", "acceptedAnswers": ["gpupdate", "gpupdate /force"]},
+    ],
+    "explanation": "ipconfig manages IP configuration, sfc /scannow verifies protected system files, chkdsk checks disk integrity, and gpupdate /force refreshes Group Policy.",
+    "sourceRefs": REFS("1.5", "220-1202 1.5 Command-Line Tools"),
+})
+
+# ── D2 Security (6) ─────────────────────────────────────────────────────────
+NEW.append({
+    "id": "a2-pbq-2-001", "domain": 2, "objective": "2.6", "format": "pbq",
+    "kind": "ordering",
+    "prompt": "A technician is removing malware from an infected SOHO Windows workstation. Place the 9-step removal process in the correct order.",
+    "items": [
+        {"id": "i1", "text": "Investigate and verify the malware symptoms"},
+        {"id": "i2", "text": "Quarantine the infected system (disconnect from the network)"},
+        {"id": "i3", "text": "Disable System Restore in Windows"},
+        {"id": "i4", "text": "Remediate the infected system (remove the malware)"},
+        {"id": "i5", "text": "Update the anti-malware software"},
+        {"id": "i6", "text": "Scan and remove using safe mode or a preinstallation environment"},
+        {"id": "i7", "text": "Reimage or reinstall the OS if the infection persists"},
+        {"id": "i8", "text": "Schedule scans and run updates"},
+        {"id": "i9", "text": "Enable System Restore, create a restore point, and educate the end user"},
+    ],
+    "correctOrder": ["i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9"],
+    "explanation": "The official order: investigate/verify → quarantine → disable System Restore → remediate → update anti-malware → scan/remove (safe mode/PE) → reimage if needed → schedule scans/updates → re-enable System Restore + educate. System Restore is disabled early so malware can't restore itself, then re-enabled last.",
+    "sourceRefs": REFS("2.6", "220-1202 2.6 SOHO Malware Removal"),
+})
+NEW.append({
+    "id": "a2-pbq-2-002", "domain": 2, "objective": "2.4", "format": "pbq",
+    "kind": "matching",
+    "prompt": "Match each malware type to its description.",
+    "premises": [
+        {"id": "p1", "text": "Virus"},
+        {"id": "p2", "text": "Worm"},
+        {"id": "p3", "text": "Trojan"},
+        {"id": "p4", "text": "Ransomware"},
+        {"id": "p5", "text": "Rootkit"},
+    ],
+    "targets": [
+        {"id": "t1", "text": "Self-replicates by infecting other files and requires a host"},
+        {"id": "t2", "text": "Self-propagates across networks without user action"},
+        {"id": "t3", "text": "Disguises itself as a legitimate program"},
+        {"id": "t4", "text": "Encrypts data and demands payment for decryption"},
+        {"id": "t5", "text": "Hides deep in the OS to maintain privileged access"},
+    ],
+    "extraTargets": [{"id": "t6", "text": "Displays unwanted advertisements"}],
+    "correctMatches": {"p1": "t1", "p2": "t2", "p3": "t3", "p4": "t4", "p5": "t5"},
+    "explanation": "Viruses need a host file, worms spread on their own, trojans disguise themselves, ransomware extorts via encryption, and rootkits hide in the OS. Adware shows unwanted ads.",
+    "sourceRefs": REFS("2.4", "220-1202 2.4 Malware"),
+})
+NEW.append({
+    "id": "a2-pbq-2-003", "domain": 2, "objective": "2.10", "format": "pbq",
+    "kind": "configuration",
+    "prompt": "A technician is securing a SOHO wireless router. Configure each setting with the most secure option.",
+    "fields": [
+        {"id": "f1", "label": "Wireless security mode", "options": [
+            {"id": "o1", "text": "WPA3"},
+            {"id": "o2", "text": "WPA2"},
+            {"id": "o3", "text": "WPA"},
+            {"id": "o4", "text": "WEP"},
+        ]},
+        {"id": "f2", "label": "WPS (Wi-Fi Protected Setup)", "options": [
+            {"id": "o1", "text": "Disabled"},
+            {"id": "o2", "text": "Enabled"},
+            {"id": "o3", "text": "Enabled with PIN only"},
+            {"id": "o4", "text": "Enabled for guest network only"},
+        ]},
+        {"id": "f3", "label": "Remote management from the internet", "options": [
+            {"id": "o1", "text": "Disabled"},
+            {"id": "o2", "text": "Enabled on port 8080"},
+            {"id": "o3", "text": "Enabled for admin only"},
+            {"id": "o4", "text": "Enabled with default port"},
+        ]},
+        {"id": "f4", "label": "Guest network", "options": [
+            {"id": "o1", "text": "Enabled with isolation from the main LAN"},
+            {"id": "o2", "text": "Enabled with full LAN access"},
+            {"id": "o3", "text": "Enabled with the same SSID"},
+            {"id": "o4", "text": "Disabled entirely"},
+        ]},
+    ],
+    "correctValues": {"f1": "o1", "f2": "o1", "f3": "o1", "f4": "o1"},
+    "explanation": "WPA3 is the strongest wireless encryption; WPS should be disabled (it is crackable); remote management from the internet should be off; the guest network should be isolated from the main LAN.",
+    "sourceRefs": REFS("2.10", "220-1202 2.10 SOHO Network Security"),
+})
+NEW.append({
+    "id": "a2-pbq-2-004", "domain": 2, "objective": "2.9", "format": "pbq",
+    "kind": "matching",
+    "prompt": "Match each data destruction method to the media it is BEST suited for.",
+    "premises": [
+        {"id": "p1", "text": "Degaussing"},
+        {"id": "p2", "text": "Secure erase / crypto-shred"},
+        {"id": "p3", "text": "Physical shredding"},
+        {"id": "p4", "text": "Factory reset"},
+        {"id": "p5", "text": "Cross-cut shredding"},
+    ],
+    "targets": [
+        {"id": "t1", "text": "Magnetic hard disk drives"},
+        {"id": "t2", "text": "SSDs and encrypted drives (destroy keys)"},
+        {"id": "t3", "text": "Drives and media slated for disposal"},
+        {"id": "t4", "text": "Mobile phones and tablets"},
+        {"id": "t5", "text": "Paper documents"},
+    ],
+    "extraTargets": [{"id": "t6", "text": "Optical discs"}],
+    "correctMatches": {"p1": "t1", "p2": "t2", "p3": "t3", "p4": "t4", "p5": "t5"},
+    "explanation": "Degaussing destroys the magnetic field of HDDs (ineffective on flash); SSDs need secure erase or crypto-shred; shredding physically destroys drives/media; factory reset is for mobile devices; cross-cut shredding is for paper.",
+    "sourceRefs": REFS("2.9", "220-1202 2.9 Data Destruction"),
+})
+NEW.append({
+    "id": "a2-pbq-2-005", "domain": 2, "objective": "2.2", "format": "pbq",
+    "kind": "word-bank",
+    "prompt": "Complete each statement about Windows security settings.\n\n1. ____ prompts for confirmation when a program tries to make system changes.\n2. ____ encrypts an entire Windows drive and works with a TPM chip.\n3. ____ is the hardware security chip used for encryption keys and attestation.\n4. ____ is the built-in antivirus and firewall platform in Windows.\n5. ____ requires two different authentication factors.",
+    "blanks": [
+        {"id": "b1", "label": "Elevation prompt"},
+        {"id": "b2", "label": "Full-disk encryption"},
+        {"id": "b3", "label": "Hardware security chip"},
+        {"id": "b4", "label": "Built-in security platform"},
+        {"id": "b5", "label": "Two-factor verification"},
+    ],
+    "bank": [
+        {"id": "w1", "word": "UAC"},
+        {"id": "w2", "word": "BitLocker"},
+        {"id": "w3", "word": "TPM"},
+        {"id": "w4", "word": "Windows Defender"},
+        {"id": "w5", "word": "MFA"},
+        {"id": "w6", "word": "EFS"},
+        {"id": "w7", "word": "UEFI"},
+    ],
+    "correctAssignments": {"b1": "w1", "b2": "w2", "b3": "w3", "b4": "w4", "b5": "w5"},
+    "explanation": "UAC prompts on system changes; BitLocker is Windows full-disk encryption; TPM is the hardware security chip; Windows Defender is the built-in antivirus/firewall; MFA requires two factors. EFS is per-file encryption and UEFI is the firmware.",
+    "sourceRefs": REFS("2.2", "220-1202 2.2 Windows Security Settings"),
+})
+NEW.append({
+    "id": "a2-pbq-2-006", "domain": 2, "objective": "2.5", "format": "pbq",
+    "kind": "multi-step",
+    "context": "An employee received an email claiming to be from the CEO requesting an urgent wire transfer to a new vendor. The employee is asking what to do.",
+    "steps": [
+        {
+            "id": "s1", "domain": 2, "objective": "2.5", "format": "pbq",
+            "kind": "single-choice",
+            "prompt": "Step 1: The employee notices the sender address is ceo@company-support-llc.com rather than the company domain. What is this attack called?",
+            "options": [
+                {"id": "a", "text": "Business email compromise (BEC)", "rationale": "BEC impersonates an executive to trick an employee into a fraudulent action such as a wire transfer — the sender-domain mismatch is the tell."},
+                {"id": "b", "text": "Smishing", "rationale": "Smishing is phishing over SMS, not email."},
+                {"id": "c", "text": "Whaling", "rationale": "Whaling targets executives directly; here the employee is the target, the CEO is impersonated."},
+                {"id": "d", "text": "Vishing", "rationale": "Vishing is voice phishing."},
+            ],
+            "correctOptionIds": ["a"],
+            "selectCount": 1,
+            "explanation": "BEC impersonates a trusted executive (often the CEO) to authorize fraudulent transfers. The lookalike domain is a classic indicator.",
+            "sourceRefs": REFS("2.5", "220-1202 2.5 Social Engineering"),
+        },
+        {
+            "id": "s2", "domain": 2, "objective": "2.5", "format": "pbq",
+            "kind": "single-choice",
+            "prompt": "Step 2: The employee should verify the request. Which is the BEST verification method?",
+            "options": [
+                {"id": "a", "text": "Reply to the email asking for confirmation", "rationale": "Replying to the same email chain continues the conversation with the attacker."},
+                {"id": "b", "text": "Call the CEO on a known, published phone number", "rationale": "Out-of-band verification using a trusted number breaks the attacker's control of the conversation."},
+                {"id": "c", "text": "Reply asking for a callback number", "rationale": "The attacker will provide their own number."},
+                {"id": "d", "text": "Forward the email to the new vendor", "rationale": "The 'vendor' is part of the scam."},
+            ],
+            "correctOptionIds": ["b"],
+            "selectCount": 1,
+            "explanation": "Verify out-of-band via a known number or in person. Any channel controlled by the email sender is suspect.",
+            "sourceRefs": REFS("2.5", "220-1202 2.5 Social Engineering"),
+        },
+        {
+            "id": "s3", "domain": 2, "objective": "2.5", "format": "pbq",
+            "kind": "single-choice",
+            "prompt": "Step 3: The request turns out to be fraudulent. What should the employee do with the email?",
+            "options": [
+                {"id": "a", "text": "Report it to the security/IT team for investigation", "rationale": "Reporting lets the security team block the sender and check for other victims."},
+                {"id": "b", "text": "Delete it and forget about it", "rationale": "Deleting destroys evidence and prevents an investigation."},
+                {"id": "c", "text": "Reply to the attacker warning them", "rationale": "Engaging the attacker is pointless and may escalate."},
+                {"id": "d", "text": "Forward it to all employees as a warning", "rationale": "Mass-forwarding could spread the link and is not the official channel."},
+            ],
+            "correctOptionIds": ["a"],
+            "selectCount": 1,
+            "explanation": "Report suspected phishing to security/IT so they can analyze the message, block the sender, and alert others. Evidence is preserved for investigation.",
+            "sourceRefs": REFS("2.5", "220-1202 2.5 Social Engineering"),
+        },
+    ],
+    "explanation": "BEC emails impersonate executives and push urgent financial actions. Verify out-of-band, never through the email itself, and report to security so the campaign can be blocked.",
+    "sourceRefs": REFS("2.5", "220-1202 2.5 Social Engineering"),
+})
+
+# ── D3 Software Troubleshooting (4) ─────────────────────────────────────────
+NEW.append({
+    "id": "a2-pbq-3-001", "domain": 3, "objective": "3.1", "format": "pbq",
+    "kind": "evidence",
+    "prompt": "A Windows 11 PC shows a blue screen with the stop code PAGE_FAULT_IN_NONPAGED_AREA immediately after a new driver was installed. Which Event Viewer entry is the STRONGEST evidence pointing to the driver as the cause?",
+    "artifact": {
+        "label": "Event Viewer — System log (excerpt)",
+        "format": "log",
+        "lines": [
+            {"id": "l1", "text": "Error: The device driver for 'Fabrikam GPU Driver v9.2' failed to load — source: Kernel-PnP"},
+            {"id": "l2", "text": "Information: Windows successfully loaded the previous driver for this device"},
+            {"id": "l3", "text": "Warning: Disk 0 has limited free space (2.1 GB remaining)"},
+            {"id": "l4", "text": "Information: Windows Update installed security update KB5034441"},
+            {"id": "l5", "text": "Error: Time service did not synchronize within the configured interval"},
+        ],
+    },
+    "selectCount": 1,
+    "correctLineIds": ["l1"],
+    "explanation": "A Kernel-PnP driver load failure for the just-installed GPU driver directly explains a PAGE_FAULT_IN_NONPAGED_AREA crash (a buggy driver touching bad memory). The other entries are routine or unrelated.",
+    "sourceRefs": REFS("3.1", "220-1202 3.1 Troubleshooting Windows"),
+})
+NEW.append({
+    "id": "a2-pbq-3-002", "domain": 3, "objective": "3.1", "format": "pbq",
+    "kind": "matching",
+    "prompt": "Match each Windows symptom to the BEST first diagnostic tool.",
+    "premises": [
+        {"id": "p1", "text": "PC is slow at startup"},
+        {"id": "p2", "text": "System files may be corrupted"},
+        {"id": "p3", "text": "A device shows an exclamation mark"},
+        {"id": "p4", "text": "Need to see application crash details"},
+        {"id": "p5", "text": "Disk errors are suspected"},
+    ],
+    "targets": [
+        {"id": "t1", "text": "Task Manager (Startup tab)"},
+        {"id": "t2", "text": "sfc /scannow"},
+        {"id": "t3", "text": "Device Manager"},
+        {"id": "t4", "text": "Event Viewer"},
+        {"id": "t5", "text": "chkdsk"},
+    ],
+    "extraTargets": [{"id": "t6", "text": "gpedit.msc"}],
+    "correctMatches": {"p1": "t1", "p2": "t2", "p3": "t3", "p4": "t4", "p5": "t5"},
+    "explanation": "Startup slowness → Task Manager Startup; corrupt system files → sfc /scannow; device problems → Device Manager; crash details → Event Viewer; disk errors → chkdsk.",
+    "sourceRefs": REFS("3.1", "220-1202 3.1 Troubleshooting Windows"),
+})
+NEW.append({
+    "id": "a2-pbq-3-003", "domain": 3, "objective": "3.4", "format": "pbq",
+    "kind": "ordering",
+    "prompt": "A workstation is infected with ransomware that has encrypted files. Place the response steps in the correct order.",
+    "items": [
+        {"id": "i1", "text": "Isolate the system from the network to stop the spread"},
+        {"id": "i2", "text": "Document the incident and preserve evidence (screenshots, notes)"},
+        {"id": "i3", "text": "Report the incident to the security team"},
+        {"id": "i4", "text": "Restore encrypted files from clean backups"},
+        {"id": "i5", "text": "Reimage the system if restoration is not viable"},
+        {"id": "i6", "text": "Verify restored data and monitor for re-infection"},
+    ],
+    "correctOrder": ["i1", "i2", "i3", "i4", "i5", "i6"],
+    "explanation": "Contain first (isolate), preserve evidence, report, then recover from clean backups, reimage if needed, and verify. Never pay the ransom — it funds the attackers and does not guarantee decryption.",
+    "sourceRefs": REFS("3.4", "220-1202 3.4 Troubleshooting Security Issues"),
+})
+NEW.append({
+    "id": "a2-pbq-3-004", "domain": 3, "objective": "3.1", "format": "pbq",
+    "kind": "multi-step",
+    "context": "A Windows PC boots to a black screen with a spinning cursor and never reaches the login screen.",
+    "steps": [
+        {
+            "id": "s1", "domain": 3, "objective": "3.1", "format": "pbq",
+            "kind": "single-choice",
+            "prompt": "Step 1: The technician needs a recovery environment. Which startup option should be used FIRST?",
+            "options": [
+                {"id": "a", "text": "Windows Recovery Environment (WinRE) via installation media", "rationale": "WinRE provides repair tools (Startup Repair, System Restore, command prompt) when Windows cannot boot."},
+                {"id": "b", "text": "Safe Mode with Networking", "rationale": "Safe Mode requires booting into Windows first, which is failing here."},
+                {"id": "c", "text": "Last Known Good Configuration", "rationale": "This option is gone in modern Windows; WinRE is the supported path."},
+                {"id": "d", "text": "Task Manager", "rationale": "Task Manager cannot run without a desktop session."},
+            ],
+            "correctOptionIds": ["a"],
+            "selectCount": 1,
+            "explanation": "Boot into WinRE (from media or the recovery partition) to access repair tools before Windows loads.",
+            "sourceRefs": REFS("3.1", "220-1202 3.1 Troubleshooting Windows"),
+        },
+        {
+            "id": "s2", "domain": 3, "objective": "3.1", "format": "pbq",
+            "kind": "single-choice",
+            "prompt": "Step 2: In WinRE, the technician first runs Startup Repair, which reports it could not fix the problem. What should be tried NEXT?",
+            "options": [
+                {"id": "a", "text": "Run System Restore to a point before the issue began", "rationale": "System Restore rolls back system files/settings to a known-good restore point."},
+                {"id": "b", "text": "Run sfc /scannow from a command prompt", "rationale": "sfc may help but depends on a healthy image; System Restore is the broader rollback."},
+                {"id": "c", "text": "Reinstall Windows immediately", "rationale": "Reinstalling loses user data; try restore paths first."},
+                {"id": "d", "text": "Check the BIOS boot order", "rationale": "The PC IS booting (spinning cursor), so boot order is not the fault."},
+            ],
+            "correctOptionIds": ["a"],
+            "selectCount": 1,
+            "explanation": "After Startup Repair fails, System Restore to a known-good point is the standard next step. Reinstall is a last resort.",
+            "sourceRefs": REFS("3.1", "220-1202 3.1 Troubleshooting Windows"),
+        },
+        {
+            "id": "s3", "domain": 3, "objective": "3.1", "format": "pbq",
+            "kind": "single-choice",
+            "prompt": "Step 3: System Restore succeeds and the PC boots. What is the FINAL step of good troubleshooting practice?",
+            "options": [
+                {"id": "a", "text": "Document the symptoms, cause, and resolution in the ticket", "rationale": "Documentation captures lessons learned and helps future incidents."},
+                {"id": "b", "text": "Reboot the PC once more", "rationale": "A single successful boot is enough; another reboot adds nothing."},
+                {"id": "c", "text": "Delete the restore point", "rationale": "Deleting the restore point removes the safety net."},
+                {"id": "d", "text": "Uninstall the antivirus", "rationale": "Unrelated and harmful."},
+            ],
+            "correctOptionIds": ["a"],
+            "selectCount": 1,
+            "explanation": "Verify functionality and document findings, actions, and outcomes — the final step of every troubleshooting process.",
+            "sourceRefs": REFS("3.1", "220-1202 3.1 Troubleshooting Windows"),
+        },
+    ],
+    "explanation": "Boot failures: enter WinRE → Startup Repair → System Restore → verify → document. Escalate to reinstall only after restore paths fail.",
+    "sourceRefs": REFS("3.1", "220-1202 3.1 Troubleshooting Windows"),
+})
+
+# ── D4 Operational Procedures (5) ───────────────────────────────────────────
+NEW.append({
+    "id": "a2-pbq-4-001", "domain": 4, "objective": "4.2", "format": "pbq",
+    "kind": "ordering",
+    "prompt": "A company is applying a change management process to a planned server upgrade. Place the steps in the correct order.",
+    "items": [
+        {"id": "i1", "text": "Submit a change request describing the change and its purpose"},
+        {"id": "i2", "text": "Review the change with the change advisory board (CAB)"},
+        {"id": "i3", "text": "Assess the risk, impact, and required backout plan"},
+        {"id": "i4", "text": "Schedule the change in an approved maintenance window"},
+        {"id": "i5", "text": "Implement the change and verify functionality"},
+        {"id": "i6", "text": "Document the outcome and lessons learned"},
+    ],
+    "correctOrder": ["i1", "i2", "i3", "i4", "i5", "i6"],
+    "explanation": "Change management: request → review/approval → risk/impact assessment with a backout plan → schedule → implement and verify → document. Emergency changes still require documentation.",
+    "sourceRefs": REFS("4.2", "220-1202 4.2 Change Management"),
+})
+NEW.append({
+    "id": "a2-pbq-4-002", "domain": 4, "objective": "4.3", "format": "pbq",
+    "kind": "configuration",
+    "prompt": "A technician is setting up a backup schedule for a small business. Configure each backup setting.",
+    "fields": [
+        {"id": "f1", "label": "Backup type for daily backups", "options": [
+            {"id": "o1", "text": "Differential (changes since last full)"},
+            {"id": "o2", "text": "Full every day"},
+            {"id": "o3", "text": "Incremental (changes since last backup of any type)"},
+            {"id": "o4", "text": "No backups needed"},
+        ]},
+        {"id": "f2", "label": "Backup destination", "options": [
+            {"id": "o1", "text": "Offsite (cloud or remote location) in addition to local"},
+            {"id": "o2", "text": "Same drive as the data"},
+            {"id": "o3", "text": "A folder on the user's desktop"},
+            {"id": "o4", "text": "USB drive stored next to the PC"},
+        ]},
+        {"id": "f3", "label": "Backup verification", "options": [
+            {"id": "o1", "text": "Test restore regularly"},
+            {"id": "o2", "text": "Trust the backup software's success message"},
+            {"id": "o3", "text": "Verify only after a data loss"},
+            {"id": "o4", "text": "Never verify"},
+        ]},
+        {"id": "f4", "label": "Backup schedule", "options": [
+            {"id": "o1", "text": "Automated on a regular schedule (e.g., nightly)"},
+            {"id": "o2", "text": "Manual whenever the user remembers"},
+            {"id": "o3", "text": "Once a year"},
+            {"id": "o4", "text": "Only before OS updates"},
+        ]},
+    ],
+    "correctValues": {"f1": "o1", "f2": "o1", "f3": "o1", "f4": "o1"},
+    "explanation": "Best practice: differential backups on a schedule, with a copy offsite (3-2-1 rule), regular restore testing, and automation so backups actually happen.",
+    "sourceRefs": REFS("4.3", "220-1202 4.3 Backup and Recovery"),
+})
+NEW.append({
+    "id": "a2-pbq-4-003", "domain": 4, "objective": "4.3", "format": "pbq",
+    "kind": "matching",
+    "prompt": "Match each backup type to its description.",
+    "premises": [
+        {"id": "p1", "text": "Full backup"},
+        {"id": "p2", "text": "Incremental backup"},
+        {"id": "p3", "text": "Differential backup"},
+        {"id": "p4", "text": "System image"},
+        {"id": "p5", "text": "Cloud backup"},
+    ],
+    "targets": [
+        {"id": "t1", "text": "Copies all selected data every time"},
+        {"id": "t2", "text": "Copies data changed since the last backup of ANY type"},
+        {"id": "t3", "text": "Copies data changed since the last FULL backup"},
+        {"id": "t4", "text": "Captures the entire OS state for bare-metal recovery"},
+        {"id": "t5", "text": "Stores copies offsite via the internet"},
+    ],
+    "extraTargets": [{"id": "t6", "text": "Copies only deleted files"}],
+    "correctMatches": {"p1": "t1", "p2": "t2", "p3": "t3", "p4": "t4", "p5": "t5"},
+    "explanation": "Full copies everything; incremental captures changes since the last backup of any type; differential captures changes since the last full; a system image enables full OS recovery; cloud backup is offsite.",
+    "sourceRefs": REFS("4.3", "220-1202 4.3 Backup and Recovery"),
+})
+NEW.append({
+    "id": "a2-pbq-4-004", "domain": 4, "objective": "4.8", "format": "pbq",
+    "kind": "fill-blank",
+    "prompt": "Type the scripting term that matches each description.\n\n1. ____ — a named storage location for a value that can change during script execution.\n2. ____ — a structure that repeats a block of code while a condition is true.\n3. ____ — a block of reusable code that can be called with arguments.\n4. ____ — a statement that executes different code based on a condition.",
+    "blanks": [
+        {"id": "b1", "label": "Named storage for a value", "placeholder": "Term", "acceptedAnswers": ["variable"]},
+        {"id": "b2", "label": "Repeating structure", "placeholder": "Term", "acceptedAnswers": ["loop"]},
+        {"id": "b3", "label": "Reusable code block", "placeholder": "Term", "acceptedAnswers": ["function", "method"]},
+        {"id": "b4", "label": "Conditional execution", "placeholder": "Term", "acceptedAnswers": ["conditional", "if statement", "if"]},
+    ],
+    "explanation": "Variables store values, loops repeat code, functions are reusable blocks, and conditionals (if/else) branch execution. These are the building blocks of PowerShell, bash, and batch scripts.",
+    "sourceRefs": REFS("4.8", "220-1202 4.8 Scripting Basics"),
+})
+NEW.append({
+    "id": "a2-pbq-4-005", "domain": 4, "objective": "4.10", "format": "pbq",
+    "kind": "word-bank",
+    "prompt": "Complete each statement about basic AI concepts.\n\n1. A ____ is a large machine-learning model that generates text based on patterns in training data.\n2. ____ is a technique that grounds AI answers in retrieved documents to reduce errors.\n3. A ____ is a confidently wrong answer produced by an AI model.\n4. ____ are realistic but fabricated media created with AI.\n5. ____ is an attack where malicious instructions are hidden inside text given to an AI system.",
+    "blanks": [
+        {"id": "b1", "label": "Text-generation model"},
+        {"id": "b2", "label": "Document-grounded generation"},
+        {"id": "b3", "label": "Confident wrong answer"},
+        {"id": "b4", "label": "Fabricated media"},
+        {"id": "b5", "label": "Hidden-instruction attack"},
+    ],
+    "bank": [
+        {"id": "w1", "word": "LLM"},
+        {"id": "w2", "word": "RAG"},
+        {"id": "w3", "word": "hallucination"},
+        {"id": "w4", "word": "deepfakes"},
+        {"id": "w5", "word": "prompt injection"},
+        {"id": "w6", "word": "tokenization"},
+        {"id": "w7", "word": "overfitting"},
+    ],
+    "correctAssignments": {"b1": "w1", "b2": "w2", "b3": "w3", "b4": "w4", "b5": "w5"},
+    "explanation": "LLMs generate text; RAG (retrieval-augmented generation) grounds answers in fetched documents; hallucinations are confident wrong answers; deepfakes are AI-fabricated media; prompt injection hides malicious instructions in AI input.",
+    "sourceRefs": REFS("4.10", "220-1202 4.10 Basic AI Concepts"),
+})
+
+merge(load_bank("1202"), "1202", new_pbqs=NEW)
+alib.count_check(load_bank("1202"), "1202")

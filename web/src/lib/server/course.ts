@@ -1,6 +1,7 @@
 import type { CourseId, CourseMeta, Domain, SessionMode, SessionType } from '$lib/types';
 import { objectivesByDomain } from './question-bank';
 import { APLUS_1201_OBJECTIVES, APLUS_1201_WEIGHTS, APLUS_1202_OBJECTIVES, APLUS_1202_WEIGHTS } from './aplus-meta';
+import { APLUS_1201_COURSE, APLUS_1202_COURSE } from './aplus-courses';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Course definition — Security+ SY0-701, structured like a college course.
@@ -704,7 +705,9 @@ If you can't do all three, that objective goes on today's targeted review list. 
 // appends to ('aplus-1201' | 'aplus-1202') and the profiles worktree scopes by.
 
 export const COURSES: Partial<Record<CourseId, CourseDefinition>> = {
-	'secp-701': COURSE_DEFINITION
+	'secp-701': COURSE_DEFINITION,
+	'aplus-1201': APLUS_1201_COURSE,
+	'aplus-1202': APLUS_1202_COURSE
 };
 
 export const COURSE_META: Partial<Record<CourseId, CourseMeta>> = {
@@ -744,7 +747,7 @@ export const COURSE_META: Partial<Record<CourseId, CourseMeta>> = {
 };
 
 /** Courses available in the app. The A+ worktree appends the two A+ cores. */
-export const ACTIVE_COURSES: CourseId[] = ['secp-701'];
+export const ACTIVE_COURSES: CourseId[] = ['secp-701', 'aplus-1201', 'aplus-1202'];
 
 // ── Scheduling helpers ───────────────────────────────────────────────────────
 

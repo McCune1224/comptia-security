@@ -1,0 +1,958 @@
+{
+  "mcqs": [
+    {
+      "id": "a1-1-001",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is replacing the battery in a three-year-old laptop whose battery no longer holds a charge. After confirming the correct replacement part number, the technician prepares the laptop for the swap. Which step should the technician take first before removing the old battery?",
+      "context": "A technician is swapping a degraded battery in a three-year-old laptop and must prepare the device safely before removal.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Power the laptop down and unplug the AC adapter, then remove the battery",
+          "rationale": "Shutting down and disconnecting AC power removes both power sources so the battery can be handled safely."
+        },
+        {
+          "id": "b",
+          "text": "Remove the battery while the laptop is running so the system clock is preserved",
+          "rationale": "Removing a battery from a running laptop risks data loss and hardware damage; clock retention is handled by the RTC battery, not the main battery."
+        },
+        {
+          "id": "c",
+          "text": "Short the battery terminals together to discharge it fully before removal",
+          "rationale": "Shorting battery terminals is dangerous and can damage the battery or start a fire; batteries should never be shorted."
+        },
+        {
+          "id": "d",
+          "text": "Put the laptop in sleep mode and remove the battery to avoid a full shutdown",
+          "rationale": "Sleep mode still draws power and does not provide a safe powered-down state for battery removal."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The safe sequence is to shut the laptop down completely and unplug the AC adapter before removing the battery. Removing a battery from a running or sleeping system can corrupt data and damage components, and shorting the terminals is never an acceptable discharge method.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-002",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user reports that the S key on their laptop frequently sticks and sometimes needs several presses to register. The technician inspects the key and finds the keycap is worn, but the scissor mechanism beneath it is intact. What is the appropriate replacement procedure?",
+      "context": "A laptop key sticks intermittently; the keycap is worn but the underlying mechanism is still intact.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the keycap only",
+          "rationale": "With the mechanism intact, replacing just the keycap restores normal operation without the cost of a full keyboard."
+        },
+        {
+          "id": "b",
+          "text": "Replace the entire keyboard assembly",
+          "rationale": "A full keyboard swap is only needed when the mechanism or membrane is damaged; here the scissor mechanism is intact."
+        },
+        {
+          "id": "c",
+          "text": "Replace the laptop's motherboard",
+          "rationale": "A sticking key is a keyboard assembly issue, not a motherboard fault; replacing the board is unnecessary and expensive."
+        },
+        {
+          "id": "d",
+          "text": "Replace the LCD panel",
+          "rationale": "The LCD displays output and has nothing to do with keyboard input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Because the scissor mechanism is intact and only the keycap is worn, the technician should replace just the keycap. Replacing the whole keyboard, motherboard, or LCD would address components that are not causing the symptom.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-003",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is upgrading a laptop from 8 GB to 16 GB of memory. The laptop has one open memory slot, and the technician opens the bottom access panel to install the new module. Which memory form factor should the technician select?",
+      "context": "A technician is adding memory to a laptop with one open slot and must choose the correct module form factor.",
+      "options": [
+        {
+          "id": "a",
+          "text": "SODIMM",
+          "rationale": "Laptops use the smaller Small Outline DIMM form factor, which fits the low-profile memory slots found in portable systems."
+        },
+        {
+          "id": "b",
+          "text": "DIMM",
+          "rationale": "Full-size DIMMs are used in desktop towers and servers; they are physically too large for laptop memory slots."
+        },
+        {
+          "id": "c",
+          "text": "RDIMM",
+          "rationale": "Registered DIMMs are server memory modules with a register between the memory controller and the chips; laptops do not use them."
+        },
+        {
+          "id": "d",
+          "text": "SIMM",
+          "rationale": "SIMMs are an obsolete single-inline memory package from older systems and are not used in modern laptops."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Portable computers accept SODIMM modules, the compact form factor designed for their low-profile slots. DIMMs and RDIMMs are desktop/server modules, and SIMMs are obsolete, so none of them fit a laptop.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-004",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user complains that their laptop takes several minutes to boot and applications load slowly. The technician finds the laptop has a 5400 rpm hard drive and ample free RAM. Which upgrade will provide the most noticeable improvement in boot and application load times?",
+      "context": "A slow-booting laptop has a 5400 rpm hard drive and plenty of RAM; the technician must pick the most effective upgrade.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the hard drive with a 2.5-inch SATA SSD",
+          "rationale": "An SSD removes the mechanical seek and spin-up delays of a hard drive, dramatically speeding boot and application loading."
+        },
+        {
+          "id": "b",
+          "text": "Add additional SODIMM memory",
+          "rationale": "The system already has ample free RAM, so more memory would provide little benefit for the described symptoms."
+        },
+        {
+          "id": "c",
+          "text": "Replace the wireless card",
+          "rationale": "The wireless card affects network throughput, not boot or application load times."
+        },
+        {
+          "id": "d",
+          "text": "Install a higher-capacity battery",
+          "rationale": "A larger battery extends runtime but does not affect how quickly the system boots or loads applications."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Swapping the mechanical hard drive for a solid-state drive gives the biggest improvement in boot and load performance because SSDs have no moving parts and far faster access times. RAM, Wi-Fi, and battery changes do not address the drive bottleneck.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-005",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician replaces the wireless card in a laptop after the original card failed. During reassembly, the technician must reconnect the small antenna leads that snap onto tiny circular connectors on the card. Which antenna connector type is used on laptop wireless cards?",
+      "context": "A technician is reconnecting antenna leads to a replacement laptop wireless card during reassembly.",
+      "options": [
+        {
+          "id": "a",
+          "text": "MHF/U.FL",
+          "rationale": "Laptop wireless cards use ultra-miniature MHF (U.FL/IPEX) connectors, which are tiny push-on circular connectors for the internal antenna leads."
+        },
+        {
+          "id": "b",
+          "text": "RP-SMA",
+          "rationale": "RP-SMA is a larger threaded connector found on external antennas, such as those on access points and desktop cards, not inside laptops."
+        },
+        {
+          "id": "c",
+          "text": "RJ45",
+          "rationale": "RJ45 is an eight-pin modular connector used for twisted-pair Ethernet cabling, not wireless antennas."
+        },
+        {
+          "id": "d",
+          "text": "DB-9",
+          "rationale": "DB-9 is a serial connector used for legacy COM ports, unrelated to wireless antennas."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Laptop Wi-Fi cards connect to their internal antennas through tiny MHF/U.FL (IPEX) push-on connectors. RP-SMA is for external screw-on antennas, while RJ45 and DB-9 are wired data connectors.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-006",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "A technician is configuring Windows Hello on a company laptop so the user can sign in without typing a password. The laptop already has a fingerprint reader and a standard webcam. Which TWO hardware components can Windows Hello use for sign-in?",
+      "context": "A technician is setting up Windows Hello sign-in on a laptop that has a fingerprint reader, a standard webcam, and other common components.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fingerprint reader",
+          "rationale": "Windows Hello supports fingerprint recognition for passwordless sign-in using the built-in fingerprint sensor."
+        },
+        {
+          "id": "b",
+          "text": "Infrared (IR) camera",
+          "rationale": "Windows Hello facial recognition requires an IR camera that can map the face reliably even in low light; a standard webcam alone is not sufficient."
+        },
+        {
+          "id": "c",
+          "text": "NFC scanner",
+          "rationale": "NFC handles short-range contactless data exchange such as mobile payments; Windows Hello does not use it for sign-in."
+        },
+        {
+          "id": "d",
+          "text": "GPS receiver",
+          "rationale": "GPS determines location from satellites and plays no role in Windows Hello authentication."
+        },
+        {
+          "id": "e",
+          "text": "Standard webcam",
+          "rationale": "A standard webcam alone cannot perform Windows Hello facial recognition because it lacks the infrared sensor; only the IR camera variant works."
+        },
+        {
+          "id": "f",
+          "text": "Ambient light sensor",
+          "rationale": "An ambient light sensor adjusts screen brightness; it is not an authentication component."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Windows Hello can authenticate with a fingerprint reader or with facial recognition through an infrared camera. NFC, GPS, ambient light sensors, and a standard webcam are not used for Hello sign-in, and a plain webcam specifically lacks the IR capability Hello requires.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-007",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "During a video conference, a user's laptop camera shows a completely black image, although the built-in microphone picks up audio normally and the operating system lists the camera as present. Which hardware component is most likely at fault?",
+      "context": "A laptop's video feed is black during a call while the microphone works and the OS detects the camera.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Webcam module",
+          "rationale": "The camera itself is the likely fault since audio works and the OS sees the device; a faulty webcam module produces a black image."
+        },
+        {
+          "id": "b",
+          "text": "Microphone array",
+          "rationale": "The microphone is working normally, as audio is being captured during the call."
+        },
+        {
+          "id": "c",
+          "text": "NFC reader",
+          "rationale": "The NFC reader is used for contactless data exchange and has no connection to video capture."
+        },
+        {
+          "id": "d",
+          "text": "Fingerprint reader",
+          "rationale": "The fingerprint reader handles biometric sign-in and is unrelated to camera output."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "With the microphone working and the OS recognizing the camera, the symptom points to the webcam module itself. The microphone, NFC reader, and fingerprint reader are separate components that do not affect video output.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-008",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user purchases a new tablet that charges through a USB-C port and asks the technician whether the cable can be plugged in upside down. Which statement about USB-C is correct?",
+      "context": "A user asks about the physical design of the USB-C connector on a new tablet.",
+      "options": [
+        {
+          "id": "a",
+          "text": "USB-C is reversible, so it plugs in either orientation",
+          "rationale": "The USB-C connector is symmetrical and reversible, so it works regardless of which way it is inserted."
+        },
+        {
+          "id": "b",
+          "text": "USB-C only works in one orientation, like micro-USB",
+          "rationale": "Micro-USB is not reversible; USB-C was designed with a symmetric plug that inserts either way."
+        },
+        {
+          "id": "c",
+          "text": "USB-C is Apple's proprietary Lightning connector",
+          "rationale": "Lightning is Apple's proprietary connector; USB-C is an open industry standard used across many devices."
+        },
+        {
+          "id": "d",
+          "text": "USB-C carries power but never data",
+          "rationale": "USB-C carries both power and data; USB Power Delivery and alternate modes also let it handle high wattage and video."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "USB-C's key physical trait is its reversible, symmetric connector, which inserts in either orientation. It is an industry standard (not Apple's Lightning) and carries both data and power, unlike one-way micro-USB.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-009",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user brings in an iPhone that will not charge and needs a replacement cable. The technician checks the port on the phone before selecting a cable. Which connector type does the iPhone use?",
+      "context": "A technician must pick the correct charging cable for an iPhone.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lightning",
+          "rationale": "Apple's Lightning connector is the proprietary port used by iPhones for charging and data."
+        },
+        {
+          "id": "b",
+          "text": "USB-C",
+          "rationale": "USB-C is a universal standard used on many Android phones and newer laptops, but not the port on an iPhone."
+        },
+        {
+          "id": "c",
+          "text": "Micro-USB",
+          "rationale": "Micro-USB was common on older Android devices and peripherals, not on iPhones."
+        },
+        {
+          "id": "d",
+          "text": "Mini-USB",
+          "rationale": "Mini-USB predates micro-USB and appeared on older cameras and devices, never on iPhones."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "iPhones charge and sync through Apple's proprietary Lightning connector. USB-C, micro-USB, and mini-USB are different standards used by other device families.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-010",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user wants to pay for a purchase by holding their smartphone a few centimeters from the store's payment terminal. The technician confirms the phone supports the required technology. Which wireless technology enables this contactless payment?",
+      "context": "A user wants to tap their phone at a payment terminal for contactless payment.",
+      "options": [
+        {
+          "id": "a",
+          "text": "NFC",
+          "rationale": "NFC (Near-field Communication) supports short-range contactless exchange at roughly 4 cm, which is how tap-to-pay terminals work."
+        },
+        {
+          "id": "b",
+          "text": "Bluetooth",
+          "rationale": "Bluetooth covers a much larger range (meters) and is used for pairing audio and peripherals, not tap-to-pay at a terminal."
+        },
+        {
+          "id": "c",
+          "text": "Wi-Fi",
+          "rationale": "Wi-Fi provides high-speed networking over tens of meters and is not used for a quick terminal tap."
+        },
+        {
+          "id": "d",
+          "text": "Cellular data",
+          "rationale": "Cellular provides wide-area connectivity through the carrier network; it is not the contactless link to a payment terminal."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Tap-to-pay relies on NFC, a very short-range contactless technology. Bluetooth's range is far too large for a terminal tap, and Wi-Fi and cellular serve different networking purposes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-011",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "While traveling, a user needs to get their laptop online, but the only internet access available is the cellular data plan on their smartphone. The technician enables the phone's hotspot feature. What does this feature do?",
+      "context": "A user enables their phone's hotspot to give a laptop internet access while traveling.",
+      "options": [
+        {
+          "id": "a",
+          "text": "It shares the phone's cellular data connection over Wi-Fi for other devices",
+          "rationale": "A mobile hotspot (Wi-Fi tethering) rebroadcasts the phone's cellular data connection so nearby devices can connect."
+        },
+        {
+          "id": "b",
+          "text": "It creates a VPN tunnel back to the user's office network",
+          "rationale": "A hotspot shares internet access; VPN connectivity is a separate feature configured on the device."
+        },
+        {
+          "id": "c",
+          "text": "It extends the user's home Wi-Fi network",
+          "rationale": "Extending a home network requires a repeater or extender; the hotspot uses the phone's cellular link instead."
+        },
+        {
+          "id": "d",
+          "text": "It converts cellular data into a wired Ethernet connection",
+          "rationale": "Tethering can also work over USB or Bluetooth, but hotspot mode specifically shares over Wi-Fi, not Ethernet."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The hotspot shares the phone's cellular data connection over Wi-Fi, letting the laptop and other devices get online through the carrier plan. VPNs, network extenders, and Ethernet are different connectivity concepts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-012",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "An office wants employees to connect their laptops to two external monitors, a wired keyboard, and a network cable by plugging in a single connector at their desks. Which TWO types of devices provide this kind of one-connection expansion for laptops?",
+      "context": "An office wants laptops to attach to multiple peripherals and displays with a single connection at each desk.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Docking station",
+          "rationale": "A docking station connects to the laptop and provides ports for monitors, keyboards, network, and power in one unit."
+        },
+        {
+          "id": "b",
+          "text": "Port replicator",
+          "rationale": "A port replicator mirrors the laptop's ports so multiple peripherals can be attached through a single connection, ideal for a fixed desk setup."
+        },
+        {
+          "id": "c",
+          "text": "Trackpad",
+          "rationale": "A trackpad is a pointing input device, not a port-expansion accessory."
+        },
+        {
+          "id": "d",
+          "text": "Stylus",
+          "rationale": "A stylus is a pen-shaped input tool for touchscreens and has nothing to do with connecting peripherals."
+        },
+        {
+          "id": "e",
+          "text": "Drawing pad",
+          "rationale": "A drawing pad is an input device for digital art; it does not add ports to a laptop."
+        },
+        {
+          "id": "f",
+          "text": "Bluetooth speaker",
+          "rationale": "A Bluetooth speaker is an audio output accessory, not a connectivity hub."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Both docking stations and port replicators let a laptop connect to monitors, keyboards, and networking through one attachment point. Trackpads, styluses, drawing pads, and speakers are input or output accessories, not port-expansion devices.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-013",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user tries to charge their laptop using a USB-C charger that came with their smartphone, but the laptop does not charge even though the cable fits the port correctly. What is the most likely reason the laptop is not charging?",
+      "context": "A laptop refuses to charge from a USB-C phone charger even though the cable fits.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The charger does not supply enough wattage for the laptop's USB Power Delivery requirements",
+          "rationale": "Laptops need far more power than phones; if the charger cannot negotiate enough wattage via USB Power Delivery, the laptop will not charge."
+        },
+        {
+          "id": "b",
+          "text": "USB-C ports only support charging for phones",
+          "rationale": "USB-C with USB Power Delivery supports high-wattage charging for laptops and other large devices when the charger can supply it."
+        },
+        {
+          "id": "c",
+          "text": "The charger delivers power but the cable was inserted the wrong way",
+          "rationale": "USB-C is reversible, and the cable fitting correctly means orientation is not the issue."
+        },
+        {
+          "id": "d",
+          "text": "The laptop requires a proprietary magnetic connector",
+          "rationale": "Many laptops charge over standard USB-C; the problem here is power capacity, not connector type."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "USB-C charging depends on USB Power Delivery negotiation; a phone charger typically provides too little wattage for a laptop, so the laptop will not charge. USB-C does support laptop charging, orientation is not the issue, and the connector is not proprietary.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-014",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is setting up a tablet for a field worker who will be in rural areas with no Wi-Fi. The technician activates a cellular data plan and connects the tablet to the carrier's network. Which technology is the tablet using for internet access?",
+      "context": "A tablet gets internet access through a cellular data plan in an area with no Wi-Fi.",
+      "options": [
+        {
+          "id": "a",
+          "text": "4G/5G cellular (WWAN)",
+          "rationale": "Cellular wide-area networks such as 4G LTE and 5G provide internet access through the carrier's towers wherever there is coverage."
+        },
+        {
+          "id": "b",
+          "text": "NFC",
+          "rationale": "NFC is a short-range contactless technology used for payments and tags, not for internet access over distance."
+        },
+        {
+          "id": "c",
+          "text": "Bluetooth",
+          "rationale": "Bluetooth creates a short-range personal area network for peripherals, not wide-area internet access."
+        },
+        {
+          "id": "d",
+          "text": "Wi-Fi Direct",
+          "rationale": "Wi-Fi Direct links devices to each other without an access point; it does not provide internet connectivity by itself."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "With a cellular plan active, the tablet connects through the carrier's 4G/5G network, a WWAN technology. NFC, Bluetooth, and Wi-Fi Direct are short-range personal-area links that cannot provide carrier-based internet.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-015",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user is traveling internationally and purchases an eSIM data plan for their unlocked smartphone. The technician explains how the eSIM works. Which statement about eSIM is correct?",
+      "context": "A user buys an eSIM data plan for international travel on an unlocked phone.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The eSIM profile is downloaded and activated electronically without inserting a physical card",
+          "rationale": "An eSIM is embedded in the phone and is programmed remotely, so a new plan can be downloaded and activated without a physical SIM."
+        },
+        {
+          "id": "b",
+          "text": "The user must insert a physical eSIM card into the SIM tray",
+          "rationale": "There is no physical eSIM card; the eSIM is built into the device and provisioned digitally."
+        },
+        {
+          "id": "c",
+          "text": "The eSIM only works while the phone is connected to Wi-Fi",
+          "rationale": "The eSIM connects to the cellular network; Wi-Fi is not required to activate or use it."
+        },
+        {
+          "id": "d",
+          "text": "The eSIM permanently locks the phone to a single carrier",
+          "rationale": "eSIMs can store multiple profiles and are not inherently carrier-locked; users can switch plans."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An eSIM is a programmable SIM embedded in the device, activated by downloading a profile rather than inserting a card. It works over the cellular network and can hold multiple carrier profiles, so it does not lock the phone to one carrier.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-016",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user wants to connect a new wireless headset to their smartphone. The technician tells the user to put the headset into discoverable mode, select it in the phone's Bluetooth settings, and confirm the code shown on both devices. What is this process called?",
+      "context": "A user connects a wireless headset to a smartphone by making it discoverable and confirming a code.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pairing",
+          "rationale": "Pairing is the process of making Bluetooth devices discoverable and exchanging a passkey or PIN to establish a trusted connection."
+        },
+        {
+          "id": "b",
+          "text": "Tethering",
+          "rationale": "Tethering shares a device's internet connection; it is not the process of linking a headset."
+        },
+        {
+          "id": "c",
+          "text": "Synchronization",
+          "rationale": "Synchronization keeps data like contacts and calendars consistent between devices; it is not the Bluetooth link setup."
+        },
+        {
+          "id": "d",
+          "text": "Hotspot",
+          "rationale": "A hotspot broadcasts a Wi-Fi network for internet sharing, unrelated to connecting an audio accessory."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The discoverable-mode and passkey exchange is Bluetooth pairing. Tethering, synchronization, and hotspot functions serve internet sharing and data consistency, not the establishment of a Bluetooth link.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-017",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is helping a user whose navigation app cannot determine their position while hiking in a remote canyon. The phone's cellular signal is weak, but the technician knows the phone still receives satellite signals. Which technology provides the phone's position using satellites?",
+      "context": "A navigation app cannot get a position in a remote canyon with weak cellular signal.",
+      "options": [
+        {
+          "id": "a",
+          "text": "GPS",
+          "rationale": "GPS determines position from a constellation of satellites, so it works in remote areas where cellular signals are weak or absent."
+        },
+        {
+          "id": "b",
+          "text": "Cellular tower triangulation",
+          "rationale": "Cellular location uses signal strength from nearby towers, which fails when the phone has little or no tower coverage."
+        },
+        {
+          "id": "c",
+          "text": "Wi-Fi positioning",
+          "rationale": "Wi-Fi positioning maps nearby access points and requires detectable Wi-Fi networks, which are rare in a remote canyon."
+        },
+        {
+          "id": "d",
+          "text": "NFC",
+          "rationale": "NFC is a contactless tap technology with a range of centimeters; it cannot determine location."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "GPS derives position directly from satellites, which is why it functions in remote locations with poor cellular coverage. Tower triangulation and Wi-Fi positioning depend on infrastructure that is unavailable in a canyon, and NFC is far too short-range.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-018",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "A company is rolling out a bring-your-own-device (BYOD) program and enrolls employee smartphones in its mobile device management (MDM) platform. Which TWO capabilities does the MDM platform provide to the company?",
+      "context": "A company enrolls employee-owned smartphones in an MDM platform for a BYOD program.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enforce security policies such as passcode requirements and encryption",
+          "rationale": "MDM can push and enforce policies like device passcodes, encryption, and allowed apps on enrolled devices."
+        },
+        {
+          "id": "b",
+          "text": "Remotely wipe a lost or stolen device",
+          "rationale": "MDM allows administrators to perform a remote wipe to erase data from a missing or compromised device."
+        },
+        {
+          "id": "c",
+          "text": "Increase the phone's cellular signal strength",
+          "rationale": "Signal strength depends on the carrier network and antenna; MDM cannot improve it."
+        },
+        {
+          "id": "d",
+          "text": "Unlock the phone from its carrier",
+          "rationale": "Carrier unlocking is a carrier-side process; MDM does not manage carrier locks."
+        },
+        {
+          "id": "e",
+          "text": "Speed up the device's processor",
+          "rationale": "MDM manages policy and data, not CPU clock speed or performance."
+        },
+        {
+          "id": "f",
+          "text": "Extend the device's battery life",
+          "rationale": "MDM may recommend power settings, but it cannot physically extend battery life."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "MDM platforms give administrators policy enforcement, such as passcodes and encryption, plus remote-wipe capability for lost or stolen devices. Signal strength, carrier unlocking, CPU speed, and battery capacity are outside what MDM can control.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-019",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user edits a contact on their smartphone and expects the change to appear in the email client on their laptop and in the web calendar later the same day. Which feature keeps this data consistent across all of the user's devices?",
+      "context": "A user expects a contact edit made on a phone to appear on their laptop and web accounts.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Synchronization",
+          "rationale": "Synchronization pushes contacts, calendar, and mail changes to the cloud account so every device shows the same data."
+        },
+        {
+          "id": "b",
+          "text": "Airplane mode",
+          "rationale": "Airplane mode disables all wireless radios; it would prevent, not enable, the data transfer."
+        },
+        {
+          "id": "c",
+          "text": "Tethering",
+          "rationale": "Tethering shares an internet connection with other devices; it does not sync application data."
+        },
+        {
+          "id": "d",
+          "text": "Pairing",
+          "rationale": "Pairing establishes a Bluetooth link between devices; it does not keep cloud data consistent."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Synchronization is the feature that keeps contacts, calendar, and mail consistent across devices through the user's cloud account. Airplane mode, tethering, and pairing either block connectivity or serve different purposes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-020",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user is about to board a flight and wants to disable all of the wireless radios on their smartphone at once, including cellular, Wi-Fi, and Bluetooth. Which setting should the user enable?",
+      "context": "A user wants to turn off all wireless radios on their phone at once before a flight.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Airplane mode",
+          "rationale": "Airplane mode disables cellular, Wi-Fi, Bluetooth, and other wireless radios with a single toggle."
+        },
+        {
+          "id": "b",
+          "text": "Do Not Disturb",
+          "rationale": "Do Not Disturb silences notifications and calls but leaves the radios active."
+        },
+        {
+          "id": "c",
+          "text": "Battery saver",
+          "rationale": "Battery saver reduces background activity and performance but does not turn off radios."
+        },
+        {
+          "id": "d",
+          "text": "Screen timeout",
+          "rationale": "Screen timeout controls when the display sleeps; it has no effect on wireless radios."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Airplane mode is the single toggle that turns off cellular, Wi-Fi, and Bluetooth together. Do Not Disturb only silences alerts, while battery saver and screen timeout do not control radios at all.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    }
+  ],
+  "pbqs": []
+}

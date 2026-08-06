@@ -1,0 +1,3139 @@
+{
+  "mcqs": [
+    {
+      "id": "a1-4-001",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A technician is provisioning a new server that will run four virtual machines for a small business. The technician installs a hypervisor directly on the server hardware, with no host operating system underneath. Which hypervisor type is being deployed?",
+      "context": "A new server runs four VMs; the hypervisor is installed directly on the hardware with no host OS underneath.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Type 2 hypervisor",
+          "rationale": "A Type 2 hypervisor runs as an application on top of a host operating system (e.g., VirtualBox, VMware Workstation)."
+        },
+        {
+          "id": "b",
+          "text": "Type 1 hypervisor",
+          "rationale": "A Type 1 (bare-metal) hypervisor installs directly on the hardware and manages VMs without a host OS — the deployment described."
+        },
+        {
+          "id": "c",
+          "text": "Container engine",
+          "rationale": "Containers share the host kernel rather than virtualizing hardware; no hypervisor is involved."
+        },
+        {
+          "id": "d",
+          "text": "Emulator",
+          "rationale": "Emulators translate instructions for a different CPU architecture; a native hypervisor virtualizes the same architecture."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "Type 1 (bare-metal) hypervisors such as VMware ESXi, Microsoft Hyper-V, and Proxmox install directly on hardware and provide the VM management layer without a host OS. Type 2 hypervisors run inside a general-purpose OS.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-002",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A support technician needs to create a full point-in-time copy of a virtual machine before applying a risky driver update, so the VM can be rolled back if the update fails. Which virtualization feature should the technician use?",
+      "context": "A VM needs a full point-in-time rollback point before a risky driver update.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Snapshot",
+          "rationale": "A snapshot captures the VM's disk and memory state at a point in time, allowing a quick rollback — exactly the pre-update safety net described."
+        },
+        {
+          "id": "b",
+          "text": "Live migration",
+          "rationale": "Live migration moves a running VM between hosts without downtime; it does not create a rollback point."
+        },
+        {
+          "id": "c",
+          "text": "Resource pooling",
+          "rationale": "Resource pooling aggregates CPU/RAM/storage across hosts; unrelated to rollback."
+        },
+        {
+          "id": "d",
+          "text": "Virtual switch",
+          "rationale": "A virtual switch forwards traffic between VMs and the network; unrelated to VM state."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Snapshots save the VM state (disk and optionally memory) so you can revert after a failed change. Live migration, resource pooling, and virtual switching are management/network features, not rollback mechanisms.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-003",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "An administrator notices that a virtual machine on a shared host is consuming so much CPU that the other VMs on the same host have become sluggish. Which virtualization feature should be used to guarantee each VM a minimum amount of CPU capacity?",
+      "context": "One VM is starving other VMs of CPU on a shared hypervisor host.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sandboxing",
+          "rationale": "Sandboxing isolates a VM's processes for security; it does not guarantee CPU capacity."
+        },
+        {
+          "id": "b",
+          "text": "Resource allocation/reservation",
+          "rationale": "Resource reservations guarantee a VM a minimum share of CPU, memory, or I/O, preventing one VM from starving its neighbors."
+        },
+        {
+          "id": "c",
+          "text": "Snapshotting",
+          "rationale": "Snapshots capture state for rollback; unrelated to performance guarantees."
+        },
+        {
+          "id": "d",
+          "text": "Virtual NIC teaming",
+          "rationale": "NIC teaming aggregates network interfaces for throughput/redundancy, not CPU guarantees."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "Resource allocation (reservations/limits/shares) lets an administrator guarantee minimum capacity or cap usage per VM. Without it, a runaway VM can degrade every other VM on the host.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-004",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A security-conscious administrator plans to test untrusted software inside an isolated virtual machine that cannot affect the host or other VMs. Which TWO virtualization concepts are MOST directly related to this goal?",
+      "context": "Untrusted software will be tested in a VM that must not affect the host or other VMs.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sandboxing",
+          "rationale": "Running untrusted code in an isolated VM is sandboxing — the VM contains the software's effects."
+        },
+        {
+          "id": "b",
+          "text": "Snapshot",
+          "rationale": "Snapshots aid rollback but do not themselves isolate the VM from the host."
+        },
+        {
+          "id": "c",
+          "text": "Virtualization security/VM isolation",
+          "rationale": "Hypervisor isolation ensures a compromised guest cannot break out to the host or other guests."
+        },
+        {
+          "id": "d",
+          "text": "Live migration",
+          "rationale": "Live migration moves VMs between hosts; it does not isolate untrusted code."
+        },
+        {
+          "id": "e",
+          "text": "Resource pooling",
+          "rationale": "Resource pooling aggregates capacity; irrelevant to isolation."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "c"
+      ],
+      "selectCount": 2,
+      "explanation": "Sandboxing uses VM isolation to contain untrusted software, and hypervisor-enforced isolation is the security property that makes the sandbox effective. Snapshots and migration are operational features; resource pooling is capacity management.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-005",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A technician needs to move a running virtual machine from one hypervisor host to another with NO downtime while the server hosting a production application is being maintained. Which virtualization feature supports this?",
+      "context": "A running production VM must move between hosts with zero downtime during maintenance.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Virtual machine migration (live migration)",
+          "rationale": "Live migration moves a running VM between hosts with no interruption — the maintenance-friendly option."
+        },
+        {
+          "id": "b",
+          "text": "Snapshot",
+          "rationale": "Snapshots are rollback points; they do not move a VM to another host."
+        },
+        {
+          "id": "c",
+          "text": "Cloning",
+          "rationale": "Cloning copies a VM to create an identical instance, but the original keeps running on the source host."
+        },
+        {
+          "id": "d",
+          "text": "Virtual desktop infrastructure (VDI)",
+          "rationale": "VDI hosts user desktops as VMs; it is a deployment model, not a zero-downtime move tool."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Live migration (vMotion/Live Migration) moves a running VM between hosts without downtime, enabling maintenance without service interruption.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-006",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "An organization provides each call-center employee with a remote virtual desktop that runs on a central server, so the company can centrally manage the OS and applications. Which virtualization technology is described?",
+      "context": "Call-center employees get centrally managed remote virtual desktops hosted on a server.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Virtual desktop infrastructure (VDI)",
+          "rationale": "VDI hosts desktop operating systems as VMs on central servers; users connect remotely and IT manages them centrally."
+        },
+        {
+          "id": "b",
+          "text": "Virtual network",
+          "rationale": "A virtual network interconnects VMs; it does not deliver desktops to users."
+        },
+        {
+          "id": "c",
+          "text": "Storage virtualization",
+          "rationale": "Storage virtualization pools physical disks; unrelated to desktop delivery."
+        },
+        {
+          "id": "d",
+          "text": "Application virtualization",
+          "rationale": "Application virtualization isolates individual apps, not full desktops."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "VDI runs desktop OS images on centralized servers (e.g., VMware Horizon, Citrix Virtual Apps and Desktops); users access them remotely and IT manages one gold image instead of many PCs.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-007",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A hypervisor host has 64 GB of RAM installed and four VMs configured with 16 GB each. The administrator wants to run a fifth VM that also needs 16 GB, but only 8 GB is free. Which virtualization feature would allow the fifth VM to start by reclaiming unused memory from the other VMs?",
+      "context": "Four VMs use 16 GB each on a 64 GB host; a fifth VM needs 16 GB but only 8 GB is free.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Memory overcommitment",
+          "rationale": "Memory overcommitment lets the hypervisor assign more memory to VMs than physically exists, reclaiming idle pages from guests — enabling the fifth VM."
+        },
+        {
+          "id": "b",
+          "text": "Disk thin provisioning",
+          "rationale": "Thin provisioning grows virtual disks on demand; it does not free RAM."
+        },
+        {
+          "id": "c",
+          "text": "VM cloning",
+          "rationale": "Cloning copies a VM; it does not create free memory."
+        },
+        {
+          "id": "d",
+          "text": "Network address translation (NAT)",
+          "rationale": "NAT translates IP addresses; unrelated to memory."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Memory overcommitment (ballooning, page sharing) lets a hypervisor run VMs whose total configured RAM exceeds physical RAM by reclaiming unused guest memory. Thin provisioning is the disk analog.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-008",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "A technician is explaining to a small business owner that a single physical server can run multiple isolated operating systems, reducing hardware costs. Which virtualization component directly controls and allocates the physical hardware among the guest OSes?",
+      "context": "A single physical server runs multiple isolated OSes; which component allocates physical hardware among guests?",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The hypervisor",
+          "rationale": "The hypervisor (VMM) directly controls and allocates CPU, memory, and I/O among guest VMs — the core of server virtualization."
+        },
+        {
+          "id": "b",
+          "text": "The guest operating system",
+          "rationale": "Guest OSes run inside VMs and cannot directly allocate the physical hardware."
+        },
+        {
+          "id": "c",
+          "text": "A virtual switch",
+          "rationale": "A virtual switch handles VM networking only."
+        },
+        {
+          "id": "d",
+          "text": "A RAID controller",
+          "rationale": "A RAID controller manages physical disk arrays, not VM resource allocation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The hypervisor is the virtualization layer that partitions and allocates physical resources (CPU, RAM, storage, I/O) among the guest VMs running on the host.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-009",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A startup rents virtual servers, block storage, and a virtual network from a cloud provider and configures the operating systems and applications itself. Which cloud service model is the startup using?",
+      "context": "A startup rents virtual servers, block storage, and networking, and manages the OS/apps itself.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Software as a Service (SaaS)",
+          "rationale": "SaaS provides a finished application; the customer does not manage the OS."
+        },
+        {
+          "id": "b",
+          "text": "Platform as a Service (PaaS)",
+          "rationale": "PaaS provides a managed platform (runtime/database) but hides the underlying servers."
+        },
+        {
+          "id": "c",
+          "text": "Infrastructure as a Service (IaaS)",
+          "rationale": "IaaS delivers raw compute, storage, and networking; the customer installs and manages the OS and applications — exactly this scenario."
+        },
+        {
+          "id": "d",
+          "text": "Desktop as a Service (DaaS)",
+          "rationale": "DaaS delivers virtual desktops, not raw infrastructure."
+        }
+      ],
+      "correctOptionIds": [
+        "c"
+      ],
+      "selectCount": 1,
+      "explanation": "IaaS (AWS EC2, Azure VMs) provides virtualized infrastructure — compute, storage, networking — and the customer is responsible for the OS, middleware, and applications.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-010",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A small law firm subscribes to a cloud email and document suite. The provider manages the application, data storage, and infrastructure, and the firm only manages its user accounts and content. Which cloud service model is this?",
+      "context": "A firm subscribes to a cloud email/docs suite; the provider manages app, storage, and infrastructure.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Infrastructure as a Service (IaaS)",
+          "rationale": "IaaS would require the firm to manage the OS and apps itself."
+        },
+        {
+          "id": "b",
+          "text": "Platform as a Service (PaaS)",
+          "rationale": "PaaS is a development platform; users build apps rather than consume a finished suite."
+        },
+        {
+          "id": "c",
+          "text": "Software as a Service (SaaS)",
+          "rationale": "SaaS delivers a complete application over the internet (e.g., Microsoft 365, Google Workspace) — the provider runs everything, the customer manages accounts/content."
+        },
+        {
+          "id": "d",
+          "text": "Community cloud",
+          "rationale": "Community cloud describes the deployment (shared by a community), not the service model."
+        }
+      ],
+      "correctOptionIds": [
+        "c"
+      ],
+      "selectCount": 1,
+      "explanation": "SaaS (Microsoft 365, Google Workspace, Salesforce) delivers finished applications; the provider handles infrastructure, platform, and app maintenance while the customer manages users and data.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-011",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A hospital must keep sensitive patient data on its own premises for legal reasons, but wants to use a public cloud provider for non-sensitive development workloads. Which cloud deployment model combines these environments?",
+      "context": "A hospital keeps sensitive data on-premises for compliance but uses public cloud for dev workloads.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Private cloud",
+          "rationale": "Private cloud is dedicated to one organization; it does not combine with a public provider."
+        },
+        {
+          "id": "b",
+          "text": "Hybrid cloud",
+          "rationale": "Hybrid cloud combines private (on-premises) and public cloud environments, often with data remaining where required by compliance — exactly this mix."
+        },
+        {
+          "id": "c",
+          "text": "Community cloud",
+          "rationale": "Community cloud is shared by several organizations with common interests, not a private/public mix."
+        },
+        {
+          "id": "d",
+          "text": "Multi-cloud",
+          "rationale": "Multi-cloud uses multiple PUBLIC providers; it does not include on-premises infrastructure."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "Hybrid cloud = private/on-premises + public cloud, letting organizations keep sensitive data local while bursting dev workloads to the public cloud. Multi-cloud is multiple public providers; community cloud is shared by a group.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-012",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A consultant lists the defining characteristics of cloud computing for a client. Which TWO characteristics are core cloud attributes?",
+      "context": "Which two are defining characteristics of cloud computing?",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pay-as-you-go metered usage",
+          "rationale": "Cloud resources are metered and billed by consumption — a core cloud characteristic."
+        },
+        {
+          "id": "b",
+          "text": "Self-service on-demand provisioning",
+          "rationale": "Users provision resources on demand without provider intervention — a core cloud characteristic."
+        },
+        {
+          "id": "c",
+          "text": "A fixed, dedicated hardware footprint",
+          "rationale": "Clouds pool shared resources; a fixed dedicated footprint is the opposite of elasticity."
+        },
+        {
+          "id": "d",
+          "text": "On-premises-only deployment",
+          "rationale": "Clouds are accessed over the network, not limited to on-premises."
+        },
+        {
+          "id": "e",
+          "text": "Single-tenant hardware by default",
+          "rationale": "Cloud providers pool multi-tenant resources; single-tenant hardware is not a defining characteristic."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Core cloud characteristics include on-demand self-service, broad network access, resource pooling, rapid elasticity, and measured (metered) service. Fixed dedicated hardware and on-premises-only models contradict these.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-013",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "An accounting firm's workload has predictable peak usage at month end. The firm wants its cloud environment to automatically add virtual servers during the peak and remove them afterward, paying only for what is used. Which cloud characteristic enables this?",
+      "context": "A workload needs automatic server scaling up at month-end peaks and down afterward, billed by usage.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Rapid elasticity",
+          "rationale": "Rapid elasticity automatically scales resources up/down to match demand — the month-end peak scenario."
+        },
+        {
+          "id": "b",
+          "text": "Resource pooling",
+          "rationale": "Resource pooling shares infrastructure among tenants; it does not auto-scale."
+        },
+        {
+          "id": "c",
+          "text": "Metered service",
+          "rationale": "Metered billing tracks usage but does not itself scale resources."
+        },
+        {
+          "id": "d",
+          "text": "Broad network access",
+          "rationale": "Broad network access means resources are reachable over the network; unrelated to scaling."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Rapid elasticity lets cloud resources scale out and in automatically with demand. Metered service bills for that usage; pooling and access are separate attributes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-014",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "Two municipal agencies with identical compliance requirements decide to share a cloud infrastructure operated by a third party, solely for their joint use. Which cloud deployment model is this?",
+      "context": "Two agencies with identical compliance needs share a third-party-operated cloud for their joint use only.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Public cloud",
+          "rationale": "Public cloud is open to the general public, not restricted to two agencies."
+        },
+        {
+          "id": "b",
+          "text": "Community cloud",
+          "rationale": "Community cloud is shared by organizations with common interests/compliance needs, operated by a third party — exactly this."
+        },
+        {
+          "id": "c",
+          "text": "Hybrid cloud",
+          "rationale": "Hybrid combines private and public; this is not a mixed deployment."
+        },
+        {
+          "id": "d",
+          "text": "Private cloud",
+          "rationale": "Private cloud serves a single organization, not a shared community."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "Community cloud is a shared environment for organizations with common concerns (compliance, jurisdiction) — e.g., government agencies or healthcare bodies — operated by themselves or a third party.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-015",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A business is evaluating a cloud provider and asks who is responsible for patching the operating system of the rented virtual servers. Under IaaS, which party is responsible for OS patching?",
+      "context": "Under IaaS, who is responsible for patching the guest OS of rented virtual servers?",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The cloud provider",
+          "rationale": "Under IaaS the provider maintains the physical infrastructure, not the guest OS."
+        },
+        {
+          "id": "b",
+          "text": "The customer",
+          "rationale": "In IaaS the customer manages and patches the guest OS, middleware, and applications; the provider handles the physical layer."
+        },
+        {
+          "id": "c",
+          "text": "The hypervisor vendor",
+          "rationale": "The hypervisor vendor supplies the virtualization layer; it does not patch the customer's guests."
+        },
+        {
+          "id": "d",
+          "text": "A managed service provider contracted by the provider",
+          "rationale": "The provider's own contracts do not cover the customer's OS."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "explanation": "Shared responsibility in IaaS: the provider secures the physical host and hypervisor; the customer patches and secures the guest OS, applications, and data.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-4-016",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "A sales team needs the same customer relationship management (CRM) application available from phones, tablets, and laptops with no local installation or server management. Which cloud service model fits BEST?",
+      "context": "A team needs the same CRM app on any device with no local install or server management.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Infrastructure as a Service (IaaS)",
+          "rationale": "IaaS requires building and managing the application stack."
+        },
+        {
+          "id": "b",
+          "text": "Platform as a Service (PaaS)",
+          "rationale": "PaaS is for developing apps, not consuming a ready-made CRM."
+        },
+        {
+          "id": "c",
+          "text": "Software as a Service (SaaS)",
+          "rationale": "SaaS delivers the CRM over the web on any device with zero local installation or server management — the best fit."
+        },
+        {
+          "id": "d",
+          "text": "Desktop as a Service (DaaS)",
+          "rationale": "DaaS provides desktops, not a specific business application."
+        }
+      ],
+      "correctOptionIds": [
+        "c"
+      ],
+      "selectCount": 1,
+      "explanation": "SaaS (e.g., Salesforce, Microsoft 365) delivers the finished application to any device via browser/client with the provider handling all infrastructure — the classic no-install CRM scenario.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1/4.2 Virtualization & Cloud"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-001",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is replacing the battery in a three-year-old laptop whose battery no longer holds a charge. After confirming the correct replacement part number, the technician prepares the laptop for the swap. Which step should the technician take first before removing the old battery?",
+      "context": "A technician is swapping a degraded battery in a three-year-old laptop and must prepare the device safely before removal.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Power the laptop down and unplug the AC adapter, then remove the battery",
+          "rationale": "Shutting down and disconnecting AC power removes both power sources so the battery can be handled safely."
+        },
+        {
+          "id": "b",
+          "text": "Remove the battery while the laptop is running so the system clock is preserved",
+          "rationale": "Removing a battery from a running laptop risks data loss and hardware damage; clock retention is handled by the RTC battery, not the main battery."
+        },
+        {
+          "id": "c",
+          "text": "Short the battery terminals together to discharge it fully before removal",
+          "rationale": "Shorting battery terminals is dangerous and can damage the battery or start a fire; batteries should never be shorted."
+        },
+        {
+          "id": "d",
+          "text": "Put the laptop in sleep mode and remove the battery to avoid a full shutdown",
+          "rationale": "Sleep mode still draws power and does not provide a safe powered-down state for battery removal."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The safe sequence is to shut the laptop down completely and unplug the AC adapter before removing the battery. Removing a battery from a running or sleeping system can corrupt data and damage components, and shorting the terminals is never an acceptable discharge method.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-002",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user reports that the S key on their laptop frequently sticks and sometimes needs several presses to register. The technician inspects the key and finds the keycap is worn, but the scissor mechanism beneath it is intact. What is the appropriate replacement procedure?",
+      "context": "A laptop key sticks intermittently; the keycap is worn but the underlying mechanism is still intact.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the keycap only",
+          "rationale": "With the mechanism intact, replacing just the keycap restores normal operation without the cost of a full keyboard."
+        },
+        {
+          "id": "b",
+          "text": "Replace the entire keyboard assembly",
+          "rationale": "A full keyboard swap is only needed when the mechanism or membrane is damaged; here the scissor mechanism is intact."
+        },
+        {
+          "id": "c",
+          "text": "Replace the laptop's motherboard",
+          "rationale": "A sticking key is a keyboard assembly issue, not a motherboard fault; replacing the board is unnecessary and expensive."
+        },
+        {
+          "id": "d",
+          "text": "Replace the LCD panel",
+          "rationale": "The LCD displays output and has nothing to do with keyboard input."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Because the scissor mechanism is intact and only the keycap is worn, the technician should replace just the keycap. Replacing the whole keyboard, motherboard, or LCD would address components that are not causing the symptom.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-003",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is upgrading a laptop from 8 GB to 16 GB of memory. The laptop has one open memory slot, and the technician opens the bottom access panel to install the new module. Which memory form factor should the technician select?",
+      "context": "A technician is adding memory to a laptop with one open slot and must choose the correct module form factor.",
+      "options": [
+        {
+          "id": "a",
+          "text": "SODIMM",
+          "rationale": "Laptops use the smaller Small Outline DIMM form factor, which fits the low-profile memory slots found in portable systems."
+        },
+        {
+          "id": "b",
+          "text": "DIMM",
+          "rationale": "Full-size DIMMs are used in desktop towers and servers; they are physically too large for laptop memory slots."
+        },
+        {
+          "id": "c",
+          "text": "RDIMM",
+          "rationale": "Registered DIMMs are server memory modules with a register between the memory controller and the chips; laptops do not use them."
+        },
+        {
+          "id": "d",
+          "text": "SIMM",
+          "rationale": "SIMMs are an obsolete single-inline memory package from older systems and are not used in modern laptops."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Portable computers accept SODIMM modules, the compact form factor designed for their low-profile slots. DIMMs and RDIMMs are desktop/server modules, and SIMMs are obsolete, so none of them fit a laptop.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-004",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user complains that their laptop takes several minutes to boot and applications load slowly. The technician finds the laptop has a 5400 rpm hard drive and ample free RAM. Which upgrade will provide the most noticeable improvement in boot and application load times?",
+      "context": "A slow-booting laptop has a 5400 rpm hard drive and plenty of RAM; the technician must pick the most effective upgrade.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the hard drive with a 2.5-inch SATA SSD",
+          "rationale": "An SSD removes the mechanical seek and spin-up delays of a hard drive, dramatically speeding boot and application loading."
+        },
+        {
+          "id": "b",
+          "text": "Add additional SODIMM memory",
+          "rationale": "The system already has ample free RAM, so more memory would provide little benefit for the described symptoms."
+        },
+        {
+          "id": "c",
+          "text": "Replace the wireless card",
+          "rationale": "The wireless card affects network throughput, not boot or application load times."
+        },
+        {
+          "id": "d",
+          "text": "Install a higher-capacity battery",
+          "rationale": "A larger battery extends runtime but does not affect how quickly the system boots or loads applications."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Swapping the mechanical hard drive for a solid-state drive gives the biggest improvement in boot and load performance because SSDs have no moving parts and far faster access times. RAM, Wi-Fi, and battery changes do not address the drive bottleneck.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-005",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician replaces the wireless card in a laptop after the original card failed. During reassembly, the technician must reconnect the small antenna leads that snap onto tiny circular connectors on the card. Which antenna connector type is used on laptop wireless cards?",
+      "context": "A technician is reconnecting antenna leads to a replacement laptop wireless card during reassembly.",
+      "options": [
+        {
+          "id": "a",
+          "text": "MHF/U.FL",
+          "rationale": "Laptop wireless cards use ultra-miniature MHF (U.FL/IPEX) connectors, which are tiny push-on circular connectors for the internal antenna leads."
+        },
+        {
+          "id": "b",
+          "text": "RP-SMA",
+          "rationale": "RP-SMA is a larger threaded connector found on external antennas, such as those on access points and desktop cards, not inside laptops."
+        },
+        {
+          "id": "c",
+          "text": "RJ45",
+          "rationale": "RJ45 is an eight-pin modular connector used for twisted-pair Ethernet cabling, not wireless antennas."
+        },
+        {
+          "id": "d",
+          "text": "DB-9",
+          "rationale": "DB-9 is a serial connector used for legacy COM ports, unrelated to wireless antennas."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Laptop Wi-Fi cards connect to their internal antennas through tiny MHF/U.FL (IPEX) push-on connectors. RP-SMA is for external screw-on antennas, while RJ45 and DB-9 are wired data connectors.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-006",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "A technician is configuring Windows Hello on a company laptop so the user can sign in without typing a password. The laptop already has a fingerprint reader and a standard webcam. Which TWO hardware components can Windows Hello use for sign-in?",
+      "context": "A technician is setting up Windows Hello sign-in on a laptop that has a fingerprint reader, a standard webcam, and other common components.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fingerprint reader",
+          "rationale": "Windows Hello supports fingerprint recognition for passwordless sign-in using the built-in fingerprint sensor."
+        },
+        {
+          "id": "b",
+          "text": "Infrared (IR) camera",
+          "rationale": "Windows Hello facial recognition requires an IR camera that can map the face reliably even in low light; a standard webcam alone is not sufficient."
+        },
+        {
+          "id": "c",
+          "text": "NFC scanner",
+          "rationale": "NFC handles short-range contactless data exchange such as mobile payments; Windows Hello does not use it for sign-in."
+        },
+        {
+          "id": "d",
+          "text": "GPS receiver",
+          "rationale": "GPS determines location from satellites and plays no role in Windows Hello authentication."
+        },
+        {
+          "id": "e",
+          "text": "Standard webcam",
+          "rationale": "A standard webcam alone cannot perform Windows Hello facial recognition because it lacks the infrared sensor; only the IR camera variant works."
+        },
+        {
+          "id": "f",
+          "text": "Ambient light sensor",
+          "rationale": "An ambient light sensor adjusts screen brightness; it is not an authentication component."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Windows Hello can authenticate with a fingerprint reader or with facial recognition through an infrared camera. NFC, GPS, ambient light sensors, and a standard webcam are not used for Hello sign-in, and a plain webcam specifically lacks the IR capability Hello requires.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-007",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "During a video conference, a user's laptop camera shows a completely black image, although the built-in microphone picks up audio normally and the operating system lists the camera as present. Which hardware component is most likely at fault?",
+      "context": "A laptop's video feed is black during a call while the microphone works and the OS detects the camera.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Webcam module",
+          "rationale": "The camera itself is the likely fault since audio works and the OS sees the device; a faulty webcam module produces a black image."
+        },
+        {
+          "id": "b",
+          "text": "Microphone array",
+          "rationale": "The microphone is working normally, as audio is being captured during the call."
+        },
+        {
+          "id": "c",
+          "text": "NFC reader",
+          "rationale": "The NFC reader is used for contactless data exchange and has no connection to video capture."
+        },
+        {
+          "id": "d",
+          "text": "Fingerprint reader",
+          "rationale": "The fingerprint reader handles biometric sign-in and is unrelated to camera output."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "With the microphone working and the OS recognizing the camera, the symptom points to the webcam module itself. The microphone, NFC reader, and fingerprint reader are separate components that do not affect video output.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.1 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-008",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user purchases a new tablet that charges through a USB-C port and asks the technician whether the cable can be plugged in upside down. Which statement about USB-C is correct?",
+      "context": "A user asks about the physical design of the USB-C connector on a new tablet.",
+      "options": [
+        {
+          "id": "a",
+          "text": "USB-C is reversible, so it plugs in either orientation",
+          "rationale": "The USB-C connector is symmetrical and reversible, so it works regardless of which way it is inserted."
+        },
+        {
+          "id": "b",
+          "text": "USB-C only works in one orientation, like micro-USB",
+          "rationale": "Micro-USB is not reversible; USB-C was designed with a symmetric plug that inserts either way."
+        },
+        {
+          "id": "c",
+          "text": "USB-C is Apple's proprietary Lightning connector",
+          "rationale": "Lightning is Apple's proprietary connector; USB-C is an open industry standard used across many devices."
+        },
+        {
+          "id": "d",
+          "text": "USB-C carries power but never data",
+          "rationale": "USB-C carries both power and data; USB Power Delivery and alternate modes also let it handle high wattage and video."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "USB-C's key physical trait is its reversible, symmetric connector, which inserts in either orientation. It is an industry standard (not Apple's Lightning) and carries both data and power, unlike one-way micro-USB.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-009",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user brings in an iPhone that will not charge and needs a replacement cable. The technician checks the port on the phone before selecting a cable. Which connector type does the iPhone use?",
+      "context": "A technician must pick the correct charging cable for an iPhone.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lightning",
+          "rationale": "Apple's Lightning connector is the proprietary port used by iPhones for charging and data."
+        },
+        {
+          "id": "b",
+          "text": "USB-C",
+          "rationale": "USB-C is a universal standard used on many Android phones and newer laptops, but not the port on an iPhone."
+        },
+        {
+          "id": "c",
+          "text": "Micro-USB",
+          "rationale": "Micro-USB was common on older Android devices and peripherals, not on iPhones."
+        },
+        {
+          "id": "d",
+          "text": "Mini-USB",
+          "rationale": "Mini-USB predates micro-USB and appeared on older cameras and devices, never on iPhones."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "iPhones charge and sync through Apple's proprietary Lightning connector. USB-C, micro-USB, and mini-USB are different standards used by other device families.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-010",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user wants to pay for a purchase by holding their smartphone a few centimeters from the store's payment terminal. The technician confirms the phone supports the required technology. Which wireless technology enables this contactless payment?",
+      "context": "A user wants to tap their phone at a payment terminal for contactless payment.",
+      "options": [
+        {
+          "id": "a",
+          "text": "NFC",
+          "rationale": "NFC (Near-field Communication) supports short-range contactless exchange at roughly 4 cm, which is how tap-to-pay terminals work."
+        },
+        {
+          "id": "b",
+          "text": "Bluetooth",
+          "rationale": "Bluetooth covers a much larger range (meters) and is used for pairing audio and peripherals, not tap-to-pay at a terminal."
+        },
+        {
+          "id": "c",
+          "text": "Wi-Fi",
+          "rationale": "Wi-Fi provides high-speed networking over tens of meters and is not used for a quick terminal tap."
+        },
+        {
+          "id": "d",
+          "text": "Cellular data",
+          "rationale": "Cellular provides wide-area connectivity through the carrier network; it is not the contactless link to a payment terminal."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Tap-to-pay relies on NFC, a very short-range contactless technology. Bluetooth's range is far too large for a terminal tap, and Wi-Fi and cellular serve different networking purposes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-011",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "While traveling, a user needs to get their laptop online, but the only internet access available is the cellular data plan on their smartphone. The technician enables the phone's hotspot feature. What does this feature do?",
+      "context": "A user enables their phone's hotspot to give a laptop internet access while traveling.",
+      "options": [
+        {
+          "id": "a",
+          "text": "It shares the phone's cellular data connection over Wi-Fi for other devices",
+          "rationale": "A mobile hotspot (Wi-Fi tethering) rebroadcasts the phone's cellular data connection so nearby devices can connect."
+        },
+        {
+          "id": "b",
+          "text": "It creates a VPN tunnel back to the user's office network",
+          "rationale": "A hotspot shares internet access; VPN connectivity is a separate feature configured on the device."
+        },
+        {
+          "id": "c",
+          "text": "It extends the user's home Wi-Fi network",
+          "rationale": "Extending a home network requires a repeater or extender; the hotspot uses the phone's cellular link instead."
+        },
+        {
+          "id": "d",
+          "text": "It converts cellular data into a wired Ethernet connection",
+          "rationale": "Tethering can also work over USB or Bluetooth, but hotspot mode specifically shares over Wi-Fi, not Ethernet."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The hotspot shares the phone's cellular data connection over Wi-Fi, letting the laptop and other devices get online through the carrier plan. VPNs, network extenders, and Ethernet are different connectivity concepts.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-012",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "An office wants employees to connect their laptops to two external monitors, a wired keyboard, and a network cable by plugging in a single connector at their desks. Which TWO types of devices provide this kind of one-connection expansion for laptops?",
+      "context": "An office wants laptops to attach to multiple peripherals and displays with a single connection at each desk.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Docking station",
+          "rationale": "A docking station connects to the laptop and provides ports for monitors, keyboards, network, and power in one unit."
+        },
+        {
+          "id": "b",
+          "text": "Port replicator",
+          "rationale": "A port replicator mirrors the laptop's ports so multiple peripherals can be attached through a single connection, ideal for a fixed desk setup."
+        },
+        {
+          "id": "c",
+          "text": "Trackpad",
+          "rationale": "A trackpad is a pointing input device, not a port-expansion accessory."
+        },
+        {
+          "id": "d",
+          "text": "Stylus",
+          "rationale": "A stylus is a pen-shaped input tool for touchscreens and has nothing to do with connecting peripherals."
+        },
+        {
+          "id": "e",
+          "text": "Drawing pad",
+          "rationale": "A drawing pad is an input device for digital art; it does not add ports to a laptop."
+        },
+        {
+          "id": "f",
+          "text": "Bluetooth speaker",
+          "rationale": "A Bluetooth speaker is an audio output accessory, not a connectivity hub."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "Both docking stations and port replicators let a laptop connect to monitors, keyboards, and networking through one attachment point. Trackpads, styluses, drawing pads, and speakers are input or output accessories, not port-expansion devices.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-013",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user tries to charge their laptop using a USB-C charger that came with their smartphone, but the laptop does not charge even though the cable fits the port correctly. What is the most likely reason the laptop is not charging?",
+      "context": "A laptop refuses to charge from a USB-C phone charger even though the cable fits.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The charger does not supply enough wattage for the laptop's USB Power Delivery requirements",
+          "rationale": "Laptops need far more power than phones; if the charger cannot negotiate enough wattage via USB Power Delivery, the laptop will not charge."
+        },
+        {
+          "id": "b",
+          "text": "USB-C ports only support charging for phones",
+          "rationale": "USB-C with USB Power Delivery supports high-wattage charging for laptops and other large devices when the charger can supply it."
+        },
+        {
+          "id": "c",
+          "text": "The charger delivers power but the cable was inserted the wrong way",
+          "rationale": "USB-C is reversible, and the cable fitting correctly means orientation is not the issue."
+        },
+        {
+          "id": "d",
+          "text": "The laptop requires a proprietary magnetic connector",
+          "rationale": "Many laptops charge over standard USB-C; the problem here is power capacity, not connector type."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "USB-C charging depends on USB Power Delivery negotiation; a phone charger typically provides too little wattage for a laptop, so the laptop will not charge. USB-C does support laptop charging, orientation is not the issue, and the connector is not proprietary.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-014",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is setting up a tablet for a field worker who will be in rural areas with no Wi-Fi. The technician activates a cellular data plan and connects the tablet to the carrier's network. Which technology is the tablet using for internet access?",
+      "context": "A tablet gets internet access through a cellular data plan in an area with no Wi-Fi.",
+      "options": [
+        {
+          "id": "a",
+          "text": "4G/5G cellular (WWAN)",
+          "rationale": "Cellular wide-area networks such as 4G LTE and 5G provide internet access through the carrier's towers wherever there is coverage."
+        },
+        {
+          "id": "b",
+          "text": "NFC",
+          "rationale": "NFC is a short-range contactless technology used for payments and tags, not for internet access over distance."
+        },
+        {
+          "id": "c",
+          "text": "Bluetooth",
+          "rationale": "Bluetooth creates a short-range personal area network for peripherals, not wide-area internet access."
+        },
+        {
+          "id": "d",
+          "text": "Wi-Fi Direct",
+          "rationale": "Wi-Fi Direct links devices to each other without an access point; it does not provide internet connectivity by itself."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "With a cellular plan active, the tablet connects through the carrier's 4G/5G network, a WWAN technology. NFC, Bluetooth, and Wi-Fi Direct are short-range personal-area links that cannot provide carrier-based internet.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-015",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user is traveling internationally and purchases an eSIM data plan for their unlocked smartphone. The technician explains how the eSIM works. Which statement about eSIM is correct?",
+      "context": "A user buys an eSIM data plan for international travel on an unlocked phone.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The eSIM profile is downloaded and activated electronically without inserting a physical card",
+          "rationale": "An eSIM is embedded in the phone and is programmed remotely, so a new plan can be downloaded and activated without a physical SIM."
+        },
+        {
+          "id": "b",
+          "text": "The user must insert a physical eSIM card into the SIM tray",
+          "rationale": "There is no physical eSIM card; the eSIM is built into the device and provisioned digitally."
+        },
+        {
+          "id": "c",
+          "text": "The eSIM only works while the phone is connected to Wi-Fi",
+          "rationale": "The eSIM connects to the cellular network; Wi-Fi is not required to activate or use it."
+        },
+        {
+          "id": "d",
+          "text": "The eSIM permanently locks the phone to a single carrier",
+          "rationale": "eSIMs can store multiple profiles and are not inherently carrier-locked; users can switch plans."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "An eSIM is a programmable SIM embedded in the device, activated by downloading a profile rather than inserting a card. It works over the cellular network and can hold multiple carrier profiles, so it does not lock the phone to one carrier.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-016",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user wants to connect a new wireless headset to their smartphone. The technician tells the user to put the headset into discoverable mode, select it in the phone's Bluetooth settings, and confirm the code shown on both devices. What is this process called?",
+      "context": "A user connects a wireless headset to a smartphone by making it discoverable and confirming a code.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pairing",
+          "rationale": "Pairing is the process of making Bluetooth devices discoverable and exchanging a passkey or PIN to establish a trusted connection."
+        },
+        {
+          "id": "b",
+          "text": "Tethering",
+          "rationale": "Tethering shares a device's internet connection; it is not the process of linking a headset."
+        },
+        {
+          "id": "c",
+          "text": "Synchronization",
+          "rationale": "Synchronization keeps data like contacts and calendars consistent between devices; it is not the Bluetooth link setup."
+        },
+        {
+          "id": "d",
+          "text": "Hotspot",
+          "rationale": "A hotspot broadcasts a Wi-Fi network for internet sharing, unrelated to connecting an audio accessory."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "The discoverable-mode and passkey exchange is Bluetooth pairing. Tethering, synchronization, and hotspot functions serve internet sharing and data consistency, not the establishment of a Bluetooth link.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-017",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A technician is helping a user whose navigation app cannot determine their position while hiking in a remote canyon. The phone's cellular signal is weak, but the technician knows the phone still receives satellite signals. Which technology provides the phone's position using satellites?",
+      "context": "A navigation app cannot get a position in a remote canyon with weak cellular signal.",
+      "options": [
+        {
+          "id": "a",
+          "text": "GPS",
+          "rationale": "GPS determines position from a constellation of satellites, so it works in remote areas where cellular signals are weak or absent."
+        },
+        {
+          "id": "b",
+          "text": "Cellular tower triangulation",
+          "rationale": "Cellular location uses signal strength from nearby towers, which fails when the phone has little or no tower coverage."
+        },
+        {
+          "id": "c",
+          "text": "Wi-Fi positioning",
+          "rationale": "Wi-Fi positioning maps nearby access points and requires detectable Wi-Fi networks, which are rare in a remote canyon."
+        },
+        {
+          "id": "d",
+          "text": "NFC",
+          "rationale": "NFC is a contactless tap technology with a range of centimeters; it cannot determine location."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "GPS derives position directly from satellites, which is why it functions in remote locations with poor cellular coverage. Tower triangulation and Wi-Fi positioning depend on infrastructure that is unavailable in a canyon, and NFC is far too short-range.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-018",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "A company is rolling out a bring-your-own-device (BYOD) program and enrolls employee smartphones in its mobile device management (MDM) platform. Which TWO capabilities does the MDM platform provide to the company?",
+      "context": "A company enrolls employee-owned smartphones in an MDM platform for a BYOD program.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enforce security policies such as passcode requirements and encryption",
+          "rationale": "MDM can push and enforce policies like device passcodes, encryption, and allowed apps on enrolled devices."
+        },
+        {
+          "id": "b",
+          "text": "Remotely wipe a lost or stolen device",
+          "rationale": "MDM allows administrators to perform a remote wipe to erase data from a missing or compromised device."
+        },
+        {
+          "id": "c",
+          "text": "Increase the phone's cellular signal strength",
+          "rationale": "Signal strength depends on the carrier network and antenna; MDM cannot improve it."
+        },
+        {
+          "id": "d",
+          "text": "Unlock the phone from its carrier",
+          "rationale": "Carrier unlocking is a carrier-side process; MDM does not manage carrier locks."
+        },
+        {
+          "id": "e",
+          "text": "Speed up the device's processor",
+          "rationale": "MDM manages policy and data, not CPU clock speed or performance."
+        },
+        {
+          "id": "f",
+          "text": "Extend the device's battery life",
+          "rationale": "MDM may recommend power settings, but it cannot physically extend battery life."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "explanation": "MDM platforms give administrators policy enforcement, such as passcodes and encryption, plus remote-wipe capability for lost or stolen devices. Signal strength, carrier unlocking, CPU speed, and battery capacity are outside what MDM can control.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-019",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user edits a contact on their smartphone and expects the change to appear in the email client on their laptop and in the web calendar later the same day. Which feature keeps this data consistent across all of the user's devices?",
+      "context": "A user expects a contact edit made on a phone to appear on their laptop and web accounts.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Synchronization",
+          "rationale": "Synchronization pushes contacts, calendar, and mail changes to the cloud account so every device shows the same data."
+        },
+        {
+          "id": "b",
+          "text": "Airplane mode",
+          "rationale": "Airplane mode disables all wireless radios; it would prevent, not enable, the data transfer."
+        },
+        {
+          "id": "c",
+          "text": "Tethering",
+          "rationale": "Tethering shares an internet connection with other devices; it does not sync application data."
+        },
+        {
+          "id": "d",
+          "text": "Pairing",
+          "rationale": "Pairing establishes a Bluetooth link between devices; it does not keep cloud data consistent."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Synchronization is the feature that keeps contacts, calendar, and mail consistent across devices through the user's cloud account. Airplane mode, tethering, and pairing either block connectivity or serve different purposes.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-1-020",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "A user is about to board a flight and wants to disable all of the wireless radios on their smartphone at once, including cellular, Wi-Fi, and Bluetooth. Which setting should the user enable?",
+      "context": "A user wants to turn off all wireless radios on their phone at once before a flight.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Airplane mode",
+          "rationale": "Airplane mode disables cellular, Wi-Fi, Bluetooth, and other wireless radios with a single toggle."
+        },
+        {
+          "id": "b",
+          "text": "Do Not Disturb",
+          "rationale": "Do Not Disturb silences notifications and calls but leaves the radios active."
+        },
+        {
+          "id": "c",
+          "text": "Battery saver",
+          "rationale": "Battery saver reduces background activity and performance but does not turn off radios."
+        },
+        {
+          "id": "d",
+          "text": "Screen timeout",
+          "rationale": "Screen timeout controls when the display sleeps; it has no effect on wireless radios."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "Airplane mode is the single toggle that turns off cellular, Wi-Fi, and Bluetooth together. Do Not Disturb only silences alerts, while battery saver and screen timeout do not control radios at all.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Devices"
+        }
+      ]
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "a1-pbq-1-001",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "A technician is connecting mobile devices for users. Complete each statement with the correct term.\n\n1. The ____ connection method is reversible and is the standard modern charging/data port on Android and Windows devices.\n2. The ____ connector is proprietary to Apple mobile devices.\n3. ____ allows two devices to exchange data when held a few centimeters apart.\n4. Sharing a phone's cellular data connection with a laptop over Wi-Fi is called ____.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Reversible modern port"
+        },
+        {
+          "id": "b2",
+          "label": "Apple proprietary connector"
+        },
+        {
+          "id": "b3",
+          "label": "Contactless short-range exchange"
+        },
+        {
+          "id": "b4",
+          "label": "Sharing cellular data over Wi-Fi"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "USB-C"
+        },
+        {
+          "id": "w2",
+          "word": "Lightning"
+        },
+        {
+          "id": "w3",
+          "word": "NFC"
+        },
+        {
+          "id": "w4",
+          "word": "tethering"
+        },
+        {
+          "id": "w5",
+          "word": "Bluetooth"
+        },
+        {
+          "id": "w6",
+          "word": "hotspot pairing"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      },
+      "explanation": "USB-C is the reversible modern standard; Lightning is Apple's proprietary connector. NFC exchanges data over a few centimeters, and tethering shares a phone's cellular data connection with other devices.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Connecting Mobile Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-1-002",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "Match each mobile accessory to its primary purpose.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "Docking station"
+        },
+        {
+          "id": "p2",
+          "text": "Port replicator"
+        },
+        {
+          "id": "p3",
+          "text": "Stylus"
+        },
+        {
+          "id": "p4",
+          "text": "Trackpoint"
+        },
+        {
+          "id": "p5",
+          "text": "Drawing pad"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Connects a laptop to multiple peripherals and power in one cradle"
+        },
+        {
+          "id": "t2",
+          "text": "Adds the laptop's common ports (USB, video, network) without a full dock"
+        },
+        {
+          "id": "t3",
+          "text": "Precision input on a touchscreen or digitizer"
+        },
+        {
+          "id": "t4",
+          "text": "Cursor control embedded in the keyboard"
+        },
+        {
+          "id": "t5",
+          "text": "Digitizer surface for sketching and signatures"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "Wireless charging pad"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "A docking station cradles the laptop with power and peripherals; a port replicator adds ports without a full dock. A stylus provides precision input, a trackpoint is the keyboard-embedded cursor control, and a drawing pad is a digitizer surface.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.2 Mobile Device Accessories"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-1-003",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "pbq",
+      "kind": "fill-blank",
+      "prompt": "Type the acronym that matches each definition.\n\n1. ____ — a programmable card profile built into a phone that can activate cellular service without a physical card.\n2. ____ — satellite-based positioning used by navigation apps.\n3. ____ — the platform IT uses to enroll, configure, and wipe corporate mobile devices.\n4. ____ — the ownership model where employees use their personal devices for work.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Programmable cellular profile",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "eSIM"
+          ]
+        },
+        {
+          "id": "b2",
+          "label": "Satellite positioning",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "GPS"
+          ]
+        },
+        {
+          "id": "b3",
+          "label": "Corporate mobile device platform",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "MDM"
+          ]
+        },
+        {
+          "id": "b4",
+          "label": "Personal devices for work",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "BYOD"
+          ]
+        }
+      ],
+      "explanation": "eSIM is the embedded programmable SIM profile; GPS provides satellite positioning. MDM (mobile device management) enforces corporate policy and can remote-wipe; BYOD means employees use personal devices for work.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 1.3 Mobile Device Management"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-2-001",
+      "domain": 2,
+      "objective": "2.1",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "Match each protocol to its well-known port number.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "SSH"
+        },
+        {
+          "id": "p2",
+          "text": "SMTP"
+        },
+        {
+          "id": "p3",
+          "text": "HTTPS"
+        },
+        {
+          "id": "p4",
+          "text": "RDP"
+        },
+        {
+          "id": "p5",
+          "text": "DNS"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "22"
+        },
+        {
+          "id": "t2",
+          "text": "25"
+        },
+        {
+          "id": "t3",
+          "text": "443"
+        },
+        {
+          "id": "t4",
+          "text": "3389"
+        },
+        {
+          "id": "t5",
+          "text": "53"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "445"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "SSH uses 22 for encrypted remote shell, SMTP 25 for outgoing mail, HTTPS 443 for encrypted web, RDP 3389 for remote desktop, and DNS 53 for name resolution. SMB/CIFS uses 445.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.1 Common Ports"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-2-002",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "pbq",
+      "kind": "ordering",
+      "prompt": "A technician is setting up a new SOHO wireless router for a small office. Place the configuration steps in the correct order.",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Connect the router's WAN port to the ISP modem and power it on"
+        },
+        {
+          "id": "i2",
+          "text": "Log in to the router's management interface with the default credentials"
+        },
+        {
+          "id": "i3",
+          "text": "Change the default administrator password"
+        },
+        {
+          "id": "i4",
+          "text": "Set the wireless network name (SSID) and enable WPA2/WPA3 security"
+        },
+        {
+          "id": "i5",
+          "text": "Update the router firmware"
+        },
+        {
+          "id": "i6",
+          "text": "Connect a client and verify internet access"
+        }
+      ],
+      "correctOrder": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "explanation": "Physical connection comes first, then management access, then security hardening (admin password, wireless encryption), firmware update, and finally verification. Changing the default admin password before configuring wireless prevents the router from being managed with default credentials.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 SOHO Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-2-003",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "pbq",
+      "kind": "configuration",
+      "prompt": "A technician is securing a new SOHO wireless router. Configure each setting with the most secure option.",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Wireless security mode",
+          "options": [
+            {
+              "id": "o1",
+              "text": "WPA3"
+            },
+            {
+              "id": "o2",
+              "text": "WPA2"
+            },
+            {
+              "id": "o3",
+              "text": "WEP"
+            },
+            {
+              "id": "o4",
+              "text": "Open"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "SSID broadcast",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Enabled"
+            },
+            {
+              "id": "o2",
+              "text": "Disabled"
+            },
+            {
+              "id": "o3",
+              "text": "Set to the default name"
+            },
+            {
+              "id": "o4",
+              "text": "Broadcast only during business hours"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Default administrator password",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Leave unchanged"
+            },
+            {
+              "id": "o2",
+              "text": "Change to a strong unique passphrase"
+            },
+            {
+              "id": "o3",
+              "text": "Change to the SSID"
+            },
+            {
+              "id": "o4",
+              "text": "Disable the password"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Router firmware",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Update to the latest vendor release"
+            },
+            {
+              "id": "o2",
+              "text": "Keep the factory version"
+            },
+            {
+              "id": "o3",
+              "text": "Install a custom third-party build"
+            },
+            {
+              "id": "o4",
+              "text": "Disable updates"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o1",
+        "f2": "o2",
+        "f3": "o2",
+        "f4": "o1"
+      },
+      "explanation": "WPA3 is the strongest wireless security; disabling SSID broadcast reduces casual discovery (though it is not real security). A strong unique admin password and current firmware close the most common SOHO router attack paths.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 SOHO Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-2-004",
+      "domain": 2,
+      "objective": "2.6",
+      "format": "pbq",
+      "kind": "evidence",
+      "prompt": "A user reports no internet access. The technician runs ipconfig and sees the output below. Which line is the strongest evidence that DHCP failed and the NIC fell back to link-local addressing?",
+      "artifact": {
+        "label": "ipconfig output (excerpt)",
+        "format": "command-output",
+        "lines": [
+          {
+            "id": "l1",
+            "text": "IPv4 Address. . . . . . . . . . . : 169.254.10.42"
+          },
+          {
+            "id": "l2",
+            "text": "Subnet Mask . . . . . . . . . . : 255.255.0.0"
+          },
+          {
+            "id": "l3",
+            "text": "Default Gateway . . . . . . . . : 0.0.0.0"
+          },
+          {
+            "id": "l4",
+            "text": "Physical Address. . . . . . . . : 3C-97-0E-4B-11-2F"
+          },
+          {
+            "id": "l5",
+            "text": "DHCP Enabled. . . . . . . . . . : Yes"
+          }
+        ]
+      },
+      "selectCount": 1,
+      "correctLineIds": [
+        "l1"
+      ],
+      "explanation": "An IPv4 address in the 169.254.x.x range is APIPA (Automatic Private IP Addressing) — the NIC self-assigned a link-local address because no DHCP server responded. The 0.0.0.0 gateway confirms there is no routable network path.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.6 Assigning IP Addresses"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-2-005",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about network configuration concepts.\n\n1. A ____ record maps a hostname to an IPv6 address.\n2. A ____ record identifies the mail servers for a domain.\n3. A DHCP ____ guarantees a specific device always receives the same IP address.\n4. A ____ separates broadcast domains on a switch.\n5. A ____ provides an encrypted tunnel between two sites over the internet.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "IPv6 address record"
+        },
+        {
+          "id": "b2",
+          "label": "Mail server record"
+        },
+        {
+          "id": "b3",
+          "label": "Fixed DHCP assignment"
+        },
+        {
+          "id": "b4",
+          "label": "Broadcast domain separator"
+        },
+        {
+          "id": "b5",
+          "label": "Encrypted site-to-site tunnel"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "AAAA"
+        },
+        {
+          "id": "w2",
+          "word": "MX"
+        },
+        {
+          "id": "w3",
+          "word": "reservation"
+        },
+        {
+          "id": "w4",
+          "word": "VLAN"
+        },
+        {
+          "id": "w5",
+          "word": "VPN"
+        },
+        {
+          "id": "w6",
+          "word": "CNAME"
+        },
+        {
+          "id": "w7",
+          "word": "scope"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      },
+      "explanation": "AAAA maps names to IPv6 addresses and MX identifies mail servers. A DHCP reservation binds an IP to a MAC address; VLANs segment broadcast domains; VPNs encrypt traffic between sites. CNAME is an alias and a scope is the DHCP address pool.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 2.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 2.4 DNS Configuration and DHCP"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-001",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "Match each connector to its most common use.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "RJ-45"
+        },
+        {
+          "id": "p2",
+          "text": "HDMI"
+        },
+        {
+          "id": "p3",
+          "text": "SATA"
+        },
+        {
+          "id": "p4",
+          "text": "M.2"
+        },
+        {
+          "id": "p5",
+          "text": "RJ-11"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Ethernet network cable (8P8C)"
+        },
+        {
+          "id": "t2",
+          "text": "Audio/video to a TV or monitor"
+        },
+        {
+          "id": "t3",
+          "text": "Internal storage drive data"
+        },
+        {
+          "id": "t4",
+          "text": "Small form-factor SSD (SATA or NVMe)"
+        },
+        {
+          "id": "t5",
+          "text": "Analog telephone line"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "DisplayPort daisy-chaining"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "RJ-45 terminates twisted-pair Ethernet; HDMI carries audio+video; SATA connects internal drives; M.2 is the small card slot for SATA/NVMe SSDs; RJ-11 is the 6-pin telephone connector.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.2 Cables and Connectors"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-002",
+      "domain": 3,
+      "objective": "3.8",
+      "format": "pbq",
+      "kind": "ordering",
+      "prompt": "A laser printer is producing faded prints and the maintenance kit is due. Place the technician's maintenance steps in the correct order.",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Power the printer off and unplug it"
+        },
+        {
+          "id": "i2",
+          "text": "Open the printer's access panels and remove the toner cartridge"
+        },
+        {
+          "id": "i3",
+          "text": "Replace the maintenance kit (fuser, rollers, and pickup assembly)"
+        },
+        {
+          "id": "i4",
+          "text": "Reinstall the toner cartridge and close the panels"
+        },
+        {
+          "id": "i5",
+          "text": "Plug the printer in, power it on, and run the calibration routine"
+        },
+        {
+          "id": "i6",
+          "text": "Print a test page and verify output quality"
+        }
+      ],
+      "correctOrder": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "explanation": "Always power down and unplug before opening a laser printer (the fuser gets very hot and there are high voltages). Remove the toner, swap the maintenance kit components, reassemble, calibrate, and verify with a test page.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.8"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.8 Printer Maintenance"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-003",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "pbq",
+      "kind": "numeric",
+      "prompt": "A server is built with three 1 TB drives in RAID 5. How many terabytes of usable storage capacity does the array provide (excluding RAID overhead)?",
+      "unit": "TB",
+      "correctValue": 2,
+      "tolerance": 0,
+      "explanation": "RAID 5 stripes data with distributed parity: one drive's worth of capacity is consumed by parity, so usable capacity = (n-1) × drive size = 2 × 1 TB = 2 TB. The array survives a single drive failure.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.4 Storage Devices"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-3-004",
+      "domain": 3,
+      "objective": "3.5",
+      "format": "pbq",
+      "kind": "configuration",
+      "prompt": "A technician is configuring a new workstation in the UEFI setup utility. Configure each setting appropriately.",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Boot mode",
+          "options": [
+            {
+              "id": "o1",
+              "text": "UEFI"
+            },
+            {
+              "id": "o2",
+              "text": "Legacy BIOS"
+            },
+            {
+              "id": "o3",
+              "text": "Network boot only"
+            },
+            {
+              "id": "o4",
+              "text": "Disabled"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Secure Boot",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Enabled"
+            },
+            {
+              "id": "o2",
+              "text": "Disabled"
+            },
+            {
+              "id": "o3",
+              "text": "Enabled only for legacy OS"
+            },
+            {
+              "id": "o4",
+              "text": "Unavailable"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Intel VT-x / AMD-V virtualization",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Enabled"
+            },
+            {
+              "id": "o2",
+              "text": "Disabled"
+            },
+            {
+              "id": "o3",
+              "text": "Set to automatic"
+            },
+            {
+              "id": "o4",
+              "text": "Only for the OS"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Boot order",
+          "options": [
+            {
+              "id": "o1",
+              "text": "Internal SSD first"
+            },
+            {
+              "id": "o2",
+              "text": "USB first"
+            },
+            {
+              "id": "o3",
+              "text": "Network first"
+            },
+            {
+              "id": "o4",
+              "text": "Optical drive first"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "o1",
+        "f2": "o1",
+        "f3": "o1",
+        "f4": "o1"
+      },
+      "explanation": "Modern systems boot UEFI with Secure Boot enabled to prevent unauthorized boot code. Hardware virtualization (VT-x/AMD-V) must be on for hypervisors/VMs. The internal SSD should be first in boot order so the OS loads normally.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 3.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 3.5 Motherboards and BIOS"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-4-001",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "Match each cloud service model to its description.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "IaaS"
+        },
+        {
+          "id": "p2",
+          "text": "PaaS"
+        },
+        {
+          "id": "p3",
+          "text": "SaaS"
+        },
+        {
+          "id": "p4",
+          "text": "Hybrid cloud"
+        },
+        {
+          "id": "p5",
+          "text": "Community cloud"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Rented virtual servers, storage, and networking; customer manages the OS"
+        },
+        {
+          "id": "t2",
+          "text": "Managed development platform with runtime and database services"
+        },
+        {
+          "id": "t3",
+          "text": "Finished application delivered over the internet"
+        },
+        {
+          "id": "t4",
+          "text": "Combines private/on-premises and public cloud"
+        },
+        {
+          "id": "t5",
+          "text": "Shared by organizations with common compliance needs"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "A single tenant's dedicated hardware"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "IaaS = raw infrastructure, PaaS = managed platform for developers, SaaS = finished app. Hybrid combines private+public; community cloud is shared by organizations with common interests or compliance requirements.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.2 Cloud Models"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-4-002",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about virtualization.\n\n1. The ____ is the software layer that creates and runs virtual machines on physical hardware.\n2. A ____ is a point-in-time copy of a VM's state used for rollback.\n3. The ____ is the physical server that provides resources to virtual machines.\n4. Running untrusted software inside a VM so it cannot affect the host is called ____.\n5. Moving a running VM between hosts with no downtime is called ____.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "VM management layer"
+        },
+        {
+          "id": "b2",
+          "label": "Rollback point"
+        },
+        {
+          "id": "b3",
+          "label": "Physical provider"
+        },
+        {
+          "id": "b4",
+          "label": "Containment of untrusted code"
+        },
+        {
+          "id": "b5",
+          "label": "Zero-downtime move"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "hypervisor"
+        },
+        {
+          "id": "w2",
+          "word": "snapshot"
+        },
+        {
+          "id": "w3",
+          "word": "host"
+        },
+        {
+          "id": "w4",
+          "word": "sandboxing"
+        },
+        {
+          "id": "w5",
+          "word": "live migration"
+        },
+        {
+          "id": "w6",
+          "word": "guest"
+        },
+        {
+          "id": "w7",
+          "word": "cloning"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      },
+      "explanation": "The hypervisor manages VMs on the host. Snapshots enable rollback; sandboxing contains untrusted software; live migration moves VMs without downtime. The guest is the VM itself, and cloning creates an identical copy.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 4.1 Virtualization"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-001",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "pbq",
+      "kind": "evidence",
+      "prompt": "A technician powers on a desktop and hears a repeating beep pattern from the speaker; the screen stays blank. Which line of evidence BEST indicates a RAM fault?",
+      "artifact": {
+        "label": "POST behavior log",
+        "format": "log",
+        "lines": [
+          {
+            "id": "l1",
+            "text": "Repeating short beeps on power-on, no video output"
+          },
+          {
+            "id": "l2",
+            "text": "One short beep followed by normal boot"
+          },
+          {
+            "id": "l3",
+            "text": "Continuous long beeps, fans spin normally"
+          },
+          {
+            "id": "l4",
+            "text": "No beeps at all, power LED off"
+          },
+          {
+            "id": "l5",
+            "text": "Two short beeps then successful Windows load"
+          }
+        ]
+      },
+      "selectCount": 1,
+      "correctLineIds": [
+        "l1"
+      ],
+      "explanation": "On most boards, repeating short beeps indicate a memory (RAM) failure during POST. One short beep is the normal 'all clear', and no beeps with no power LED points to a power problem instead.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-002",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "pbq",
+      "kind": "multi-step",
+      "context": "A workstation in a small office lost all network connectivity. The technician follows a structured diagnosis.",
+      "steps": [
+        {
+          "id": "s1",
+          "domain": 5,
+          "objective": "5.5",
+          "format": "pbq",
+          "kind": "single-choice",
+          "prompt": "Step 1: The technician first checks the patch cable and sees the NIC's link LED is dark. What does this indicate?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The NIC has no active physical link",
+              "rationale": "A dark link LED means no link signal is being received — a physical layer problem."
+            },
+            {
+              "id": "b",
+              "text": "The NIC is operating normally",
+              "rationale": "A normal link shows a lit (or blinking) link LED."
+            },
+            {
+              "id": "c",
+              "text": "DNS resolution failed",
+              "rationale": "DNS failures do not affect the link LED."
+            },
+            {
+              "id": "d",
+              "text": "The OS firewall blocked traffic",
+              "rationale": "Firewall rules do not extinguish the link LED."
+            }
+          ],
+          "correctOptionIds": [
+            "a"
+          ],
+          "selectCount": 1,
+          "explanation": "A dark link LED means no physical link (cable, port, or NIC).",
+          "sourceRefs": [
+            {
+              "source": "comptia",
+              "section": "Objective 5.5"
+            },
+            {
+              "source": "professor-messer",
+              "section": "220-1201 5.5 Troubleshooting Networks"
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "domain": 5,
+          "objective": "5.5",
+          "format": "pbq",
+          "kind": "single-choice",
+          "prompt": "Step 2: The technician reseats the cable in a different wall port and the link LED lights up, but the workstation still cannot reach the internet. Which command should be run NEXT to test the default gateway?",
+          "options": [
+            {
+              "id": "a",
+              "text": "ping <gateway IP>",
+              "rationale": "Pinging the default gateway tests local routing before moving to external connectivity."
+            },
+            {
+              "id": "b",
+              "text": "ipconfig /release",
+              "rationale": "Releasing the lease would drop the working IP assignment."
+            },
+            {
+              "id": "c",
+              "text": "tracert -d to the ISP",
+              "rationale": "Tracing to the ISP skips the gateway hop test."
+            },
+            {
+              "id": "d",
+              "text": "netstat -a",
+              "rationale": "netstat shows connections, not reachability of the gateway."
+            }
+          ],
+          "correctOptionIds": [
+            "a"
+          ],
+          "selectCount": 1,
+          "explanation": "Ping the gateway first to isolate whether the problem is local routing or beyond.",
+          "sourceRefs": [
+            {
+              "source": "comptia",
+              "section": "Objective 5.5"
+            },
+            {
+              "source": "professor-messer",
+              "section": "220-1201 5.5 Troubleshooting Networks"
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "domain": 5,
+          "objective": "5.5",
+          "format": "pbq",
+          "kind": "single-choice",
+          "prompt": "Step 3: The gateway responds, but pinging a public IP address fails while pinging a public hostname also fails. What is the MOST likely remaining fault?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The DNS server is unreachable",
+              "rationale": "Both name and IP pings fail, so name resolution is not the bottleneck — the fault is upstream routing."
+            },
+            {
+              "id": "b",
+              "text": "The workstation's subnet mask is wrong",
+              "rationale": "A wrong mask would break gateway reachability, which worked."
+            },
+            {
+              "id": "c",
+              "text": "The ISP link is down or the WAN is unplugged",
+              "rationale": "Gateway works but nothing beyond it resolves or answers — the WAN/ISP path is down."
+            },
+            {
+              "id": "d",
+              "text": "The switch port is administratively down",
+              "rationale": "A down switch port would have failed the link test in step 1."
+            }
+          ],
+          "correctOptionIds": [
+            "c"
+          ],
+          "selectCount": 1,
+          "explanation": "Local routing works (gateway answers) but all external traffic fails — the fault is on the WAN/ISP side.",
+          "sourceRefs": [
+            {
+              "source": "comptia",
+              "section": "Objective 5.5"
+            },
+            {
+              "source": "professor-messer",
+              "section": "220-1201 5.5 Troubleshooting Networks"
+            }
+          ]
+        }
+      ],
+      "explanation": "The layered approach — physical link first, then gateway, then external path — isolates the fault quickly. A dark link LED is a physical layer issue; gateway success with external failure points to the WAN/ISP link.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.5 Troubleshooting Networks"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-003",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "pbq",
+      "kind": "ordering",
+      "prompt": "A company is retiring drives that contained sensitive data. Place the data destruction steps in the correct order.",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Back up any data still needed from the drives"
+        },
+        {
+          "id": "i2",
+          "text": "Overwrite the drives with a secure erase utility"
+        },
+        {
+          "id": "i3",
+          "text": "Degauss magnetic drives to destroy the platters' magnetic field"
+        },
+        {
+          "id": "i4",
+          "text": "Physically shred or incinerate the drives"
+        },
+        {
+          "id": "i5",
+          "text": "Document the destruction with serial numbers and certificates"
+        },
+        {
+          "id": "i6",
+          "text": "Verify no drive is readable before disposal"
+        }
+      ],
+      "correctOrder": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "explanation": "Preserve needed data first, then destroy: overwrite, then degauss (magnetic media), then physical destruction, then verify and document. Verification before disposal catches incomplete destruction.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-004",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "pbq",
+      "kind": "ordering",
+      "prompt": "A laser printer reports a paper jam. Place the technician's response steps in the correct order.",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Open the printer's jam-access panels following the on-screen diagram"
+        },
+        {
+          "id": "i2",
+          "text": "Remove the jammed paper gently in the direction of paper travel"
+        },
+        {
+          "id": "i3",
+          "text": "Inspect the rollers and pickup assembly for wear or debris"
+        },
+        {
+          "id": "i4",
+          "text": "Clear any torn fragments from the paper path"
+        },
+        {
+          "id": "i5",
+          "text": "Close the panels and press Resume"
+        },
+        {
+          "id": "i6",
+          "text": "Print a test page and confirm the jam does not recur"
+        }
+      ],
+      "correctOrder": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "explanation": "Open the jam access, remove paper in the direction of travel (never force it backward), inspect for debris and worn rollers, clear fragments, resume, then verify with a test page.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.6"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.6 Troubleshooting Printers"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-005",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "Match each symptom to its MOST likely hardware cause.",
+      "premises": [
+        {
+          "id": "p1",
+          "text": "Loud clicking or grinding from the drive bay"
+        },
+        {
+          "id": "p2",
+          "text": "Laptop screen is dim but faint image is visible"
+        },
+        {
+          "id": "p3",
+          "text": "Random shutdowns under load, system is very hot"
+        },
+        {
+          "id": "p4",
+          "text": "System date resets every time the PC is unplugged"
+        },
+        {
+          "id": "p5",
+          "text": "Repeating beeps at POST with no video"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": "Failing HDD read/write heads"
+        },
+        {
+          "id": "t2",
+          "text": "Failed display backlight/inverter"
+        },
+        {
+          "id": "t3",
+          "text": "Overheating CPU (fans/heat sink clogged)"
+        },
+        {
+          "id": "t4",
+          "text": "Dead CMOS battery"
+        },
+        {
+          "id": "t5",
+          "text": "Faulty RAM module"
+        }
+      ],
+      "extraTargets": [
+        {
+          "id": "t6",
+          "text": "Defective power cord"
+        }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "Clicking/grinding = failing HDD heads; a dim-but-visible screen = backlight/inverter failure; heat-related shutdowns = cooling failure; date resets = dead CMOS battery; POST beeps with no video = RAM fault.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.1"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.1 Troubleshooting Hardware"
+        }
+      ]
+    },
+    {
+      "id": "a1-pbq-5-006",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "pbq",
+      "kind": "fill-blank",
+      "prompt": "Type the term that matches each definition.\n\n1. ____ — the drive self-diagnostics standard that reports reallocated sectors and pending failures.\n2. ____ — the firmware self-test that runs when a PC powers on.\n3. ____ — a measure of storage performance expressed in operations per second.\n4. ____ — a RAID level that mirrors data across pairs of drives for redundancy.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "Drive self-diagnostics",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "S.M.A.R.T.",
+            "SMART"
+          ]
+        },
+        {
+          "id": "b2",
+          "label": "Power-on self-test",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "POST"
+          ]
+        },
+        {
+          "id": "b3",
+          "label": "Operations per second metric",
+          "placeholder": "Acronym",
+          "acceptedAnswers": [
+            "IOPS"
+          ]
+        },
+        {
+          "id": "b4",
+          "label": "Mirroring RAID level",
+          "placeholder": "Level",
+          "acceptedAnswers": [
+            "RAID 1",
+            "RAID1",
+            "1"
+          ]
+        }
+      ],
+      "explanation": "S.M.A.R.T. monitors drive health indicators; POST is the firmware power-on test; IOPS measures storage performance; RAID 1 mirrors pairs of drives for fault tolerance.",
+      "sourceRefs": [
+        {
+          "source": "comptia",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "professor-messer",
+          "section": "220-1201 5.2 Troubleshooting Storage"
+        }
+      ]
+    }
+  ]
+}
