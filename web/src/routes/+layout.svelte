@@ -1,13 +1,93 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	import BottomNav from '$lib/components/BottomNav.svelte';
 	import MobileMenu from '$lib/components/MobileMenu.svelte';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+	import ProfileSwitcher from '$lib/components/ProfileSwitcher.svelte';
+	import CourseSwitcher from '$lib/components/CourseSwitcher.svelte';
 	import '../app.css';
+
+	type Profile = { id: string; name: string; color: string };
+	type Course = { id: string; title: string; shortTitle: string };
+	type ScopeInfo = {
+		scope: { profileId: string; courseId: string };
+		profiles: Profile[];
+		courses: Course[];
+	};
 
 	let { children } = $props();
 	let mobileMenuOpen = $state(false);
 	let currentPath = $derived($page.url.pathname);
+
+	let scopeInfo = $state<ScopeInfo | null>(null);
+
+	async function loadScope() {
+		try {
+			const response = await fetch('/api/scope');
+			if (response.ok) scopeInfo = await response.json();
+		} catch {
+			// Chips fall back to placeholder styling; pages still fetch their own data.
+		}
+	}
+	onMount(loadScope);
+
+	async function switchProfile(profileId: string) {
+		const response = await fetch('/api/scope', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'switch', profileId })
+		});
+		if (response.ok) window.location.reload();
+	}
+
+	async function switchCourse(courseId: string) {
+		const response = await fetch('/api/scope', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'switch', courseId })
+		});
+		if (response.ok) window.location.reload();
+	}
+
+	async function createProfile(name: string, color: string): Promise<{ ok: boolean; message?: string }> {
+		const response = await fetch('/api/scope', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'create', name, color })
+		});
+		const body = (await response.json().catch(() => ({}))) as {
+			profile?: Profile;
+			error?: { message?: string };
+		};
+		if (!response.ok || !body.profile)
+			return { ok: false, message: body.error?.message ?? 'Could not create the profile.' };
+		const switched = await fetch('/api/scope', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'switch', profileId: body.profile.id })
+		});
+		if (switched.ok) window.location.reload();
+		return { ok: true };
+	}
+
+	async function renameProfile(profileId: string, name: string): Promise<boolean> {
+		const response = await fetch('/api/scope', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'rename', profileId, name })
+		});
+		if (response.ok) await loadScope();
+		return response.ok;
+	}
+
+	async function deleteProfile(profileId: string): Promise<boolean> {
+		const response = await fetch(`/api/scope?profileId=${encodeURIComponent(profileId)}`, {
+			method: 'DELETE'
+		});
+		if (response.ok) await loadScope();
+		return response.ok;
+	}
 
 	function isActive(path: string): boolean {
 		return path === '/' ? currentPath === '/' : currentPath.startsWith(path);
@@ -16,10 +96,17 @@
 
 <div class="flex min-h-screen flex-col">
 	<nav
-		class="sticky top-0 z-50 border-b border-border bg-surface-900/85 backdrop-blur-xl"
+		class="sticky top-0 z-50 border-b border-border"
 		aria-label="Main navigation"
 	>
-		<div class="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+		<!-- Frosted background as a non-ancestor layer: backdrop-filter on the
+		     nav itself would make it the containing block for position:fixed
+		     descendants (the switcher sheets) and trap them in the header. -->
+		<div
+			class="pointer-events-none absolute inset-0 bg-surface-900/85 backdrop-blur-xl"
+			aria-hidden="true"
+		></div>
+		<div class="relative mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
 			<a href="/" class="flex min-h-11 items-center gap-2.5" aria-label="Security+ Course home">
 				<div
 					class="grid h-9 w-9 place-items-center rounded-md bg-accent font-display text-lg font-bold text-white"
@@ -170,42 +257,59 @@
 						stroke-width="2"
 						><path
 							d="M8 5.5 10.5 3l2.5 2.5L15.5 3 18 5.5 15.5 8 18 10.5 15.5 13 18 15.5 15.5 18 13 15.5 10.5 18 8 15.5 5.5 18 3 15.5 5.5 13 3 10.5 5.5 8 3 5.5 5.5 3 8 5.5Z"
-						/></svg
-					>
-					PBQs
-				</a>
-				<div class="ml-1 border-l border-border pl-2"><ThemeToggle /></div>
-			</div>
+							/></svg
+						>
+						PBQs
+					</a>
+					</div>
 
-			<div class="flex items-center gap-2 md:hidden">
-				<ThemeToggle />
-				<button
-					class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
-					type="button"
-					aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-					aria-expanded={mobileMenuOpen}
-					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-6 w-6"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path
-							class:opacity-0={mobileMenuOpen}
-							class:translate-y-1.5={mobileMenuOpen}
-							d="M4 7h16"
-						/><path class:opacity-0={mobileMenuOpen} d="M4 12h16" /><path
-							class:opacity-0={mobileMenuOpen}
-							class:-translate-y-1.5={mobileMenuOpen}
-							d="M4 17h16"
-						/><path class:opacity-100={mobileMenuOpen} d="m6 6 12 12M18 6 6 18" /></svg
+					<div class="flex items-center gap-1.5 md:gap-2">
+					{#if scopeInfo}
+						<CourseSwitcher
+							courses={scopeInfo.courses}
+							activeCourseId={scopeInfo.scope.courseId}
+							onswitch={switchCourse}
+						/>
+						<ProfileSwitcher
+							profiles={scopeInfo.profiles}
+							activeProfileId={scopeInfo.scope.profileId}
+							onswitch={switchProfile}
+							onrename={renameProfile}
+							oncreate={createProfile}
+							ondelete={deleteProfile}
+						/>
+					{:else}
+						<div class="h-11 w-14 rounded-md border border-border bg-surface-800 md:h-10"></div>
+						<div class="h-11 w-14 rounded-md border border-border bg-surface-800 md:h-10"></div>
+					{/if}
+					<ThemeToggle />
+					<button
+						class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary md:hidden"
+						type="button"
+						aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+						aria-expanded={mobileMenuOpen}
+						onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
 					>
-				</button>
-			</div>
-		</div>
-	</nav>
+						<svg
+							viewBox="0 0 24 24"
+							class="h-6 w-6"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							><path
+								class:opacity-0={mobileMenuOpen}
+								class:translate-y-1.5={mobileMenuOpen}
+								d="M4 7h16"
+							/><path class:opacity-0={mobileMenuOpen} d="M4 12h16" /><path
+								class:opacity-0={mobileMenuOpen}
+								class:-translate-y-1.5={mobileMenuOpen}
+								d="M4 17h16"
+							/><path class:opacity-100={mobileMenuOpen} d="m6 6 12 12M18 6 6 18" /></svg
+						>
+					</button>
+					</div>
+					</div>
+					</nav>
 
 	<MobileMenu open={mobileMenuOpen} onclose={() => (mobileMenuOpen = false)} />
 

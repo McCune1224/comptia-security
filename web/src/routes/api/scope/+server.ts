@@ -7,7 +7,10 @@ import { resolveScope } from '$lib/server/scope';
 const SCOPE_COOKIE = {
 	path: '/',
 	maxAge: 60 * 60 * 24 * 365, // 1 year
-	sameSite: 'lax' as const
+	sameSite: 'lax' as const,
+	// Local no-auth app served over plain http (localhost dev / Tailscale).
+	// SvelteKit's prod default (Secure) would make browsers drop the cookie.
+	secure: false
 };
 
 /** Current scope + available profiles and courses (drives both switchers). */
