@@ -12,7 +12,7 @@ import { APLUS_1202_OBJECTIVES } from './aplus-meta';
 export const APLUS_1202_BANK_SPEC: CourseBankSpec = {
 	courseId: 'aplus-1202',
 	mcqTotal: 150,
-	pbqTotal: 20,
+	pbqTotal: 28,
 	mcqIdPattern: /^a2-[1-4]-\d{3}$/,
 	pbqIdPattern: /^a2-pbq-[1-4]-\d{3}$/,
 	domains: [1, 2, 3, 4],
@@ -26,7 +26,7 @@ export const APLUS_1202_BANK_SPEC: CourseBankSpec = {
 	mcqDomainTotals: { 1: 42, 2: 42, 3: 34, 4: 32 },
 	multiTotals: { 1: 6, 2: 6, 3: 5, 4: 5 },
 	scenarioTotals: { 1: 42, 2: 42, 3: 34, 4: 32 },
-	pbqDomainTotals: { 1: 5, 2: 6, 3: 4, 4: 5 }
+	pbqDomainTotals: { 1: 7, 2: 9, 3: 6, 4: 6 }
 };
 
 export function loadAplus1202Bank(): QuestionBank {
