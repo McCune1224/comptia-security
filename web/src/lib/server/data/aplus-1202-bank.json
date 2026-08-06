@@ -7332,42 +7332,24 @@
       "domain": 1,
       "objective": "1.5",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Type the command that matches each description.\n\n1. ____ — displays and renews the IP configuration of a Windows NIC.\n2. ____ — scans and repairs system file integrity violations.\n3. ____ — checks a disk for errors and bad sectors.\n4. ____ — immediately refreshes Group Policy settings.",
       "blanks": [
         {
           "id": "b1",
-          "label": "IP configuration tool",
-          "placeholder": "Command",
-          "acceptedAnswers": [
-            "ipconfig"
-          ]
+          "label": "IP configuration tool"
         },
         {
           "id": "b2",
-          "label": "System file checker",
-          "placeholder": "Command",
-          "acceptedAnswers": [
-            "sfc",
-            "sfc /scannow"
-          ]
+          "label": "System file checker"
         },
         {
           "id": "b3",
-          "label": "Disk check tool",
-          "placeholder": "Command",
-          "acceptedAnswers": [
-            "chkdsk"
-          ]
+          "label": "Disk check tool"
         },
         {
           "id": "b4",
-          "label": "Group Policy refresh",
-          "placeholder": "Command",
-          "acceptedAnswers": [
-            "gpupdate",
-            "gpupdate /force"
-          ]
+          "label": "Group Policy refresh"
         }
       ],
       "explanation": "ipconfig manages IP configuration, sfc /scannow verifies protected system files, chkdsk checks disk integrity, and gpupdate /force refreshes Group Policy.",
@@ -7380,7 +7362,39 @@
           "source": "professor-messer",
           "section": "220-1202 1.5 Command-Line Tools"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "ipconfig"
+        },
+        {
+          "id": "w2",
+          "word": "sfc"
+        },
+        {
+          "id": "w3",
+          "word": "chkdsk"
+        },
+        {
+          "id": "w4",
+          "word": "gpupdate"
+        },
+        {
+          "id": "d1",
+          "word": "netstat"
+        },
+        {
+          "id": "d2",
+          "word": "ping"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "a2-pbq-2-001",
@@ -8536,43 +8550,24 @@
       "domain": 4,
       "objective": "4.8",
       "format": "pbq",
-      "kind": "fill-blank",
+      "kind": "word-bank",
       "prompt": "Type the scripting term that matches each description.\n\n1. ____ — a named storage location for a value that can change during script execution.\n2. ____ — a structure that repeats a block of code while a condition is true.\n3. ____ — a block of reusable code that can be called with arguments.\n4. ____ — a statement that executes different code based on a condition.",
       "blanks": [
         {
           "id": "b1",
-          "label": "Named storage for a value",
-          "placeholder": "Term",
-          "acceptedAnswers": [
-            "variable"
-          ]
+          "label": "Named storage for a value"
         },
         {
           "id": "b2",
-          "label": "Repeating structure",
-          "placeholder": "Term",
-          "acceptedAnswers": [
-            "loop"
-          ]
+          "label": "Repeating structure"
         },
         {
           "id": "b3",
-          "label": "Reusable code block",
-          "placeholder": "Term",
-          "acceptedAnswers": [
-            "function",
-            "method"
-          ]
+          "label": "Reusable code block"
         },
         {
           "id": "b4",
-          "label": "Conditional execution",
-          "placeholder": "Term",
-          "acceptedAnswers": [
-            "conditional",
-            "if statement",
-            "if"
-          ]
+          "label": "Conditional execution"
         }
       ],
       "explanation": "Variables store values, loops repeat code, functions are reusable blocks, and conditionals (if/else) branch execution. These are the building blocks of PowerShell, bash, and batch scripts.",
@@ -8585,7 +8580,39 @@
           "source": "professor-messer",
           "section": "220-1202 4.8 Scripting Basics"
         }
-      ]
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "variable"
+        },
+        {
+          "id": "w2",
+          "word": "loop"
+        },
+        {
+          "id": "w3",
+          "word": "function"
+        },
+        {
+          "id": "w4",
+          "word": "conditional"
+        },
+        {
+          "id": "d1",
+          "word": "array"
+        },
+        {
+          "id": "d2",
+          "word": "syntax"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
     },
     {
       "id": "a2-pbq-4-005",
