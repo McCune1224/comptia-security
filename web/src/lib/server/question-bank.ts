@@ -8,6 +8,7 @@ import type {
 	SourceRef
 } from '$lib/types';
 import rawBank from './data/question-bank.json';
+import { hotspotTemplate } from '$lib/hotspot-templates';
 
 export interface DefinitionBase {
 	id: string;
@@ -87,6 +88,22 @@ export interface SortDefinition extends DefinitionBase {
 	correctBuckets: Record<string, string>;
 }
 
+export interface HotspotDefinition extends DefinitionBase {
+	kind: 'hotspot';
+	/** Shared diagram template id (see lib/hotspot-templates.ts). */
+	template: string;
+	/** Tap regions in normalized 0–100 coordinates; at least one correct + one distractor. */
+	regions: {
+		id: string;
+		label: string;
+		x1: number;
+		y1: number;
+		x2: number;
+		y2: number;
+		correct: boolean;
+	}[];
+}
+
 export interface MultiStepPbqDefinition extends DefinitionBase {
 	kind: 'multi-step';
 	context: string;
@@ -103,6 +120,7 @@ export type QuestionDefinition =
 	| FillBlankDefinition
 	| WordBankDefinition
 	| SortDefinition
+	| HotspotDefinition
 	| MultiStepPbqDefinition;
 
 export interface QuestionBank {
@@ -168,6 +186,32 @@ function hasUniqueIds(items: { id: string }[]): boolean {
 	return new Set(items.map((item) => item.id)).size === items.length;
 }
 
+function regionsOverlap(
+	a: { x1: number; y1: number; x2: number; y2: number },
+	b: { x1: number; y1: number; x2: number; y2: number }
+): boolean {
+	return a.x1 < b.x2 && a.x2 > b.x1 && a.y1 < b.y2 && a.y2 > b.y1;
+}
+
+function isValidHotspot(question: HotspotDefinition): boolean {
+	const def = hotspotTemplate(question.template);
+	if (!def || question.regions.length < def.minRegions || !hasUniqueIds(question.regions)) return false;
+	if (def.expectedRegions && question.regions.length !== def.expectedRegions) return false;
+	if (question.regions.some((region) =>
+		!region.label.trim() ||
+		(def.maxLabelLength !== undefined && region.label.length > def.maxLabelLength) ||
+		!Number.isFinite(region.x1) || !Number.isFinite(region.y1) || !Number.isFinite(region.x2) || !Number.isFinite(region.y2) ||
+		region.x1 < 0 || region.y1 < 0 || region.x2 > 100 || region.y2 > 100 ||
+		region.x2 <= region.x1 || region.y2 <= region.y1
+	)) return false;
+	for (let i = 0; i < question.regions.length; i++) {
+		for (let j = i + 1; j < question.regions.length; j++) {
+			if (regionsOverlap(question.regions[i], question.regions[j])) return false;
+		}
+	}
+	return question.regions.some((region) => region.correct) && question.regions.some((region) => !region.correct);
+}
+
 export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = SECP701_BANK_SPEC): void {
 	if (bank.mcqs.length !== spec.mcqTotal) fail('mcqs', `expected ${spec.mcqTotal} items, found ${bank.mcqs.length}`);
 	if (bank.pbqs.length !== spec.pbqTotal) fail('pbqs', `expected ${spec.pbqTotal} items, found ${bank.pbqs.length}`);
@@ -206,6 +250,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		if (question.kind === 'configuration' && (question.fields.length < 4 || Object.keys(question.correctValues).length !== question.fields.length || question.fields.some((field) => field.options.length < 4 || !question.correctValues[field.id] || !field.options.some((option) => option.id === question.correctValues[field.id])))) fail(question.id, 'invalid configuration (need ≥4 fields, ≥4 options each)');
 		if (question.kind === 'word-bank' && (question.blanks.length < 2 || !hasUniqueIds(question.blanks) || !hasUniqueIds(question.bank) || question.bank.length < question.blanks.length + 1 || Object.keys(question.correctAssignments).length !== question.blanks.length || question.blanks.some((blank) => !question.correctAssignments[blank.id] || !question.bank.some((word) => word.id === question.correctAssignments[blank.id])) || new Set(Object.values(question.correctAssignments)).size !== question.blanks.length || (question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)) fail(question.id, 'invalid word-bank (need ≥2 blanks, bank ≥ blanks+1 with distractors, unique assignments)');
 		if (question.kind === 'sort' && (question.items.length < 4 || !hasUniqueIds(question.items) || question.buckets.length < 2 || !hasUniqueIds(question.buckets) || Object.keys(question.correctBuckets).length !== question.items.length || !question.items.every((item) => question.correctBuckets[item.id] && question.buckets.some((bucket) => bucket.id === question.correctBuckets[item.id])) || new Set(Object.values(question.correctBuckets)).size >= question.buckets.length)) fail(question.id, 'invalid sort (need ≥4 items, ≥2 buckets, all items bucketed, at least one distractor bucket)');
+		if (question.kind === 'hotspot' && !isValidHotspot(question)) fail(question.id, 'invalid hotspot (need ≥2 non-overlapping regions in 0–100 on a known template, ≥1 correct + ≥1 distractor)');
 		if (question.kind === 'multi-step') {
 			if (!question.steps || question.steps.length < 2 || question.steps.length > 4) fail(question.id, 'multi-step must have 2-4 steps');
 			for (const step of question.steps) {
@@ -220,6 +265,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 				if (step.kind === 'numeric' && (!Number.isFinite(step.correctValue) || step.tolerance < 0)) fail(step.id || question.id, 'invalid child numeric');
 				if (step.kind === 'word-bank' && (step.blanks.length < 2 || !hasUniqueIds(step.blanks) || !hasUniqueIds(step.bank) || step.bank.length < step.blanks.length + 1 || Object.keys(step.correctAssignments).length !== step.blanks.length || new Set(Object.values(step.correctAssignments)).size !== step.blanks.length || (step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)) fail(step.id || question.id, 'invalid child word-bank');
 				if (step.kind === 'sort' && (step.items.length < 4 || step.buckets.length < 2 || Object.keys(step.correctBuckets).length !== step.items.length || !step.items.every((item) => step.correctBuckets[item.id] && step.buckets.some((bucket) => bucket.id === step.correctBuckets[item.id])) || new Set(Object.values(step.correctBuckets)).size >= step.buckets.length)) fail(step.id || question.id, 'invalid child sort');
+				if (step.kind === 'hotspot' && !isValidHotspot(step)) fail(step.id || question.id, 'invalid child hotspot');
 			}
 		}
 	}
@@ -244,6 +290,7 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 		case 'fill-blank': return { ...base, kind: 'fill-blank', blanks: definition.blanks.map(({ id, label, placeholder }) => ({ id, label, placeholder })) };
 		case 'word-bank': return { ...base, kind: 'word-bank', blanks: definition.blanks, bank: definition.bank };
 		case 'sort': return { ...base, kind: 'sort', items: definition.items, buckets: definition.buckets };
+		case 'hotspot': return { ...base, kind: 'hotspot', template: definition.template, regions: definition.regions.map(({ id, label, x1, y1, x2, y2 }) => ({ id, label, x1, y1, x2, y2 })) };
 		case 'multi-step': return { ...base, kind: 'multi-step', context: definition.context, steps: definition.steps.map(toPublicQuestion) };
 	}
 }
@@ -259,6 +306,7 @@ export function correctResponse(definition: QuestionDefinition): QuestionRespons
 		case 'fill-blank': return { kind: 'fill-blank', values: Object.fromEntries(definition.blanks.map((blank) => [blank.id, blank.acceptedAnswers[0]])) };
 		case 'word-bank': return { kind: 'word-bank', assignments: definition.correctAssignments };
 		case 'sort': return { kind: 'sort', assignments: definition.correctBuckets };
+		case 'hotspot': return { kind: 'hotspot', regionIds: definition.regions.filter((region) => region.correct).map((region) => region.id) };
 		case 'multi-step': return { kind: 'multi-step', stepResponses: definition.steps.map(correctResponse) };
 	}
 }

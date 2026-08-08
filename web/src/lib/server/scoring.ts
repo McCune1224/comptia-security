@@ -64,6 +64,12 @@ export function scoreQuestion(
 						(item) => response.assignments[item.id] === question.correctBuckets[item.id]
 					).length / question.items.length;
 				break;
+			case 'hotspot':
+				if (response.kind === 'hotspot') {
+					const correctIds = question.regions.filter((region) => region.correct).map((region) => region.id);
+					earnedPoints = selectedScore(correctIds, response.regionIds);
+				}
+				break;
 			case 'multi-step':
 				if (response.kind === 'multi-step') {
 					const stepScores = question.steps.map((step, i) => scoreQuestion(step, response.stepResponses[i] ?? null));

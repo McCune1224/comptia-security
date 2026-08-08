@@ -80,6 +80,7 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	if (question.kind === 'fill-blank' && response.kind === 'fill-blank' && Object.keys(response.values).length === question.blanks.length && question.blanks.every((blank) => typeof response.values[blank.id] === 'string')) return;
 	if (question.kind === 'word-bank' && response.kind === 'word-bank' && Object.keys(response.assignments).length === question.blanks.length && question.blanks.every((blank) => question.bank.some((word) => word.id === response.assignments[blank.id])) && new Set(Object.values(response.assignments)).size === question.blanks.length) return;
 	if (question.kind === 'sort' && response.kind === 'sort' && Object.keys(response.assignments).length === question.items.length && question.items.every((item) => question.buckets.some((bucket) => bucket.id === response.assignments[item.id]))) return;
+	if (question.kind === 'hotspot' && response.kind === 'hotspot' && distinct(response.regionIds) && response.regionIds.every((id) => question.regions.some((region) => region.id === id))) return;
 	if (question.kind === 'multi-step' && response.kind === 'multi-step' && response.stepResponses.length === question.steps.length) {
 		for (let i = 0; i < question.steps.length; i++) { validateResponse(question.steps[i], response.stepResponses[i]); }
 		return;

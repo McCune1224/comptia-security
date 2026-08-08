@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
+import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
 
 const bank = loadQuestionBank();
@@ -82,5 +82,38 @@ describe('scoreQuestion', () => {
 		const oneWrong = { ...sort.correctBuckets, i4: 'b1' };
 		expect(scoreQuestion(sort, { kind: 'sort', assignments: oneWrong }).earnedPoints).toBe(3 / 4);
 		expect(scoreQuestion(sort, { kind: 'sort', assignments: {} }).earnedPoints).toBe(0);
+	});
+
+	it('scores hotspot taps with a wrong-tap penalty and partial credit', () => {
+		const hotspot: HotspotDefinition = {
+			id: 'pbq-5-998',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Tap the OSI layers that are connection-oriented.',
+			explanation: 'Transport (TCP) and Session maintain state; the others are not.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'hotspot',
+			template: 'osi-stack',
+			regions: [
+				{ id: 'r1', label: 'Application', x1: 0, y1: 0, x2: 100, y2: 14.3, correct: false },
+				{ id: 'r2', label: 'Presentation', x1: 0, y1: 14.3, x2: 100, y2: 28.6, correct: false },
+				{ id: 'r3', label: 'Session', x1: 0, y1: 28.6, x2: 100, y2: 42.9, correct: true },
+				{ id: 'r4', label: 'Transport', x1: 0, y1: 42.9, x2: 100, y2: 57.2, correct: true },
+				{ id: 'r5', label: 'Network', x1: 0, y1: 57.2, x2: 100, y2: 71.5, correct: false },
+				{ id: 'r6', label: 'Data Link', x1: 0, y1: 71.5, x2: 100, y2: 85.8, correct: false },
+				{ id: 'r7', label: 'Physical', x1: 0, y1: 85.8, x2: 100, y2: 100, correct: false }
+			]
+		};
+		// Both correct taps -> full credit.
+		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: ['r3', 'r4'] }).earnedPoints).toBe(1);
+		// One correct, one wrong -> 0 (hit - miss = 0 over 2).
+		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: ['r3', 'r1'] }).earnedPoints).toBe(0);
+		// One of two correct -> partial 0.5.
+		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: ['r3'] }).earnedPoints).toBe(0.5);
+		// Only wrong taps -> 0.
+		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: ['r1'] }).earnedPoints).toBe(0);
+		// Empty -> 0.
+		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: [] }).earnedPoints).toBe(0);
 	});
 });

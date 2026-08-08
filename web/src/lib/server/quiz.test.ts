@@ -73,6 +73,56 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('round-trips hotspot responses through a PBQ session with an injected bank', () => {
+		const repository = createQuizRepository(':memory:');
+		const hotspotPbq: QuestionDefinition = {
+			id: 'pbq-5-995',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Tap the layer responsible for routing packets between networks.',
+			explanation: 'The Network layer (L3) routes packets.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'hotspot',
+			template: 'osi-stack',
+			regions: [
+				{ id: 'r1', label: 'Application', x1: 0, y1: 0, x2: 100, y2: 14.3, correct: false },
+				{ id: 'r2', label: 'Presentation', x1: 0, y1: 14.3, x2: 100, y2: 28.6, correct: false },
+				{ id: 'r3', label: 'Session', x1: 0, y1: 28.6, x2: 100, y2: 42.9, correct: false },
+				{ id: 'r4', label: 'Transport', x1: 0, y1: 42.9, x2: 100, y2: 57.2, correct: false },
+				{ id: 'r5', label: 'Network', x1: 0, y1: 57.2, x2: 100, y2: 71.5, correct: true },
+				{ id: 'r6', label: 'Data Link', x1: 0, y1: 71.5, x2: 100, y2: 85.8, correct: false },
+				{ id: 'r7', label: 'Physical', x1: 0, y1: 85.8, x2: 100, y2: 100, correct: false }
+			]
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [hotspotPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		expect(session.questions[0].kind).toBe('hotspot');
+		// Public view must not leak the correct flag.
+		const pub = session.questions[0];
+		expect(pub.kind === 'hotspot' && 'correct' in pub.regions[0]).toBe(false);
+		// Correct response -> full credit.
+		service.saveResponse(session.sessionId, 0, { kind: 'hotspot', regionIds: ['r5'] });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		// Wrong + a penalty tap -> 0.
+		const wrong = service.startSession({ type: 'pbq', count: 1 });
+		service.saveResponse(wrong.sessionId, 0, { kind: 'hotspot', regionIds: ['r5', 'r1'] });
+		const wrongResult = service.completeSession(wrong.sessionId);
+		expect(wrongResult.review[0].feedback.earnedPoints).toBe(0);
+		// Unknown region id -> INVALID_REQUEST.
+		const invalid = service.startSession({ type: 'pbq', count: 1 });
+		expect(() =>
+			service.saveResponse(invalid.sessionId, 0, { kind: 'hotspot', regionIds: ['zzz'] })
+		).toThrow('Response does not match the question interaction.');
+		repository.close();
+	});
+
 	it('round-trips sort responses through a PBQ session with an injected bank', () => {
 		const repository = createQuizRepository(':memory:');
 		const sortPbq: QuestionDefinition = {

@@ -92,6 +92,8 @@
 				return 'See correct words below.';
 			case 'sort':
 				return 'See correct buckets below.';
+			case 'hotspot':
+				return 'See correct regions below.';
 			case 'numeric':
 				return `${cr.value}`;
 			case 'multi-step':
@@ -127,6 +129,8 @@
 				return Object.values(review.response.assignments).join(' | ');
 			case 'sort':
 				return Object.values(review.response.assignments).join(' | ');
+			case 'hotspot':
+				return review.response.regionIds.join(', ');
 			case 'numeric':
 				return `${review.response.value}`;
 			case 'multi-step':
@@ -531,6 +535,34 @@
 												>(correct: {q.buckets.find((b) => b.id === correctBucket)?.label})</span
 											>
 										{/if}
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else if q.kind === 'hotspot'}
+						<div class="space-y-2">
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+								Your regions
+							</p>
+							{#each q.regions as region}
+								{@const tapped =
+									review.response?.kind === 'hotspot' &&
+									review.response.regionIds.includes(region.id)}
+								{@const correct =
+									review.feedback.correctResponse.kind === 'hotspot' &&
+									review.feedback.correctResponse.regionIds.includes(region.id)}
+								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+									<div class="flex items-center gap-2">
+										<span class="flex-1 text-text-primary">{region.label}</span>
+										<span class="text-xs font-bold {correct
+											? 'text-success'
+											: tapped
+												? 'text-danger'
+												: 'text-text-muted'}">{correct
+											? '✓ correct'
+											: tapped
+												? '✗ your pick'
+												: 'not selected'}</span>
 									</div>
 								</div>
 							{/each}

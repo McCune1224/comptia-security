@@ -3,6 +3,7 @@
 	import Sortable from 'sortablejs';
 	import MatchConnect from '$lib/components/MatchConnect.svelte';
 	import SortBoard from '$lib/components/SortBoard.svelte';
+	import Hotspot from '$lib/components/Hotspot.svelte';
 	import type {
 		ActiveSessionSummary,
 		PublicQuestion,
@@ -96,6 +97,13 @@
 		return question.premises.every((premise) => !!response.matches[premise.id]);
 	}
 
+	function hotspotAnswered(): boolean {
+		if (question?.kind !== 'hotspot') return true;
+		const response = draft?.kind === 'hotspot' ? draft : null;
+		if (!response) return false;
+		return response.regionIds.length > 0;
+	}
+
 	/** True when a multi-step child's response is complete enough to validate server-side. */
 	function stepAnswered(step: PublicQuestion, response: QuestionResponse | null): boolean {
 		if (!response) return false;
@@ -134,6 +142,8 @@
 				return response.kind === 'ordering' && response.itemIds.length === step.items.length;
 			case 'numeric':
 				return response.kind === 'numeric' && Number.isFinite(response.value);
+			case 'hotspot':
+				return response.kind === 'hotspot' && response.regionIds.length > 0;
 		}
 		return true;
 	}
@@ -142,6 +152,12 @@
 		const stepFeedback = feedback?.stepFeedback?.[subStep];
 		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'sort') return null;
 		return stepFeedback.correctResponse.assignments;
+	}
+
+	function stepHotspotCorrectIds(): string[] | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'hotspot') return null;
+		return stepFeedback.correctResponse.regionIds;
 	}
 
 	function moveSubStep(dir: number) {
@@ -877,6 +893,18 @@
 					disabled={!!feedback}
 					onchange={(a) => (draft = { kind: 'sort', assignments: a })}
 				/>
+			{:else if question.kind === 'hotspot'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<Hotspot
+						template={question.template}
+						regions={question.regions}
+						selectedIds={draft?.kind === 'hotspot' ? draft.regionIds : []}
+						feedbackCorrectIds={feedback?.correctResponse.kind === 'hotspot' ? feedback.correctResponse.regionIds : null}
+						disabled={!!feedback}
+						onchange={(regionIds) => (draft = { kind: 'hotspot', regionIds })}
+					/>
+				</div>
 			{:else if question.kind === 'multi-step'}
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
@@ -1110,6 +1138,16 @@
 							disabled={!!feedback}
 							onchange={(a) => updateSubResponse({ kind: 'sort', assignments: a })}
 						/>
+					{:else if step.kind === 'hotspot'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<Hotspot
+							template={step.template}
+							regions={step.regions}
+							selectedIds={subDraft?.kind === 'hotspot' ? subDraft.regionIds : []}
+							feedbackCorrectIds={stepHotspotCorrectIds()}
+							disabled={!!feedback}
+							onchange={(regionIds) => updateSubResponse({ kind: 'hotspot', regionIds })}
+						/>
 					{/if}
 
 					<div class="flex gap-2">
@@ -1140,7 +1178,7 @@
 					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered() || !matchingAnswered()}
+					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered() || !matchingAnswered() || !hotspotAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'

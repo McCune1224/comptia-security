@@ -108,6 +108,20 @@ export interface PublicSortQuestion extends PublicQuestionBase {
 	buckets: { id: string; label: string }[];
 }
 
+export interface PublicHotspotQuestion extends PublicQuestionBase {
+	kind: 'hotspot';
+	/** Shared diagram template id (see lib/hotspot-templates.ts). */
+	template: string;
+	/** Tap regions in normalized 0–100 coordinates (no `correct` flag — answer is secret). */
+	regions: { id: string; label: string; x1: number; y1: number; x2: number; y2: number }[];
+}
+
+export interface PublicMemoryQuestion extends PublicQuestionBase {
+	kind: 'memory';
+	/** Card pairs; each pair renders as two face-down cards (a-side and b-side). */
+	pairs: { id: string; a: string; b: string }[];
+}
+
 export interface PublicMultiStepPbqQuestion extends PublicQuestionBase {
 	kind: 'multi-step';
 	context: string;
@@ -124,6 +138,8 @@ export type PublicQuestion =
 	| PublicFillBlankQuestion
 	| PublicWordBankQuestion
 	| PublicSortQuestion
+	| PublicHotspotQuestion
+	| PublicMemoryQuestion
 	| PublicMultiStepPbqQuestion;
 
 export type QuestionResponse =
@@ -136,6 +152,7 @@ export type QuestionResponse =
 	| { kind: 'fill-blank'; values: Record<string, string> }
 	| { kind: 'word-bank'; assignments: Record<string, string> }
 	| { kind: 'sort'; assignments: Record<string, string> }
+	| { kind: 'hotspot'; regionIds: string[] }
 	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
 
 export interface QuestionFeedback {
