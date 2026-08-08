@@ -79,8 +79,18 @@
 					.map((item) => item.id)}
 				<div
 					class="rounded-md border border-border bg-surface-700/60 p-3 {selected
-						? 'border-dashed border-border-strong'
+						? 'cursor-pointer border-dashed border-border-strong'
 						: ''}"
+					role="button"
+					tabindex="0"
+					aria-label={selected ? `Place selected item in ${bucket.label}` : `${bucket.label} bucket`}
+					onclick={() => onBucketTap(bucket.id)}
+					onkeydown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault();
+							onBucketTap(bucket.id);
+						}
+					}}
 				>
 					<p class="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
 						{bucket.label}

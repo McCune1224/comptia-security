@@ -24,3 +24,6 @@ vite.config.ts.timestamp-*
 
 # App data (SQLite database)
 /data/
+
+# Mobile QA artifacts (screenshots are large; report.md IS tracked)
+dogfood-output/screenshots/

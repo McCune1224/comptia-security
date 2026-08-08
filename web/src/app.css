@@ -101,6 +101,11 @@
 		touch-action: manipulation;
 	}
 
+	/* SortableJS drag handles must own the gesture, or touch drags scroll the page. */
+	.drag-handle {
+		touch-action: none;
+	}
+
 	select {
 		min-height: 2.75rem;
 		width: 100%;
