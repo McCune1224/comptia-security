@@ -49,8 +49,7 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
   - `full` (4) — 90-question timed full exams + week-1 checkpoint, 50% weight
 - **Question banks:** Security+ 300 MCQs (45/66/55/77/57 across Domains 1–5, all scenario-format)
-  + 88 PBQs (matching, ordering, evidence, configuration, numeric, multi-step, **fill-blank**,
-  **word-bank**). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
+  + 88 PBQs (matching, ordering, evidence, configuration, numeric, word-bank, sort, multi-step). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
   multi-selects) **+ 20 PBQs** (3/5/4/2/6 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
   MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 20 PBQs** (5/6/4/5 per domain,
   8 kinds). Bank ids: `mcq-/pbq-` (Security+), `a1-`/`a1-pbq-` (A+ Core 1), `a2-`/`a2-pbq-`
@@ -60,17 +59,24 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   fragments from `web/scripts/data/frags/` (fragments are authored directly; the expand-*.py
   scripts merge PBQs). Exam specs: A+ Core 1 90Q/90min pass 675; Core 2 90Q/90min pass 700 —
   both read from `COURSE_META.passingScore` (readiness thresholds 675/900 and 700/900).
-  Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`, `expand-interactive.py`,
+  Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`,
   `expand-exam-aligned.py`, `expand-pbqs-exam-style.py`; `bank-lib.py` merges them idempotently.
   PBQ coverage spans all 28 objectives; real-exam formats include firewall ACL rule ordering,
   certificate-type matching, crypto-algorithm selection, SQLi/Windows-event log analysis,
   vulnerability-scan prioritization, device-placement/segmentation, least-privilege permissions,
   MFA/SSO configuration, SOAR/automation matching, investigation data sources, sensitive-data
   handling, and recovery metrics.
-- **Interactive kinds:** `fill-blank` (typed recall, case/whitespace-insensitive, partial credit per
-  blank; `____` markers in the prompt, one per blank) and `word-bank` (sentence blanks + word chips
-  with distractors, click-to-fill, partial credit per assignment). Both also work as multi-step
-  children.
+- **Interactive kinds:** `word-bank` (sentence blanks + word chips with distractors, click-to-fill,
+  partial credit per assignment), `sort` (tap-to-bucket classification with ≥1 distractor bucket),
+  `hotspot` (tap regions on a shared diagram template — `osi-stack` / `topology-basic` /
+  `packet-frame` / `log-lines`; penalty scoring `max(0, hits−misses)/correct`, correct flag never
+  leaks to the client), `matching` (tap-to-connect via MatchConnect), `ordering` (drag/tap
+  ordering), `configuration` (dropdown rule builders), `evidence` (artifact line selection),
+  `numeric` (typed number entry — DEPRECATED, being converted to `slider`/word-bank),
+  `multi-step` (2–4 guided child steps). **`fill-blank` is banned from authoring** (validator
+  rejects it top-level and as a multi-step child) and renders legacy read-only for stored session
+  snapshots. Interactive renderers: `MatchConnect.svelte`, `SortBoard.svelte`, `Hotspot.svelte` —
+  all ≥44px touch targets.
 - **Daily review engine** (`src/lib/server/review.ts`): SM-2-lite spaced repetition over the bank.
   `review_cards` holds per-question interval/ease/lapses/due date (local calendar day); `study_log`
   records per-day question counts for streaks and the 12-week heatmap. `composeQueue('daily')`
