@@ -803,14 +803,22 @@
 					onchange={(m) => (draft = { kind: 'matching', matches: m })}
 				/>
 			{:else if question.kind === 'numeric'}
-				<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-					<input
-						class="w-full sm:max-w-xs"
-						type="number"
-						value={draft?.kind === 'numeric' ? draft.value : ''}
-						oninput={(event) =>
-							(draft = { kind: 'numeric', value: Number(event.currentTarget.value) })}
-					/><span class="text-text-secondary">{question.unit}</span>
+				<div class="space-y-3">
+					<div class="flex items-center gap-2">
+						<span class="chip bg-surface-700 text-text-muted">Legacy question</span>
+						<span class="text-xs text-text-muted">
+							Typed numeric was retired — your stored answer is shown below.
+						</span>
+					</div>
+					<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+						<input
+							class="w-full sm:max-w-xs"
+							type="number"
+							value={draft?.kind === 'numeric' ? draft.value : ''}
+							disabled
+							readonly
+						/><span class="text-text-secondary">{question.unit}</span>
+					</div>
 				</div>
 			{:else if question.kind === 'evidence'}
 				<div class="space-y-2 font-mono text-sm">
@@ -1078,15 +1086,18 @@
 							onchange={(m) => updateSubResponse({ kind: 'matching', matches: m })}
 						/>
 					{:else if step.kind === 'numeric'}
-						<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+						<div class="space-y-2">
 							<p class="font-medium text-text-primary">{step.prompt}</p>
-							<input
-								class="w-full sm:max-w-xs"
-								type="number"
-								value={subDraft?.kind === 'numeric' ? subDraft.value : ''}
-								oninput={(e) =>
-									updateSubResponse({ kind: 'numeric', value: Number(e.currentTarget.value) })}
-							/><span class="text-text-secondary">{step.unit}</span>
+							<div class="flex items-center gap-2">
+								<span class="chip bg-surface-700 text-text-muted">Legacy question</span>
+								<input
+									class="w-full sm:max-w-xs"
+									type="number"
+									value={subDraft?.kind === 'numeric' ? subDraft.value : ''}
+									disabled
+									readonly
+								/><span class="text-text-secondary">{step.unit}</span>
+							</div>
 						</div>
 					{:else if step.kind === 'evidence'}
 						<div class="space-y-2 font-mono text-sm">

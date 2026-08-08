@@ -17350,15 +17350,38 @@
       "steps": [
         {
           "id": "step-9-1",
-          "kind": "numeric",
+          "kind": "single-choice",
           "domain": 5,
           "objective": "5.2",
           "format": "pbq",
           "prompt": "The company experienced three security breaches this fiscal year, each costing $20,000. What is the annualized loss expectancy (ALE)?",
           "context": "",
-          "correctValue": 60000,
-          "unit": "USD",
-          "tolerance": 0,
+          "options": [
+            {
+              "id": "a",
+              "text": "$60,000",
+              "rationale": "Correct: ALE = SLE × ARO = $20,000 × 3 = $60,000."
+            },
+            {
+              "id": "b",
+              "text": "$20,000",
+              "rationale": "That is the SLE for a single breach; ARO is 3, so multiply by 3."
+            },
+            {
+              "id": "c",
+              "text": "$180,000",
+              "rationale": "Treats the three breaches as three years of losses rather than one year."
+            },
+            {
+              "id": "d",
+              "text": "$40,000",
+              "rationale": "Uses an ARO of 2; the observed frequency this year is 3 breaches."
+            }
+          ],
+          "correctOptionIds": [
+            "a"
+          ],
+          "selectCount": 1,
           "explanation": "ALE = SLE × ARO. SLE = $20,000 per breach. ARO = 3 based on observed frequency. ALE = $20,000 × 3 = $60,000.",
           "sourceRefs": [
             {
@@ -17505,12 +17528,35 @@
       "domain": 5,
       "objective": "5.2",
       "format": "pbq",
-      "kind": "numeric",
-      "prompt": "A database server valued at $50,000 has an exposure factor of 0.4 in a disaster scenario. What is the SLE? Enter only the numeric result.",
+      "kind": "single-choice",
+      "prompt": "A database server valued at $50,000 has an exposure factor of 0.4 in a disaster scenario. What is the single loss expectancy (SLE)?",
       "context": "Database server AV=$50,000, EF=0.4. Calculate SLE.",
-      "correctValue": 20000,
-      "unit": "USD",
-      "tolerance": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "$20,000",
+          "rationale": "Correct: SLE = AV × EF = $50,000 × 0.4 = $20,000."
+        },
+        {
+          "id": "b",
+          "text": "$50,000",
+          "rationale": "That is the asset value, not the expected loss from one occurrence."
+        },
+        {
+          "id": "c",
+          "text": "$125,000",
+          "rationale": "Divides instead of multiplies — AV ÷ EF is not SLE."
+        },
+        {
+          "id": "d",
+          "text": "$80,000",
+          "rationale": "Treats the exposure factor as 1.6; it is 0.4."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
       "explanation": "SLE = AV × EF = $50,000 × 0.40 = $20,000. This represents expected loss from one occurrence.",
       "sourceRefs": [
         {
@@ -17528,12 +17574,15 @@
       "domain": 5,
       "objective": "5.2",
       "format": "pbq",
-      "kind": "numeric",
-      "prompt": "An online banking platform has MTBF of 99 hours and MTTR of 1 hour. What is the availability percentage? Round to nearest whole number.",
-      "context": "Banking platform MTBF=99h, MTTR=1h. Calculate availability.",
-      "correctValue": 99,
+      "kind": "slider",
+      "prompt": "An online banking platform has MTBF of 99 hours and MTTR of 1 hour. What is the availability percentage?",
+      "context": "Banking platform MTBF=99h, MTTR=1h. Drag the slider to the availability percentage.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
       "unit": "percent",
-      "tolerance": 0.1,
+      "correctValue": 99,
+      "tolerance": 1,
       "explanation": "Availability = MTBF/(MTBF+MTTR)×100 = 99/(99+1)×100 = 99%.",
       "sourceRefs": [
         {
@@ -17551,12 +17600,35 @@
       "domain": 5,
       "objective": "5.2",
       "format": "pbq",
-      "kind": "numeric",
-      "prompt": "ALE before a control is $40,000. The control costs $15,000/year. ALE after is $10,000. What is the annual control benefit? Enter only the numeric result.",
+      "kind": "single-choice",
+      "prompt": "ALE before a control is $40,000. The control costs $15,000/year. ALE after is $10,000. What is the annual control benefit?",
       "context": "ALE before=$40k, control cost=$15k/yr, ALE after=$10k. Calculate annual benefit.",
-      "correctValue": 15000,
-      "unit": "USD",
-      "tolerance": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "$15,000",
+          "rationale": "Correct: (ALE_before − ALE_after) − control_cost = ($40k − $10k) − $15k = $15k."
+        },
+        {
+          "id": "b",
+          "text": "$25,000",
+          "rationale": "Subtracts only the control cost from the old ALE, ignoring the reduced ALE after."
+        },
+        {
+          "id": "c",
+          "text": "$30,000",
+          "rationale": "Uses the gross loss reduction but forgets to subtract the control cost."
+        },
+        {
+          "id": "d",
+          "text": "$5,000",
+          "rationale": "Subtracts the new ALE from the control cost instead of from the old ALE."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
       "explanation": "Annual benefit = (ALE_before - ALE_after) - control_cost = ($40k - $10k) - $15k = $15k.",
       "sourceRefs": [
         {
@@ -17965,12 +18037,15 @@
       "domain": 1,
       "objective": "1.4",
       "format": "pbq",
-      "kind": "numeric",
+      "kind": "slider",
       "prompt": "A security engineer must select a key length that provides 128 bits of symmetric-equivalent strength. The organization's standard uses AES-256. If the engineer is evaluating an RSA key for the TLS handshake, which RSA modulus size (in bits) is the recommended minimum that provides at least 128-bit equivalent strength?",
-      "context": "Enter a whole number of bits (e.g., 2048).",
+      "context": "Drag the slider to the recommended RSA modulus size.",
+      "min": 1024,
+      "max": 8192,
+      "step": 512,
       "unit": "bits",
       "correctValue": 3072,
-      "tolerance": 0,
+      "tolerance": 256,
       "explanation": "Per NIST guidance, RSA-3072 provides approximately 128 bits of symmetric-equivalent security (RSA-2048 provides ~112 bits).",
       "sourceRefs": [
         {
@@ -18515,12 +18590,15 @@
       "domain": 3,
       "objective": "3.4",
       "format": "pbq",
-      "kind": "numeric",
+      "kind": "slider",
       "prompt": "A database contains 500 GB of transaction data. The organization requires an RPO of 4 hours. Backups run every 4 hours as full copies. Each backup requires 2 hours to complete and is retained for 30 days. What is the minimum amount of storage (in GB) that must be reserved for backup retention, assuming no compression or deduplication and that the data volume is constant?",
-      "context": "Enter a whole number of GB. RPO = 4h; backups every 4h; full copies; retained 30 days; 500 GB each.",
+      "context": "RPO = 4h; backups every 4h; full copies; retained 30 days; 500 GB each. Drag to the reserved GB.",
+      "min": 0,
+      "max": 100000,
+      "step": 5000,
       "unit": "GB",
       "correctValue": 90000,
-      "tolerance": 0,
+      "tolerance": 1000,
       "explanation": "6 backups per day (24h/4h) × 30 days retention = 180 backups × 500 GB each = 90,000 GB of storage reserved.",
       "sourceRefs": [
         {
@@ -19197,12 +19275,35 @@
       "domain": 5,
       "objective": "5.2",
       "format": "pbq",
-      "kind": "numeric",
+      "kind": "single-choice",
       "prompt": "An asset is valued at $250,000. The exposure factor for a specific threat is 40%, and the annualized rate of occurrence is 0.2. What is the annualized loss expectancy (ALE) in dollars?",
-      "context": "Enter a whole number of dollars. SLE = AV × EF; ALE = SLE × ARO.",
-      "unit": "dollars",
-      "correctValue": 20000,
-      "tolerance": 0,
+      "context": "SLE = AV × EF; ALE = SLE × ARO.",
+      "options": [
+        {
+          "id": "a",
+          "text": "$20,000",
+          "rationale": "Correct: SLE = $250,000 × 0.4 = $100,000; ALE = $100,000 × 0.2 = $20,000."
+        },
+        {
+          "id": "b",
+          "text": "$100,000",
+          "rationale": "That is the SLE — one occurrence — before applying the annualized rate of occurrence."
+        },
+        {
+          "id": "c",
+          "text": "$50,000",
+          "rationale": "Multiplies the asset value by ARO directly, skipping the exposure factor."
+        },
+        {
+          "id": "d",
+          "text": "$200,000",
+          "rationale": "That is a fraction of the asset value unrelated to the given EF and ARO."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
       "explanation": "SLE = $250,000 × 0.40 = $100,000. ALE = $100,000 × 0.2 = $20,000/year.",
       "sourceRefs": [
         {

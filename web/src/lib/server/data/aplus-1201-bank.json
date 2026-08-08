@@ -7762,11 +7762,14 @@
       "domain": 3,
       "objective": "3.4",
       "format": "pbq",
-      "kind": "numeric",
+      "kind": "slider",
       "prompt": "A server is built with three 1 TB drives in RAID 5. How many terabytes of usable storage capacity does the array provide (excluding RAID overhead)?",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
       "unit": "TB",
       "correctValue": 2,
-      "tolerance": 0,
+      "tolerance": 0.25,
       "explanation": "RAID 5 stripes data with distributed parity: one drive's worth of capacity is consumed by parity, so usable capacity = (n-1) × drive size = 2 × 1 TB = 2 TB. The array survives a single drive failure.",
       "sourceRefs": [
         {
