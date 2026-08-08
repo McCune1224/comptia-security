@@ -19,7 +19,7 @@
 </script>
 
 <button
-	class="relative inline-flex h-9 w-16 items-center rounded-full border border-border-strong bg-surface-800 p-1 transition-colors duration-200"
+	class="relative inline-flex h-11 w-16 items-center rounded-full border border-border-strong bg-surface-800 p-1 transition-colors duration-200"
 	type="button"
 	role="switch"
 	aria-checked={isLight}

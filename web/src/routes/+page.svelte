@@ -228,7 +228,7 @@
 						href="/quiz?review=daily"
 						>Start today's review</a
 					>
-					<a class="text-sm font-bold text-accent hover:underline" href="/review">Review →</a>
+					<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/review">Review →</a>
 				</div>
 			</section>
 		{/if}
@@ -247,7 +247,7 @@
 						>
 						What's due
 					</h2>
-					<a class="text-sm font-bold text-accent hover:underline" href="/calendar">Calendar →</a>
+					<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/calendar">Calendar →</a>
 				</div>
 				{#if overview.toDo.length === 0}
 					<p class="mt-5 rounded-md bg-success/10 p-4 text-sm text-success">
@@ -336,7 +336,7 @@
 						>Take a full exam now</a
 					>
 					<a
-						class="mt-3 block text-center text-sm font-bold text-accent hover:underline"
+						class="mt-3 block min-h-[44px] text-center text-sm font-bold text-accent hover:underline"
 						href="/mastery"
 						>Objective mastery →</a
 					>
@@ -348,7 +348,7 @@
 	<section>
 		<div class="mb-4 flex items-center justify-between">
 			<h2 class="h-display text-xl text-text-primary">Quick drills</h2>
-			<a class="text-sm font-bold text-accent hover:underline" href="/history">History →</a>
+			<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/history">History →</a>
 		</div>
 		<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
 			<a
@@ -394,7 +394,7 @@
 		<section>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="h-display text-xl text-text-primary">Course modules</h2>
-				<a class="text-sm font-bold text-accent hover:underline" href="/syllabus">Full syllabus</a>
+				<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/syllabus">Full syllabus</a>
 			</div>
 			<div class="grid gap-4 md:grid-cols-2">
 				{#each overview.modules as module (module.module.id)}

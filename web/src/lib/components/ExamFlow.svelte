@@ -5,6 +5,7 @@
 	import SortBoard from '$lib/components/SortBoard.svelte';
 	import type {
 		ActiveSessionSummary,
+		PublicQuestion,
 		QuestionFeedback,
 		QuestionResponse,
 		QuizResult,
@@ -88,6 +89,55 @@
 		return question.items.every((item) => (response.assignments[item.id] ?? '').length > 0);
 	}
 
+	function matchingAnswered(): boolean {
+		if (question?.kind !== 'matching') return true;
+		const response = draft?.kind === 'matching' ? draft : null;
+		if (!response) return false;
+		return question.premises.every((premise) => !!response.matches[premise.id]);
+	}
+
+	/** True when a multi-step child's response is complete enough to validate server-side. */
+	function stepAnswered(step: PublicQuestion, response: QuestionResponse | null): boolean {
+		if (!response) return false;
+		switch (step.kind) {
+			case 'fill-blank':
+				return (
+					response.kind === 'fill-blank' &&
+					step.blanks.every((blank) => (response.values[blank.id] ?? '').trim().length > 0)
+				);
+			case 'word-bank':
+				return (
+					response.kind === 'word-bank' &&
+					step.blanks.every((blank) => !!response.assignments[blank.id])
+				);
+			case 'matching':
+				return (
+					response.kind === 'matching' &&
+					step.premises.every((premise) => !!response.matches[premise.id])
+				);
+			case 'sort':
+				return (
+					response.kind === 'sort' &&
+					step.items.every((item) => !!response.assignments[item.id])
+				);
+			case 'configuration':
+				return (
+					response.kind === 'configuration' &&
+					step.fields.every((field) => !!response.values[field.id])
+				);
+			case 'evidence':
+				return response.kind === 'evidence' && response.lineIds.length === step.selectCount;
+			case 'single-choice':
+			case 'multiple-choice':
+				return response.kind === 'choice' && response.optionIds.length === step.selectCount;
+			case 'ordering':
+				return response.kind === 'ordering' && response.itemIds.length === step.items.length;
+			case 'numeric':
+				return response.kind === 'numeric' && Number.isFinite(response.value);
+		}
+		return true;
+	}
+
 	function stepSortAssignments(): Record<string, string> | null {
 		const stepFeedback = feedback?.stepFeedback?.[subStep];
 		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'sort') return null;
@@ -103,21 +153,7 @@
 		if (question?.kind !== 'multi-step') return true;
 		if (draft?.kind !== 'multi-step') return false;
 		for (let i = 0; i < question.steps.length; i++) {
-			const step = question.steps[i];
-			const response = draft.stepResponses[i];
-			if (!response) return false;
-			if (
-				step.kind === 'fill-blank' &&
-				response.kind === 'fill-blank' &&
-				!step.blanks.every((blank) => (response.values[blank.id] ?? '').trim())
-			)
-				return false;
-			if (
-				step.kind === 'word-bank' &&
-				response.kind === 'word-bank' &&
-				!step.blanks.every((blank) => response.assignments[blank.id])
-			)
-				return false;
+			if (!stepAnswered(question.steps[i], draft.stepResponses[i])) return false;
 		}
 		return true;
 	}
@@ -1104,7 +1140,7 @@
 					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered()}
+					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered() || !matchingAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'
