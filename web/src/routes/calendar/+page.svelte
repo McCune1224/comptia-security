@@ -368,7 +368,7 @@
 								</div>
 							</div>
 							<button
-								class="text-sm font-semibold text-danger transition hover:text-danger/70 disabled:opacity-50"
+								class="touch-target text-sm font-semibold text-danger transition hover:text-danger/70 disabled:opacity-50"
 								type="button"
 								onclick={disconnect}
 								disabled={gcalBusy}
@@ -378,7 +378,7 @@
 						</div>
 						<div class="flex flex-wrap items-center gap-3 border-t border-border pt-4">
 							<button
-								class="btn btn-ghost h-10 px-3 text-xs"
+								class="btn btn-ghost h-11 px-3 text-xs"
 								type="button"
 								aria-pressed={showGoogle}
 								onclick={() => (showGoogle = !showGoogle)}
@@ -396,7 +396,7 @@
 									{/if}
 								</span>
 								<button
-									class="btn btn-primary h-10 px-4 text-xs"
+									class="btn btn-primary h-11 px-4 text-xs"
 									type="button"
 									onclick={() => syncDeadlines()}
 									disabled={gcalBusy}
@@ -416,7 +416,7 @@
 		{/if}
 
 		<div class="grid gap-6 lg:grid-cols-3">
-			<section class="card p-4 sm:p-6 lg:col-span-2">
+			<section class="card p-3 sm:p-6 lg:col-span-2">
 				<div class="mb-4 flex items-center justify-between">
 					<h2 class="h-display text-xl text-text-primary">{monthLabel}</h2>
 					<div class="flex gap-2">
@@ -451,13 +451,13 @@
 					</div>
 				</div>
 				<div
-					class="grid grid-cols-7 gap-1 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
+					class="grid grid-cols-7 gap-0.5 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
 				>
 					{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div class="py-2">
-							{day}
-						</div>{/each}
+						{day}
+					</div>{/each}
 				</div>
-				<div class="grid grid-cols-7 gap-1">
+				<div class="grid grid-cols-7 gap-0.5">
 					{#each Array(firstWeekday) as _}<div></div>{/each}
 					{#each Array(daysInMonth) as _, index (index)}
 						{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}

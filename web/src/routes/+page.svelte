@@ -441,7 +441,7 @@
 			<section class="card p-5 sm:p-6">
 				<div class="flex items-center justify-between">
 					<h2 class="h-display text-xl text-text-primary">Recent sessions</h2>
-					<a class="text-sm font-bold text-accent hover:underline" href="/history">View all</a>
+					<a class="touch-target text-sm font-bold text-accent hover:underline" href="/history">View all</a>
 				</div>
 				<div class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
 					{#each overview.recentSessions as session (session.id)}

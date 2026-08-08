@@ -96,7 +96,7 @@
 						</div>
 						<h2 class="h-display text-xl text-text-primary">Recent sessions</h2>
 					</div>
-					<a class="text-sm font-bold text-accent hover:underline" href="/history">View all</a>
+					<a class="touch-target text-sm font-bold text-accent hover:underline" href="/history">View all</a>
 				</div>
 				<div class="mt-4 space-y-2">
 					{#each data.recentSessions.slice(0, 5) as session}
