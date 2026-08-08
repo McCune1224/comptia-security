@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type SortDefinition } from './question-bank';
+import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type SortDefinition } from './question-bank';
 
 describe('question bank', () => {
 	it('rejects malformed sort definitions but accepts well-formed ones', () => {
@@ -97,6 +97,81 @@ describe('question bank', () => {
 			blanks: [{ id: 'b1', label: 'Key type', placeholder: 'term', acceptedAnswers: ['shared', 'same'] }]
 		};
 		expect(() => validateQuestionBank({ mcqs: [], pbqs: [legacy] }, spec)).toThrow(/deprecated/);
+	});
+
+	it('rejects malformed hotspot definitions but accepts well-formed ones', () => {
+		const spec: CourseBankSpec = {
+			courseId: 'secp-701',
+			mcqTotal: 0,
+			pbqTotal: 1,
+			mcqIdPattern: /^mcq-none$/,
+			pbqIdPattern: /^pbq-/,
+			domains: [5],
+			objectivesByDomain: { 5: ['5.1'] },
+			mcqObjectiveTotals: {},
+			mcqDomainTotals: { 5: 0 },
+			multiTotals: { 5: 0 },
+			scenarioTotals: { 5: 0 }
+		};
+		const bands = [0, 14.3, 28.6, 42.9, 57.2, 71.5, 85.8, 100];
+		const region = (i: number, correct: boolean) => ({
+			id: `r${i}`,
+			label: `Layer ${i}`,
+			x1: 0,
+			y1: bands[i],
+			x2: 100,
+			y2: bands[i + 1],
+			correct
+		});
+		const base = {
+			id: 'pbq-5-997',
+			domain: 5 as const,
+			objective: '5.1',
+			format: 'pbq' as const,
+			prompt: 'Tap the OSI layers that match the description.',
+			explanation: 'Layers map to the description in the prompt.',
+			sourceRefs: [{ source: 'exam-objectives' as const, section: '5.1' }]
+		};
+		// No distractor region -> invalid.
+		const allCorrect: HotspotDefinition = {
+			...base,
+			kind: 'hotspot',
+			template: 'osi-stack',
+			regions: Array.from({ length: 7 }, (_, i) => region(i, true))
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [allCorrect] }, spec)).toThrow(/invalid hotspot/);
+		// Overlapping regions -> invalid (region 1 overlaps region 0's band).
+		const overlap: HotspotDefinition = {
+			...base,
+			kind: 'hotspot',
+			template: 'osi-stack',
+			regions: [
+				{ ...region(0, true) },
+				{ ...region(1, false), y1: 5, y2: 20 },
+				region(2, false),
+				region(3, false),
+				region(4, false),
+				region(5, false),
+				region(6, false)
+			]
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [overlap] }, spec)).toThrow(/invalid hotspot/);
+		// Unknown template -> invalid.
+		const badTemplate: HotspotDefinition = {
+			...base,
+			kind: 'hotspot',
+			template: 'not-a-template',
+			regions: Array.from({ length: 7 }, (_, i) => region(i, i === 0))
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [badTemplate] }, spec)).toThrow(/invalid hotspot/);
+		// Well-formed: 7 non-overlapping bands, one correct + distractors.
+		const good: HotspotDefinition = {
+			...base,
+			kind: 'hotspot',
+			template: 'osi-stack',
+			regions: Array.from({ length: 7 }, (_, i) => region(i, i === 3))
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
 	});
 
 	it('has the required authored allocation and redacts public questions', () => {
