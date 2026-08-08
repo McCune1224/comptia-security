@@ -96,6 +96,8 @@
 				return 'See correct regions below.';
 			case 'memory':
 				return 'See matched pairs below.';
+			case 'slider':
+				return `${cr.value}`;
 			case 'numeric':
 				return `${cr.value}`;
 			case 'multi-step':
@@ -135,6 +137,8 @@
 				return review.response.regionIds.join(', ');
 			case 'memory':
 				return review.response.matchedPairIds.join(', ');
+			case 'slider':
+				return `${review.response.value}${q.kind === 'slider' ? q.unit : ''}`;
 			case 'numeric':
 				return `${review.response.value}`;
 			case 'multi-step':
@@ -596,6 +600,21 @@
 									</div>
 								</div>
 							{/each}
+						</div>
+					{:else if q.kind === 'slider'}
+						<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+							<p class="text-text-primary">
+								Your answer:
+								{review.response?.kind === 'slider'
+									? `${review.response.value}${q.unit}`
+									: 'Not answered'}
+							</p>
+							<p class="mt-1 text-xs text-success">
+								Correct:
+								{review.feedback.correctResponse.kind === 'slider'
+									? `${review.feedback.correctResponse.value}${q.unit}`
+									: ''}
+							</p>
 						</div>
 					{:else if q.kind === 'multi-step'}
 						<div class="space-y-3">

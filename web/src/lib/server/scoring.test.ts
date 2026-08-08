@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
+import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type NumericDefinition, type SliderDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
 
 const bank = loadQuestionBank();
@@ -142,5 +142,32 @@ describe('scoreQuestion', () => {
 		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'zzz'] }).earnedPoints).toBe(0.25);
 		// Empty -> 0.
 		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: [] }).earnedPoints).toBe(0);
+	});
+
+	it('scores slider values with a tolerance band', () => {
+		const slider: SliderDefinition = {
+			id: 'pbq-5-992',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'What is the default SSH port?',
+			explanation: 'SSH listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'slider',
+			min: 1,
+			max: 65535,
+			step: 1,
+			unit: '',
+			correctValue: 22,
+			tolerance: 1
+		};
+		// Exact -> full credit.
+		expect(scoreQuestion(slider, { kind: 'slider', value: 22 }).earnedPoints).toBe(1);
+		// Within tolerance -> full credit.
+		expect(scoreQuestion(slider, { kind: 'slider', value: 23 }).earnedPoints).toBe(1);
+		// Out of tolerance -> 0.
+		expect(scoreQuestion(slider, { kind: 'slider', value: 30 }).earnedPoints).toBe(0);
+		// No response -> 0.
+		expect(scoreQuestion(slider, null).earnedPoints).toBe(0);
 	});
 });

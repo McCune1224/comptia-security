@@ -5,6 +5,7 @@
 	import SortBoard from '$lib/components/SortBoard.svelte';
 	import Hotspot from '$lib/components/Hotspot.svelte';
 	import MemoryBoard from '$lib/components/MemoryBoard.svelte';
+	import SliderInput from '$lib/components/SliderInput.svelte';
 	import type {
 		ActiveSessionSummary,
 		PublicQuestion,
@@ -112,6 +113,26 @@
 		return response.matchedPairIds.length === question.pairs.length;
 	}
 
+	function sliderAnswered(): boolean {
+		if (question?.kind !== 'slider') return true;
+		const response = draft?.kind === 'slider' ? draft : null;
+		if (!response) return false;
+		return Number.isFinite(response.value);
+	}
+
+	/** Uncommitted display start for a slider (mid-range, snapped to step) — draft stays null until touched. */
+	function sliderDefault(question: PublicQuestion): number {
+		if (question.kind !== 'slider') return 0;
+		const mid = (question.min + question.max) / 2;
+		return Math.min(
+			question.max,
+			Math.max(
+				question.min,
+				Math.round((mid - question.min) / question.step) * question.step + question.min
+			)
+		);
+	}
+
 	/** True when a multi-step child's response is complete enough to validate server-side. */
 	function stepAnswered(step: PublicQuestion, response: QuestionResponse | null): boolean {
 		if (!response) return false;
@@ -153,6 +174,8 @@
 				return response.kind === 'hotspot' && response.regionIds.length > 0;
 			case 'memory':
 				return response.kind === 'memory' && response.matchedPairIds.length === step.pairs.length;
+			case 'slider':
+				return response.kind === 'slider' && Number.isFinite(response.value);
 		}
 		return true;
 	}
@@ -173,6 +196,12 @@
 		const stepFeedback = feedback?.stepFeedback?.[subStep];
 		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'memory') return null;
 		return stepFeedback.correctResponse.matchedPairIds;
+	}
+
+	function stepSliderFeedbackValue(): number | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'slider') return null;
+		return stepFeedback.correctResponse.value;
 	}
 
 	function moveSubStep(dir: number) {
@@ -934,6 +963,23 @@
 						onchange={(matchedPairIds) => (draft = { kind: 'memory', matchedPairIds })}
 					/>
 				</div>
+			{:else if question.kind === 'slider'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<SliderInput
+						min={question.min}
+						max={question.max}
+						step={question.step}
+						unit={question.unit}
+						value={draft?.kind === 'slider' ? draft.value : sliderDefault(question)}
+						feedbackValue={feedback?.correctResponse.kind === 'slider'
+							? feedback.correctResponse.value
+							: null}
+						tolerance={question.tolerance}
+						disabled={!!feedback}
+						onchange={(value) => (draft = { kind: 'slider', value })}
+					/>
+				</div>
 			{:else if question.kind === 'multi-step'}
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
@@ -1186,6 +1232,19 @@
 							disabled={!!feedback}
 							onchange={(matchedPairIds) => updateSubResponse({ kind: 'memory', matchedPairIds })}
 						/>
+					{:else if step.kind === 'slider'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<SliderInput
+							min={step.min}
+							max={step.max}
+							step={step.step}
+							unit={step.unit}
+							value={subDraft?.kind === 'slider' ? subDraft.value : sliderDefault(step)}
+							feedbackValue={stepSliderFeedbackValue()}
+							tolerance={step.tolerance}
+							disabled={!!feedback}
+							onchange={(value) => updateSubResponse({ kind: 'slider', value })}
+						/>
 					{/if}
 
 					<div class="flex gap-2">
@@ -1224,7 +1283,8 @@
 						!sortAnswered() ||
 						!matchingAnswered() ||
 						!hotspotAnswered() ||
-						!memoryAnswered()}
+						!memoryAnswered() ||
+						!sliderAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'

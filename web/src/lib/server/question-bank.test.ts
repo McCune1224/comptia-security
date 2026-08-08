@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SortDefinition } from './question-bank';
+import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SliderDefinition, type SortDefinition } from './question-bank';
 
 describe('question bank', () => {
 	it('rejects malformed sort definitions but accepts well-formed ones', () => {
@@ -230,6 +230,67 @@ describe('question bank', () => {
 				{ id: 'p3', a: 'HTTP', b: '80' },
 				{ id: 'p4', a: 'HTTPS', b: '443' }
 			]
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
+	});
+
+	it('rejects malformed slider definitions but accepts well-formed ones', () => {
+		const spec: CourseBankSpec = {
+			courseId: 'secp-701',
+			mcqTotal: 0,
+			pbqTotal: 1,
+			mcqIdPattern: /^mcq-none$/,
+			pbqIdPattern: /^pbq-/,
+			domains: [5],
+			objectivesByDomain: { 5: ['5.1'] },
+			mcqObjectiveTotals: {},
+			mcqDomainTotals: { 5: 0 },
+			multiTotals: { 5: 0 },
+			scenarioTotals: { 5: 0 }
+		};
+		const base = {
+			id: 'pbq-5-990',
+			domain: 5 as const,
+			objective: '5.1',
+			format: 'pbq' as const,
+			prompt: 'What is the default SSH port?',
+			explanation: 'SSH listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives' as const, section: '5.1' }]
+		};
+		// correctValue out of range -> invalid.
+		const outOfRange: SliderDefinition = {
+			...base,
+			kind: 'slider',
+			min: 1,
+			max: 100,
+			step: 1,
+			unit: '',
+			correctValue: 200,
+			tolerance: 1
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [outOfRange] }, spec)).toThrow(/invalid slider/);
+		// step <= 0 -> invalid.
+		const badStep: SliderDefinition = {
+			...base,
+			kind: 'slider',
+			min: 1,
+			max: 100,
+			step: 0,
+			unit: '',
+			correctValue: 50,
+			tolerance: 1
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [badStep] }, spec)).toThrow(/invalid slider/);
+		// Well-formed -> accepts.
+		const good: SliderDefinition = {
+			...base,
+			kind: 'slider',
+			min: 1,
+			max: 100,
+			step: 1,
+			unit: '',
+			correctValue: 22,
+			tolerance: 1
 		};
 		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
 	});

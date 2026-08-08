@@ -71,6 +71,16 @@ export interface PublicNumericQuestion extends PublicQuestionBase {
 	unit: string;
 }
 
+export interface PublicSliderQuestion extends PublicQuestionBase {
+	kind: 'slider';
+	min: number;
+	max: number;
+	step: number;
+	unit: string;
+	/** Acceptance band: |value − correctValue| ≤ tolerance (correctValue stays secret server-side). */
+	tolerance: number;
+}
+
 export interface PublicEvidenceQuestion extends PublicQuestionBase {
 	kind: 'evidence';
 	artifact: {
@@ -133,6 +143,7 @@ export type PublicQuestion =
 	| PublicOrderingQuestion
 	| PublicMatchingQuestion
 	| PublicNumericQuestion
+	| PublicSliderQuestion
 	| PublicEvidenceQuestion
 	| PublicConfigurationQuestion
 	| PublicFillBlankQuestion
@@ -147,6 +158,7 @@ export type QuestionResponse =
 	| { kind: 'ordering'; itemIds: string[] }
 	| { kind: 'matching'; matches: Record<string, string> }
 	| { kind: 'numeric'; value: number }
+	| { kind: 'slider'; value: number }
 	| { kind: 'evidence'; lineIds: string[] }
 	| { kind: 'configuration'; values: Record<string, string> }
 	| { kind: 'fill-blank'; values: Record<string, string> }

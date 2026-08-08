@@ -49,6 +49,16 @@ export interface NumericDefinition extends DefinitionBase {
 	tolerance: number;
 }
 
+export interface SliderDefinition extends DefinitionBase {
+	kind: 'slider';
+	min: number;
+	max: number;
+	step: number;
+	unit: string;
+	correctValue: number;
+	tolerance: number;
+}
+
 export interface EvidenceDefinition extends DefinitionBase {
 	kind: 'evidence';
 	artifact: { label: string; format: 'log' | 'acl' | 'command-output'; lines: { id: string; text: string }[] };
@@ -121,6 +131,7 @@ export type QuestionDefinition =
 	| OrderingDefinition
 	| MatchingDefinition
 	| NumericDefinition
+	| SliderDefinition
 	| EvidenceDefinition
 	| ConfigurationDefinition
 	| FillBlankDefinition
@@ -253,6 +264,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		if (question.kind === 'ordering' && (question.items.length < 6 || !hasUniqueIds(question.items) || question.correctOrder.length !== question.items.length || new Set(question.correctOrder).size !== question.items.length || !question.correctOrder.every((id) => question.items.some((item) => item.id === id)))) fail(question.id, 'invalid ordering (need ≥6 items)');
 		if (question.kind === 'matching' && (question.premises.length < 5 || !hasUniqueIds(question.premises) || !hasUniqueIds(question.targets) || question.premises.length !== question.targets.length || Object.keys(question.correctMatches).length !== question.premises.length || new Set(Object.values(question.correctMatches)).size !== question.targets.length || !question.extraTargets?.length)) fail(question.id, 'invalid matching (need ≥5 pairs + extraTargets)');
 		if (question.kind === 'numeric' && (!Number.isFinite(question.correctValue) || question.tolerance < 0)) fail(question.id, 'invalid numeric response key');
+		if (question.kind === 'slider' && (![question.min, question.max, question.step, question.correctValue].every(Number.isFinite) || question.tolerance < 0 || question.step <= 0 || question.correctValue < question.min || question.correctValue > question.max)) fail(question.id, 'invalid slider (need finite min/max/step/correctValue, step > 0, correctValue within range, tolerance ≥ 0)');
 		if (question.kind === 'evidence' && (question.correctLineIds.length !== question.selectCount || new Set(question.correctLineIds).size !== question.selectCount || !question.correctLineIds.every((id) => question.artifact.lines.some((line) => line.id === id)))) fail(question.id, 'invalid evidence response key');
 		if (question.kind === 'configuration' && (question.fields.length < 4 || Object.keys(question.correctValues).length !== question.fields.length || question.fields.some((field) => field.options.length < 4 || !question.correctValues[field.id] || !field.options.some((option) => option.id === question.correctValues[field.id])))) fail(question.id, 'invalid configuration (need ≥4 fields, ≥4 options each)');
 		if (question.kind === 'word-bank' && (question.blanks.length < 2 || !hasUniqueIds(question.blanks) || !hasUniqueIds(question.bank) || question.bank.length < question.blanks.length + 1 || Object.keys(question.correctAssignments).length !== question.blanks.length || question.blanks.some((blank) => !question.correctAssignments[blank.id] || !question.bank.some((word) => word.id === question.correctAssignments[blank.id])) || new Set(Object.values(question.correctAssignments)).size !== question.blanks.length || (question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)) fail(question.id, 'invalid word-bank (need ≥2 blanks, bank ≥ blanks+1 with distractors, unique assignments)');
@@ -271,6 +283,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 				if (step.kind === 'configuration' && (step.fields.length < 4 || Object.keys(step.correctValues).length !== step.fields.length || step.fields.some((f) => f.options.length < 4 || !step.correctValues[f.id] || !f.options.some((o) => o.id === step.correctValues[f.id])))) fail(step.id || question.id, 'invalid child configuration (need ≥4 fields, ≥4 options each, valid correctValues)');
 				if (step.kind === 'evidence' && (step.correctLineIds.length !== step.selectCount || !step.correctLineIds.every((id) => step.artifact.lines.some((l) => l.id === id)))) fail(step.id || question.id, 'invalid child evidence');
 				if (step.kind === 'numeric' && (!Number.isFinite(step.correctValue) || step.tolerance < 0)) fail(step.id || question.id, 'invalid child numeric');
+				if (step.kind === 'slider' && (![step.min, step.max, step.step, step.correctValue].every(Number.isFinite) || step.tolerance < 0 || step.step <= 0 || step.correctValue < step.min || step.correctValue > step.max)) fail(step.id || question.id, 'invalid child slider');
 				if (step.kind === 'word-bank' && (step.blanks.length < 2 || !hasUniqueIds(step.blanks) || !hasUniqueIds(step.bank) || step.bank.length < step.blanks.length + 1 || Object.keys(step.correctAssignments).length !== step.blanks.length || new Set(Object.values(step.correctAssignments)).size !== step.blanks.length || (step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)) fail(step.id || question.id, 'invalid child word-bank');
 				if (step.kind === 'sort' && (step.items.length < 4 || step.buckets.length < 2 || Object.keys(step.correctBuckets).length !== step.items.length || !step.items.every((item) => step.correctBuckets[item.id] && step.buckets.some((bucket) => bucket.id === step.correctBuckets[item.id])) || new Set(Object.values(step.correctBuckets)).size >= step.buckets.length)) fail(step.id || question.id, 'invalid child sort');
 				if (step.kind === 'hotspot' && !isValidHotspot(step)) fail(step.id || question.id, 'invalid child hotspot');
@@ -294,6 +307,7 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 		case 'ordering': return { ...base, kind: 'ordering', items: definition.items };
 		case 'matching': return { ...base, kind: 'matching', premises: definition.premises, targets: definition.targets, ...(definition.extraTargets ? { extraTargets: definition.extraTargets } : {}) };
 		case 'numeric': return { ...base, kind: 'numeric', unit: definition.unit };
+		case 'slider': return { ...base, kind: 'slider', min: definition.min, max: definition.max, step: definition.step, unit: definition.unit, tolerance: definition.tolerance };
 		case 'evidence': return { ...base, kind: 'evidence', artifact: definition.artifact, selectCount: definition.selectCount };
 		case 'configuration': return { ...base, kind: 'configuration', fields: definition.fields };
 		case 'fill-blank': return { ...base, kind: 'fill-blank', blanks: definition.blanks.map(({ id, label, placeholder }) => ({ id, label, placeholder })) };
@@ -311,6 +325,7 @@ export function correctResponse(definition: QuestionDefinition): QuestionRespons
 		case 'ordering': return { kind: 'ordering', itemIds: definition.correctOrder };
 		case 'matching': return { kind: 'matching', matches: definition.correctMatches };
 		case 'numeric': return { kind: 'numeric', value: definition.correctValue };
+		case 'slider': return { kind: 'slider', value: definition.correctValue };
 		case 'evidence': return { kind: 'evidence', lineIds: definition.correctLineIds };
 		case 'configuration': return { kind: 'configuration', values: definition.correctValues };
 		case 'fill-blank': return { kind: 'fill-blank', values: Object.fromEntries(definition.blanks.map((blank) => [blank.id, blank.acceptedAnswers[0]])) };

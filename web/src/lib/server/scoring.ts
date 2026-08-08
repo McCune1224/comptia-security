@@ -9,6 +9,11 @@ function selectedScore(correctIds: string[], selectedIds: string[]): number {
 	return Math.min(1, Math.max(0, (hits - misses) / correctIds.length));
 }
 
+/** Shared tolerance check for numeric and slider scoring: |value − correct| ≤ tolerance. */
+export function withinTolerance(value: number, correctValue: number, tolerance: number): boolean {
+	return Math.abs(value - correctValue) <= tolerance;
+}
+
 export function scoreQuestion(
 	question: QuestionDefinition,
 	response: QuestionResponse | null
@@ -33,7 +38,10 @@ export function scoreQuestion(
 				if (response.kind === 'matching') earnedPoints = question.premises.filter((premise) => response.matches[premise.id] === question.correctMatches[premise.id]).length / question.premises.length;
 				break;
 			case 'numeric':
-				if (response.kind === 'numeric' && Math.abs(response.value - question.correctValue) <= question.tolerance) earnedPoints = 1;
+				if (response.kind === 'numeric' && withinTolerance(response.value, question.correctValue, question.tolerance)) earnedPoints = 1;
+				break;
+			case 'slider':
+				if (response.kind === 'slider' && withinTolerance(response.value, question.correctValue, question.tolerance)) earnedPoints = 1;
 				break;
 			case 'evidence':
 				if (response.kind === 'evidence') earnedPoints = selectedScore(question.correctLineIds, response.lineIds);

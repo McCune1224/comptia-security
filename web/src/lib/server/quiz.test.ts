@@ -166,6 +166,47 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('round-trips slider responses through a PBQ session with an injected bank', () => {
+		const repository = createQuizRepository(':memory:');
+		const sliderPbq: QuestionDefinition = {
+			id: 'pbq-5-991',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'What is the default SSH port?',
+			explanation: 'SSH listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'slider',
+			min: 1,
+			max: 65535,
+			step: 1,
+			unit: '',
+			correctValue: 22,
+			tolerance: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [sliderPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		expect(session.questions[0].kind).toBe('slider');
+		// Public view must not leak the correct value.
+		const pub = session.questions[0];
+		expect(pub.kind === 'slider' && 'correctValue' in pub).toBe(false);
+		// Within tolerance -> full credit.
+		service.saveResponse(session.sessionId, 0, { kind: 'slider', value: 22 });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		// Out-of-range value -> INVALID_REQUEST.
+		const invalid = service.startSession({ type: 'pbq', count: 1 });
+		expect(() =>
+			service.saveResponse(invalid.sessionId, 0, { kind: 'slider', value: 99999 })
+		).toThrow('Response does not match the question interaction.');
+		repository.close();
+	});
+
 	it('round-trips sort responses through a PBQ session with an injected bank', () => {
 		const repository = createQuizRepository(':memory:');
 		const sortPbq: QuestionDefinition = {
