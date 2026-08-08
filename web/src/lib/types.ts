@@ -116,6 +116,12 @@ export interface PublicHotspotQuestion extends PublicQuestionBase {
 	regions: { id: string; label: string; x1: number; y1: number; x2: number; y2: number }[];
 }
 
+export interface PublicMemoryQuestion extends PublicQuestionBase {
+	kind: 'memory';
+	/** Card pairs; each pair renders as two face-down cards (a-side and b-side). */
+	pairs: { id: string; a: string; b: string }[];
+}
+
 export interface PublicMultiStepPbqQuestion extends PublicQuestionBase {
 	kind: 'multi-step';
 	context: string;
@@ -133,6 +139,7 @@ export type PublicQuestion =
 	| PublicWordBankQuestion
 	| PublicSortQuestion
 	| PublicHotspotQuestion
+	| PublicMemoryQuestion
 	| PublicMultiStepPbqQuestion;
 
 export type QuestionResponse =
