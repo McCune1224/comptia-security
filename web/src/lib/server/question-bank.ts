@@ -104,6 +104,12 @@ export interface HotspotDefinition extends DefinitionBase {
 	}[];
 }
 
+export interface MemoryDefinition extends DefinitionBase {
+	kind: 'memory';
+	/** Card pairs; each pair renders as two face-down cards (a-side and b-side). */
+	pairs: { id: string; a: string; b: string }[];
+}
+
 export interface MultiStepPbqDefinition extends DefinitionBase {
 	kind: 'multi-step';
 	context: string;
@@ -121,6 +127,7 @@ export type QuestionDefinition =
 	| WordBankDefinition
 	| SortDefinition
 	| HotspotDefinition
+	| MemoryDefinition
 	| MultiStepPbqDefinition;
 
 export interface QuestionBank {
@@ -251,6 +258,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		if (question.kind === 'word-bank' && (question.blanks.length < 2 || !hasUniqueIds(question.blanks) || !hasUniqueIds(question.bank) || question.bank.length < question.blanks.length + 1 || Object.keys(question.correctAssignments).length !== question.blanks.length || question.blanks.some((blank) => !question.correctAssignments[blank.id] || !question.bank.some((word) => word.id === question.correctAssignments[blank.id])) || new Set(Object.values(question.correctAssignments)).size !== question.blanks.length || (question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)) fail(question.id, 'invalid word-bank (need ≥2 blanks, bank ≥ blanks+1 with distractors, unique assignments)');
 		if (question.kind === 'sort' && (question.items.length < 4 || !hasUniqueIds(question.items) || question.buckets.length < 2 || !hasUniqueIds(question.buckets) || Object.keys(question.correctBuckets).length !== question.items.length || !question.items.every((item) => question.correctBuckets[item.id] && question.buckets.some((bucket) => bucket.id === question.correctBuckets[item.id])) || new Set(Object.values(question.correctBuckets)).size >= question.buckets.length)) fail(question.id, 'invalid sort (need ≥4 items, ≥2 buckets, all items bucketed, at least one distractor bucket)');
 		if (question.kind === 'hotspot' && !isValidHotspot(question)) fail(question.id, 'invalid hotspot (need ≥2 non-overlapping regions in 0–100 on a known template, ≥1 correct + ≥1 distractor)');
+		if (question.kind === 'memory' && (question.pairs.length < 4 || !hasUniqueIds(question.pairs) || question.pairs.some((pair) => !pair.a.trim() || !pair.b.trim()) || new Set(question.pairs.flatMap((pair) => [pair.a, pair.b])).size !== question.pairs.length * 2)) fail(question.id, 'invalid memory (need ≥4 pairs, unique ids, every card text unique across the board)');
 		if (question.kind === 'multi-step') {
 			if (!question.steps || question.steps.length < 2 || question.steps.length > 4) fail(question.id, 'multi-step must have 2-4 steps');
 			for (const step of question.steps) {
@@ -266,6 +274,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 				if (step.kind === 'word-bank' && (step.blanks.length < 2 || !hasUniqueIds(step.blanks) || !hasUniqueIds(step.bank) || step.bank.length < step.blanks.length + 1 || Object.keys(step.correctAssignments).length !== step.blanks.length || new Set(Object.values(step.correctAssignments)).size !== step.blanks.length || (step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)) fail(step.id || question.id, 'invalid child word-bank');
 				if (step.kind === 'sort' && (step.items.length < 4 || step.buckets.length < 2 || Object.keys(step.correctBuckets).length !== step.items.length || !step.items.every((item) => step.correctBuckets[item.id] && step.buckets.some((bucket) => bucket.id === step.correctBuckets[item.id])) || new Set(Object.values(step.correctBuckets)).size >= step.buckets.length)) fail(step.id || question.id, 'invalid child sort');
 				if (step.kind === 'hotspot' && !isValidHotspot(step)) fail(step.id || question.id, 'invalid child hotspot');
+				if (step.kind === 'memory' && (step.pairs.length < 4 || !hasUniqueIds(step.pairs) || step.pairs.some((p) => !p.a.trim() || !p.b.trim()) || new Set(step.pairs.flatMap((p) => [p.a, p.b])).size !== step.pairs.length * 2)) fail(step.id || question.id, 'invalid child memory (need ≥4 pairs, unique texts)');
 			}
 		}
 	}
@@ -291,6 +300,7 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 		case 'word-bank': return { ...base, kind: 'word-bank', blanks: definition.blanks, bank: definition.bank };
 		case 'sort': return { ...base, kind: 'sort', items: definition.items, buckets: definition.buckets };
 		case 'hotspot': return { ...base, kind: 'hotspot', template: definition.template, regions: definition.regions.map(({ id, label, x1, y1, x2, y2 }) => ({ id, label, x1, y1, x2, y2 })) };
+		case 'memory': return { ...base, kind: 'memory', pairs: definition.pairs };
 		case 'multi-step': return { ...base, kind: 'multi-step', context: definition.context, steps: definition.steps.map(toPublicQuestion) };
 	}
 }
@@ -307,6 +317,7 @@ export function correctResponse(definition: QuestionDefinition): QuestionRespons
 		case 'word-bank': return { kind: 'word-bank', assignments: definition.correctAssignments };
 		case 'sort': return { kind: 'sort', assignments: definition.correctBuckets };
 		case 'hotspot': return { kind: 'hotspot', regionIds: definition.regions.filter((region) => region.correct).map((region) => region.id) };
+		case 'memory': return { kind: 'memory', matchedPairIds: definition.pairs.map((pair) => pair.id) };
 		case 'multi-step': return { kind: 'multi-step', stepResponses: definition.steps.map(correctResponse) };
 	}
 }

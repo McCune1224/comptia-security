@@ -123,6 +123,49 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('round-trips memory responses through a PBQ session with an injected bank', () => {
+		const repository = createQuizRepository(':memory:');
+		const memoryPbq: QuestionDefinition = {
+			id: 'pbq-5-994',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Match each service to its well-known port.',
+			explanation: 'Well-known ports map to their services.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' },
+				{ id: 'p4', a: 'HTTPS', b: '443' }
+			]
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [memoryPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		expect(session.questions[0].kind).toBe('memory');
+		// Correct response -> full credit.
+		service.saveResponse(session.sessionId, 0, { kind: 'memory', matchedPairIds: ['p1', 'p2', 'p3', 'p4'] });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		// Partial -> 0.5.
+		const partial = service.startSession({ type: 'pbq', count: 1 });
+		service.saveResponse(partial.sessionId, 0, { kind: 'memory', matchedPairIds: ['p1', 'p2'] });
+		const partialResult = service.completeSession(partial.sessionId);
+		expect(partialResult.review[0].feedback.earnedPoints).toBe(0.5);
+		// Unknown pair id -> INVALID_REQUEST.
+		const invalid = service.startSession({ type: 'pbq', count: 1 });
+		expect(() =>
+			service.saveResponse(invalid.sessionId, 0, { kind: 'memory', matchedPairIds: ['zzz'] })
+		).toThrow('Response does not match the question interaction.');
+		repository.close();
+	});
+
 	it('round-trips sort responses through a PBQ session with an injected bank', () => {
 		const repository = createQuizRepository(':memory:');
 		const sortPbq: QuestionDefinition = {

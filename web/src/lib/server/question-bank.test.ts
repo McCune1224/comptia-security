@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type SortDefinition } from './question-bank';
+import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SortDefinition } from './question-bank';
 
 describe('question bank', () => {
 	it('rejects malformed sort definitions but accepts well-formed ones', () => {
@@ -170,6 +170,66 @@ describe('question bank', () => {
 			kind: 'hotspot',
 			template: 'osi-stack',
 			regions: Array.from({ length: 7 }, (_, i) => region(i, i === 3))
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
+	});
+
+	it('rejects malformed memory definitions but accepts well-formed ones', () => {
+		const spec: CourseBankSpec = {
+			courseId: 'secp-701',
+			mcqTotal: 0,
+			pbqTotal: 1,
+			mcqIdPattern: /^mcq-none$/,
+			pbqIdPattern: /^pbq-/,
+			domains: [5],
+			objectivesByDomain: { 5: ['5.1'] },
+			mcqObjectiveTotals: {},
+			mcqDomainTotals: { 5: 0 },
+			multiTotals: { 5: 0 },
+			scenarioTotals: { 5: 0 }
+		};
+		const base = {
+			id: 'pbq-5-993',
+			domain: 5 as const,
+			objective: '5.1',
+			format: 'pbq' as const,
+			prompt: 'Match each service to its well-known port.',
+			explanation: 'Well-known ports map to their services.',
+			sourceRefs: [{ source: 'exam-objectives' as const, section: '5.1' }]
+		};
+		// Fewer than 4 pairs -> invalid.
+		const tooFew: MemoryDefinition = {
+			...base,
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' }
+			]
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [tooFew] }, spec)).toThrow(/invalid memory/);
+		// Duplicate card text across the board -> invalid.
+		const dupText: MemoryDefinition = {
+			...base,
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' },
+				{ id: 'p4', a: 'HTTP', b: '443' }
+			]
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [dupText] }, spec)).toThrow(/invalid memory/);
+		// Well-formed: 4 unique pairs -> accepts.
+		const good: MemoryDefinition = {
+			...base,
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' },
+				{ id: 'p4', a: 'HTTPS', b: '443' }
+			]
 		};
 		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
 	});

@@ -4,6 +4,7 @@
 	import MatchConnect from '$lib/components/MatchConnect.svelte';
 	import SortBoard from '$lib/components/SortBoard.svelte';
 	import Hotspot from '$lib/components/Hotspot.svelte';
+	import MemoryBoard from '$lib/components/MemoryBoard.svelte';
 	import type {
 		ActiveSessionSummary,
 		PublicQuestion,
@@ -104,6 +105,13 @@
 		return response.regionIds.length > 0;
 	}
 
+	function memoryAnswered(): boolean {
+		if (question?.kind !== 'memory') return true;
+		const response = draft?.kind === 'memory' ? draft : null;
+		if (!response) return false;
+		return response.matchedPairIds.length === question.pairs.length;
+	}
+
 	/** True when a multi-step child's response is complete enough to validate server-side. */
 	function stepAnswered(step: PublicQuestion, response: QuestionResponse | null): boolean {
 		if (!response) return false;
@@ -125,8 +133,7 @@
 				);
 			case 'sort':
 				return (
-					response.kind === 'sort' &&
-					step.items.every((item) => !!response.assignments[item.id])
+					response.kind === 'sort' && step.items.every((item) => !!response.assignments[item.id])
 				);
 			case 'configuration':
 				return (
@@ -144,6 +151,8 @@
 				return response.kind === 'numeric' && Number.isFinite(response.value);
 			case 'hotspot':
 				return response.kind === 'hotspot' && response.regionIds.length > 0;
+			case 'memory':
+				return response.kind === 'memory' && response.matchedPairIds.length === step.pairs.length;
 		}
 		return true;
 	}
@@ -158,6 +167,12 @@
 		const stepFeedback = feedback?.stepFeedback?.[subStep];
 		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'hotspot') return null;
 		return stepFeedback.correctResponse.regionIds;
+	}
+
+	function stepMemoryCorrectIds(): string[] | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'memory') return null;
+		return stepFeedback.correctResponse.matchedPairIds;
 	}
 
 	function moveSubStep(dir: number) {
@@ -611,10 +626,7 @@
 					class="chip flex items-center gap-1.5 bg-surface-700 text-accent-warm"
 					title="Answer streak"
 				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="currentColor"
+					<svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"
 						><path
 							d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
 						/></svg
@@ -623,9 +635,7 @@
 				</span>
 			{/if}
 			{#if session.mode === 'practice' && sessionScore > 0}
-				<span class="chip bg-surface-700 text-text-secondary"
-					>{Math.round(sessionScore)} pts</span
-				>
+				<span class="chip bg-surface-700 text-text-secondary">{Math.round(sessionScore)} pts</span>
 			{/if}
 			{#if timer}<span
 					class="chip flex items-center gap-1.5 bg-surface-700 font-mono font-semibold {isLowTime()
@@ -757,7 +767,9 @@
 					premises={question.premises}
 					targets={[...question.targets, ...(question.extraTargets ?? [])]}
 					matches={draft?.kind === 'matching' ? draft.matches : {}}
-					feedbackMatches={feedback?.correctResponse.kind === 'matching' ? feedback.correctResponse.matches : null}
+					feedbackMatches={feedback?.correctResponse.kind === 'matching'
+						? feedback.correctResponse.matches
+						: null}
 					disabled={!!feedback}
 					onchange={(m) => (draft = { kind: 'matching', matches: m })}
 				/>
@@ -889,7 +901,9 @@
 					items={question.items}
 					buckets={question.buckets}
 					assignments={draft?.kind === 'sort' ? draft.assignments : {}}
-					feedbackAssignments={feedback?.correctResponse.kind === 'sort' ? feedback.correctResponse.assignments : null}
+					feedbackAssignments={feedback?.correctResponse.kind === 'sort'
+						? feedback.correctResponse.assignments
+						: null}
 					disabled={!!feedback}
 					onchange={(a) => (draft = { kind: 'sort', assignments: a })}
 				/>
@@ -900,9 +914,24 @@
 						template={question.template}
 						regions={question.regions}
 						selectedIds={draft?.kind === 'hotspot' ? draft.regionIds : []}
-						feedbackCorrectIds={feedback?.correctResponse.kind === 'hotspot' ? feedback.correctResponse.regionIds : null}
+						feedbackCorrectIds={feedback?.correctResponse.kind === 'hotspot'
+							? feedback.correctResponse.regionIds
+							: null}
 						disabled={!!feedback}
 						onchange={(regionIds) => (draft = { kind: 'hotspot', regionIds })}
+					/>
+				</div>
+			{:else if question.kind === 'memory'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<MemoryBoard
+						pairs={question.pairs}
+						matchedIds={draft?.kind === 'memory' ? draft.matchedPairIds : []}
+						feedbackCorrectIds={feedback?.correctResponse.kind === 'memory'
+							? feedback.correctResponse.matchedPairIds
+							: null}
+						disabled={!!feedback}
+						onchange={(matchedPairIds) => (draft = { kind: 'memory', matchedPairIds })}
 					/>
 				</div>
 			{:else if question.kind === 'multi-step'}
@@ -1148,6 +1177,15 @@
 							disabled={!!feedback}
 							onchange={(regionIds) => updateSubResponse({ kind: 'hotspot', regionIds })}
 						/>
+					{:else if step.kind === 'memory'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<MemoryBoard
+							pairs={step.pairs}
+							matchedIds={subDraft?.kind === 'memory' ? subDraft.matchedPairIds : []}
+							feedbackCorrectIds={stepMemoryCorrectIds()}
+							disabled={!!feedback}
+							onchange={(matchedPairIds) => updateSubResponse({ kind: 'memory', matchedPairIds })}
+						/>
 					{/if}
 
 					<div class="flex gap-2">
@@ -1178,7 +1216,15 @@
 					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered() || !matchingAnswered() || !hotspotAnswered()}
+					disabled={!draft ||
+						saving ||
+						!!feedback ||
+						!allSubStepsAnswered() ||
+						!blanksAnswered() ||
+						!sortAnswered() ||
+						!matchingAnswered() ||
+						!hotspotAnswered() ||
+						!memoryAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'
@@ -1223,10 +1269,7 @@
 
 					{#if session.mode === 'practice' && !feedback.fullyCorrect && retriesLeft > 0}
 						<div class="mt-3 flex flex-wrap gap-2">
-							<button
-								class="btn btn-ghost h-11 px-4 text-sm"
-								type="button"
-								onclick={retryQuestion}
+							<button class="btn btn-ghost h-11 px-4 text-sm" type="button" onclick={retryQuestion}
 								>Try again — {retriesLeft === 2 ? '60' : '30'}%</button
 							>
 						</div>

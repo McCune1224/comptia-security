@@ -70,6 +70,12 @@ export function scoreQuestion(
 					earnedPoints = selectedScore(correctIds, response.regionIds);
 				}
 				break;
+			case 'memory':
+				if (response.kind === 'memory') {
+					const correctIds = new Set(question.pairs.map((pair) => pair.id));
+					earnedPoints = (response.matchedPairIds ?? []).filter((id) => correctIds.has(id)).length / question.pairs.length;
+				}
+				break;
 			case 'multi-step':
 				if (response.kind === 'multi-step') {
 					const stepScores = question.steps.map((step, i) => scoreQuestion(step, response.stepResponses[i] ?? null));

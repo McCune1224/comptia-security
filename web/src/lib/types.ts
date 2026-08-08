@@ -153,6 +153,7 @@ export type QuestionResponse =
 	| { kind: 'word-bank'; assignments: Record<string, string> }
 	| { kind: 'sort'; assignments: Record<string, string> }
 	| { kind: 'hotspot'; regionIds: string[] }
+	| { kind: 'memory'; matchedPairIds: string[] }
 	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
 
 export interface QuestionFeedback {

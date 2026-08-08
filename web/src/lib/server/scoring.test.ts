@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
+import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
 
 const bank = loadQuestionBank();
@@ -115,5 +115,32 @@ describe('scoreQuestion', () => {
 		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: ['r1'] }).earnedPoints).toBe(0);
 		// Empty -> 0.
 		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: [] }).earnedPoints).toBe(0);
+	});
+
+	it('scores memory pair matches without a guessing penalty', () => {
+		const memory: MemoryDefinition = {
+			id: 'pbq-5-996',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Match each service to its well-known port.',
+			explanation: 'Well-known ports map to their services.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' },
+				{ id: 'p4', a: 'HTTPS', b: '443' }
+			]
+		};
+		// All pairs matched -> full credit.
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'p2', 'p3', 'p4'] }).earnedPoints).toBe(1);
+		// Half matched -> 0.5 (no penalty for attempts).
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'p2'] }).earnedPoints).toBe(0.5);
+		// Unknown ids are simply not counted (validateResponse blocks them upstream).
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'zzz'] }).earnedPoints).toBe(0.25);
+		// Empty -> 0.
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: [] }).earnedPoints).toBe(0);
 	});
 });
