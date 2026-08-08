@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type SortDefinition } from './question-bank';
+import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type SortDefinition } from './question-bank';
 
 describe('question bank', () => {
 	it('rejects malformed sort definitions but accepts well-formed ones', () => {
@@ -69,6 +69,34 @@ describe('question bank', () => {
 			correctBuckets: { i1: 'b1', i2: 'b2', i3: 'b1', i4: 'b2' }
 		};
 		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
+	});
+
+	it('rejects fill-blank definitions (deprecated kind)', () => {
+		const spec: CourseBankSpec = {
+			courseId: 'secp-701',
+			mcqTotal: 0,
+			pbqTotal: 1,
+			mcqIdPattern: /^mcq-none$/,
+			pbqIdPattern: /^pbq-/,
+			domains: [1],
+			objectivesByDomain: { 1: ['1.4'] },
+			mcqObjectiveTotals: {},
+			mcqDomainTotals: { 1: 0 },
+			multiTotals: { 1: 0 },
+			scenarioTotals: { 1: 0 }
+		};
+		const legacy: FillBlankDefinition = {
+			id: 'pbq-1-995',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt: 'The symmetric cipher uses ____ keys.',
+			explanation: 'Symmetric ciphers share one key.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'fill-blank',
+			blanks: [{ id: 'b1', label: 'Key type', placeholder: 'term', acceptedAnswers: ['shared', 'same'] }]
+		};
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [legacy] }, spec)).toThrow(/deprecated/);
 	});
 
 	it('has the required authored allocation and redacts public questions', () => {
