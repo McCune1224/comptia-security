@@ -17,7 +17,7 @@ import {
 	type QuestionBank,
 	type QuestionDefinition
 } from './question-bank';
-import { HINT_POINT_FACTOR, scoreQuestion } from './scoring';
+import { scoreQuestion } from './scoring';
 import { createCourseService, type CourseService } from './course-service';
 import { createReviewService, type ReviewService, type ReviewSource } from './review';
 
@@ -526,8 +526,7 @@ export function createQuizService({
 			if (stored.summary.mode !== 'practice') return { saved: true as const };
 			const feedback = scoreQuestion(question, response, { hintUsed });
 			feedback.earnedPoints *=
-				RETRY_FACTORS[Math.min((stored.retries[questionIndex] ?? 0) + 1, MAX_PRACTICE_RETRIES)] *
-				(hintUsed ? HINT_POINT_FACTOR : 1);
+				RETRY_FACTORS[Math.min((stored.retries[questionIndex] ?? 0) + 1, MAX_PRACTICE_RETRIES)];
 			return { saved: true as const, feedback };
 		},
 		updateSession(id, update) {
