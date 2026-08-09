@@ -285,7 +285,7 @@ function seedCourse(db: Database.Database): void {
 			'INSERT INTO course_modules (id, course_id, week, title, description, position) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, week = excluded.week, title = excluded.title, description = excluded.description, position = excluded.position'
 		);
 		const insertLesson = db.prepare(
-			'INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, position) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, position = excluded.position'
+			'INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, objective_id, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, objective_id = excluded.objective_id, position = excluded.position'
 		);
 		const insertAssignment = db.prepare(
 			'INSERT INTO course_assignments (id, course_id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, description = excluded.description, kind = excluded.kind, category = excluded.category, points = excluded.points, count = excluded.count, domain = excluded.domain, mode = excluded.mode, duration_minutes = excluded.duration_minutes, due_offset_days = excluded.due_offset_days, position = excluded.position'
@@ -311,6 +311,7 @@ function seedCourse(db: Database.Database): void {
 					lesson.title,
 					lesson.summary,
 					lesson.content,
+					lesson.objectiveId ?? null,
 					lesson.position
 				);
 			for (const assignment of definition.assignments)
@@ -355,7 +356,7 @@ export function createQuizRepository(
 		CREATE TABLE IF NOT EXISTS study_log (profile_id TEXT NOT NULL, date_key TEXT NOT NULL, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL, PRIMARY KEY (profile_id, date_key));
 		CREATE TABLE IF NOT EXISTS course_meta (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, key));
 		CREATE TABLE IF NOT EXISTS course_modules (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', week INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, position INTEGER NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', objective_id TEXT, position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_assignments (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, kind TEXT NOT NULL, category TEXT NOT NULL, points REAL NOT NULL, count INTEGER NOT NULL, domain INTEGER, mode TEXT NOT NULL, duration_minutes INTEGER NOT NULL, due_offset_days INTEGER NOT NULL, position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_assignment_submissions (profile_id TEXT NOT NULL, assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, assignment_id, session_id));
 		CREATE TABLE IF NOT EXISTS course_lesson_completions (profile_id TEXT NOT NULL, lesson_id TEXT NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, lesson_id));
@@ -426,6 +427,8 @@ export function createQuizRepository(
 			db.exec('ALTER TABLE quiz_session_responses ADD COLUMN retries INTEGER NOT NULL DEFAULT 0');
 		if (!has('quiz_session_responses', 'hint_used'))
 			db.exec('ALTER TABLE quiz_session_responses ADD COLUMN hint_used INTEGER NOT NULL DEFAULT 0');
+		if (!has('course_lessons', 'objective_id'))
+			db.exec('ALTER TABLE course_lessons ADD COLUMN objective_id TEXT');
 
 		// B. Primary-key rebuilds — SQLite 12-step, backfilling all existing
 		// rows to the seeded default profile / Security+ course.
@@ -861,7 +864,7 @@ export function createQuizRepository(
 			getCourseLessons() {
 				return db
 					.prepare(
-						'SELECT id, module_id AS moduleId, title, summary, content, position FROM course_lessons WHERE course_id = ? ORDER BY position'
+						'SELECT id, module_id AS moduleId, title, summary, content, objective_id AS objectiveId, position FROM course_lessons WHERE course_id = ? ORDER BY position'
 					)
 					.all(scope.courseId) as unknown as CourseLesson[];
 			},
