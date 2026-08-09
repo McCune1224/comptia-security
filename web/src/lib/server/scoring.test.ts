@@ -183,4 +183,35 @@ describe('scoreQuestion', () => {
 		// No response -> 0.
 		expect(scoreQuestion(slider, null).earnedPoints).toBe(0);
 	});
+
+	it('applies the hint point cost without flipping fullyCorrect', () => {
+		const choice: ChoiceDefinition = {
+			id: 'pbq-5-989',
+			domain: 5,
+			objective: '5.2',
+			format: 'pbq',
+			prompt: 'Synthetic choice item for hint scoring.',
+			explanation: 'Synthetic.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.2' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'Correct', rationale: 'Correct.' },
+				{ id: 'b', text: 'Wrong', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Wrong', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Wrong', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		// No hint -> full credit and fullyCorrect.
+		const plain = scoreQuestion(choice, { kind: 'choice', optionIds: ['a'] });
+		expect(plain.earnedPoints).toBe(1);
+		expect(plain.fullyCorrect).toBe(true);
+		// Hint used -> 0.75 but still fullyCorrect (raw correctness is unscaled).
+		const hinted = scoreQuestion(choice, { kind: 'choice', optionIds: ['a'] }, { hintUsed: true });
+		expect(hinted.earnedPoints).toBe(0.75);
+		expect(hinted.fullyCorrect).toBe(true);
+		// Wrong answer stays 0 even with a hint.
+		expect(scoreQuestion(choice, { kind: 'choice', optionIds: ['b'] }, { hintUsed: true }).earnedPoints).toBe(0);
+	});
 });

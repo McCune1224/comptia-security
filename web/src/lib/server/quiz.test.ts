@@ -166,6 +166,50 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('applies the practice-mode hint point cost server-side', () => {
+		const repository = createQuizRepository(':memory:');
+		const choicePbq: QuestionDefinition = {
+			id: 'pbq-5-988',
+			domain: 5,
+			objective: '5.2',
+			format: 'pbq',
+			prompt: 'Synthetic choice item for the hint flow.',
+			explanation: 'Synthetic.',
+			hint: 'The service listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.2' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'SSH', rationale: 'Correct.' },
+				{ id: 'b', text: 'DNS', rationale: 'Wrong.' },
+				{ id: 'c', text: 'HTTP', rationale: 'Wrong.' },
+				{ id: 'd', text: 'SMTP', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [choicePbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		// Public view exposes the hint but the correct answer stays secret.
+		const plain = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		expect(plain.questions[0].kind === 'single-choice' && plain.questions[0].hint).toBe('The service listens on TCP 22.');
+		// First attempt, no hint -> full points.
+		service.saveResponse(plain.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const plainResult = service.completeSession(plain.sessionId);
+		expect(plainResult.review[0].feedback.earnedPoints).toBe(1);
+		// Retry with hint -> 0.6 (retry) × 0.75 (hint) = 0.45.
+		const hinted = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
+		const retry = service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['a'] }, true);
+		expect(retry.feedback?.earnedPoints).toBeCloseTo(0.6 * 0.75);
+		const hintedResult = service.completeSession(hinted.sessionId);
+		expect(hintedResult.review[0].feedback.earnedPoints).toBeCloseTo(0.6 * 0.75);
+		repository.close();
+	});
+
 	it('round-trips slider responses through a PBQ session with an injected bank', () => {
 		const repository = createQuizRepository(':memory:');
 		const sliderPbq: QuestionDefinition = {

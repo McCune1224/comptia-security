@@ -46,6 +46,8 @@ export interface PublicQuestionBase {
 	format: QuestionFormat;
 	prompt: string;
 	context?: string;
+	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
+	hint?: string;
 }
 
 export interface PublicChoiceQuestion extends PublicQuestionBase {

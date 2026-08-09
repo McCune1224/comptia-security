@@ -282,6 +282,9 @@
 		}
 	}
 
+	/** Practice-mode hint revealed per question index (client view; server enforces the 25% cost). */
+	let hintUsed = $state<Record<number, boolean>>({});
+
 	async function save() {
 		if (!session || !draft) return;
 		saving = true;
@@ -293,7 +296,8 @@
 				body: JSON.stringify({
 					sessionId: session.sessionId,
 					questionIndex: index,
-					response: draft
+					response: draft,
+					hintUsed: hintUsed[index] ?? false
 				})
 			});
 			const data = await response.json();
@@ -1343,6 +1347,23 @@
 							<button class="btn btn-ghost h-11 px-4 text-sm" type="button" onclick={retryQuestion}
 								>Try again — {retriesLeft === 2 ? '60' : '30'}%</button
 							>
+						</div>
+					{/if}
+					{#if session.mode === 'practice' && !feedback.fullyCorrect && question?.hint}
+						<div class="mt-3">
+							{#if hintUsed[index]}
+								<p
+									class="rounded-md bg-surface-700/60 p-3 text-sm leading-relaxed text-text-secondary"
+								>
+									{question.hint}
+								</p>
+							{:else}
+								<button
+									class="btn btn-ghost h-11 px-4 text-sm"
+									type="button"
+									onclick={() => (hintUsed[index] = true)}>Hint — 25% off the next attempt</button
+								>
+							{/if}
 						</div>
 					{/if}
 					{#if session.mode === 'practice' && question.objective}

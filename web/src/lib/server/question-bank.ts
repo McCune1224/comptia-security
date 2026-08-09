@@ -17,6 +17,8 @@ export interface DefinitionBase {
 	format: QuestionFormat;
 	prompt: string;
 	context?: string;
+	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
+	hint?: string;
 	explanation: string;
 	sourceRefs: SourceRef[];
 }
@@ -257,6 +259,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0) fail(question.id, 'missing authored content or source reference');
 		if (question.kind === 'fill-blank') fail(question.id, 'fill-blank is deprecated — author word-bank or matching instead');
 		if (question.kind === 'numeric') fail(question.id, 'numeric is deprecated — author slider or word-bank instead');
+		if (question.hint !== undefined && !question.hint.trim()) fail(question.id, 'hint must be a non-empty string');
 		if (question.kind === 'single-choice' || question.kind === 'multiple-choice') {
 			if (question.options.length !== (question.kind === 'single-choice' ? 4 : question.options.length) || (question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))) fail(question.id, 'invalid option count');
 			if (!hasUniqueIds(question.options) || question.options.some((option) => !option.text.trim() || !option.rationale.trim())) fail(question.id, 'invalid options');
@@ -277,6 +280,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 				if (!step.prompt.trim() || !step.explanation.trim() || !step.kind || !step.sourceRefs?.length) fail(step.id || question.id, 'invalid multi-step child definition');
 				if (step.kind === 'fill-blank') fail(step.id || question.id, 'fill-blank child steps are deprecated');
 				if (step.kind === 'numeric') fail(step.id || question.id, 'numeric child steps are deprecated');
+				if (step.hint !== undefined && !step.hint.trim()) fail(step.id || question.id, 'hint must be a non-empty string');
 				if (step.kind === 'single-choice' && (step.options.length !== 4 || !hasUniqueIds(step.options) || step.options.some((o) => !o.text.trim() || !o.rationale.trim()) || step.correctOptionIds.length !== 1)) fail(step.id || question.id, 'invalid child single-choice');
 				if (step.kind === 'multiple-choice' && (![5, 6].includes(step.options.length) || !hasUniqueIds(step.options) || step.options.some((o) => !o.text.trim() || !o.rationale.trim()) || step.correctOptionIds.length !== step.selectCount)) fail(step.id || question.id, 'invalid child multiple-choice');
 				if (step.kind === 'ordering' && (step.items.length < 6 || step.correctOrder.length !== step.items.length || new Set(step.correctOrder).size !== step.items.length)) fail(step.id || question.id, 'invalid child ordering (need ≥6)');
@@ -300,7 +304,7 @@ export function loadQuestionBank(): QuestionBank {
 }
 
 export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion {
-	const base = { id: definition.id, domain: definition.domain, objective: definition.objective, format: definition.format, prompt: definition.prompt, ...(definition.context ? { context: definition.context } : {}) };
+	const base = { id: definition.id, domain: definition.domain, objective: definition.objective, format: definition.format, prompt: definition.prompt, ...(definition.context ? { context: definition.context } : {}), ...(definition.hint ? { hint: definition.hint } : {}) };
 	switch (definition.kind) {
 		case 'single-choice':
 		case 'multiple-choice': return { ...base, kind: definition.kind, options: definition.options.map(({ id, text }) => ({ id, text })), selectCount: definition.selectCount };
