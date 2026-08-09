@@ -94,6 +94,10 @@
 				return 'See correct buckets below.';
 			case 'hotspot':
 				return 'See correct regions below.';
+			case 'memory':
+				return 'See matched pairs below.';
+			case 'slider':
+				return `${cr.value}`;
 			case 'numeric':
 				return `${cr.value}`;
 			case 'multi-step':
@@ -131,6 +135,10 @@
 				return Object.values(review.response.assignments).join(' | ');
 			case 'hotspot':
 				return review.response.regionIds.join(', ');
+			case 'memory':
+				return review.response.matchedPairIds.join(', ');
+			case 'slider':
+				return `${review.response.value}${q.kind === 'slider' ? q.unit : ''}`;
 			case 'numeric':
 				return `${review.response.value}`;
 			case 'multi-step':
@@ -554,18 +562,59 @@
 								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-primary">{region.label}</span>
-										<span class="text-xs font-bold {correct
-											? 'text-success'
-											: tapped
-												? 'text-danger'
-												: 'text-text-muted'}">{correct
-											? '✓ correct'
-											: tapped
-												? '✗ your pick'
-												: 'not selected'}</span>
+										<span
+											class="text-xs font-bold {correct
+												? 'text-success'
+												: tapped
+													? 'text-danger'
+													: 'text-text-muted'}"
+											>{correct ? '✓ correct' : tapped ? '✗ your pick' : 'not selected'}</span
+										>
 									</div>
 								</div>
 							{/each}
+						</div>
+					{:else if q.kind === 'memory'}
+						<div class="space-y-2">
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+								Your matched pairs
+							</p>
+							{#each q.pairs as pair}
+								{@const matched =
+									review.response?.kind === 'memory' &&
+									review.response.matchedPairIds.includes(pair.id)}
+								{@const correct =
+									review.feedback.correctResponse.kind === 'memory' &&
+									review.feedback.correctResponse.matchedPairIds.includes(pair.id)}
+								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+									<div class="flex items-center gap-2">
+										<span class="flex-1 text-text-primary">{pair.a} ↔ {pair.b}</span>
+										<span
+											class="text-xs font-bold {correct
+												? 'text-success'
+												: matched
+													? 'text-danger'
+													: 'text-text-muted'}"
+											>{correct ? '✓ matched' : matched ? '✗ your match' : 'not matched'}</span
+										>
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else if q.kind === 'slider'}
+						<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+							<p class="text-text-primary">
+								Your answer:
+								{review.response?.kind === 'slider'
+									? `${review.response.value}${q.unit}`
+									: 'Not answered'}
+							</p>
+							<p class="mt-1 text-xs text-success">
+								Correct:
+								{review.feedback.correctResponse.kind === 'slider'
+									? `${review.feedback.correctResponse.value}${q.unit}`
+									: ''}
+							</p>
 						</div>
 					{:else if q.kind === 'multi-step'}
 						<div class="space-y-3">

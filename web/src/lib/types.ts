@@ -46,6 +46,8 @@ export interface PublicQuestionBase {
 	format: QuestionFormat;
 	prompt: string;
 	context?: string;
+	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
+	hint?: string;
 }
 
 export interface PublicChoiceQuestion extends PublicQuestionBase {
@@ -69,6 +71,16 @@ export interface PublicMatchingQuestion extends PublicQuestionBase {
 export interface PublicNumericQuestion extends PublicQuestionBase {
 	kind: 'numeric';
 	unit: string;
+}
+
+export interface PublicSliderQuestion extends PublicQuestionBase {
+	kind: 'slider';
+	min: number;
+	max: number;
+	step: number;
+	unit: string;
+	/** Acceptance band: |value − correctValue| ≤ tolerance (correctValue stays secret server-side). */
+	tolerance: number;
 }
 
 export interface PublicEvidenceQuestion extends PublicQuestionBase {
@@ -133,6 +145,7 @@ export type PublicQuestion =
 	| PublicOrderingQuestion
 	| PublicMatchingQuestion
 	| PublicNumericQuestion
+	| PublicSliderQuestion
 	| PublicEvidenceQuestion
 	| PublicConfigurationQuestion
 	| PublicFillBlankQuestion
@@ -147,12 +160,14 @@ export type QuestionResponse =
 	| { kind: 'ordering'; itemIds: string[] }
 	| { kind: 'matching'; matches: Record<string, string> }
 	| { kind: 'numeric'; value: number }
+	| { kind: 'slider'; value: number }
 	| { kind: 'evidence'; lineIds: string[] }
 	| { kind: 'configuration'; values: Record<string, string> }
 	| { kind: 'fill-blank'; values: Record<string, string> }
 	| { kind: 'word-bank'; assignments: Record<string, string> }
 	| { kind: 'sort'; assignments: Record<string, string> }
 	| { kind: 'hotspot'; regionIds: string[] }
+	| { kind: 'memory'; matchedPairIds: string[] }
 	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
 
 export interface QuestionFeedback {

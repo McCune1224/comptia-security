@@ -4,6 +4,8 @@
 	import MatchConnect from '$lib/components/MatchConnect.svelte';
 	import SortBoard from '$lib/components/SortBoard.svelte';
 	import Hotspot from '$lib/components/Hotspot.svelte';
+	import MemoryBoard from '$lib/components/MemoryBoard.svelte';
+	import SliderInput from '$lib/components/SliderInput.svelte';
 	import type {
 		ActiveSessionSummary,
 		PublicQuestion,
@@ -104,6 +106,33 @@
 		return response.regionIds.length > 0;
 	}
 
+	function memoryAnswered(): boolean {
+		if (question?.kind !== 'memory') return true;
+		const response = draft?.kind === 'memory' ? draft : null;
+		if (!response) return false;
+		return response.matchedPairIds.length === question.pairs.length;
+	}
+
+	function sliderAnswered(): boolean {
+		if (question?.kind !== 'slider') return true;
+		const response = draft?.kind === 'slider' ? draft : null;
+		if (!response) return false;
+		return Number.isFinite(response.value);
+	}
+
+	/** Uncommitted display start for a slider (mid-range, snapped to step) — draft stays null until touched. */
+	function sliderDefault(question: PublicQuestion): number {
+		if (question.kind !== 'slider') return 0;
+		const mid = (question.min + question.max) / 2;
+		return Math.min(
+			question.max,
+			Math.max(
+				question.min,
+				Math.round((mid - question.min) / question.step) * question.step + question.min
+			)
+		);
+	}
+
 	/** True when a multi-step child's response is complete enough to validate server-side. */
 	function stepAnswered(step: PublicQuestion, response: QuestionResponse | null): boolean {
 		if (!response) return false;
@@ -125,8 +154,7 @@
 				);
 			case 'sort':
 				return (
-					response.kind === 'sort' &&
-					step.items.every((item) => !!response.assignments[item.id])
+					response.kind === 'sort' && step.items.every((item) => !!response.assignments[item.id])
 				);
 			case 'configuration':
 				return (
@@ -144,6 +172,10 @@
 				return response.kind === 'numeric' && Number.isFinite(response.value);
 			case 'hotspot':
 				return response.kind === 'hotspot' && response.regionIds.length > 0;
+			case 'memory':
+				return response.kind === 'memory' && response.matchedPairIds.length === step.pairs.length;
+			case 'slider':
+				return response.kind === 'slider' && Number.isFinite(response.value);
 		}
 		return true;
 	}
@@ -158,6 +190,18 @@
 		const stepFeedback = feedback?.stepFeedback?.[subStep];
 		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'hotspot') return null;
 		return stepFeedback.correctResponse.regionIds;
+	}
+
+	function stepMemoryCorrectIds(): string[] | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'memory') return null;
+		return stepFeedback.correctResponse.matchedPairIds;
+	}
+
+	function stepSliderFeedbackValue(): number | null {
+		const stepFeedback = feedback?.stepFeedback?.[subStep];
+		if (!stepFeedback || stepFeedback.correctResponse.kind !== 'slider') return null;
+		return stepFeedback.correctResponse.value;
 	}
 
 	function moveSubStep(dir: number) {
@@ -238,6 +282,9 @@
 		}
 	}
 
+	/** Practice-mode hint revealed per question index (client view; server enforces the 25% cost). */
+	let hintUsed = $state<Record<number, boolean>>({});
+
 	async function save() {
 		if (!session || !draft) return;
 		saving = true;
@@ -249,7 +296,8 @@
 				body: JSON.stringify({
 					sessionId: session.sessionId,
 					questionIndex: index,
-					response: draft
+					response: draft,
+					hintUsed: hintUsed[index] ?? false
 				})
 			});
 			const data = await response.json();
@@ -611,10 +659,7 @@
 					class="chip flex items-center gap-1.5 bg-surface-700 text-accent-warm"
 					title="Answer streak"
 				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="currentColor"
+					<svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"
 						><path
 							d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
 						/></svg
@@ -623,9 +668,7 @@
 				</span>
 			{/if}
 			{#if session.mode === 'practice' && sessionScore > 0}
-				<span class="chip bg-surface-700 text-text-secondary"
-					>{Math.round(sessionScore)} pts</span
-				>
+				<span class="chip bg-surface-700 text-text-secondary">{Math.round(sessionScore)} pts</span>
 			{/if}
 			{#if timer}<span
 					class="chip flex items-center gap-1.5 bg-surface-700 font-mono font-semibold {isLowTime()
@@ -757,19 +800,29 @@
 					premises={question.premises}
 					targets={[...question.targets, ...(question.extraTargets ?? [])]}
 					matches={draft?.kind === 'matching' ? draft.matches : {}}
-					feedbackMatches={feedback?.correctResponse.kind === 'matching' ? feedback.correctResponse.matches : null}
+					feedbackMatches={feedback?.correctResponse.kind === 'matching'
+						? feedback.correctResponse.matches
+						: null}
 					disabled={!!feedback}
 					onchange={(m) => (draft = { kind: 'matching', matches: m })}
 				/>
 			{:else if question.kind === 'numeric'}
-				<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-					<input
-						class="w-full sm:max-w-xs"
-						type="number"
-						value={draft?.kind === 'numeric' ? draft.value : ''}
-						oninput={(event) =>
-							(draft = { kind: 'numeric', value: Number(event.currentTarget.value) })}
-					/><span class="text-text-secondary">{question.unit}</span>
+				<div class="space-y-3">
+					<div class="flex items-center gap-2">
+						<span class="chip bg-surface-700 text-text-muted">Legacy question</span>
+						<span class="text-xs text-text-muted">
+							Typed numeric was retired — your stored answer is shown below.
+						</span>
+					</div>
+					<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+						<input
+							class="w-full sm:max-w-xs"
+							type="number"
+							value={draft?.kind === 'numeric' ? draft.value : ''}
+							disabled
+							readonly
+						/><span class="text-text-secondary">{question.unit}</span>
+					</div>
 				</div>
 			{:else if question.kind === 'evidence'}
 				<div class="space-y-2 font-mono text-sm">
@@ -889,7 +942,9 @@
 					items={question.items}
 					buckets={question.buckets}
 					assignments={draft?.kind === 'sort' ? draft.assignments : {}}
-					feedbackAssignments={feedback?.correctResponse.kind === 'sort' ? feedback.correctResponse.assignments : null}
+					feedbackAssignments={feedback?.correctResponse.kind === 'sort'
+						? feedback.correctResponse.assignments
+						: null}
 					disabled={!!feedback}
 					onchange={(a) => (draft = { kind: 'sort', assignments: a })}
 				/>
@@ -900,9 +955,41 @@
 						template={question.template}
 						regions={question.regions}
 						selectedIds={draft?.kind === 'hotspot' ? draft.regionIds : []}
-						feedbackCorrectIds={feedback?.correctResponse.kind === 'hotspot' ? feedback.correctResponse.regionIds : null}
+						feedbackCorrectIds={feedback?.correctResponse.kind === 'hotspot'
+							? feedback.correctResponse.regionIds
+							: null}
 						disabled={!!feedback}
 						onchange={(regionIds) => (draft = { kind: 'hotspot', regionIds })}
+					/>
+				</div>
+			{:else if question.kind === 'memory'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<MemoryBoard
+						pairs={question.pairs}
+						matchedIds={draft?.kind === 'memory' ? draft.matchedPairIds : []}
+						feedbackCorrectIds={feedback?.correctResponse.kind === 'memory'
+							? feedback.correctResponse.matchedPairIds
+							: null}
+						disabled={!!feedback}
+						onchange={(matchedPairIds) => (draft = { kind: 'memory', matchedPairIds })}
+					/>
+				</div>
+			{:else if question.kind === 'slider'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<SliderInput
+						min={question.min}
+						max={question.max}
+						step={question.step}
+						unit={question.unit}
+						value={draft?.kind === 'slider' ? draft.value : sliderDefault(question)}
+						feedbackValue={feedback?.correctResponse.kind === 'slider'
+							? feedback.correctResponse.value
+							: null}
+						tolerance={question.tolerance}
+						disabled={!!feedback}
+						onchange={(value) => (draft = { kind: 'slider', value })}
 					/>
 				</div>
 			{:else if question.kind === 'multi-step'}
@@ -1003,15 +1090,18 @@
 							onchange={(m) => updateSubResponse({ kind: 'matching', matches: m })}
 						/>
 					{:else if step.kind === 'numeric'}
-						<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+						<div class="space-y-2">
 							<p class="font-medium text-text-primary">{step.prompt}</p>
-							<input
-								class="w-full sm:max-w-xs"
-								type="number"
-								value={subDraft?.kind === 'numeric' ? subDraft.value : ''}
-								oninput={(e) =>
-									updateSubResponse({ kind: 'numeric', value: Number(e.currentTarget.value) })}
-							/><span class="text-text-secondary">{step.unit}</span>
+							<div class="flex items-center gap-2">
+								<span class="chip bg-surface-700 text-text-muted">Legacy question</span>
+								<input
+									class="w-full sm:max-w-xs"
+									type="number"
+									value={subDraft?.kind === 'numeric' ? subDraft.value : ''}
+									disabled
+									readonly
+								/><span class="text-text-secondary">{step.unit}</span>
+							</div>
 						</div>
 					{:else if step.kind === 'evidence'}
 						<div class="space-y-2 font-mono text-sm">
@@ -1148,6 +1238,28 @@
 							disabled={!!feedback}
 							onchange={(regionIds) => updateSubResponse({ kind: 'hotspot', regionIds })}
 						/>
+					{:else if step.kind === 'memory'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<MemoryBoard
+							pairs={step.pairs}
+							matchedIds={subDraft?.kind === 'memory' ? subDraft.matchedPairIds : []}
+							feedbackCorrectIds={stepMemoryCorrectIds()}
+							disabled={!!feedback}
+							onchange={(matchedPairIds) => updateSubResponse({ kind: 'memory', matchedPairIds })}
+						/>
+					{:else if step.kind === 'slider'}
+						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
+						<SliderInput
+							min={step.min}
+							max={step.max}
+							step={step.step}
+							unit={step.unit}
+							value={subDraft?.kind === 'slider' ? subDraft.value : sliderDefault(step)}
+							feedbackValue={stepSliderFeedbackValue()}
+							tolerance={step.tolerance}
+							disabled={!!feedback}
+							onchange={(value) => updateSubResponse({ kind: 'slider', value })}
+						/>
 					{/if}
 
 					<div class="flex gap-2">
@@ -1178,7 +1290,16 @@
 					class="btn btn-primary h-11 flex-1 px-4 sm:flex-none"
 					type="button"
 					onclick={save}
-					disabled={!draft || saving || !!feedback || !allSubStepsAnswered() || !blanksAnswered() || !sortAnswered() || !matchingAnswered() || !hotspotAnswered()}
+					disabled={!draft ||
+						saving ||
+						!!feedback ||
+						!allSubStepsAnswered() ||
+						!blanksAnswered() ||
+						!sortAnswered() ||
+						!matchingAnswered() ||
+						!hotspotAnswered() ||
+						!memoryAnswered() ||
+						!sliderAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice'
@@ -1223,12 +1344,26 @@
 
 					{#if session.mode === 'practice' && !feedback.fullyCorrect && retriesLeft > 0}
 						<div class="mt-3 flex flex-wrap gap-2">
-							<button
-								class="btn btn-ghost h-11 px-4 text-sm"
-								type="button"
-								onclick={retryQuestion}
+							<button class="btn btn-ghost h-11 px-4 text-sm" type="button" onclick={retryQuestion}
 								>Try again — {retriesLeft === 2 ? '60' : '30'}%</button
 							>
+						</div>
+					{/if}
+					{#if session.mode === 'practice' && !feedback.fullyCorrect && question?.hint}
+						<div class="mt-3">
+							{#if hintUsed[index]}
+								<p
+									class="rounded-md bg-surface-700/60 p-3 text-sm leading-relaxed text-text-secondary"
+								>
+									{question.hint}
+								</p>
+							{:else}
+								<button
+									class="btn btn-ghost h-11 px-4 text-sm"
+									type="button"
+									onclick={() => (hintUsed[index] = true)}>Hint — 25% off the next attempt</button
+								>
+							{/if}
 						</div>
 					{/if}
 					{#if session.mode === 'practice' && question.objective}

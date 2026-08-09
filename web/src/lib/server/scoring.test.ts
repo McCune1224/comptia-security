@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type NumericDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
+import { loadQuestionBank, type ChoiceDefinition, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type NumericDefinition, type SliderDefinition, type SortDefinition, type WordBankDefinition } from './question-bank';
 import { scoreQuestion } from './scoring';
 
 const bank = loadQuestionBank();
@@ -16,8 +16,21 @@ describe('scoreQuestion', () => {
 	it('scores partial ordering, matching, configuration, and numeric tolerance', () => {
 		const order = bank.pbqs.find((question) => question.kind === 'ordering')!;
 		expect(scoreQuestion(order, { kind: 'ordering', itemIds: [order.correctOrder[0], ...order.correctOrder.slice(2), order.correctOrder[1]] }).earnedPoints).toBe(1 / 6);
-		const numeric = bank.pbqs.find((question): question is NumericDefinition => question.kind === 'numeric' && question.tolerance > 0)!;
+		const numeric: NumericDefinition = {
+			id: 'pbq-5-997',
+			domain: 5,
+			objective: '5.2',
+			format: 'pbq',
+			prompt: 'Synthetic numeric item for tolerance scoring.',
+			explanation: 'Synthetic — legacy kind, engine-side scoring only.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.2' }],
+			kind: 'numeric',
+			unit: 'USD',
+			correctValue: 100,
+			tolerance: 5
+		};
 		expect(scoreQuestion(numeric, { kind: 'numeric', value: numeric.correctValue + numeric.tolerance }).earnedPoints).toBe(1);
+		expect(scoreQuestion(numeric, { kind: 'numeric', value: numeric.correctValue + numeric.tolerance + 1 }).earnedPoints).toBe(0);
 	});
 
 	it('scores fill-blank with case-insensitive normalization and partial credit', () => {
@@ -115,5 +128,90 @@ describe('scoreQuestion', () => {
 		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: ['r1'] }).earnedPoints).toBe(0);
 		// Empty -> 0.
 		expect(scoreQuestion(hotspot, { kind: 'hotspot', regionIds: [] }).earnedPoints).toBe(0);
+	});
+
+	it('scores memory pair matches without a guessing penalty', () => {
+		const memory: MemoryDefinition = {
+			id: 'pbq-5-996',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Match each service to its well-known port.',
+			explanation: 'Well-known ports map to their services.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' },
+				{ id: 'p4', a: 'HTTPS', b: '443' }
+			]
+		};
+		// All pairs matched -> full credit.
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'p2', 'p3', 'p4'] }).earnedPoints).toBe(1);
+		// Half matched -> 0.5 (no penalty for attempts).
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'p2'] }).earnedPoints).toBe(0.5);
+		// Unknown ids are simply not counted (validateResponse blocks them upstream).
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: ['p1', 'zzz'] }).earnedPoints).toBe(0.25);
+		// Empty -> 0.
+		expect(scoreQuestion(memory, { kind: 'memory', matchedPairIds: [] }).earnedPoints).toBe(0);
+	});
+
+	it('scores slider values with a tolerance band', () => {
+		const slider: SliderDefinition = {
+			id: 'pbq-5-992',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'What is the default SSH port?',
+			explanation: 'SSH listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'slider',
+			min: 1,
+			max: 65535,
+			step: 1,
+			unit: '',
+			correctValue: 22,
+			tolerance: 1
+		};
+		// Exact -> full credit.
+		expect(scoreQuestion(slider, { kind: 'slider', value: 22 }).earnedPoints).toBe(1);
+		// Within tolerance -> full credit.
+		expect(scoreQuestion(slider, { kind: 'slider', value: 23 }).earnedPoints).toBe(1);
+		// Out of tolerance -> 0.
+		expect(scoreQuestion(slider, { kind: 'slider', value: 30 }).earnedPoints).toBe(0);
+		// No response -> 0.
+		expect(scoreQuestion(slider, null).earnedPoints).toBe(0);
+	});
+
+	it('applies the hint point cost without flipping fullyCorrect', () => {
+		const choice: ChoiceDefinition = {
+			id: 'pbq-5-989',
+			domain: 5,
+			objective: '5.2',
+			format: 'pbq',
+			prompt: 'Synthetic choice item for hint scoring.',
+			explanation: 'Synthetic.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.2' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'Correct', rationale: 'Correct.' },
+				{ id: 'b', text: 'Wrong', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Wrong', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Wrong', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		// No hint -> full credit and fullyCorrect.
+		const plain = scoreQuestion(choice, { kind: 'choice', optionIds: ['a'] });
+		expect(plain.earnedPoints).toBe(1);
+		expect(plain.fullyCorrect).toBe(true);
+		// Hint used -> 0.75 but still fullyCorrect (raw correctness is unscaled).
+		const hinted = scoreQuestion(choice, { kind: 'choice', optionIds: ['a'] }, { hintUsed: true });
+		expect(hinted.earnedPoints).toBe(0.75);
+		expect(hinted.fullyCorrect).toBe(true);
+		// Wrong answer stays 0 even with a hint.
+		expect(scoreQuestion(choice, { kind: 'choice', optionIds: ['b'] }, { hintUsed: true }).earnedPoints).toBe(0);
 	});
 });

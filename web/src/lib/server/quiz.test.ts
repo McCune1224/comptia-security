@@ -123,6 +123,134 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('round-trips memory responses through a PBQ session with an injected bank', () => {
+		const repository = createQuizRepository(':memory:');
+		const memoryPbq: QuestionDefinition = {
+			id: 'pbq-5-994',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Match each service to its well-known port.',
+			explanation: 'Well-known ports map to their services.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'memory',
+			pairs: [
+				{ id: 'p1', a: 'SSH', b: '22' },
+				{ id: 'p2', a: 'DNS', b: '53' },
+				{ id: 'p3', a: 'HTTP', b: '80' },
+				{ id: 'p4', a: 'HTTPS', b: '443' }
+			]
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [memoryPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		expect(session.questions[0].kind).toBe('memory');
+		// Correct response -> full credit.
+		service.saveResponse(session.sessionId, 0, { kind: 'memory', matchedPairIds: ['p1', 'p2', 'p3', 'p4'] });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		// Partial -> 0.5.
+		const partial = service.startSession({ type: 'pbq', count: 1 });
+		service.saveResponse(partial.sessionId, 0, { kind: 'memory', matchedPairIds: ['p1', 'p2'] });
+		const partialResult = service.completeSession(partial.sessionId);
+		expect(partialResult.review[0].feedback.earnedPoints).toBe(0.5);
+		// Unknown pair id -> INVALID_REQUEST.
+		const invalid = service.startSession({ type: 'pbq', count: 1 });
+		expect(() =>
+			service.saveResponse(invalid.sessionId, 0, { kind: 'memory', matchedPairIds: ['zzz'] })
+		).toThrow('Response does not match the question interaction.');
+		repository.close();
+	});
+
+	it('applies the practice-mode hint point cost server-side', () => {
+		const repository = createQuizRepository(':memory:');
+		const choicePbq: QuestionDefinition = {
+			id: 'pbq-5-988',
+			domain: 5,
+			objective: '5.2',
+			format: 'pbq',
+			prompt: 'Synthetic choice item for the hint flow.',
+			explanation: 'Synthetic.',
+			hint: 'The service listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.2' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'SSH', rationale: 'Correct.' },
+				{ id: 'b', text: 'DNS', rationale: 'Wrong.' },
+				{ id: 'c', text: 'HTTP', rationale: 'Wrong.' },
+				{ id: 'd', text: 'SMTP', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [choicePbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		// Public view exposes the hint but the correct answer stays secret.
+		const plain = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		expect(plain.questions[0].kind === 'single-choice' && plain.questions[0].hint).toBe('The service listens on TCP 22.');
+		// First attempt, no hint -> full points.
+		service.saveResponse(plain.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const plainResult = service.completeSession(plain.sessionId);
+		expect(plainResult.review[0].feedback.earnedPoints).toBe(1);
+		// Retry with hint -> 0.6 (retry) × 0.75 (hint) = 0.45.
+		const hinted = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
+		const retry = service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['a'] }, true);
+		expect(retry.feedback?.earnedPoints).toBeCloseTo(0.6 * 0.75);
+		const hintedResult = service.completeSession(hinted.sessionId);
+		expect(hintedResult.review[0].feedback.earnedPoints).toBeCloseTo(0.6 * 0.75);
+		repository.close();
+	});
+
+	it('round-trips slider responses through a PBQ session with an injected bank', () => {
+		const repository = createQuizRepository(':memory:');
+		const sliderPbq: QuestionDefinition = {
+			id: 'pbq-5-991',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'What is the default SSH port?',
+			explanation: 'SSH listens on TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'slider',
+			min: 1,
+			max: 65535,
+			step: 1,
+			unit: '',
+			correctValue: 22,
+			tolerance: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [sliderPbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		expect(session.questions[0].kind).toBe('slider');
+		// Public view must not leak the correct value.
+		const pub = session.questions[0];
+		expect(pub.kind === 'slider' && 'correctValue' in pub).toBe(false);
+		// Within tolerance -> full credit.
+		service.saveResponse(session.sessionId, 0, { kind: 'slider', value: 22 });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		// Out-of-range value -> INVALID_REQUEST.
+		const invalid = service.startSession({ type: 'pbq', count: 1 });
+		expect(() =>
+			service.saveResponse(invalid.sessionId, 0, { kind: 'slider', value: 99999 })
+		).toThrow('Response does not match the question interaction.');
+		repository.close();
+	});
+
 	it('round-trips sort responses through a PBQ session with an injected bank', () => {
 		const repository = createQuizRepository(':memory:');
 		const sortPbq: QuestionDefinition = {
