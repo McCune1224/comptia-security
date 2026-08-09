@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import StatusChip from '$lib/components/StatusChip.svelte';
+	import LessonContent from '$lib/components/LessonContent.svelte';
 	import { relativeDue } from '$lib/utils';
 
 	let { params } = $props();
@@ -10,6 +11,7 @@
 		title: string;
 		summary: string;
 		content: string;
+		objectiveId?: string;
 		completed: boolean;
 	};
 	type AssignmentView = {
@@ -69,29 +71,6 @@
 					? 'PBQ'
 					: 'Full Exam';
 	}
-
-	function renderMarkdown(text: string): string {
-		// Minimal markdown: bold, headings, bullets.
-		return text
-			.split('\n')
-			.map((line) => {
-				const trimmed = line.trim();
-				if (trimmed.startsWith('**')) {
-					return `<p class="h-display mt-4 text-base text-text-primary">${trimmed.replace(/\*\*(.*?)\*\*/g, '$1')}</p>`;
-				}
-				if (trimmed.startsWith('- ')) {
-					return `<p class="flex gap-2 text-sm leading-6 text-text-secondary"><span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"></span><span>${trimmed
-						.slice(2)
-						.replace(
-							/\*\*(.*?)\*\*/g,
-							'<strong class="text-text-primary">$1</strong>'
-						)}</span></p>`;
-				}
-				if (!trimmed) return '';
-				return `<p class="text-sm leading-6 text-text-secondary">${trimmed.replace(/\*\*(.*?)\*\*/g, '<strong class="text-text-primary">$1</strong>')}</p>`;
-			})
-			.join('');
-	}
 </script>
 
 <div class="mx-auto max-w-4xl space-y-6">
@@ -128,9 +107,7 @@
 				>
 			</div>
 			<div class="mt-5 flex flex-wrap gap-3">
-				<a class="btn btn-primary" href="/quiz?start=1&type=quiz&count=10"
-					>Drill this module</a
-				>
+				<a class="btn btn-primary" href="/quiz?start=1&type=quiz&count=10">Drill this module</a>
 				<a class="btn btn-ghost" href="/pbq">PBQ drills</a>
 			</div>
 		</div>
@@ -204,7 +181,15 @@
 										{lesson.summary}
 									</p>
 
-									<div class="space-y-1">{@html renderMarkdown(lesson.content)}</div>
+									{#if lesson.objectiveId}
+										<a
+											class="btn btn-ghost mb-4 h-11 px-4 text-sm"
+											href="/quiz?start=1&type=quiz&objective={lesson.objectiveId}&count=5"
+											>Drill this topic →</a
+										>
+									{/if}
+
+									<LessonContent body={lesson.content} />
 								</div>
 							{/if}
 						</div>

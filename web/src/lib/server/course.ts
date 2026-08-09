@@ -1,6 +1,11 @@
 import type { CourseId, CourseMeta, Domain, SessionMode, SessionType } from '$lib/types';
 import { objectivesByDomain } from './question-bank';
-import { APLUS_1201_OBJECTIVES, APLUS_1201_WEIGHTS, APLUS_1202_OBJECTIVES, APLUS_1202_WEIGHTS } from './aplus-meta';
+import {
+	APLUS_1201_OBJECTIVES,
+	APLUS_1201_WEIGHTS,
+	APLUS_1202_OBJECTIVES,
+	APLUS_1202_WEIGHTS
+} from './aplus-meta';
 import { APLUS_1201_COURSE, APLUS_1202_COURSE } from './aplus-courses';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -20,6 +25,8 @@ export interface CourseLesson {
 	title: string;
 	summary: string;
 	content: string;
+	/** Primary exam objective id for the per-lesson "Drill this topic" launch (optional). */
+	objectiveId?: string;
 	position: number;
 }
 
@@ -120,6 +127,7 @@ export const COURSE_DEFINITION: CourseDefinition = {
 		{
 			id: 'lesson-1-1',
 			moduleId: 'week-1',
+			objectiveId: '1.1',
 			title: 'Domain 1 — General Security Concepts',
 			summary:
 				'CIA triad, AAA, security control types, Zero Trust architecture, physical security, deception technology, change management, and cryptography basics.',
@@ -190,6 +198,12 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 - **Digital signatures** — hash + encrypt with *private* key; verifies integrity AND non-repudiation. **Key exchange** — Diffie-Hellman (ECDH); **perfect forward secrecy** = ephemeral keys (DHE/ECDHE) so past sessions stay secret if a long-term key leaks.
 - **Key management** — key escrow, key rotation, key length, hardware security module (HSM), TPM, FIPS 140-2/3.
 
+## 1.4 Network ports quick drill
+
+The exam leans on a short list of well-known ports. Tap the cards to flip each one to its service, then drill them from memory.
+
+::widget port-flip-cards::
+
 ## Sample questions
 
 1. **Q:** A hospital cannot patch an MRI machine and installs an inline IPS rule that blocks the exploit pattern. Control type? **A:** Compensating — alternative protection because the primary control (patch) isn't possible.
@@ -200,6 +214,7 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 		{
 			id: 'lesson-1-2',
 			moduleId: 'week-1',
+			objectiveId: '2.1',
 			title: 'Domain 2 — Threats, Vulnerabilities & Mitigations',
 			summary:
 				'Threat actors and attributes, threat vectors, malware, network/application/cryptographic/physical attacks, vulnerabilities, and mitigation techniques.',
@@ -262,6 +277,7 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 		{
 			id: 'lesson-2-1',
 			moduleId: 'week-2',
+			objectiveId: '3.1',
 			title: 'Domain 3 — Security Architecture',
 			summary:
 				'Cloud and on-premises architecture, segmentation, virtualization/containerization, IoT and ICS/SCADA, data protection, high availability and disaster recovery.',
@@ -273,6 +289,8 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 - **Other models** — on-premises, **serverless** (function-as-a-service, no server management, pay per execution), **microservices** (small independently deployable services), **infrastructure as code (IaC)** (Terraform/CloudFormation — treat config as versioned code), **VDI** (virtual desktops), **SDN** (software-defined networking — separates control plane from data plane), **SASE/SSE** (cloud security service edge).
 - **Cloud-specific risks** — misconfigured storage buckets, excessive IAM permissions, shared tenancy isolation failures, API key leaks, shadow cloud, region/data residency, lack of visibility (shadow IT), **VM escape**.
 
+::widget osi-explorer::
+
 ## 3.2 Security implications of architecture
 
 - **Segmentation** — VLANs, DMZ, subnetting, microsegmentation, air gaps. Purpose: contain east-west movement. **East-west** = server-to-server; **north-south** = in/out of the network.
@@ -281,6 +299,8 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 - **Zero Trust architecture** — (see Domain 1.2) NIST SP 800-207: control/data plane separation, PEP, adaptive identity, microsegmentation, never trust/always verify. **ZTNA** = zero trust network access (identity-aware proxy).
 - **Mobile & wireless architecture** — MDM/UEM, BYOD/COPE/CYOD, geofencing, Wi-Fi: WPA2/WPA3, enterprise auth (802.1X, RADIUS), captive portals, rogue AP/evil twin defenses (WIDS/WIPS).
 - **Data considerations** — data classification, data sovereignty/residency, **data at rest / in transit / in use**, encryption, tokenization, masking, DLP, CASB (cloud access security broker — sits between users and cloud).
+
+::widget topology-spotlight::
 
 ## 3.3 Data protection
 
@@ -306,6 +326,7 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 		{
 			id: 'lesson-2-2',
 			moduleId: 'week-2',
+			objectiveId: '4.1',
 			title: 'Domain 4 — Security Operations (Part I)',
 			summary:
 				'Secure baselines and hardening, endpoint security, mobile/wireless security, monitoring and logging, and vulnerability management.',
@@ -355,6 +376,7 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 		{
 			id: 'lesson-3-1',
 			moduleId: 'week-3',
+			objectiveId: '4.6',
 			title: 'Domain 4 — Security Operations (Part II)',
 			summary:
 				'Identity and access management, NAC, DLP, email and DNS security, incident response, and digital forensics.',
@@ -399,6 +421,7 @@ Formal process to manage changes safely: **request → review/approval (CAB) →
 		{
 			id: 'lesson-3-2',
 			moduleId: 'week-3',
+			objectiveId: '5.1',
 			title: 'Domain 5 — Security Program Management & Oversight',
 			summary:
 				'Governance and policy, risk management, third-party risk, compliance, audits and assessments, and security awareness.',
