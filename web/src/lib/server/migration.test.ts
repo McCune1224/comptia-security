@@ -124,9 +124,28 @@ describe('v5 → v7 migration', () => {
 		expect((db.prepare("SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { value: string }).value).toBe('2026-09-30');
 		db.close();
 	});
-});
 
-describe('fresh databases', () => {
+	it('repairs v7 databases that are missing guarded post-v7 columns before seeding', () => {
+		const file = tempDb();
+		const initial = createQuizRepository(file);
+		initial.close();
+
+		const drifted = new Database(file);
+		drifted.exec('ALTER TABLE course_lessons DROP COLUMN objective_id');
+		drifted.exec('ALTER TABLE quiz_session_responses DROP COLUMN hint_used');
+		drifted.pragma('user_version = 7');
+		drifted.close();
+
+		expect(() => createQuizRepository(file)).not.toThrow();
+		const repaired = new Database(file, { readonly: true });
+		const lessonColumns = repaired.prepare('PRAGMA table_info(course_lessons)').all() as { name: string }[];
+		const responseColumns = repaired.prepare('PRAGMA table_info(quiz_session_responses)').all() as { name: string }[];
+		expect(lessonColumns.map((column) => column.name)).toContain('objective_id');
+		expect(responseColumns.map((column) => column.name)).toContain('hint_used');
+		repaired.close();
+	});
+});
+	describe('fresh databases', () => {
 	it('reaches the v6 shape directly with both profiles and exam dates seeded', () => {
 		const repo = createQuizRepository(':memory:');
 		expect(repo.getProfiles()).toHaveLength(2);

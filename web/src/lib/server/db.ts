@@ -497,7 +497,12 @@ export function createQuizRepository(
 		).run();
 		db.pragma('user_version = 7');
 	});
-	if (db.pragma('user_version', { simple: true }) !== 7) migrate();
+	const version = db.pragma('user_version', { simple: true });
+	const needsPostVersionRepair =
+		!columns('quiz_session_responses').has('retries') ||
+		!columns('quiz_session_responses').has('hint_used') ||
+		!columns('course_lessons').has('objective_id');
+	if (version !== 7 || needsPostVersionRepair) migrate();
 	seedCourse(db);
 
 	const make = (scope: Scope): QuizRepository => {
