@@ -43,7 +43,7 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   2. Architecture & Operations I (Domains 3–4)
   3. Operations II & Program Management (Domain 4 finish + Domain 5)
   4. Final Review & Readiness (targeted review + final full exam)
-- **7 lessons** with study content (summary + markdown body) per module; lessons are marked read.
+- **7 lessons** with study content (summary + interactive body rendered by `LessonContent.svelte`) per module; lessons are marked read. Lesson bodies are block-parsed into skim cards (tables/headings/lists) and can embed `::widget <id>::` markers resolved through `src/lib/components/widgets/` (osi-explorer, port-flip-cards, subnet-calculator, topology-spotlight); each secp lesson carries an `objectiveId` powering a per-lesson "Drill this topic" launch.
 - **12 graded assignments** across three weighted categories:
   - `quiz` (6) — 20-question objective quizzes, 30% weight
   - `scenario-pbq` (2) — scenario sets and PBQ sets, 20% weight
