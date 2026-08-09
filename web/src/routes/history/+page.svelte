@@ -145,7 +145,7 @@
 								{formatDuration(session.duration)}
 							</td>
 							<td class="px-5 py-4 text-right">
-								<a class="btn btn-primary h-10 px-4 text-xs" href="/history/{session.id}">Review</a>
+								<a class="btn btn-primary h-11 px-4 text-xs" href="/history/{session.id}">Review</a>
 							</td>
 						</tr>
 					{/each}

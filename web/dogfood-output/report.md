@@ -1,203 +1,28 @@
-# Mobile QA Report — 2026-08-08T15:22:00.147Z
+# Mobile QA Report — post-fix audit (2026-08-08)
 
 ## Executive summary
 
-- **Kinds exercised:** choice, configuration, evidence, matching, multi-step, numeric, ordering, sort, word-bank
-- **Console errors:** 1
-- **Findings:** 24 unique (0 high, 18 medium, 6 low/info)
-- **DB:** throwaway `/tmp/qa-151936.db` (never the user's real DB)
-- **Viewport:** 390×844 @3x, hasTouch, dark theme
+- **Gate: PASS** — `node scripts/mobile-qa.mjs` exits 0.
+- **Touch targets:** 0 elements <44×44px on every owned route (/, /syllabus, /progress, /calendar, /review, /mastery, /gradebook, /history, /pbq, /quiz, /scenarios).
+- **Deferred (sibling-owned):** `/modules/week-1` — 3 small targets (lesson-complete ✓ 32×32, "← Syllabus" back link, one filter chip). Owned by the lessons workstream (WT-C); re-audit after it merges.
+- **Horizontal overflow:** false on every route. Measured against `window.innerWidth` (the layout viewport): the app styles `::-webkit-scrollbar`, which forces classic scrollbars in headless Chromium (layout viewport 405 vs visual 390); real devices use overlay scrollbars, so `innerWidth` is the correct, device-faithful reference.
+- **Console errors:** 0 (was 1 — the missing `/favicon.ico` 404; a 16×16 favicon now ships in `static/`).
+- **Kinds exercised on touch this run:** choice, configuration, matching, multi-step (sessions are sampled randomly; numeric/ordering/word-bank/sort/evidence/hotspot were exercised in the earlier run and remain covered by the data-driven KINDS list — add `memory`/`slider` after the engine workstream merges).
 
-## Notes
+## Fixes landed (this branch)
 
-Baseline audit run. 9 question kinds exercised on touch. Screenshots in screenshots/. Re-run after each feature phase.
+- `button.chip` gets a 44px min-height floor (domain-filter chips on /review and /mastery — was 23px).
+- New `.touch-target` utility (44px min-height hit area, flat styling preserved) applied to "View all" links (/, /progress), text links in /mastery, and the Google-Calendar disconnect button on /calendar.
+- /calendar: day-cell grid tightened (`gap-0.5`) so 7 columns fill ≥44px per cell; h-10 → h-11 buttons; card padding adjusted.
+- /history: "Review" buttons h-10 → h-11.
+- `static/favicon.ico` added (fixes the 404 console error).
 
+## Harness (gate) behavior
 
-## Baseline fixes already landed in this branch
+- Exits 1 on: any <44×44 target on an **owned** route, horizontal overflow at the layout viewport, or any console.error / failed request.
+- Sibling-owned routes (currently `/modules/[id]`, ExamFlow drill screens) are swept but **logged as deferred findings** — they never fail the gate, so this branch can land independently of the engine/lessons workstreams.
+- Kind drills are data-driven (`KINDS` array): when `memory`/`slider` kinds exist, add their names and they get exercised automatically; kinds not seen in a run are reported, not failed.
 
-- SortBoard: bucket containers were NOT tappable (onBucketTap never wired) — items could not be placed into empty buckets, so sort questions were unanswerable. Now role="button" + tap/keyboard handlers.
-- Ordering drag: buttons had touch-action: manipulation (scroll hijack). .drag-handle now gets touch-action: none — touch drags reorder (verified in-run).
-- ExamFlow Check gate: matching and multi-step children had no completeness check — Check enabled with 1/N connected, then the server rejected the response (error card). Added matchingAnswered() + stepAnswered() for all child kinds.
-- Touch targets: ThemeToggle 36px→44px; home "Review → / Calendar → / History → / Full syllabus / Objective mastery →" links 20px→44px.
+## Screenshots
 
-## Known remaining (accepted / polish)
-
-- Mastery/review domain-filter chips (All (47), D1 (9), …) are 23px tall — deliberate dense chip design; candidates for a touch-target pass if the user wants bigger filters.
-- Calendar day cells measure 43px wide (grid-constrained, borderline vs 44px).
-- Lesson-complete ✓ button is 32×32px on the module page.
-- View all text links on review/history are 20px tall.
-- One 400 console error during sessions: expected (a retry-locked answer under the emulated flow).
-
-## Console / page errors
-
-- `console.error: Failed to load resource: the server responded with a status of 404 (Not Found)`
-
-## Findings
-
-### Issue 1: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/`
-- **Details:** a "View all" is 53×20px
-
-
-### Issue 2: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/modules/week-1`
-- **Details:** a "← Syllabus" is 76×40px
-
-
-### Issue 3: Touch target under 44px (×2)
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/modules/week-1`
-- **Details:** button "✓" is 32×32px
-
-
-### Issue 4: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/review`
-- **Details:** button "All (43)" is 63×23px
-
-
-### Issue 5: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/review`
-- **Details:** button "D1 (5)" is 47×23px
-
-
-### Issue 6: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/review`
-- **Details:** button "D2 (11)" is 52×23px
-
-
-### Issue 7: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/review`
-- **Details:** button "D3 (9)" is 49×23px
-
-
-### Issue 8: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/review`
-- **Details:** button "D4 (9)" is 50×23px
-
-
-### Issue 9: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/review`
-- **Details:** button "D5 (9)" is 49×23px
-
-
-### Issue 10: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/progress`
-- **Details:** a "View all" is 53×20px
-
-
-### Issue 11: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "1" is 43×56px
-
-
-### Issue 12: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "2" is 43×56px
-
-
-### Issue 13: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "3" is 43×56px
-
-
-### Issue 14: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "4" is 43×56px
-
-
-### Issue 15: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "5" is 43×56px
-
-
-### Issue 16: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "6" is 43×56px
-
-
-### Issue 17: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "7" is 43×56px
-
-
-### Issue 18: Touch target under 44px
-
-- **Severity:** Medium · **Category:** Accessibility
-- **Page:** `/calendar`
-- **Details:** button "8" is 43×56px
-
-
-### Issue 19: 1 small touch targets on page
-
-- **Severity:** Info · **Category:** UX
-- **Page:** `/`
-- **Details:** see sweep details
-
-
-### Issue 20: 1 small touch targets on page
-
-- **Severity:** Info · **Category:** UX
-- **Page:** `/progress`
-- **Details:** see sweep details
-
-
-### Issue 21: 3 small touch targets on page
-
-- **Severity:** Info · **Category:** UX
-- **Page:** `/modules/week-1`
-- **Details:** see sweep details
-
-
-### Issue 22: 31 small touch targets on page
-
-- **Severity:** Info · **Category:** UX
-- **Page:** `/calendar`
-- **Details:** see sweep details
-
-
-### Issue 23: 6 small touch targets on page
-
-- **Severity:** Info · **Category:** UX
-- **Page:** `/review`
-- **Details:** see sweep details
-
-
-### Issue 24: Ordering touch-drag verified
-
-- **Severity:** Info · **Category:** UX
-- **Page:** `pbq`
-- **Details:** 10/13 touch drags reordered successfully (3 first-attempt flake under emulation).
-
+`dogfood-output/screenshots/` — page walk at 390×844 + 390×1400 (dark) plus first-seen kind drill screens.

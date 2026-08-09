@@ -140,7 +140,7 @@
 									</p>
 								</div>
 							</div>
-							<a href="/modules/{module.module.id}" class="btn btn-ghost h-10 px-4 text-xs"
+							<a href="/modules/{module.module.id}" class="btn btn-ghost h-11 px-4 text-xs"
 								>Open module</a
 							>
 						</div>

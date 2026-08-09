@@ -96,9 +96,9 @@
 			<section class="card p-6">
 				<p class="text-text-secondary">
 					No answers tracked yet — complete a
-					<a class="font-bold text-accent hover:underline" href="/quiz?start=1">quiz</a>,
-					<a class="font-bold text-accent hover:underline" href="/pbq">PBQ set</a>, or
-					<a class="font-bold text-accent hover:underline" href="/quiz?start=1&type=full&mode=exam"
+					<a class="touch-target font-bold text-accent hover:underline" href="/quiz?start=1">quiz</a>,
+					<a class="touch-target font-bold text-accent hover:underline" href="/pbq">PBQ set</a>, or
+					<a class="touch-target font-bold text-accent hover:underline" href="/quiz?start=1&type=full&mode=exam"
 						>full exam</a
 					>
 					and every objective's accuracy lights up here.

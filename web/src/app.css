@@ -298,6 +298,22 @@
 	text-transform: uppercase;
 }
 
+/* Chips used as BUTTONS (domain filters, word-bank) must clear the 44px touch
+   floor — same square geometry, just taller hit area. */
+button.chip {
+	min-height: 2.75rem;
+	justify-content: center;
+	cursor: pointer;
+}
+
+/* Reusable 44px touch floor for inline links / text controls that otherwise
+   render at text height. Keeps flat styling; only guarantees the hit area. */
+.touch-target {
+	display: inline-flex;
+	align-items: center;
+	min-height: 2.75rem;
+}
+
 /* Mono label — tool-style eyebrow */
 .eyebrow {
 	font-family: var(--font-mono);
