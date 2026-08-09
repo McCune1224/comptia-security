@@ -343,6 +343,7 @@ export function createQuizRepository(
 	const db = new Database(filename);
 	db.pragma('foreign_keys = ON');
 	db.pragma('journal_mode = WAL');
+	db.pragma('busy_timeout = 5000');
 
 	// Fresh databases are created directly in the v6 shape; the migrate block
 	// below upgrades v5 files in place and no-ops on anything already v6.
