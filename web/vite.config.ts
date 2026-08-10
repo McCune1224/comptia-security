@@ -13,6 +13,6 @@ export default defineConfig({
 		// would sweep them into the primary run and execute them against
 		// frankenstein module resolution (worktree relative imports + primary
 		// $lib aliases). Never run nested-worktree tests from the primary tree.
-		exclude: [...defaultExclude, '**/.worktrees/**']
+		exclude: [...defaultExclude, '**/.worktrees/**', '**/e2e/**']
 	}
 });
