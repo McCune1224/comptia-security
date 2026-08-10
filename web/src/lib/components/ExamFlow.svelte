@@ -290,6 +290,7 @@
 		saving = true;
 		error = '';
 		try {
+			const replacingResponse = Boolean(session.responses[index]);
 			const response = await fetch('/api/quiz/answer', {
 				method: 'PUT',
 				headers: { 'content-type': 'application/json' },
@@ -310,6 +311,7 @@
 				if (data.feedback.fullyCorrect) streak += 1;
 				else streak = 0;
 			}
+			if (replacingResponse) session.retries[index] = (session.retries[index] ?? 0) + 1;
 			session.responses[index] = draft;
 			session.answeredCount = Object.keys(session.responses).length;
 		} catch (cause) {
@@ -1337,7 +1339,7 @@
 						<strong class="h-display text-text-primary"
 							>{feedback.fullyCorrect ? 'Correct' : 'Answer review'}</strong
 						><span class="chip bg-surface-800 text-text-primary"
-							>{feedback.earnedPoints}/{feedback.possiblePoints} points</span
+							>{feedback.earnedPoints}/{feedback.possiblePoints} points{session.mode === 'practice' && (session.retries[index] ?? 0) > 0 ? ' · retry-adjusted' : ''}</span
 						>
 					</div>
 					<p class="mt-2 leading-relaxed text-text-secondary">{feedback.explanation}</p>

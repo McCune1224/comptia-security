@@ -184,6 +184,9 @@
 					</p>
 					<p class="mt-1 text-xs text-text-muted">
 						{result.earnedPoints.toFixed(2)}/{result.possiblePoints} points
+						{result.mode === 'practice' && result.review.some((review) => review.retryCount > 0)
+							? ' · includes retry weighting'
+							: ''}
 					</p>
 				</div>
 			</div>
@@ -276,7 +279,7 @@
 								? 'text-success'
 								: 'text-danger'}"
 						>
-							{review.feedback.earnedPoints}/{review.feedback.possiblePoints}
+							{review.feedback.earnedPoints}/{review.feedback.possiblePoints}{result.mode === 'practice' && review.retryCount > 0 ? ' · retry-adjusted' : ''}
 						</span>
 					</div>
 

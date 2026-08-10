@@ -9,14 +9,13 @@ import { DEFAULT_SCOPE, quizRepository, type Scope } from './db';
  */
 export function resolveScope(event: RequestEvent): Scope {
 	const cookieProfile = event.cookies.get('profile_id');
-	const profileId =
-		cookieProfile && quizRepository.getProfiles().some((profile) => profile.id === cookieProfile)
-			? cookieProfile
-			: DEFAULT_SCOPE.profileId;
+	const profiles = quizRepository.getProfiles();
+	const selectedProfile = profiles.find((profile) => profile.id === cookieProfile);
+	const profileId = selectedProfile?.id ?? DEFAULT_SCOPE.profileId;
 	const cookieCourse = event.cookies.get('course_id');
 	const courseId =
 		cookieCourse && (ACTIVE_COURSES as string[]).includes(cookieCourse)
 			? (cookieCourse as CourseId)
-			: DEFAULT_SCOPE.courseId;
+			: (selectedProfile?.courseId as CourseId | undefined) ?? DEFAULT_SCOPE.courseId;
 	return { profileId, courseId };
 }

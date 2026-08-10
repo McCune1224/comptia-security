@@ -164,7 +164,7 @@ export interface QuizRepository {
 			points: number;
 		}[],
 		completedAt: string
-	): QuizResult;
+	): { result: QuizResult; finalized: boolean };
 	getAllDomainProgress(): Record<
 		number,
 		{
@@ -495,6 +495,24 @@ export function createQuizRepository(
 		db.prepare(
 			'UPDATE quiz_answers SET points_earned = is_correct, points_possible = 1 WHERE points_possible = 0'
 		).run();
+		// A historical bug allowed multiple active sessions in one scope to
+		// accumulate across restarts. Keep the newest one resumable and retain
+		// older rows as abandoned history before enforcing the invariant.
+		db.prepare(
+			`UPDATE quiz_sessions AS older
+			 SET status = 'abandoned', updated_at = COALESCE(NULLIF(older.updated_at, ''), older.started_at)
+			 WHERE older.status = 'active'
+			   AND EXISTS (
+					SELECT 1 FROM quiz_sessions AS newer
+					WHERE newer.status = 'active'
+					  AND newer.profile_id = older.profile_id
+					  AND newer.course_id = older.course_id
+					  AND (newer.started_at > older.started_at OR (newer.started_at = older.started_at AND newer.id > older.id))
+				)`
+		).run();
+		db.exec(
+			"CREATE UNIQUE INDEX IF NOT EXISTS quiz_sessions_one_active_scope ON quiz_sessions(profile_id, course_id) WHERE status = 'active'"
+		);
 		db.pragma('user_version = 7');
 	});
 	const version = db.pragma('user_version', { simple: true });
@@ -502,7 +520,9 @@ export function createQuizRepository(
 		!columns('quiz_session_responses').has('retries') ||
 		!columns('quiz_session_responses').has('hint_used') ||
 		!columns('course_lessons').has('objective_id');
-	if (version !== 7 || needsPostVersionRepair) migrate();
+	const needsActiveSessionIndex =
+		(db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'").get() as { 1: number } | undefined) === undefined;
+	if (version !== 7 || needsPostVersionRepair || needsActiveSessionIndex) migrate();
 	seedCourse(db);
 
 	const make = (scope: Scope): QuizRepository => {
@@ -620,13 +640,29 @@ export function createQuizRepository(
 				return row ? readSession(row.id) : null;
 			},
 			saveResponse(id, index, response, answeredAt, hintUsed = false) {
+			const save = db.transaction(() => {
+				const owned = db
+					.prepare('SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?')
+					.get(id, scope.profileId, scope.courseId);
+				if (!owned) return;
 				db.prepare(
 					'INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, hint_used, answered_at) VALUES (?, ?, ?, 0, 0, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1, hint_used = MAX(hint_used, excluded.hint_used)'
 				).run(id, index, JSON.stringify(response), hintUsed ? 1 : 0, answeredAt);
-				db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(answeredAt, id);
+				db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?').run(
+					answeredAt,
+					id,
+					scope.profileId,
+					scope.courseId
+				);
+			});
+			save();
 			},
 			updateState(id, currentIndex, flag, updatedAt = new Date().toISOString()) {
 				const update = db.transaction(() => {
+					const owned = db
+						.prepare('SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?')
+						.get(id, scope.profileId, scope.courseId);
+					if (!owned) return;
 					if (currentIndex !== undefined)
 						db.prepare(
 							'UPDATE quiz_session_state SET current_index = ?, updated_at = ? WHERE session_id = ?'
@@ -635,7 +671,12 @@ export function createQuizRepository(
 						db.prepare(
 							'INSERT INTO quiz_session_responses (session_id, question_index, flagged) VALUES (?, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET flagged = excluded.flagged'
 						).run(id, flag.questionIndex, flag.value ? 1 : 0);
-					db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ?').run(updatedAt, id);
+					db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?').run(
+						updatedAt,
+						id,
+						scope.profileId,
+						scope.courseId
+					);
 				});
 				update();
 			},
@@ -650,10 +691,15 @@ export function createQuizRepository(
 			},
 			complete(id, result, answers, completedAt) {
 				const finalize = db.transaction(() => {
+					const owned = db
+						.prepare('SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?')
+						.get(id, scope.profileId, scope.courseId);
+					if (!owned) throw new Error('Session is outside the active scope.');
 					const existing = db
 						.prepare('SELECT result_json FROM quiz_session_state WHERE session_id = ?')
 						.get(id) as { result_json: string | null } | undefined;
-					if (existing?.result_json) return JSON.parse(existing.result_json) as QuizResult;
+					if (existing?.result_json)
+					return { result: JSON.parse(existing.result_json) as QuizResult, finalized: false };
 					// Answers + domain progress follow the session's own scope.
 					const sessionScope = (db
 						.prepare('SELECT profile_id, course_id FROM quiz_sessions WHERE id = ?')
@@ -711,7 +757,7 @@ export function createQuizRepository(
 					db.prepare(
 						'UPDATE quiz_session_state SET result_json = ?, updated_at = ? WHERE session_id = ?'
 					).run(JSON.stringify(result), completedAt, id);
-					return result;
+					return { result, finalized: true };
 				});
 				return finalize();
 			},

@@ -198,6 +198,10 @@ describe('scope isolation', () => {
 		expect(alice.getSyncedEvents()).toHaveLength(1);
 		expect(bob.getSyncedEvents()).toHaveLength(0);
 
+		// Scoped state updates must not let another profile mutate the session.
+		bob.updateState('a-sess', 1, undefined, '2026-08-05T10:04:00.000Z');
+		expect((alice.getSession('a-sess') as { currentIndex: number }).currentIndex).toBe(0);
+
 		// Abandoning in one scope never touches the other scope's session.
 		expect(bob.abandon('a-sess', '2026-08-05T10:05:00.000Z')).toBe(false);
 		expect(alice.getActiveSession()).not.toBeNull();
@@ -217,6 +221,9 @@ describe('scope isolation', () => {
 			domainBreakdown: { 1: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 2: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 3: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 4: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 5: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 } },
 			completedAt: '2026-08-05T10:30:00.000Z', review: []
 		};
+		expect(() => bob.complete('s1', result, [], '2026-08-05T10:30:00.000Z')).toThrow('outside the active scope');
+		expect(bob.getAllCompletedSessions()).toHaveLength(0);
+		expect(alice.getAllCompletedSessions()).toHaveLength(0);
 		alice.complete('s1', result, [], '2026-08-05T10:30:00.000Z');
 		expect(alice.getAllCompletedSessions()).toHaveLength(1);
 		expect(bob.getAllCompletedSessions()).toHaveLength(0);
@@ -301,5 +308,45 @@ describe('seed upsert healing', () => {
 			{ course_id: 'secp-701', c: 12 }
 		]);
 		healed.close();
+	});
+});
+
+describe('active-session restart recovery', () => {
+	it('keeps only the newest active session per profile and course after reopening', () => {
+		const file = tempDb();
+		const repo = createQuizRepository(file);
+		repo.close();
+
+		const db = new Database(file);
+		db.exec('DROP INDEX IF EXISTS quiz_sessions_one_active_scope');
+		db.prepare(
+			"INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id, profile_id, course_id) VALUES (?, ?, 'quiz', 1, 0, 'practice', 'active', ?, NULL, 'default', 'secp-701')"
+		).run('older-active', '2026-08-01T09:00:00.000Z', '2026-08-01T09:00:00.000Z');
+		db.prepare(
+			"INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, result_json, updated_at) VALUES (?, 1, NULL, 0, '[]', NULL, ?)"
+		).run('older-active', '2026-08-01T09:00:00.000Z');
+		db.prepare(
+			"INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id, profile_id, course_id) VALUES (?, ?, 'quiz', 1, 0, 'practice', 'active', ?, NULL, 'default', 'secp-701')"
+		).run('newer-active', '2026-08-01T10:00:00.000Z', '2026-08-01T10:00:00.000Z');
+		db.prepare(
+			"INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, result_json, updated_at) VALUES (?, 1, NULL, 0, '[]', NULL, ?)"
+		).run('newer-active', '2026-08-01T10:00:00.000Z');
+		db.close();
+
+		createQuizRepository(file).close();
+
+		const repaired = new Database(file, { readonly: true });
+		expect(repaired.prepare("SELECT id FROM quiz_sessions WHERE status = 'active' AND profile_id = 'default' AND course_id = 'secp-701'").all()).toEqual([{ id: 'newer-active' }]);
+		expect(repaired.prepare("SELECT status FROM quiz_sessions WHERE id = 'older-active'").get()).toEqual({ status: 'abandoned' });
+		expect(repaired.prepare("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'").get()).toEqual({ 1: 1 });
+		repaired.close();
+
+		const enforced = new Database(file);
+		expect(() =>
+			enforced
+				.prepare("INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id, profile_id, course_id) VALUES ('duplicate-active', '2026-08-01T11:00:00.000Z', 'quiz', 1, 0, 'practice', 'active', '2026-08-01T11:00:00.000Z', NULL, 'default', 'secp-701')")
+				.run()
+		).toThrow(/UNIQUE constraint failed/i);
+		enforced.close();
 	});
 });

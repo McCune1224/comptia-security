@@ -70,6 +70,8 @@ describe('QuizService', () => {
 		const result = service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBeCloseTo(0.3);
 		expect(result.review[0].feedback.fullyCorrect).toBe(true);
+		expect(result.review[0].retryCount).toBe(2);
+		expect(repository.complete(session.sessionId, result, [], result.completedAt)).toEqual({ result, finalized: false });
 		repository.close();
 	});
 

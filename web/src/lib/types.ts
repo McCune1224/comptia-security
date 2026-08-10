@@ -185,6 +185,7 @@ export interface QuestionReview {
 	question: PublicQuestion;
 	response: QuestionResponse | null;
 	feedback: QuestionFeedback;
+	retryCount: number;
 }
 
 export interface ScoreBreakdown {

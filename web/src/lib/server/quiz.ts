@@ -353,7 +353,12 @@ export function createQuizService({
 			objective.totalQuestions++;
 			if (feedback.fullyCorrect) objective.fullyCorrect++;
 			objectiveBreakdown[question.objective] = objective;
-			return { question: toPublicQuestion(question), response, feedback };
+			return {
+				question: toPublicQuestion(question),
+				response,
+				feedback,
+				retryCount: stored.retries[index] ?? 0
+			};
 		});
 		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
 		const result: QuizResult = {
@@ -371,7 +376,7 @@ export function createQuizService({
 			completedAt: now().toISOString(),
 			review
 		};
-		const finalized = repository.complete(
+		const completion = repository.complete(
 			stored.summary.id,
 			result,
 			review.map((item, index) => ({
@@ -382,6 +387,8 @@ export function createQuizService({
 			})),
 			result.completedAt
 		);
+		if (!completion.finalized) return completion.result;
+		const finalized = completion.result;
 		if (stored.summary.assignment_id)
 			courseSvc.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
 		reviewSvc.recordCompletion(
@@ -479,16 +486,25 @@ export function createQuizService({
 							now().getTime() + (input.type === 'full' ? 90 : selected.length) * 60_000
 						).toISOString()
 					: null;
-			repository.createSession({
-				id: crypto.randomUUID(),
-				type: input.type,
-				mode,
-				domain: input.domain ?? null,
-				startedAt,
-				deadlineAt,
-				questions: selected,
-				assignmentId: input.assignmentId ?? null
-			});
+			try {
+				repository.createSession({
+					id: crypto.randomUUID(),
+					type: input.type,
+					mode,
+					domain: input.domain ?? null,
+					startedAt,
+					deadlineAt,
+					questions: selected,
+					assignmentId: input.assignmentId ?? null
+				});
+			} catch (error) {
+				if (error instanceof Error && /quiz_sessions_one_active_scope|UNIQUE constraint failed/i.test(error.message))
+					throw new QuizServiceError(
+						'ACTIVE_SESSION_EXISTS',
+						'Resume or abandon the active session first.'
+					);
+				throw error;
+			}
 			return asView(repository.getActiveSession()!);
 		},
 		getSession(id) {

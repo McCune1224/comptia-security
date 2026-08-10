@@ -55,8 +55,8 @@ export async function POST(event: RequestEvent) {
 			courseId = profiles.find((p) => p.id === switchProfile)?.courseId ?? DEFAULT_SCOPE.courseId;
 		}
 		if (switchCourse) {
-			// Remember this course as the active profile's preference.
-			quizRepository.setProfileCourse(scope.profileId, switchCourse);
+			// Remember this course as the selected profile's preference.
+			quizRepository.setProfileCourse(profileId, switchCourse);
 		}
 
 		event.cookies.set('profile_id', profileId, SCOPE_COOKIE);
