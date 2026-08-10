@@ -48,6 +48,8 @@ export interface PublicQuestionBase {
 	context?: string;
 	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
 	hint?: string;
+	/** Present only for practice sessions; deliberately excludes answer-bearing data. */
+	practiceSummary?: { text: string; domain: Domain; objective: ObjectiveId; format: QuestionFormat };
 }
 
 export interface PublicChoiceQuestion extends PublicQuestionBase {
@@ -204,6 +206,7 @@ export interface ActiveSessionSummary {
 	answeredCount: number;
 	totalQuestions: number;
 	currentIndex: number;
+	elapsedSeconds?: number;
 }
 
 export interface SessionView extends ActiveSessionSummary {
@@ -228,5 +231,7 @@ export interface QuizResult {
 	domainBreakdown: Record<Domain, ScoreBreakdown>;
 	objectiveBreakdown: Partial<Record<ObjectiveId, ScoreBreakdown>>;
 	completedAt: string;
+	elapsedSeconds?: number;
+	durationSeconds?: number;
 	review: QuestionReview[];
 }

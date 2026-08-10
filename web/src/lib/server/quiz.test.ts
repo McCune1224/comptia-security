@@ -5,6 +5,55 @@ import { loadQuestionBank, type QuestionDefinition } from './question-bank';
 import { createQuizService } from './quiz';
 
 describe('QuizService', () => {
+	it('adds an answer-neutral practice summary and omits it for exam mode', () => {
+		const repository = createQuizRepository(':memory:');
+		const question: QuestionDefinition = {
+			id: 'pbq-1-summary', domain: 1, objective: '1.1', format: 'pbq',
+			context: 'A security team is reviewing an access-control decision.',
+			prompt: 'Which control is most appropriate?', explanation: 'MFA is correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'single-choice',
+			options: [{ id: 'a', text: 'MFA', rationale: 'Correct.' }, { id: 'b', text: 'Backups', rationale: 'Wrong.' }, { id: 'c', text: 'Patching', rationale: 'Wrong.' }, { id: 'd', text: 'Hashing', rationale: 'Wrong.' }],
+			correctOptionIds: ['a'], selectCount: 1
+		};
+		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5 });
+		const practice = service.startSession({ type: 'pbq', count: 1 });
+		expect(practice.questions[0].practiceSummary?.text).toContain('security team');
+		expect(JSON.stringify(practice.questions[0].practiceSummary)).not.toContain('MFA');
+		service.abandonSession(practice.sessionId);
+		const exam = service.startSession({ type: 'pbq', mode: 'exam', count: 1 });
+		expect(exam.questions[0].practiceSummary).toBeUndefined();
+		repository.close();
+	});
+
+	it('fails closed when question context contains an answer-bearing value', () => {
+		const repository = createQuizRepository(':memory:');
+		const question: QuestionDefinition = {
+			id: 'pbq-1-summary-leak', domain: 1, objective: '1.1', format: 'pbq',
+			context: 'The correct answer is MFA.', prompt: 'Choose the control.', explanation: 'MFA is correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'single-choice',
+			options: [{ id: 'a', text: 'MFA', rationale: 'Correct.' }, { id: 'b', text: 'Backups', rationale: 'Wrong.' }, { id: 'c', text: 'Patching', rationale: 'Wrong.' }, { id: 'd', text: 'Hashing', rationale: 'Wrong.' }],
+			correctOptionIds: ['a'], selectCount: 1
+		};
+		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5 });
+		expect(service.startSession({ type: 'pbq', count: 1 }).questions[0].practiceSummary).toBeUndefined();
+		repository.close();
+	});
+
+	it('reports elapsed practice time on resume and persists completion duration', () => {
+		const repository = createQuizRepository(':memory:');
+		let current = new Date('2026-07-22T12:00:00.000Z');
+		const question = loadQuestionBank().pbqs[0];
+		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5, now: () => current });
+		const session = service.startSession({ type: 'pbq', count: 1 });
+		current = new Date('2026-07-22T12:01:05.000Z');
+		expect((service.getSession(session.sessionId) as typeof session).elapsedSeconds).toBe(65);
+		const result = service.completeSession(session.sessionId);
+		expect(result.elapsedSeconds).toBe(65);
+		expect(result.durationSeconds).toBe(65);
+		expect(repository.getAllCompletedSessions()[0].duration_seconds).toBe(65);
+		repository.close();
+	});
+
 	it('assembles a stable 90-question full exam and persists response replacement', () => {
 		const repository = createQuizRepository(':memory:');
 		let seed = 7;

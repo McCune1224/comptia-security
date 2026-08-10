@@ -73,6 +73,7 @@ describe('v5 → v7 migration', () => {
 		expect((db.prepare('SELECT COUNT(*) c FROM review_cards').get() as { c: number }).c).toBe(1);
 		expect((db.prepare('SELECT COUNT(*) c FROM course_assignment_submissions').get() as { c: number }).c).toBe(1);
 		expect((db.prepare('SELECT COUNT(*) c FROM google_synced_events').get() as { c: number }).c).toBe(1);
+		expect((db.prepare('PRAGMA table_info(quiz_sessions)').all() as { name: string }[]).map((column) => column.name)).toEqual(expect.arrayContaining(['elapsed_seconds', 'duration_seconds']));
 
 		// Sessions + answers backfilled to ('default','secp-701').
 		const session = db.prepare("SELECT profile_id, course_id FROM quiz_sessions WHERE id = 'sess-1'").get() as { profile_id: string; course_id: string };
