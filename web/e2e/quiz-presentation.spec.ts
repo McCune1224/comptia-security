@@ -38,3 +38,20 @@ test('exam mode has no practice-summary control and renders its countdown', asyn
 
 	await context.close();
 });
+
+test('desktop navigation exposes review and past-session history', async ({ browser }) => {
+	const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+	await setScope(context, 'default', 'secp-701');
+	const page = await context.newPage();
+
+	await page.goto('/review');
+	await expect(
+		page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Review' })
+	).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Past sessions' })).toHaveAttribute(
+		'href',
+		'/history'
+	);
+
+	await context.close();
+});

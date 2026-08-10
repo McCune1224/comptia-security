@@ -113,6 +113,7 @@
 							{/if}
 						</button>
 						<a class="btn btn-ghost" href="/quiz?review=wall">Drill the wall</a>
+						<a class="btn btn-ghost" href="/history">Past sessions</a>
 					</div>
 				</div>
 				<div class="flex items-center justify-around gap-6 lg:justify-end">

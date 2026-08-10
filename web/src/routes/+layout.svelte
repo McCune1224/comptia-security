@@ -198,6 +198,25 @@
 					>
 					Calendar
 				</a>
+				<a
+					href="/review"
+					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+						'/review'
+					)
+						? 'bg-accent/15 text-accent'
+						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
+					aria-current={isActive('/review') ? 'page' : undefined}
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						><path d="M4 5h16v14H4z" /><path d="M8 9h8M8 13h5" /></svg
+					>
+					Review
+				</a>
 				<div class="mx-1 h-5 w-px bg-border"></div>
 				<a
 					href="/quiz"
