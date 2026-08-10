@@ -20,6 +20,7 @@ import {
 	type CourseModule,
 	type SubmissionRecord
 } from './course';
+import { ScopedReadCache, type ScopedCacheStats } from './scoped-cache';
 
 export const DB_PATH = path.resolve(process.cwd(), 'data/quiz.db');
 
@@ -225,6 +226,8 @@ export interface QuizRepository {
 		syncedAt: string
 	): void;
 	removeSyncedEvent(source: string): void;
+	/** Test/dev-only counters for the bounded read cache; zeroed in production. */
+	getCacheStats(): ScopedCacheStats;
 	close(): void;
 }
 
@@ -341,6 +344,7 @@ export function createQuizRepository(
 ): QuizRepository {
 	if (filename !== ':memory:') fs.mkdirSync(path.dirname(filename), { recursive: true });
 	const db = new Database(filename);
+	const cache = new ScopedReadCache();
 	db.pragma('foreign_keys = ON');
 	db.pragma('journal_mode = WAL');
 	db.pragma('busy_timeout = 5000');
@@ -521,12 +525,17 @@ export function createQuizRepository(
 		!columns('quiz_session_responses').has('hint_used') ||
 		!columns('course_lessons').has('objective_id');
 	const needsActiveSessionIndex =
-		(db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'").get() as { 1: number } | undefined) === undefined;
+		(db
+			.prepare(
+				"SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'"
+			)
+			.get() as { 1: number } | undefined) === undefined;
 	if (version !== 7 || needsPostVersionRepair || needsActiveSessionIndex) migrate();
 	seedCourse(db);
 
 	const make = (scope: Scope): QuizRepository => {
 		const readSession = (id: string): StoredSession | null => {
+			cache.bypass();
 			const row = db
 				.prepare(
 					'SELECT s.*, st.deadline_at, st.current_index, st.questions_json, st.result_json FROM quiz_sessions s JOIN quiz_session_state st ON st.session_id = s.id WHERE s.id = ? AND s.profile_id = ? AND s.course_id = ?'
@@ -632,6 +641,7 @@ export function createQuizRepository(
 			},
 			getSession: readSession,
 			getActiveSession() {
+				cache.bypass();
 				const row = db
 					.prepare(
 						"SELECT id FROM quiz_sessions WHERE status = 'active' AND profile_id = ? AND course_id = ? ORDER BY started_at DESC LIMIT 1"
@@ -640,27 +650,28 @@ export function createQuizRepository(
 				return row ? readSession(row.id) : null;
 			},
 			saveResponse(id, index, response, answeredAt, hintUsed = false) {
-			const save = db.transaction(() => {
-				const owned = db
-					.prepare('SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?')
-					.get(id, scope.profileId, scope.courseId);
-				if (!owned) return;
-				db.prepare(
-					'INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, hint_used, answered_at) VALUES (?, ?, ?, 0, 0, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1, hint_used = MAX(hint_used, excluded.hint_used)'
-				).run(id, index, JSON.stringify(response), hintUsed ? 1 : 0, answeredAt);
-				db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?').run(
-					answeredAt,
-					id,
-					scope.profileId,
-					scope.courseId
-				);
-			});
-			save();
+				const save = db.transaction(() => {
+					const owned = db
+						.prepare(
+							'SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?'
+						)
+						.get(id, scope.profileId, scope.courseId);
+					if (!owned) return;
+					db.prepare(
+						'INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, hint_used, answered_at) VALUES (?, ?, ?, 0, 0, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1, hint_used = MAX(hint_used, excluded.hint_used)'
+					).run(id, index, JSON.stringify(response), hintUsed ? 1 : 0, answeredAt);
+					db.prepare(
+						'UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?'
+					).run(answeredAt, id, scope.profileId, scope.courseId);
+				});
+				save();
 			},
 			updateState(id, currentIndex, flag, updatedAt = new Date().toISOString()) {
 				const update = db.transaction(() => {
 					const owned = db
-						.prepare('SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?')
+						.prepare(
+							'SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?'
+						)
 						.get(id, scope.profileId, scope.courseId);
 					if (!owned) return;
 					if (currentIndex !== undefined)
@@ -671,12 +682,9 @@ export function createQuizRepository(
 						db.prepare(
 							'INSERT INTO quiz_session_responses (session_id, question_index, flagged) VALUES (?, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET flagged = excluded.flagged'
 						).run(id, flag.questionIndex, flag.value ? 1 : 0);
-					db.prepare('UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?').run(
-						updatedAt,
-						id,
-						scope.profileId,
-						scope.courseId
-					);
+					db.prepare(
+						'UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?'
+					).run(updatedAt, id, scope.profileId, scope.courseId);
 				});
 				update();
 			},
@@ -692,14 +700,16 @@ export function createQuizRepository(
 			complete(id, result, answers, completedAt) {
 				const finalize = db.transaction(() => {
 					const owned = db
-						.prepare('SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?')
+						.prepare(
+							'SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?'
+						)
 						.get(id, scope.profileId, scope.courseId);
 					if (!owned) throw new Error('Session is outside the active scope.');
 					const existing = db
 						.prepare('SELECT result_json FROM quiz_session_state WHERE session_id = ?')
 						.get(id) as { result_json: string | null } | undefined;
 					if (existing?.result_json)
-					return { result: JSON.parse(existing.result_json) as QuizResult, finalized: false };
+						return { result: JSON.parse(existing.result_json) as QuizResult, finalized: false };
 					// Answers + domain progress follow the session's own scope.
 					const sessionScope = (db
 						.prepare('SELECT profile_id, course_id FROM quiz_sessions WHERE id = ?')
@@ -762,6 +772,7 @@ export function createQuizRepository(
 				return finalize();
 			},
 			getAllDomainProgress() {
+				cache.bypass();
 				const result: Record<
 					number,
 					{
@@ -796,6 +807,7 @@ export function createQuizRepository(
 				return result;
 			},
 			getRecentSessions(limit = 10) {
+				cache.bypass();
 				return db
 					.prepare(
 						"SELECT * FROM quiz_sessions WHERE status = 'completed' AND profile_id = ? AND course_id = ? ORDER BY completed_at DESC LIMIT ?"
@@ -803,6 +815,7 @@ export function createQuizRepository(
 					.all(scope.profileId, scope.courseId, limit) as SessionRow[];
 			},
 			getAllCompletedSessions() {
+				cache.bypass();
 				return db
 					.prepare(
 						"SELECT * FROM quiz_sessions WHERE status = 'completed' AND profile_id = ? AND course_id = ? ORDER BY completed_at DESC"
@@ -810,6 +823,7 @@ export function createQuizRepository(
 					.all(scope.profileId, scope.courseId) as SessionRow[];
 			},
 			getWeakTopics() {
+				cache.bypass();
 				return (
 					db
 						.prepare(
@@ -905,27 +919,40 @@ export function createQuizRepository(
 				db.prepare(
 					"INSERT INTO course_meta (profile_id, course_id, key, value) VALUES (?, ?, 'exam_date', ?) ON CONFLICT(profile_id, course_id, key) DO UPDATE SET value = excluded.value"
 				).run(scope.profileId, scope.courseId, examDate);
+				cache.invalidateScope(scope);
 			},
 			getCourseModules() {
-				return db
-					.prepare(
-						'SELECT id, week, title, description, position FROM course_modules WHERE course_id = ? ORDER BY position'
-					)
-					.all(scope.courseId) as CourseModule[];
+				return cache.read(
+					cache.key(scope, 'course-modules'),
+					() =>
+						db
+							.prepare(
+								'SELECT id, week, title, description, position FROM course_modules WHERE course_id = ? ORDER BY position'
+							)
+							.all(scope.courseId) as CourseModule[]
+				);
 			},
 			getCourseLessons() {
-				return db
-					.prepare(
-						'SELECT id, module_id AS moduleId, title, summary, content, objective_id AS objectiveId, position FROM course_lessons WHERE course_id = ? ORDER BY position'
-					)
-					.all(scope.courseId) as unknown as CourseLesson[];
+				return cache.read(
+					cache.key(scope, 'course-lessons'),
+					() =>
+						db
+							.prepare(
+								'SELECT id, module_id AS moduleId, title, summary, content, objective_id AS objectiveId, position FROM course_lessons WHERE course_id = ? ORDER BY position'
+							)
+							.all(scope.courseId) as unknown as CourseLesson[]
+				);
 			},
 			getCourseAssignments() {
-				return db
-					.prepare(
-						'SELECT id, module_id AS moduleId, title, description, kind, category, points, count, domain, mode, duration_minutes AS durationMinutes, due_offset_days AS dueOffsetDays, position FROM course_assignments WHERE course_id = ? ORDER BY position'
-					)
-					.all(scope.courseId) as unknown as CourseAssignment[];
+				return cache.read(
+					cache.key(scope, 'course-assignments'),
+					() =>
+						db
+							.prepare(
+								'SELECT id, module_id AS moduleId, title, description, kind, category, points, count, domain, mode, duration_minutes AS durationMinutes, due_offset_days AS dueOffsetDays, position FROM course_assignments WHERE course_id = ? ORDER BY position'
+							)
+							.all(scope.courseId) as unknown as CourseAssignment[]
+				);
 			},
 			getLessonCompletions() {
 				return new Set(
@@ -945,8 +972,10 @@ export function createQuizRepository(
 					db.prepare(
 						'DELETE FROM course_lesson_completions WHERE profile_id = ? AND lesson_id = ?'
 					).run(scope.profileId, lessonId);
+				cache.invalidateScope(scope);
 			},
 			getSubmissions() {
+				cache.bypass();
 				return db
 					.prepare(
 						'SELECT assignment_id AS assignmentId, session_id AS sessionId, earned, percentage, completed_at AS completedAt FROM course_assignment_submissions WHERE profile_id = ?'
@@ -964,6 +993,7 @@ export function createQuizRepository(
 					submission.percentage,
 					submission.completedAt
 				);
+				cache.invalidateScope(scope);
 			},
 			getGoogleOAuth() {
 				const row = db
@@ -1008,6 +1038,9 @@ export function createQuizRepository(
 					scope.profileId,
 					source
 				);
+			},
+			getCacheStats() {
+				return cache.getStats();
 			},
 			close() {
 				db.close();
