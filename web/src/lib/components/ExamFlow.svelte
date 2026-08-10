@@ -49,6 +49,7 @@
 	const MAX_PRACTICE_RETRIES = 2;
 	let streak = $state(0);
 	let sessionScore = $state(0);
+	let showPracticeSummary = $state(true);
 	const scoreByIndex = new Map<number, number>();
 	let retriesLeft = $derived(
 		session ? Math.max(0, MAX_PRACTICE_RETRIES - (session.retries[index] ?? 0)) : 0
@@ -624,7 +625,7 @@
 			<h1 class="h-display text-2xl text-text-primary">Practice performance</h1>
 			<p class="mt-2 text-text-secondary">
 				{result.earnedPoints.toFixed(2)} / {result.possiblePoints} points · {result.fullyCorrect} fully
-				correct of {result.totalQuestions}
+				correct of {result.totalQuestions}{result.durationSeconds !== undefined ? ` · ${Math.floor(result.durationSeconds / 60)}:${String(result.durationSeconds % 60).padStart(2, '0')}` : ''}
 			</p>
 		</div>
 		{#if Object.keys(result.domainBreakdown).length}
@@ -715,6 +716,15 @@
 			{/if}
 		{/if}
 		<div class="card p-5 sm:p-8">
+			{#if session.mode === 'practice' && question.practiceSummary}
+				<div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-accent/20 bg-accent/5 p-3">
+					<label class="flex min-h-11 items-center gap-2 text-sm font-semibold text-text-secondary">
+						<input type="checkbox" bind:checked={showPracticeSummary} />
+						Show practice context
+					</label>
+					{#if showPracticeSummary}<span class="text-sm leading-relaxed text-text-primary">{question.practiceSummary.text}</span>{/if}
+				</div>
+			{/if}
 			{#if question.context}<div
 					class="mb-5 rounded-md border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
 				>

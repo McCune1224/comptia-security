@@ -14,6 +14,7 @@ import { quizRepository, type QuizRepository, type StoredSession } from './db';
 import {
 	loadQuestionBank,
 	toPublicQuestion,
+	practiceSummary,
 	type QuestionBank,
 	type QuestionDefinition
 } from './question-bank';
@@ -106,8 +107,15 @@ function presentation(question: QuestionDefinition, rng: () => number): Question
 	return cloned;
 }
 
-function asView(stored: StoredSession): SessionView {
-	const questions = stored.questions.map(toPublicQuestion);
+function asView(stored: StoredSession, clock = new Date()): SessionView {
+	const questions = stored.questions.map((question) => {
+		const publicQuestion = toPublicQuestion(question);
+		const summary = stored.summary.mode === 'practice' ? practiceSummary(question) : undefined;
+		return summary ? { ...publicQuestion, practiceSummary: summary } : publicQuestion;
+	});
+	const elapsedSeconds = stored.summary.mode === 'practice'
+		? Math.max(0, Math.floor(((stored.summary.completed_at ? new Date(stored.summary.completed_at) : clock).getTime() - new Date(stored.summary.started_at).getTime()) / 1000))
+		: undefined;
 	return {
 		sessionId: stored.summary.id,
 		type: stored.summary.type,
@@ -118,6 +126,7 @@ function asView(stored: StoredSession): SessionView {
 		totalQuestions: questions.length,
 		currentIndex: stored.currentIndex,
 		status: stored.summary.status,
+		...(elapsedSeconds !== undefined ? { elapsedSeconds } : {}),
 		questions,
 		responses: stored.responses,
 		retries: stored.retries,
@@ -361,6 +370,9 @@ export function createQuizService({
 			};
 		});
 		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
+		const elapsedSeconds = stored.summary.mode === 'practice'
+			? Math.max(0, Math.floor((new Date(now().toISOString()).getTime() - new Date(stored.summary.started_at).getTime()) / 1000))
+			: undefined;
 		const result: QuizResult = {
 			sessionId: stored.summary.id,
 			type: stored.summary.type,
@@ -374,6 +386,7 @@ export function createQuizService({
 			domainBreakdown,
 			objectiveBreakdown,
 			completedAt: now().toISOString(),
+			...(elapsedSeconds !== undefined ? { elapsedSeconds, durationSeconds: elapsedSeconds } : {}),
 			review
 		};
 		const completion = repository.complete(
@@ -505,13 +518,13 @@ export function createQuizService({
 					);
 				throw error;
 			}
-			return asView(repository.getActiveSession()!);
+			return asView(repository.getActiveSession()!, now());
 		},
 		getSession(id) {
 			const stored = requireStored(id);
 			return stored.summary.status === 'completed' && stored.result
 				? stored.result
-				: asView(stored);
+				: asView(stored, now());
 		},
 		getActiveSession() {
 			const stored = repository.getActiveSession();
@@ -564,7 +577,7 @@ export function createQuizService({
 			)
 				throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.');
 			repository.updateState(id, update.currentIndex, update.flag, now().toISOString());
-			return asView(requireStored(id));
+			return asView(requireStored(id), now());
 		},
 		abandonSession(id) {
 			const stored = requireStored(id);

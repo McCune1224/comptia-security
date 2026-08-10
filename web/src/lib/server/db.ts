@@ -55,6 +55,8 @@ type SessionRow = {
 	points_possible: number;
 	updated_at: string;
 	assignment_id: string | null;
+	elapsed_seconds: number | null;
+	duration_seconds: number | null;
 };
 type StateRow = {
 	deadline_at: string | null;
@@ -348,7 +350,7 @@ export function createQuizRepository(
 	// Fresh databases are created directly in the v6 shape; the migrate block
 	// below upgrades v5 files in place and no-ops on anything already v6.
 	db.exec(`
-		CREATE TABLE IF NOT EXISTS quiz_sessions (id TEXT PRIMARY KEY, started_at TEXT NOT NULL, completed_at TEXT, type TEXT NOT NULL, domain INTEGER, total_questions INTEGER NOT NULL DEFAULT 0, correct_answers INTEGER NOT NULL DEFAULT 0, mode TEXT NOT NULL DEFAULT 'practice', status TEXT NOT NULL DEFAULT 'active', points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT '', assignment_id TEXT, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701');
+		CREATE TABLE IF NOT EXISTS quiz_sessions (id TEXT PRIMARY KEY, started_at TEXT NOT NULL, completed_at TEXT, type TEXT NOT NULL, domain INTEGER, total_questions INTEGER NOT NULL DEFAULT 0, correct_answers INTEGER NOT NULL DEFAULT 0, mode TEXT NOT NULL DEFAULT 'practice', status TEXT NOT NULL DEFAULT 'active', points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT '', assignment_id TEXT, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701', elapsed_seconds INTEGER, duration_seconds INTEGER);
 		CREATE TABLE IF NOT EXISTS quiz_answers (id INTEGER PRIMARY KEY AUTOINCREMENT, session_id TEXT NOT NULL, question_index INTEGER NOT NULL, prompt TEXT NOT NULL DEFAULT '', domain INTEGER NOT NULL, category TEXT, correct_answer TEXT NOT NULL DEFAULT '', user_answer TEXT NOT NULL DEFAULT '', is_correct INTEGER NOT NULL DEFAULT 0, question_id TEXT, objective TEXT, response_json TEXT, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701', FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
 		CREATE TABLE IF NOT EXISTS domain_progress (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, domain INTEGER NOT NULL, total_attempted INTEGER NOT NULL DEFAULT 0, total_correct INTEGER NOT NULL DEFAULT 0, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, last_reviewed_at TEXT, PRIMARY KEY (profile_id, course_id, domain));
 		CREATE TABLE IF NOT EXISTS quiz_session_state (session_id TEXT PRIMARY KEY, schema_version INTEGER NOT NULL, deadline_at TEXT, current_index INTEGER NOT NULL DEFAULT 0, questions_json TEXT NOT NULL, result_json TEXT, updated_at TEXT NOT NULL, FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
@@ -411,6 +413,10 @@ export function createQuizRepository(
 			db.exec("ALTER TABLE quiz_sessions ADD COLUMN profile_id TEXT NOT NULL DEFAULT 'default'");
 		if (!has('quiz_sessions', 'course_id'))
 			db.exec("ALTER TABLE quiz_sessions ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
+		if (!has('quiz_sessions', 'elapsed_seconds'))
+			db.exec('ALTER TABLE quiz_sessions ADD COLUMN elapsed_seconds INTEGER');
+		if (!has('quiz_sessions', 'duration_seconds'))
+			db.exec('ALTER TABLE quiz_sessions ADD COLUMN duration_seconds INTEGER');
 		if (!has('quiz_answers', 'profile_id'))
 			db.exec("ALTER TABLE quiz_answers ADD COLUMN profile_id TEXT NOT NULL DEFAULT 'default'");
 		if (!has('quiz_answers', 'course_id'))
@@ -744,13 +750,15 @@ export function createQuizRepository(
 							);
 					}
 					db.prepare(
-						"UPDATE quiz_sessions SET status = 'completed', completed_at = ?, points_earned = ?, points_possible = ?, correct_answers = ?, total_questions = ?, updated_at = ? WHERE id = ? AND status = 'active'"
+						"UPDATE quiz_sessions SET status = 'completed', completed_at = ?, points_earned = ?, points_possible = ?, correct_answers = ?, total_questions = ?, elapsed_seconds = ?, duration_seconds = ?, updated_at = ? WHERE id = ? AND status = 'active'"
 					).run(
 						completedAt,
 						result.earnedPoints,
 						result.possiblePoints,
 						result.fullyCorrect,
 						result.totalQuestions,
+						result.elapsedSeconds ?? null,
+						result.durationSeconds ?? null,
 						completedAt,
 						id
 					);

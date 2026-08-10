@@ -323,6 +323,32 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 	}
 }
 
+/** Build a deterministic, answer-neutral practice aid. Unsafe context fails closed. */
+export function practiceSummary(definition: QuestionDefinition): NonNullable<PublicQuestion['practiceSummary']> | undefined {
+	const context = definition.context?.trim();
+	if (!context || /\b(correct answer|correct response|answer is|solution is|the answer)\b/i.test(context)) return undefined;
+	const answerTexts: string[] = [];
+	switch (definition.kind) {
+		case 'single-choice': case 'multiple-choice':
+			answerTexts.push(...definition.options.filter((option) => definition.correctOptionIds.includes(option.id)).map((option) => option.text)); break;
+		case 'ordering': answerTexts.push(...definition.correctOrder.map((id) => definition.items.find((item) => item.id === id)?.text ?? '')); break;
+		case 'matching': answerTexts.push(...Object.values(definition.correctMatches).map((id) => [...definition.targets, ...(definition.extraTargets ?? [])].find((target) => target.id === id)?.text ?? '')); break;
+		case 'numeric': case 'slider': answerTexts.push(String(definition.correctValue)); break;
+		case 'evidence': answerTexts.push(...definition.correctLineIds.map((id) => definition.artifact.lines.find((line) => line.id === id)?.text ?? '')); break;
+		case 'configuration': answerTexts.push(...definition.fields.flatMap((field) => { const id = definition.correctValues[field.id]; return field.options.filter((option) => option.id === id).map((option) => option.text); })); break;
+		case 'fill-blank': answerTexts.push(...definition.blanks.flatMap((blank) => blank.acceptedAnswers)); break;
+		case 'word-bank': answerTexts.push(...Object.values(definition.correctAssignments).map((id) => definition.bank.find((word) => word.id === id)?.word ?? '')); break;
+		case 'sort': answerTexts.push(...Object.values(definition.correctBuckets).map((id) => definition.buckets.find((bucket) => bucket.id === id)?.label ?? '')); break;
+		case 'hotspot': answerTexts.push(...definition.regions.filter((region) => region.correct).map((region) => region.label)); break;
+		case 'memory': answerTexts.push(...definition.pairs.flatMap((pair) => [pair.a, pair.b])); break;
+		case 'multi-step': break;
+	}
+	const lowerContext = context.toLowerCase();
+	if (definition.explanation.trim().length >= 3 && lowerContext.includes(definition.explanation.trim().toLowerCase())) return undefined;
+	if (answerTexts.some((term) => term.trim().length >= 3 && lowerContext.includes(term.trim().toLowerCase()))) return undefined;
+	return { text: context, domain: definition.domain, objective: definition.objective, format: definition.format };
+}
+
 export function correctResponse(definition: QuestionDefinition): QuestionResponse {
 	switch (definition.kind) {
 		case 'single-choice': case 'multiple-choice': return { kind: 'choice', optionIds: definition.correctOptionIds };
