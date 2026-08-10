@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { createQuizRepository, createScopedRepo, MAX_PROFILES } from './db';
+import type { QuizResult } from '$lib/types';
 
 const tempFiles: string[] = [];
 function tempDb(): string {
@@ -144,6 +145,53 @@ describe('v5 → v7 migration', () => {
 		expect(lessonColumns.map((column) => column.name)).toContain('objective_id');
 		expect(responseColumns.map((column) => column.name)).toContain('hint_used');
 		repaired.close();
+	});
+
+	it('repairs v7 databases missing timing columns before completion writes', () => {
+		const file = tempDb();
+		createQuizRepository(file).close();
+
+		const drifted = new Database(file);
+		drifted.exec('ALTER TABLE quiz_sessions DROP COLUMN elapsed_seconds');
+		drifted.exec('ALTER TABLE quiz_sessions DROP COLUMN duration_seconds');
+		drifted.pragma('user_version = 7');
+		drifted.close();
+
+		const repository = createQuizRepository(file);
+		const scoped = createScopedRepo(repository, { profileId: 'default', courseId: 'secp-701' });
+		scoped.createSession({
+			id: 'legacy-timing',
+			type: 'quiz',
+			mode: 'practice',
+			domain: 1,
+			startedAt: '2026-08-10T12:00:00.000Z',
+			deadlineAt: null,
+			questions: []
+		});
+		const result = {
+			sessionId: 'legacy-timing',
+			type: 'quiz',
+			mode: 'practice',
+			totalQuestions: 0,
+			fullyCorrect: 0,
+			earnedPoints: 0,
+			possiblePoints: 0,
+			domainBreakdown: Object.fromEntries(
+				[1, 2, 3, 4, 5].map((domain) => [domain, { totalQuestions: 0, fullyCorrect: 0, earnedPoints: 0, possiblePoints: 0 }])
+			),
+			objectiveBreakdown: {},
+			completedAt: '2026-08-10T12:00:12.000Z',
+			elapsedSeconds: 12,
+			durationSeconds: 12,
+			review: []
+		} as unknown as QuizResult;
+
+		expect(scoped.complete('legacy-timing', result, [], result.completedAt)).toEqual({ result, finalized: true });
+		const persisted = new Database(file, { readonly: true }).prepare(
+			"SELECT elapsed_seconds, duration_seconds FROM quiz_sessions WHERE id = 'legacy-timing'"
+		).get() as { elapsed_seconds: number; duration_seconds: number };
+		expect(persisted).toEqual({ elapsed_seconds: 12, duration_seconds: 12 });
+		repository.close();
 	});
 });
 	describe('fresh databases', () => {

@@ -529,7 +529,9 @@ export function createQuizRepository(
 	const needsPostVersionRepair =
 		!columns('quiz_session_responses').has('retries') ||
 		!columns('quiz_session_responses').has('hint_used') ||
-		!columns('course_lessons').has('objective_id');
+		!columns('course_lessons').has('objective_id') ||
+		!columns('quiz_sessions').has('elapsed_seconds') ||
+		!columns('quiz_sessions').has('duration_seconds');
 	const needsActiveSessionIndex =
 		(db
 			.prepare(
