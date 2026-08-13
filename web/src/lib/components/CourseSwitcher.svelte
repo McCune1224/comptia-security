@@ -52,7 +52,7 @@
 </button>
 
 <div
-	class="fixed inset-0 z-[60] bg-black/50 transition-opacity duration-200"
+	class="fixed inset-0 z-[60] flex items-end justify-center bg-black/50 transition-opacity duration-200"
 	class:pointer-events-none={!open}
 	class:opacity-0={!open}
 	class:opacity-100={open}
@@ -64,7 +64,7 @@
 	}}
 >
 	<aside
-		class="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-md border-t border-border bg-surface-900 p-5 pb-safe shadow-2xl transition-transform duration-300 ease-out"
+		class="w-full max-h-full overflow-y-auto rounded-t-md border-t border-border bg-surface-900 p-5 pb-safe shadow-2xl transition-transform duration-300 ease-out"
 		class:translate-y-full={!open}
 		class:translate-y-0={open}
 		aria-label="Course switcher"

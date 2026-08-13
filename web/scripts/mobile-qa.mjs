@@ -107,6 +107,7 @@ const pageErrors = [];
 const failedRequests = [];
 const KINDS_SEEN = new Set();
 const KINDS_NOT_SEEN = [];
+let sessionQuestions = null;
 const activeSessions = new Set();
 let orderingAttempts = 0;
 let orderingFailures = 0;
@@ -352,6 +353,25 @@ async function tapEnabled(locator) {
 	}
 }
 
+/**
+ * SelectCount for the question (or multi-step child step) currently on screen,
+ * read from the seeded session payload so checkbox taps match exactly.
+ */
+async function expectedChoiceCount(page) {
+	const text = await page.evaluate(() => document.body.innerText || '');
+	const qm = text.match(/Q(\d+)\s+OF\s+\d+/i);
+	const sm = text.match(/Step\s+(\d+)\s+of\s+\d+/i);
+	if (!qm || !sessionQuestions) return 1;
+	const question = sessionQuestions[parseInt(qm[1], 10) - 1];
+	if (!question) return 1;
+	if (question.kind === 'multiple-choice') return question.selectCount ?? 2;
+	if (question.kind === 'multi-step' && sm) {
+		const step = question.steps[parseInt(sm[1], 10) - 1];
+		if (step?.kind === 'multiple-choice') return step.selectCount ?? 2;
+	}
+	return 1;
+}
+
 async function interactWithKind(page, kind) {
 	switch (kind) {
 		case 'choice': {
@@ -359,17 +379,12 @@ async function interactWithKind(page, kind) {
 			if (await radios.count()) {
 				await radios.first().tap({ timeout: 3000 }).catch(() => {});
 			} else {
+				const want = await expectedChoiceCount(page);
 				const boxes = page.locator('input[data-answer-option][type="checkbox"]');
 				const n = await boxes.count();
-				for (let i = 0; i < Math.min(4, n); i++) {
+				for (let i = 0; i < Math.min(Math.min(want, 3), n); i++) {
 					await boxes.nth(i).tap({ timeout: 3000 }).catch(() => {});
-					await page.waitForTimeout(150);
-					const ready = await page
-						.locator('button:has-text("Check Answer")')
-						.first()
-						.isEnabled()
-						.catch(() => false);
-					if (ready) break;
+					await page.waitForTimeout(120);
 				}
 			}
 			break;
@@ -567,6 +582,9 @@ async function driveSession(page, context, type, routeTag, body, tag, cap = 160)
 		throw new Error(`seed ${type} session failed: ${res.status()} ${JSON.stringify(payload).slice(0, 200)}`);
 	}
 	activeSessions.add(sessionId);
+	const viewRes = await context.request.get(`${BASE}/api/quiz/session/${sessionId}`);
+	const viewPayload = await viewRes.json().catch(() => ({}));
+	sessionQuestions = viewPayload.session?.questions ?? null;
 	await page.goto(`${BASE}/${routeTag}?session=${sessionId}`);
 	await page.waitForTimeout(1200);
 
