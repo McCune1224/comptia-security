@@ -39,6 +39,26 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('fails closed for multi-step contexts that contain a child-step answer', () => {
+		const repository = createQuizRepository(':memory:');
+		const step: QuestionDefinition = {
+			id: 'pbq-1-ms-step', domain: 1, objective: '1.1', format: 'pbq',
+			prompt: 'Which control blocks credential reuse?', explanation: 'MFA resists credential reuse.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'single-choice',
+			options: [{ id: 'a', text: 'MFA', rationale: 'Correct.' }, { id: 'b', text: 'Backups', rationale: 'Wrong.' }, { id: 'c', text: 'Patching', rationale: 'Wrong.' }, { id: 'd', text: 'Hashing', rationale: 'Wrong.' }],
+			correctOptionIds: ['a'], selectCount: 1
+		};
+		const question: QuestionDefinition = {
+			id: 'pbq-1-ms-leak', domain: 1, objective: '1.1', format: 'pbq',
+			context: 'The incident response team decides MFA should be mandatory for admin accounts.',
+			prompt: 'Respond to the incident.', explanation: 'Parent-level explanation.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'multi-step', steps: [step]
+		};
+		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5 });
+		expect(service.startSession({ type: 'pbq', count: 1 }).questions[0].practiceSummary).toBeUndefined();
+		repository.close();
+	});
+
 	it('reports elapsed practice time on resume and persists completion duration', () => {
 		const repository = createQuizRepository(':memory:');
 		let current = new Date('2026-07-22T12:00:00.000Z');
@@ -244,20 +264,172 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		// Public view exposes the hint but the correct answer stays secret.
+		// Public view exposes the authored hint but the correct answer stays secret.
 		const plain = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
 		expect(plain.questions[0].kind === 'single-choice' && plain.questions[0].hint).toBe('The service listens on TCP 22.');
 		// First attempt, no hint -> full points.
 		service.saveResponse(plain.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
 		const plainResult = service.completeSession(plain.sessionId);
 		expect(plainResult.review[0].feedback.earnedPoints).toBe(1);
-		// Retry with hint -> 0.6 (retry) × 0.75 (hint) = 0.45.
+		// Reveal the hint server-side, then retry -> 0.6 (retry) × 0.75 (hint) = 0.45.
 		const hinted = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
 		service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
-		const retry = service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['a'] }, true);
+		const revealed = service.revealHint(hinted.sessionId, 0);
+		expect(revealed.hint.text).toBe('The service listens on TCP 22.');
+		const retry = service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
 		expect(retry.feedback?.earnedPoints).toBeCloseTo(0.6 * 0.75);
 		const hintedResult = service.completeSession(hinted.sessionId);
 		expect(hintedResult.review[0].feedback.earnedPoints).toBeCloseTo(0.6 * 0.75);
+		// Exam mode strips the hint entirely.
+		const exam = service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
+		expect(exam.questions[0].kind === 'single-choice' && exam.questions[0].hint).toBeUndefined();
+		repository.close();
+	});
+
+	it('generates answer-safe auto-hints and rejects hint reveals outside practice', () => {
+		const repository = createQuizRepository(':memory:');
+		const choicePbq: QuestionDefinition = {
+			id: 'pbq-5-987',
+			domain: 5,
+			objective: '5.2',
+			format: 'pbq',
+			prompt: 'Synthetic choice item without an authored hint.',
+			explanation: 'Synthetic.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.2' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'SSH', rationale: 'Correct.' },
+				{ id: 'b', text: 'DNS', rationale: 'Wrong.' },
+				{ id: 'c', text: 'HTTP', rationale: 'Wrong.' },
+				{ id: 'd', text: 'SMTP', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [choicePbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const hint = service.revealHint(session.sessionId, 0);
+		expect(hint.hint.text).toMatch(/incorrect/);
+		expect(hint.hint.text.toLowerCase()).not.toContain('ssh');
+		expect(service.revealHint(session.sessionId, 0).hint.text).toBe(hint.hint.text);
+		service.completeSession(session.sessionId);
+		// Graded sessions refuse hints.
+		const graded = service.startSession({ type: 'pbq', count: 1, mode: 'practice', assignmentId: 'assign-1' });
+		expect(() => service.revealHint(graded.sessionId, 0)).toThrow(/graded/);
+		// Exam sessions refuse hints.
+		service.abandonSession(graded.sessionId);
+		const exam = service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
+		expect(() => service.revealHint(exam.sessionId, 0)).toThrow(/practice mode/);
+		repository.close();
+	});
+
+	it('withholds feedback and locks responses for graded assignment sessions', () => {
+		const repository = createQuizRepository(':memory:');
+		const question: QuestionDefinition = {
+			id: 'pbq-1-graded',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Which control is most appropriate?',
+			explanation: 'MFA is correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Backups', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Patching', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Hashing', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [question] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 1, mode: 'practice', assignmentId: 'assign-week-1' });
+		expect(session.assignmentId).toBe('assign-week-1');
+		const saved = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		expect(saved).toEqual({ saved: true });
+		expect(() => service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['b'] })).toThrow(/locked/);
+		const result = service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBe(1);
+		expect(repository.getSubmissions().length).toBe(1);
+		repository.close();
+	});
+
+	it('starts a retake session from the missed questions of a completed session', () => {
+		const repository = createQuizRepository(':memory:');
+		const good: QuestionDefinition = {
+			id: 'pbq-1-retake-good',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Easy question.',
+			explanation: 'MFA is correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Backups', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Patching', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Hashing', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const missed: QuestionDefinition = {
+			id: 'pbq-1-retake-missed',
+			domain: 1,
+			objective: '1.2',
+			format: 'pbq',
+			prompt: 'Hard question.',
+			explanation: 'Backups are correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.2' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Wrong.' },
+				{ id: 'b', text: 'Backups', rationale: 'Correct.' },
+				{ id: 'c', text: 'Patching', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Hashing', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['b'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [good, missed] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'pbq', count: 2 });
+		const goodIndex = session.questions.findIndex((q) => q.id === 'pbq-1-retake-good');
+		const missedIndex = session.questions.findIndex((q) => q.id === 'pbq-1-retake-missed');
+		service.saveResponse(session.sessionId, goodIndex, { kind: 'choice', optionIds: ['a'] });
+		service.saveResponse(session.sessionId, missedIndex, { kind: 'choice', optionIds: ['a'] });
+		const result = service.completeSession(session.sessionId);
+		expect(result.review.filter((item) => !item.feedback.fullyCorrect)).toHaveLength(1);
+		const retake = service.retakeSession(session.sessionId);
+		expect(retake.mode).toBe('practice');
+		expect(retake.questions.map((q) => q.id)).toEqual(['pbq-1-retake-missed']);
+		// Retaking a session with no missed questions fails.
+		service.abandonSession(retake.sessionId);
+		const perfect = service.startSession({ type: 'pbq', count: 1 });
+		service.saveResponse(perfect.sessionId, 0, {
+			kind: 'choice',
+			optionIds: perfect.questions[0].kind === 'single-choice' || perfect.questions[0].kind === 'multiple-choice' ? ['a'] : []
+		});
+		const perfectResult = service.completeSession(perfect.sessionId);
+		if (perfectResult.review.every((item) => item.feedback.fullyCorrect))
+			expect(() => service.retakeSession(perfect.sessionId)).toThrow(/No missed/);
 		repository.close();
 	});
 

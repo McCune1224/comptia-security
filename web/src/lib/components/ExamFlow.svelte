@@ -15,6 +15,7 @@
 		SessionType,
 		SessionView
 	} from '$lib/types';
+	import { AUTO_HINTABLE_KINDS } from '$lib/types';
 
 	let {
 		type,
@@ -219,6 +220,14 @@
 		return true;
 	}
 
+	/** True when a choice question has exactly selectCount options chosen. */
+	function choiceAnswered(): boolean {
+		if (!question) return true;
+		if (question.kind !== 'single-choice' && question.kind !== 'multiple-choice') return true;
+		if (draft?.kind !== 'choice') return false;
+		return draft.optionIds.length === question.selectCount;
+	}
+
 	/** True when the current question's blanks (fill-blank / word-bank) are all answered. */
 	function blanksAnswered(): boolean {
 		if (!question) return true;
@@ -241,6 +250,7 @@
 		subStep = 0;
 		draft = value.responses[index] ?? null;
 		feedback = null;
+		savedAck = false;
 	}
 
 	async function load() {
@@ -283,8 +293,51 @@
 		}
 	}
 
-	/** Practice-mode hint revealed per question index (client view; server enforces the 25% cost). */
-	let hintUsed = $state<Record<number, boolean>>({});
+	/** Practice-mode hint text revealed per question index (server records the 25% cost). */
+	let revealedHints = $state<Record<number, string>>({});
+	/** True after an answer is saved in a graded assignment (no immediate feedback there). */
+	let savedAck = $state(false);
+
+	function hintable(question: PublicQuestion | undefined): boolean {
+		if (!question) return false;
+		return Boolean(question.hint) || (AUTO_HINTABLE_KINDS as readonly string[]).includes(question.kind);
+	}
+
+	async function revealHint() {
+		if (!session) return;
+		error = '';
+		try {
+			const response = await fetch('/api/quiz/hint', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ sessionId: session.sessionId, questionIndex: index })
+			});
+			const data = await response.json();
+			if (!response.ok) throw new Error(data.error?.message ?? 'Unable to reveal hint');
+			revealedHints[index] = data.hint.text;
+		} catch (cause) {
+			error = cause instanceof Error ? cause.message : 'Unable to reveal hint';
+		}
+	}
+
+	async function retakeMissed() {
+		if (!result) return;
+		error = '';
+		try {
+			const response = await fetch('/api/quiz/retake', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ sessionId: result.sessionId })
+			});
+			const data = await response.json();
+			if (!response.ok) throw new Error(data.error?.message ?? 'Unable to start retake session');
+			result = null;
+			hydrate(data.session);
+			history.replaceState({}, '', `${location.pathname}?session=${data.session.sessionId}`);
+		} catch (cause) {
+			error = cause instanceof Error ? cause.message : 'Unable to start retake session';
+		}
+	}
 
 	async function save() {
 		if (!session || !draft) return;
@@ -298,8 +351,7 @@
 				body: JSON.stringify({
 					sessionId: session.sessionId,
 					questionIndex: index,
-					response: draft,
-					hintUsed: hintUsed[index] ?? false
+					response: draft
 				})
 			});
 			const data = await response.json();
@@ -311,6 +363,8 @@
 				scoreByIndex.set(index, data.feedback.earnedPoints);
 				if (data.feedback.fullyCorrect) streak += 1;
 				else streak = 0;
+			} else {
+				savedAck = true;
 			}
 			if (replacingResponse) session.retries[index] = (session.retries[index] ?? 0) + 1;
 			session.responses[index] = draft;
@@ -328,6 +382,7 @@
 		subStep = 0;
 		draft = session.responses[index] ?? null;
 		feedback = null;
+		savedAck = false;
 		await fetch(`/api/quiz/session/${session.sessionId}`, {
 			method: 'PATCH',
 			headers: { 'content-type': 'application/json' },
@@ -642,6 +697,11 @@
 		{/if}
 		<div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
 			<a class="btn btn-primary" href="/history/{result.sessionId}">Review Answers</a>
+			{#if result.review.some((item) => !item.feedback.fullyCorrect)}
+				<button class="btn btn-ghost" type="button" onclick={retakeMissed}
+					>Retake missed ({result.review.filter((item) => !item.feedback.fullyCorrect).length})</button
+				>
+			{/if}
 			<button class="btn btn-ghost" type="button" onclick={onDone}
 				>{assignmentId ? 'Back to assignment' : 'Return to dashboard'}</button
 			>
@@ -725,7 +785,7 @@
 					{#if showPracticeSummary}<span class="text-sm leading-relaxed text-text-primary">{question.practiceSummary.text}</span>{/if}
 				</div>
 			{/if}
-			{#if question.context}<div
+			{#if question.context && !(session.mode === 'practice' && question.practiceSummary)}<div
 					class="mb-5 rounded-md border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
 				>
 					{question.context}
@@ -743,6 +803,7 @@
 									? 'border-accent bg-accent/10'
 									: 'border-border hover:border-border-strong'}"
 							><input
+									data-answer-option
 								type={question.kind === 'multiple-choice' ? 'checkbox' : 'radio'}
 								checked={draft?.kind === 'choice' && draft.optionIds.includes(option.id)}
 								onchange={() => choose(option.id, question.kind === 'multiple-choice')}
@@ -1008,11 +1069,6 @@
 				{@const step = question.steps[subStep]}
 				{@const subDraft = getSubResponse()}
 				<div class="space-y-4">
-					<div
-						class="rounded-md border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
-					>
-						{question.context}
-					</div>
 					<div class="flex items-center gap-2 text-sm">
 						<span class="rounded-md bg-surface-700 px-3 py-1.5 font-semibold text-text-primary">
 							Step {subStep + 1} of {question.steps.length}
@@ -1033,6 +1089,7 @@
 										: 'border-border hover:border-border-strong'}"
 								>
 									<input
+											data-answer-option
 										type={step.kind === 'multiple-choice' ? 'checkbox' : 'radio'}
 										checked={subDraft?.kind === 'choice' && subDraft.optionIds.includes(option.id)}
 										onchange={() => {
@@ -1305,6 +1362,8 @@
 					disabled={!draft ||
 						saving ||
 						!!feedback ||
+						(Boolean(session.assignmentId) && session.responses[index] !== undefined) ||
+						!choiceAnswered() ||
 						!allSubStepsAnswered() ||
 						!blanksAnswered() ||
 						!sortAnswered() ||
@@ -1314,7 +1373,7 @@
 						!sliderAnswered()}
 					>{saving
 						? 'Saving…'
-						: session.mode === 'practice'
+						: session.mode === 'practice' && !session.assignmentId
 							? 'Check Answer'
 							: 'Save Answer'}</button
 				>
@@ -1336,6 +1395,14 @@
 					>Submit</button
 				>
 			</div>
+
+			{#if savedAck && !feedback}
+				<div class="mt-3">
+					<span class="chip bg-surface-700 text-text-secondary"
+						>Answer saved — your score will be shown after you submit.</span
+					>
+				</div>
+			{/if}
 
 			{#if feedback}
 				<div
@@ -1361,19 +1428,19 @@
 							>
 						</div>
 					{/if}
-					{#if session.mode === 'practice' && !feedback.fullyCorrect && question?.hint}
+					{#if session.mode === 'practice' && !session.assignmentId && !feedback.fullyCorrect && hintable(question)}
 						<div class="mt-3">
-							{#if hintUsed[index]}
+							{#if revealedHints[index]}
 								<p
 									class="rounded-md bg-surface-700/60 p-3 text-sm leading-relaxed text-text-secondary"
 								>
-									{question.hint}
+									{revealedHints[index]}
 								</p>
 							{:else}
 								<button
 									class="btn btn-ghost h-11 px-4 text-sm"
 									type="button"
-									onclick={() => (hintUsed[index] = true)}>Hint — 25% off the next attempt</button
+									onclick={revealHint}>Hint — 25% off</button
 								>
 							{/if}
 						</div>

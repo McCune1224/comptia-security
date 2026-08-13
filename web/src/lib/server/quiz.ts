@@ -18,6 +18,7 @@ import {
 	type QuestionBank,
 	type QuestionDefinition
 } from './question-bank';
+import { autoHint } from './hints';
 import { scoreQuestion } from './scoring';
 import { createCourseService, type CourseService } from './course-service';
 import { createReviewService, type ReviewService, type ReviewSource } from './review';
@@ -46,15 +47,20 @@ export interface QuizService {
 		objective?: ObjectiveId;
 		assignmentId?: string;
 		reviewSource?: ReviewSource;
+		/** Explicit question ids (retake flows); overrides random bank selection. */
+		questionIds?: string[];
 	}): SessionView;
 	getSession(sessionId: string): SessionView | QuizResult;
 	getActiveSession(): ActiveSessionSummary | null;
 	saveResponse(
 		sessionId: string,
 		questionIndex: number,
-		response: QuestionResponse,
-		hintUsed?: boolean
+		response: QuestionResponse
 	): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
+	/** Practice-mode hint reveal; records the 25% point cost server-side. */
+	revealHint(sessionId: string, questionIndex: number): { hint: { text: string } };
+	/** Starts a practice session from the missed questions of a completed session. */
+	retakeSession(sessionId: string): SessionView;
 	updateSession(
 		sessionId: string,
 		update: { currentIndex?: number; flag?: { questionIndex: number; value: boolean } }
@@ -110,6 +116,7 @@ function presentation(question: QuestionDefinition, rng: () => number): Question
 function asView(stored: StoredSession, clock = new Date()): SessionView {
 	const questions = stored.questions.map((question) => {
 		const publicQuestion = toPublicQuestion(question);
+		if (stored.summary.mode !== 'practice') delete publicQuestion.hint;
 		const summary = stored.summary.mode === 'practice' ? practiceSummary(question) : undefined;
 		return summary ? { ...publicQuestion, practiceSummary: summary } : publicQuestion;
 	});
@@ -130,7 +137,8 @@ function asView(stored: StoredSession, clock = new Date()): SessionView {
 		questions,
 		responses: stored.responses,
 		retries: stored.retries,
-		flaggedQuestionIndexes: stored.flags
+		flaggedQuestionIndexes: stored.flags,
+		assignmentId: stored.summary.assignment_id
 	};
 }
 
@@ -414,112 +422,135 @@ export function createQuizService({
 		);
 		return finalized;
 	};
-	return {
-		startSession(input) {
-			const active = repository.getActiveSession();
-			if (active) {
-				const current = expire(active);
-				if (current.summary.status === 'active')
-					throw new QuizServiceError(
-						'ACTIVE_SESSION_EXISTS',
-						'Resume or abandon the active session first.',
-						{ session: summary(current) }
-					);
-			}
-			const mode: SessionMode = input.type === 'full' ? 'exam' : (input.mode ?? 'practice');
-			if (
-				!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) ||
-				!['practice', 'exam'].includes(mode) ||
-				(input.type !== 'quiz' && input.domain !== undefined) ||
-				(input.objective !== undefined &&
-					(input.type !== 'quiz' || !/^[1-5]\.[1-9]\d?$/.test(input.objective))) ||
-				(input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall')
-			)
-				throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
-			const source =
-				input.type === 'pbq'
-					? bank.pbqs
-					: input.type === 'scenario'
-						? bank.mcqs.filter((question) => question.format === 'scenario')
-						: bank.mcqs;
-			const count =
-				input.type === 'full'
-					? 90
-					: (input.count ??
-						(input.type === 'quiz'
-							? 20
-							: input.type === 'scenario'
-								? 10
-								: input.type === 'review'
-									? 10
-									: 5));
-			let selected: QuestionDefinition[];
-			if (input.type === 'review') {
-				if (count < 1 || count > 20)
-					throw new QuizServiceError('INVALID_REQUEST', 'Review count must be between 1 and 20.');
-				selected = reviewSvc.composeQueue({ source: input.reviewSource!, count }, now());
-			} else if (input.type === 'full') {
-				const pbqs = assemblePbqSet(bank, examConfig.domains);
-				if (!pbqs)
-					throw new QuizServiceError(
-						'INVALID_REQUEST',
-						`Bank cannot assemble ${examConfig.domains.length} distinct PBQ interactions.`
-					);
-				selected = [...pbqs];
-				for (const domain of examConfig.domains)
-					selected.push(
-						...shuffle(
-							bank.mcqs.filter((question) => question.domain === domain),
-							rng
-						).slice(0, examConfig.quotas[domain] - 1)
-					);
-			} else {
-				const filtered = source.filter(
-					(question) =>
-						(!input.domain || question.domain === input.domain) &&
-						(!input.objective || question.objective === input.objective)
+	const startSession = (input: {
+		type: SessionType;
+		mode?: SessionMode;
+		count?: number;
+		domain?: Domain;
+		objective?: ObjectiveId;
+		assignmentId?: string;
+		reviewSource?: ReviewSource;
+		questionIds?: string[];
+	}): SessionView => {
+		const active = repository.getActiveSession();
+		if (active) {
+			const current = expire(active);
+			if (current.summary.status === 'active')
+				throw new QuizServiceError(
+					'ACTIVE_SESSION_EXISTS',
+					'Resume or abandon the active session first.',
+					{ session: summary(current) }
 				);
-				const valid =
-					input.type === 'quiz'
-						? count >= 5 && count <= 50
+		}
+		const mode: SessionMode = input.type === 'full' ? 'exam' : (input.mode ?? 'practice');
+		if (
+			!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) ||
+			!['practice', 'exam'].includes(mode) ||
+			(input.type !== 'quiz' && input.domain !== undefined) ||
+			(input.objective !== undefined &&
+				(input.type !== 'quiz' || !/^[1-5]\.[1-9]\d?$/.test(input.objective))) ||
+			(input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall') ||
+			(input.questionIds !== undefined &&
+				(!Array.isArray(input.questionIds) ||
+					input.questionIds.length < 1 ||
+					input.questionIds.length > 50 ||
+					input.questionIds.some((id) => typeof id !== 'string')))
+		)
+			throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
+		const source =
+			input.type === 'pbq'
+				? bank.pbqs
+				: input.type === 'scenario'
+					? bank.mcqs.filter((question) => question.format === 'scenario')
+					: bank.mcqs;
+		const count =
+			input.type === 'full'
+				? 90
+				: (input.count ??
+					(input.type === 'quiz'
+						? 20
 						: input.type === 'scenario'
-							? count >= 5 && count <= 30
-							: count >= 1 && (count <= 10 || count === 30);
-				if (!valid || count > filtered.length)
-					throw new QuizServiceError('INVALID_REQUEST', 'Requested count is unavailable.', {
-						available: filtered.length
-					});
-				selected = shuffle(filtered, rng).slice(0, count);
-			}
-			selected = shuffle(selected, rng).map((question) => presentation(question, rng));
-			const startedAt = now().toISOString();
-			const deadlineAt =
-				mode === 'exam'
-					? new Date(
-							now().getTime() + (input.type === 'full' ? 90 : selected.length) * 60_000
-						).toISOString()
-					: null;
-			try {
-				repository.createSession({
-					id: crypto.randomUUID(),
-					type: input.type,
-					mode,
-					domain: input.domain ?? null,
-					startedAt,
-					deadlineAt,
-					questions: selected,
-					assignmentId: input.assignmentId ?? null
+							? 10
+							: input.type === 'review'
+								? 10
+								: 5));
+		let selected: QuestionDefinition[];
+		if (input.type === 'review') {
+			if (count < 1 || count > 20)
+				throw new QuizServiceError('INVALID_REQUEST', 'Review count must be between 1 and 20.');
+			selected = reviewSvc.composeQueue({ source: input.reviewSource!, count }, now());
+		} else if (input.questionIds?.length) {
+			const pool = [...bank.mcqs, ...bank.pbqs];
+			const byId = new Map(pool.map((question) => [question.id, question]));
+			selected = input.questionIds
+				.map((id) => byId.get(id))
+				.filter((question): question is QuestionDefinition => Boolean(question));
+			if (selected.length !== input.questionIds.length)
+				throw new QuizServiceError('INVALID_REQUEST', 'One or more question ids are unknown.');
+		} else if (input.type === 'full') {
+			const pbqs = assemblePbqSet(bank, examConfig.domains);
+			if (!pbqs)
+				throw new QuizServiceError(
+					'INVALID_REQUEST',
+					`Bank cannot assemble ${examConfig.domains.length} distinct PBQ interactions.`
+				);
+			selected = [...pbqs];
+			for (const domain of examConfig.domains)
+				selected.push(
+					...shuffle(
+						bank.mcqs.filter((question) => question.domain === domain),
+						rng
+					).slice(0, examConfig.quotas[domain] - 1)
+				);
+		} else {
+			const filtered = source.filter(
+				(question) =>
+					(!input.domain || question.domain === input.domain) &&
+					(!input.objective || question.objective === input.objective)
+			);
+			const valid =
+				input.type === 'quiz'
+					? count >= 5 && count <= 50
+					: input.type === 'scenario'
+						? count >= 5 && count <= 30
+						: count >= 1 && (count <= 10 || count === 30);
+			if (!valid || count > filtered.length)
+				throw new QuizServiceError('INVALID_REQUEST', 'Requested count is unavailable.', {
+					available: filtered.length
 				});
-			} catch (error) {
-				if (error instanceof Error && /quiz_sessions_one_active_scope|UNIQUE constraint failed/i.test(error.message))
-					throw new QuizServiceError(
-						'ACTIVE_SESSION_EXISTS',
-						'Resume or abandon the active session first.'
-					);
-				throw error;
-			}
-			return asView(repository.getActiveSession()!, now());
-		},
+			selected = shuffle(filtered, rng).slice(0, count);
+		}
+		selected = shuffle(selected, rng).map((question) => presentation(question, rng));
+		const startedAt = now().toISOString();
+		const deadlineAt =
+			mode === 'exam'
+				? new Date(
+						now().getTime() + (input.type === 'full' ? 90 : selected.length) * 60_000
+					).toISOString()
+				: null;
+		try {
+			repository.createSession({
+				id: crypto.randomUUID(),
+				type: input.type,
+				mode,
+				domain: input.domain ?? null,
+				startedAt,
+				deadlineAt,
+				questions: selected,
+				assignmentId: input.assignmentId ?? null
+			});
+		} catch (error) {
+			if (error instanceof Error && /quiz_sessions_one_active_scope|UNIQUE constraint failed/i.test(error.message))
+				throw new QuizServiceError(
+					'ACTIVE_SESSION_EXISTS',
+					'Resume or abandon the active session first.'
+				);
+			throw error;
+		}
+		return asView(repository.getActiveSession()!, now());
+	};
+	return {
+		startSession,
 		getSession(id) {
 			const stored = requireStored(id);
 			return stored.summary.status === 'completed' && stored.result
@@ -530,7 +561,7 @@ export function createQuizService({
 			const stored = repository.getActiveSession();
 			return stored ? summary(expire(stored)) : null;
 		},
-		saveResponse(id, questionIndex, response, hintUsed = false) {
+		saveResponse(id, questionIndex, response) {
 			const stored = requireStored(id);
 			if (stored.summary.status !== 'active')
 				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
@@ -540,7 +571,14 @@ export function createQuizService({
 				questionIndex >= stored.questions.length
 			)
 				throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.');
+			const graded = Boolean(stored.summary.assignment_id);
+			if (graded && stored.responses[questionIndex])
+				throw new QuizServiceError(
+					'RESPONSE_LOCKED',
+					'Graded assignment responses are locked after saving.'
+				);
 			if (
+				!graded &&
 				stored.summary.mode === 'practice' &&
 				stored.responses[questionIndex] &&
 				(stored.retries[questionIndex] ?? 0) >= MAX_PRACTICE_RETRIES
@@ -551,12 +589,46 @@ export function createQuizService({
 				);
 			const question = stored.questions[questionIndex];
 			validateResponse(question, response);
-			repository.saveResponse(id, questionIndex, response, now().toISOString(), hintUsed);
-			if (stored.summary.mode !== 'practice') return { saved: true as const };
-			const feedback = scoreQuestion(question, response, { hintUsed });
+			repository.saveResponse(id, questionIndex, response, now().toISOString());
+			if (stored.summary.mode !== 'practice' || graded) return { saved: true as const };
+			const feedback = scoreQuestion(question, response, {
+				hintUsed: stored.hints[questionIndex] ?? false
+			});
 			feedback.earnedPoints *=
 				RETRY_FACTORS[Math.min((stored.retries[questionIndex] ?? 0) + 1, MAX_PRACTICE_RETRIES)];
 			return { saved: true as const, feedback };
+		},
+		revealHint(id, questionIndex) {
+			const stored = requireStored(id);
+			if (stored.summary.status !== 'active')
+				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
+			if (stored.summary.mode !== 'practice')
+				throw new QuizServiceError('INVALID_REQUEST', 'Hints are only available in practice mode.');
+			if (stored.summary.assignment_id)
+				throw new QuizServiceError('INVALID_REQUEST', 'Hints are not available for graded assignments.');
+			if (
+				!Number.isInteger(questionIndex) ||
+				questionIndex < 0 ||
+				questionIndex >= stored.questions.length
+			)
+				throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.');
+			const question = stored.questions[questionIndex];
+			const text = question.hint?.trim() || autoHint(question);
+			if (!text)
+				throw new QuizServiceError('INVALID_REQUEST', 'No hint is available for this question.');
+			repository.markHintUsed(id, questionIndex, now().toISOString());
+			return { hint: { text } };
+		},
+		retakeSession(id) {
+			const stored = requireStored(id);
+			if (stored.summary.status !== 'completed' || !stored.result)
+				throw new QuizServiceError('INVALID_REQUEST', 'Only completed sessions can be retaken.');
+			const missedIds = stored.result.review
+				.filter((item) => !item.feedback.fullyCorrect)
+				.map((item) => item.question.id);
+			if (missedIds.length === 0)
+				throw new QuizServiceError('INVALID_REQUEST', 'No missed questions to retake.');
+			return startSession({ type: 'quiz', mode: 'practice', questionIds: missedIds });
 		},
 		updateSession(id, update) {
 			const stored = requireStored(id);

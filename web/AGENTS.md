@@ -87,6 +87,14 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   cards (`reviewSvc.recordCompletion` hook in `quiz.ts`). `/review` page: streak hero, heatmap,
   filterable wall; home page has a review strip. Start a review session via
   `POST /api/quiz/start {type:'review', reviewSource:'daily'|'wall'}` or `/quiz?review=daily`.
+- **Practice hints** (`src/lib/server/hints.ts` + `POST /api/quiz/hint`): revealed after a wrong
+  answer in free-practice mode. Authored per-question hints are optional (validator rejects hints
+  containing the correct answer text); every question without one gets a deterministic auto-hint
+  (choice kinds only name WRONG options — answer-neutral by construction; other kinds reveal at
+  most one correct element). The 25% point cost is recorded server-side in `hint_used` and applied
+  by `scoreQuestion`. Exam-mode payloads never ship hint text.
+- **Retake flow** (`POST /api/quiz/retake`): from a completed session's result screen or the
+  history page, relaunch a practice session containing only the missed questions.
 - **Scheduling:** every assignment has a `dueOffsetDays` (negative = days before exam). The exam
   date lives in `course_meta` (`exam_date`, default: **last day of the current month**) and can be
   changed from the Syllabus page — changing it reschedules every due date.
@@ -151,7 +159,9 @@ active course. Migration/isolation coverage lives in `migration.test.ts`.
 | `GET`  | `/api/review` | Daily-review summary: streak, due cards, today count, 84-day heatmap, wall of shame (with wall items) |
 | `POST` | `/api/quiz/start` | Session start — accepts optional `assignmentId`; `type: 'quiz'` accepts optional `objective` filter; `type: 'review'` requires `reviewSource: 'daily' \| 'wall'` |
 | `GET/PATCH/DELETE` | `/api/quiz/session/[id]` | Resume, move/flag, abandon |
-| `PUT`  | `/api/quiz/answer` | Save answer (practice returns feedback) |
+| `PUT`  | `/api/quiz/answer` | Save answer. Practice returns feedback (correct response + explanation); **graded assignment sessions (`assignmentId` set) return no feedback and lock each response after saving** — results appear on completion. Retries are capped at 2 (60%/30% factors) in practice only. |
+| `POST` | `/api/quiz/hint` | Practice-mode hint reveal `{ sessionId, questionIndex }` — returns `{ hint: { text } }` and records the 25% point cost **server-side** (`quiz_session_responses.hint_used`). Authored hints take precedence; otherwise an answer-safe auto-hint is generated per kind (see `src/lib/server/hints.ts`). Refused for exam mode and graded sessions. |
+| `POST` | `/api/quiz/retake` | `{ sessionId }` (completed session) → starts a practice session containing only the missed questions |
 | `POST` | `/api/quiz/complete` | Finalize; records assignment submission when linked |
 | `GET`  | `/api/progress`, `/api/history`, `/api/cards`, `/api/sync` | Legacy analytics/tools |
 | `GET`  | `/api/calendar/google/status` | Google Calendar connection status (`configured`, `connected`, `email`, `syncedCount`, `lastSyncAt`) |
@@ -198,14 +208,14 @@ active course. Migration/isolation coverage lives in `migration.test.ts`.
 npm run dev          # dev server on localhost:5173
 npm run build        # production build (adapter-node)
 npm run check        # svelte-check type checking
-npm run test         # vitest (23 tests: quiz, scoring, question-bank, cards, course)
+npm run test         # vitest (121 tests: quiz, scoring, question-bank, cards, course, hints, migration, scope)
 ```
 
 `course.test.ts` covers the course definition, scheduling, assignment status, gradebook math,
 readiness, and the course service end-to-end. DB tests use `:memory:`; the module-level
 `quizRepository` singleton uses `:memory:` under vitest (`process.env.VITEST`) to avoid file races.
 `migration.test.ts` covers the v5→v6 migration (fixture upgrade, idempotency, fresh-DB parity),
-scope isolation between profiles, and the 2-profile cap. 60 tests total.
+scope isolation between profiles, and the 2-profile cap.
 
 ## Styling
 

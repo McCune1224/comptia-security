@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SliderDefinition, type SortDefinition } from './question-bank';
+import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type ChoiceDefinition, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SliderDefinition, type SortDefinition } from './question-bank';
 
 describe('question bank', () => {
 	it('rejects malformed sort definitions but accepts well-formed ones', () => {
@@ -293,6 +293,44 @@ describe('question bank', () => {
 			tolerance: 1
 		};
 		expect(() => validateQuestionBank({ mcqs: [], pbqs: [good] }, spec)).not.toThrow();
+	});
+
+	it('rejects hints that reveal the correct answer but accepts safe ones', () => {
+		const spec: CourseBankSpec = {
+			courseId: 'secp-701',
+			mcqTotal: 0,
+			pbqTotal: 1,
+			mcqIdPattern: /^mcq-none$/,
+			pbqIdPattern: /^pbq-/,
+			domains: [5],
+			objectivesByDomain: { 5: ['5.1'] },
+			mcqObjectiveTotals: {},
+			mcqDomainTotals: { 5: 0 },
+			multiTotals: { 5: 0 },
+			scenarioTotals: { 5: 0 }
+		};
+		const base: ChoiceDefinition = {
+			id: 'pbq-5-996',
+			domain: 5,
+			objective: '5.1',
+			format: 'pbq',
+			prompt: 'Which protocol is used for secure remote administration?',
+			explanation: 'SSH provides encrypted remote administration.',
+			sourceRefs: [{ source: 'exam-objectives', section: '5.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'SSH', rationale: 'Correct.' },
+				{ id: 'b', text: 'DNS', rationale: 'Wrong.' },
+				{ id: 'c', text: 'HTTP', rationale: 'Wrong.' },
+				{ id: 'd', text: 'SMTP', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const leaking = { ...base, hint: 'The answer is Secure Shell (SSH).' };
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [leaking] }, spec)).toThrow(/hint must not reveal/);
+		const safe = { ...base, hint: 'Think about remote command-line administration.' };
+		expect(() => validateQuestionBank({ mcqs: [], pbqs: [safe] }, spec)).not.toThrow();
 	});
 
 	it('has the required authored allocation and redacts public questions', () => {

@@ -147,9 +147,10 @@ export interface QuizRepository {
 		id: string,
 		index: number,
 		response: QuestionResponse,
-		answeredAt: string,
-		hintUsed?: boolean
+		answeredAt: string
 	): void;
+	/** Marks a practice-mode hint as revealed for a question index (server-enforced cost). */
+	markHintUsed(id: string, index: number, updatedAt: string): void;
 	updateState(
 		id: string,
 		currentIndex?: number,
@@ -657,7 +658,7 @@ export function createQuizRepository(
 					.get(scope.profileId, scope.courseId) as { id: string } | undefined;
 				return row ? readSession(row.id) : null;
 			},
-			saveResponse(id, index, response, answeredAt, hintUsed = false) {
+			saveResponse(id, index, response, answeredAt) {
 				const save = db.transaction(() => {
 					const owned = db
 						.prepare(
@@ -666,13 +667,30 @@ export function createQuizRepository(
 						.get(id, scope.profileId, scope.courseId);
 					if (!owned) return;
 					db.prepare(
-						'INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, hint_used, answered_at) VALUES (?, ?, ?, 0, 0, ?, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1, hint_used = MAX(hint_used, excluded.hint_used)'
-					).run(id, index, JSON.stringify(response), hintUsed ? 1 : 0, answeredAt);
+						'INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, answered_at) VALUES (?, ?, ?, 0, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1'
+					).run(id, index, JSON.stringify(response), answeredAt);
 					db.prepare(
 						'UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?'
 					).run(answeredAt, id, scope.profileId, scope.courseId);
 				});
 				save();
+			},
+			markHintUsed(id, index, updatedAt) {
+				const mark = db.transaction(() => {
+					const owned = db
+						.prepare(
+							'SELECT 1 FROM quiz_sessions WHERE id = ? AND profile_id = ? AND course_id = ?'
+						)
+						.get(id, scope.profileId, scope.courseId);
+					if (!owned) return;
+					db.prepare(
+						'INSERT INTO quiz_session_responses (session_id, question_index, hint_used) VALUES (?, ?, 1) ON CONFLICT(session_id, question_index) DO UPDATE SET hint_used = 1'
+					).run(id, index);
+					db.prepare(
+						'UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?'
+					).run(updatedAt, id, scope.profileId, scope.courseId);
+				});
+				mark();
 			},
 			updateState(id, currentIndex, flag, updatedAt = new Date().toISOString()) {
 				const update = db.transaction(() => {

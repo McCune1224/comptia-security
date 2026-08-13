@@ -260,6 +260,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		if (question.kind === 'fill-blank') fail(question.id, 'fill-blank is deprecated — author word-bank or matching instead');
 		if (question.kind === 'numeric') fail(question.id, 'numeric is deprecated — author slider or word-bank instead');
 		if (question.hint !== undefined && !question.hint.trim()) fail(question.id, 'hint must be a non-empty string');
+		if (question.hint !== undefined && leaksAnswer(question.hint, question)) fail(question.id, 'hint must not reveal the correct answer');
 		if (question.kind === 'single-choice' || question.kind === 'multiple-choice') {
 			if (question.options.length !== (question.kind === 'single-choice' ? 4 : question.options.length) || (question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))) fail(question.id, 'invalid option count');
 			if (!hasUniqueIds(question.options) || question.options.some((option) => !option.text.trim() || !option.rationale.trim())) fail(question.id, 'invalid options');
@@ -281,6 +282,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 				if (step.kind === 'fill-blank') fail(step.id || question.id, 'fill-blank child steps are deprecated');
 				if (step.kind === 'numeric') fail(step.id || question.id, 'numeric child steps are deprecated');
 				if (step.hint !== undefined && !step.hint.trim()) fail(step.id || question.id, 'hint must be a non-empty string');
+				if (step.hint !== undefined && leaksAnswer(step.hint, step)) fail(step.id || question.id, 'hint must not reveal the correct answer');
 				if (step.kind === 'single-choice' && (step.options.length !== 4 || !hasUniqueIds(step.options) || step.options.some((o) => !o.text.trim() || !o.rationale.trim()) || step.correctOptionIds.length !== 1)) fail(step.id || question.id, 'invalid child single-choice');
 				if (step.kind === 'multiple-choice' && (![5, 6].includes(step.options.length) || !hasUniqueIds(step.options) || step.options.some((o) => !o.text.trim() || !o.rationale.trim()) || step.correctOptionIds.length !== step.selectCount)) fail(step.id || question.id, 'invalid child multiple-choice');
 				if (step.kind === 'ordering' && (step.items.length < 6 || step.correctOrder.length !== step.items.length || new Set(step.correctOrder).size !== step.items.length)) fail(step.id || question.id, 'invalid child ordering (need ≥6)');
@@ -323,29 +325,39 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 	}
 }
 
+/** Correct-answer surface text per kind (empty for multi-step — use child steps). */
+function answerTexts(definition: QuestionDefinition): string[] {
+	switch (definition.kind) {
+		case 'single-choice': case 'multiple-choice':
+			return definition.options.filter((option) => definition.correctOptionIds.includes(option.id)).map((option) => option.text);
+		case 'ordering': return definition.correctOrder.map((id) => definition.items.find((item) => item.id === id)?.text ?? '');
+		case 'matching': return Object.values(definition.correctMatches).map((id) => [...definition.targets, ...(definition.extraTargets ?? [])].find((target) => target.id === id)?.text ?? '');
+		case 'numeric': case 'slider': return [String(definition.correctValue)];
+		case 'evidence': return definition.correctLineIds.map((id) => definition.artifact.lines.find((line) => line.id === id)?.text ?? '');
+		case 'configuration': return definition.fields.flatMap((field) => { const id = definition.correctValues[field.id]; return field.options.filter((option) => option.id === id).map((option) => option.text); });
+		case 'fill-blank': return definition.blanks.flatMap((blank) => blank.acceptedAnswers);
+		case 'word-bank': return Object.values(definition.correctAssignments).map((id) => definition.bank.find((word) => word.id === id)?.word ?? '');
+		case 'sort': return Object.values(definition.correctBuckets).map((id) => definition.buckets.find((bucket) => bucket.id === id)?.label ?? '');
+		case 'hotspot': return definition.regions.filter((region) => region.correct).map((region) => region.label);
+		case 'memory': return definition.pairs.flatMap((pair) => [pair.a, pair.b]);
+		case 'multi-step': return definition.steps.flatMap(answerTexts);
+	}
+}
+
+function leaksAnswer(text: string, definition: QuestionDefinition): boolean {
+	const hint = text.trim().toLowerCase();
+	return answerTexts(definition).some(
+		(term) => term.trim().length >= 3 && hint.includes(term.trim().toLowerCase())
+	);
+}
+
 /** Build a deterministic, answer-neutral practice aid. Unsafe context fails closed. */
 export function practiceSummary(definition: QuestionDefinition): NonNullable<PublicQuestion['practiceSummary']> | undefined {
 	const context = definition.context?.trim();
 	if (!context || /\b(correct answer|correct response|answer is|solution is|the answer)\b/i.test(context)) return undefined;
-	const answerTexts: string[] = [];
-	switch (definition.kind) {
-		case 'single-choice': case 'multiple-choice':
-			answerTexts.push(...definition.options.filter((option) => definition.correctOptionIds.includes(option.id)).map((option) => option.text)); break;
-		case 'ordering': answerTexts.push(...definition.correctOrder.map((id) => definition.items.find((item) => item.id === id)?.text ?? '')); break;
-		case 'matching': answerTexts.push(...Object.values(definition.correctMatches).map((id) => [...definition.targets, ...(definition.extraTargets ?? [])].find((target) => target.id === id)?.text ?? '')); break;
-		case 'numeric': case 'slider': answerTexts.push(String(definition.correctValue)); break;
-		case 'evidence': answerTexts.push(...definition.correctLineIds.map((id) => definition.artifact.lines.find((line) => line.id === id)?.text ?? '')); break;
-		case 'configuration': answerTexts.push(...definition.fields.flatMap((field) => { const id = definition.correctValues[field.id]; return field.options.filter((option) => option.id === id).map((option) => option.text); })); break;
-		case 'fill-blank': answerTexts.push(...definition.blanks.flatMap((blank) => blank.acceptedAnswers)); break;
-		case 'word-bank': answerTexts.push(...Object.values(definition.correctAssignments).map((id) => definition.bank.find((word) => word.id === id)?.word ?? '')); break;
-		case 'sort': answerTexts.push(...Object.values(definition.correctBuckets).map((id) => definition.buckets.find((bucket) => bucket.id === id)?.label ?? '')); break;
-		case 'hotspot': answerTexts.push(...definition.regions.filter((region) => region.correct).map((region) => region.label)); break;
-		case 'memory': answerTexts.push(...definition.pairs.flatMap((pair) => [pair.a, pair.b])); break;
-		case 'multi-step': break;
-	}
 	const lowerContext = context.toLowerCase();
 	if (definition.explanation.trim().length >= 3 && lowerContext.includes(definition.explanation.trim().toLowerCase())) return undefined;
-	if (answerTexts.some((term) => term.trim().length >= 3 && lowerContext.includes(term.trim().toLowerCase()))) return undefined;
+	if (answerTexts(definition).some((term) => term.trim().length >= 3 && lowerContext.includes(term.trim().toLowerCase()))) return undefined;
 	return { text: context, domain: definition.domain, objective: definition.objective, format: definition.format };
 }
 

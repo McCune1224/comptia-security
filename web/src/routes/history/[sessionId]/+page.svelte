@@ -1,12 +1,35 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { getBarColor, getPercentColor } from '$lib/utils';
 	import type { QuizResult, QuestionReview } from '$lib/types';
 
 	let result = $state<QuizResult | null>(null);
 	let error = $state('');
 	let filter = $state<'all' | 'correct' | 'incorrect' | 'flagged'>('all');
+	let retaking = $state(false);
+
+	let missedCount = $derived(result ? result.review.filter((review) => !review.feedback.fullyCorrect).length : 0);
+
+	async function retakeMissed() {
+		if (!result || retaking) return;
+		retaking = true;
+		try {
+			const response = await fetch('/api/quiz/retake', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ sessionId: result.sessionId })
+			});
+			const data = await response.json();
+			if (!response.ok) throw new Error(data.error?.message ?? 'Unable to start retake session');
+			await goto(`/quiz?session=${data.session.sessionId}`);
+		} catch (cause) {
+			error = cause instanceof Error ? cause.message : 'Unable to start retake session';
+		} finally {
+			retaking = false;
+		}
+	}
 
 	let flaggedIndexes = $derived(result?.flaggedQuestionIndexes ?? []);
 
@@ -188,6 +211,15 @@
 							? ' · includes retry weighting'
 							: ''}
 					</p>
+					{#if missedCount > 0}
+						<button
+							class="btn btn-ghost mt-3 h-11 px-4 text-sm"
+							type="button"
+							disabled={retaking}
+							onclick={retakeMissed}
+							>{retaking ? 'Starting…' : `Retake missed (${missedCount})`}</button
+						>
+					{/if}
 				</div>
 			</div>
 

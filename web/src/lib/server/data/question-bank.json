@@ -20836,7 +20836,7 @@
       "format": "pbq",
       "kind": "matching",
       "prompt": "A network administrator is documenting firewall rules. Match each protocol to its DEFAULT port number. Each port is used once; three extra ports are provided as distractors.",
-      "context": "The exam expects the secure/insecure default port pairs (SSH 22, HTTPS 443, LDAPS 636, SNMP 161, RDP 3389).",
+      "context": "A network administrator is documenting firewall rules for a newly segmented DMZ and must confirm each protocol's default port before allowing traffic through.",
       "premises": [
         {
           "id": "p1",
@@ -20921,7 +20921,7 @@
       "format": "pbq",
       "kind": "matching",
       "prompt": "A hardening project must replace each insecure protocol with its secure alternative. Match each legacy protocol to its correct secure replacement. Each replacement is used once; three extra options are distractors.",
-      "context": "Standard secure/insecure pairs from the exam: Telnet→SSH, FTP→SFTP, HTTP→HTTPS, LDAP→LDAPS, SNMPv2c→SNMPv3.",
+      "context": "The organization's security policy mandates replacing every legacy management protocol with an encrypted alternative before the next audit.",
       "premises": [
         {
           "id": "p1",

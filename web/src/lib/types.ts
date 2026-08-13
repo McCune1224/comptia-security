@@ -34,6 +34,21 @@ export type SessionMode = 'practice' | 'exam';
 export type SessionStatus = 'active' | 'completed' | 'abandoned';
 export type QuestionFormat = 'standard' | 'scenario' | 'pbq';
 
+/** Question kinds the server can generate an answer-safe auto-hint for (practice mode). */
+export const AUTO_HINTABLE_KINDS = [
+	'single-choice',
+	'multiple-choice',
+	'ordering',
+	'matching',
+	'configuration',
+	'word-bank',
+	'sort',
+	'hotspot',
+	'memory',
+	'evidence',
+	'slider'
+] as const;
+
 export interface SourceRef {
 	source: 'exam-objectives' | 'study-guide' | 'nist' | 'owasp' | 'mitre' | 'comptia' | 'cisa' | 'professor-messer';
 	section: string;
@@ -216,6 +231,8 @@ export interface SessionView extends ActiveSessionSummary {
 	/** Practice-mode retry count per question index (0 = first attempt). */
 	retries: Record<number, number>;
 	flaggedQuestionIndexes: number[];
+	/** Graded assignment id when this session counts toward the course gradebook. */
+	assignmentId: string | null;
 }
 
 export interface QuizResult {
