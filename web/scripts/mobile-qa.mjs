@@ -355,14 +355,21 @@ async function tapEnabled(locator) {
 async function interactWithKind(page, kind) {
 	switch (kind) {
 		case 'choice': {
-			const radios = page.locator('input[type="radio"]');
+			const radios = page.locator('input[data-answer-option][type="radio"]');
 			if (await radios.count()) {
 				await radios.first().tap({ timeout: 3000 }).catch(() => {});
 			} else {
-				const boxes = page.locator('input[type="checkbox"]');
+				const boxes = page.locator('input[data-answer-option][type="checkbox"]');
 				const n = await boxes.count();
-				for (let i = 0; i < Math.min(2, n); i++) {
+				for (let i = 0; i < Math.min(4, n); i++) {
 					await boxes.nth(i).tap({ timeout: 3000 }).catch(() => {});
+					await page.waitForTimeout(150);
+					const ready = await page
+						.locator('button:has-text("Check Answer")')
+						.first()
+						.isEnabled()
+						.catch(() => false);
+					if (ready) break;
 				}
 			}
 			break;
