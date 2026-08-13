@@ -12,10 +12,11 @@ if (!dbPath || dbPath.startsWith(':') || !confirmed) {
 }
 
 const runtimeTables = [
+	// Children of quiz_sessions first (foreign keys are enforced during the wipe).
+	'quiz_answers',
 	'quiz_session_responses',
 	'quiz_session_state',
 	'quiz_sessions',
-	'quiz_answers',
 	'domain_progress',
 	'review_cards',
 	'study_log',
