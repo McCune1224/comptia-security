@@ -7,7 +7,7 @@ NODE ?= /usr/local/bin/node
 DB ?= $(WEB_DIR)/data/quiz.db
 BACKUP_DIR ?= $(WEB_DIR)/data/backups
 
-.PHONY: pull install check test verify build restart deploy status logs start stop reset-runtime
+.PHONY: pull install check test verify build restart deploy update status logs start stop reset-runtime
 
 pull:
 	git -C $(REPO_DIR) pull --ff-only
@@ -32,6 +32,9 @@ restart:
 	sudo systemctl restart $(SERVICE)
 
 deploy: pull install verify build restart
+
+# Quick ship: pull, rebuild, restart, show status — the day-to-day update path.
+update: pull build restart status
 
 status:
 	sudo systemctl status $(SERVICE) --no-pager -l
