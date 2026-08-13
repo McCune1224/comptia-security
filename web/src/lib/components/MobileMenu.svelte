@@ -60,13 +60,13 @@
 	}}
 >
 	<aside
-		class="absolute inset-x-0 bottom-0 rounded-t-md border-t border-border bg-surface-900 p-5 pb-safe shadow-2xl transition-transform duration-300 ease-out"
+		class="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-md border-t border-border bg-surface-900 p-5 pb-safe shadow-2xl transition-transform duration-300 ease-out"
 		class:translate-y-full={!open}
 		class:translate-y-0={open}
 		aria-label="More options"
 	>
 		<div class="mx-auto mb-4 h-1 w-10 rounded-sm bg-surface-600"></div>
-		<div class="mb-3 flex items-center justify-between">
+		<div class="sticky top-0 z-10 -mx-5 mb-3 flex items-center justify-between bg-surface-900/95 px-5 py-1 backdrop-blur">
 			<span class="eyebrow">More</span>
 			<button
 				class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"

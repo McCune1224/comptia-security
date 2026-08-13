@@ -15,7 +15,7 @@
 </script>
 
 <nav
-	class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface-900/90 pb-safe backdrop-blur-xl md:hidden"
+	class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface-900/90 pb-safe backdrop-blur-xl xl:hidden"
 	aria-label="Primary navigation"
 >
 	<div class="mx-auto grid max-w-md grid-cols-5">

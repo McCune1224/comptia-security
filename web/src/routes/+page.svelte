@@ -234,7 +234,7 @@
 		{/if}
 
 		<!-- To-do + readiness panel -->
-		<div class="grid gap-6 lg:grid-cols-3">
+		<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 			<section class="card p-5 sm:p-6 lg:col-span-2">
 				<div class="flex items-center justify-between">
 					<h2 class="h-display flex items-center gap-2 text-xl text-text-primary">
@@ -396,7 +396,7 @@
 				<h2 class="h-display text-xl text-text-primary">Course modules</h2>
 				<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/syllabus">Full syllabus</a>
 			</div>
-			<div class="grid gap-4 md:grid-cols-2">
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				{#each overview.modules as module (module.module.id)}
 					<a
 						href="/modules/{module.module.id}"
@@ -443,7 +443,7 @@
 					<h2 class="h-display text-xl text-text-primary">Recent sessions</h2>
 					<a class="touch-target text-sm font-bold text-accent hover:underline" href="/history">View all</a>
 				</div>
-				<div class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+				<div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
 					{#each overview.recentSessions as session (session.id)}
 						<a
 							href="/history/{session.id}"

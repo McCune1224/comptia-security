@@ -125,7 +125,7 @@
 		aria-label="Profile switcher"
 	>
 		<div class="mx-auto mb-4 h-1 w-10 rounded-sm bg-surface-600"></div>
-		<div class="mb-3 flex items-center justify-between">
+		<div class="sticky top-0 z-10 -mx-5 mb-3 flex items-center justify-between bg-surface-900/95 px-5 py-1 backdrop-blur">
 			<span class="eyebrow">Profile</span>
 			<button
 				class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"

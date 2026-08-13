@@ -118,29 +118,10 @@
 				>
 			</a>
 
-			<div class="hidden items-center gap-1 md:flex">
-				<a
-					href="/"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
-						'/'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10Z" /></svg
-					>
-					Home
-				</a>
+			<div class="hidden items-center gap-1 xl:flex">
 				<a
 					href="/syllabus"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/syllabus'
 					)
 						? 'bg-accent/15 text-accent'
@@ -161,7 +142,7 @@
 				</a>
 				<a
 					href="/gradebook"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/gradebook'
 					)
 						? 'bg-accent/15 text-accent'
@@ -179,7 +160,7 @@
 				</a>
 				<a
 					href="/calendar"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/calendar'
 					)
 						? 'bg-accent/15 text-accent'
@@ -200,7 +181,7 @@
 				</a>
 				<a
 					href="/review"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/review'
 					)
 						? 'bg-accent/15 text-accent'
@@ -220,7 +201,7 @@
 				<div class="mx-1 h-5 w-px bg-border"></div>
 				<a
 					href="/quiz"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/quiz'
 					)
 						? 'bg-accent/15 text-accent'
@@ -241,7 +222,7 @@
 				</a>
 				<a
 					href="/scenarios"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/scenarios'
 					)
 						? 'bg-accent/15 text-accent'
@@ -260,7 +241,7 @@
 				</a>
 				<a
 					href="/pbq"
-					class="flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold transition {isActive(
+					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
 						'/pbq'
 					)
 						? 'bg-accent/15 text-accent'
@@ -302,7 +283,7 @@
 					{/if}
 					<ThemeToggle />
 					<button
-						class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary md:hidden"
+						class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary xl:hidden"
 						type="button"
 						aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
 						aria-expanded={mobileMenuOpen}
@@ -331,11 +312,11 @@
 
 	<MobileMenu open={mobileMenuOpen} onclose={() => (mobileMenuOpen = false)} />
 
-	<main class="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-8 md:pb-12">
+	<main class="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-8 xl:pb-12">
 		{@render children()}
 	</main>
 
-	<footer class="hidden border-t border-border py-6 text-center text-xs text-text-subtle md:block">
+	<footer class="hidden border-t border-border py-6 text-center text-xs text-text-subtle xl:block">
 		CompTIA · {new Date().getFullYear()}
 	</footer>
 	<BottomNav {currentPath} />
