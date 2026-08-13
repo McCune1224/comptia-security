@@ -1,0 +1,111 @@
+Front,Back,Tags
+What is IAM?,Identity and Access Management — managing digital identities and their access,secp701::d4::iam
+What is multi-factor authentication (MFA)?,Authentication requiring two or more different factors,secp701::d4::iam
+What is single sign-on (SSO)?,"One set of credentials granting access to multiple systems",secp701::d4::iam
+What is federation?,Trust between organizations to share identities (SAML enables it),secp701::d4::iam
+What is SAML?,A standard for exchanging authentication and authorization assertions (SSO),secp701::d4::iam
+What is OAuth?,A standard for delegated authorization (apps acting on your behalf),secp701::d4::iam
+What is OIDC?,OpenID Connect — an authentication layer built on OAuth 2.0,secp701::d4::iam
+What is PAM?,Privileged Access Management — securing and monitoring privileged accounts,secp701::d4::iam
+What is MAC (mandatory access control)?,"Access granted by security labels — user label must dominate the resource label",secp701::d4::iam
+What is DAC (discretionary access control)?,Resource owners decide who can access their resources,secp701::d4::iam
+What is RBAC?,Access granted by job role — permissions assigned to roles not individuals,secp701::d4::iam
+What is rule-based access control?,Access granted by rules or ACLs applied across multiple users,secp701::d4::iam
+What is ABAC?,"Access based on attributes of user, resource, and environment",secp701::d4::iam
+What is the principle of least privilege?,Granting users only the minimum access needed to do their job,secp701::d4::iam
+What is separation of duties?,Splitting sensitive tasks among multiple people to prevent fraud or abuse,secp701::d4::iam
+What is just-in-time (JIT) access?,Privileges granted only when needed and revoked afterward,secp701::d4::iam
+What is a password spraying attack?,"Trying one common password against many accounts, avoiding lockouts",secp701::d4::iam
+What makes a strong password policy?,"Length over complexity, passphrases, MFA, and no reuse",secp701::d4::iam
+What does a password manager do?,Stores credentials in an encrypted vault,secp701::d4::iam
+What is an account lockout policy?,Locking an account after repeated failed logins (blocks brute force),secp701::d4::iam
+What is a zero-day vulnerability?,"A vulnerability unknown to the vendor, with no patch available",secp701::d4::vulnerabilities
+What is bluejacking?,Sending unsolicited messages over Bluetooth,secp701::d4::vulnerabilities
+What is bluesnarfing?,Stealing data over Bluetooth without authorization,secp701::d4::vulnerabilities
+What is jailbreaking (or rooting)?,Removing OS restrictions to run unauthorized software,secp701::d4::vulnerabilities
+What is sideloading?,Installing apps from outside the official app store,secp701::d4::vulnerabilities
+What is SQL injection?,"Injecting malicious SQL through input; prevented by parameterized queries",secp701::d4::vulnerabilities
+What is XML injection?,Injecting malicious XML to manipulate an application's processing,secp701::d4::vulnerabilities
+What is XSS (cross-site scripting)?,Injecting scripts into web pages viewed by other users,secp701::d4::vulnerabilities
+What is CSRF (XSRF)?,Tricking a logged-in user's browser into making unwanted requests,secp701::d4::vulnerabilities
+What is a buffer overflow?,Writing data past a buffer's boundary to overwrite memory,secp701::d4::vulnerabilities
+What is a race condition?,"A flaw where the outcome depends on timing (TOCTOU is a classic example)",secp701::d4::vulnerabilities
+What is a DDoS attack?,Flooding a target with traffic from many systems to make it unavailable,secp701::d4::attacks
+What is a DNS amplification attack?,"A DDoS using small DNS queries that produce large responses",secp701::d4::attacks
+What is DNS poisoning?,Inserting false records into DNS responses to redirect users,secp701::d4::attacks
+What is directory traversal?,Using ../ sequences to access files outside the web root,secp701::d4::attacks
+What is privilege escalation?,Gaining higher privileges than intended,secp701::d4::attacks
+What is a replay attack?,Capturing valid traffic and resending it (prevented by timestamps and nonces),secp701::d4::attacks
+What is session hijacking?,Stealing a session token or cookie to impersonate a user,secp701::d4::attacks
+What is an on-path (man-in-the-middle) attack?,Intercepting traffic between two parties,secp701::d4::attacks
+What is an indicator of compromise (IoC)?,"Evidence that a system has been compromised (hashes, IPs, unusual behavior)",secp701::d4::attacks
+What is credential harvesting?,Collecting usernames and passwords from a target,secp701::d4::attacks
+What is OSINT?,Open-Source Intelligence — info gathered from public sources,secp701::d4::attacks
+What is hardening?,Reducing attack surface by securing configurations,secp701::d4::hardening
+What is the first hardening step for default installations?,"Changing default usernames, passwords, and configurations",secp701::d4::hardening
+What is an allowlist?,A list of applications or entities explicitly permitted,secp701::d4::hardening
+What is a denylist?,A list of applications or entities explicitly blocked,secp701::d4::hardening
+What is a trusted operating system?,An OS with built-in mandatory controls (e.g. SELinux),secp701::d4::hardening
+What is SELinux?,Security-Enhanced Linux — mandatory access control built into Linux,secp701::d4::hardening
+What is patch management?,"The process of planning, testing, deploying, and auditing updates",secp701::d4::hardening
+What is Group Policy (GPO)?,Centralized configuration management for Windows domains,secp701::d4::hardening
+What is a secure baseline?,A documented minimum security configuration,secp701::d4::hardening
+What is secure boot?,UEFI verifying that boot components are digitally signed,secp701::d4::hardening
+What is measured boot?,Recording hashes of boot components to detect tampering,secp701::d4::hardening
+What is full disk encryption (FDE)?,Encrypting an entire drive — protects data at rest,secp701::d4::hardening
+What is WEP?,A broken wireless standard using RC4 — do not use,secp701::d4::wireless
+What does WPA2 use?,AES with CCMP,secp701::d4::wireless
+What does WPA3 add over WPA2?,"SAE handshake (resists offline cracking), forward secrecy, protected management frames",secp701::d4::wireless
+What is WPA2/WPA3-Enterprise?,Wireless authentication against a RADIUS server (802.1X),secp701::d4::wireless
+What is a pre-shared key (PSK)?,A shared passphrase for WPA personal mode,secp701::d4::wireless
+What is EAP-TLS?,Extensible Authentication Protocol using certificates for both client and server,secp701::d4::wireless
+What is PEAP?,Protected EAP — a server certificate plus password inside a TLS tunnel,secp701::d4::wireless
+What is RADIUS?,A protocol providing centralized AAA for network access,secp701::d4::wireless
+What is 802.1X?,Port-based authentication requiring devices to authenticate before network access,secp701::d4::wireless
+What is vulnerability scanning?,Automated identification of known vulnerabilities in systems,secp701::d4::vulnmgmt
+What is a credentialed (authenticated) scan?,A scan run with login rights — sees deeper than uncredentialed scans,secp701::d4::vulnmgmt
+What is a threat intelligence feed?,"A subscription of current threat data (IOCs, TTPs) for security tools",secp701::d4::vulnmgmt
+What is a responsible disclosure program?,A process for researchers to report vulnerabilities safely,secp701::d4::vulnmgmt
+What is vulnerability analysis?,Assessing the severity and impact of identified vulnerabilities,secp701::d4::vulnmgmt
+What is vulnerability remediation?,"Fixing vulnerabilities (patching, configuration changes, or compensating controls)",secp701::d4::vulnmgmt
+What is vulnerability validation?,Verifying that remediation actually closed the vulnerability (e.g. rescanning),secp701::d4::vulnmgmt
+What is vulnerability reporting?,Communicating findings and remediation status to management,secp701::d4::vulnmgmt
+What does SIEM do?,"Aggregates and correlates logs from many sources, alerting on threats",secp701::d4::monitoring
+What is a syslog?,A standard format for sending log messages to a central server,secp701::d4::monitoring
+What is NetFlow?,"Traffic flow data showing source, destination, ports, and volume",secp701::d4::monitoring
+What is a packet capture?,"Recording raw network traffic for analysis (Wireshark, tcpdump)",secp701::d4::monitoring
+What is a dashboard in security monitoring?,A visual summary of key security metrics in one view,secp701::d4::monitoring
+What is SCAP?,Security Content Automation Protocol — standardized vulnerability management formats,secp701::d4::monitoring
+What is a CVE?,A unique identifier for a known vulnerability,secp701::d4::monitoring
+What is CVSS?,A 0-10 score measuring the severity of a vulnerability,secp701::d4::monitoring
+What is the single pane of glass concept?,One dashboard unifying visibility across all security tools,secp701::d4::monitoring
+What is a SOP?,Standard Operating Procedure — documented routine steps,secp701::d4::monitoring
+What is continuous monitoring?,Ongoing observation of systems and controls for changes and threats,secp701::d4::monitoring
+What are the seven phases of the CompTIA incident response process?,"Preparation, Detection, Analysis, Containment, Eradication, Recovery, Post-Incident Activity",secp701::d4::ir
+What are the four NIST incident response phases?,"Preparation, Detection and Analysis, Containment/Eradication/Recovery, Post-Incident Activity",secp701::d4::ir
+What happens in the preparation phase?,"Hardening systems and creating policies, procedures, and communication plans",secp701::d4::ir
+What happens in the containment phase?,Limiting the incident's scope and preventing spread,secp701::d4::ir
+What happens in the eradication phase?,Removing the cause of the incident (e.g. reimaging systems),secp701::d4::ir
+What happens in the recovery phase?,Restoring systems and services to a secure state,secp701::d4::ir
+What is root cause analysis (RCA)?,Identifying the incident's source and how to prevent recurrence,secp701::d4::ir
+What are the steps of root cause analysis?,"Define/scope, determine causal relationships, identify a solution, implement and track",secp701::d4::ir
+What is a lessons learned session?,Documenting what went well and what to improve after an incident,secp701::d4::ir
+What is an after-action report?,A formal report of what occurred during an incident,secp701::d4::ir
+What is an incident response playbook?,Documented step-by-step procedures for a specific incident type,secp701::d4::ir
+What is a CSIRT?,Computer Security Incident Response Team,secp701::d4::ir
+What is threat hunting?,Proactively searching networks for threats that evaded existing defenses,secp701::d4::ir
+What is a tabletop exercise for incident response?,A discussion-based walkthrough of an incident scenario,secp701::d4::ir
+What is the order of volatility?,"Collect the most volatile evidence first: registers, cache, RAM, disk, backups",secp701::d4::forensics
+What is the chain of custody?,Documentation of who handled evidence and when,secp701::d4::forensics
+What is a legal hold?,A requirement to preserve all relevant data for litigation,secp701::d4::forensics
+What is e-discovery?,Collecting electronic evidence for legal proceedings,secp701::d4::forensics
+What is slack space?,Unused space in a disk cluster that can hold residual deleted data,secp701::d4::forensics
+What is a memory dump?,A snapshot of the contents of RAM for analysis,secp701::d4::forensics
+What is metadata?,"Data about data (timestamps, author, location) — valuable in investigations",secp701::d4::forensics
+What is SOAR?,"Security Orchestration, Automation, and Response",secp701::d4::automation
+When should you automate a security task?,"When it is repetitive, high-volume, and well-understood",secp701::d4::automation
+What are benefits of automation and orchestration?,"Speed, consistency, reduced human error, lower cost",secp701::d4::automation
+What is an API?,Application Programming Interface — a defined way for applications to communicate,secp701::d4::automation
+What is CI/CD?,Continuous Integration / Continuous Deployment — automated build and release,secp701::d4::automation
+What is automated ticket creation used for?,Routing alerts to the right team with context automatically,secp701::d4::automation
+What is automated onboarding?,Provisioning accounts and access for new employees automatically,secp701::d4::automation

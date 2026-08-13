@@ -1,0 +1,93 @@
+Front,Back,Tags
+What is high availability (HA)?,Designing systems to minimize downtime and stay operational,secp701::d3::availability
+What is redundancy?,Duplicating critical components to remove single points of failure,secp701::d3::availability
+What is RAID 0?,Striping with no redundancy — speed only,secp701::d3::availability
+What is RAID 1?,Mirroring — identical data on two disks,secp701::d3::availability
+What is RAID 5?,Striping with single distributed parity,secp701::d3::availability
+What is RAID 6?,Striping with dual parity — survives two disk failures,secp701::d3::availability
+What is RAID 10?,Mirroring plus striping (speed and redundancy),secp701::d3::availability
+What is capacity planning?,Predicting future resource needs to ensure systems keep performing,secp701::d3::availability
+What does a UPS provide?,Short-term battery power during an outage,secp701::d3::availability
+What does a generator provide?,Long-term power during an extended outage,secp701::d3::availability
+What does a full backup copy?,All selected data,secp701::d3::availability
+What does an incremental backup copy?,Data changed since the last backup of any type,secp701::d3::availability
+What does a differential backup copy?,Data changed since the last FULL backup,secp701::d3::availability
+What is a continuity of operations plan (COOP)?,A plan to keep essential functions running during a disaster,secp701::d3::availability
+What is a hot site?,A fully equipped alternate site ready in minutes to hours,secp701::d3::availability
+What is a warm site?,A partially equipped site ready in days,secp701::d3::availability
+What is a cold site?,An empty building with no equipment — ready in weeks,secp701::d3::availability
+What is the difference between BCP and DRP?,"BCP keeps the whole business running; DRP focuses on restoring IT systems",secp701::d3::availability
+What is RTO (recovery time objective)?,The maximum acceptable time to restore a system,secp701::d3::availability
+What is RPO (recovery point objective)?,The maximum acceptable data loss measured in time,secp701::d3::availability
+What is a tabletop exercise?,A discussion-based walkthrough of a disaster scenario,secp701::d3::availability
+What are the three cloud service models?,"IaaS, PaaS, SaaS",secp701::d3::cloud
+In IaaS what does the customer manage?,Everything from the operating system up,secp701::d3::cloud
+In SaaS what does the vendor manage?,Everything — the full application,secp701::d3::cloud
+What is the shared responsibility model?,"The cloud provider secures the cloud; the customer secures what's in the cloud",secp701::d3::cloud
+In which service model does the customer have the most security responsibility?,IaaS,secp701::d3::cloud
+What is a hypervisor?,Software that creates and runs virtual machines,secp701::d3::cloud
+What is a Type 1 hypervisor?,A bare-metal hypervisor that runs directly on hardware,secp701::d3::cloud
+What is a Type 2 hypervisor?,A hosted hypervisor that runs on top of an OS,secp701::d3::cloud
+What is a container?,A lightweight package of an app and its dependencies sharing the host kernel,secp701::d3::cloud
+What is serverless computing?,The provider runs functions on demand — no servers to manage (FaaS),secp701::d3::cloud
+What are microservices?,Small independently deployable services that make up an application,secp701::d3::cloud
+What is VDI?,Virtual Desktop Infrastructure — desktops hosted centrally and delivered remotely,secp701::d3::cloud
+What does SDN do?,Separates the network control plane from the data plane,secp701::d3::network
+What is infrastructure as code (IaC)?,Managing infrastructure through versioned configuration files (e.g. Terraform),secp701::d3::network
+What is IoT?,Internet-connected devices like sensors and cameras,secp701::d3::network
+What is SCADA used for?,Supervising and controlling industrial processes,secp701::d3::network
+What is an embedded system?,A specialized computer built into a larger device,secp701::d3::network
+What are the three port ranges?,"Well-known 0-1023, registered 1024-49151, dynamic/private 49152-65535",secp701::d3::ports
+Who assigns well-known port numbers?,IANA,secp701::d3::ports
+What is a screened subnet (DMZ)?,"A buffer network between external untrusted networks and internal trusted networks",secp701::d3::firewalls
+What is a packet-filtering firewall?,A firewall that inspects packet headers (IPs and ports) at Layer 4,secp701::d3::firewalls
+What is a stateful firewall?,"A firewall that tracks connection state and allows return traffic for outbound requests",secp701::d3::firewalls
+What is a proxy firewall?,A firewall that makes connections on behalf of endpoints (Layer 5 or 7),secp701::d3::firewalls
+What is a kernel proxy firewall?,A firewall with full packet inspection at every layer with minimal performance impact,secp701::d3::firewalls
+What is a next-generation firewall (NGFW)?,"An application-aware firewall with deep packet inspection and integrated security",secp701::d3::firewalls
+What is a UTM firewall?,"One device combining firewall, IPS, antivirus, and more — a single point of failure",secp701::d3::firewalls
+How do NGFW and UTM engines differ?,"UTM uses separate individual engines; NGFW uses a single engine",secp701::d3::firewalls
+What is a WAF?,A firewall that inspects HTTP traffic and blocks web attacks like XSS and SQLi,secp701::d3::firewalls
+What does implicit deny mean?,Traffic that is not explicitly allowed is blocked,secp701::d3::firewalls
+What is an IDS?,An intrusion detection system that detects and alerts — but does not block,secp701::d3::idsips
+What is an IPS?,An intrusion prevention system that detects AND blocks — deployed in-line,secp701::d3::idsips
+What is a signature-based detection?,Matching traffic against known attack patterns,secp701::d3::idsips
+What is anomaly-based detection?,Alerting on deviations from a learned baseline of normal behavior,secp701::d3::idsips
+What is a false positive?,An alert raised on benign activity,secp701::d3::idsips
+What is a false negative?,A real attack that goes undetected,secp701::d3::idsips
+What is a HIDS?,A host-based intrusion detection system on a single system,secp701::d3::idsips
+What is a NIDS?,A network-based intrusion detection system watching network traffic,secp701::d3::idsips
+What does a load balancer do?,Distributes traffic across multiple servers,secp701::d3::appliances
+What is a forward proxy?,A proxy handling outbound client requests,secp701::d3::appliances
+What is a reverse proxy?,A proxy sitting in front of servers to filter and balance incoming requests,secp701::d3::appliances
+What is a VPN concentrator?,A device that terminates many VPN connections,secp701::d3::appliances
+What is NAC (network access control)?,"Checking device health and policy before granting network access",secp701::d3::appliances
+What is a honeypot?,A decoy system designed to attract and observe attackers,secp701::d3::appliances
+What is a honeynet?,A network of honeypots,secp701::d3::appliances
+What is a jump box?,A hardened server used as the only entry point to a secure network,secp701::d3::appliances
+What does SPF do?,Lists servers authorized to send email for a domain,secp701::d3::appliances
+What does DKIM do?,Digitally signs outbound email so recipients can verify it,secp701::d3::appliances
+What does DMARC do?,Defines policy for what to do when SPF/DKIM checks fail,secp701::d3::appliances
+What is an email gateway (spam filter)?,An appliance that filters inbound/outbound email for spam and malware,secp701::d3::appliances
+What is EDR?,Endpoint Detection and Response — continuous endpoint monitoring and threat response,secp701::d3::appliances
+What is UBA (user behavior analytics)?,Detecting anomalies in user behavior to spot compromised accounts,secp701::d3::appliances
+What is SNMP?,A protocol for monitoring and managing network devices,secp701::d3::protocols
+Which SNMP versions use plaintext community strings?,SNMP v1 and v2,secp701::d3::protocols
+What does SNMPv3 add?,Encryption and authentication,secp701::d3::protocols
+What is SFTP?,Secure file transfer over SSH (port 22),secp701::d3::protocols
+What is FTPS?,FTP tunneled over TLS,secp701::d3::protocols
+What is S/MIME used for?,Encrypting and digitally signing email,secp701::d3::protocols
+What does IPSec provide?,Security for IP traffic (encryption and/or integrity) — used in VPNs,secp701::d3::protocols
+In IPSec what does ESP provide?,Encryption (and integrity),secp701::d3::protocols
+In IPSec what does AH provide?,Integrity and authentication only — no encryption,secp701::d3::protocols
+What is DNSSEC?,Digitally signed DNS records to prevent DNS spoofing,secp701::d3::protocols
+What is SRTP?,Secure Real-time Transport Protocol — encrypted VoIP,secp701::d3::protocols
+What is LDAPS?,LDAP encrypted over TLS (port 636),secp701::d3::protocols
+Where should WAPs be placed for security?,Central locations away from external walls and windows,secp701::d3::wireless
+What is an extended service set (ESS)?,Multiple access points working together for seamless coverage,secp701::d3::wireless
+Which 2.4 GHz channels avoid overlap?,"1, 6, and 11",secp701::d3::wireless
+What is a site survey?,An on-site assessment of RF interference and coverage before deploying wireless,secp701::d3::wireless
+What is an evil twin?,A rogue access point impersonating a legitimate one,secp701::d3::wireless
+What is a rogue access point?,An unauthorized AP connected to the network,secp701::d3::wireless
+What is a captive portal?,A page requiring acceptance or login before network access is granted,secp701::d3::wireless
+What is a jamming attack?,Flooding radio frequencies to disrupt wireless service,secp701::d3::wireless

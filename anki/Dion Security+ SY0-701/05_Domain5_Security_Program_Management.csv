@@ -1,0 +1,21 @@
+Front,Back,Tags
+What is security awareness training?,Educating employees about threats and their role in security,secp701::d5::awareness
+How does awareness differ from training?,"Training teaches skills; awareness changes everyday behavior",secp701::d5::awareness
+What is the purpose of a user education program?,Reducing human-driven risk across the organization,secp701::d5::awareness
+Name insider threat warning signs.,"Unusual access patterns, downloading large data volumes, working odd hours, disgruntlement",secp701::d5::insider
+What is an unintentional insider threat?,An employee who causes harm by accident (falling for phishing),secp701::d5::insider
+What is a malicious insider threat?,An employee who deliberately steals or sabotages,secp701::d5::insider
+What is the best defense against insider threats?,"Least privilege, monitoring, and separation of duties",secp701::d5::insider
+What does a password manager protect against?,"Reused and weak passwords — each account gets a unique, strong password",secp701::d5::awareness
+What is the master password?,The single password protecting a password manager vault,secp701::d5::awareness
+What should you do with a suspicious email?,Report it and do not click links or attachments,secp701::d5::awareness
+How do you verify an unexpected request is legitimate?,"Contact the requester through a known, separate channel",secp701::d5::awareness
+What is an employee handbook?,Documentation of workplace rules including security expectations,secp701::d5::policy
+Which policy typically sits inside the employee handbook?,The acceptable use policy (AUP),secp701::d5::policy
+What must remote and hybrid workers use to connect securely?,VPN and MFA,secp701::d5::policy
+What is a culture of security?,"An environment where everyone sees security as their responsibility",secp701::d5::culture
+How do organizations build a security culture?,"Executive example, security champions, and continuous reinforcement",secp701::d5::culture
+What is a security champion?,An employee who advocates for security within their team,secp701::d5::culture
+What is gamification in training?,Using game elements to boost engagement with security education,secp701::d5::culture
+How often should security awareness training be repeated?,At least annually (and for new hires) — ideally continuously,secp701::d5::awareness
+What is simulated phishing?,Safe fake phishing campaigns used to measure and train employees,secp701::d5::awareness

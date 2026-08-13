@@ -1,0 +1,139 @@
+Front,Back,Tags
+What are the three components of the CIA triad?,"Confidentiality, Integrity, Availability",secp701::d1::cia
+Which CIA component ensures data is only accessible to authorized parties?,Confidentiality,secp701::d1::cia
+Encryption is primarily a control for which CIA component?,Confidentiality,secp701::d1::cia
+Which CIA component uses hashing to detect unauthorized changes?,Integrity,secp701::d1::cia
+Which CIA component is supported by redundancy and fault tolerance?,Availability,secp701::d1::cia
+What does non-repudiation guarantee?,"That the sender cannot deny having sent a message",secp701::d1::cia
+Which cryptographic mechanism provides non-repudiation?,Digital signatures,secp701::d1::cia
+What are the three components of the AAA framework?,"Authentication, Authorization, Accounting",secp701::d1::aaa
+Which AAA component verifies that a user is who they claim to be?,Authentication,secp701::d1::aaa
+Which AAA component determines what an authenticated user is allowed to do?,Authorization,secp701::d1::aaa
+Which AAA component tracks and logs user actions for auditing?,Accounting,secp701::d1::aaa
+What are the five authentication factor categories?,"Something you know, have, are, somewhere you are, something you do",secp701::d1::aaa
+A smart card is which authentication factor?,Something you have,secp701::d1::aaa
+A fingerprint scan is which authentication factor?,Something you are,secp701::d1::aaa
+A password or PIN is which authentication factor?,Something you know,secp701::d1::aaa
+Geofencing or physical location is which authentication factor?,Somewhere you are,secp701::d1::aaa
+A typing pattern or signature is which authentication factor?,Something you do,secp701::d1::aaa
+What are the four broad categories of security controls?,"Technical, Managerial, Operational, Physical",secp701::d1::controls
+Firewalls and encryption are which control category?,Technical,secp701::d1::controls
+Security policies and strategic planning are which control category?,Managerial (administrative),secp701::d1::controls
+Security awareness training and daily procedures are which control category?,Operational,secp701::d1::controls
+Fences and locks are which control category?,Physical,secp701::d1::controls
+What are the six types of security controls?,"Preventive, Deterrent, Detective, Corrective, Compensating, Directive",secp701::d1::controls
+A firewall ACL that blocks malicious traffic is which control type?,Preventive,secp701::d1::controls
+A warning banner or visible security guard is which control type?,Deterrent,secp701::d1::controls
+Log monitoring and IDS alerts are which control type?,Detective,secp701::d1::controls
+Restoring from backups after an attack is which control type?,Corrective,secp701::d1::controls
+A control used when the primary control is not feasible is which type?,Compensating,secp701::d1::controls
+A security policy is which control type?,Directive,secp701::d1::controls
+What is a gap analysis?,"Evaluation of the difference between current and desired security posture",secp701::d1::controls
+What are the two basic types of gap analysis?,"Technical and business",secp701::d1::controls
+What is a POA&M used for?,"Outlining measures, resources, and timelines to remediate each vulnerability",secp701::d1::controls
+What is the core principle of Zero Trust?,"Never trust, always verify — no implicit trust based on network location",secp701::d1::zerotrust
+What are the two planes in a zero trust architecture?,"Control plane and data plane",secp701::d1::zerotrust
+Which zero trust plane defines and enforces policies?,Control plane,secp701::d1::zerotrust
+Which zero trust plane carries the actual network traffic?,Data plane,secp701::d1::zerotrust
+Where does the policy enforcement point (PEP) live in zero trust?,Data plane,secp701::d1::zerotrust
+Name common threat actor motivations.,"Data exfiltration, blackmail, espionage, service disruption, financial gain, philosophical/political beliefs",secp701::d1::threatactors
+Which threat actor motivation is the most common?,Financial gain,secp701::d1::threatactors
+What is an unskilled attacker (script kiddie)?,"An attacker with little skill who uses pre-made tools",secp701::d1::threatactors
+What motivates a hacktivist?,Political or social causes,secp701::d1::threatactors
+What motivates organized crime threat actors?,Money (ransomware-as-a-service is an example),secp701::d1::threatactors
+What is an advanced persistent threat (APT)?,"A highly sophisticated, well-funded group (often nation-state) that maintains long-term access",secp701::d1::threatactors
+What is an insider threat?,"Someone with authorized access who misuses it, intentionally or accidentally",secp701::d1::threatactors
+What is shadow IT?,"Systems, software, or services used without IT department approval",secp701::d1::threatactors
+What is a threat vector?,"The path or means an attacker uses to gain access to a target",secp701::d1::threatactors
+What is an attack surface?,"All the points where an attacker could attempt to enter a system",secp701::d1::threatactors
+What is social engineering?,"Manipulating people into divulging information or performing actions",secp701::d1::socialeng
+What is phishing?,Fraudulent email designed to trick the recipient into acting,secp701::d1::socialeng
+What is spear phishing?,Phishing targeted at a specific person or organization,secp701::d1::socialeng
+What is whaling?,Phishing that targets high-level executives,secp701::d1::socialeng
+What is vishing?,Phishing over voice (phone) calls,secp701::d1::socialeng
+What is smishing?,Phishing via SMS text messages,secp701::d1::socialeng
+What is pretexting?,Using a fabricated scenario or story to obtain information,secp701::d1::socialeng
+What is impersonation?,Pretending to be someone else (IT support or a manager) to gain trust,secp701::d1::socialeng
+What are the six motivational triggers social engineers use?,"Authority, urgency, social proof, scarcity, likability, fear",secp701::d1::socialeng
+What is baiting?,Offering something enticing to trick a victim into acting,secp701::d1::socialeng
+What is tailgating?,Following an authorized person through a secured door without credentials,secp701::d1::socialeng
+What is shoulder surfing?,Looking over someone's shoulder to observe credentials or sensitive data,secp701::d1::socialeng
+What is dumpster diving?,Searching discarded materials for sensitive information,secp701::d1::socialeng
+What is a watering hole attack?,Infecting a website frequently visited by the target group,secp701::d1::socialeng
+What is an influence campaign?,Using social media and messaging to shape opinions and behavior,secp701::d1::socialeng
+What are the two best defenses against phishing?,"Security awareness training and multi-factor authentication",secp701::d1::socialeng
+What is malware?,Malicious software designed to harm or exploit systems,secp701::d1::malware
+What is a virus?,"Malicious code that attaches to a host file and needs user interaction to spread",secp701::d1::malware
+What is a worm?,"Self-replicating malware that spreads across networks without user action",secp701::d1::malware
+What is a Trojan?,"Malware disguised as legitimate software",secp701::d1::malware
+What is a RAT?,Remote Access Trojan — a Trojan that gives the attacker remote control,secp701::d1::malware
+What is ransomware?,Malware that encrypts files and demands payment for decryption,secp701::d1::malware
+What is a botnet?,A network of compromised machines (zombies) controlled by an attacker,secp701::d1::malware
+What is a rootkit?,"Malware that modifies the OS to hide itself, making it very hard to detect",secp701::d1::malware
+What is a backdoor?,A hidden method of bypassing normal authentication,secp701::d1::malware
+What is a logic bomb?,Code that triggers malicious action when a specific condition is met,secp701::d1::malware
+What is a keylogger?,Software or hardware that records keystrokes,secp701::d1::malware
+What is spyware?,Software that monitors user activity without consent,secp701::d1::malware
+What is bloatware?,Unwanted software preinstalled by the manufacturer,secp701::d1::malware
+What is shellcode?,A small piece of code used as the payload of an exploit,secp701::d1::malware
+What is a downloader?,A stage of malware that retrieves additional malware after the initial infection,secp701::d1::malware
+What is concealing malware (concealment)?,"Techniques like encryption and obfuscation used to hide malware from detection",secp701::d1::malware
+What is a bollard?,A physical barrier that blocks vehicles from approaching a building,secp701::d1::physical
+What is the purpose of perimeter fencing?,Establishing a physical boundary and deterring intrusion,secp701::d1::physical
+What is a mantrap (access control vestibule)?,"A two-door chamber where only one door opens at a time to prevent tailgating",secp701::d1::physical
+What is badge cloning?,Copying the credentials from an RFID access badge to impersonate its owner,secp701::d1::physical
+What does a Faraday cage do?,Blocks electromagnetic signals to prevent eavesdropping on wireless devices,secp701::d1::physical
+What is a brute-force physical attack?,Repeatedly trying combinations (locks or passwords) until one works,secp701::d1::physical
+What are the main data classification levels used by businesses?,"Public, Sensitive, Private, Confidential, Critical",secp701::d1::data
+What are the U.S. government classification levels?,"Unclassified, Confidential, Secret, Top Secret",secp701::d1::data
+Who is the data owner?,The senior executive ultimately accountable for the data,secp701::d1::data
+Who is the data custodian (steward)?,"The person responsible for day-to-day handling, storage, and protection of data",secp701::d1::data
+What is a data privacy officer (DPO)?,The person responsible for compliance with privacy laws,secp701::d1::data
+What are the three data states?,"At rest, in transit, in use",secp701::d1::data
+Data stored on a hard drive is in which state?,At rest,secp701::d1::data
+Data being sent across a network is in which state?,In transit,secp701::d1::data
+What is data sovereignty?,Data is subject to the laws of the country where it is stored,secp701::d1::data
+What is PII?,Personally Identifiable Information,secp701::d1::data
+What is PHI?,Protected Health Information (regulated by HIPAA),secp701::d1::data
+What type of data does PCI DSS protect?,Credit cardholder data,secp701::d1::data
+What is GDPR?,The EU privacy regulation governing personal data,secp701::d1::data
+What is HIPAA?,The U.S. law protecting health information,secp701::d1::data
+What is DLP (data loss prevention)?,Technology that monitors and blocks unauthorized data exfiltration,secp701::d1::data
+Where can DLP be enforced?,"Endpoint, network, and storage",secp701::d1::data
+What is data masking?,Replacing sensitive data with fictional but realistic-looking values,secp701::d1::data
+What is tokenization?,Replacing sensitive data with a random token that can be mapped back securely,secp701::d1::data
+What is data encryption?,Encoding data so only authorized parties with the key can read it,secp701::d1::data
+What does hashing provide for data?,Integrity — detection of unauthorized changes,secp701::d1::data
+What is symmetric encryption?,"Encryption using a single shared key for both encryption and decryption",secp701::d1::crypto
+What is the main weakness of symmetric encryption?,Secure key distribution at scale,secp701::d1::crypto
+What is asymmetric encryption?,"Encryption using a key pair: public key encrypts, private key decrypts",secp701::d1::crypto
+Why is asymmetric encryption slower than symmetric?,Heavier math on large numbers,secp701::d1::crypto
+How does the hybrid approach combine symmetric and asymmetric encryption?,"Asymmetric encrypts and shares a secret key; symmetric does the bulk encryption",secp701::d1::crypto
+What is a stream cipher?,"A cipher that encrypts data bit-by-bit or byte-by-byte in a continuous stream",secp701::d1::crypto
+What is a block cipher?,"A cipher that encrypts data in fixed-size blocks (64, 128, or 256 bits)",secp701::d1::crypto
+Which is better suited to real-time audio/video: stream or block cipher?,Stream cipher,secp701::d1::crypto
+What is a hash?,"A one-way function producing a fixed-length message digest from any input",secp701::d1::crypto
+Which hash produces a 128-bit digest and is now considered insecure?,MD5,secp701::d1::crypto
+Which hash family includes SHA-224 through SHA-512?,SHA-2,secp701::d1::crypto
+What does HMAC provide?,Message integrity AND authenticity using a shared secret key,secp701::d1::crypto
+What is a digital signature?,"A hash of the message encrypted with the sender's private key",secp701::d1::crypto
+What does a digital signature provide?,"Integrity, authentication, and non-repudiation",secp701::d1::crypto
+What is a pass-the-hash attack?,"Authenticating using a stolen password hash instead of the plaintext password",secp701::d1::crypto
+What is a birthday attack?,An attack exploiting hash collisions (math around birthdays),secp701::d1::crypto
+What is a downgrade attack?,Forcing a system to use a weaker protocol or cipher,secp701::d1::crypto
+What is a certificate authority (CA)?,A trusted third party that issues and signs digital certificates,secp701::d1::crypto
+What does a registration authority (RA) do?,Verifies the identity of certificate requesters for the CA,secp701::d1::crypto
+What is a CRL?,Certificate Revocation List — a list of revoked certificates,secp701::d1::crypto
+What does OCSP do?,Provides real-time online checking of a certificate's revocation status,secp701::d1::crypto
+What is a CSR?,Certificate Signing Request — a request sent to a CA to obtain a certificate,secp701::d1::crypto
+What is a wildcard certificate?,A certificate valid for any subdomain of a domain (*.example.com),secp701::d1::crypto
+What is a subject alternative name (SAN)?,A certificate field allowing additional domains on one certificate,secp701::d1::crypto
+What is a self-signed certificate?,A certificate signed by its own creator — not trusted by default publicly,secp701::d1::crypto
+What is certificate pinning?,Hard-coding a specific certificate or key so substitutes are rejected,secp701::d1::crypto
+What is key escrow?,Storing copies of encryption keys with a trusted third party for recovery,secp701::d1::crypto
+What is blockchain?,A distributed immutable ledger of transactions shared across participants,secp701::d1::crypto
+What is steganography?,Hiding data inside other data (e.g. a message inside an image),secp701::d1::crypto
+What is obfuscation?,Making code or data hard for humans to understand (used by malware authors),secp701::d1::crypto
+What is a brute-force attack?,Trying every possible key or password until the correct one is found,secp701::d1::crypto
+What is a dictionary attack?,Trying words from a list of common passwords,secp701::d1::crypto
+What is a rainbow table?,A precomputed table of hashes used to reverse password hashes,secp701::d1::crypto

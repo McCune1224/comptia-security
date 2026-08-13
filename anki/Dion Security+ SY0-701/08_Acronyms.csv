@@ -1,0 +1,130 @@
+Front,Back,Tags
+What does CIA stand for?,"Confidentiality, Integrity, Availability",secp701::acronyms
+What does AAA stand for?,"Authentication, Authorization, Accounting",secp701::acronyms
+What does MFA stand for?,Multi-Factor Authentication,secp701::acronyms
+What does SSO stand for?,Single Sign-On,secp701::acronyms
+What does SAML stand for?,Security Assertion Markup Language,secp701::acronyms
+What does OIDC stand for?,OpenID Connect,secp701::acronyms
+What does PAM stand for?,Privileged Access Management,secp701::acronyms
+What does ACL stand for?,Access Control List,secp701::acronyms
+What does MAC stand for (access control)?,Mandatory Access Control,secp701::acronyms
+What does DAC stand for?,Discretionary Access Control,secp701::acronyms
+What does RBAC stand for?,Role-Based Access Control,secp701::acronyms
+What does ABAC stand for?,Attribute-Based Access Control,secp701::acronyms
+What does PKI stand for?,Public Key Infrastructure,secp701::acronyms
+What does CA stand for?,Certificate Authority,secp701::acronyms
+What does RA stand for?,Registration Authority,secp701::acronyms
+What does CRL stand for?,Certificate Revocation List,secp701::acronyms
+What does OCSP stand for?,Online Certificate Status Protocol,secp701::acronyms
+What does CSR stand for?,Certificate Signing Request,secp701::acronyms
+What does SAN stand for (certificates)?,Subject Alternative Name,secp701::acronyms
+What does DLP stand for?,Data Loss Prevention,secp701::acronyms
+What does PII stand for?,Personally Identifiable Information,secp701::acronyms
+What does PHI stand for?,Protected Health Information,secp701::acronyms
+What does PCI DSS stand for?,Payment Card Industry Data Security Standard,secp701::acronyms
+What does GDPR stand for?,General Data Protection Regulation,secp701::acronyms
+What does HIPAA stand for?,Health Insurance Portability and Accountability Act,secp701::acronyms
+What does SLE stand for?,Single Loss Expectancy,secp701::acronyms
+What does EF stand for (risk)?,Exposure Factor,secp701::acronyms
+What does ARO stand for?,Annualized Rate of Occurrence,secp701::acronyms
+What does ALE stand for?,Annualized Loss Expectancy,secp701::acronyms
+What does SLA stand for?,Service Level Agreement,secp701::acronyms
+What does MOU stand for?,Memorandum of Understanding,secp701::acronyms
+What does MSA stand for?,Master Service Agreement,secp701::acronyms
+What does ISA stand for?,Interconnection Security Agreement,secp701::acronyms
+What does NDA stand for?,Non-Disclosure Agreement,secp701::acronyms
+What does EOL stand for?,End of Life,secp701::acronyms
+What does EOSL stand for?,End of Service Life,secp701::acronyms
+What does AUP stand for?,Acceptable Use Policy,secp701::acronyms
+What does CAB stand for?,Change Advisory Board,secp701::acronyms
+What does COOP stand for?,Continuity of Operations Plan,secp701::acronyms
+What does BCP stand for?,Business Continuity Plan,secp701::acronyms
+What does DRP stand for?,Disaster Recovery Plan,secp701::acronyms
+What does RTO stand for?,Recovery Time Objective,secp701::acronyms
+What does RPO stand for?,Recovery Point Objective,secp701::acronyms
+What does MTTR stand for?,Mean Time to Repair,secp701::acronyms
+What does MTTF stand for?,Mean Time to Failure,secp701::acronyms
+What does MTBF stand for?,Mean Time Between Failures,secp701::acronyms
+What does UPS stand for?,Uninterruptible Power Supply,secp701::acronyms
+What does RAID stand for?,Redundant Array of Independent Disks,secp701::acronyms
+What does IaaS stand for?,Infrastructure as a Service,secp701::acronyms
+What does PaaS stand for?,Platform as a Service,secp701::acronyms
+What does SaaS stand for?,Software as a Service,secp701::acronyms
+What does VDI stand for?,Virtual Desktop Infrastructure,secp701::acronyms
+What does FaaS stand for?,Function as a Service,secp701::acronyms
+What does SDN stand for?,Software-Defined Networking,secp701::acronyms
+What does IaC stand for?,Infrastructure as Code,secp701::acronyms
+What does IoT stand for?,Internet of Things,secp701::acronyms
+What does ICS stand for?,Industrial Control Systems,secp701::acronyms
+What does SCADA stand for?,Supervisory Control and Data Acquisition,secp701::acronyms
+What does NGFW stand for?,Next-Generation Firewall,secp701::acronyms
+What does UTM stand for?,Unified Threat Management,secp701::acronyms
+What does WAF stand for?,Web Application Firewall,secp701::acronyms
+What does IDS stand for?,Intrusion Detection System,secp701::acronyms
+What does IPS stand for?,Intrusion Prevention System,secp701::acronyms
+What does HIDS stand for?,Host-based Intrusion Detection System,secp701::acronyms
+What does NIDS stand for?,Network-based Intrusion Detection System,secp701::acronyms
+What does NAC stand for?,Network Access Control,secp701::acronyms
+What does VPN stand for?,Virtual Private Network,secp701::acronyms
+What does IPSec stand for?,Internet Protocol Security,secp701::acronyms
+What does AH stand for (IPSec)?,Authentication Header,secp701::acronyms
+What does ESP stand for (IPSec)?,Encapsulating Security Payload,secp701::acronyms
+What does S/MIME stand for?,Secure/Multipurpose Internet Mail Extensions,secp701::acronyms
+What does SRTP stand for?,Secure Real-time Transport Protocol,secp701::acronyms
+What does SNMP stand for?,Simple Network Management Protocol,secp701::acronyms
+What does SIEM stand for?,"Security Information and Event Management",secp701::acronyms
+What does SCAP stand for?,Security Content Automation Protocol,secp701::acronyms
+What does CVE stand for?,Common Vulnerabilities and Exposures,secp701::acronyms
+What does CVSS stand for?,Common Vulnerability Scoring System,secp701::acronyms
+What does IoC stand for?,Indicator of Compromise,secp701::acronyms
+What does IR stand for?,Incident Response,secp701::acronyms
+What does CSIRT stand for?,Computer Security Incident Response Team,secp701::acronyms
+What does RCA stand for?,Root Cause Analysis,secp701::acronyms
+What does SOAR stand for?,"Security Orchestration, Automation, and Response",secp701::acronyms
+What does API stand for?,Application Programming Interface,secp701::acronyms
+What does CI/CD stand for?,Continuous Integration / Continuous Deployment,secp701::acronyms
+What does EDR stand for?,Endpoint Detection and Response,secp701::acronyms
+What does UBA stand for?,User Behavior Analytics,secp701::acronyms
+What does DDoS stand for?,Distributed Denial of Service,secp701::acronyms
+What does DNSSEC stand for?,Domain Name System Security Extensions,secp701::acronyms
+What does XSS stand for?,Cross-Site Scripting,secp701::acronyms
+What does CSRF stand for?,Cross-Site Request Forgery,secp701::acronyms
+What does SQLi stand for?,SQL Injection,secp701::acronyms
+What does TOCTOU stand for?,Time of Check to Time of Use,secp701::acronyms
+What does MITM stand for?,Man-in-the-Middle (on-path),secp701::acronyms
+What does OSINT stand for?,Open-Source Intelligence,secp701::acronyms
+What does TTP stand for?,"Tactics, Techniques, and Procedures",secp701::acronyms
+What does APT stand for?,Advanced Persistent Threat,secp701::acronyms
+What does RAT stand for?,Remote Access Trojan,secp701::acronyms
+What does WEP stand for?,Wired Equivalent Privacy,secp701::acronyms
+What does WPA stand for?,Wi-Fi Protected Access,secp701::acronyms
+What does PSK stand for?,Pre-Shared Key,secp701::acronyms
+What does EAP stand for?,Extensible Authentication Protocol,secp701::acronyms
+What does PEAP stand for?,Protected Extensible Authentication Protocol,secp701::acronyms
+What does SAE stand for (WPA3)?,Simultaneous Authentication of Equals,secp701::acronyms
+What does RADIUS stand for?,Remote Authentication Dial-In User Service,secp701::acronyms
+What does LDAP stand for?,Lightweight Directory Access Protocol,secp701::acronyms
+What does SMB stand for?,Server Message Block,secp701::acronyms
+What does FTP stand for?,File Transfer Protocol,secp701::acronyms
+What does TFTP stand for?,Trivial File Transfer Protocol,secp701::acronyms
+What does SMTP stand for?,Simple Mail Transfer Protocol,secp701::acronyms
+What does POP3 stand for?,Post Office Protocol version 3,secp701::acronyms
+What does IMAP stand for?,Internet Message Access Protocol,secp701::acronyms
+What does RDP stand for?,Remote Desktop Protocol,secp701::acronyms
+What does DHCP stand for?,Dynamic Host Configuration Protocol,secp701::acronyms
+What does NTP stand for?,Network Time Protocol,secp701::acronyms
+What does DNS stand for?,Domain Name System,secp701::acronyms
+What does HTTP stand for?,Hypertext Transfer Protocol,secp701::acronyms
+What does HTTPS stand for?,Hypertext Transfer Protocol Secure,secp701::acronyms
+What does AES stand for?,Advanced Encryption Standard,secp701::acronyms
+What does DES stand for?,Data Encryption Standard,secp701::acronyms
+What does 3DES stand for?,Triple Data Encryption Standard,secp701::acronyms
+What does RSA stand for?,"Rivest, Shamir, Adleman",secp701::acronyms
+What does ECC stand for?,Elliptic Curve Cryptography,secp701::acronyms
+What does MD5 stand for?,Message Digest Algorithm 5,secp701::acronyms
+What does SHA stand for?,Secure Hash Algorithm,secp701::acronyms
+What does HMAC stand for?,Hash-based Message Authentication Code,secp701::acronyms
+What does DSA stand for?,Digital Signature Algorithm,secp701::acronyms
+What does POA&M stand for?,Plan of Action and Milestones,secp701::acronyms
+What does SOP stand for?,Standard Operating Procedure,secp701::acronyms
+What does OSI stand for?,Open Systems Interconnection,secp701::acronyms

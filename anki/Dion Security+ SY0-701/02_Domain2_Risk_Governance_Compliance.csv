@@ -1,0 +1,51 @@
+Front,Back,Tags
+What is risk?,"The likelihood that a threat will exploit a vulnerability, causing harm or loss",secp701::d2::risk
+What is a risk register?,"A living document tracking identified risks, likelihood, impact, owner, and mitigations",secp701::d2::risk
+How often should a risk assessment be performed?,"Periodically and whenever significant changes occur",secp701::d2::risk
+What is qualitative risk analysis?,"Subjective analysis rating risks as high, medium, or low using likelihood and impact",secp701::d2::risk
+What is quantitative risk analysis?,"Objective, numeric analysis of risk using monetary values",secp701::d2::risk
+What is the exposure factor (EF)?,"The percentage of an asset's value lost in a single event",secp701::d2::risk
+What is the single loss expectancy (SLE)?,The monetary loss expected from a single event,secp701::d2::risk
+What is the formula for SLE?,SLE = Asset Value (AV) × Exposure Factor (EF),secp701::d2::risk
+What is the annualized rate of occurrence (ARO)?,The estimated number of times a threat occurs per year,secp701::d2::risk
+What is the annualized loss expectancy (ALE)?,The expected yearly monetary loss from a risk,secp701::d2::risk
+What is the formula for ALE?,ALE = SLE × ARO,secp701::d2::risk
+What are the four risk management strategies?,"Transfer, avoid, mitigate, accept",secp701::d2::risk
+Buying cyber insurance is which risk strategy?,Risk transference,secp701::d2::risk
+Stopping a risky activity entirely is which risk strategy?,Risk avoidance,secp701::d2::risk
+Implementing security controls to reduce risk is which strategy?,Risk mitigation,secp701::d2::risk
+Acknowledging a risk without action is which strategy?,Risk acceptance,secp701::d2::risk
+What is risk monitoring and reporting?,Regularly reviewing risk levels and communicating them to stakeholders,secp701::d2::risk
+What is a supply chain attack?,"Compromising a trusted vendor to reach its customers",secp701::d2::supplychain
+What is a vendor assessment?,Evaluating a vendor's security posture before doing business,secp701::d2::supplychain
+What is vendor monitoring?,Ongoing review of a vendor's security performance during the relationship,secp701::d2::supplychain
+What does EOL mean?,End of Life — the product is no longer produced,secp701::d2::supplychain
+What does EOSL mean?,End of Service Life — support and updates are no longer provided,secp701::d2::supplychain
+What is an SLA?,Service Level Agreement — contractual performance commitments,secp701::d2::supplychain
+What is an MOU?,Memorandum of Understanding — non-binding statement of intent,secp701::d2::supplychain
+What is an MSA?,Master Service Agreement — umbrella contract governing future agreements,secp701::d2::supplychain
+What is an ISA?,Interconnection Security Agreement — defines security between connected systems,secp701::d2::supplychain
+What is an NDA?,Non-Disclosure Agreement — protects confidential information,secp701::d2::supplychain
+What is governance?,Management's direction and oversight of security strategy,secp701::d2::governance
+Who leads the security program in an organization?,The CISO (Chief Information Security Officer),secp701::d2::governance
+What is a policy?,A high-level mandatory statement of management intent,secp701::d2::governance
+What is a standard?,Specific mandatory requirements for achieving policy goals,secp701::d2::governance
+What is a procedure?,Step-by-step instructions for performing a task,secp701::d2::governance
+What is an acceptable use policy (AUP)?,Rules defining acceptable use of organizational systems,secp701::d2::governance
+What is compliance?,"Meeting legal, regulatory, and contractual requirements",secp701::d2::governance
+What are consequences of non-compliance?,"Fines, lawsuits, loss of reputation, and even jail time",secp701::d2::governance
+What is the purpose of change management?,Reducing the risk that changes break systems or introduce vulnerabilities,secp701::d2::changemgmt
+What are the key steps of the change management process?,"Request, approval, documentation, testing, implementation, rollback plan",secp701::d2::changemgmt
+What is a rollback (backout) plan?,A documented plan to revert a change if it fails,secp701::d2::changemgmt
+What is a Change Advisory Board (CAB)?,A group that reviews and approves significant changes,secp701::d2::changemgmt
+What is version control?,Tracking and managing changes to files and configurations over time,secp701::d2::changemgmt
+What is an internal audit?,An assessment performed by the organization's own staff,secp701::d2::audit
+What is an external (third-party) audit?,An assessment performed by an independent outside organization,secp701::d2::audit
+What is a penetration test?,An authorized simulated attack against systems to find exploitable weaknesses,secp701::d2::audit
+How does a pentest differ from a vulnerability scan?,A scan identifies vulnerabilities; a pentest actively exploits them,secp701::d2::audit
+What is reconnaissance in a pentest?,Gathering information about the target before attacking,secp701::d2::audit
+What is passive reconnaissance?,Gathering info without directly interacting with the target (e.g. OSINT),secp701::d2::audit
+What is active reconnaissance?,Gathering info by directly interacting with the target (e.g. port scans),secp701::d2::audit
+What are rules of engagement?,The defined scope and limitations of a penetration test,secp701::d2::audit
+What is attestation of findings?,A formal statement validating that assessment results are accurate,secp701::d2::audit
+What is an attestation in compliance?,A third party confirming that controls are in place and working,secp701::d2::audit

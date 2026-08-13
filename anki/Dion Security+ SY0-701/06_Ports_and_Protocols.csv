@@ -1,0 +1,70 @@
+Front,Back,Tags
+Which port does FTP use?,"21 (TCP)",secp701::ports
+"Which port do SSH, SCP, and SFTP share?","22 (TCP)",secp701::ports
+Which port does Telnet use?,"23 (TCP)",secp701::ports
+Which port does SMTP use?,"25 (TCP)",secp701::ports
+Which port does DNS use?,"53 (TCP/UDP)",secp701::ports
+Which port does TFTP use?,"69 (UDP)",secp701::ports
+Which port does HTTP use?,"80 (TCP)",secp701::ports
+Which port does Kerberos use?,"88 (TCP/UDP)",secp701::ports
+Which port does POP3 use?,"110 (TCP)",secp701::ports
+Which port does NNTP use?,"119 (TCP)",secp701::ports
+Which port does RPC use?,"135 (TCP/UDP)",secp701::ports
+Which ports does NetBIOS use?,"137, 138, 139 (TCP/UDP)",secp701::ports
+Which port does IMAP use?,"143 (TCP)",secp701::ports
+Which port does SNMP use?,"161 (UDP)",secp701::ports
+Which port does the SNMP trap use?,"162 (UDP)",secp701::ports
+Which port does LDAP use?,"389 (TCP)",secp701::ports
+Which port does HTTPS use?,"443 (TCP)",secp701::ports
+Which port does SMB use?,"445 (TCP)",secp701::ports
+Which ports do SMTPS use?,"465 and 587 (TCP)",secp701::ports
+Which port does Syslog use?,"514 (UDP)",secp701::ports
+Which port does LDAPS use?,"636 (TCP)",secp701::ports
+Which port does IMAPS use?,"993 (TCP)",secp701::ports
+Which port does POP3S use?,"995 (TCP)",secp701::ports
+Which port does Microsoft SQL Server use?,"1433 (TCP)",secp701::ports
+Which ports does RADIUS use?,"1645/1646 (TCP) and 1812/1813 (UDP)",secp701::ports
+Which port does RDP use?,"3389 (TCP)",secp701::ports
+Which port does Syslog over TLS use?,"6514 (TCP)",secp701::ports
+Which port does DHCP use for servers and clients?,"67 (server) and 68 (client) — UDP",secp701::ports
+Which port does NTP use?,"123 (UDP)",secp701::ports
+Port 21 — name the protocol.,FTP (File Transfer Protocol),secp701::ports
+Port 22 — name the protocols.,"SSH, SCP, SFTP",secp701::ports
+Port 23 — name the protocol.,Telnet,secp701::ports
+Port 25 — name the protocol.,SMTP (Simple Mail Transfer Protocol),secp701::ports
+Port 53 — name the protocol.,DNS (Domain Name System),secp701::ports
+Port 69 — name the protocol.,TFTP (Trivial File Transfer Protocol),secp701::ports
+Port 80 — name the protocol.,HTTP,secp701::ports
+Port 88 — name the protocol.,Kerberos,secp701::ports
+Port 110 — name the protocol.,POP3,secp701::ports
+Port 119 — name the protocol.,NNTP (Network News Transfer Protocol),secp701::ports
+Port 135 — name the protocol.,RPC (Remote Procedure Call),secp701::ports
+Ports 137-139 — name the protocol.,NetBIOS,secp701::ports
+Port 143 — name the protocol.,IMAP,secp701::ports
+Port 161 — name the protocol.,SNMP,secp701::ports
+Port 162 — name the protocol.,SNMP trap,secp701::ports
+Port 389 — name the protocol.,LDAP,secp701::ports
+Port 443 — name the protocol.,HTTPS,secp701::ports
+Port 445 — name the protocol.,SMB (Server Message Block),secp701::ports
+Ports 465/587 — name the protocol.,SMTPS (SMTP Secure),secp701::ports
+Port 514 — name the protocol.,Syslog,secp701::ports
+Port 636 — name the protocol.,LDAPS (LDAP Secure),secp701::ports
+Port 993 — name the protocol.,IMAPS (IMAP over SSL/TLS),secp701::ports
+Port 995 — name the protocol.,POP3S (POP3 over SSL/TLS),secp701::ports
+Port 1433 — name the protocol.,Microsoft SQL,secp701::ports
+Ports 1645/1646 and 1812/1813 — name the protocol.,RADIUS,secp701::ports
+Port 3389 — name the protocol.,RDP (Remote Desktop Protocol),secp701::ports
+Port 6514 — name the protocol.,Syslog over TLS,secp701::ports
+Ports 67/68 — name the protocol.,DHCP,secp701::ports
+Port 123 — name the protocol.,NTP (Network Time Protocol),secp701::ports
+Which port range contains well-known ports?,"0-1023",secp701::ports
+Which port range contains registered ports?,"1024-49151",secp701::ports
+Which port range contains dynamic/private ports?,"49152-65535",secp701::ports
+What is a port?,A logical communication endpoint identifying a process or service,secp701::ports
+Which protocol is cleartext and should be replaced by SSH?,Telnet,secp701::ports
+Which secure protocol replaces FTP?,SFTP or FTPS,secp701::ports
+Which secure protocol replaces HTTP?,HTTPS,secp701::ports
+Which secure protocol replaces LDAP?,LDAPS,secp701::ports
+Which secure protocol replaces SMTP?,SMTPS,secp701::ports
+Which secure protocol replaces SNMP v1/v2?,SNMPv3,secp701::ports
+Which insecure protocol maps to SSH?,Telnet,secp701::ports

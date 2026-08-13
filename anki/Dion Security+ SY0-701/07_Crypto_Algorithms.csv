@@ -1,0 +1,31 @@
+Front,Back,Tags
+What is DES and why is it obsolete?,"Data Encryption Standard — 56-bit effective key, too weak",secp701::crypto
+What key and block size does DES use?,"64-bit block, 64-bit key (56 effective)",secp701::crypto
+What is 3DES?,"Triple DES — three 56-bit keys applied in encrypt-decrypt-encrypt order, ~112-bit strength",secp701::crypto
+Why is 3DES rarely used today?,It is slow compared to AES,secp701::crypto
+What key sizes does AES support?,"128, 192, or 256 bits",secp701::crypto
+What is AES's block size?,128 bits,secp701::crypto
+Which algorithm is the U.S. government standard for sensitive unclassified data?,AES,secp701::crypto
+What key size range does Blowfish support?,32 to 448 bits,secp701::crypto
+What are Twofish's key and block sizes?,"Block 128 bits; keys 128, 192, or 256 bits",secp701::crypto
+Which of the RC ciphers is a stream cipher?,RC4,secp701::crypto
+Where was RC4 used?,SSL and WEP (both now considered insecure),secp701::crypto
+Which asymmetric algorithm is used for key exchange and is vulnerable to man-in-the-middle attacks?,Diffie-Hellman,secp701::crypto
+Where is Diffie-Hellman commonly used?,VPN tunnel establishment (IPSec),secp701::crypto
+What hard math problem does RSA rely on?,Factoring large prime numbers,secp701::crypto
+What key sizes does RSA support?,1024 to 4096 bits,secp701::crypto
+What is ECC?,"Elliptic Curve Cryptography — same strength as RSA with much smaller keys",secp701::crypto
+Which is faster at equal security: ECC or RSA?,ECC,secp701::crypto
+What is IDEA?,"A symmetric block cipher — 64-bit block, 128-bit key",secp701::crypto
+What hash length does MD5 produce?,128 bits,secp701::crypto
+Why is MD5 not recommended?,Collisions — limited unique values,secp701::crypto
+What hash length does SHA-1 produce?,160 bits,secp701::crypto
+What digest sizes does SHA-2 support?,"SHA-224, SHA-256, SHA-384, SHA-512",secp701::crypto
+What makes SHA-3 different from SHA-2?,Different internal design (sponge construction) and more rounds,secp701::crypto
+What is RIPEMD?,An open-source hash family (most common: 160-bit),secp701::crypto
+What does HMAC add to a hash?,A secret key — providing authenticity as well as integrity,secp701::crypto
+Which algorithm is used only for digital signatures per DSS?,DSA,secp701::crypto
+"Which asymmetric algorithm supports encryption, signatures, AND key exchange?",RSA,secp701::crypto
+What does asymmetric encryption provide that symmetric does not?,Non-repudiation,secp701::crypto
+Why is asymmetric encryption used for key exchange in hybrid crypto?,"It solves key distribution; symmetric then handles bulk data for speed",secp701::crypto
+What happens to a hash if one character of input changes?,The digest changes drastically (avalanche effect),secp701::crypto
