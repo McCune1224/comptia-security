@@ -1,4 +1,10 @@
-# Linked git worktrees (repo-local metadata, not content)
+# Node dependencies — never commit
+node_modules/
+
+# Local agent tooling state (opencode config, agent runtimes, worktree checkouts)
+.hermes/
+.opencode/
+opencode.json
 .worktrees/
 
 # Python

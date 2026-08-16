@@ -1,0 +1,112 @@
+# CompTIA Security+ Course
+
+An offline-first, Blackboard-style course learning system for preparing for the CompTIA Security+
+(SY0-701) certification exam.
+
+The app combines a structured four-week course plan with adaptive practice, graded assignments,
+PBQs, full-length exams, spaced repetition, a weighted gradebook, and exam-readiness tracking. It is
+designed for focused study on desktop or mobile and runs locally with SQLite.
+
+![Course home dashboard](web/static/screenshots/home.png)
+
+## Product Tour
+
+### Course planning
+
+The course home turns an exam date into an actionable study plan with countdown, readiness, daily
+review, due assignments, quick drills, and module progress.
+
+![Course home on mobile](web/static/screenshots/home-mobile.png)
+
+The syllabus lays out four weeks of lessons, objective quizzes, scenario sets, PBQs, and timed full
+exams. Changing the exam date recalculates the schedule.
+
+![Course syllabus](web/static/screenshots/syllabus.png)
+
+### Active practice
+
+Practice sessions use scenario-based questions, objective labels, progress navigation, optional
+context, and answer checks to turn the question bank into a guided drill.
+
+![Practice quiz](web/static/screenshots/practice.png)
+
+### Targeted improvement
+
+Daily review combines due cards, weak objectives, new questions, a study heatmap, and a Wall of Shame
+for questions that need another pass.
+
+![Daily review](web/static/screenshots/review.png)
+
+The mastery matrix shows accuracy across all 28 SY0-701 objectives. Any objective can launch a
+targeted five-question practice session.
+
+![Mastery matrix](web/static/screenshots/mastery.png)
+
+## Features
+
+- Four weekly modules covering all five Security+ exam domains
+- Seven lessons with interactive study widgets
+- Objective quizzes, scenario sets, PBQs, and 90-question timed full exams
+- Interactive PBQ formats including matching, ordering, configuration, evidence, hotspot, sorting,
+  word-bank, and multi-step tasks
+- Daily spaced-repetition review with streaks, heatmap, and weak-topic recovery
+- Mastery matrix across all 28 SY0-701 objectives
+- Weighted gradebook with assignment statuses, retakes, category breakdowns, and letter grade
+- Exam-readiness estimate against the official 750/900 passing threshold
+- Local multi-profile support with per-course progress isolation
+- Optional Google Calendar synchronization for exam and assignment deadlines
+- Responsive dark study-tool interface with light-theme support
+
+## Quick Start
+
+Requirements: Node.js 22 or newer.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). The first run creates and seeds a local
+`data/quiz.db` database. The default exam date is set automatically and can be changed from the
+Syllabus page.
+
+## Verify
+
+Run these commands from `web/`:
+
+```bash
+npm run check
+npm run test
+npm run build
+```
+
+## Technology
+
+- SvelteKit 5 with Svelte runes
+- Tailwind CSS v4
+- SQLite with `better-sqlite3`
+- Vitest for unit and service tests
+- Playwright for end-to-end coverage
+- Self-hosted Inter and Space Grotesk fonts
+
+## Project Layout
+
+```text
+web/                          Course learning app (SvelteKit 5)
+├── src/routes/               Course pages and API routes
+├── src/lib/components/       Shared UI and interactive PBQ components
+├── src/lib/server/           SQLite services, course model, quiz engine, and review engine
+├── scripts/                  Question-bank and content tooling
+├── e2e/                      Playwright end-to-end tests
+└── static/screenshots/       README product screenshots
+notes/                        Obsidian study vault (domains, flashcards, exam resources)
+anki/                         Anki flashcard exports
+```
+
+See [`web/README.md`](web/README.md) for the detailed architecture, data model, API route map,
+authoring workflow, and deployment notes.
+
+## License
+
+This project is released under the terms in [`LICENSE`](LICENSE).
