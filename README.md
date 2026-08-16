@@ -7,6 +7,11 @@ The app combines a structured four-week course plan with adaptive practice, grad
 PBQs, full-length exams, spaced repetition, a weighted gradebook, and exam-readiness tracking. It is
 designed for focused study on desktop or mobile and runs locally with SQLite.
 
+> 💡 **A personal project first.** This is the tool I built and dogfooded for my own study sessions —
+> the course plan, banks, and schedules are tuned for how *I* study, not a generic audience, and it
+> isn't a configurable product. That said, it's open source for a reason: fork it, use it, and steal
+> whatever ideas work for you. If you'd like to see it go further, PRs are welcome.
+
 ![Course home dashboard](web/static/screenshots/home.png)
 
 ## Product Tour
@@ -53,7 +58,13 @@ targeted five-question practice session.
 - Mastery matrix across all 28 SY0-701 objectives
 - Weighted gradebook with assignment statuses, retakes, category breakdowns, and letter grade
 - Exam-readiness estimate against the official 750/900 passing threshold
-- Local multi-profile support with per-course progress isolation
+- Multi-course support — Security+ SY0-701 plus A+ Core 1/2 (220-1201 / 220-1202) question banks
+- Ready-to-import Anki flashcard decks — CSV exports for every domain plus ports/protocols and
+  acronyms live in `anki/`, with matching flashcard notes in the vault
+- Mobile-first — bottom navigation, ≥44px touch targets, and a layout that works one-handed between
+  meetings
+- Cheap to deploy — offline-first with self-hosted fonts and SQLite storage, no external services;
+  runs on a single small VPS (or a free-tier host) via `make deploy` (systemd)
 - Optional Google Calendar synchronization for exam and assignment deadlines
 - Responsive dark study-tool interface with light-theme support
 
@@ -106,6 +117,12 @@ anki/                         Anki flashcard exports
 
 See [`web/README.md`](web/README.md) for the detailed architecture, data model, API route map,
 authoring workflow, and deployment notes.
+
+## Contributing
+
+As noted up top, this is a personal, dogfood-first project rather than a configurable app. If you
+find it useful (or just want to borrow the structure), please do — that's what it's here for. If
+you hit a bug or have an idea, open a PR and I'll take a look.
 
 ## License
 
