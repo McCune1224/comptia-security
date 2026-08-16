@@ -1,0 +1,469 @@
+{
+  "mcqs": [
+    {
+      "id": "mcq-3-056",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "Which TWO security responsibilities remain with the organization under the serverless shared responsibility model? (Select TWO.)",
+      "context": "A healthcare company migrates its claims-eligibility service to a Function-as-a-Service (FaaS) platform. The provider provisions the execution environment, patches the underlying runtime and operating system, and manages the physical hosts. The company's developers deploy hundreds of small functions that read and write protected health information, and the platform bills per execution.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Patching the operating system that hosts the function runtime",
+          "rationale": "In serverless, the provider patches the runtime and the underlying operating system as part of the managed platform; this is not a customer responsibility."
+        },
+        {
+          "id": "b",
+          "text": "Reviewing the application code and third-party libraries the functions use",
+          "rationale": "The customer authors and deploys the function code, so vulnerabilities in that code and its dependencies remain the customer's responsibility to review and fix."
+        },
+        {
+          "id": "c",
+          "text": "Configuring the identity and access management permissions granted to each function",
+          "rationale": "The customer defines the roles and permissions each function runs with; over-privileged function roles are a leading cause of serverless data exposure."
+        },
+        {
+          "id": "d",
+          "text": "Hardening the virtual machines that execute the functions",
+          "rationale": "Serverless abstracts away the servers entirely, so the customer has no access to the underlying virtual machines to harden them."
+        },
+        {
+          "id": "e",
+          "text": "Installing antivirus agents on the function hosts",
+          "rationale": "The provider secures the host environment, and customers cannot install host agents on infrastructure they do not control."
+        },
+        {
+          "id": "f",
+          "text": "Monitoring the physical security of the provider's data centers",
+          "rationale": "Data center facility security is the provider's responsibility under the shared responsibility model; the customer retains logical control of its own data and policies."
+        }
+      ],
+      "correctOptionIds": [
+        "b",
+        "c"
+      ],
+      "selectCount": 2,
+      "hint": "Map the shared-responsibility boundary for Function-as-a-Service: the provider owns the platform up to and including the runtime, while everything you deploy and the access rules you encode stay with you. Cold starts and per-execution billing affect latency and cost, not ownership.",
+      "explanation": "In serverless/FaaS the provider owns the physical hosts, hypervisor, runtime, and operating system, so host patching, VM hardening, host antivirus, and data-center security are provider responsibilities. The customer remains responsible for the function code and its dependencies, the identity and access management roles and permissions the functions run with, and the data the functions process. Over-privileged function roles are a common serverless misconfiguration that leads to data exposure.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "study-guide",
+          "section": "Architecture Models - Serverless"
+        },
+        {
+          "source": "owasp",
+          "section": "Serverless Top 10 - Function Permissions"
+        }
+      ]
+    },
+    {
+      "id": "mcq-3-057",
+      "domain": 3,
+      "objective": "3.1",
+      "format": "scenario",
+      "prompt": "Which mitigation is MOST appropriate for securing these controllers?",
+      "context": "A chemical plant uses programmable logic controllers (PLCs) running a proprietary real-time operating system (RTOS). The controllers must respond to sensor interrupts and actuate valves within strict hard deadlines, because a delayed response can over-pressurize a reactor. The RTOS vendor provides no security patches, and the plant cannot install antivirus or modify the kernel scheduling on the devices.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace the RTOS with a general-purpose Linux distribution so the devices can be patched",
+          "rationale": "A general-purpose OS cannot guarantee hard real-time response deadlines and would break the process safety requirements, even though it would allow patching."
+        },
+        {
+          "id": "b",
+          "text": "Isolate the controllers on a segmented OT network, restrict inbound traffic, and monitor the gateway for anomalies",
+          "rationale": "Because the devices cannot be patched and must keep deterministic timing, compensating controls at the network boundary reduce exposure without altering the device."
+        },
+        {
+          "id": "c",
+          "text": "Run full-disk encryption and file-integrity monitoring on each controller",
+          "rationale": "The closed, unpatched RTOS cannot be modified to run such agents, and this does not address the inability to patch the platform."
+        },
+        {
+          "id": "d",
+          "text": "Disable the real-time scheduler and run the control logic in software emulation",
+          "rationale": "Removing real-time scheduling destroys the deterministic timing the process requires and is unsafe for the reactor control loop."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "hint": "Weigh the constraint that the device cannot be changed or patched against the need for deterministic response. When the system itself is fixed, look for controls that reduce exposure around it rather than inside it.",
+      "explanation": "Hard real-time systems must meet deterministic deadlines; general-purpose OSes, emulation, or added host agents can break timing or simply cannot be installed on a closed RTOS. Because the controllers cannot be patched, the practical mitigation is network segmentation of the OT environment, restricting inbound traffic, and monitoring at the boundary — compensating controls that shrink the attack surface without modifying the device.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.1"
+        },
+        {
+          "source": "study-guide",
+          "section": "RTOS and Embedded Systems"
+        },
+        {
+          "source": "cisa",
+          "section": "Control System Defense - OT Segmentation"
+        }
+      ]
+    },
+    {
+      "id": "mcq-3-058",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "Which failure mode should be configured for the door lock?",
+      "context": "A company installs an electronic badge-controlled lock on the door of its server room. The life-safety policy requires that employees must always be able to leave the room, including during a power outage or a controller failure, and that no one can ever be trapped inside. The security team must decide how the lock behaves when the access-control system loses power or malfunctions.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fail-open, so the door unlocks and lets occupants exit when the system fails",
+          "rationale": "Fail-open (fail-unlocked) defaults to allowing passage when power or the controller fails, guaranteeing egress and satisfying the stated life-safety requirement."
+        },
+        {
+          "id": "b",
+          "text": "Fail-closed, so the door stays locked and protects the room during an outage",
+          "rationale": "Fail-closed (fail-secure) keeps the door locked on failure, which protects assets but traps occupants and violates the life-safety policy."
+        },
+        {
+          "id": "c",
+          "text": "Fail to the last-known state, preserving whichever position the lock was in",
+          "rationale": "Preserving the last state is unpredictable: if the door happened to be locked at failure time, occupants are still trapped, so egress is not guaranteed."
+        },
+        {
+          "id": "d",
+          "text": "Install an uninterruptible power supply so the lock never loses power",
+          "rationale": "A UPS delays power loss but cannot cover a controller malfunction or an extended outage, and the policy requires guaranteed egress in every failure scenario."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Decide which outcome the policy treats as non-negotiable when the control itself stops working, then set the default to match that priority. Life-safety and availability requirements can override a security-first default.",
+      "explanation": "Fail-open (fail-unlocked) makes the door default to unlocked when power or the controller fails, which guarantees occupant egress and satisfies the life-safety policy. Fail-closed/fail-secure would keep the door locked and trap occupants; preserving the last state gives no guaranteed outcome; and a UPS cannot cover every failure mode. The right failure mode depends on the control's priority — an access door favoring life safety goes fail-open, while a firewall protecting data typically goes fail-closed so traffic is blocked by default.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Failure Modes - Fail-Open vs Fail-Closed"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-53 PE-3 Physical Access Control"
+        }
+      ]
+    },
+    {
+      "id": "mcq-3-059",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "prompt": "Which TWO controls should the administrator implement to prevent unauthorized devices from connecting to the network? (Select TWO.)",
+      "context": "A retailer discovers that an unknown device was plugged into an active wall jack in a stockroom and connected to the corporate network. The switches in the wiring closets currently accept any device on any port. The administrator must prevent unauthorized devices from attaching to access ports while keeping day-to-day operations manageable.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable port security with a MAC address limit and sticky learning so each port accepts only the first authorized device",
+          "rationale": "Port security with a MAC limit and sticky learning binds each port to the first learned device and blocks additional hardware from attaching to that port."
+        },
+        {
+          "id": "b",
+          "text": "Enable Dynamic Trunking Protocol (DTP) on the access ports so trunk negotiation is automatic",
+          "rationale": "DTP auto-negotiation is a VLAN-hopping risk and does not restrict which devices connect; it should be disabled on access ports."
+        },
+        {
+          "id": "c",
+          "text": "Deploy 802.1X port-based authentication with a RADIUS back end for all wired access",
+          "rationale": "802.1X authenticates the endpoint against a RADIUS server before the port becomes active, so unauthorized devices are denied at the port."
+        },
+        {
+          "id": "d",
+          "text": "Disable unused switch ports and place them in an unused VLAN",
+          "rationale": "Disabling unused ports prevents connections to dead jacks, but active wall jacks still accept any device, so this alone does not stop rogue devices."
+        },
+        {
+          "id": "e",
+          "text": "Configure the switch to learn an unlimited number of MAC addresses per port",
+          "rationale": "Unlimited MAC learning allows any number of devices to attach and does the opposite of restricting access to the port."
+        },
+        {
+          "id": "f",
+          "text": "Place all access ports in the default VLAN to simplify management",
+          "rationale": "A single shared VLAN removes segmentation and gives unauthorized devices full reachability; it does not prevent them from connecting."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "c"
+      ],
+      "selectCount": 2,
+      "hint": "Ask which mechanisms bind the physical port to an approved identity: either constraining what hardware may attach to a port, or proving a device is authorized before the port becomes active. Switching behaviors such as trunk negotiation and VLAN assignment do not decide who is allowed on.",
+      "explanation": "Port security with a MAC limit and sticky learning binds each port to the first learned device and blocks additional hardware, and 802.1X authenticates the endpoint against a RADIUS server before the port becomes active — together these stop rogue devices from using wall jacks. DTP negotiation is a VLAN-hopping risk, unlimited MAC learning expands access, disabling unused ports only covers dead jacks, and a shared VLAN removes segmentation. Best practice combines 802.1X with port security and also disables unused ports and DTP.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Port Security and 802.1X"
+        }
+      ]
+    },
+    {
+      "id": "mcq-3-060",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "Which mechanism enabled this recovery?",
+      "context": "A payment-processing database loses power while processing a batch of transfers. After the system restarts, the database automatically recovers: every transaction that was committed before the crash is restored, and partially completed transactions are rolled back, so no committed payment is lost or duplicated. The recovery does not depend on restoring a backup.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Transaction journaling with a write-ahead log that records committed changes before they are applied",
+          "rationale": "A write-ahead journal records each transaction's changes to a durable log before the commit, so the database can replay committed work and roll back incomplete work after a crash."
+        },
+        {
+          "id": "b",
+          "text": "Read-only replication to a standby database",
+          "rationale": "Replication maintains a current copy but does not by itself reconstruct committed transactions on the crashed primary; the primary's journal is what makes deterministic crash recovery possible."
+        },
+        {
+          "id": "c",
+          "text": "A snapshot of the database taken at the last full backup",
+          "rationale": "A snapshot restores a point-in-time copy and would lose any transaction committed after it was taken; it cannot replay commits that followed."
+        },
+        {
+          "id": "d",
+          "text": "Error-correcting memory on the database server",
+          "rationale": "ECC memory corrects transient bit flips in RAM; it does not record transaction state or provide crash recovery."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Recovery that replays committed work without relying on a backup depends on a record written before the change is made final. Think about the mechanism that logs each transaction's intent ahead of the data update.",
+      "explanation": "A write-ahead journal records each transaction's changes to a log before the transaction is committed, so after a crash the database can replay (redo) committed transactions and roll back (undo) incomplete ones — no backup is required. Replication, point-in-time snapshots, and ECC memory do not provide this redo/undo capability. Filesystems use the same journaling principle to protect metadata during sudden power loss.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Journaling and Write-Ahead Logs"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-34 Contingency Planning - Recovery"
+        }
+      ]
+    },
+    {
+      "id": "mcq-3-061",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "Which resilience strategy does this approach represent?",
+      "context": "A company hosts every customer-facing service on identical servers running the same operating system and hypervisor from a single vendor. The security team warns that one widely exploited OS or hypervisor vulnerability could take down or compromise all services at once. The company decides to run different operating systems and hypervisors across its critical workloads and to avoid depending on a single vendor for every tier.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Platform diversity",
+          "rationale": "Running critical workloads on different operating systems, hypervisors, and vendors means a single platform flaw cannot simultaneously bring down every system."
+        },
+        {
+          "id": "b",
+          "text": "Geographic dispersion",
+          "rationale": "Geographic dispersion spreads systems across locations to survive the loss of one site; it does not remove the common OS or hypervisor weakness."
+        },
+        {
+          "id": "c",
+          "text": "Load balancing",
+          "rationale": "Load balancing distributes traffic across identical nodes for capacity and failover but leaves the shared platform weakness fully intact."
+        },
+        {
+          "id": "d",
+          "text": "Patch management",
+          "rationale": "Patching addresses known flaws but cannot stop a single zero-day or unpatched platform flaw from affecting every identical host at once."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Reducing common-mode failure means removing a single shared component that could bring everything down at once. Consider what changes about the platforms themselves rather than how traffic or locations are arranged.",
+      "explanation": "Platform diversity runs critical workloads on different operating systems, hypervisors, or hardware so that a vulnerability or vendor defect in one platform cannot simultaneously compromise all systems, reducing common-mode failure and single-vendor risk. Geographic dispersion, load balancing, and patching each support resilience in other ways but leave the shared-platform weakness in place.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Platform Diversity"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-34 Contingency Planning - Diversity"
+        }
+      ]
+    },
+    {
+      "id": "mcq-3-062",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "scenario",
+      "prompt": "Which activity best prepares the platform for the peak?",
+      "context": "A retailer's e-commerce site faces a predictable seasonal surge in traffic and orders. The operations team must confirm the web tier can handle the projected peak requests per second, storage can absorb the added transaction volume, and enough support staff are scheduled to respond to incidents, all while continuing to meet the stated availability and recovery targets.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Capacity planning that models compute, storage, and staffing against the forecasted demand",
+          "rationale": "Capacity planning sizes compute, storage, and people to the expected peak so the service meets its availability and recovery targets without over- or under-provisioning."
+        },
+        {
+          "id": "b",
+          "text": "Purchasing the maximum server configuration available for every tier regardless of demand",
+          "rationale": "Oversizing without analysis wastes budget and ignores staffing and storage sizing; capacity planning matches resources to measured demand instead."
+        },
+        {
+          "id": "c",
+          "text": "Removing the load balancer so requests reach servers directly",
+          "rationale": "Removing the load balancer eliminates distribution and failover, reducing availability exactly when peak demand arrives."
+        },
+        {
+          "id": "d",
+          "text": "Extending the backup retention policy to cover the full peak period",
+          "rationale": "Longer retention increases storage cost but does not size the platform for peak load or schedule staff; it addresses a different recovery requirement."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Forecast the expected workload, then size the infrastructure and the people needed to support it before the load arrives. The practice is about matching resources to measured demand rather than adding capacity after the fact.",
+      "explanation": "Capacity planning forecasts expected demand and sizes compute, storage, and staffing so the platform can meet its availability and recovery targets during peaks. Arbitrary oversizing wastes budget, removing load-balancing capacity reduces availability, and longer backup retention is a data-retention decision rather than load sizing.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Capacity Planning"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-34 Contingency Planning - Capacity"
+        }
+      ]
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "pbq-3-018",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about resilience and recovery by placing the correct word in each blank. Each word is used once.\n\n1. A ____ site is fully equipped with running systems and continuously replicated data, ready to take over production within minutes of a disaster.\n\n2. A ____ site provides only basic infrastructure such as power, cooling, and floor space, and requires days of setup before it can support production.\n\n3. Recording changes to a log before they are applied, so that committed transactions can be replayed after a crash, is called ____.\n\n4. The maximum acceptable data loss measured in time is the recovery point ____ (RPO).\n\n5. Forecasting compute, storage, and staffing needs so the platform can meet availability targets during demand peaks is called ____ planning.",
+      "context": "Click a word chip, then click the blank where it belongs. Each word is used once; extra words are distractors.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "1. Minutes-to-failover site"
+        },
+        {
+          "id": "b2",
+          "label": "2. Basic infrastructure, days of setup"
+        },
+        {
+          "id": "b3",
+          "label": "3. Log-before-apply crash recovery"
+        },
+        {
+          "id": "b4",
+          "label": "4. RPO full word"
+        },
+        {
+          "id": "b5",
+          "label": "5. Sizing compute, storage, staff"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "hot"
+        },
+        {
+          "id": "w2",
+          "word": "cold"
+        },
+        {
+          "id": "w3",
+          "word": "journaling"
+        },
+        {
+          "id": "w4",
+          "word": "objective"
+        },
+        {
+          "id": "w5",
+          "word": "capacity"
+        },
+        {
+          "id": "d1",
+          "word": "warm"
+        },
+        {
+          "id": "d2",
+          "word": "replication"
+        },
+        {
+          "id": "d3",
+          "word": "snapshot"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      },
+      "hint": "Match each statement to the resilience term it defines: think about how quickly a site can resume production, which mechanism replays committed work after a crash, what RPO measures, and which activity sizes resources for future demand.",
+      "explanation": "A hot site is fully equipped and continuously replicated and can take over in minutes; a cold site has only basic infrastructure and needs days of setup. Journaling (write-ahead logging) records changes before they are applied so committed work survives crashes. RPO, the recovery point objective, is the maximum acceptable data loss measured in time. Capacity planning sizes compute, storage, and staffing to meet peak demand. Warm sites sit between hot and cold; replication and snapshots are data-copy techniques, not site types or planning activities.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Resilience and Recovery"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-34 Contingency Planning - Recovery Strategies"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,298 @@
+{
+  "replace": {
+    "mcq-1-032": {
+      "id": "mcq-1-032",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "How should the policy and the standard operating procedure be classified as a control?",
+      "context": "A regional bank is standardizing how employees reach the network from home. The information security team publishes a policy stating that multifactor authentication (MFA) is required for every remote-access session, and a standard operating procedure that requires MFA enrollment before the VPN client is installed on a laptop. Neither document contains enforcement software; a separate identity platform verifies credentials when employees connect.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Directive — the documents define required behavior for gaining remote access",
+          "rationale": "Policies, standards, and procedures are directive controls: they state required actions and guide employee behavior without enforcing those actions themselves."
+        },
+        {
+          "id": "b",
+          "text": "Preventive — the documents stop unauthorized remote sessions before they start",
+          "rationale": "A written document cannot block access by itself; prevention is performed by the separate identity platform that enforces MFA at connect time."
+        },
+        {
+          "id": "c",
+          "text": "Deterrent — the documents discourage violations by threatening disciplinary action",
+          "rationale": "Deterrent controls rely on stated consequences to discourage misconduct; nothing in the described policy or SOP threatens penalties."
+        },
+        {
+          "id": "d",
+          "text": "Compensating — the documents substitute for a technical control the bank could not implement",
+          "rationale": "Compensating controls are alternative safeguards used when a required control is unavailable; no missing or substituted control is described here."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about the family of controls that exists to communicate expectations and required steps — written guidance that shapes how people act — rather than a mechanism that blocks, punishes, or replaces another safeguard.",
+      "explanation": "The policy and the standard operating procedure are directive controls because their purpose is to communicate required behavior — the same role played by all policies, standards, and procedures. They do not block access (preventive), threaten consequences (deterrent), or stand in for a control that could not be implemented (compensating). Enforcement is left to the separate identity platform, which is a technical control distinct from the documents themselves.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 1.1"
+        },
+        {
+          "source": "study-guide",
+          "section": "Security Control Types"
+        }
+      ]
+    },
+    "mcq-2-020": {
+      "id": "mcq-2-020",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which threat vector delivered this attack?",
+      "context": "An accounts-payable clerk receives a direct message in the company's chat application from a profile showing the CEO's name and photo. The message urgently requests gift-card codes to close a time-sensitive vendor deal and includes a link to an external redemption page. When the clerk opens the sender's full profile, the account was created the previous day and its handle differs slightly from the real executive's.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Message-based — an instant-messaging channel carried the phishing request",
+          "rationale": "Instant messaging is a message-based vector in objective 2.2; the attack arrived as a direct message inside a real-time chat application."
+        },
+        {
+          "id": "b",
+          "text": "Voice call — the attacker placed a phone call impersonating the CEO",
+          "rationale": "No phone call occurred; voice-based phishing (vishing) uses telephone channels, not a chat application."
+        },
+        {
+          "id": "c",
+          "text": "File-based — a malicious attachment delivered the payload",
+          "rationale": "The message contained a link to an external page rather than a file, so the payload arrived through the link, not as an attachment."
+        },
+        {
+          "id": "d",
+          "text": "Image-based — a malicious picture embedded in the message carried the attack",
+          "rationale": "No image was involved; the request was plain chat text with a link, not a payload hidden inside an image file."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Focus on the channel that carried the request — a real-time text conversation inside a chat product — rather than a telephone call, an attached file, or a picture embedded in the message.",
+      "explanation": "The attack arrived as a direct message in the company's instant-messaging application, which makes it a message-based vector delivered over instant messaging. Voice call (b) describes vishing over the phone, file-based (c) requires a malicious attachment, and image-based (d) requires a payload hidden in a picture — none of which matches a chat message with a link. Impersonating the CEO and manufacturing urgency are social-engineering elements, but the vector is the messaging channel that carried them.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Attack Vectors"
+        },
+        {
+          "source": "cisa",
+          "section": "CISA Phishing Guidance: Stopping the Attack Cycle at Phase One"
+        }
+      ]
+    },
+    "mcq-2-022": {
+      "id": "mcq-2-022",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which threat vector did the attacker exploit?",
+      "context": "A security analyst reviews an incident at a company whose employees use Bluetooth headsets paired to corporate laptops. While several employees sat near the lobby with their laptops in discoverable mode, an attacker in the same room used a Bluetooth scanning tool to silently pull contact details and calendar entries from the devices without permission. The laptops had no open network ports and full-disk encryption was enabled.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Unsecure networks — Bluetooth radio links were the attack surface",
+          "rationale": "Bluetooth is listed under unsecure networks in objective 2.2; the attacker exploited the short-range wireless link, not an IP service."
+        },
+        {
+          "id": "b",
+          "text": "Open service ports — a listening network service accepted the attacker's connection",
+          "rationale": "The laptops had no open network ports; Bluetooth operates over its own radio protocol rather than a TCP or UDP service port."
+        },
+        {
+          "id": "c",
+          "text": "Removable device — the attacker connected portable media to the laptops",
+          "rationale": "No physical media were attached; the access came over the Bluetooth radio link from across the room."
+        },
+        {
+          "id": "d",
+          "text": "Default credentials — the headsets' factory pairing PIN allowed the access",
+          "rationale": "The incident is unauthorized data access over the Bluetooth link, not a login using a guessable factory-set password."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider the medium the attacker used to reach the devices from across the room without touching them, and which attack-surface category in the objectives groups short-range wireless links.",
+      "explanation": "Bluetooth is grouped under unsecure networks in objective 2.2, and the attacker exploited the discoverable Bluetooth radio link to read data without permission — an attack known as bluesnarfing. Open service ports (b) would require a listening TCP or UDP service, which the laptops did not have, and removable device (c) requires physical media. Default credentials (d) describes logging in with a factory-set password, which did not occur. Disabling Bluetooth when it is not needed and turning off discoverable or pairing mode reduce this exposure.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Wireless Security"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-121 Rev. 1 Guide to Bluetooth Security"
+        }
+      ]
+    },
+    "mcq-2-026": {
+      "id": "mcq-2-026",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which threat vector describes how the malware entered the environment?",
+      "context": "An employee of a law firm finds a USB flash drive in the parking lot with a label reading 'Q3 bonus schedule.' Curious, the employee plugs the drive into a work laptop, and an autorun file on the drive installs a keystroke logger that begins sending captured keystrokes to an external server. No email, phone call, or network connection was used to deliver the malware.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Removable device — the planted USB drive delivered the malicious software",
+          "rationale": "The malware arrived on removable media that an attacker dropped as bait; removable device is a listed 2.2 vector."
+        },
+        {
+          "id": "b",
+          "text": "Message-based — the label's enticing message tricked the employee",
+          "rationale": "The label is a lure, but the malware itself was physically delivered on the drive; message-based vectors carry content through communication channels such as email, SMS, or IM."
+        },
+        {
+          "id": "c",
+          "text": "Supply chain — the drive arrived through an official vendor channel",
+          "rationale": "The drive was planted by an attacker, not shipped through a supplier; supply-chain compromises taint legitimate products before delivery."
+        },
+        {
+          "id": "d",
+          "text": "Open service ports — a network service accepted the malware",
+          "rationale": "No network service was involved; the infection came from locally attached media rather than a listening port."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Identify the physical medium that carried the malware into the building and how that hardware arrived, rather than a communication channel, a legitimate supplier shipment, or a listening network service.",
+      "explanation": "The malware entered through a removable device: an attacker planted the USB drive as bait and the employee attached it, triggering the autorun payload. The label's wording is a social-engineering lure, but message-based vectors (b) deliver content through communication channels, and nothing here came through email, SMS, or IM. Supply chain (c) would require the drive to arrive through a legitimate vendor, and open service ports (d) would require a network service to be attacked — neither occurred. Disabling autorun, restricting removable media, and endpoint protection reduce this exposure.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Attack Vectors"
+        }
+      ]
+    },
+    "mcq-2-030": {
+      "id": "mcq-2-030",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which threat vector provided the attacker's initial access?",
+      "context": "A beverage manufacturer connects an internet-facing building-automation controller to monitor warehouse temperature remotely. Months after deployment, monitoring logs show an unknown actor signed in to the controller's administrator console using the manufacturer's default administrator password, which was never changed from the factory setting, and altered the temperature schedule.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Default credentials — the controller was accessed with its factory-set administrator password",
+          "rationale": "The vendor's well-known default password was still active and provided the login; default credentials are a listed 2.2 vector."
+        },
+        {
+          "id": "b",
+          "text": "Vulnerable software — an unpatched firmware flaw was exploited",
+          "rationale": "No vulnerability was exploited; the attacker simply logged in with the factory-set password that should have been changed at deployment."
+        },
+        {
+          "id": "c",
+          "text": "Open service ports — the controller's management port was exposed",
+          "rationale": "Although the device was internet-reachable, the entry was a valid login with a known credential, not an attack against a port or protocol."
+        },
+        {
+          "id": "d",
+          "text": "Unsecure networks — the controller connected through an open wireless link",
+          "rationale": "The controller used a wired internet connection, and the access was gained through the credential, not the network medium."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider what the attacker supplied to pass the login check — a secret that should have been replaced during deployment — rather than an exploit, a reachable port, or the network medium.",
+      "explanation": "Default credentials are a common initial-access vector: devices shipped with well-known factory passwords remain vulnerable when the default is never changed, as happened here. Vulnerable software (b) would require exploiting a firmware flaw, open service ports (c) an attack against a listening service, and unsecure networks (d) a compromised network medium — none of which occurred. Requiring a unique administrator password before deployment, disabling remote management where possible, and scanning for devices still using factory defaults mitigate this risk.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Attack Vectors"
+        }
+      ]
+    },
+    "mcq-2-031": {
+      "id": "mcq-2-031",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which threat vector does this attack represent?",
+      "context": "While on a business trip, an employee connects a company laptop to the hotel's free Wi-Fi, which uses no encryption and no authentication. A nearby attacker runs a rogue access point broadcasting the same network name, the laptop associates with it, and the attacker captures the employee's credentials when they sign in to the company portal.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Unsecure networks — an open or spoofed wireless network intercepted the traffic",
+          "rationale": "The attacker exploited an unencrypted wireless medium and a rogue access point with a trusted SSID; unsecure networks are a listed 2.2 vector."
+        },
+        {
+          "id": "b",
+          "text": "Open service ports — a listening service on the laptop accepted the connection",
+          "rationale": "The laptop did not expose a vulnerable service; the attacker positioned themselves on the wireless medium and captured traffic in transit."
+        },
+        {
+          "id": "c",
+          "text": "Removable device — the attacker attached media to the laptop",
+          "rationale": "No physical media were involved; the interception happened over the wireless link."
+        },
+        {
+          "id": "d",
+          "text": "Default credentials — the attacker guessed the employee's portal password",
+          "rationale": "The portal account was not compromised by guessing; the credentials were captured from unencrypted traffic on the rogue network."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider the medium the attacker abused to see the traffic in transit, rather than a listening service, a portable device, or a guessed account secret.",
+      "explanation": "The attacker used an unsecure network: the hotel's open Wi-Fi had no encryption or authentication, and a rogue access point with the same SSID let the attacker capture traffic the employee believed was going to the hotel's network. Open service ports (b) would require a vulnerable listening service, removable device (c) physical media, and default credentials (d) a guessed password — none apply. Using a VPN, verifying certificates, and avoiding open networks for sensitive logins reduce this exposure.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Wireless Security"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-153 Guidelines for Securing Wireless Local Area Networks"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "replace": {
+    "mcq-2-055": {
+      "id": "mcq-2-055",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "Which vulnerability class does this exploitation demonstrate?",
+      "context": "A community hospital runs a multi-tenant private cloud in which several departments share physical hosts under a single hypervisor. A penetration tester compromises a low-privileged account inside one guest VM, then exploits an unpatched hypervisor flaw: the guest's code executes against the host kernel and, from there, reads memory belonging to another department's VM on the same host. The tester never interacted with the second guest directly.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "VM escape",
+          "rationale": "A VM escape occurs when code running inside a guest breaks out of the virtual machine boundary and executes against the hypervisor or host; the resulting host-level access is what let the tester reach the other guest. This is the class demonstrated."
+        },
+        {
+          "id": "b",
+          "text": "Resource reuse",
+          "rationale": "Resource reuse leaks data through memory, storage, or other resources that were not cleared before being reassigned to a different tenant; here the exposure came from crossing the hypervisor boundary, not from stale resource remnants."
+        },
+        {
+          "id": "c",
+          "text": "Container breakout",
+          "rationale": "A container breakout escapes the isolation of a container runtime on a shared operating-system kernel; this environment runs full VMs under a hypervisor, so the boundary that was broken is the virtual machine boundary, not a container runtime."
+        },
+        {
+          "id": "d",
+          "text": "Privilege escalation",
+          "rationale": "Privilege escalation raises access within the same trust boundary, such as moving from a standard user to an administrator on the guest itself; the decisive event here removes the virtualization boundary between the guest and the host, which makes it an escape rather than simple escalation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about which layer of the virtualization stack the attacker crosses — the event is defined by where the malicious code ends up running relative to the guest it started in, not by how it gained its initial foothold.",
+      "explanation": "The tester's code began inside one guest VM and ended up executing against the host kernel, crossing the hypervisor-enforced isolation boundary — the defining property of a VM escape. Resource reuse would instead expose data left behind by a prior tenant without crossing the virtualization boundary, and a container breakout targets container-runtime isolation on a shared kernel rather than a hypervisor. Privilege escalation increases access inside the same boundary, which is not what happened here. Keeping the hypervisor patched, minimizing the management-plane attack surface, and isolating high-value tenants on dedicated hosts reduce the risk of escapes and cross-tenant data exposure.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Vulnerability Types"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-125 — Guide to Security for Full Virtualization Technologies"
+        }
+      ]
+    }
+  }
+}

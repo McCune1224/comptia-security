@@ -1,0 +1,193 @@
+{
+ "hints": {
+  "mcq-4-001": "Automation only changes the systems it knows about. Think about how the tool discovers or targets its managed hosts, and what happens to a server it never sees.",
+  "mcq-4-003": "A domain policy that is still linked and enforced should keep winning. Consider which control point can apply settings directly at the machine, independent of the domain channel.",
+  "mcq-4-004": "Immutable infrastructure treats running systems as disposable. Consider whether the new image was built from a clean, trusted source or from a system that may have drifted from the standard.",
+  "mcq-4-006": "Drift detection works by comparing the current state against an agreed reference. Think about which kind of search establishes that baseline and raises an alert when values diverge.",
+  "mcq-4-009": "Geolocation is derived from the IP address the service observes. Think about where that address actually originates when a remote user connects through a corporate VPN.",
+  "mcq-4-010": "Consider what a long string of failed authentication attempts followed by a success from the same source typically indicates about credential guessing.",
+  "mcq-4-012": "One unusual transfer is suggestive, but stronger conclusions come from combining attributes of the flow. Think about which extra details would set an attacker's activity apart from legitimate business traffic.",
+  "mcq-4-014": "Retention requirements are often enforced automatically by the storage platform. Consider which mechanism is designed to remove or archive data once it reaches a configured age.",
+  "mcq-4-017": "Automated workflows route actions through conditional branches. Think about what condition must be true before the playbook performs the account-level action.",
+  "mcq-4-018": "A finding supported by only one source is weaker evidence. Think about how requiring corroboration across independent sources would filter the noise.",
+  "mcq-4-019": "Full automation is safest when the signal is unambiguous and confirmed by multiple strong indicators. Look for triggers backed by high-confidence, corroborated evidence rather than a single observation.",
+  "mcq-4-020": "Severity scores alone do not determine urgency. Consider what real-world factor would make a lower-scored vulnerability the more pressing problem.",
+  "mcq-4-021": "Repeatedly querying the same artifact wastes the same limited resource over and over. Think about which improvement avoids redundant work rather than simply adding capacity.",
+  "mcq-4-022": "An isolation action is only effective if it cuts every path the host uses. Consider what could still give the system a route to the internal network.",
+  "mcq-4-024": "For data that must be permanently unrecoverable, think about making the decryption capability itself disappear rather than trying to erase every copy.",
+  "mcq-4-025": "The workstation has already been isolated and captured. Distinguish between stopping the spread, removing the malicious presence, and restoring normal operation.",
+  "mcq-4-027": "Incident plans define who must be told what and when. Think about which plan component covers the obligation to inform parties outside the response team within agreed timeframes.",
+  "mcq-4-029": "Some evidence exists only in a system's volatile state and vanishes the instant power is lost or the process ends. Consider which information any disruptive action would destroy.",
+  "mcq-4-030": "After the initial containment actions, the priority is keeping the incident from expanding further. Think about which step isolates the affected area from the rest of the environment.",
+  "mcq-4-031": "Sharing personal data externally requires reducing the link to identifiable individuals. Consider which approach keeps the data useful while breaking the direct connection to a person.",
+  "mcq-4-032": "Two controls work together: one governs how long records are kept, and the other governs how the media is destroyed at end of life. Think about which methods match the media type involved.",
+  "mcq-4-033": "Order of volatility ranks evidence by how quickly it disappears. Start with data that exists only in active memory and end with data stored elsewhere.",
+  "mcq-4-036": "The system is already powered off, so the priority is preserving the drive exactly as found. Think about what hardware guarantees the original media is never modified during acquisition.",
+  "mcq-4-038": "Capturing at the switch lets you see the workstation's traffic without touching the endpoint. Consider which switch feature copies traffic from a specific port to a monitoring port.",
+  "mcq-4-040": "Monitoring that touches personal data requires balancing operational needs against privacy rights. Consider which approach assesses the impact, limits what is collected, and keeps employees informed.",
+  "mcq-4-041": "Evidence is classified by how it is presented in court: physical objects, written records, sworn statements, and exhibits that illustrate facts. Consider which category each item falls into.",
+  "mcq-4-049": "Filtered ports mean the scanner's probes are not getting an answer, yet a browser session works. Think about how stateful filtering treats new connections differently from established ones.",
+  "mcq-4-051": "A capture command needs the interface, a filter that selects protocol and host, and a destination file. Consider how tcpdump combines those options into one command.",
+  "mcq-4-056": "Recovered plaintext credentials are highly sensitive artifacts. Think about what the report must communicate without exposing the secrets themselves.",
+  "mcq-4-057": "A master template captured once and deployed to many identical systems is a standard practice. Consider the term used for that reference image.",
+  "mcq-4-058": "Each finding points to a legacy protocol or weak credential practice. Look for replacements that add encryption and strong authentication rather than preserving the insecure behavior.",
+  "mcq-4-059": "The requirement goes beyond signature matching: it includes behavioral detection, automated response, and the ability to investigate and undo changes. Consider the tool category built for detection plus response.",
+  "mcq-4-060": "The control flips the default from anything may run to only listed software may run. Consider which approach denies by default.",
+  "mcq-4-061": "The organization owns the devices but permits some personal use within a managed boundary. Consider the deployment model that describes corporate ownership with personal enablement.",
+  "mcq-4-062": "Offline guessing succeeds when a captured handshake can be tested repeatedly. Think about the modern standard designed so that even a captured handshake cannot be cracked offline.",
+  "mcq-4-063": "The platform aggregates logs from many sources and correlates events to detect complex attacks. Consider which category of monitoring tool performs that function.",
+  "mcq-4-064": "An administrator who can modify a system can also modify its local records. Consider where logs can be written but never changed or deleted.",
+  "mcq-4-065": "A high severity score measures the flaw, not the actual risk to your environment. Think about which factors beyond the score should shape the decision.",
+  "mcq-4-066": "This goes beyond scanning: it actively attempts to exploit weaknesses like an attacker would, within agreed rules. Consider which assessment type does that.",
+  "mcq-4-067": "One authentication event can be reused across many applications through a trusted identity source. Consider the technology that enables that single sign-on experience.",
+  "mcq-4-068": "These capabilities all center on governing privileged accounts: secure storage, temporary elevation, recorded sessions, and credential changes. Consider the solution category built for that purpose.",
+  "mcq-4-069": "The workflow runs across multiple tools automatically: enrich, ticket, block, notify. Consider the platform designed to orchestrate and automate response actions.",
+  "mcq-4-070": "Automation magnifies the power of whatever credential it uses. Think about limiting what that credential can do and controlling the changes it makes.",
+  "mcq-4-071": "After the spread has been stopped, the team removes the malware and closes the vulnerability it exploited. Consider which phase focuses on eliminating the threat rather than restoring service.",
+  "mcq-4-072": "Court-ready evidence depends on proving exactly who handled it and when. Consider the practice that documents every transfer and safeguard along the way.",
+  "mcq-4-073": "The attack being resisted is offline guessing of a shared passphrase. Think about the current-generation standard that makes captured handshakes useless for offline cracking.",
+  "mcq-4-074": "The attacker impersonates a legitimate network to lure devices into connecting. Consider the attack named for a rogue look-alike access point.",
+  "mcq-4-075": "Mutual certificate authentication means both the client and the server prove identity with certificates. Consider which EAP method requires certificates on both ends.",
+  "mcq-4-076": "Volatile data disappears when power is lost or the session ends. Rank the sources from the one that vanishes first to the one that persists longest.",
+  "mcq-4-077": "Containment is about stopping the spread and cutting off the attacker's control, not yet restoring or reviewing. Look for actions that immediately limit movement and communication.",
+  "pbq-4-001": "Work through the incident lifecycle in order: the phases build on each other, and the later steps ask you to recognize malicious activity and decide how the response platform should handle each detection type.",
+  "pbq-4-002": "Some evidence sources change every second, while others accumulate records that persist for months. Think about how quickly the data in each source would disappear if the system stopped.",
+  "pbq-4-003": "Each tool has one primary job: aggregating events, inspecting packets, finding vulnerabilities, exposing system state, or profiling network traffic. Match the tool to the description of what it produces.",
+  "pbq-4-004": "The server cannot be taken offline, so evidence collection must respect what is most fragile. Consider which data disappears first and which acquisition method disturbs the running system least.",
+  "pbq-4-005": "Exfiltration often hides inside large transfers to unusual destinations. Compare the flows for volume, timing, and destination to find the one that stands out from normal business traffic.",
+  "pbq-4-006": "Apply least privilege to each traffic path: permit only what the tier's function requires, and keep management and monitoring channels restricted to their legitimate sources.",
+  "pbq-4-007": "Match the response to how certain the threat is: confirmed malicious files warrant strong containment, while merely suspicious or potentially unwanted activity should be observed before acting.",
+  "pbq-4-008": "Segmentation is about controlling the paths between trust zones. Consider which two options create separation and constrain traffic flow between zones rather than simplifying connectivity.",
+  "pbq-4-009": "The official lifecycle moves from readiness, through understanding and response, to review. Consider which sequence reflects the standard phases and where the supporting activities belong.",
+  "pbq-4-010": "Evidence disappears at different speeds. Start with the most fleeting processor state and work toward data that survives on disk or on other systems.",
+  "pbq-4-011": "Each protocol solves a different identity problem: browser-based identity, delegated access, identity layered over an authorization framework, domain authentication, and network-device access control. Match each technology to the purpose it was designed for.",
+  "pbq-4-012": "Enterprise wireless needs per-user authentication against a central identity store. Consider which settings provide that while disabling guest access and convenience features that weaken security.",
+  "pbq-4-013": "The three A's describe proving identity, granting permissions, and recording activity, while the remaining blanks deal with one login for many applications and the exchange of identity assertions.",
+  "pbq-4-014": "Email authentication relies on several DNS-based records that verify the sending server, sign the message, and tell receivers what to do when checks fail, plus a platform that aggregates logs from across the enterprise.",
+  "pbq-4-015": "Each activity belongs to one stage of the response lifecycle: preparing ahead of time, stopping the spread, removing the threat, restoring service, and reviewing afterward.",
+  "pbq-4-016": "The attacker's many failed attempts are followed by one successful authentication from the same source. Look for the line where the outcome changes from rejection to acceptance.",
+  "pbq-4-017": "A scan shows one external source probing many different destination ports on the same host within moments. Look for where that pattern begins.",
+  "pbq-4-018": "Match each acronym to the layer it operates at: enterprise log correlation, automated response, endpoint behavior, network admission, and protection of data at the point of egress.",
+  "pbq-4-019": "Distinguish the platform that runs automated steps, the sequence of steps itself, the documented manual procedure it replaces, the coordination of multiple tools, and the programmatic interfaces between them.",
+  "pbq-4-020": "Prioritize by exposure and exploitability: a critical, actively exploitable weakness on an internet-facing system outranks findings on internal hosts regardless of how many there are.",
+  "pbq-4-021": "The strongest configuration rejects or quarantines mail that fails sender authentication, encrypts sensitive mail in transit, and verifies links both at delivery and when clicked.",
+  "pbq-4-022": "Apply least privilege to each group-folder pair: grant each group only the level its job requires and deny access where it has no legitimate need.",
+  "pbq-4-023": "The most secure posture requires a second factor for every privileged login, possession-based factors for remote users, and identity flows routed through the company's identity provider.",
+  "pbq-4-024": "Each question points to a different source of truth: file access events, network flows, endpoint activity, mail delivery, or authentication records. Match the question to the log that records that event.",
+  "pbq-4-801": "Rank by risk: exploitable, internet-exposed weaknesses come first, followed by less urgent but still important issues, and finally low-impact or informational findings.",
+  "pbq-4-802": "Each service listens on a well-known port by default. Match the protocol to the port number it is registered to use.",
+  "pbq-4-803": "Each legacy protocol has a modern replacement that provides the same function with encryption or stronger authentication. Match the insecure protocol to its secure counterpart.",
+  "pbq-4-804": "Federation exchanges identity in defined formats: one is the markup used for SAML assertions, one is the token type issued by OIDC, and one is the protocol Microsoft's stack commonly uses.",
+  "pbq-4-805": "The strongest MFA policy combines something you know with something you possess, keeps session tokens short, and locks the account after a few failed attempts.",
+  "pbq-4-806": "A credential-stuffing burst is many failed logons from one origin in a short window. Tune the rule to group those attempts, set severity to match confirmed attacker behavior, and respond automatically at the network edge.",
+  "pbq-4-001:step-7-1": "Think about what must be in place before an incident, what happens when one is detected, and what is done to stop, remove, and recover from it. The phases follow a natural progression.",
+  "pbq-4-001:step-7-2": "Not every PowerShell event indicates compromise. Look for the event that shows an encoded command retrieving a payload from an external address rather than routine administrative activity.",
+  "pbq-4-001:step-7-3": "Match the response to how certain the threat is and how much the action would disrupt legitimate work: clearly malicious activity warrants strong containment, while ambiguous behavior should be observed in a controlled way.",
+  "pbq-4-004:step-8-1": "Evidence disappears at different speeds once the system stops. Think about which sources exist only while the machine runs and which survive on storage or on other systems.",
+  "pbq-4-004:step-8-2": "Legitimate services run from standard system directories. Look for a process whose binary path or name is unusual, such as one running from a temporary location with a misleading name.",
+  "pbq-4-004:step-8-3": "The server must stay online, so acquisition must avoid altering the running system. Consider a method that captures memory and streams it to a separate machine rather than storing it on the evidence host."
+ },
+ "sourceRefs": {
+  "pbq-4-802": [
+   {
+    "source": "exam-objectives",
+    "section": "4.1"
+   },
+   {
+    "source": "study-guide",
+    "section": "Secure Protocols"
+   }
+  ],
+  "pbq-4-804": [
+   {
+    "source": "exam-objectives",
+    "section": "4.6"
+   },
+   {
+    "source": "study-guide",
+    "section": "Identity and Access Management"
+   }
+  ]
+ },
+ "replace": {
+  "pbq-4-013": {
+   "id": "pbq-4-013",
+   "domain": 4,
+   "objective": "4.6",
+   "format": "pbq",
+   "kind": "word-bank",
+   "prompt": "Complete each statement about identity and access management by placing the correct word in each blank. Each word is used once.\n\n1. Proving who you are is called ____; determining what you may do is called ____.\n\n2. The AAA model's third 'A' \u2014 recording what users did \u2014 is ____.\n\n3. A system that lets users authenticate once and access many applications is called single ____-on (SSO).\n\n4. The protocol family that exchanges XML security assertions between an identity provider and a service provider is ____.",
+   "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+   "blanks": [
+    {
+     "id": "b1",
+     "label": "1a. Proving identity"
+    },
+    {
+     "id": "b2",
+     "label": "1b. What you may do"
+    },
+    {
+     "id": "b3",
+     "label": "2. Third A of AAA"
+    },
+    {
+     "id": "b4",
+     "label": "3. SSO full word"
+    },
+    {
+     "id": "b5",
+     "label": "4. XML assertions"
+    }
+   ],
+   "explanation": "Authentication proves identity; authorization grants permissions; accounting logs activity (AAA). SSO means one sign-on; SAML (Security Assertion Markup Language) carries XML assertions between IdP and SP.",
+   "sourceRefs": [
+    {
+     "source": "exam-objectives",
+     "section": "Objective 4.6"
+    },
+    {
+     "source": "study-guide",
+     "section": "Performance-Based Questions"
+    }
+   ],
+   "bank": [
+    {
+     "id": "w1",
+     "word": "authentication"
+    },
+    {
+     "id": "w2",
+     "word": "authorization"
+    },
+    {
+     "id": "w3",
+     "word": "accounting"
+    },
+    {
+     "id": "w4",
+     "word": "sign-on"
+    },
+    {
+     "id": "w5",
+     "word": "saml"
+    },
+    {
+     "id": "d1",
+     "word": "identification"
+    },
+    {
+     "id": "d2",
+     "word": "federation"
+    }
+   ],
+   "correctAssignments": {
+    "b1": "w1",
+    "b2": "w2",
+    "b3": "w3",
+    "b4": "w4",
+    "b5": "w5"
+   }
+  }
+ }
+}

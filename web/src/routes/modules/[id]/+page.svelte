@@ -11,7 +11,7 @@
 		title: string;
 		summary: string;
 		content: string;
-		objectiveId?: string;
+		objectiveIds?: string[];
 		completed: boolean;
 	};
 	type AssignmentView = {
@@ -85,7 +85,7 @@
 		<div>
 			<a
 				href="/syllabus"
-				class="inline-flex min-h-10 items-center text-sm font-bold text-accent hover:underline"
+				class="inline-flex min-h-11 items-center text-sm font-bold text-accent hover:underline"
 				>← Syllabus</a
 			>
 			<p class="eyebrow mt-4">Week {moduleView.module.week}</p>
@@ -107,7 +107,7 @@
 				>
 			</div>
 			<div class="mt-5 flex flex-wrap gap-3">
-				<a class="btn btn-primary" href="/quiz?start=1&type=quiz&count=10">Drill this module</a>
+				<a class="btn btn-primary" href="/quiz?start=1&type=quiz&count=10">Mixed practice</a>
 				<a class="btn btn-ghost" href="/pbq">PBQ drills</a>
 			</div>
 		</div>
@@ -134,7 +134,7 @@
 								}}
 							>
 								<button
-									class="grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded text-xs {lesson.completed
+									class="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded text-xs {lesson.completed
 										? 'bg-success/15 text-success'
 										: 'bg-surface-700 text-text-muted'}"
 									type="button"
@@ -181,12 +181,16 @@
 										{lesson.summary}
 									</p>
 
-									{#if lesson.objectiveId}
-										<a
-											class="btn btn-ghost mb-4 h-11 px-4 text-sm"
-											href="/quiz?start=1&type=quiz&objective={lesson.objectiveId}&count=5"
-											>Drill this topic →</a
-										>
+									{#if lesson.objectiveIds?.length}
+										<div class="mb-4 flex flex-wrap gap-2">
+											{#each lesson.objectiveIds as objectiveId (objectiveId)}
+												<a
+													class="btn btn-ghost h-11 px-4 text-sm"
+													href="/quiz?start=1&type=quiz&objective={objectiveId}&count=5"
+													>Drill {objectiveId}</a
+												>
+											{/each}
+										</div>
 									{/if}
 
 									<LessonContent body={lesson.content} />
@@ -224,7 +228,7 @@
 									<span
 										class="num-display text-sm {item.bestSubmission.percentage >= 85
 											? 'text-success'
-											: 'text-accent-warm'}">{item.bestSubmission.percentage}%</span
+											: 'text-warning'}">{item.bestSubmission.percentage}%</span
 									>
 								{:else}
 									<span class="hidden text-xs text-text-muted sm:block"

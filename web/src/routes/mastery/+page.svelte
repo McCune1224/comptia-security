@@ -37,14 +37,14 @@
 	function cellClass(cell: ObjectiveCell): string {
 		if (cell.percentage === null) return 'border border-border bg-surface-800/60 text-text-muted';
 		if (cell.percentage >= 85) return 'border border-success/40 bg-success/15 text-success';
-		if (cell.percentage >= 60) return 'border border-accent-warm/40 bg-accent-warm/15 text-accent-warm';
+		if (cell.percentage >= 60) return 'border border-warning/40 bg-warning/15 text-warning';
 		return 'border border-danger/40 bg-danger/15 text-danger';
 	}
 
 	function domainBarClass(rollup: DomainRollup): string {
 		if (rollup.percentage === null) return 'bg-surface-600';
 		if (rollup.percentage >= 85) return 'bg-success';
-		if (rollup.percentage >= 60) return 'bg-accent-warm';
+		if (rollup.percentage >= 60) return 'bg-warning';
 		return 'bg-danger';
 	}
 </script>
@@ -81,7 +81,7 @@
 			><span class="flex items-center gap-1.5"
 				><span class="h-3.5 w-3.5 rounded-[2px] bg-danger/40"></span> &lt;60%</span
 			><span class="flex items-center gap-1.5"
-				><span class="h-3.5 w-3.5 rounded-[2px] bg-accent-warm/40"></span> 60–84%</span
+				><span class="h-3.5 w-3.5 rounded-[2px] bg-warning/40"></span> 60–84%</span
 			><span class="flex items-center gap-1.5"
 				><span class="h-3.5 w-3.5 rounded-[2px] bg-success/50"></span> 85%+</span
 			>

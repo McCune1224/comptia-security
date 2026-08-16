@@ -173,7 +173,7 @@
 <div class="mx-auto max-w-5xl space-y-6">
 	<nav class="flex items-center gap-2 text-sm text-text-secondary">
 		<a
-			class="inline-flex min-h-10 items-center font-bold text-accent transition hover:underline"
+			class="inline-flex min-h-11 items-center font-bold text-accent transition hover:underline"
 			href="/history">← Back to history</a
 		>
 	</nav>
@@ -252,31 +252,31 @@
 
 		<div class="flex flex-wrap items-center gap-2">
 			<button
-				class="chip min-h-10 {filter === 'all'
-					? 'bg-accent text-white'
+				class="chip {filter === 'all'
+					? 'bg-accent text-on-accent'
 					: 'bg-surface-700 text-text-secondary hover:text-text-primary'}"
 				type="button"
 				onclick={() => (filter = 'all')}>All ({result.review.length})</button
 			>
 			<button
-				class="chip min-h-10 {filter === 'correct'
-					? 'bg-success text-white'
+				class="chip {filter === 'correct'
+					? 'bg-success text-on-success'
 					: 'bg-surface-700 text-text-secondary hover:text-text-primary'}"
 				type="button"
 				onclick={() => (filter = 'correct')}
 				>Correct ({result.review.filter((r) => r.feedback.fullyCorrect).length})</button
 			>
 			<button
-				class="chip min-h-10 {filter === 'incorrect'
-					? 'bg-danger text-white'
+				class="chip {filter === 'incorrect'
+					? 'bg-danger text-on-danger'
 					: 'bg-surface-700 text-text-secondary hover:text-text-primary'}"
 				type="button"
 				onclick={() => (filter = 'incorrect')}
 				>Incorrect ({result.review.filter((r) => !r.feedback.fullyCorrect).length})</button
 			>
 			<button
-				class="chip min-h-10 {filter === 'flagged'
-					? 'bg-accent-warm text-white'
+				class="chip {filter === 'flagged'
+					? 'bg-warning text-on-warning'
 					: 'bg-surface-700 text-text-secondary hover:text-text-primary'}"
 				type="button"
 				onclick={() => (filter = 'flagged')}
@@ -291,7 +291,7 @@
 					class="glass rounded-md p-5 border-l-4 {review.feedback.fullyCorrect
 						? 'border-l-success'
 						: review.feedback.earnedPoints > 0
-							? 'border-l-accent-warm'
+							? 'border-l-warning'
 							: 'border-l-danger'}"
 				>
 					<div class="mb-3 flex flex-wrap items-center gap-2">
@@ -673,7 +673,7 @@
 					<div
 						class="mt-4 rounded-md border-l-4 p-3 text-sm {review.feedback.fullyCorrect
 							? 'border-l-success bg-success/10'
-							: 'border-l-accent-warm bg-accent-warm/10'}"
+							: 'border-l-warning bg-warning/10'}"
 					>
 						<strong class="text-text-primary">
 							{review.feedback.fullyCorrect ? 'Correct' : 'Answer review'}

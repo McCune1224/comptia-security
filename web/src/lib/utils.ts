@@ -18,13 +18,13 @@ export const OBJECTIVES_BY_DOMAIN: Record<number, string[]> = {
 
 export function getPercentColor(pct: number): string {
 	if (pct >= 85) return 'text-success';
-	if (pct >= 60) return 'text-accent-warm';
+	if (pct >= 60) return 'text-warning';
 	return 'text-danger';
 }
 
 export function getBarColor(pct: number): string {
 	if (pct >= 85) return 'bg-success';
-	if (pct >= 60) return 'bg-accent-warm';
+	if (pct >= 60) return 'bg-warning';
 	return 'bg-danger';
 }
 

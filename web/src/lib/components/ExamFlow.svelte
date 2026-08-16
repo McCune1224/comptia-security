@@ -351,7 +351,8 @@
 				body: JSON.stringify({
 					sessionId: session.sessionId,
 					questionIndex: index,
-					response: draft
+					response: draft,
+					check: true
 				})
 			});
 			const data = await response.json();
@@ -376,8 +377,46 @@
 		}
 	}
 
+	/** Persist the current draft without revealing feedback or counting a scored attempt.
+	 *  Used when navigating away so answers are never lost. */
+	async function silentSave() {
+		if (!session || !draft || feedback) return;
+		const answered =
+			choiceAnswered() &&
+			allSubStepsAnswered() &&
+			blanksAnswered() &&
+			sortAnswered() &&
+			matchingAnswered() &&
+			hotspotAnswered() &&
+			memoryAnswered() &&
+			sliderAnswered();
+		if (!answered) return;
+		// Graded responses lock after the first save — don't re-save an already-saved question.
+		if (Boolean(session.assignmentId) && session.responses[index] !== undefined) return;
+		error = '';
+		try {
+			const response = await fetch('/api/quiz/answer', {
+				method: 'PUT',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({
+					sessionId: session.sessionId,
+					questionIndex: index,
+					response: draft,
+					check: false
+				})
+			});
+			if (!response.ok) return;
+			session.responses[index] = draft;
+			session.answeredCount = Object.keys(session.responses).length;
+			savedAck = Boolean(session.assignmentId);
+		} catch {
+			// best-effort persistence; leave the in-memory draft intact
+		}
+	}
+
 	async function move(next: number) {
 		if (!session) return;
+		await silentSave();
 		index = Math.min(Math.max(next, 0), session.questions.length - 1);
 		subStep = 0;
 		draft = session.responses[index] ?? null;
@@ -391,8 +430,9 @@
 	}
 
 	async function complete() {
+		if (!session) return;
+		await silentSave();
 		if (
-			!session ||
 			!confirm(
 				`Submit now? ${session.totalQuestions - session.answeredCount} questions are unanswered.`
 			)
@@ -632,9 +672,9 @@
 {/if}
 
 {#if activeConflict}
-	<div class="card mx-auto max-w-lg space-y-4 border-t-4 border-t-accent-warm p-6">
+	<div class="card mx-auto max-w-lg space-y-4 border-t-4 border-t-warning p-6">
 		<div>
-			<p class="text-sm font-bold text-accent-warm">Session in progress</p>
+			<p class="text-sm font-bold text-warning">Session in progress</p>
 			<h1 class="h-display mt-1 text-xl text-text-primary">An active session already exists</h1>
 		</div>
 		<p class="text-text-secondary">
@@ -719,7 +759,7 @@
 			</div>
 			{#if session.mode === 'practice' && streak > 1}
 				<span
-					class="chip flex items-center gap-1.5 bg-surface-700 text-accent-warm"
+					class="chip flex items-center gap-1.5 bg-surface-700 text-warning"
 					title="Answer streak"
 				>
 					<svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"
@@ -756,12 +796,12 @@
 						{@const isFlagged = session.flaggedQuestionIndexes.includes(qi)}
 						{@const isCurrent = qi === index}
 						<button
-							class="grid h-10 w-10 place-items-center rounded-md text-sm font-bold transition {isCurrent
+							class="grid h-11 w-11 place-items-center rounded-md text-sm font-bold transition {isCurrent
 								? 'ring-2 ring-accent ring-offset-1 ring-offset-surface-800'
 								: ''} {isAnswered
-								? 'bg-accent text-white'
+								? 'bg-accent text-on-accent'
 								: 'border border-border text-text-secondary hover:border-border-strong'} {isFlagged
-								? 'ring-1 ring-accent-warm'
+								? 'ring-1 ring-warning'
 								: ''}"
 							type="button"
 							title="Question {qi + 1}{isFlagged ? ' (flagged)' : ''}{isAnswered
@@ -790,9 +830,11 @@
 				>
 					{question.context}
 				</div>{/if}
-			<h1 class="h-display mb-6 text-xl leading-relaxed text-text-primary sm:text-2xl">
-				{question.prompt}
-			</h1>
+			{#if question.kind !== 'word-bank' && question.kind !== 'fill-blank'}
+				<h1 class="h-display mb-6 text-xl leading-relaxed text-text-primary sm:text-2xl">
+					{question.prompt}
+				</h1>
+			{/if}
 
 			{#if question.kind === 'single-choice' || question.kind === 'multiple-choice'}
 				<div class="space-y-3">
@@ -829,7 +871,7 @@
 					{#each draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id) as id, itemIndex}
 						<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
 							<button
-								class="drag-handle cursor-grab active:cursor-grabbing flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+								class="drag-handle grid h-11 w-11 cursor-grab active:cursor-grabbing place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
 								type="button"
 								aria-label="Reorder item. Press arrow keys to move."
 								onkeydown={(e) => {
@@ -900,7 +942,7 @@
 			{:else if question.kind === 'evidence'}
 				<div class="space-y-2 font-mono text-sm">
 					{#each question.artifact.lines as line}<label
-							class="flex cursor-pointer items-start gap-3 rounded-md border border-border bg-surface-900/60 p-3 transition {draft?.kind ===
+							class="flex min-w-0 cursor-pointer items-start gap-3 rounded-md border border-border bg-surface-900/60 p-3 transition {draft?.kind ===
 								'evidence' && draft.lineIds.includes(line.id)
 								? 'border-accent bg-accent/10'
 								: 'hover:border-border-strong'}"
@@ -908,7 +950,7 @@
 								type="checkbox"
 								checked={draft?.kind === 'evidence' && draft.lineIds.includes(line.id)}
 								onchange={() => toggleEvidence(line.id)}
-							/><span class="leading-relaxed text-text-secondary">{line.text}</span></label
+							/><span class="min-w-0 flex-1 break-words leading-relaxed text-text-secondary">{line.text}</span></label
 						>{/each}
 				</div>
 			{:else if question.kind === 'configuration'}
@@ -959,7 +1001,9 @@
 					draft?.kind === 'word-bank' ? Object.values(draft.assignments) : []
 				)}
 				<div class="space-y-5">
-					<p class="text-base leading-relaxed text-text-primary">
+					<p
+						class="h-display text-xl leading-relaxed text-text-primary sm:text-2xl"
+					>
 						{#each segments as segment, si}
 							{segment}
 							{#if si < segments.length - 1}
@@ -969,10 +1013,10 @@
 								{@const assignedWord = question.bank.find((word) => word.id === assignedId)}
 								<button
 									type="button"
-									class="mx-1 inline-flex min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold transition {assignedWord
+									class="mx-1 inline-flex min-h-11 min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold transition {assignedWord
 										? 'border-accent bg-accent/15 text-accent'
 										: wordBankSelected === blank.id
-											? 'border-accent-warm bg-accent-warm/10 text-accent-warm'
+											? 'border-warning bg-warning/10 text-warning'
 											: 'border-dashed border-border-strong text-text-muted hover:border-accent'} {feedback
 										? 'cursor-default'
 										: 'cursor-pointer'}"
@@ -989,14 +1033,14 @@
 					</p>
 					<div>
 						<p class="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
-							Word bank — click a word, then click a blank (or click a filled blank to clear)
+							Word bank — tap a word, then tap a blank (tap a filled blank to clear)
 						</p>
 						<div class="flex flex-wrap gap-2">
 							{#each question.bank as word}
 								{@const isUsed = usedIds.has(word.id)}
 								<button
 									type="button"
-									class="rounded-md border px-3.5 py-1.5 text-sm font-medium transition {isUsed
+									class="min-h-11 rounded-md border px-3.5 py-1.5 text-sm font-medium transition {isUsed
 										? 'cursor-not-allowed border-border opacity-40 line-through'
 										: feedback
 											? 'cursor-default border-border opacity-70'
@@ -1113,7 +1157,7 @@
 							{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map((i) => i.id) as id, itemIndex}
 								<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
 									<button
-										class="drag-handle cursor-grab active:cursor-grabbing flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+										class="drag-handle grid h-11 w-11 cursor-grab active:cursor-grabbing place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
 										type="button"
 										aria-label="Reorder item. Press arrow keys to move."
 										onkeydown={(e) => {
@@ -1252,7 +1296,7 @@
 							subDraft?.kind === 'word-bank' ? Object.values(subDraft.assignments) : []
 						)}
 						<div class="space-y-4">
-							<p class="mb-2 font-medium text-text-primary">
+							<p class="h-display text-xl leading-relaxed text-text-primary sm:text-2xl">
 								{#each stepSegments as segment, si}
 									{segment}
 									{#if si < stepSegments.length - 1}
@@ -1261,7 +1305,7 @@
 											subDraft?.kind === 'word-bank' ? (subDraft.assignments[blank.id] ?? '') : ''}
 										{@const assignedWord = step.bank.find((word) => word.id === assignedId)}
 										<span
-											class="mx-1 inline-flex min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold {assignedWord
+											class="mx-1 inline-flex min-h-11 min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold {assignedWord
 												? 'border-accent bg-accent/15 text-accent'
 												: 'border-dashed border-border-strong text-text-muted'}"
 										>
@@ -1270,21 +1314,26 @@
 									{/if}
 								{/each}
 							</p>
-							<div class="flex flex-wrap gap-2">
-								{#each step.bank as word}
-									<button
-										type="button"
-										class="rounded-md border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
-											word.id
-										)
-											? 'cursor-not-allowed border-border opacity-40 line-through'
-											: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
-										disabled={stepUsed.has(word.id)}
-										onclick={() => assignSubWord(word.id)}
-									>
-										{word.word}
-									</button>
-								{/each}
+							<div>
+								<p class="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
+									Word bank — tap a word, then tap a blank (tap a filled blank to clear)
+								</p>
+								<div class="flex flex-wrap gap-2">
+									{#each step.bank as word}
+										<button
+											type="button"
+											class="min-h-11 rounded-md border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
+												word.id
+											)
+												? 'cursor-not-allowed border-border opacity-40 line-through'
+												: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
+											disabled={stepUsed.has(word.id)}
+											onclick={() => assignSubWord(word.id)}
+										>
+											{word.word}
+										</button>
+									{/each}
+								</div>
 							</div>
 						</div>
 					{:else if step.kind === 'sort'}
@@ -1385,7 +1434,7 @@
 				>
 				{#if session.mode === 'exam'}<button
 						class="btn h-11 border px-4 {session.flaggedQuestionIndexes.includes(index)
-							? 'border-accent-warm bg-accent-warm/10 text-accent-warm'
+							? 'border-warning bg-warning/10 text-warning'
 							: 'border-border-strong text-text-secondary hover:text-text-primary'}"
 						type="button"
 						onclick={toggleFlag}
@@ -1409,7 +1458,7 @@
 					class="mt-5 translate-y-0 rounded-md border-l-4 p-4 opacity-100 transition-all duration-200 {feedback.fullyCorrect
 						? 'border-l-success bg-success/10'
 						: feedback.earnedPoints > 0
-							? 'border-l-accent-warm bg-accent-warm/10'
+							? 'border-l-warning bg-warning/10'
 							: 'border-l-danger bg-danger/10'}"
 				>
 					<div class="flex items-center justify-between gap-3">
@@ -1448,7 +1497,7 @@
 					{#if session.mode === 'practice' && question.objective}
 						<div class="mt-3">
 							<a
-								class="text-sm font-bold text-accent hover:underline"
+								class="touch-target text-sm font-bold text-accent hover:underline"
 								href="/quiz?start=1&type=quiz&objective={question.objective}&count=5"
 								>More like this →</a
 							>

@@ -55,7 +55,8 @@ export interface QuizService {
 	saveResponse(
 		sessionId: string,
 		questionIndex: number,
-		response: QuestionResponse
+		response: QuestionResponse,
+		opts?: { check?: boolean }
 	): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
 	/** Practice-mode hint reveal; records the 25% point cost server-side. */
 	revealHint(sessionId: string, questionIndex: number): { hint: { text: string } };
@@ -561,7 +562,8 @@ export function createQuizService({
 			const stored = repository.getActiveSession();
 			return stored ? summary(expire(stored)) : null;
 		},
-		saveResponse(id, questionIndex, response) {
+		saveResponse(id, questionIndex, response, opts = {}) {
+			const { check } = opts;
 			const stored = requireStored(id);
 			if (stored.summary.status !== 'active')
 				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
@@ -589,8 +591,14 @@ export function createQuizService({
 				);
 			const question = stored.questions[questionIndex];
 			validateResponse(question, response);
-			repository.saveResponse(id, questionIndex, response, now().toISOString());
-			if (stored.summary.mode !== 'practice' || graded) return { saved: true as const };
+			// Free-practice responses return feedback and count as a scored attempt only
+			// when explicitly checked. Silent drafts (check: false, or exam/graded) persist
+			// without revealing the answer or bumping the retry/lock counter.
+			const wantFeedback = check !== false && !graded && stored.summary.mode === 'practice';
+			repository.saveResponse(id, questionIndex, response, now().toISOString(), {
+				incrementRetries: wantFeedback
+			});
+			if (!wantFeedback) return { saved: true as const };
 			const feedback = scoreQuestion(question, response, {
 				hintUsed: stored.hints[questionIndex] ?? false
 			});

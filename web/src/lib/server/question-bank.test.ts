@@ -335,10 +335,10 @@ describe('question bank', () => {
 
 	it('has the required authored allocation and redacts public questions', () => {
 		const bank = loadQuestionBank();
-		expect(bank.mcqs).toHaveLength(300);
-		expect(bank.pbqs).toHaveLength(98);
-		expect(bank.mcqs.filter((question) => question.format === 'scenario')).toHaveLength(300);
-		expect(new Set([...bank.mcqs, ...bank.pbqs].map((question) => question.id)).size).toBe(398);
+		expect(bank.mcqs).toHaveLength(332);
+		expect(bank.pbqs).toHaveLength(105);
+		expect(bank.mcqs.filter((question) => question.format === 'scenario')).toHaveLength(332);
+		expect(new Set([...bank.mcqs, ...bank.pbqs].map((question) => question.id)).size).toBe(437);
 		const publicQuestion = toPublicQuestion(bank.mcqs[0]);
 		expect(JSON.stringify(publicQuestion)).not.toContain('correctOptionIds');
 		expect(JSON.stringify(publicQuestion)).not.toContain('rationale');

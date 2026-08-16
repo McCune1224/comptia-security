@@ -1,0 +1,41 @@
+{
+  "hints": {
+    "mcq-4-039": "Consider what a forensic tool can recover from a powered-off device versus a live one — the device's state determines which acquisition path is available.",
+    "mcq-5-028": "Recall which US financial-privacy regulation governs how banks disclose customer-data sharing and must offer an opt-out.",
+    "mcq-5-039": "Think about the standard cadence for refresher training after initial onboarding — most frameworks expect a recurring cycle.",
+    "mcq-3-046": "Consider a one-way transformation that preserves matchability across databases without storing the raw value.",
+    "mcq-5-057": "Work through the standard annualized-loss formula: exposure factor against the asset value, then scaled by how often the threat occurs per year.",
+    "pbq-1-009": "Read each statement and decide which security term fits the described concept before tapping a chip.",
+    "pbq-2-012": "Read each statement and decide which attack type fits the described behavior before tapping a chip.",
+    "pbq-3-010": "Read each statement and decide which backup or recovery concept fits before tapping a chip.",
+    "pbq-4-013": "Read each statement and decide which identity and access concept fits before tapping a chip.",
+    "pbq-1-012": "Read each statement and decide which public key infrastructure concept fits before tapping a chip."
+  },
+  "replace": {
+    "mcq-1-048": {
+      "id": "mcq-1-048",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "Which TWO properties of this storage approach make it the best fit for the requirement? (Select TWO.)",
+      "context": "A pharmaceutical distributor must share shipment provenance records with several independent manufacturers and regulators who do not trust one another's systems. The security team proposes an open, distributed ledger that every party maintains a copy of, with records chained cryptographically.",
+      "kind": "multiple-choice",
+      "options": [
+        { "id": "a", "text": "Tamper evidence via chained, hashed records", "rationale": "A blockchain chains each block to the previous one with hashes, so altering an earlier record breaks every subsequent link — this provides the tamper-evidence the distributor needs." },
+        { "id": "b", "text": "Decentralized consensus so no single party controls the records", "rationale": "Every independent party keeps a copy and agrees on additions, so no single manufacturer or regulator can silently rewrite history — this is the open-ledger property." },
+        { "id": "c", "text": "Single-owner write access for faster updates", "rationale": "A single writer is the opposite of the open-ledger model and would recreate the trust problem the requirement is trying to eliminate." },
+        { "id": "d", "text": "Built-in encryption of every field at rest", "rationale": "Ledgers do not inherently encrypt record contents; confidentiality is provided separately, and the requirement here is about integrity and multi-party trust, not secrecy." },
+        { "id": "e", "text": "Tokenized record values for compliance", "rationale": "Tokenization replaces sensitive values with placeholders for privacy compliance; provenance records are about integrity, not about hiding values." },
+        { "id": "f", "text": "Centralized backup with row-level audit logging", "rationale": "A centralized database with audit logs still vests control in one operator, which does not satisfy the requirement that mutually distrusting parties all verify the records." }
+      ],
+      "correctOptionIds": ["a", "b"],
+      "selectCount": 2,
+      "hint": "Think about which two properties let independent parties detect any alteration without trusting a central operator.",
+      "explanation": "The distributor's requirement is tamper-evident provenance that independent parties can verify without trusting one another. The open ledger satisfies both: (a) chained hashes make any alteration detectable, and (b) decentralized consensus means no single party controls the record. A single-owner write model, field-level encryption, tokenization, or centralized audit logging each address a different concern (speed, confidentiality, privacy, or logging) and none removes the need for a trusted central party.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 1.4 — Blockchain and open public ledger" },
+        { "source": "study-guide", "section": "Cryptography — Distributed Ledger Technology" }
+      ]
+    }
+  }
+}

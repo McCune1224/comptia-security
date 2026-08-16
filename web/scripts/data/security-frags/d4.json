@@ -1,0 +1,1024 @@
+{
+  "mcqs": [
+    {
+      "id": "mcq-4-078",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "What should the network team do before mounting any access points?",
+      "context": "A hospital is adding Wi-Fi coverage for nursing tablets and VoIP handsets in a new wing. The team must guarantee continuous coverage while avoiding interference between access points and with nearby medical telemetry. The wing includes thick-walled rooms and a central elevator shaft that can shadow wireless signals.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Install access points at maximum transmit power to push coverage through walls",
+          "rationale": "Running every AP at maximum power creates overlapping cells and co-channel interference, degrading throughput for all clients."
+        },
+        {
+          "id": "b",
+          "text": "Perform a wireless site survey and analyze heat maps before placing access points",
+          "rationale": "A site survey measures signal strength and coverage across the floor, and heat maps reveal weak and overlapping areas so APs can be positioned deliberately."
+        },
+        {
+          "id": "c",
+          "text": "Place access points only where network cable is easiest to run",
+          "rationale": "Cabling convenience does not account for radio coverage, so easy placement can leave dead zones in critical areas."
+        },
+        {
+          "id": "d",
+          "text": "Mount the access points and rely on default channel assignments",
+          "rationale": "Default channels cause adjacent APs to overlap on the same channel, increasing interference in a dense deployment."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "hint": "Think about the planning step that produces a visual coverage analysis before any access point is permanently mounted.",
+      "explanation": "A wireless site survey collects signal measurements around the facility, and heat maps visualize coverage, interference, and dead zones, letting the team position access points and choose channels before mounting hardware. Maximum power and default channels worsen interference, while cabling convenience ignores radio physics.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.1 — Wireless security settings: Site surveys, Heat maps"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-153 — Guidelines for Securing Wireless Local Area Networks (site survey)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Site Surveys and Heat Maps"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-079",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "Which TWO cookie attributes should the team set to address these findings? (Select TWO.)",
+      "context": "A financial services web application stores the session identifier in a cookie. A penetration test found two issues: a stored cross-site scripting (XSS) flaw that lets an attacker read document.cookie, and a cross-site request forgery (CSRF) flaw that lets an attacker trigger state-changing requests while the victim's session is active. The application is already served exclusively over HTTPS.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "HttpOnly",
+          "rationale": "HttpOnly prevents client-side scripts from reading the cookie, blocking the XSS-based session theft."
+        },
+        {
+          "id": "b",
+          "text": "SameSite",
+          "rationale": "SameSite restricts the browser from attaching the cookie to cross-site requests, mitigating the CSRF flaw."
+        },
+        {
+          "id": "c",
+          "text": "Secure",
+          "rationale": "The Secure attribute only forces HTTPS delivery, which the site already guarantees, so it adds no protection here."
+        },
+        {
+          "id": "d",
+          "text": "Domain set to the parent domain",
+          "rationale": "Broadening the Domain scope sends the cookie to more hosts, enlarging the attack surface rather than hardening it."
+        },
+        {
+          "id": "e",
+          "text": "A long Max-Age for persistent sessions",
+          "rationale": "Lengthening the cookie's life increases the window in which a stolen or leaked session can be replayed."
+        },
+        {
+          "id": "f",
+          "text": "SameSite=None",
+          "rationale": "SameSite=None explicitly permits cross-site sending of the cookie, directly worsening the CSRF exposure."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Separate the two attack types: one attribute keeps the cookie out of client-side script, the other limits when the browser attaches the cookie to requests from other sites.",
+      "explanation": "HttpOnly denies JavaScript access to the cookie, defeating the XSS exfiltration, while SameSite stops the browser from sending the cookie on cross-site requests, defeating CSRF. Secure is redundant on an HTTPS-only site, and expanding domain scope, extending lifetime, or allowing cross-site sending increases exposure rather than reducing it.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.1 — Application security: Secure cookies"
+        },
+        {
+          "source": "owasp",
+          "section": "OWASP Session Management Cheat Sheet — Secure, HttpOnly, SameSite attributes"
+        },
+        {
+          "source": "study-guide",
+          "section": "Secure Cookies"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-080",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "scenario",
+      "prompt": "Which technique would the team add to the pipeline to inspect the source code itself before the application is built or executed?",
+      "context": "A development team wants to catch injection, cross-site scripting, and buffer-overflow flaws before code is deployed. They plan to add a scanning step to their CI pipeline that runs automatically on every commit. The team's budget covers one new tool, and the tool must not require a running, instrumented application.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Static code analysis (SAST)",
+          "rationale": "SAST examines source code without executing it, catching flaws early in CI before deployment."
+        },
+        {
+          "id": "b",
+          "text": "Dynamic application security testing (DAST)",
+          "rationale": "DAST probes a running application over HTTP, so it requires a deployed or staged instance rather than analyzing source."
+        },
+        {
+          "id": "c",
+          "text": "Fuzzing",
+          "rationale": "Fuzzing executes the program with malformed inputs to trigger crashes, which needs a runnable build, not static inspection."
+        },
+        {
+          "id": "d",
+          "text": "Penetration testing",
+          "rationale": "Penetration testing is a manual or semi-automated exercise against live systems, not a per-commit source inspection."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Contrast reading the code itself with techniques that require a running application and live input.",
+      "explanation": "Static code analysis parses the source and models data flow to find vulnerabilities such as injection, XSS, and buffer overflows before anything runs, which fits a per-commit CI gate. DAST, fuzzing, and penetration testing all act against an executed application and would come later in the lifecycle.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.1 — Application security: Static code analysis"
+        },
+        {
+          "source": "owasp",
+          "section": "OWASP Source Code Analysis Tools"
+        },
+        {
+          "source": "study-guide",
+          "section": "Static Code Analysis"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-081",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "prompt": "Which TWO approaches should the team use together to enumerate the organization's assets? (Select TWO.)",
+      "context": "An organization is building a complete hardware and software asset inventory to identify unmanaged and rogue devices before an upcoming security audit. Endpoint agents are installed on most laptops, but the team cannot assume coverage is complete because servers, network gear, and IoT devices were never enrolled. The inventory must reflect what is actually connected today.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Active network scanning across all subnets to discover hosts, ports, and services",
+          "rationale": "Network scanning directly discovers connected devices, including ones with no agent, providing a live view of the environment."
+        },
+        {
+          "id": "b",
+          "text": "Correlating the CMDB, DHCP leases, and directory service records",
+          "rationale": "Authoritative records of known systems and address assignments reveal managed assets and help reconcile the scan results."
+        },
+        {
+          "id": "c",
+          "text": "Using only the agent data already collected from managed laptops",
+          "rationale": "Agent-only data misses servers, network gear, IoT, and rogue devices, so the inventory stays incomplete."
+        },
+        {
+          "id": "d",
+          "text": "Purging inventory records older than 90 days to reduce noise",
+          "rationale": "Deleting historical records removes visibility into assets that may still be active and connected."
+        },
+        {
+          "id": "e",
+          "text": "Restricting discovery to the finance department's subnet",
+          "rationale": "Scoping to one subnet leaves every other segment unexplored, defeating the purpose of a full inventory."
+        },
+        {
+          "id": "f",
+          "text": "Waiting for the next annual audit to compile the list",
+          "rationale": "A once-a-year snapshot cannot support ongoing asset tracking or reveal what is connected today."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Combine a technique that sees devices directly on the network with the organization's existing authoritative records of systems and addresses.",
+      "explanation": "Active scanning discovers what is actually on the wire, while CMDB, DHCP, and directory records provide context on known assets; together they reconcile managed, unmanaged, and rogue devices. Agent-only, subnet-limited, record-purging, or annual approaches each leave material gaps in the inventory.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.2 — Monitoring/asset tracking: Inventory, Enumeration"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-115 — Technical Guide to Information Security Testing (network discovery and enumeration)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Asset Inventory and Enumeration"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-082",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which term best describes the researcher's action?",
+      "context": "A security researcher discovers a critical remote code execution flaw in a company's web portal. The company operates a public bug bounty program with a defined scope and rules of engagement. The researcher reports the flaw privately through the program, the vendor confirms it and schedules a patch, and the researcher agrees to keep the details confidential until the fix is released, when a public advisory will be published.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Coordinated disclosure",
+          "rationale": "The researcher privately reports, the vendor fixes within a negotiated window, and details are published only after remediation — the defining pattern of coordinated disclosure."
+        },
+        {
+          "id": "b",
+          "text": "Full disclosure",
+          "rationale": "Full disclosure publishes vulnerability details and proof of concept immediately to force a response, the opposite of this embargoed process."
+        },
+        {
+          "id": "c",
+          "text": "Exploit brokering",
+          "rationale": "Selling the flaw to a third party without notifying the vendor does not match a private report through the vendor's own program."
+        },
+        {
+          "id": "d",
+          "text": "Extortion",
+          "rationale": "Demanding payment to keep the vulnerability secret differs from reporting through a program that the company itself operates."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Compare what the researcher did — private report, vendor fix window, then public advisory — with models that publish immediately or withhold details for gain.",
+      "explanation": "Coordinated (responsible) disclosure gives the vendor a chance to remediate before the public learns of the flaw, and the bug bounty program is the channel through which the report flowed. Full disclosure, exploit brokering, and extortion all lack the vendor-remediation-first sequence.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3 — Identification methods: Responsible disclosure program, Bug bounty program"
+        },
+        {
+          "source": "cisa",
+          "section": "CISA — Coordinated Vulnerability Disclosure (BOD 20-01)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Responsible Disclosure and Bug Bounty Programs"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-083",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "What is the primary security value of this dark-web intelligence?",
+      "context": "The security team subscribes to a dark-web monitoring service. An analyst finds the CTO's corporate email address and a password hash posted on a criminal forum, along with chatter advertising access to the company's VPN. The team has no current evidence of intrusion, but the data appears to match credentials exposed in a recent phishing campaign.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "It gives early warning to reset exposed credentials and hunt for unauthorized access",
+          "rationale": "Leaked credentials and access chatter let the team rotate passwords, block compromised accounts, and search logs for signs the access was used."
+        },
+        {
+          "id": "b",
+          "text": "It confirms the CTO's account is actively compromised",
+          "rationale": "A posted hash indicates exposure, not that the account has already been used; the team must still investigate."
+        },
+        {
+          "id": "c",
+          "text": "It replaces routine vulnerability scanning",
+          "rationale": "Dark-web monitoring addresses credential exposure and threat chatter, not software vulnerabilities, so scanning remains necessary."
+        },
+        {
+          "id": "d",
+          "text": "It provides court-admissible evidence of the attacker's identity",
+          "rationale": "Monitoring feeds are intelligence leads, not forensic evidence; attribution requires a proper investigation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Focus on what the intelligence lets the team do before an incident occurs — invalidate exposed credentials and check whether leaked access was already used.",
+      "explanation": "Dark-web monitoring is a threat-intelligence source: finding posted credentials and access chatter enables proactive resets and threat hunting. It does not by itself prove compromise, and it complements rather than replaces vulnerability scanning or forensic investigation.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3 — Identification methods: Dark web, Threat feed"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-150 — Guide to Cyber Threat Information Sharing"
+        },
+        {
+          "source": "study-guide",
+          "section": "Dark-Web Intelligence and Threat Feeds"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-084",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "Which set of standards would the team rely on to automate these checks under SCAP?",
+      "context": "A compliance team must assess thousands of servers against a published hardening benchmark, remediate failures, and produce auditable evidence. To do this at scale, they adopt the Security Content Automation Protocol (SCAP) so the checks are machine-readable and repeatable rather than manual.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "XCCDF for the benchmark/policy, OVAL for the technical checks, and CVE for vulnerability identifiers",
+          "rationale": "XCCDF expresses the checklist and results, OVAL defines machine-readable tests of system state, and CVE names vulnerabilities — the core SCAP components."
+        },
+        {
+          "id": "b",
+          "text": "STIX, TAXII, and OpenIOC for threat-intelligence sharing",
+          "rationale": "These are threat-intelligence exchange formats, not configuration-assessment standards, so they do not automate benchmark checks."
+        },
+        {
+          "id": "c",
+          "text": "NetFlow, SNMP traps, and syslog for network monitoring",
+          "rationale": "These collect traffic and device events; they report activity but do not assess configuration against a benchmark."
+        },
+        {
+          "id": "d",
+          "text": "DMARC, DKIM, and SPF for email authentication",
+          "rationale": "Email authentication protocols protect mail delivery, unrelated to server configuration assessment."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Recall that SCAP pairs a policy/benchmark language with a machine-readable check language and a shared vulnerability naming standard.",
+      "explanation": "SCAP bundles XCCDF (checklists and results), OVAL (system-state checks), and CVE (vulnerability identifiers), along with CPE and CVSS, to automate and standardize configuration assessment. The other options are threat-intelligence, monitoring, or email protocols outside SCAP's scope.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4 — Tools: SCAP"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-126 — The Technical Specification for the Security Content Automation Protocol"
+        },
+        {
+          "source": "study-guide",
+          "section": "SCAP and Benchmarks"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-085",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "Which configuration would give the team immediate, event-driven alerts without polling?",
+      "context": "The network operations team needs to know the moment a core switch fails, an interface goes down, or a router restarts so they can respond before users notice. Their monitoring server currently polls devices on a five-minute cycle, which is too slow for critical infrastructure.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Configure SNMP traps so managed devices send unsolicited notifications to the monitoring server",
+          "rationale": "SNMP traps push event notifications the instant a device detects a condition, enabling immediate alerting without polling."
+        },
+        {
+          "id": "b",
+          "text": "Shorten the SNMP polling interval to every few seconds",
+          "rationale": "More frequent polling still relies on the server requesting state, adds load to devices and the network, and can miss short-lived events."
+        },
+        {
+          "id": "c",
+          "text": "Enable NetFlow export on the switches",
+          "rationale": "NetFlow records traffic flows for analysis; it does not report device faults such as a switch rebooting."
+        },
+        {
+          "id": "d",
+          "text": "Disable SNMP and rely on manual checks",
+          "rationale": "Removing SNMP eliminates automated visibility entirely and delays detection of failures."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Distinguish messages a device pushes the moment an event occurs from state collected through repeated requests or flow sampling.",
+      "explanation": "SNMP traps are unsolicited notifications sent by managed devices when an event such as a link failure or restart occurs, giving near-real-time alerting. Polling, NetFlow, or disabling SNMP each fail to deliver event-driven fault alerts.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4 — Tools: SNMP traps"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-123 — Guide to General Server Security (network monitoring and SNMP)"
+        },
+        {
+          "source": "study-guide",
+          "section": "SNMP Traps"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-086",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "prompt": "Which statement best describes SELinux and how the team should use it?",
+      "context": "A Linux web server hosts an application that was breached last year after the web daemon's process was used to read sensitive files. The security team enables SELinux so that even if the application is compromised, it is confined. During rollout, the application fails to start because SELinux denies one of its legitimate operations, and an administrator proposes switching the server to permissive mode.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Keep enforcing mode and use permissive mode only temporarily to identify denials from the audit log",
+          "rationale": "Enforcing mode blocks policy violations; permissive mode logs without blocking, so it is useful only for troubleshooting before returning to enforcing."
+        },
+        {
+          "id": "b",
+          "text": "Switch to permissive mode permanently because it blocks violations while allowing the app to run",
+          "rationale": "Permissive mode does not block anything — it only logs denials, so it provides no real confinement."
+        },
+        {
+          "id": "c",
+          "text": "Disable SELinux because the firewall already protects the server",
+          "rationale": "A firewall filters network traffic; SELinux confines local processes, so disabling it removes the protection that would limit a compromised daemon."
+        },
+        {
+          "id": "d",
+          "text": "Replace standard file permissions with SELinux labels",
+          "rationale": "SELinux adds mandatory access control on top of DAC; it does not replace ownership and permission bits."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about what mandatory access control adds beyond the firewall and file permissions, and what each SELinux mode actually does with a violation.",
+      "explanation": "SELinux applies mandatory access control so a process is confined by policy even when it runs with elevated privileges; enforcing mode blocks violations while permissive mode only logs them. The correct response is to allow the legitimate operation in policy and remain in enforcing mode, not to disable the control.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5 — Operating system security: SELinux"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-123 — Guide to General Server Security (mandatory access control)"
+        },
+        {
+          "source": "study-guide",
+          "section": "SELinux and OS Hardening"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-087",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "Which IAM process is the team performing?",
+      "context": "Before issuing credentials to a newly hired remote contractor, the IAM team must confirm the contractor is genuinely who they claim to be. The contractor uploads a government-issued ID, the system compares it with a live selfie, and the contractor answers knowledge-based questions from public records. Only after this passes does the system issue the account.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Identity proofing",
+          "rationale": "Identity proofing verifies a person's claimed identity at enrollment using documents and other evidence before credentials are issued."
+        },
+        {
+          "id": "b",
+          "text": "Authorization",
+          "rationale": "Authorization assigns what an identified user may access; it assumes identity has already been established."
+        },
+        {
+          "id": "c",
+          "text": "Federation",
+          "rationale": "Federation establishes trust between identity providers so one organization accepts another's assertions, not the initial identity check."
+        },
+        {
+          "id": "d",
+          "text": "Accounting",
+          "rationale": "Accounting records and audits user activity after access exists; it does not verify who the user is at enrollment."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider which step establishes that a person is who they claim to be before any credentials or permissions are issued.",
+      "explanation": "Identity proofing validates the applicant's identity through identity documents, biometric comparison, and knowledge-based verification before account issuance. Authorization, federation, and accounting all operate after or alongside an established identity.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6 — Identity proofing"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-63A — Digital Identity Guidelines: Enrollment and Identity Proofing"
+        },
+        {
+          "source": "study-guide",
+          "section": "Identity Proofing"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-088",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "What is this mechanism called?",
+      "context": "An organization allows only company-issued laptops onto the VPN. Each laptop's Trusted Platform Module (TPM) records measurements of the firmware and boot process, signs a statement about those measurements, and presents it to the VPN gateway. The gateway verifies the signature and the measurements before permitting the connection, rejecting devices whose boot state has been altered.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Attestation",
+          "rationale": "Attestation is a party proving to a verifier that its hardware and software are in a trusted, expected state, here via TPM-signed boot measurements."
+        },
+        {
+          "id": "b",
+          "text": "Federation",
+          "rationale": "Federation links identity providers for single sign-on; it does not prove a device's boot state."
+        },
+        {
+          "id": "c",
+          "text": "Non-repudiation",
+          "rationale": "Non-repudiation prevents denying that an action took place; it does not validate the integrity of a device's boot state."
+        },
+        {
+          "id": "d",
+          "text": "Port-based authentication",
+          "rationale": "Port-based (802.1X) authentication controls network access by credentials but does not verify measured boot state."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Focus on the term for a device proving to a verifier that its hardware and software are in a trusted, expected state.",
+      "explanation": "Attestation lets a device demonstrate its state to a verifier: the TPM signs the measured boot values and the VPN gateway checks them, blocking tampered devices. Federation, non-repudiation, and port-based authentication address different problems.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6 — Attestation"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management (attestation)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Attestation"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-089",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "What is the primary security advantage of this passwordless approach?",
+      "context": "An organization replaces passwords with FIDO2 passkeys for all employees. Users unlock sign-in on their device with a biometric or PIN, and the private key is generated and stored in the device's secure element. When a user signs in to a site, the site's challenge is answered with the device-bound key rather than a shared secret typed by the user.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "There is no reusable shared secret to phish or steal, because the private key never leaves the user's device",
+          "rationale": "Passkeys eliminate the shared-secret model: the private key stays in the device, and a phished site cannot replay it."
+        },
+        {
+          "id": "b",
+          "text": "Users can now use one master password for every site",
+          "rationale": "Passkeys remove the password entirely; a shared master password would recreate the same credential-theft risk."
+        },
+        {
+          "id": "c",
+          "text": "The private key is backed up on the server so users can recover it",
+          "rationale": "Exporting the private key to servers recreates a shared secret and defeats the device-bound security model."
+        },
+        {
+          "id": "d",
+          "text": "One-time codes delivered by SMS are more resistant to phishing",
+          "rationale": "SMS one-time codes remain phishable and are subject to SIM-swap attacks, unlike device-bound passkeys."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider what an attacker would need to phish or steal when authentication uses a private key that never leaves the user's device.",
+      "explanation": "FIDO2/WebAuthn passkeys bind the private key to the device and use origin-bound challenges, so there is no password or reusable code for attackers to phish. Server-side key storage or SMS codes each reintroduce the shared-secret weaknesses passkeys remove.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6 — Passwordless"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-63B — Digital Identity Guidelines (phishing-resistant authenticators)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Passwordless Authentication and Passkeys"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-090",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "Which access control is the company implementing?",
+      "context": "A retailer's back-office systems process payroll and inventory only during store hours. The IAM policy prevents administrative accounts from authenticating between 10:00 p.m. and 6:00 a.m. local time, when no store employees are scheduled. A night-shift cleaner's badge is also blocked from entering the office floor outside those same hours.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Time-of-day restrictions",
+          "rationale": "Time-of-day restrictions limit when authentication or physical access is permitted based on the clock, matching the company's operating schedule."
+        },
+        {
+          "id": "b",
+          "text": "Account lockout",
+          "rationale": "Account lockout disables accounts after failed attempts; it does not restrict access by the time of day."
+        },
+        {
+          "id": "c",
+          "text": "Session timeout",
+          "rationale": "A session timeout ends an idle session after a period of inactivity; it does not prevent access during certain hours."
+        },
+        {
+          "id": "d",
+          "text": "Geolocation restrictions",
+          "rationale": "Geolocation restricts access by physical location, not by time."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Identify the access rule that constrains when authentication or access is permitted according to the clock.",
+      "explanation": "Time-of-day restrictions encode business-hours access in the IAM policy, so accounts cannot authenticate outside the permitted window — applied here to both logical and physical access. Lockout, timeout, and geolocation address different access dimensions.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6 — Access controls: Time-of-day restrictions"
+        },
+        {
+          "source": "study-guide",
+          "section": "Time-of-Day Restrictions"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-091",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "prompt": "Which TWO statements best describe this ephemeral credential approach? (Select TWO.)",
+      "context": "A security team removes standing administrative rights from all IT staff and deploys a privileged access management tool. When an administrator needs elevated rights, they submit a request with a justification, the tool grants temporary credentials that expire after 15 minutes, and the rights are automatically removed. Every grant and use is recorded.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Credentials are short-lived and expire automatically, eliminating the need for manual revocation",
+          "rationale": "Ephemeral credentials self-expire in minutes, so the standing-privilege window and manual revocation burden disappear."
+        },
+        {
+          "id": "b",
+          "text": "Privilege is granted per request, shrinking the attack surface available at any moment",
+          "rationale": "Just-in-time grants mean elevated rights exist only while a task requires them, reducing exposure."
+        },
+        {
+          "id": "c",
+          "text": "Credentials remain valid indefinitely to avoid re-enrollment overhead",
+          "rationale": "Long-lived credentials recreate the standing-privilege risk the team is removing."
+        },
+        {
+          "id": "d",
+          "text": "The same standing rights remain available 24/7 through the tool",
+          "rationale": "Always-on elevated rights defeat the purpose of just-in-time access."
+        },
+        {
+          "id": "e",
+          "text": "Audit logging is disabled to reduce storage costs",
+          "rationale": "Removing the audit trail destroys the accountability that makes ephemeral access safe to grant."
+        },
+        {
+          "id": "f",
+          "text": "Credentials are embedded in shared scripts for convenience",
+          "rationale": "Storing credentials in scripts exposes secrets to anyone who reads the script."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Think about the two properties that remove standing privilege: the credential window is very short, and elevated access appears only when a task actually needs it.",
+      "explanation": "Ephemeral credentials expire automatically, and just-in-time provisioning grants privilege only for the active task, so attackers cannot harvest always-on admin rights. Indefinite validity, standing rights, embedded secrets, and disabled logging all undermine the model.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6 — Privileged access management tools: Just-in-time permissions, Ephemeral credentials"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-207 — Zero Trust Architecture (short-lived credentials)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Ephemeral Credentials and Just-in-Time Access"
+        }
+      ]
+    },
+    {
+      "id": "mcq-4-092",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "scenario",
+      "prompt": "What must the organization do to satisfy this legal hold?",
+      "context": "A company receives a litigation hold notice after a former employee sues the firm over a disputed contract. The notice covers email, chat, and file-share content related to the contract. The company's data-retention policy normally deletes email after 90 days, and backups are recycled every four weeks.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Preserve all potentially relevant data, suspend routine deletion, and protect backups until the hold is lifted",
+          "rationale": "A legal hold freezes normal retention: relevant data, including backups and archives, must be preserved to avoid spoliation."
+        },
+        {
+          "id": "b",
+          "text": "Continue the 90-day retention schedule to reduce storage costs",
+          "rationale": "Deleting on schedule while a hold is active destroys evidence and can expose the company to sanctions for spoliation."
+        },
+        {
+          "id": "c",
+          "text": "Encrypt and then permanently delete the contract-related data",
+          "rationale": "Destroying the very data in dispute guarantees loss of evidence and violates the hold."
+        },
+        {
+          "id": "d",
+          "text": "Take no action until a court orders specific documents",
+          "rationale": "The hold notice itself already triggers the preservation obligation; waiting risks automatic deletion before any order arrives."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "The hold flips the normal lifecycle rule: instead of deleting on schedule, the organization must freeze and protect the relevant records, including backups.",
+      "explanation": "E-discovery and legal hold require preserving potentially relevant data — email, chat, file shares, and backups — and suspending routine destruction until the hold is lifted. Continuing deletions or destroying the data constitutes spoliation and undermines any investigation.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.8 — E-discovery, Legal hold"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-86 — Guide to Integrating Forensic Techniques into Incident Response (legal hold and preservation)"
+        },
+        {
+          "source": "study-guide",
+          "section": "E-Discovery and Legal Hold"
+        }
+      ]
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "pbq-4-025",
+      "domain": 4,
+      "objective": "4.7",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about automation and orchestration in security operations by placing the correct word in each blank. Each word is used once.\n\n1. When HR approves a new employee, a script creates the account, assigns the correct role, and sends a welcome email. This is an example of ____.\n\n2. When a cloud workload crosses a CPU threshold, automation provisions additional compute instances. This is an example of ____.\n\n3. A playbook that correlates an alert with threat intelligence, isolates an infected endpoint, and opens a ticket without human involvement demonstrates ____.\n\n4. Pushing the same approved configuration to every new server so all devices match the secure standard is ____.\n\n5. An automation chain that depends on a single component can become a ____ if that component fails.",
+      "context": "Click a word chip, then click the blank where it belongs. Each word is used once; two extra words are distractors.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "1. HR onboarding automation"
+        },
+        {
+          "id": "b2",
+          "label": "2. Auto-scaling compute"
+        },
+        {
+          "id": "b3",
+          "label": "3. Coordinated tool-chain playbook"
+        },
+        {
+          "id": "b4",
+          "label": "4. Uniform secure configuration"
+        },
+        {
+          "id": "b5",
+          "label": "5. Single-dependency risk"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "User provisioning"
+        },
+        {
+          "id": "w2",
+          "word": "Resource provisioning"
+        },
+        {
+          "id": "w3",
+          "word": "Orchestration"
+        },
+        {
+          "id": "w4",
+          "word": "Enforcing baselines"
+        },
+        {
+          "id": "w5",
+          "word": "Single point of failure"
+        },
+        {
+          "id": "w6",
+          "word": "Manual escalation"
+        },
+        {
+          "id": "w7",
+          "word": "Deny list"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      },
+      "hint": "Think about who or what performs each action: a script handling one routine task, automation scaling resources, a coordinated chain of tools, configuration standardization, and what a single dependency risks.",
+      "explanation": "User provisioning automates account creation and role assignment; resource provisioning scales infrastructure automatically. Orchestration coordinates multiple tools into a workflow, and enforcing baselines pushes approved configurations to every device. A single point of failure is a key automation caution: one broken component can halt the whole chain. Manual escalation and deny list are not supported by these statements.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.7 — Automation and orchestration: use cases, benefits, other considerations"
+        },
+        {
+          "source": "study-guide",
+          "section": "Automation and Orchestration"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 — CA-7 Continuous Monitoring (automated mechanisms)"
+        }
+      ]
+    },
+    {
+      "id": "pbq-4-026",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "pbq",
+      "kind": "configuration",
+      "context": "A retailer deploys network access control (NAC) at every wired and wireless entry point. At connection time each device is assessed against a posture policy requiring current antivirus definitions, all critical patches, and no active threat indicators. Devices that fail a fixable check are placed on a remediation network where they can update and recheck; devices with an active threat are blocked from the network entirely. A separate guest network provides internet-only access for visitors.",
+      "prompt": "For each endpoint below, select the NAC action the team should enforce. Each field is scored separately.",
+      "explanation": "The finance laptop passes every posture check, so it earns full corporate access. The contractor tablet and the employee laptop fail fixable checks (missing patches/AV, disabled AV), so quarantine to the remediation network is correct; permanent blocking is reserved for active threats, and allowing access contradicts the posture policy. The workstation shows active compromise, so it must be blocked or isolated rather than given any access. The visitor is a guest, so the policy routes the device to the guest segment with internet-only access.",
+      "hint": "Classify each device first: fully compliant, fixable non-compliance, an active threat, or a category the policy treats specially. Then match the category to the action the NAC policy defines for it.",
+      "fields": [
+        {
+          "id": "f1",
+          "label": "Finance laptop — AV current, fully patched, policy compliant",
+          "options": [
+            {
+              "id": "a",
+              "text": "Allow full corporate access"
+            },
+            {
+              "id": "b",
+              "text": "Quarantine to the remediation network"
+            },
+            {
+              "id": "c",
+              "text": "Block from the network"
+            },
+            {
+              "id": "d",
+              "text": "Allow but flag for manual review"
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "label": "Contractor tablet — missing critical patches, no antivirus installed",
+          "options": [
+            {
+              "id": "a",
+              "text": "Allow full corporate access"
+            },
+            {
+              "id": "b",
+              "text": "Quarantine to the remediation network until patched and protected"
+            },
+            {
+              "id": "c",
+              "text": "Block from the network permanently"
+            },
+            {
+              "id": "d",
+              "text": "Allow access and log at higher verbosity"
+            }
+          ]
+        },
+        {
+          "id": "f3",
+          "label": "Workstation — EDR reports active malware beaconing to a command-and-control server",
+          "options": [
+            {
+              "id": "a",
+              "text": "Allow full corporate access"
+            },
+            {
+              "id": "b",
+              "text": "Quarantine to the remediation network so the malware can update"
+            },
+            {
+              "id": "c",
+              "text": "Block/isolate from all network access"
+            },
+            {
+              "id": "d",
+              "text": "Allow access to email only"
+            }
+          ]
+        },
+        {
+          "id": "f4",
+          "label": "Visitor laptop on the guest wireless network",
+          "options": [
+            {
+              "id": "a",
+              "text": "Allow access to the guest segment (internet only, no corporate resources)"
+            },
+            {
+              "id": "b",
+              "text": "Allow full corporate access"
+            },
+            {
+              "id": "c",
+              "text": "Deny all network access"
+            },
+            {
+              "id": "d",
+              "text": "Route through the corporate VPN"
+            }
+          ]
+        },
+        {
+          "id": "f5",
+          "label": "Employee laptop — antivirus disabled by the user and definitions outdated",
+          "options": [
+            {
+              "id": "a",
+              "text": "Allow full corporate access"
+            },
+            {
+              "id": "b",
+              "text": "Quarantine to the remediation network until AV is re-enabled and updated"
+            },
+            {
+              "id": "c",
+              "text": "Block from the network permanently"
+            },
+            {
+              "id": "d",
+              "text": "Allow access but suppress the alert"
+            }
+          ]
+        }
+      ],
+      "correctValues": {
+        "f1": "a",
+        "f2": "b",
+        "f3": "c",
+        "f4": "a",
+        "f5": "b"
+      },
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5 — Network access control (NAC)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Network Access Control and Endpoint Posture"
+        }
+      ]
+    }
+  ]
+}

@@ -176,26 +176,36 @@ export interface CourseBankSpec {
 	scenarioTotals: Record<number, number>;
 	/** optional per-domain PBQ floor (checked when provided) */
 	pbqDomainTotals?: Record<number, number>;
+	/** Security+ quality gates — optional; banks that omit them stay valid. */
+	requireAuthoredHints?: boolean;
+	minSourceRefs?: number;
+	pbqObjectiveMinimum?: number;
+	kindDomainMinimums?: Partial<Record<QuestionDefinition['kind'], Partial<Record<Domain, number>>>>;
 }
 
 export const SECP701_BANK_SPEC: CourseBankSpec = {
 	courseId: 'secp-701',
-	mcqTotal: 300,
-	pbqTotal: 98,
+	mcqTotal: 332,
+	pbqTotal: 105,
 	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
 	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
 	domains: [1, 2, 3, 4, 5],
 	objectivesByDomain,
 	mcqObjectiveTotals: {
-		'1.1': 10, '1.2': 12, '1.3': 10, '1.4': 13,
-		'2.1': 12, '2.2': 14, '2.3': 12, '2.4': 16, '2.5': 12,
-		'3.1': 13, '3.2': 16, '3.3': 13, '3.4': 13,
-		'4.1': 8, '4.2': 8, '4.3': 11, '4.4': 8, '4.5': 9, '4.6': 8, '4.7': 8, '4.8': 10, '4.9': 7,
-		'5.1': 9, '5.2': 10, '5.3': 9, '5.4': 9, '5.5': 10, '5.6': 10
+		'1.1': 10, '1.2': 13, '1.3': 10, '1.4': 15,
+		'2.1': 12, '2.2': 16, '2.3': 13, '2.4': 17, '2.5': 13,
+		'3.1': 15, '3.2': 18, '3.3': 13, '3.4': 16,
+		'4.1': 11, '4.2': 9, '4.3': 13, '4.4': 10, '4.5': 10, '4.6': 13, '4.7': 8, '4.8': 11, '4.9': 7,
+		'5.1': 9, '5.2': 11, '5.3': 10, '5.4': 9, '5.5': 10, '5.6': 10
 	},
-	mcqDomainTotals: { 1: 45, 2: 66, 3: 55, 4: 77, 5: 57 },
-	multiTotals: { 1: 5, 2: 10, 3: 7, 4: 10, 5: 6 },
-	scenarioTotals: { 1: 45, 2: 66, 3: 55, 4: 77, 5: 57 }
+	mcqDomainTotals: { 1: 48, 2: 71, 3: 62, 4: 92, 5: 59 },
+	multiTotals: { 1: 6, 2: 11, 3: 9, 4: 13, 5: 7 },
+	scenarioTotals: { 1: 48, 2: 71, 3: 62, 4: 92, 5: 59 },
+	pbqDomainTotals: { 1: 15, 2: 21, 3: 19, 4: 32, 5: 18 },
+	requireAuthoredHints: true,
+	minSourceRefs: 2,
+	pbqObjectiveMinimum: 2,
+	kindDomainMinimums: { 'word-bank': { 1: 5, 2: 3, 3: 4, 4: 5, 5: 3 } }
 };
 
 function fail(id: string, message: string): never {
@@ -237,7 +247,9 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 	if (bank.pbqs.length !== spec.pbqTotal) fail('pbqs', `expected ${spec.pbqTotal} items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
-	if (new Set(all.map((question) => question.prompt.trim())).size !== all.length) fail('bank', 'prompts must be unique');
+	const normalized = (text: string) => text.trim().toLowerCase().replace(/\s+/g, ' ');
+	if (new Set(all.map((question) => normalized(question.prompt))).size !== all.length)
+		fail('bank', 'prompts must be unique (normalized)');
 	for (const domain of spec.domains) {
 		const mcqs = bank.mcqs.filter((question) => question.domain === domain);
 		if (mcqs.length !== spec.mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected ${spec.mcqDomainTotals[domain]} items`);
@@ -253,10 +265,30 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 	for (const [objective, expected] of Object.entries(spec.mcqObjectiveTotals) as [ObjectiveId, number][]) {
 		if (bank.mcqs.filter((question) => question.objective === objective).length !== expected) fail(objective, `expected ${expected} MCQs`);
 	}
+	if (spec.pbqObjectiveMinimum) {
+		for (const objective of Object.keys(spec.mcqObjectiveTotals)) {
+			const count = bank.pbqs.filter((question) => question.objective === objective).length;
+			if (count < spec.pbqObjectiveMinimum) fail(`pbq-${objective}`, `expected at least ${spec.pbqObjectiveMinimum} PBQs`);
+		}
+	}
+	if (spec.kindDomainMinimums) {
+		for (const [kind, minimums] of Object.entries(spec.kindDomainMinimums)) {
+			for (const domain of spec.domains) {
+				const expected = minimums[domain as Domain];
+				if (expected === undefined) continue;
+				const count = bank.pbqs.filter((question) => question.domain === domain && question.kind === kind).length;
+				if (count < expected) fail(`pbq-${kind}-${domain}`, `expected at least ${expected} ${kind} PBQs`);
+			}
+		}
+	}
 	for (const question of all) {
 		if (!spec.objectivesByDomain[question.domain].includes(question.objective)) fail(question.id, 'objective does not belong to domain');
 		if (!question.id.match(question.format === 'pbq' ? spec.pbqIdPattern : spec.mcqIdPattern)) fail(question.id, 'invalid ID or format');
 		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0) fail(question.id, 'missing authored content or source reference');
+		if (question.sourceRefs.some((ref, i) => !ref.section.trim() || question.sourceRefs.findIndex((other) => other.source === ref.source && other.section === ref.section) !== i)) fail(question.id, 'source references must be unique and non-empty');
+		if (spec.requireAuthoredHints && !question.hint) fail(question.id, 'missing authored hint');
+		if (spec.minSourceRefs !== undefined && question.sourceRefs.length < spec.minSourceRefs) fail(question.id, `expected at least ${spec.minSourceRefs} source references`);
+		if (question.kind === 'word-bank' && /typing the missing term|Spelling must be exact \(case-insensitive\)/i.test(question.prompt)) fail(question.id, 'word-bank prompts must use chip-selection instructions, not typing instructions');
 		if (question.kind === 'fill-blank') fail(question.id, 'fill-blank is deprecated — author word-bank or matching instead');
 		if (question.kind === 'numeric') fail(question.id, 'numeric is deprecated — author slider or word-bank instead');
 		if (question.hint !== undefined && !question.hint.trim()) fail(question.id, 'hint must be a non-empty string');
@@ -264,6 +296,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		if (question.kind === 'single-choice' || question.kind === 'multiple-choice') {
 			if (question.options.length !== (question.kind === 'single-choice' ? 4 : question.options.length) || (question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))) fail(question.id, 'invalid option count');
 			if (!hasUniqueIds(question.options) || question.options.some((option) => !option.text.trim() || !option.rationale.trim())) fail(question.id, 'invalid options');
+			if (new Set(question.options.map((option) => normalized(option.text))).size !== question.options.length) fail(question.id, 'options must be unique (normalized)');
 			if (question.correctOptionIds.length !== question.selectCount || !question.correctOptionIds.every((id) => question.options.some((option) => option.id === id))) fail(question.id, 'invalid correct choice IDs');
 		}
 		if (question.kind === 'ordering' && (question.items.length < 6 || !hasUniqueIds(question.items) || question.correctOrder.length !== question.items.length || new Set(question.correctOrder).size !== question.items.length || !question.correctOrder.every((id) => question.items.some((item) => item.id === id)))) fail(question.id, 'invalid ordering (need ≥6 items)');
@@ -279,6 +312,9 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 			if (!question.steps || question.steps.length < 2 || question.steps.length > 4) fail(question.id, 'multi-step must have 2-4 steps');
 			for (const step of question.steps) {
 				if (!step.prompt.trim() || !step.explanation.trim() || !step.kind || !step.sourceRefs?.length) fail(step.id || question.id, 'invalid multi-step child definition');
+				if (step.sourceRefs.some((ref, i) => !ref.section.trim() || step.sourceRefs.findIndex((other) => other.source === ref.source && other.section === ref.section) !== i)) fail(step.id || question.id, 'child source references must be unique and non-empty');
+				if (spec.requireAuthoredHints && !step.hint) fail(step.id || question.id, 'missing authored hint on multi-step child');
+				if (spec.minSourceRefs !== undefined && step.sourceRefs.length < spec.minSourceRefs) fail(step.id || question.id, `expected at least ${spec.minSourceRefs} child source references`);
 				if (step.kind === 'fill-blank') fail(step.id || question.id, 'fill-blank child steps are deprecated');
 				if (step.kind === 'numeric') fail(step.id || question.id, 'numeric child steps are deprecated');
 				if (step.hint !== undefined && !step.hint.trim()) fail(step.id || question.id, 'hint must be a non-empty string');

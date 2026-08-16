@@ -143,7 +143,7 @@
 	function statusTone(status: string): string {
 		if (status === 'submitted') return 'bg-success/15 text-success';
 		if (status === 'overdue') return 'bg-danger/15 text-danger';
-		if (status === 'due-soon') return 'bg-accent-warm/15 text-accent-warm';
+		if (status === 'due-soon') return 'bg-warning/15 text-warning';
 		if (status === 'in-progress') return 'bg-info/15 text-info';
 		return 'bg-surface-700 text-text-secondary';
 	}
@@ -450,67 +450,71 @@
 						</button>
 					</div>
 				</div>
-				<div
-					class="grid grid-cols-7 gap-0.5 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
-				>
-					{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div class="py-2">
-						{day}
-					</div>{/each}
-				</div>
-				<div class="grid grid-cols-7 gap-0.5">
-					{#each Array(firstWeekday) as _}<div></div>{/each}
-					{#each Array(daysInMonth) as _, index (index)}
-						{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
-						{@const items = byDay[keyFor(day)] ?? []}
-						{@const gitems = gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
-						<button
-							class="flex min-h-14 flex-col items-start rounded-md border p-1.5 text-left transition sm:min-h-16 {isToday(
-								day
-							)
-								? 'border-accent/60 bg-accent/10'
-								: 'border-border bg-surface-800/40 hover:bg-surface-700/60'}"
-							type="button"
-							onclick={() =>
-								(selectedDay = selectedDay && keyFor(selectedDay) === keyFor(day) ? null : day)}
+				<div class="overflow-x-auto">
+					<div class="min-w-[22rem]">
+						<div
+							class="grid grid-cols-7 gap-0.5 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
 						>
-							<span
-								class="text-xs font-bold {isToday(day)
-									? 'text-accent'
-									: inPast(day)
-										? 'text-text-subtle'
-										: 'text-text-secondary'}">{index + 1}</span
-							>
-							{#if items.length || gitems.length}
-								<span class="mt-auto flex flex-wrap items-center gap-0.5">
-									{#each items as item (item.assignment.id)}
-										<span
-											class="block h-1.5 w-1.5 rounded-full {item.status === 'submitted'
-												? 'bg-success'
-												: item.status === 'overdue'
-													? 'bg-danger'
-													: item.status === 'due-soon'
-														? 'bg-accent-warm'
-														: item.status === 'in-progress'
-															? 'bg-info'
-															: 'bg-surface-600'}"
-											title={item.assignment.title}
-										></span>
-									{/each}
-									{#each gitems.slice(0, 3) as event (event.id)}
-										<span
-											class="block h-1.5 w-1.5 rounded-full bg-accent-secondary"
-											title={`${event.summary} (Google)`}
-										></span>
-									{/each}
-									{#if gitems.length > 3}
-										<span class="text-[9px] font-semibold leading-3 text-text-muted"
-											>+{gitems.length - 3}</span
-										>
+							{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div class="py-2">
+								{day}
+							</div>{/each}
+						</div>
+						<div class="grid grid-cols-7 gap-0.5">
+							{#each Array(firstWeekday) as _}<div></div>{/each}
+							{#each Array(daysInMonth) as _, index (index)}
+								{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
+								{@const items = byDay[keyFor(day)] ?? []}
+								{@const gitems = gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
+								<button
+									class="flex min-h-14 flex-col items-start rounded-md border p-1.5 text-left transition sm:min-h-16 {isToday(
+										day
+									)
+										? 'border-accent/60 bg-accent/10'
+										: 'border-border bg-surface-800/40 hover:bg-surface-700/60'}"
+									type="button"
+									onclick={() =>
+										(selectedDay = selectedDay && keyFor(selectedDay) === keyFor(day) ? null : day)}
+								>
+									<span
+										class="text-xs font-bold {isToday(day)
+											? 'text-accent'
+											: inPast(day)
+												? 'text-text-subtle'
+												: 'text-text-secondary'}">{index + 1}</span
+									>
+									{#if items.length || gitems.length}
+										<span class="mt-auto flex flex-wrap items-center gap-0.5">
+											{#each items as item (item.assignment.id)}
+												<span
+													class="block h-1.5 w-1.5 rounded-full {item.status === 'submitted'
+														? 'bg-success'
+														: item.status === 'overdue'
+															? 'bg-danger'
+															: item.status === 'due-soon'
+																? 'bg-warning'
+																: item.status === 'in-progress'
+																	? 'bg-info'
+																	: 'bg-surface-600'}"
+													title={item.assignment.title}
+												></span>
+											{/each}
+											{#each gitems.slice(0, 3) as event (event.id)}
+												<span
+													class="block h-1.5 w-1.5 rounded-full bg-accent-secondary"
+													title={`${event.summary} (Google)`}
+												></span>
+											{/each}
+											{#if gitems.length > 3}
+												<span class="text-[9px] font-semibold leading-3 text-text-muted"
+													>+{gitems.length - 3}</span
+												>
+											{/if}
+										</span>
 									{/if}
-								</span>
-							{/if}
-						</button>
-					{/each}
+								</button>
+							{/each}
+						</div>
+					</div>
 				</div>
 				<div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-text-muted">
 					<span class="flex items-center gap-1.5"
@@ -610,7 +614,7 @@
 											class="mt-0.5 text-xs {item.assignment.daysUntilDue < 0
 												? 'text-danger'
 												: item.assignment.daysUntilDue <= 2
-													? 'text-accent-warm'
+													? 'text-warning'
 													: 'text-text-muted'}"
 										>
 											{item.assignment.dueDateLabel}

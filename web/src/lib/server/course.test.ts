@@ -166,12 +166,16 @@ describe('Readiness', () => {
 		expect(readiness.examCount).toBe(2);
 	});
 
-	it('projects a scaled score on the 100–900 band', () => {
+	it('reports the app-defined practice target and the official passing score without a projection', () => {
 		const readiness = computeReadiness({ 1: { percentage: 100, possiblePoints: 10 } }, [
 			{ percentage: 100 }
 		]);
-		expect(readiness.passingScale).toBe(900);
-		expect(computeReadiness({}, []).passingScale).toBe(100);
+		expect(readiness.practiceTargetPercent).toBe(83.3);
+		expect(readiness.officialPassingScore).toBe(750);
+		expect(readiness.ready).toBe(true);
+		expect(computeReadiness({}, []).practiceTargetPercent).toBe(83.3);
+		expect(computeReadiness({}, []).officialPassingScore).toBe(750);
+		expect(computeReadiness({}, []).ready).toBe(false);
 	});
 
 	it('labels low scores as not started', () => {

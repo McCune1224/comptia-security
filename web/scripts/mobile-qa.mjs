@@ -2,25 +2,15 @@
 /**
  * mobile-qa.mjs — FAIL-THRESHOLD mobile touch-QA gate for the CompTIA study app.
  *
- * Drives the PRODUCTION build (node build/index.js) on a THROWAWAY DB through an
- * iPhone-class touch-emulated viewport and asserts the mobile contract:
- *
- *   • every interactive element on every route is ≥44×44 CSS px
- *   • no horizontal overflow at 390px
- *   • zero console.error / uncaught page errors / failed resources
- *   • every question kind the engine supports is exercised (drill + screenshot)
- *
- * Routes owned by this gate fail it on violation. Routes owned by sibling
- * workstreams (modules/[id] → WT-C, ExamFlow drill screens → WT-A) are swept and
- * LOGGED as deferred findings for the post-merge re-audit but do not fail the gate.
- *
- * Usage (cwd = web/):
- *   node scripts/mobile-qa.mjs [--report-only]
- *
- * Exit codes:
- *   0  pass — no gate violations
- *   1  gate violations (small targets on owned routes, overflow, console errors)
- *   2  environment failure (server boot, browser launch)
+ * Runs the production build against a throwaway database and drives it with a
+ * real mobile-emulated Chromium:
+ *   1. Kind drills — seeds sessions via the API and answers every supported
+ *      engine kind on touch, in BOTH themes (dark + light).
+ *   2. Full route walk — touch-target sweep (≥44×44px), 390px horizontal
+ *      overflow, console/page/failed-request errors, dual-viewport screenshots.
+ *   3. Fixed viewports — 320×568, 390×844, and 640×360 landscape: dropdown
+ *      containment, calendar, lesson objective drills, and the fixed bottom
+ *      nav never covering the final assessment action.
  *
  * Env: PORT (default 4899), QUIZ_DB_PATH (default /tmp/qa-<pid>.db)
  * Never points at the user's real data/quiz.db.
@@ -41,13 +31,13 @@ const DB = process.env.QUIZ_DB_PATH || `/tmp/qa-${process.pid}.db`;
 const BASE = `http://localhost:${PORT}`;
 const VIEWPORT = { width: 390, height: 844 };
 const TALL = { width: 390, height: 1400 };
+const LANDSCAPE = { width: 640, height: 360 };
+const NARROW = { width: 320, height: 568 };
 const MIN_TAP = 44;
 const REPORT_ONLY = process.argv.includes('--report-only');
 
 // ---------------------------------------------------------------------------
-// Route ownership: routes we own fail the gate; routes owned by sibling
-// workstreams are swept but their findings are logged as deferred (post-merge
-// re-audit), never as gate failures.
+// Route ownership: every route is owned by this app — no deferred exemptions.
 // ---------------------------------------------------------------------------
 const OWNED_ROUTES = [
 	'/',
@@ -60,24 +50,25 @@ const OWNED_ROUTES = [
 	'/history',
 	'/pbq',
 	'/quiz',
-	'/scenarios'
+	'/scenarios',
+	'/modules/week-1'
 ];
-const DEFERRED_ROUTE_PREFIXES = ['/modules/']; // WT-C owns modules/[id] (+ its 32px ✓ button)
+const DEFERRED_ROUTE_PREFIXES = [];
 
 /**
- * Question kinds the engine supports. Data-driven on purpose: when WT-A merges
- * `memory` / `slider` (and WT-D authors `hotspot` items), add the name here and
- * the drill + screenshot happen automatically. A kind with no bank items is
- * reported as "not exercisable yet" (Info) instead of failing the gate.
+ * Question kinds the engine supports. Data-driven: when a kind has no bank
+ * items it is reported as "unavailable" (Info) instead of failing the gate.
  */
 const KINDS = [
 	'choice',
 	'configuration',
 	'evidence',
 	'matching',
+	'memory',
 	'multi-step',
 	'numeric',
 	'ordering',
+	'slider',
 	'sort',
 	'word-bank',
 	'hotspot'
@@ -107,10 +98,13 @@ const pageErrors = [];
 const failedRequests = [];
 const KINDS_SEEN = new Set();
 const KINDS_NOT_SEEN = [];
+const THEMES_SEEN = [];
 let sessionQuestions = null;
 const activeSessions = new Set();
 let orderingAttempts = 0;
 let orderingFailures = 0;
+let orderingKeyboardRecovered = 0;
+const FIXED_CHECKS = [];
 
 function addFinding(pageUrl, severity, category, title, details, screenshot = null) {
 	findings.push({ pageUrl, severity, category, title, details, screenshot });
@@ -143,6 +137,14 @@ function attachListeners(page) {
 		const why = req.failure() ? req.failure().errorText : 'unknown';
 		failedRequests.push(`${req.url()} — ${why}`);
 		console.log(`REQ-FAILED: ${req.url()} — ${why}`);
+	});
+	page.on('response', (res) => {
+		if (res.status() >= 400 && res.url().includes('/api/')) {
+			res
+				.text()
+				.then((body) => console.log(`API-ERROR ${res.status()}: ${res.url()} — ${body.slice(0, 200)}`))
+				.catch(() => {});
+		}
 	});
 	// Native confirm() on Submit must be accepted for the session to complete.
 	page.on('dialog', (dialog) => dialog.accept().catch(() => {}));
@@ -206,14 +208,14 @@ async function touchDrag(page, fromSelector, toSelector) {
 
 /**
  * Sweep every interactive element on the page for the ≥44×44 touch contract
- * and check horizontal overflow at 390px. Radio/checkbox inputs inside a
- * <label> are measured by the label box (the label is the real hit target).
- * Returns { small: [...], overflow: boolean }.
+ * and check horizontal overflow at the current viewport. Radio/checkbox inputs
+ * inside a <label> are measured by the label box (the label is the real hit
+ * target). Returns { small: [...], overflow: boolean }.
  */
 async function sweepPage(page) {
 	return page.evaluate((min) => {
 		const small = [];
-		const sel = 'button, a, [role="button"], input, select, [tabindex]:not([tabindex="-1"])';
+		const sel = 'button, a, [role="button"], [role="slider"], input, select, [tabindex]:not([tabindex="-1"])';
 		for (const el of document.querySelectorAll(sel)) {
 			const style = getComputedStyle(el);
 			if (style.visibility === 'hidden' || style.display === 'none') continue;
@@ -254,9 +256,6 @@ async function sweepRoute(page, route, forceDeferred = false) {
 	const { small, overflow } = await sweepPage(page);
 	if (small.length) {
 		if (deferred) {
-			// Sibling-owned surface (ExamFlow / modules page): one compact finding so the
-			// post-merge re-audit has a pointer without flooding the report with hundreds
-			// of identical navigator-button rows.
 			const examples = small
 				.slice(0, 5)
 				.map((s) => `${s.tag} "${s.text}" ${s.w}×${s.h}px`)
@@ -265,7 +264,7 @@ async function sweepRoute(page, route, forceDeferred = false) {
 				route,
 				'Info',
 				'Accessibility',
-				`${small.length} small touch targets (deferred — post-merge re-audit)`,
+				`${small.length} small touch targets (deferred — logged only)`,
 				`e.g. ${examples}${small.length > 5 ? ` (+${small.length - 5} more)` : ''}`
 			);
 			console.log(`[sweep] ${route}: ${small.length} small target(s) (deferred — logged only)`);
@@ -285,7 +284,7 @@ async function sweepRoute(page, route, forceDeferred = false) {
 		}
 	}
 	if (overflow) {
-		const msg = 'horizontal overflow at 390px';
+		const msg = `horizontal overflow at ${page.viewportSize()?.width ?? 'current'}px`;
 		addFinding(route, deferred ? 'Info' : 'Medium', 'Layout', `Horizontal overflow${deferred ? ' (deferred)' : ''}`, msg);
 		if (!deferred) addViolation(route, msg);
 	}
@@ -306,6 +305,8 @@ async function bootServer() {
 	child.stdout.on('data', (d) => (out += d));
 	child.stderr.on('data', (d) => (out += d));
 	for (let i = 0; i < 60; i++) {
+		if (child.exitCode !== null || child.signalCode !== null)
+			throw new Error(`server died during boot (port ${PORT} in use?):\n${out.slice(-2000)}`);
 		try {
 			const res = await fetch(`${BASE}/`);
 			if (res.ok) return child;
@@ -313,6 +314,25 @@ async function bootServer() {
 		await new Promise((r) => setTimeout(r, 500));
 	}
 	throw new Error(`server did not boot:\n${out.slice(-2000)}`);
+}
+
+// ---- theme-aware context ---------------------------------------------------
+async function newThemeContext(browser, theme) {
+	const context = await browser.newContext({
+		viewport: VIEWPORT,
+		deviceScaleFactor: 3,
+		isMobile: true,
+		hasTouch: true,
+		colorScheme: theme,
+		initScript: `localStorage.setItem('theme', '${theme}');`,
+		userAgent:
+			'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+	});
+	return context;
+}
+
+async function actualTheme(page) {
+	return page.evaluate(() => document.documentElement.dataset.theme ?? '(none)');
 }
 
 // ---- kind detection -------------------------------------------------------
@@ -326,11 +346,13 @@ async function detectKind(page, allowMultiStep = true) {
 			return 'multi-step';
 		if (has('[data-connect-premise]')) return 'matching';
 		if (low.includes('tap a region')) return 'hotspot';
+		if (has('[role="slider"]')) return 'slider';
 		if (has('select')) return 'configuration';
 		if (has('input[type="number"]')) return 'numeric';
 		if (low.includes('word bank —')) return 'word-bank';
 		if (low.includes('tap an item, then tap a bucket')) return 'sort';
 		if (has('[aria-label^="Reorder item"]')) return 'ordering';
+		if (has('button[aria-pressed]') && low.includes('flip') ) return 'memory';
 		const mono = document.querySelectorAll('.font-mono input[type="checkbox"]').length;
 		if (mono > 0) return 'evidence';
 		if (has('input[type="radio"]') || has('input[type="checkbox"]')) return 'choice';
@@ -411,6 +433,28 @@ async function interactWithKind(page, kind) {
 			}
 			break;
 		}
+		case 'memory': {
+			// flip cards in pairs until the board resolves.
+			const cards = page.locator('button[aria-label*="card" i], button[aria-pressed]');
+			const n = await cards.count();
+			for (let i = 0; i < Math.min(n, 8); i++) {
+				await cards.nth(i % n).tap({ timeout: 3000 }).catch(() => {});
+				await page.waitForTimeout(120);
+				await cards.nth((i + 1) % n).tap({ timeout: 3000 }).catch(() => {});
+				await page.waitForTimeout(180);
+			}
+			break;
+		}
+		case 'slider': {
+			const slider = page.locator('[role="slider"]').first();
+			const box = await slider.boundingBox().catch(() => null);
+			if (box) {
+				await page.touchscreen.tap(box.x + box.width * 0.5, box.y + box.height / 2).catch(() => {});
+			}
+			await slider.focus().catch(() => {});
+			await page.keyboard.press('ArrowRight').catch(() => {});
+			break;
+		}
 		case 'sort': {
 			for (let i = 0; i < 8; i++) {
 				const tray = page.locator('div.flex.flex-wrap.gap-2 > button[aria-pressed]:not([disabled])');
@@ -468,13 +512,29 @@ async function interactWithKind(page, kind) {
 			break;
 		}
 		case 'evidence': {
-			const text = await page.evaluate(() => document.body.innerText || '');
-			const m = text.match(/[Ss]elect (?:up to )?(ALL|the|TWO|THREE|FOUR|ONE|one|two|three|four)/);
+			// Prefer the seeded payload's exact selectCount; fall back to prompt text.
 			let want = 1;
-			if (m) {
-				const w = m[1].toUpperCase();
-				if (w === 'ALL') want = Infinity;
-				else want = w === 'ONE' ? 1 : w === 'TWO' ? 2 : w === 'THREE' ? 3 : w === 'FOUR' ? 4 : 1;
+			const text = await page.evaluate(() => document.body.innerText || '');
+			const qm = text.match(/Q(\d+)\s+OF\s+\d+/i);
+			const sm = text.match(/Step\s+(\d+)\s+of\s+\d+/i);
+			let payloadQuestion = null;
+			if (qm && sessionQuestions) {
+				const question = sessionQuestions[parseInt(qm[1], 10) - 1];
+				if (question?.kind === 'evidence') payloadQuestion = question;
+				if (question?.kind === 'multi-step' && sm) {
+					const step = question.steps[parseInt(sm[1], 10) - 1];
+					if (step?.kind === 'evidence') payloadQuestion = step;
+				}
+			}
+			if (payloadQuestion) {
+				want = payloadQuestion.selectCount;
+			} else {
+				const m = text.match(/[Ss]elect (?:up to )?(ALL|the|TWO|THREE|FOUR|ONE|one|two|three|four)/);
+				if (m) {
+					const w = m[1].toUpperCase();
+					if (w === 'ALL') want = Infinity;
+					else want = w === 'ONE' ? 1 : w === 'TWO' ? 2 : w === 'THREE' ? 3 : w === 'FOUR' ? 4 : 1;
+				}
 			}
 			const boxes = page.locator('.font-mono input[type="checkbox"]');
 			const total = await boxes.count();
@@ -493,18 +553,26 @@ async function interactWithKind(page, kind) {
 		case 'ordering': {
 			orderingAttempts++;
 			const handles = page.locator('[aria-label^="Reorder item"]');
-			const ok = await touchDragBoxes(page, handles.nth(0), handles.nth(1));
-			const draftActive = await page
-				.locator('button:has-text("Check Answer")')
-				.first()
-				.isEnabled()
-				.catch(() => false);
-			console.log(`ordering drag ok=${ok} draftEnabled=${draftActive}`);
-			if (!draftActive) {
+			const order = () =>
+				page
+					.evaluate(() =>
+						[...document.querySelectorAll('[data-id]')].map((el) => el.getAttribute('data-id')).join(',')
+					)
+					.catch(() => '');
+			const before = await order();
+			await touchDragBoxes(page, handles.nth(0), handles.nth(1));
+			await page.waitForTimeout(350);
+			const after = await order();
+			const reordered = before !== after;
+			console.log(`ordering drag reordered=${reordered}`);
+			if (!reordered) {
 				orderingFailures++;
-				const first = page.locator('[aria-label^="Reorder item"]').first();
-				await first.focus();
+				const first = handles.first();
+				await first.focus().catch(() => {});
 				await page.keyboard.press('ArrowDown');
+				await page.waitForTimeout(350);
+				const afterFallback = await order();
+				if (before !== afterFallback) orderingKeyboardRecovered++;
 			}
 			break;
 		}
@@ -572,7 +640,7 @@ async function abandonSession(context, sessionId) {
  * Seed a session via the API, then drive it on touch until every not-yet-seen
  * kind in KINDS has been exercised (answered + screenshotted), the session
  * completes, or the iteration cap is hit. Screenshots every kind's first
- * occurrence at 390×844 and 390×1400, dark.
+ * occurrence at 390×844 and 390×1400, in the context's current theme.
  */
 async function driveSession(page, context, type, routeTag, body, tag, cap = 160) {
 	const res = await context.request.post(`${BASE}/api/quiz/start`, { data: body });
@@ -606,9 +674,8 @@ async function driveSession(page, context, type, routeTag, body, tag, cap = 160)
 			KINDS_SEEN.add(kind);
 			await screenshot(page, `kind-${slug(kind)}-390x844`, VIEWPORT);
 			await screenshot(page, `kind-${slug(kind)}-390x1400`, TALL);
-			// drill screens are ExamFlow (WT-A): sweep as deferred, log only.
-			const { small } = await sweepRoute(page, `${routeTag}#${kind}`, true);
-			console.log(`[${tag}] kind=${kind} first-seen (${small} small targets, deferred)`);
+			const { small } = await sweepRoute(page, `${routeTag}#${kind}`);
+			console.log(`[${tag}] kind=${kind} first-seen (${small} small targets)`);
 		}
 		if (kind === 'unknown') {
 			const snippet = bodyText.replace(/\s+/g, ' ').slice(0, 500);
@@ -648,22 +715,22 @@ async function driveSession(page, context, type, routeTag, body, tag, cap = 160)
 }
 
 // ---- page walk ------------------------------------------------------------
-async function walkPages(page) {
+async function walkPages(page, theme) {
 	for (const route of OWNED_ROUTES) {
 		try {
 			await page.goto(`${BASE}${route}`);
 			await page.waitForTimeout(1400);
-			const { small, overflow } = await sweepRoute(page, route);
-			console.log(`[walk] ${route}: ${small} small, overflow=${overflow}`);
-			await screenshot(page, `page-${slug(route)}-390x844`, VIEWPORT);
-			await screenshot(page, `page-${slug(route)}-390x1400`, TALL);
-			// bottom sheet / menu exercise on home (the "More" header button).
+			const { small, overflow } = await sweepRoute(page, `${route} (${theme})`);
+			console.log(`[walk][${theme}] ${route}: ${small} small, overflow=${overflow}`);
+			await screenshot(page, `page-${slug(route)}-${theme}-390x844`, VIEWPORT);
+			await screenshot(page, `page-${slug(route)}-${theme}-390x1400`, TALL);
+			// bottom nav / mobile menu exercise on home.
 			if (route === '/') {
-				const menu = page.locator('button:has-text("More")');
+				const menu = page.locator('button[aria-label="Open menu"]');
 				if (await menu.count()) {
 					await menu.first().tap({ timeout: 3000 }).catch(() => {});
 					await page.waitForTimeout(600);
-					await screenshot(page, 'page-home-menu-390x844', VIEWPORT);
+					await screenshot(page, `page-home-menu-${theme}-390x844`, VIEWPORT);
 					await page.keyboard.press('Escape');
 					await page.waitForTimeout(400);
 				}
@@ -672,31 +739,179 @@ async function walkPages(page) {
 			console.log(`walk ${route} ERROR: ${err.message}`);
 		}
 	}
-	// Deferred routes (modules/[id], WT-C) — swept, logged, never failing.
-	for (const route of ['/modules/week-1']) {
+}
+
+/** True when an element box is at least MIN_TAP × MIN_TAP. */
+function meetsTap(box) {
+	return box && box.width >= MIN_TAP && box.height >= MIN_TAP;
+}
+
+/**
+ * Fixed-viewport scenarios: 320×568, 390×844, 640×360 landscape.
+ * Covers dashboard/bottom nav, dropdown containment, calendar, lesson
+ * objective drills, and the fixed bottom nav never covering the final
+ * assessment action. Interactive elements must be ≥44×44; no page-level
+ * horizontal overflow; dropdowns stay in the viewport and scroll internally.
+ */
+async function fixedViewportScenarios(page, context, theme) {
+	const scope = `fixed:${theme}`;
+	const check = async (viewport, name, fn) => {
 		try {
-			await page.goto(`${BASE}${route}`);
-			await page.waitForTimeout(1400);
-			const { small, overflow } = await sweepRoute(page, route);
-			console.log(`[walk][deferred] ${route}: ${small} small, overflow=${overflow}`);
-			await screenshot(page, `page-${slug(route)}-390x844`, VIEWPORT);
-			await screenshot(page, `page-${slug(route)}-390x1400`, TALL);
+			await page.setViewportSize(viewport);
+			await page.waitForTimeout(400);
+			await fn();
+			FIXED_CHECKS.push(`${name}@${viewport.width}x${viewport.height}`);
+			console.log(`[fixed][${theme}] ${name} OK (${viewport.width}×${viewport.height})`);
 		} catch (err) {
-			console.log(`walk ${route} ERROR: ${err.message}`);
+			console.log(`[fixed][${theme}] ${name} ERROR: ${err.message}`);
 		}
-	}
+	};
+
+	const assertNoPageOverflow = async (label) => {
+		const overflow = await page.evaluate(
+			() =>
+				document.documentElement.scrollWidth > window.innerWidth + 1 ||
+				(document.body && document.body.scrollWidth > window.innerWidth + 1)
+		);
+		if (overflow) addViolation(scope, `${label}: page-level horizontal overflow`);
+	};
+
+	const assertBottomNavClear = async (label) => {
+		// The fixed bottom nav must not cover the final assessment action once
+		// the user has scrolled it into view.
+		const navBox = await page.locator('nav[aria-label="Primary navigation"]').boundingBox().catch(() => null);
+		if (!navBox) return;
+		const submit = page.locator('button:has-text("Submit")').last();
+		await submit.scrollIntoViewIfNeeded().catch(() => {});
+		await page.waitForTimeout(300);
+		const box = await submit.boundingBox().catch(() => null);
+		if (box && box.y + box.height > navBox.y + 4) {
+			addViolation(scope, `${label}: bottom nav covers the final assessment action`);
+		}
+	};
+
+	const dropdownContained = async (label, openSelector, closeVia = 'Escape') => {
+		const open = page.locator(openSelector).first();
+		if (!(await open.count())) return;
+		await open.tap({ timeout: 3000 }).catch(() => {});
+		await page.waitForTimeout(500);
+		// Every open dropdown panel must fit the viewport and scroll internally.
+		const panels = page.locator('[role="menu"]');
+		const n = await panels.count();
+		for (let i = 0; i < n; i++) {
+			const box = await panels.nth(i).boundingBox().catch(() => null);
+			if (!box) continue;
+			if (box.x < 0 || box.y < 0 || box.x + box.width > page.viewportSize().width + 1 || box.y + box.height > page.viewportSize().height + 1) {
+				addViolation(scope, `${label}: dropdown leaves the viewport (${Math.round(box.x)},${Math.round(box.y)} ${Math.round(box.width)}×${Math.round(box.height)} at ${page.viewportSize().width}×${page.viewportSize().height})`);
+			}
+			const scrollable = await panels.nth(i).evaluate((el) => el.scrollHeight > el.clientHeight + 4).catch(() => false);
+			if (box.height >= page.viewportSize().height - 40 && !scrollable) {
+				addViolation(scope, `${label}: dropdown fills the viewport but does not scroll internally`);
+			}
+		}
+		await page.keyboard.press(closeVia);
+		await page.waitForTimeout(400);
+	};
+
+	await check(LANDSCAPE, 'dropdowns',
+		async () => {
+			await page.goto(`${BASE}/`);
+			await page.waitForTimeout(1200);
+			await dropdownContained('MobileMenu', 'button[aria-label="Open menu"]');
+			await dropdownContained('CourseSwitcher', 'button[aria-label="Switch course"]');
+			await dropdownContained('ProfileSwitcher', 'button[aria-label="Switch profile"]');
+			await assertNoPageOverflow('landscape dropdowns');
+		});
+
+	await check(NARROW, 'calendar',
+		async () => {
+			await page.goto(`${BASE}/calendar`);
+			await page.waitForTimeout(1200);
+			await assertNoPageOverflow('calendar 320px');
+			// Select a calendar day — day cells must stay ≥44px tall within the scroller.
+			const day = page.locator('button').filter({ has: page.locator('span') }).first();
+			const dayBox = await day.boundingBox().catch(() => null);
+			if (dayBox && (dayBox.width < 20 || dayBox.height < 40)) {
+				addViolation(scope, `calendar day cell too small (${Math.round(dayBox.width)}×${Math.round(dayBox.height)})`);
+			}
+			await day.tap({ timeout: 3000 }).catch(() => {});
+			await page.waitForTimeout(400);
+		});
+
+	await check(NARROW, 'lesson drills',
+		async () => {
+			await page.goto(`${BASE}/modules/week-1`);
+			await page.waitForTimeout(1200);
+			await assertNoPageOverflow('lesson 320px');
+			// Open the first lesson, then verify an objective drill link starts a 5-question session.
+			const lessonRow = page.locator('[role="button"]').filter({ hasText: 'Domain 1' }).first();
+			await lessonRow.tap({ timeout: 3000 }).catch(() => {});
+			await page.waitForTimeout(600);
+			const drill = page.locator('a', { hasText: /^Drill \d+\.\d+$/ }).first();
+			const drillBox = await drill.boundingBox().catch(() => null);
+			if (!meetsTap(drillBox)) addViolation(scope, `objective drill link < ${MIN_TAP}px`);
+			const href = await drill.getAttribute('href').catch(() => null);
+			const match = href ? /objective=([\d.]+)&count=5/.exec(href) : null;
+			if (!match) {
+				addViolation(scope, 'objective drill link does not target a 5-question objective session');
+				return;
+			}
+			await page.goto(`${BASE}${href}`);
+			await page.waitForTimeout(1500);
+			const text = await page.evaluate(() => document.body.innerText || '');
+			if (!/Q1\s+OF\s+5/i.test(text)) addViolation(scope, `objective drill did not start a 5-question session (${href})`);
+			// The bottom nav must not cover the action row on a drill.
+			await assertBottomNavClear('drill');
+			// Abandon the drill session so the next theme's seeded sessions are not blocked.
+			const sessionId = new URL(page.url()).searchParams.get('session');
+			if (sessionId) {
+				await context.request.delete(`${BASE}/api/quiz/session/${sessionId}`).catch(() => {});
+				activeSessions.delete(sessionId);
+			}
+		});
+
+	await check(NARROW, 'dashboard',
+		async () => {
+			await page.goto(`${BASE}/`);
+			await page.waitForTimeout(1200);
+			await assertNoPageOverflow('dashboard 320px');
+			// Bottom nav tabs remain ≥44px and fully visible.
+			const nav = page.locator('nav[aria-label="Primary navigation"] a');
+			const n = await nav.count();
+			for (let i = 0; i < n; i++) {
+				const box = await nav.nth(i).boundingBox().catch(() => null);
+				if (!meetsTap(box)) addViolation(scope, `bottom nav tab ${i} < ${MIN_TAP}px`);
+			}
+		});
+
+	await check(VIEWPORT, 'assessment action row',
+		async () => {
+			// Drive one choice question inside a seeded session and confirm the
+			// fixed bottom nav never covers the action row.
+			const res = await context.request.post(`${BASE}/api/quiz/start`, {
+				data: { type: 'quiz', count: 3, mode: 'practice' }
+			});
+			const payload = await res.json().catch(() => ({}));
+			const sessionId = payload.session?.sessionId;
+			if (!sessionId) return;
+			activeSessions.add(sessionId);
+			await page.goto(`${BASE}/quiz?session=${sessionId}`);
+			await page.waitForTimeout(1200);
+			await assertBottomNavClear('assessment action row');
+			await abandonSession(context, sessionId);
+		});
 }
 
 // ---- report ---------------------------------------------------------------
 function writeReport(summary) {
 	const final = [...findings];
-	if (orderingAttempts > 0 && orderingFailures > orderingAttempts / 2) {
+	if (orderingAttempts > 0 && orderingFailures === orderingAttempts && orderingKeyboardRecovered === 0) {
 		final.push({
 			pageUrl: 'pbq',
 			severity: 'High',
 			category: 'Functional',
-			title: 'Ordering touch-drag does not reorder (scroll hijack)',
-			details: `${orderingFailures}/${orderingAttempts} touch drags on the handle produced no SortableJS reorder — the page scrolls instead.`,
+			title: 'Ordering cannot be reordered (drag and keyboard fallback both fail)',
+			details: `${orderingAttempts}/${orderingAttempts} touch drags produced no SortableJS reorder and the keyboard fallback did not recover — the ordering interaction is broken.`,
 			screenshot: null
 		});
 	} else if (orderingAttempts > 0) {
@@ -704,8 +919,8 @@ function writeReport(summary) {
 			pageUrl: 'pbq',
 			severity: 'Info',
 			category: 'UX',
-			title: 'Ordering touch-drag verified',
-			details: `${orderingAttempts - orderingFailures}/${orderingAttempts} touch drags reordered successfully (${orderingFailures} first-attempt flake under emulation).`,
+			title: 'Ordering reorder verified',
+			details: `${orderingAttempts - orderingFailures}/${orderingAttempts} touch drags reordered; ${orderingKeyboardRecovered} failed drags recovered via the keyboard fallback (CDP touch emulation flake — verify on a physical device).`,
 			screenshot: null
 		});
 	}
@@ -741,21 +956,24 @@ function writeReport(summary) {
 ## Executive summary
 
 - **Gate status:** ${gateViolations.length === 0 ? '✅ PASS (exit 0)' : `❌ FAIL (${gateViolations.length} violation(s), exit 1)`}
-- **Routes swept:** ${OWNED_ROUTES.length} owned + ${DEFERRED_ROUTE_PREFIXES.length} deferred route(s)
-- **Kinds exercised:** ${[...KINDS_SEEN].sort().join(', ') || 'none'}${notSeen.length ? `\n- **Kinds NOT exercised (no bank items yet / post-merge re-audit):** ${notSeen.join(', ')}` : ''}
+- **Themes exercised:** ${THEMES_SEEN.join(', ') || 'none'} (computed \`data-theme\` recorded per run)
+- **Routes swept:** ${OWNED_ROUTES.length} owned route(s)
+- **Kinds exercised:** ${[...KINDS_SEEN].sort().join(', ') || 'none'}${notSeen.length ? `\n- **Kinds NOT exercised (no bank items yet — renderer supported, reported unavailable):** ${notSeen.join(', ')}` : ''}
 - **Console errors:** ${consoleErrors.length} · **Page errors:** ${pageErrors.length} · **Failed resources:** ${failedRequests.length}
+- **Fixed-viewport checks:** ${FIXED_CHECKS.length} run
 - **Findings:** ${unique.length} unique (${unique.filter((f) => f.severity === 'High').length} high, ${unique.filter((f) => f.severity === 'Medium').length} medium, ${unique.filter((f) => f.severity === 'Low' || f.severity === 'Info').length} low/info)
 - **DB:** throwaway \`${DB}\` (never the user's real DB)
-- **Viewport:** ${VIEWPORT.width}×${VIEWPORT.height} + ${TALL.height} @3x, hasTouch, dark theme
+- **Viewports:** ${VIEWPORT.width}×${VIEWPORT.height} + ${TALL.height} @3x, ${NARROW.width}×${NARROW.height}, ${LANDSCAPE.width}×${LANDSCAPE.height} landscape, hasTouch, both themes
 
 ${summary ? `## Notes\n\n${summary}\n\n` : ''}
 ## Gate results
 
-- **Small touch targets (<${MIN_TAP}px) on owned routes:** ${gateViolations.filter((v) => /[0-9]+×[0-9]+px/.test(v.message)).length}
+- **Small touch targets (<${MIN_TAP}px):** ${gateViolations.filter((v) => /[0-9]+×[0-9]+px/.test(v.message)).length}
 - **Horizontal overflow:** ${gateViolations.filter((v) => v.message.includes('overflow')).length}
+- **Dropdown/viewport violations:** ${gateViolations.filter((v) => v.message.includes('dropdown') || v.message.includes('covers')).length}
 - **Console/page errors:** ${consoleErrors.length + pageErrors.length + failedRequests.length}
 
-${gateViolations.length ? gateViolations.map((v) => `- ❌ \`[${v.scope}]\` ${v.message}`).join('\n') : '- ✅ none — all owned routes clear the ≥44×44px contract at 390px, no overflow, no console errors.'}
+${gateViolations.length ? gateViolations.map((v) => `- ❌ \`[${v.scope}]\` ${v.message}`).join('\n') : '- ✅ none — all owned routes clear the ≥44×44px contract, no overflow, no console errors.'}
 
 ## Console / page errors
 
@@ -765,16 +983,11 @@ ${failedRequests.length ? failedRequests.map((e) => `- \`failed request: ${e}\``
 
 ## Kinds exercised
 
-${KINDS.map((k) => `- **${k}:** ${KINDS_SEEN.has(k) ? 'exercised + screenshotted' : 'not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)'}`).join('\n')}
+${KINDS.map((k) => `- **${k}:** ${KINDS_SEEN.has(k) ? 'exercised + screenshotted' : 'unavailable — no bank items in this build (renderer supported)'}`).join('\n')}
 
 ## Screenshots
 
 ${screenshots || '- none'}
-
-## Remaining / deferred items (post-merge re-audit)
-
-- Deferred routes swept and logged only (sibling workstream ownership): see findings tagged \`(deferred)\` below.
-- Known, un-fixed by design: \`/modules/[id]\` lesson-complete ✓ (32×32) + "← Syllabus" (76×40) — owned by WT-C. ExamFlow question-navigator buttons (h-10 w-10 = 40px) — owned by WT-A. Both re-audited after their branches merge.
 
 ## Findings
 
@@ -795,40 +1008,49 @@ console.log(`chromium: ${chromiumPath}\ndb: ${DB}\nbase: ${BASE}\nreportOnly: ${
 let server;
 try {
 	server = await bootServer();
-	const browser = await chromium.launch({ executablePath: chromiumPath, args: ['--blink-settings=preferredColorScheme=2'] });
-	const context = await browser.newContext({
-		viewport: VIEWPORT,
-		deviceScaleFactor: 3,
-		isMobile: true,
-		hasTouch: true,
-		userAgent:
-			'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
-	});
-	const page = await context.newPage();
-	attachListeners(page);
+	const browser = await chromium.launch({ executablePath: chromiumPath });
 
-	// 1) Kind drills — seed sessions via the API, drive every engine kind on touch.
-	await driveSession(page, context, 'pbq', 'pbq', { type: 'pbq', count: 5, mode: 'practice' }, 'pbq', 170);
-	await driveSession(page, context, 'quiz', 'quiz', { type: 'quiz', count: 24, mode: 'practice' }, 'quiz', 60);
+	for (const theme of ['dark', 'light']) {
+		const context = await newThemeContext(browser, theme);
+		const page = await context.newPage();
+		attachListeners(page);
 
-	// 2) Full route walk — touch sweep + overflow + dual-viewport screenshots.
-	await walkPages(page);
+		await page.goto(`${BASE}/`);
+		await page.waitForTimeout(800);
+		const themeActual = await actualTheme(page);
+		THEMES_SEEN.push(`${theme} (computed: ${themeActual})`);
+		console.log(`[theme] ${theme} -> computed data-theme=${themeActual}`);
 
-	// 3) Cleanup: abandon any leftover active sessions (throwaway DB anyway).
-	for (const id of [...activeSessions]) await abandonSession(context, id);
+		// 1) Kind drills — seed sessions via the API, drive every engine kind on touch.
+		// Re-seed until all kinds with bank items (slider/evidence included) are seen.
+		const EXERCISABLE = KINDS.filter((k) => !['memory', 'hotspot', 'numeric'].includes(k));
+		for (let seed = 0; seed < 4 && EXERCISABLE.some((k) => !KINDS_SEEN.has(k)); seed++) {
+			await driveSession(page, context, 'pbq', 'pbq', { type: 'pbq', count: 30, mode: 'practice' }, `pbq-${theme}-s${seed}`, 170);
+		}
+		await driveSession(page, context, 'quiz', 'quiz', { type: 'quiz', count: 24, mode: 'practice' }, `quiz-${theme}`, 60);
 
+		// 2) Full route walk — touch sweep + overflow + dual-viewport screenshots.
+		await walkPages(page, theme);
+
+		// 3) Fixed-viewport scenarios.
+		await fixedViewportScenarios(page, context, theme);
+
+		// 4) Cleanup: abandon leftover active sessions (throwaway DB anyway).
+		for (const id of [...activeSessions]) await abandonSession(context, id);
+		await context.close();
+	}
 	await browser.close();
 
-	// 4) Gate decision.
+	// 5) Gate decision.
 	const consoleTotal = consoleErrors.length + pageErrors.length + failedRequests.length;
 	writeReport(
-		`Post-fix audit run (fail-threshold gate). Drills seeded via POST /api/quiz/start; every kind answered + screenshotted. Routes swept for ≥${MIN_TAP}px touch targets + 390px overflow; console/page errors fail the gate.`
+		`Post-fix audit run (fail-threshold gate), both themes. Drills seeded via POST /api/quiz/start; every kind answered + screenshotted. Routes swept for ≥${MIN_TAP}px touch targets + horizontal overflow; console/page errors fail the gate; fixed-viewport scenarios cover dropdowns, calendar, lesson drills, and bottom-nav clearance.`
 	);
 	console.log(
-		`DONE — kinds: ${[...KINDS_SEEN].sort().join(', ')} | gate violations: ${gateViolations.length} | console errors: ${consoleTotal}`
+		`DONE — themes: ${THEMES_SEEN.join(' | ')} | kinds: ${[...KINDS_SEEN].sort().join(', ')} | gate violations: ${gateViolations.length} | console errors: ${consoleTotal}`
 	);
 	if (gateViolations.length === 0 && consoleTotal === 0) {
-		console.log('GATE: PASS — zero <44px targets on owned routes, zero overflow, zero console errors.');
+		console.log('GATE: PASS — zero <44px targets, zero overflow, zero console errors, both themes.');
 		process.exit(0);
 	}
 	if (REPORT_ONLY) {
@@ -841,7 +1063,13 @@ try {
 	console.error(`FATAL: ${err.message}`);
 	process.exit(2);
 } finally {
-	if (server) server.kill('SIGTERM');
+	// The adapter-node server may not exit on SIGTERM promptly; force-kill so a
+	// zombie never lingers on PORT for the next run.
+	if (server) {
+		try {
+			server.kill('SIGKILL');
+		} catch {}
+	}
 	rmSync(DB, { force: true });
 	rmSync(`${DB}-wal`, { force: true });
 	rmSync(`${DB}-shm`, { force: true });

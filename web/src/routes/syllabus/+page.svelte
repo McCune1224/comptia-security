@@ -204,7 +204,7 @@
 									<span
 										class="num-display text-sm {item.bestSubmission.percentage >= 85
 											? 'text-success'
-											: 'text-accent-warm'}">{item.bestSubmission.percentage}%</span
+											: 'text-warning'}">{item.bestSubmission.percentage}%</span
 									>
 								{:else}
 									<StatusChip status={item.status} />

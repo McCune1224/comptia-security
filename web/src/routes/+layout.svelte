@@ -17,7 +17,6 @@
 	};
 
 	let { children } = $props();
-	let mobileMenuOpen = $state(false);
 	let currentPath = $derived($page.url.pathname);
 
 	let scopeInfo = $state<ScopeInfo | null>(null);
@@ -103,9 +102,10 @@
 		class="sticky top-0 z-50 border-b border-border"
 		aria-label="Main navigation"
 	>
-		<!-- Frosted background as a non-ancestor layer: backdrop-filter on the
-		     nav itself would make it the containing block for position:fixed
-		     descendants (the switcher sheets) and trap them in the header. -->
+		<!-- Frosted background as a separate non-ancestor layer: keep
+		     backdrop-filter off the nav element itself, otherwise it becomes the
+		     containing block for position:absolute descendants (the header
+		     dropdowns) and traps them inside the header. -->
 		<div
 			class="pointer-events-none absolute inset-0 bg-surface-900/85 backdrop-blur-xl"
 			aria-hidden="true"
@@ -278,39 +278,16 @@
 							ondelete={deleteProfile}
 						/>
 					{:else}
-						<div class="h-11 w-14 rounded-md border border-border bg-surface-800 md:h-10"></div>
-						<div class="h-11 w-14 rounded-md border border-border bg-surface-800 md:h-10"></div>
+						<div class="h-11 w-14 rounded-md border border-border bg-surface-800"></div>
+						<div class="h-11 w-14 rounded-md border border-border bg-surface-800"></div>
 					{/if}
-					<ThemeToggle />
-					<button
-						class="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition hover:bg-surface-700 hover:text-text-primary xl:hidden"
-						type="button"
-						aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-						aria-expanded={mobileMenuOpen}
-						onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					>
-						<svg
-							viewBox="0 0 24 24"
-							class="h-6 w-6"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							><path
-								class:opacity-0={mobileMenuOpen}
-								class:translate-y-1.5={mobileMenuOpen}
-								d="M4 7h16"
-							/><path class:opacity-0={mobileMenuOpen} d="M4 12h16" /><path
-								class:opacity-0={mobileMenuOpen}
-								class:-translate-y-1.5={mobileMenuOpen}
-								d="M4 17h16"
-							/><path class:opacity-100={mobileMenuOpen} d="m6 6 12 12M18 6 6 18" /></svg
-						>
-					</button>
+					<div class="hidden xl:block">
+						<ThemeToggle />
+					</div>
+					<MobileMenu />
 					</div>
 					</div>
 					</nav>
-
-	<MobileMenu open={mobileMenuOpen} onclose={() => (mobileMenuOpen = false)} />
 
 	<main class="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-8 xl:pb-12">
 		{@render children()}

@@ -1,0 +1,2541 @@
+{
+  "exam": "SY0-701",
+  "objectivesVersion": "5.0",
+  "objectives": [
+    {
+      "id": "1.1",
+      "title": "Compare and contrast various types of security controls.",
+      "topics": [
+        {
+          "id": "1.1-control-categories",
+          "label": "Security control categories (technical, managerial, operational, physical)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "technical",
+            "managerial",
+            "operational",
+            "physical"
+          ],
+          "questionIds": [
+            "mcq-1-001",
+            "mcq-1-003",
+            "mcq-1-025",
+            "pbq-1-001",
+            "pbq-1-005"
+          ]
+        },
+        {
+          "id": "1.1-control-types",
+          "label": "Security control types (preventive, deterrent, detective, corrective, compensating, directive)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "preventive",
+            "deterrent",
+            "detective",
+            "corrective",
+            "compensating",
+            "directive"
+          ],
+          "questionIds": [
+            "mcq-1-002",
+            "mcq-1-004",
+            "mcq-1-005",
+            "mcq-1-026",
+            "mcq-1-027",
+            "mcq-1-028",
+            "mcq-1-032",
+            "pbq-1-011"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1.2",
+      "title": "Summarize fundamental security concepts.",
+      "topics": [
+        {
+          "id": "1.2-cia-triad",
+          "label": "Confidentiality, integrity, and availability (CIA) triad",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "confidentiality",
+            "integrity",
+            "availability"
+          ],
+          "questionIds": [
+            "mcq-1-011"
+          ]
+        },
+        {
+          "id": "1.2-non-repudiation",
+          "label": "Non-repudiation",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "non-repudiation"
+          ],
+          "questionIds": [
+            "mcq-1-008",
+            "mcq-1-030"
+          ]
+        },
+        {
+          "id": "1.2-aaa",
+          "label": "Authentication, authorization, and accounting (AAA)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "authentication",
+            "authorization",
+            "accounting"
+          ],
+          "questionIds": [
+            "mcq-1-009",
+            "mcq-1-031"
+          ]
+        },
+        {
+          "id": "1.2-gap-analysis",
+          "label": "Gap analysis",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "gap analysis"
+          ],
+          "questionIds": [
+            "mcq-1-046"
+          ]
+        },
+        {
+          "id": "1.2-zero-trust",
+          "label": "Zero Trust architecture (control plane vs data plane)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "zero trust",
+            "control plane",
+            "data plane",
+            "policy enforcement point"
+          ],
+          "questionIds": [
+            "mcq-1-007",
+            "mcq-1-010",
+            "mcq-1-029",
+            "mcq-1-041",
+            "mcq-1-042",
+            "pbq-1-007"
+          ]
+        },
+        {
+          "id": "1.2-physical-security",
+          "label": "Physical security controls (bollards, vestibules, fencing, surveillance, guards, badges, lighting, sensors)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "bollards",
+            "access control vestibule",
+            "video surveillance",
+            "security guard",
+            "access badge",
+            "sensors"
+          ],
+          "questionIds": [
+            "mcq-1-006"
+          ]
+        },
+        {
+          "id": "1.2-deception-technology",
+          "label": "Deception and disruption technology (honeypots, honeynets, honeyfiles, honeytokens)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "honeypot",
+            "honeynet",
+            "honeyfile",
+            "honeytoken"
+          ],
+          "questionIds": [
+            "mcq-1-012"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1.3",
+      "title": "Explain the importance of change management processes and the impact to security.",
+      "topics": [
+        {
+          "id": "1.3-business-process",
+          "label": "Change management business process (approval, ownership, stakeholders, impact analysis, test results, backout plan, maintenance window)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "approval process",
+            "stakeholders",
+            "impact analysis",
+            "backout plan",
+            "maintenance window"
+          ],
+          "questionIds": [
+            "mcq-1-013",
+            "mcq-1-016",
+            "mcq-1-018",
+            "mcq-1-033",
+            "mcq-1-036",
+            "pbq-1-002",
+            "pbq-1-015"
+          ]
+        },
+        {
+          "id": "1.3-technical-implications",
+          "label": "Change management technical implications (allow/deny lists, restricted activities, downtime, service and application restart, legacy applications, dependencies)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "allow lists",
+            "deny lists",
+            "downtime",
+            "service restart",
+            "application restart",
+            "legacy applications",
+            "dependencies"
+          ],
+          "questionIds": [
+            "mcq-1-014",
+            "mcq-1-034",
+            "mcq-1-035"
+          ]
+        },
+        {
+          "id": "1.3-documentation",
+          "label": "Change management documentation (diagrams, policies and procedures, version control, standard operating procedure)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "version control",
+            "standard operating procedure",
+            "diagrams"
+          ],
+          "questionIds": [
+            "mcq-1-015",
+            "mcq-1-017"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1.4",
+      "title": "Explain the importance of using appropriate cryptographic solutions.",
+      "topics": [
+        {
+          "id": "1.4-pki",
+          "label": "Public key infrastructure (public/private keys, key escrow)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "public key",
+            "private key",
+            "key escrow"
+          ],
+          "questionIds": [
+            "mcq-1-040",
+            "mcq-1-045"
+          ]
+        },
+        {
+          "id": "1.4-encryption-levels",
+          "label": "Encryption levels (full-disk, partition, file, volume, database, record) and transport/communication",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "full-disk",
+            "file-level",
+            "volume",
+            "database",
+            "record"
+          ],
+          "questionIds": [
+            "mcq-1-024"
+          ]
+        },
+        {
+          "id": "1.4-crypto-tools",
+          "label": "Cryptographic tools (TPM, HSM, key management system, secure enclave)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "trusted platform module",
+            "hardware security module",
+            "key management system",
+            "secure enclave"
+          ],
+          "questionIds": [
+            "mcq-1-040",
+            "mcq-1-045"
+          ]
+        },
+        {
+          "id": "1.4-obfuscation",
+          "label": "Obfuscation (steganography, tokenization, data masking)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "steganography",
+            "tokenization",
+            "data masking"
+          ],
+          "questionIds": [
+            "mcq-1-047"
+          ]
+        },
+        {
+          "id": "1.4-hashing",
+          "label": "Hashing",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "hashing",
+            "hash"
+          ],
+          "questionIds": [
+            "mcq-1-037"
+          ]
+        },
+        {
+          "id": "1.4-salting",
+          "label": "Salting",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "salting",
+            "salt"
+          ],
+          "questionIds": [
+            "mcq-1-020",
+            "mcq-1-038"
+          ]
+        },
+        {
+          "id": "1.4-digital-signatures",
+          "label": "Digital signatures",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "digital signature"
+          ],
+          "questionIds": [
+            "mcq-1-043"
+          ]
+        },
+        {
+          "id": "1.4-key-stretching",
+          "label": "Key stretching",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "key stretching"
+          ],
+          "questionIds": [
+            "mcq-1-021"
+          ]
+        },
+        {
+          "id": "1.4-blockchain",
+          "label": "Blockchain and open public ledgers",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "blockchain",
+            "open public ledger"
+          ],
+          "questionIds": [
+            "mcq-1-048"
+          ]
+        },
+        {
+          "id": "1.4-certificates",
+          "label": "Certificates (CA, CRL, OCSP, self-signed, third-party, root of trust, CSR, wildcard)",
+          "lessonId": "lesson-1-1",
+          "lessonTerms": [
+            "certificate authority",
+            "certificate revocation list",
+            "ocsp",
+            "self-signed",
+            "root of trust",
+            "certificate signing request",
+            "wildcard"
+          ],
+          "questionIds": [
+            "mcq-1-022",
+            "mcq-1-044",
+            "pbq-1-003",
+            "pbq-1-014"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2.1",
+      "title": "Compare and contrast common threat actors and motivations.",
+      "topics": [
+        {
+          "id": "2.1-threat-actors",
+          "label": "Threat actor types (nation-state, unskilled, hacktivist, insider, organized crime, shadow IT)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "nation-state",
+            "hacktivist",
+            "insider threat",
+            "organized crime",
+            "shadow it",
+            "unskilled attacker"
+          ],
+          "questionIds": [
+            "mcq-2-001",
+            "mcq-2-004",
+            "mcq-2-045",
+            "mcq-2-046",
+            "pbq-2-001"
+          ]
+        },
+        {
+          "id": "2.1-actor-attributes",
+          "label": "Threat actor attributes (internal/external, resources, sophistication)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "internal",
+            "external",
+            "resources",
+            "sophistication"
+          ],
+          "questionIds": [
+            "mcq-2-001",
+            "mcq-2-005",
+            "mcq-2-045"
+          ]
+        },
+        {
+          "id": "2.1-motivations",
+          "label": "Threat actor motivations (exfiltration, espionage, disruption, blackmail, financial gain, ideology, revenge, war)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "data exfiltration",
+            "espionage",
+            "financial gain",
+            "revenge",
+            "disruption"
+          ],
+          "questionIds": [
+            "mcq-2-003",
+            "mcq-2-004",
+            "mcq-2-047",
+            "mcq-2-048"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2.2",
+      "title": "Explain common threat vectors and attack surfaces.",
+      "topics": [
+        {
+          "id": "2.2-message-based",
+          "label": "Message-based vectors (email, SMS, instant messaging)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "email",
+            "sms",
+            "instant messaging"
+          ],
+          "questionIds": [
+            "mcq-2-010",
+            "mcq-2-061",
+            "mcq-2-020"
+          ]
+        },
+        {
+          "id": "2.2-image-based",
+          "label": "Image-based vectors",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "image-based"
+          ],
+          "questionIds": [
+            "mcq-2-067"
+          ]
+        },
+        {
+          "id": "2.2-file-based",
+          "label": "File-based vectors",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "file-based"
+          ],
+          "questionIds": [
+            "mcq-2-011"
+          ]
+        },
+        {
+          "id": "2.2-voice-call",
+          "label": "Voice call vectors",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "voice call"
+          ],
+          "questionIds": [
+            "mcq-2-009",
+            "mcq-2-051"
+          ]
+        },
+        {
+          "id": "2.2-removable-device",
+          "label": "Removable device vectors",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "removable device"
+          ],
+          "questionIds": [
+            "mcq-2-011",
+            "mcq-2-026"
+          ]
+        },
+        {
+          "id": "2.2-unsecure-networks",
+          "label": "Unsecure networks (wireless, wired, Bluetooth) and open service ports",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "wireless",
+            "bluetooth",
+            "open service ports"
+          ],
+          "questionIds": [
+            "mcq-2-031",
+            "mcq-2-022"
+          ]
+        },
+        {
+          "id": "2.2-default-credentials",
+          "label": "Default credentials as an attack surface",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "default credentials"
+          ],
+          "questionIds": [
+            "mcq-2-030"
+          ]
+        },
+        {
+          "id": "2.2-supply-chain",
+          "label": "Supply chain vectors (MSPs, vendors, suppliers)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "supply chain",
+            "managed service providers"
+          ],
+          "questionIds": [
+            "mcq-2-050"
+          ]
+        },
+        {
+          "id": "2.2-social-engineering",
+          "label": "Human vectors and social engineering (phishing, vishing, smishing, misinformation/disinformation, impersonation, BEC, pretexting, watering hole, brand impersonation, typosquatting)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "phishing",
+            "vishing",
+            "smishing",
+            "misinformation",
+            "disinformation",
+            "impersonation",
+            "business email compromise",
+            "pretexting",
+            "watering hole",
+            "typosquatting"
+          ],
+          "questionIds": [
+            "mcq-2-009",
+            "mcq-2-010",
+            "mcq-2-017",
+            "mcq-2-049",
+            "mcq-2-051",
+            "mcq-2-061",
+            "mcq-2-062",
+            "mcq-2-068",
+            "pbq-2-018"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2.3",
+      "title": "Explain various types of vulnerabilities.",
+      "topics": [
+        {
+          "id": "2.3-application",
+          "label": "Application vulnerabilities (memory injection, buffer overflow, race conditions, TOCTOU, malicious update)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "buffer overflow",
+            "race conditions",
+            "time-of-check",
+            "time-of-use"
+          ],
+          "questionIds": [
+            "mcq-2-019",
+            "mcq-2-021"
+          ]
+        },
+        {
+          "id": "2.3-os-based",
+          "label": "Operating system-based vulnerabilities",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "operating system"
+          ],
+          "questionIds": [
+            "mcq-2-023"
+          ]
+        },
+        {
+          "id": "2.3-web-based",
+          "label": "Web-based vulnerabilities (SQL injection, cross-site scripting)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "sql injection",
+            "cross-site scripting"
+          ],
+          "questionIds": [
+            "mcq-2-013",
+            "mcq-2-014",
+            "mcq-2-024",
+            "mcq-2-052"
+          ]
+        },
+        {
+          "id": "2.3-hardware",
+          "label": "Hardware vulnerabilities (firmware, end-of-life, legacy)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "firmware",
+            "end-of-life",
+            "legacy"
+          ],
+          "questionIds": [
+            "mcq-2-023"
+          ]
+        },
+        {
+          "id": "2.3-virtualization",
+          "label": "Virtualization vulnerabilities (VM escape, resource reuse)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "virtual machine escape",
+            "resource reuse"
+          ],
+          "questionIds": [
+            "mcq-2-055"
+          ]
+        },
+        {
+          "id": "2.3-supply-chain",
+          "label": "Supply-chain and cloud-specific vulnerabilities (service, hardware, and software providers)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "supply chain",
+            "software provider",
+            "cloud-specific"
+          ],
+          "questionIds": [
+            "mcq-2-018",
+            "mcq-2-053"
+          ]
+        },
+        {
+          "id": "2.3-cryptographic",
+          "label": "Cryptographic vulnerabilities",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "cryptographic"
+          ],
+          "questionIds": [
+            "mcq-2-054"
+          ]
+        },
+        {
+          "id": "2.3-misconfiguration",
+          "label": "Misconfiguration vulnerabilities",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "misconfiguration"
+          ],
+          "questionIds": [
+            "mcq-2-025"
+          ]
+        },
+        {
+          "id": "2.3-mobile-device",
+          "label": "Mobile device vulnerabilities (side loading, jailbreaking)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "side loading",
+            "jailbreaking"
+          ],
+          "questionIds": [
+            "mcq-2-069"
+          ]
+        },
+        {
+          "id": "2.3-zero-day",
+          "label": "Zero-day vulnerabilities",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "zero-day"
+          ],
+          "questionIds": [
+            "mcq-2-018"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2.4",
+      "title": "Given a scenario, analyze indicators of malicious activity.",
+      "topics": [
+        {
+          "id": "2.4-malware",
+          "label": "Malware attacks (ransomware, trojan, worm, spyware, bloatware, virus, keylogger, logic bomb, rootkit)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "ransomware",
+            "trojan",
+            "worm",
+            "spyware",
+            "keylogger",
+            "logic bomb",
+            "rootkit"
+          ],
+          "questionIds": [
+            "mcq-2-032",
+            "mcq-2-033"
+          ]
+        },
+        {
+          "id": "2.4-physical-attacks",
+          "label": "Physical attacks (brute force, RFID cloning, environmental)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "rfid cloning",
+            "environmental"
+          ],
+          "questionIds": [
+            "mcq-2-070"
+          ]
+        },
+        {
+          "id": "2.4-network-attacks",
+          "label": "Network attacks (DDoS, DNS, wireless, on-path, credential replay, malicious code)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "distributed denial-of-service",
+            "dns",
+            "on-path",
+            "credential replay"
+          ],
+          "questionIds": [
+            "mcq-2-015",
+            "mcq-2-016",
+            "mcq-2-057"
+          ]
+        },
+        {
+          "id": "2.4-application-attacks",
+          "label": "Application attacks (injection, buffer overflow, replay, privilege escalation, forgery, directory traversal)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "privilege escalation",
+            "directory traversal",
+            "forgery"
+          ],
+          "questionIds": [
+            "mcq-2-056"
+          ]
+        },
+        {
+          "id": "2.4-cryptographic-attacks",
+          "label": "Cryptographic attacks (downgrade, collision, birthday, amplified/reflected)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "downgrade",
+            "collision",
+            "birthday"
+          ],
+          "questionIds": [
+            "mcq-2-066"
+          ]
+        },
+        {
+          "id": "2.4-password-attacks",
+          "label": "Password attacks (spraying, brute force)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "spraying",
+            "brute force"
+          ],
+          "questionIds": [
+            "mcq-2-012",
+            "mcq-2-063",
+            "mcq-2-064",
+            "mcq-2-065"
+          ]
+        },
+        {
+          "id": "2.4-indicators",
+          "label": "Indicators of compromise (account lockout, concurrent sessions, blocked content, impossible travel, resource consumption, missing logs, out-of-cycle logging)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "account lockout",
+            "impossible travel",
+            "resource consumption",
+            "out-of-cycle logging",
+            "missing logs"
+          ],
+          "questionIds": [
+            "mcq-2-027",
+            "mcq-2-028",
+            "mcq-2-029",
+            "mcq-2-057",
+            "pbq-2-004",
+            "pbq-2-005"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2.5",
+      "title": "Explain the purpose of mitigation techniques used to secure the enterprise.",
+      "topics": [
+        {
+          "id": "2.5-segmentation-isolation",
+          "label": "Segmentation and isolation",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "segmentation",
+            "isolation"
+          ],
+          "questionIds": [
+            "mcq-2-039"
+          ]
+        },
+        {
+          "id": "2.5-access-control",
+          "label": "Access control (ACLs, permissions) and least privilege",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "access control list",
+            "permissions",
+            "least privilege"
+          ],
+          "questionIds": [
+            "mcq-2-037"
+          ]
+        },
+        {
+          "id": "2.5-allow-listing",
+          "label": "Application allow list",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "allow list"
+          ],
+          "questionIds": [
+            "mcq-2-043"
+          ]
+        },
+        {
+          "id": "2.5-patching-encryption",
+          "label": "Patching and encryption",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "patching",
+            "encryption"
+          ],
+          "questionIds": [
+            "mcq-2-036",
+            "mcq-2-059"
+          ]
+        },
+        {
+          "id": "2.5-hardening",
+          "label": "Hardening techniques (endpoint protection, host firewall, HIPS, disabling ports/protocols, default password changes, removing unnecessary software)",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "endpoint protection",
+            "host-based firewall",
+            "host-based intrusion prevention",
+            "disabling ports",
+            "default password changes"
+          ],
+          "questionIds": [
+            "mcq-2-043",
+            "mcq-2-044",
+            "pbq-2-010"
+          ]
+        },
+        {
+          "id": "2.5-monitoring",
+          "label": "Monitoring",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "monitoring"
+          ],
+          "questionIds": [
+            "mcq-2-041"
+          ]
+        },
+        {
+          "id": "2.5-decommissioning",
+          "label": "Decommissioning",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "decommissioning"
+          ],
+          "questionIds": [
+            "mcq-2-071"
+          ]
+        },
+        {
+          "id": "2.5-configuration-enforcement",
+          "label": "Configuration enforcement",
+          "lessonId": "lesson-1-2",
+          "lessonTerms": [
+            "configuration enforcement"
+          ],
+          "questionIds": [
+            "mcq-2-058"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3.1",
+      "title": "Compare and contrast security implications of different architecture models.",
+      "topics": [
+        {
+          "id": "3.1-architecture-concepts",
+          "label": "Architecture and infrastructure concepts (cloud, on-premises, hybrid, third-party vendors, IaC, serverless, microservices, network infrastructure)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "infrastructure as code",
+            "serverless",
+            "microservices",
+            "hybrid"
+          ],
+          "questionIds": [
+            "mcq-3-001",
+            "mcq-3-005",
+            "mcq-3-037",
+            "mcq-3-039",
+            "mcq-3-056"
+          ]
+        },
+        {
+          "id": "3.1-virtualization",
+          "label": "Virtualization and containerization",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "virtualization",
+            "containerization"
+          ],
+          "questionIds": [
+            "mcq-3-002",
+            "mcq-3-003",
+            "mcq-3-008",
+            "mcq-3-042"
+          ]
+        },
+        {
+          "id": "3.1-iot-ics",
+          "label": "IoT, ICS/SCADA, embedded systems, and RTOS",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "iot",
+            "industrial control systems",
+            "scada",
+            "real-time operating system",
+            "embedded systems"
+          ],
+          "questionIds": [
+            "mcq-3-004",
+            "mcq-3-043",
+            "mcq-3-057"
+          ]
+        },
+        {
+          "id": "3.1-network-isolation",
+          "label": "Physical isolation (air gap) and logical segmentation (SDN)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "air-gapped",
+            "software-defined networking",
+            "logical segmentation"
+          ],
+          "questionIds": [
+            "mcq-3-006",
+            "mcq-3-043"
+          ]
+        },
+        {
+          "id": "3.1-considerations",
+          "label": "Architecture considerations (availability, high availability, resilience, cost, responsiveness, scalability, ease of deployment, risk transference, ease of recovery, patch availability, inability to patch, power, compute)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "resilience",
+            "scalability",
+            "ease of recovery",
+            "patch availability",
+            "inability to patch",
+            "high availability"
+          ],
+          "questionIds": [
+            "mcq-3-040",
+            "mcq-3-007"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3.2",
+      "title": "Given a scenario, apply security principles to secure enterprise infrastructure.",
+      "topics": [
+        {
+          "id": "3.2-device-placement",
+          "label": "Infrastructure device placement and security zones (attack surface, connectivity, failure modes fail-open/fail-closed, active vs passive, inline vs tap)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "device placement",
+            "security zones",
+            "attack surface",
+            "fail-open",
+            "fail-closed",
+            "inline",
+            "tap"
+          ],
+          "questionIds": [
+            "mcq-3-010",
+            "mcq-3-013",
+            "mcq-3-041",
+            "mcq-3-058"
+          ]
+        },
+        {
+          "id": "3.2-network-appliances",
+          "label": "Network appliances (jump server, proxy, IPS/IDS, load balancer, sensors, port security, 802.1X, EAP)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "jump server",
+            "proxy server",
+            "intrusion prevention system",
+            "intrusion detection system",
+            "load balancer",
+            "port security"
+          ],
+          "questionIds": [
+            "mcq-3-013",
+            "mcq-3-015",
+            "mcq-3-059"
+          ]
+        },
+        {
+          "id": "3.2-firewalls",
+          "label": "Firewall types (WAF, UTM, NGFW, layer 4/layer 7)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "web application firewall",
+            "unified threat management",
+            "next-generation firewall"
+          ],
+          "questionIds": [
+            "mcq-3-011",
+            "mcq-3-016",
+            "mcq-3-018"
+          ]
+        },
+        {
+          "id": "3.2-secure-communication",
+          "label": "Secure communication and access (VPN, remote access, tunneling, TLS, IPSec, SD-WAN, SASE)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "virtual private network",
+            "remote access",
+            "tunneling",
+            "transport layer security",
+            "ipsec",
+            "software-defined wide area network",
+            "secure access service edge"
+          ],
+          "questionIds": [
+            "mcq-3-014",
+            "mcq-3-017",
+            "mcq-3-044",
+            "mcq-3-053",
+            "mcq-3-054",
+            "mcq-3-055",
+            "pbq-3-014"
+          ]
+        },
+        {
+          "id": "3.2-control-selection",
+          "label": "Selection of effective controls",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "selection of effective controls"
+          ],
+          "questionIds": [
+            "mcq-3-016"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3.3",
+      "title": "Compare and contrast concepts and strategies to protect data.",
+      "topics": [
+        {
+          "id": "3.3-data-types",
+          "label": "Data types (public, regulated, restricted, trade secret, private, intellectual property, legal, financial, human vs non-human readable)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "regulated",
+            "trade secret",
+            "intellectual property",
+            "financial information"
+          ],
+          "questionIds": [
+            "mcq-3-019",
+            "mcq-3-024"
+          ]
+        },
+        {
+          "id": "3.3-data-classifications",
+          "label": "Data classifications (sensitive, confidential)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "sensitive",
+            "confidential"
+          ],
+          "questionIds": [
+            "mcq-3-019"
+          ]
+        },
+        {
+          "id": "3.3-data-states",
+          "label": "Data states (at rest, in transit, in use) and data sovereignty/geolocation",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "data at rest",
+            "data in transit",
+            "data in use",
+            "data sovereignty",
+            "geolocation"
+          ],
+          "questionIds": [
+            "mcq-3-020",
+            "mcq-3-021",
+            "mcq-3-023",
+            "mcq-3-025",
+            "mcq-3-026"
+          ]
+        },
+        {
+          "id": "3.3-data-protection-methods",
+          "label": "Methods to secure data (geographic restrictions, encryption, hashing, masking, tokenization, obfuscation, segmentation, permission restrictions)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "encryption",
+            "hashing",
+            "masking",
+            "tokenization",
+            "obfuscation",
+            "segmentation",
+            "permission restrictions"
+          ],
+          "questionIds": [
+            "mcq-3-022",
+            "mcq-3-045",
+            "mcq-3-046",
+            "mcq-3-047",
+            "pbq-3-017"
+          ]
+        },
+        {
+          "id": "3.3-dlp",
+          "label": "Data loss prevention (DLP)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "data loss prevention"
+          ],
+          "questionIds": [
+            "mcq-3-022",
+            "mcq-3-027"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3.4",
+      "title": "Explain the importance of resilience and recovery in security architecture.",
+      "topics": [
+        {
+          "id": "3.4-high-availability",
+          "label": "High availability (load balancing vs clustering)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "load balancing",
+            "clustering"
+          ],
+          "questionIds": [
+            "mcq-3-032",
+            "mcq-3-033",
+            "mcq-3-036"
+          ]
+        },
+        {
+          "id": "3.4-site-considerations",
+          "label": "Site considerations (hot, cold, warm, geographic dispersion)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "hot site",
+            "cold site",
+            "warm site",
+            "geographic dispersion"
+          ],
+          "questionIds": [
+            "mcq-3-029",
+            "mcq-3-051"
+          ]
+        },
+        {
+          "id": "3.4-platform-diversity",
+          "label": "Platform diversity and multi-cloud systems",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "platform diversity",
+            "multi-cloud"
+          ],
+          "questionIds": [
+            "mcq-3-061"
+          ]
+        },
+        {
+          "id": "3.4-continuity-capacity",
+          "label": "Continuity of operations and capacity planning (people, technology, infrastructure)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "continuity of operations",
+            "capacity planning"
+          ],
+          "questionIds": [
+            "mcq-3-062"
+          ]
+        },
+        {
+          "id": "3.4-backups",
+          "label": "Backups (onsite/offsite, frequency, encryption, snapshots) and replication",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "backups",
+            "snapshots",
+            "replication",
+            "3-2-1"
+          ],
+          "questionIds": [
+            "mcq-3-030",
+            "mcq-3-031",
+            "mcq-3-049",
+            "mcq-3-052",
+            "pbq-3-011"
+          ]
+        },
+        {
+          "id": "3.4-journaling",
+          "label": "Journaling",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "journaling"
+          ],
+          "questionIds": [
+            "mcq-3-060"
+          ]
+        },
+        {
+          "id": "3.4-power",
+          "label": "Power resilience (generators, UPS)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "generators",
+            "uninterruptible power supply"
+          ],
+          "questionIds": [
+            "mcq-3-034"
+          ]
+        },
+        {
+          "id": "3.4-testing",
+          "label": "Resilience testing (tabletop exercises, failover, simulation, parallel processing)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "tabletop exercises",
+            "failover",
+            "parallel processing"
+          ],
+          "questionIds": [
+            "mcq-3-028",
+            "mcq-3-050",
+            "pbq-3-018"
+          ]
+        },
+        {
+          "id": "3.4-recovery-metrics",
+          "label": "Recovery metrics (RTO, RPO, MTTR, MTBF)",
+          "lessonId": "lesson-2-1",
+          "lessonTerms": [
+            "recovery time objective",
+            "recovery point objective",
+            "mean time to repair",
+            "mean time between failures"
+          ],
+          "questionIds": [
+            "mcq-3-035",
+            "mcq-3-050",
+            "pbq-3-006"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.1",
+      "title": "Given a scenario, apply common security techniques to computing resources.",
+      "topics": [
+        {
+          "id": "4.1-secure-baselines",
+          "label": "Secure baselines (establish, deploy, maintain)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "secure baseline"
+          ],
+          "questionIds": [
+            "mcq-4-001",
+            "mcq-4-004",
+            "mcq-4-057",
+            "mcq-4-058"
+          ]
+        },
+        {
+          "id": "4.1-hardening-targets",
+          "label": "Hardening targets (mobile devices, workstations, switches, routers, cloud infrastructure, servers, ICS/SCADA, embedded, RTOS, IoT)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "hardening"
+          ],
+          "questionIds": [
+            "mcq-4-003",
+            "mcq-4-058"
+          ]
+        },
+        {
+          "id": "4.1-mobile-solutions",
+          "label": "Mobile solutions (MDM, deployment models BYOD/COPE/CYOD, connection methods cellular/Wi-Fi/Bluetooth)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "mobile device management",
+            "bring your own device",
+            "corporate-owned, personally enabled",
+            "choose your own device"
+          ],
+          "questionIds": [
+            "mcq-4-061",
+            "pbq-4-012"
+          ]
+        },
+        {
+          "id": "4.1-wireless-security",
+          "label": "Wireless security settings (WPA3, AAA/RADIUS, cryptographic and authentication protocols)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "wpa3",
+            "radius",
+            "cryptographic protocols",
+            "authentication protocols"
+          ],
+          "questionIds": [
+            "mcq-4-075"
+          ]
+        },
+        {
+          "id": "4.1-application-security",
+          "label": "Application security (input validation, secure cookies, static code analysis, code signing)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "input validation",
+            "secure cookies",
+            "static code analysis",
+            "code signing"
+          ],
+          "questionIds": [
+            "mcq-4-079",
+            "mcq-4-080"
+          ]
+        },
+        {
+          "id": "4.1-sandboxing",
+          "label": "Sandboxing",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "sandboxing"
+          ],
+          "questionIds": [
+            "mcq-4-078"
+          ]
+        },
+        {
+          "id": "4.1-monitoring",
+          "label": "Monitoring of computing resources",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "monitoring"
+          ],
+          "questionIds": [
+            "mcq-4-006"
+          ]
+        },
+        {
+          "id": "4.1-site-surveys",
+          "label": "Wireless installation considerations (site surveys, heat maps)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "site surveys",
+            "heat maps"
+          ],
+          "questionIds": [
+            "mcq-4-078"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.2",
+      "title": "Explain the security implications of proper hardware, software, and data asset management.",
+      "topics": [
+        {
+          "id": "4.2-acquisition",
+          "label": "Acquisition and procurement process",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "acquisition",
+            "procurement"
+          ],
+          "questionIds": [
+            "mcq-4-081",
+            "pbq-4-802"
+          ]
+        },
+        {
+          "id": "4.2-assignment",
+          "label": "Assignment and accounting (ownership, classification)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "ownership",
+            "classification"
+          ],
+          "questionIds": [
+            "pbq-4-802"
+          ]
+        },
+        {
+          "id": "4.2-monitoring-tracking",
+          "label": "Monitoring and asset tracking (inventory)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "asset tracking",
+            "inventory"
+          ],
+          "questionIds": [
+            "mcq-4-081",
+            "pbq-4-802"
+          ]
+        },
+        {
+          "id": "4.2-disposal",
+          "label": "Disposal and decommissioning (sanitization, destruction, certification, data retention)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "sanitization",
+            "destruction",
+            "certification",
+            "data retention"
+          ],
+          "questionIds": [
+            "mcq-4-032",
+            "pbq-4-802"
+          ]
+        },
+        {
+          "id": "4.2-enumeration",
+          "label": "Asset enumeration",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "enumeration"
+          ],
+          "questionIds": [
+            "mcq-4-081",
+            "pbq-4-802"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.3",
+      "title": "Explain various activities associated with vulnerability management.",
+      "topics": [
+        {
+          "id": "4.3-identification",
+          "label": "Vulnerability identification methods (vulnerability scan, application security static/dynamic analysis, package monitoring, threat feed, OSINT, proprietary/third-party, ISAC, dark web, penetration testing, responsible disclosure, bug bounty, system/process audit)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "vulnerability scan",
+            "application security",
+            "static analysis",
+            "dynamic analysis",
+            "threat feed",
+            "open-source intelligence",
+            "information-sharing",
+            "dark web",
+            "penetration testing",
+            "responsible disclosure",
+            "bug bounty"
+          ],
+          "questionIds": [
+            "mcq-4-020",
+            "mcq-4-066",
+            "mcq-4-082",
+            "mcq-4-083",
+            "pbq-4-020",
+            "mcq-4-011",
+            "mcq-4-043",
+            "mcq-4-044"
+          ]
+        },
+        {
+          "id": "4.3-analysis",
+          "label": "Vulnerability analysis (confirmation, false positive, false negative, prioritization, CVSS, CVE, vulnerability classification, exposure factor, environmental variables, industry impact, risk tolerance)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "false positive",
+            "false negative",
+            "common vulnerability scoring system",
+            "common vulnerability enumeration",
+            "prioritize"
+          ],
+          "questionIds": [
+            "mcq-4-065",
+            "mcq-4-015"
+          ]
+        },
+        {
+          "id": "4.3-response-remediation",
+          "label": "Vulnerability response, remediation, and validation (patching, insurance, segmentation, compensating controls, exceptions and exemptions, rescanning, audit, verification)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "patching",
+            "compensating controls",
+            "exceptions",
+            "exemptions",
+            "rescanning",
+            "verification",
+            "audit"
+          ],
+          "questionIds": [
+            "mcq-4-065",
+            "mcq-4-023"
+          ]
+        },
+        {
+          "id": "4.3-reporting",
+          "label": "Vulnerability reporting",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "reporting"
+          ],
+          "questionIds": [
+            "mcq-4-083",
+            "pbq-4-801"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.4",
+      "title": "Explain security alerting and monitoring concepts and tools.",
+      "topics": [
+        {
+          "id": "4.4-monitoring-resources",
+          "label": "Monitoring computing resources (systems, applications, infrastructure)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "monitoring"
+          ],
+          "questionIds": [
+            "mcq-4-062"
+          ]
+        },
+        {
+          "id": "4.4-activities",
+          "label": "Monitoring activities (log aggregation, alerting, scanning, reporting, archiving)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "log aggregation",
+            "alerting",
+            "scanning",
+            "reporting",
+            "archiving"
+          ],
+          "questionIds": [
+            "mcq-4-014",
+            "pbq-4-806",
+            "mcq-4-037"
+          ]
+        },
+        {
+          "id": "4.4-alert-response",
+          "label": "Alert response, remediation, and validation (quarantine, alert tuning)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "quarantine",
+            "alert tuning"
+          ],
+          "questionIds": [
+            "mcq-4-025",
+            "mcq-4-008"
+          ]
+        },
+        {
+          "id": "4.4-tools",
+          "label": "Monitoring tools (SCAP, benchmarks, agents/agentless, SIEM, antivirus, DLP, SNMP traps, NetFlow, vulnerability scanners)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "security content automation protocol",
+            "benchmarks",
+            "agents",
+            "security information and event management",
+            "antivirus",
+            "data loss prevention",
+            "simple network management protocol",
+            "netflow",
+            "vulnerability scanners"
+          ],
+          "questionIds": [
+            "mcq-4-014",
+            "mcq-4-064",
+            "mcq-4-084",
+            "mcq-4-085",
+            "pbq-4-018",
+            "mcq-4-028",
+            "mcq-4-013"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.5",
+      "title": "Given a scenario, modify enterprise capabilities to enhance security.",
+      "topics": [
+        {
+          "id": "4.5-firewall",
+          "label": "Firewall hardening (rules, access lists, ports/protocols, screened subnets)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "screened subnets",
+            "access lists"
+          ],
+          "questionIds": [
+            "pbq-4-006"
+          ]
+        },
+        {
+          "id": "4.5-ids-ips",
+          "label": "IDS/IPS tuning (trends, signatures)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "intrusion detection system",
+            "intrusion prevention system",
+            "signatures"
+          ],
+          "questionIds": [
+            "mcq-4-086",
+            "mcq-4-046"
+          ]
+        },
+        {
+          "id": "4.5-web-filter",
+          "label": "Web filtering (agent-based, centralized proxy, URL scanning, content categorization, block rules, reputation)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "web filter",
+            "url scanning",
+            "content categorization",
+            "reputation"
+          ],
+          "questionIds": [
+            "mcq-4-035"
+          ]
+        },
+        {
+          "id": "4.5-os-security",
+          "label": "Operating system security (Group Policy, SELinux)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "group policy",
+            "selinux"
+          ],
+          "questionIds": [
+            "mcq-4-086"
+          ]
+        },
+        {
+          "id": "4.5-secure-protocols",
+          "label": "Implementation of secure protocols (protocol selection, port selection, transport method)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "protocol selection",
+            "port selection",
+            "transport method"
+          ],
+          "questionIds": [
+            "mcq-4-045"
+          ]
+        },
+        {
+          "id": "4.5-dns-email",
+          "label": "DNS filtering and email security (DMARC, DKIM, SPF)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "dns filtering",
+            "dmarc",
+            "dkim",
+            "sender policy framework"
+          ],
+          "questionIds": [
+            "pbq-4-021"
+          ]
+        },
+        {
+          "id": "4.5-fim",
+          "label": "File integrity monitoring",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "file integrity monitoring"
+          ],
+          "questionIds": [
+            "mcq-4-026"
+          ]
+        },
+        {
+          "id": "4.5-dlp",
+          "label": "Data loss prevention",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "data loss prevention"
+          ],
+          "questionIds": [
+            "mcq-4-048"
+          ]
+        },
+        {
+          "id": "4.5-nac",
+          "label": "Network access control (NAC)",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "network access control"
+          ],
+          "questionIds": [
+            "pbq-4-026",
+            "mcq-4-034"
+          ]
+        },
+        {
+          "id": "4.5-edr-xdr",
+          "label": "Endpoint detection and response (EDR), extended detection and response (XDR), and user behavior analytics",
+          "lessonId": "lesson-2-2",
+          "lessonTerms": [
+            "endpoint detection and response",
+            "extended detection and response",
+            "user behavior analytics"
+          ],
+          "questionIds": [
+            "mcq-4-059"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.6",
+      "title": "Given a scenario, implement and maintain identity and access management.",
+      "topics": [
+        {
+          "id": "4.6-provisioning",
+          "label": "Provisioning and de-provisioning user accounts",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "provisioning",
+            "de-provisioning"
+          ],
+          "questionIds": [
+            "pbq-4-023",
+            "mcq-4-050"
+          ]
+        },
+        {
+          "id": "4.6-permission-assignments",
+          "label": "Permission assignments and implications (DAC, RBAC, rule-based, ABAC, time-of-day restrictions, least privilege)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "discretionary",
+            "role-based",
+            "attribute-based",
+            "rule-based",
+            "time-of-day restrictions",
+            "least privilege"
+          ],
+          "questionIds": [
+            "mcq-4-090",
+            "pbq-4-022"
+          ]
+        },
+        {
+          "id": "4.6-identity-proofing",
+          "label": "Identity proofing",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "identity proofing"
+          ],
+          "questionIds": [
+            "mcq-4-087"
+          ]
+        },
+        {
+          "id": "4.6-federation",
+          "label": "Federation, SSO, and interoperability (LDAP, OAuth, SAML)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "federation",
+            "single sign-on",
+            "ldap",
+            "oauth",
+            "security assertions markup language"
+          ],
+          "questionIds": [
+            "mcq-4-067",
+            "pbq-4-011",
+            "pbq-4-804",
+            "mcq-4-054"
+          ]
+        },
+        {
+          "id": "4.6-attestation",
+          "label": "Attestation",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "attestation"
+          ],
+          "questionIds": [
+            "mcq-4-088"
+          ]
+        },
+        {
+          "id": "4.6-mfa",
+          "label": "Multifactor authentication (biometrics, hard/soft tokens, security keys, factors)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "multifactor authentication",
+            "biometrics",
+            "security keys"
+          ],
+          "questionIds": [
+            "pbq-4-805",
+            "mcq-4-052"
+          ]
+        },
+        {
+          "id": "4.6-password-concepts",
+          "label": "Password concepts (best practices, length, complexity, reuse, expiration, age, password managers) and passwordless",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "password managers",
+            "passwordless"
+          ],
+          "questionIds": [
+            "mcq-4-056",
+            "mcq-4-089",
+            "mcq-4-053"
+          ]
+        },
+        {
+          "id": "4.6-pam",
+          "label": "Privileged access management (just-in-time permissions, password vaulting, ephemeral credentials)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "privileged access management",
+            "just-in-time permissions",
+            "password vaulting",
+            "ephemeral credentials"
+          ],
+          "questionIds": [
+            "mcq-4-068",
+            "mcq-4-091"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.7",
+      "title": "Explain the importance of automation and orchestration related to secure operations.",
+      "topics": [
+        {
+          "id": "4.7-automation-use-cases",
+          "label": "Automation and scripting use cases (user/resource provisioning, guard rails, security groups, ticket creation, escalation, enabling/disabling services and access)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "automation",
+            "user provisioning",
+            "resource provisioning",
+            "guard rails",
+            "ticket creation"
+          ],
+          "questionIds": [
+            "mcq-4-069",
+            "mcq-4-070",
+            "mcq-4-047",
+            "mcq-4-055"
+          ]
+        },
+        {
+          "id": "4.7-automation-benefits",
+          "label": "Automation benefits (efficiency, enforcing baselines, standard configurations, scaling, employee retention, reaction time, workforce multiplier, CI/testing)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "efficiency",
+            "enforcing baselines",
+            "workforce multiplier"
+          ],
+          "questionIds": [
+            "mcq-4-017",
+            "mcq-4-019"
+          ]
+        },
+        {
+          "id": "4.7-automation-cautions",
+          "label": "Automation cautions (complexity, cost, single point of failure, technical debt, ongoing supportability, API integrations)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "single point of failure",
+            "technical debt",
+            "ongoing supportability",
+            "application programming interfaces"
+          ],
+          "questionIds": [
+            "mcq-4-021",
+            "mcq-4-022",
+            "pbq-4-025"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.8",
+      "title": "Explain appropriate incident response activities.",
+      "topics": [
+        {
+          "id": "4.8-ir-process",
+          "label": "Incident response process and training (preparation, detection, analysis, containment, eradication, recovery, lessons learned, tabletop exercises, simulation)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "preparation",
+            "detection",
+            "containment",
+            "eradication",
+            "recovery",
+            "lessons learned",
+            "tabletop exercise",
+            "simulation"
+          ],
+          "questionIds": [
+            "mcq-4-027",
+            "mcq-4-030",
+            "mcq-4-071",
+            "mcq-4-077",
+            "pbq-4-001",
+            "pbq-4-009",
+            "pbq-4-015"
+          ]
+        },
+        {
+          "id": "4.8-root-cause",
+          "label": "Root cause analysis and threat hunting",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "root cause analysis",
+            "threat hunting"
+          ],
+          "questionIds": [
+            "mcq-4-063"
+          ]
+        },
+        {
+          "id": "4.8-digital-forensics",
+          "label": "Digital forensics (legal hold, chain of custody, acquisition, reporting, preservation, e-discovery)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "legal hold",
+            "chain of custody",
+            "acquisition",
+            "preservation",
+            "e-discovery"
+          ],
+          "questionIds": [
+            "mcq-4-029",
+            "mcq-4-036",
+            "mcq-4-039",
+            "mcq-4-076",
+            "mcq-4-092",
+            "pbq-4-002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4.9",
+      "title": "Given a scenario, use data sources to support an investigation.",
+      "topics": [
+        {
+          "id": "4.9-log-data",
+          "label": "Log data (firewall, application, endpoint, OS-specific security, IPS/IDS, network logs)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "firewall logs",
+            "application logs",
+            "endpoint logs",
+            "os-specific security logs",
+            "ips/ids logs",
+            "network logs"
+          ],
+          "questionIds": [
+            "mcq-4-049",
+            "mcq-4-051",
+            "pbq-4-004",
+            "pbq-4-005",
+            "pbq-4-016",
+            "pbq-4-017",
+            "mcq-4-060",
+            "mcq-4-073"
+          ]
+        },
+        {
+          "id": "4.9-data-sources",
+          "label": "Investigation data sources (vulnerability scans, automated reports, dashboards, packet captures, metadata)",
+          "lessonId": "lesson-3-1",
+          "lessonTerms": [
+            "vulnerability scans",
+            "automated reports",
+            "dashboards",
+            "packet captures",
+            "metadata"
+          ],
+          "questionIds": [
+            "pbq-4-024",
+            "mcq-4-073"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5.1",
+      "title": "Summarize elements of effective security governance.",
+      "topics": [
+        {
+          "id": "5.1-governance-documents",
+          "label": "Security governance documents (guidelines, policies, standards, procedures)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "guidelines",
+            "policies",
+            "standards",
+            "procedures"
+          ],
+          "questionIds": [
+            "mcq-5-001",
+            "mcq-5-005",
+            "mcq-5-041",
+            "pbq-5-008"
+          ]
+        },
+        {
+          "id": "5.1-policy-types",
+          "label": "Policy types (AUP, information security, business continuity, disaster recovery, incident response, SDLC, change management)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "acceptable use policy",
+            "information security policies",
+            "business continuity",
+            "disaster recovery",
+            "incident response",
+            "software development lifecycle",
+            "change management"
+          ],
+          "questionIds": [
+            "mcq-5-004",
+            "mcq-5-006"
+          ]
+        },
+        {
+          "id": "5.1-governance-roles",
+          "label": "Roles and responsibilities (owners, controllers, processors, custodians/stewards)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "owners",
+            "controllers",
+            "processors",
+            "custodians",
+            "stewards"
+          ],
+          "questionIds": [
+            "mcq-5-002",
+            "pbq-5-012"
+          ]
+        },
+        {
+          "id": "5.1-governance-structures",
+          "label": "Governance structures (boards, committees, government entities, centralized/decentralized)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "boards",
+            "committees",
+            "centralized",
+            "decentralized"
+          ],
+          "questionIds": [
+            "mcq-5-007",
+            "mcq-5-026"
+          ]
+        },
+        {
+          "id": "5.1-monitoring-revision",
+          "label": "Monitoring and revision of governance",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "monitoring and revision"
+          ],
+          "questionIds": [
+            "mcq-5-003"
+          ]
+        },
+        {
+          "id": "5.1-external-considerations",
+          "label": "External considerations (regulatory, legal, industry, local/regional, national, global)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "regulatory",
+            "legal",
+            "industry"
+          ],
+          "questionIds": [
+            "mcq-5-003"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5.2",
+      "title": "Explain elements of the risk management process.",
+      "topics": [
+        {
+          "id": "5.2-risk-identification",
+          "label": "Risk identification and risk register",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "risk register",
+            "risk identification"
+          ],
+          "questionIds": [
+            "mcq-5-013",
+            "mcq-5-044"
+          ]
+        },
+        {
+          "id": "5.2-risk-assessment",
+          "label": "Risk assessment (ad hoc, recurring, one-time, continuous)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "risk assessment",
+            "ad hoc",
+            "recurring",
+            "continuous"
+          ],
+          "questionIds": [
+            "mcq-5-009"
+          ]
+        },
+        {
+          "id": "5.2-risk-analysis",
+          "label": "Risk analysis (qualitative, quantitative, SLE, ALE, ARO, probability, likelihood, exposure factor)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "qualitative",
+            "quantitative",
+            "single loss expectancy",
+            "annualized loss expectancy",
+            "annualized rate of occurrence",
+            "exposure factor"
+          ],
+          "questionIds": [
+            "mcq-5-008",
+            "mcq-5-009",
+            "mcq-5-057",
+            "pbq-5-001",
+            "pbq-5-002",
+            "pbq-5-007"
+          ]
+        },
+        {
+          "id": "5.2-risk-tolerance",
+          "label": "Risk tolerance, risk appetite (expansionary, conservative, neutral), and risk threshold",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "risk tolerance",
+            "risk appetite"
+          ],
+          "questionIds": [
+            "mcq-5-014"
+          ]
+        },
+        {
+          "id": "5.2-risk-strategies",
+          "label": "Risk management strategies (transfer, accept, exemption, exception, avoid, mitigate)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "transfer",
+            "accept",
+            "exemption",
+            "exception",
+            "avoid",
+            "mitigate"
+          ],
+          "questionIds": [
+            "mcq-5-010",
+            "mcq-5-011",
+            "mcq-5-044",
+            "pbq-5-013"
+          ]
+        },
+        {
+          "id": "5.2-risk-reporting",
+          "label": "Risk reporting and key risk indicators",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "risk reporting",
+            "key risk indicators"
+          ],
+          "questionIds": [
+            "mcq-5-058"
+          ]
+        },
+        {
+          "id": "5.2-bias",
+          "label": "Business impact analysis (RTO, RPO, MTTR, MTBF)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "business impact analysis",
+            "recovery time objective",
+            "recovery point objective",
+            "mean time to repair",
+            "mean time between failures"
+          ],
+          "questionIds": [
+            "mcq-5-012",
+            "mcq-5-054",
+            "pbq-5-009"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5.3",
+      "title": "Explain the processes associated with third-party risk assessment and management.",
+      "topics": [
+        {
+          "id": "5.3-vendor-assessment",
+          "label": "Vendor assessment (penetration testing, right-to-audit clause, evidence of internal audits, independent assessments, supply chain analysis)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "vendor assessment",
+            "right-to-audit",
+            "independent assessments",
+            "supply chain analysis"
+          ],
+          "questionIds": [
+            "mcq-5-018",
+            "mcq-5-045",
+            "mcq-5-046",
+            "mcq-5-049"
+          ]
+        },
+        {
+          "id": "5.3-vendor-selection",
+          "label": "Vendor selection (due diligence, conflict of interest)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "due diligence",
+            "conflict of interest"
+          ],
+          "questionIds": [
+            "mcq-5-019",
+            "mcq-5-059"
+          ]
+        },
+        {
+          "id": "5.3-agreement-types",
+          "label": "Agreement types (SLA, MOA, MOU, MSA, WO/SOW, NDA, BPA)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "service-level agreement",
+            "memorandum of agreement",
+            "memorandum of understanding",
+            "master service agreement",
+            "statement of work",
+            "non-disclosure agreement",
+            "business partners agreement"
+          ],
+          "questionIds": [
+            "mcq-5-016",
+            "mcq-5-019",
+            "mcq-5-020",
+            "pbq-5-014"
+          ]
+        },
+        {
+          "id": "5.3-vendor-monitoring",
+          "label": "Vendor monitoring, questionnaires, and rules of engagement",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "vendor monitoring",
+            "questionnaires",
+            "rules of engagement"
+          ],
+          "questionIds": [
+            "mcq-5-017",
+            "pbq-5-010"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5.4",
+      "title": "Summarize elements of effective security compliance.",
+      "topics": [
+        {
+          "id": "5.4-compliance-reporting",
+          "label": "Compliance reporting (internal, external) and consequences of non-compliance (fines, sanctions, reputational damage, loss of license, contractual impacts)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "compliance reporting",
+            "fines",
+            "sanctions",
+            "reputational damage"
+          ],
+          "questionIds": [
+            "mcq-5-022",
+            "mcq-5-015"
+          ]
+        },
+        {
+          "id": "5.4-compliance-monitoring",
+          "label": "Compliance monitoring (due diligence/care, attestation and acknowledgement, internal and external, automation)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "due diligence",
+            "attestation"
+          ],
+          "questionIds": [
+            "mcq-5-015"
+          ]
+        },
+        {
+          "id": "5.4-privacy",
+          "label": "Privacy (legal implications, local/regional/national/global, data subject, controller vs processor, ownership, data inventory and retention, right to be forgotten)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "privacy",
+            "data subject",
+            "controller",
+            "processor",
+            "right to be forgotten",
+            "data inventory and retention"
+          ],
+          "questionIds": [
+            "mcq-5-025",
+            "mcq-5-042",
+            "pbq-5-015"
+          ]
+        },
+        {
+          "id": "5.4-regulations",
+          "label": "Key regulations (GDPR, HIPAA, PCI DSS, SOX, FERPA, GLBA)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "gdpr",
+            "hipaa",
+            "pci dss",
+            "sox",
+            "ferpa",
+            "glba"
+          ],
+          "questionIds": [
+            "mcq-5-022",
+            "mcq-5-023",
+            "mcq-5-024",
+            "mcq-5-027",
+            "mcq-5-028",
+            "mcq-5-047"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5.5",
+      "title": "Explain types and purposes of audits and assessments.",
+      "topics": [
+        {
+          "id": "5.5-audits",
+          "label": "Audits (internal, external, audit committee, self-assessments, regulatory, examinations, independent third-party)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "internal",
+            "external",
+            "audit committee",
+            "self-assessments",
+            "regulatory",
+            "independent third-party"
+          ],
+          "questionIds": [
+            "mcq-5-032",
+            "mcq-5-033",
+            "mcq-5-048",
+            "pbq-5-017",
+            "mcq-5-050",
+            "pbq-5-801",
+            "mcq-5-043"
+          ]
+        },
+        {
+          "id": "5.5-attestation",
+          "label": "Attestation",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "attestation"
+          ],
+          "questionIds": [
+            "mcq-5-033",
+            "mcq-5-050"
+          ]
+        },
+        {
+          "id": "5.5-penetration-testing",
+          "label": "Penetration testing (offensive, defensive, integrated, known/partially known/unknown environment, reconnaissance, passive/active)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "penetration testing",
+            "offensive",
+            "defensive",
+            "integrated",
+            "known environment",
+            "unknown environment",
+            "reconnaissance",
+            "passive",
+            "active"
+          ],
+          "questionIds": [
+            "mcq-5-029",
+            "mcq-5-030",
+            "mcq-5-031",
+            "mcq-5-034",
+            "mcq-5-048"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5.6",
+      "title": "Given a scenario, implement security awareness practices.",
+      "topics": [
+        {
+          "id": "5.6-phishing",
+          "label": "Phishing (campaigns, recognizing attempts, responding to reported messages)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "phishing"
+          ],
+          "questionIds": [
+            "mcq-5-035",
+            "mcq-5-038"
+          ]
+        },
+        {
+          "id": "5.6-anomalous-behavior",
+          "label": "Anomalous behavior recognition (risky, unexpected, unintentional) and insider threat",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "anomalous behavior",
+            "insider threat"
+          ],
+          "questionIds": [
+            "mcq-5-037"
+          ]
+        },
+        {
+          "id": "5.6-user-guidance",
+          "label": "User guidance and training (policy/handbooks, situational awareness, hybrid/remote work environments)",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "user guidance",
+            "situational awareness",
+            "hybrid/remote work"
+          ],
+          "questionIds": [
+            "mcq-5-036",
+            "mcq-5-040",
+            "mcq-5-051",
+            "pbq-5-004",
+            "pbq-5-016"
+          ]
+        },
+        {
+          "id": "5.6-password-management",
+          "label": "Password management and removable media and cables",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "password management",
+            "removable media"
+          ],
+          "questionIds": [
+            "mcq-5-037"
+          ]
+        },
+        {
+          "id": "5.6-social-engineering",
+          "label": "Social engineering awareness and operational security",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "social engineering",
+            "operational security"
+          ],
+          "questionIds": [
+            "mcq-5-038"
+          ]
+        },
+        {
+          "id": "5.6-reporting-monitoring",
+          "label": "Reporting and monitoring (initial, recurring) and program development/execution",
+          "lessonId": "lesson-3-2",
+          "lessonTerms": [
+            "reporting and monitoring"
+          ],
+          "questionIds": [
+            "mcq-5-039",
+            "mcq-5-040",
+            "pbq-5-004"
+          ]
+        }
+      ]
+    }
+  ]
+}

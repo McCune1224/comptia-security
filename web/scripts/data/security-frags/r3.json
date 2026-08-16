@@ -1,0 +1,343 @@
+{
+  "replace": {
+    "mcq-4-002": {
+      "id": "mcq-4-002",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which procurement practice BEST ensures the new laptops meet the organization's security baseline at purchase?",
+      "context": "A regional bank is standardizing on a new model of employee laptops and will purchase 400 units through an approved reseller. The security team wants the devices to meet the organization's security requirements from the moment they are deployed rather than relying on post-purchase remediation. The procurement team is drafting the purchase specification and asks for security input before the order is placed.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Include security requirements such as TPM support, UEFI Secure Boot, and a supported patch lifecycle in the purchase specification, and verify them against the baseline at delivery",
+          "rationale": "Security requirements must be specified at purchase because capabilities like TPM and Secure Boot cannot be added later, and verifying at delivery confirms the devices actually meet the baseline."
+        },
+        {
+          "id": "b",
+          "text": "Purchase the lowest-cost model available and apply a hardening image after the laptops arrive",
+          "rationale": "Software hardening after arrival cannot add hardware capabilities such as TPM or Secure Boot that were never built into the selected model."
+        },
+        {
+          "id": "c",
+          "text": "Rely on the manufacturer's factory-default configuration as the security baseline",
+          "rationale": "Factory defaults are rarely aligned with an organization's hardening baseline and often include settings or accounts that increase risk."
+        },
+        {
+          "id": "d",
+          "text": "Ask the reseller to preinstall a standard operating system image on each device before shipment",
+          "rationale": "A preinstalled image standardizes software but does not address hardware baseline requirements, which must be defined at the point of purchase."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about which security capabilities can only be decided before a device is purchased, and where in the process requirements must be recorded so they are enforceable.",
+      "explanation": "Secure acquisition begins with requirements: capabilities such as TPM and UEFI Secure Boot must be specified at purchase because they are hardware features that cannot be added later, and verifying delivery against the stated baseline closes the loop. Buying the cheapest hardware, trusting factory defaults, or relying on a preinstalled image all fail to guarantee that the device itself meets the organization's security requirements.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Supply Chain Risk Management"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-161 Supply Chain Risk Management"
+        }
+      ]
+    },
+    "mcq-4-007": {
+      "id": "mcq-4-007",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which practice BEST keeps the asset inventory accurate on an ongoing basis?",
+      "context": "A healthcare organization maintains an asset inventory, but a recent network scan found several medical workstations that are actively used yet missing from the inventory, while inventory records still list devices that were decommissioned years ago. Leadership wants the inventory to reflect the environment as it actually exists today and to catch newly connected devices quickly.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy agent-based discovery on managed endpoints and reconcile the reported hardware, OS, and software against the CMDB on a regular schedule",
+          "rationale": "Automated discovery continually reports what is actually installed and connected, and reconciling it with the CMDB surfaces missing and stale records for correction."
+        },
+        {
+          "id": "b",
+          "text": "Have each department email a list of its computing devices to IT once per year",
+          "rationale": "Annual manual reporting is slow, incomplete, and out of date almost immediately, so it cannot detect devices added or removed between reports."
+        },
+        {
+          "id": "c",
+          "text": "Use DHCP lease records as the definitive asset inventory",
+          "rationale": "DHCP leases show which devices requested addresses, but they lack details such as software, owner, and configuration and miss static-addressed devices."
+        },
+        {
+          "id": "d",
+          "text": "Maintain the inventory solely from procurement receipts for purchased equipment",
+          "rationale": "Purchase records show what was bought, not what is installed, connected, or still in service, so they cannot track the live environment."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Consider what mechanism reports the environment as it exists right now, and what it must be compared against to surface records that are missing or obsolete.",
+      "explanation": "Agent-based discovery continuously reports the hardware, OS, and software of managed endpoints, and regular reconciliation against the CMDB exposes both devices missing from the inventory and records for devices that no longer exist. Annual manual reporting, DHCP lease records, and procurement receipts each provide partial or stale views that fail to keep pace with a changing environment.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Asset Inventory and Enumeration"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 CM-8 — System Component Inventory"
+        }
+      ]
+    },
+    "mcq-4-016": {
+      "id": "mcq-4-016",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which retention approach is the MOST appropriate?",
+      "context": "A software company must define how long to keep three data sets: customer contracts, system audit logs, and marketing analytics. Regulators require contract records to be kept for seven years, audit logs must support compliance and incident investigations, and the marketing data has no legal retention requirement. Management asks the security team to propose a retention approach.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create a retention schedule that classifies each data set and applies the regulatory minimum for contracts, a defined period for audit logs based on compliance and investigation needs, and scheduled disposal for marketing data once it is no longer needed",
+          "rationale": "A retention schedule aligns each category with legal, regulatory, and business requirements, and scheduled disposal prevents unnecessary accumulation of data that increases risk."
+        },
+        {
+          "id": "b",
+          "text": "Retain all three data sets indefinitely because storage is inexpensive",
+          "rationale": "Retaining everything forever increases legal exposure, storage cost, and breach impact, and violates the principle of keeping data only as long as it is needed."
+        },
+        {
+          "id": "c",
+          "text": "Delete all three data sets after 90 days to minimize storage and compliance burden",
+          "rationale": "Deleting contract records and audit logs before their regulatory and investigation periods expire can violate legal and compliance obligations."
+        },
+        {
+          "id": "d",
+          "text": "Let each department decide independently when its own data is deleted",
+          "rationale": "Department-by-department decisions produce inconsistent, unverifiable retention and no organization-wide accountability for legal or regulatory requirements."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about whether one single duration fits every data category, and what governing document should define the different periods.",
+      "explanation": "Proper data retention uses a documented schedule that classifies data and sets each category's retention period from legal, regulatory, and business requirements, then disposes of data when the period ends and no legal hold applies. Retaining everything indefinitely, deleting everything quickly, or letting each department decide separately all ignore the different obligations that apply to different data.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Data Governance and Lifecycle Management"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 AU-11 — Audit Record Retention"
+        }
+      ]
+    },
+    "mcq-4-026": {
+      "id": "mcq-4-026",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which capability BEST meets this requirement?",
+      "context": "A payment processor operates critical web servers that rarely change. Management wants to detect any modification of system binaries or configuration files, including changes made by an attacker who gains local access, while avoiding alert fatigue from routine patching.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy a file integrity monitoring tool that records a baseline hash of monitored files and alerts when file content changes, with a change-management review to disposition each alert",
+          "rationale": "FIM detects unauthorized modification by comparing current file hashes to the baseline, and reviewing alerts against approved changes keeps routine patching from creating noise."
+        },
+        {
+          "id": "b",
+          "text": "Schedule daily full antivirus scans of the servers",
+          "rationale": "Antivirus detects known malware, but it does not continuously verify that critical files have not been modified."
+        },
+        {
+          "id": "c",
+          "text": "Enable Windows auditing for successful and failed logon events",
+          "rationale": "Logon auditing records authentication events, not changes to system files or configuration."
+        },
+        {
+          "id": "d",
+          "text": "Take weekly full backups of each server and compare backup sizes",
+          "rationale": "Backups preserve data but do not provide real-time detection of file modifications, and comparing sizes misses small or same-sized changes."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Consider a control that verifies the state of files themselves over time, and how legitimate changes would be separated from suspicious ones.",
+      "explanation": "File integrity monitoring establishes a baseline of file hashes and alerts when monitored files change, making it the right control for detecting tampering with system binaries or configuration. Antivirus scanning, logon auditing, and backup size comparison do not continuously verify file integrity, and pairing FIM with change-management review prevents approved updates from causing alert fatigue.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "File Integrity Monitoring"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 SI-7 — Software, Firmware, and Information Integrity"
+        }
+      ]
+    },
+    "mcq-4-034": {
+      "id": "mcq-4-034",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which practice BEST addresses this finding?",
+      "context": "After a merger, an internal audit finds that many servers and SaaS subscriptions have no documented owner: no one is accountable for approving access, classifying the data they hold, or ensuring they are patched. Management asks the security team to fix the accountability gap.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Record an accountable owner and a data classification for every asset at acquisition, and keep both current in the asset inventory",
+          "rationale": "Ownership and classification make accountability explicit: the owner authorizes access and classification decisions, and the inventory records who is responsible."
+        },
+        {
+          "id": "b",
+          "text": "Assign ownership of all unclaimed assets to the IT help desk",
+          "rationale": "A shared operational group is not a business owner and cannot make classification or access decisions for data it does not manage."
+        },
+        {
+          "id": "c",
+          "text": "Decommission every asset that lacks a documented owner immediately",
+          "rationale": "Decommissioning unowned assets is disruptive and still requires an owner to decide what data they hold and whether it must be preserved."
+        },
+        {
+          "id": "d",
+          "text": "Remove assets without an owner from the inventory so they no longer appear in audits",
+          "rationale": "Removing unowned assets from the inventory hides the accountability gap instead of resolving it."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about where ownership and classification should be established so every asset has a clear decision-maker, and how that assignment is recorded.",
+      "explanation": "Assigning ownership and classification at acquisition ensures every asset has an accountable decision-maker, and recording the assignment in the inventory makes it visible and reviewable. Routing all unclaimed assets to the help desk, decommissioning them, or hiding them from the inventory either fails to assign real business accountability or masks the problem.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Data Governance Roles"
+        }
+      ]
+    },
+    "mcq-4-035": {
+      "id": "mcq-4-035",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which practice provides the STRONGEST verifiable assurance that the data was destroyed?",
+      "context": "A hospital is decommissioning a group of end-of-life workstations that stored patient records. The drives will be destroyed by a third-party disposal contractor, and the hospital must be able to demonstrate to regulators that the data was actually destroyed.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Require a certificate of destruction from the contractor listing serial numbers, destruction method, date, and a signature, and spot-check a sample of the destroyed media",
+          "rationale": "A certificate of destruction provides documented evidence per device, and spot-checking verifies the contractor actually performed the destruction."
+        },
+        {
+          "id": "b",
+          "text": "Accept the contractor's verbal confirmation that all drives were shredded",
+          "rationale": "Verbal assurance provides no documented evidence that could be presented to regulators or auditors."
+        },
+        {
+          "id": "c",
+          "text": "Quick-format each drive once before handing the hardware over",
+          "rationale": "A quick format removes file system pointers but leaves data recoverable and is not a recognized sanitization or destruction method."
+        },
+        {
+          "id": "d",
+          "text": "Store the drives in a locked closet indefinitely to avoid disposal risk",
+          "rationale": "Indefinite storage does not decommission the media and leaves the organization with a growing liability instead of verified destruction."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Consider what written evidence would prove destruction for each specific device, and how you could confirm the contractor actually did the work.",
+      "explanation": "A certificate of destruction documenting serial numbers, method, date, and signature provides per-device evidence that data was destroyed, and spot-checking samples verifies the contractor's work. Verbal assurance cannot be audited, quick formatting leaves data recoverable, and indefinite storage never completes decommissioning. Physical destruction and sanitization must be paired with documented certification.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Asset Disposal and Decommissioning"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-88 — Guidelines for Media Sanitization"
+        }
+      ]
+    },
+    "mcq-4-048": {
+      "id": "mcq-4-048",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which policy change BEST detects the disguised data?",
+      "context": "A financial firm's DLP blocks outbound email attachments based on filename rules. An employee recently exfiltrated customer data by renaming a spreadsheet containing account numbers to 'notes.txt' and sending it to a personal webmail address. Management wants a policy that detects the data itself regardless of how it is named.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add content-aware DLP rules that inspect attachment contents using data patterns and exact-data matching against the customer database, independent of filename",
+          "rationale": "Content inspection looks for regulated data inside the file, so renaming the file does not bypass the policy."
+        },
+        {
+          "id": "b",
+          "text": "Expand the filename block list to include additional common names such as 'notes.txt'",
+          "rationale": "Filename rules remain trivially bypassable because an attacker can choose any other name."
+        },
+        {
+          "id": "c",
+          "text": "Block all outbound email with attachments sent from the affected department",
+          "rationale": "Blocking an entire department's attachments disrupts legitimate business and does not stop data leaving through other channels or names."
+        },
+        {
+          "id": "d",
+          "text": "Raise the maximum attachment size allowed outbound to reduce false positives",
+          "rationale": "Raising the size limit makes exfiltration easier rather than harder and does not inspect content."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about whether the policy depends on metadata an attacker can change, and what would recognize the sensitive data even after it is renamed.",
+      "explanation": "Content-aware DLP inspects the contents of outbound data using pattern matching, fingerprints, or exact-data matching, so renaming a file does not defeat the policy. Filename block lists depend on attacker-controlled metadata, blanket blocking of a department breaks business, and raising size limits increases risk. DLP policies should match the data itself at the point of egress.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Data Security and Privacy"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 AC-4 — Information Flow Enforcement"
+        }
+      ]
+    }
+  }
+}

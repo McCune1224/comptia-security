@@ -28,7 +28,13 @@
 		submittedAssignments: number;
 		totalAssignments: number;
 	};
-	type Readiness = { score: number; label: string; passingScale: number; ready: boolean };
+	type Readiness = {
+		score: number;
+		label: string;
+		practiceTargetPercent: number;
+		officialPassingScore: number;
+		ready: boolean;
+	};
 
 	let data = $state<{ gradebook: Gradebook; readiness: Readiness } | null>(null);
 	let error = $state('');
@@ -52,7 +58,7 @@
 	function pctClass(pct: number | null): string {
 		if (pct === null) return 'text-text-muted';
 		if (pct >= 85) return 'text-success';
-		if (pct >= 60) return 'text-accent-warm';
+		if (pct >= 60) return 'text-warning';
 		return 'text-danger';
 	}
 </script>
@@ -98,10 +104,13 @@
 			</div>
 			<div class="flex flex-col items-center justify-center text-center">
 				<ProgressRing value={readiness.score} size={120} stroke={12} label="Readiness" />
-				<p class="mt-3 text-sm font-bold {readiness.ready ? 'text-success' : 'text-accent-warm'}">
+				<p class="mt-3 text-sm font-bold {readiness.ready ? 'text-success' : 'text-warning'}">
 					{readiness.label}
 				</p>
-				<p class="text-xs text-text-muted">Projected {readiness.passingScale}/900</p>
+				<p class="text-xs text-text-muted">
+					App practice target: {readiness.practiceTargetPercent}% · official pass:
+					{readiness.officialPassingScore}/900
+				</p>
 			</div>
 		</section>
 
@@ -132,7 +141,7 @@
 										: category.percentage >= 85
 											? 'bg-success'
 											: category.percentage >= 60
-												? 'bg-accent-warm'
+												? 'bg-warning'
 												: 'bg-danger'}"
 									style="width: {category.percentage ?? 0}%"
 								></div>

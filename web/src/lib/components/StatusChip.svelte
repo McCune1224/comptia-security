@@ -5,7 +5,7 @@
 
 	const config: Record<AssignmentStatus, { label: string; classes: string }> = {
 		open: { label: 'Open', classes: 'bg-surface-700 text-text-secondary' },
-		'due-soon': { label: 'Due soon', classes: 'bg-accent-warm/15 text-accent-warm' },
+		'due-soon': { label: 'Due soon', classes: 'bg-warning/15 text-warning' },
 		overdue: { label: 'Overdue', classes: 'bg-danger/15 text-danger' },
 		'in-progress': { label: 'In progress', classes: 'bg-info/15 text-info' },
 		submitted: { label: 'Submitted', classes: 'bg-success/15 text-success' }

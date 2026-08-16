@@ -4,7 +4,7 @@
 	const items = [
 		{ href: '/', label: 'Home', icon: 'home' },
 		{ href: '/syllabus', label: 'Syllabus', icon: 'syllabus' },
-		{ href: '/quiz', label: 'Practice', icon: 'quiz', primary: true },
+		{ href: '/quiz', label: 'Practice', icon: 'quiz' },
 		{ href: '/gradebook', label: 'Grades', icon: 'grades' },
 		{ href: '/calendar', label: 'Calendar', icon: 'calendar' }
 	];
@@ -24,7 +24,7 @@
 				class="relative flex min-h-16 flex-col items-center justify-center gap-1 pb-1 pt-2 text-[11px] font-bold transition {isActive(
 					item.href
 				)
-					? 'text-accent'
+					? 'bg-accent/10 text-accent'
 					: 'text-text-muted'}"
 				href={item.href}
 				aria-current={isActive(item.href) ? 'page' : undefined}
@@ -50,18 +50,16 @@
 						/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" /></svg
 					>
 				{:else if item.icon === 'quiz'}
-					<span class="-mt-5 grid h-12 w-12 place-items-center rounded-md bg-accent text-white">
-						<svg
-							viewBox="0 0 24 24"
-							class="h-6 w-6"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							><rect x="5" y="3" width="14" height="18" rx="2" /><path
-								d="M9 3h6v3H9zM9 11h6M9 15h4"
-							/></svg
-						>
-					</span>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-6 w-6"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+						><rect x="5" y="3" width="14" height="18" rx="2" /><path
+							d="M9 3h6v3H9zM9 11h6M9 15h4"
+						/></svg
+					>
 				{:else if item.icon === 'grades'}
 					<svg
 						viewBox="0 0 24 24"
@@ -82,12 +80,8 @@
 						/></svg
 					>
 				{/if}
-				{#if item.primary}
-					<span class="text-accent">{item.label}</span>
-				{:else}
-					<span>{item.label}</span>
-				{/if}
-				{#if isActive(item.href) && !item.primary}
+				<span>{item.label}</span>
+				{#if isActive(item.href)}
 					<span class="absolute bottom-0.5 h-1 w-6 rounded-sm bg-accent"></span>
 				{/if}
 			</a>

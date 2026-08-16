@@ -74,7 +74,7 @@
 		<div>
 			<a
 				href="/modules/{view.assignment.moduleId}"
-				class="inline-flex min-h-10 items-center text-sm font-bold text-accent hover:underline"
+				class="inline-flex min-h-11 items-center text-sm font-bold text-accent hover:underline"
 				>← Back to module</a
 			>
 			<div class="mt-4 flex flex-wrap items-center gap-3">
@@ -111,7 +111,7 @@
 			</div>
 			<div class="flex items-center gap-3">
 				<span
-					class="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-accent-warm/15 text-accent-warm"
+					class="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-warning/15 text-warning"
 				>
 					<svg
 						viewBox="0 0 24 24"
@@ -143,7 +143,7 @@
 							.bestSubmission.percentage >= 85
 							? 'bg-success/15 text-success'
 							: view.bestSubmission.percentage >= 60
-								? 'bg-accent-warm/15 text-accent-warm'
+								? 'bg-warning/15 text-warning'
 								: 'bg-danger/15 text-danger'}"
 					>
 						{view.bestSubmission.percentage}%

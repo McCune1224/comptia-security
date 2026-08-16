@@ -3,7 +3,7 @@
 @import '@fontsource-variable/space-grotesk';
 
 /* ============================================================
-   Dark study tool — near-black warm charcoal + acid lime
+   Study tool — graphite + soft teal (dark), paper (light)
    Single accent, clean grotesque type, sharp 6px corners, dense.
    ============================================================ */
 
@@ -12,65 +12,82 @@
 	--font-display: 'Space Grotesk Variable', 'Inter Variable', system-ui, -apple-system, sans-serif;
 	--font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
 
-	/* Charcoal (dark) — the default theme */
-	--color-bg-base: #0e0d0b;
-	--color-surface-900: #14130f;
-	--color-surface-800: #1a1915;
-	--color-surface-700: #232119;
-	--color-surface-600: #302d24;
-	--color-accent: #b7f04c;
-	--color-accent-secondary: #9d8ad6;
-	--color-accent-warm: #e3b341;
-	--color-text-primary: #ece8df;
-	--color-text-secondary: #b6b0a3;
-	--color-text-muted: #837d70;
-	--color-text-subtle: #5a554a;
-	--color-border: rgba(236, 232, 223, 0.08);
-	--color-border-strong: rgba(236, 232, 223, 0.16);
-	--color-success: #8fcf7e;
-	--color-danger: #ef6a5c;
-	--color-info: #84a8c9;
+	/* Graphite + soft teal (dark) — the default theme */
+	--color-bg-base: #111416;
+	--color-surface-900: #161a1d;
+	--color-surface-800: #1c2125;
+	--color-surface-700: #252b30;
+	--color-surface-600: #31383e;
+	--color-accent: #67b8a8;
+	--color-accent-secondary: #a8a0c4;
+	--color-warning: #e0b66a;
+	--color-text-primary: #f1f4f3;
+	--color-text-secondary: #c2cac7;
+	--color-text-muted: #929d99;
+	--color-text-subtle: #8b9692;
+	--color-border: rgba(241, 244, 243, 0.12);
+	--color-border-strong: rgba(241, 244, 243, 0.24);
+	--color-success: #79c58e;
+	--color-danger: #f08c82;
+	--color-info: #82b5d5;
+	--color-on-accent: #0a2420;
+	--color-on-warning: #271704;
+	--color-on-success: #0a2113;
+	--color-on-danger: #2a0b08;
+	--color-on-info: #091a25;
 }
 
 :root {
-	--color-bg-base: #0e0d0b;
-	--color-surface-900: #14130f;
-	--color-surface-800: #1a1915;
-	--color-surface-700: #232119;
-	--color-surface-600: #302d24;
-	--color-accent: #b7f04c;
-	--color-accent-secondary: #9d8ad6;
-	--color-accent-warm: #e3b341;
-	--color-text-primary: #ece8df;
-	--color-text-secondary: #b6b0a3;
-	--color-text-muted: #837d70;
-	--color-text-subtle: #5a554a;
-	--color-border: rgba(236, 232, 223, 0.08);
-	--color-border-strong: rgba(236, 232, 223, 0.16);
-	--color-success: #8fcf7e;
-	--color-danger: #ef6a5c;
-	--color-info: #84a8c9;
+	color-scheme: dark;
+	--color-bg-base: #111416;
+	--color-surface-900: #161a1d;
+	--color-surface-800: #1c2125;
+	--color-surface-700: #252b30;
+	--color-surface-600: #31383e;
+	--color-accent: #67b8a8;
+	--color-accent-secondary: #a8a0c4;
+	--color-warning: #e0b66a;
+	--color-text-primary: #f1f4f3;
+	--color-text-secondary: #c2cac7;
+	--color-text-muted: #929d99;
+	--color-text-subtle: #8b9692;
+	--color-border: rgba(241, 244, 243, 0.12);
+	--color-border-strong: rgba(241, 244, 243, 0.24);
+	--color-success: #79c58e;
+	--color-danger: #f08c82;
+	--color-info: #82b5d5;
+	--color-on-accent: #0a2420;
+	--color-on-warning: #271704;
+	--color-on-success: #0a2113;
+	--color-on-danger: #2a0b08;
+	--color-on-info: #091a25;
 }
 
 /* Paper (light) — same character, invert for sunlight */
 [data-theme='light'] {
-	--color-bg-base: #f4f3ee;
-	--color-surface-900: #ecebe4;
-	--color-surface-800: #fbfaf6;
-	--color-surface-700: #e4e2d9;
-	--color-surface-600: #d5d2c5;
-	--color-accent: #557a10;
-	--color-accent-secondary: #7a63b8;
-	--color-accent-warm: #a87f12;
-	--color-text-primary: #1c1a16;
-	--color-text-secondary: #45413a;
-	--color-text-muted: #6f6a5e;
-	--color-text-subtle: #8f8978;
-	--color-border: rgba(28, 26, 22, 0.08);
-	--color-border-strong: rgba(28, 26, 22, 0.16);
-	--color-success: #3f7a33;
-	--color-danger: #c24d3e;
-	--color-info: #3f6d96;
+	color-scheme: light;
+	--color-bg-base: #f4f6f5;
+	--color-surface-900: #e8ecea;
+	--color-surface-800: #ffffff;
+	--color-surface-700: #dee4e1;
+	--color-surface-600: #cdd6d2;
+	--color-accent: #176d63;
+	--color-accent-secondary: #665c91;
+	--color-warning: #8a5a0a;
+	--color-text-primary: #18201d;
+	--color-text-secondary: #3c4944;
+	--color-text-muted: #56625c;
+	--color-text-subtle: #59665f;
+	--color-border: rgba(24, 32, 29, 0.12);
+	--color-border-strong: rgba(24, 32, 29, 0.24);
+	--color-success: #286b3e;
+	--color-danger: #a53e38;
+	--color-info: #2d668d;
+	--color-on-accent: #ffffff;
+	--color-on-warning: #ffffff;
+	--color-on-success: #ffffff;
+	--color-on-danger: #ffffff;
+	--color-on-info: #ffffff;
 }
 
 @layer base {
@@ -113,10 +130,14 @@
 		border: 1px solid var(--color-border-strong);
 		border-radius: 0.375rem;
 		background: var(--color-surface-800)
-			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23837d70'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E")
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23929D99'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E")
 			right 0.75rem center / 0.875rem no-repeat;
 		color: var(--color-text-primary);
 		padding: 0.625rem 2.25rem 0.625rem 0.75rem;
+	}
+
+	[data-theme='light'] select {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2356625C'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E");
 	}
 
 	input[type='number'],
@@ -256,7 +277,7 @@
 
 .btn-primary {
 	background: var(--color-accent);
-	color: #10100c;
+	color: var(--color-on-accent);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -345,7 +366,7 @@ button.chip {
 	border-top: 1px dashed var(--color-border-strong);
 }
 
-/* Emphasis text — solid acid lime */
+/* Emphasis text — accent color */
 .gradient-text {
 	color: var(--color-accent);
 }

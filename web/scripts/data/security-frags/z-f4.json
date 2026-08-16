@@ -1,0 +1,423 @@
+{
+  "replace": {
+    "mcq-4-034": {
+      "id": "mcq-4-034",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which NAC enforcement approach BEST satisfies these requirements?",
+      "context": "A hospital is deploying network access control (NAC) so that only compliant devices can reach clinical systems. Managed laptops must have current antivirus definitions and required security patches before they are granted network access, while visitors' unmanaged devices must be limited to internet-only connectivity. The security team is defining how the NAC should treat devices at the moment they connect.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Run an endpoint posture agent that assesses antivirus, patch, and configuration state at connection time, granting full access to compliant devices and placing non-compliant devices in a quarantine VLAN with limited remediation access",
+          "rationale": "Posture assessment checks device health before access, and quarantine enforces the policy by isolating devices that fail the check."
+        },
+        {
+          "id": "b",
+          "text": "Maintain a MAC address allowlist of known laptops and permit only those addresses on the clinical network",
+          "rationale": "MAC filtering identifies devices by address, which can be spoofed, and verifies nothing about antivirus, patches, or configuration state."
+        },
+        {
+          "id": "c",
+          "text": "Require every user to confirm compliance in a web portal before their device is granted full network access",
+          "rationale": "A portal attestation is unverifiable: nothing checks the device's actual security state, so non-compliant devices can still join."
+        },
+        {
+          "id": "d",
+          "text": "Deploy an inline intrusion prevention system that inspects traffic and drops sessions that look suspicious",
+          "rationale": "An IPS inspects traffic patterns, not device posture, so it cannot determine whether a connecting device is compliant."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about what must be verified about a device before it joins the network, and where a device that fails that check should be sent instead of receiving normal access.",
+      "explanation": "NAC posture assessment checks each device's security state — antivirus definitions, patch level, and configuration — at connection time, and quarantine directs devices that fail the check to a restricted VLAN where they can remediate without reaching clinical systems. MAC allowlists only prove an address, not health, and can be spoofed; portal self-attestation is unverifiable; and an inline IPS inspects traffic rather than endpoint compliance.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Network Access Control"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 IA-3 \u2014 Device Identification and Authentication"
+        }
+      ]
+    },
+    "mcq-4-035": {
+      "id": "mcq-4-035",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which combination of web filtering features BEST meets these requirements?",
+      "context": "A school district routes all student and staff internet traffic through a central web gateway. The district must prevent students from reaching gambling and adult-content sites, block domains known to host malware for every user, and give administrators a way to correct the occasional legitimate site that is misclassified. The IT team is deciding how the gateway should classify and block traffic.",
+      "options": [
+        {
+          "id": "a",
+          "text": "URL categorization for policy rules by category, a reputation database to flag known-malicious domains, and an exception process for reclassification requests",
+          "rationale": "Categorization enables rules such as blocking gambling and adult sites, reputation data catches known-malicious domains, and an exception workflow fixes false positives."
+        },
+        {
+          "id": "b",
+          "text": "A keyword filter that scans page content for offensive terms before the page is delivered to the browser",
+          "rationale": "Keyword scanning is unreliable: encrypted traffic hides content, and harmless pages can contain flagged words."
+        },
+        {
+          "id": "c",
+          "text": "A manually maintained allowlist of approved domains, blocking everything else",
+          "rationale": "A full allowlist does not scale to the web resources students and staff legitimately need and quickly blocks valid research."
+        },
+        {
+          "id": "d",
+          "text": "A browser extension that users install voluntarily to flag risky sites as they browse",
+          "rationale": "Voluntary client-side extensions are not enforced centrally and can be uninstalled or bypassed entirely."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Separate the three needs: classifying sites by category, judging whether a domain is known to be malicious, and allowing legitimate corrections when the classification is wrong.",
+      "explanation": "URL categorization assigns sites to categories so policies can block gambling and adult content, reputation databases identify domains known for malware or phishing, and an exception process lets administrators reclassify miscategorized sites. Keyword filtering is defeated by encrypted content and produces false positives, a full allowlist cannot scale, and voluntary browser extensions are not centrally enforceable.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Web and Content Filtering"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 SC-7 \u2014 Boundary Protection"
+        }
+      ]
+    },
+    "mcq-4-045": {
+      "id": "mcq-4-045",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which protocol migration BEST addresses the audit findings?",
+      "context": "A manufacturer's network operations team administers switches and a file server that still use Telnet for remote management and FTP for firmware and file transfers. An audit flagged these clear-text protocols, and the team must move to secure alternatives without purchasing new hardware. The switches support SSH for management, and the file server supports SSH-based file transfer.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable SSH with modern cipher suites for switch and server management, migrate file transfers to SFTP, and disable Telnet and FTP services",
+          "rationale": "SSH provides encrypted management to replace Telnet, SFTP provides encrypted file transfer to replace FTP, and disabling the legacy services and weak ciphers prevents accidental use."
+        },
+        {
+          "id": "b",
+          "text": "Tunnel the existing Telnet and FTP sessions through the VPN concentrator so the traffic is encrypted in transit",
+          "rationale": "Tunneling hides the clear-text traffic but leaves the insecure protocols and weak ciphers enabled, which is inferior to native secure alternatives."
+        },
+        {
+          "id": "c",
+          "text": "Keep Telnet for switch management and migrate only the file server to FTPS with TLS",
+          "rationale": "FTPS protects file transfers, but Telnet continues to transmit management credentials in clear text, leaving the audit finding unresolved."
+        },
+        {
+          "id": "d",
+          "text": "Disable all remote management and require a technician with a console cable for every device change",
+          "rationale": "Console-only access removes remote administration rather than securing it, and it is operationally impractical for a distributed environment."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Look for the option that replaces the clear-text protocols with encrypted equivalents for both management and file transfer, rather than merely encrypting the old protocols or removing remote access.",
+      "explanation": "SSH replaces Telnet with encrypted interactive management, SFTP (SSH File Transfer Protocol) replaces FTP with encrypted file transfer, and disabling Telnet, FTP, and weak cipher suites removes the insecure paths entirely. VPN tunneling keeps the legacy services enabled, FTPS alone leaves Telnet exposed, and console-only administration sacrifices remote management instead of securing it.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Secure Protocols"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-52 Rev. 2 \u2014 Guidelines for the Selection, Configuration, and Use of TLS Implementations"
+        }
+      ]
+    },
+    "mcq-4-046": {
+      "id": "mcq-4-046",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "Which two actions BEST reduce false positives without sacrificing detection? (Select TWO.)",
+      "context": "A university's network intrusion detection system generates thousands of alerts per week, and analysts find that most are false positives caused by legitimate student tools and administrative scans. Management wants the SOC to reduce alert fatigue while keeping visibility into genuine intrusions. The team is deciding how to tune the detection deployment.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Baseline normal traffic during busy and quiet periods, then adjust thresholds and suppress rules that repeatedly fire on known-benign activity",
+          "rationale": "Baselining identifies what is normal so thresholds can be tuned and systematic false-positive sources can be suppressed without losing coverage."
+        },
+        {
+          "id": "b",
+          "text": "Prioritize signatures using threat-intelligence trends so analyst effort focuses on rules tied to active campaigns",
+          "rationale": "Trend analysis against current threat intelligence directs limited analyst time to the detections that matter most."
+        },
+        {
+          "id": "c",
+          "text": "Enable every signature from the vendor's feed so no potential attack is missed",
+          "rationale": "Enabling every signature maximizes alert volume and makes the false-positive problem worse rather than better."
+        },
+        {
+          "id": "d",
+          "text": "Switch the sensors to inline IPS mode so suspicious traffic is blocked before it can cause damage",
+          "rationale": "Inline mode changes enforcement, not alert quality; with a noisy rule set it risks blocking legitimate traffic and does not reduce false positives."
+        },
+        {
+          "id": "e",
+          "text": "Set the sensors to monitor-only mode and review the alert stream during the monthly maintenance window",
+          "rationale": "Monitor-only mode with monthly reviews delays detection of genuine intrusions and does not reduce the false-positive rate."
+        },
+        {
+          "id": "f",
+          "text": "Delete every rule that has produced a false positive during the last quarter",
+          "rationale": "Deleting rules wholesale removes detection coverage, including rules that catch real threats occasionally."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "The goal is fewer, higher-confidence alerts. Focus on changes that reduce noise by understanding what normal looks like and by directing attention to the threats that matter, not on changing the sensor's role from detection to blocking.",
+      "explanation": "Baselining and threshold tuning remove systematic false positives caused by known-benign traffic, while threat-intelligence-driven trend analysis concentrates analyst effort on signatures tied to active campaigns. Enabling every signature, deleting rules that fire, or switching inline or monitor-only modes either adds noise, removes coverage, or changes the enforcement posture without improving alert quality — and with a noisy rule set, inline mode risks blocking legitimate traffic.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "IDS/IPS Tuning"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-94 \u2014 Guide to Intrusion Detection and Prevention Systems (IDS/IPS)"
+        }
+      ]
+    },
+    "mcq-4-060": {
+      "id": "mcq-4-060",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which endpoint/OS log source is the BEST starting point to answer these questions?",
+      "context": "A Linux server in a retailer's DMZ is suspected of being used as a pivot point during an intrusion. The incident responder must establish which accounts authenticated over SSH and when, whether any commands created new user accounts, and what processes executed around the suspected time. The responder is choosing which on-host data sources to examine first.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The authentication log (/var/log/auth.log) for SSH logon events combined with audit daemon (auditd) records for process execution and account changes",
+          "rationale": "auth.log records authentication attempts and successes over SSH, while auditd provides detailed records of process execution, syscalls, and account-management events."
+        },
+        {
+          "id": "b",
+          "text": "The web application access logs stored under /var/www that record only HTTP requests",
+          "rationale": "Application logs cover HTTP traffic only and do not capture SSH logons, process execution, or account changes on the host."
+        },
+        {
+          "id": "c",
+          "text": "The kernel ring buffer (dmesg) showing hardware and driver messages",
+          "rationale": "The kernel ring buffer reports hardware and driver activity, not authentication events or executed processes."
+        },
+        {
+          "id": "d",
+          "text": "The Bash history files in each user's home directory",
+          "rationale": "Shell history is per-user, easily cleared by an attacker, and misses non-interactive processes and root activity, so it is unreliable evidence."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider which logs the operating system itself maintains for authentication, process execution, and account changes, rather than application-specific or hardware-level records.",
+      "explanation": "On Linux, /var/log/auth.log records authentication attempts and successes such as SSH logons, and the audit daemon logs process execution, syscalls, and account-management changes, making the pair the definitive on-host source for this investigation. Web application logs only cover HTTP requests, dmesg reports kernel and hardware messages, and Bash history is per-user, trivially cleared, and excludes non-interactive activity.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "study-guide",
+          "section": "Endpoint and OS Logs"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-92 \u2014 Guide to Computer Security Log Management"
+        }
+      ]
+    },
+    "mcq-4-062": {
+      "id": "mcq-4-062",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which monitoring practice BEST provides this visibility?",
+      "context": "An online retailer's customer-facing application began returning slow responses during peak hours. The operations team wants continuous visibility into CPU, memory, disk, and application request latency so it can detect resource exhaustion before customers are affected. The team is selecting a monitoring approach for its application servers.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy agents that collect compute, memory, disk, and application performance metrics at regular intervals, with thresholds that alert when utilization or latency exceeds baselined norms",
+          "rationale": "Metric agents continuously measure the resources that degrade under load, and thresholds against baselines turn those measurements into early warnings."
+        },
+        {
+          "id": "b",
+          "text": "Run a vulnerability scan of the application servers each quarter to identify configuration weaknesses",
+          "rationale": "Vulnerability scanning assesses configuration and patch weaknesses, not live CPU, memory, disk utilization, or latency."
+        },
+        {
+          "id": "c",
+          "text": "Enable syslog forwarding of server and application events to a central log collector",
+          "rationale": "Syslog delivers event messages, but events do not provide the continuous utilization and latency measurements needed to forecast resource exhaustion."
+        },
+        {
+          "id": "d",
+          "text": "Capture full packet traces of production traffic for offline analysis",
+          "rationale": "Packet capture analyzes traffic content and flows, not server resource utilization, and continuous full capture is expensive."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about what measures the actual health of the servers themselves — utilization and latency over time — versus records of events, configuration weaknesses, or traffic.",
+      "explanation": "Infrastructure and application monitoring agents collect metrics such as CPU, memory, disk utilization, and request latency on a continuous basis, and thresholds set against baselines trigger alerts as systems approach exhaustion. Vulnerability scans reveal configuration weaknesses, syslog records events rather than utilization, and packet capture analyzes traffic instead of resource consumption.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Monitoring Computing Resources"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-137 \u2014 Information Security Continuous Monitoring for Federal Information Systems and Organizations"
+        }
+      ]
+    },
+    "mcq-4-063": {
+      "id": "mcq-4-063",
+      "domain": 4,
+      "objective": "4.8",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which approach BEST describes this activity and how it should be executed?",
+      "context": "A bank's threat intelligence team receives a report describing a campaign that uses a specific PowerShell loader and outbound connections to a set of known command infrastructure. No alerts have fired, but the bank operates similar environments. The team decides to search for the reported indicators proactively rather than wait for a detection to trigger.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Proactive threat hunting: form hypotheses from the intelligence, search endpoint and network telemetry for the indicators, and validate any findings before escalating",
+          "rationale": "Threat hunting is a hypothesis-driven search through telemetry for signs of compromise that existing detections have not surfaced, with findings validated before escalation."
+        },
+        {
+          "id": "b",
+          "text": "Vulnerability scanning: run a credentialed scan to find missing patches that the campaign might exploit",
+          "rationale": "Vulnerability scanning identifies patch and configuration weaknesses; it does not search telemetry for indicators of an active compromise."
+        },
+        {
+          "id": "c",
+          "text": "Incident response: declare an incident immediately and begin containment based on the intelligence report",
+          "rationale": "Without a confirmed compromise, declaring an incident and containing is premature; hunting establishes whether the indicators are present first."
+        },
+        {
+          "id": "d",
+          "text": "Red team testing: launch the loader in a test environment to measure whether detections fire",
+          "rationale": "Red-team emulation tests detection capability with controlled activity; it does not search the production environment for existing compromise."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "This is a search for signs of compromise that has not yet been detected — consider how an analyst would use the intelligence to look for those signs rather than scan, contain, or emulate.",
+      "explanation": "Threat hunting is a proactive, hypothesis-driven review of endpoint and network telemetry for IOCs and adversary behavior, frequently prompted by new threat intelligence before detections trigger. Findings are validated and then escalated into incident response. Vulnerability scanning checks patch state, immediate containment presumes a confirmed incident, and red-team emulation validates detection coverage rather than investigating the live environment.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.8"
+        },
+        {
+          "source": "study-guide",
+          "section": "Threat Hunting and Root Cause Analysis"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-61 Rev. 2 \u2014 Computer Security Incident Handling Guide"
+        }
+      ]
+    },
+    "mcq-4-073": {
+      "id": "mcq-4-073",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which investigation data source BEST supports this recurring review?",
+      "context": "A managed service provider's security leadership needs a recurring view of risk across hundreds of client environments, including which systems have critical unpatched vulnerabilities, how remediation is progressing, and whether any systems were added since the last review. The team must build this from the data its vulnerability management platform already collects.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Automated reports and dashboards generated from the vulnerability scanner's database, summarizing findings by severity, age, and asset",
+          "rationale": "Scanner databases retain structured findings that automated reports and dashboards aggregate by severity, asset, and remediation status for a recurring leadership view."
+        },
+        {
+          "id": "b",
+          "text": "Raw packet captures of management traffic stored on an analysis workstation",
+          "rationale": "Packet captures show individual conversations, not aggregated vulnerability or remediation posture across environments."
+        },
+        {
+          "id": "c",
+          "text": "Individual email notifications generated by each scanner run",
+          "rationale": "Per-run email notices are noisy and disconnected, with no aggregation, trending, or cross-environment summary."
+        },
+        {
+          "id": "d",
+          "text": "The quarantine lists maintained locally by endpoint agents",
+          "rationale": "Endpoint-local quarantine state reflects individual host actions, not the organization-wide vulnerability posture the review needs."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "The need is a repeatable, at-a-glance view of aggregated vulnerability and remediation data — consider what the scanning platform itself can summarize from its stored results.",
+      "explanation": "Vulnerability management platforms store scan results, and automated reports and dashboards aggregate those findings by severity, asset, and remediation status, giving leadership a recurring view of posture and progress across environments. Packet captures, individual scan emails, and endpoint-local quarantine lists do not aggregate findings organization-wide or support trend and remediation tracking.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "study-guide",
+          "section": "Automated Reports and Dashboards"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-137 \u2014 Information Security Continuous Monitoring for Federal Information Systems and Organizations"
+        }
+      ]
+    }
+  }
+}

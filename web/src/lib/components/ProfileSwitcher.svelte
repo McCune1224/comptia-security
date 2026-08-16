@@ -19,7 +19,7 @@
 		ondelete: (id: string) => Promise<boolean>;
 	} = $props();
 
-	const PROFILE_COLORS = ['#b7f04c', '#4cc9f0', '#f0b04c', '#f04c8a'];
+	const PROFILE_COLORS = ['#67B8A8', '#82B5D5', '#E0B66A', '#D894B8'];
 
 	let open = $state(false);
 	let adding = $state(false);
@@ -98,7 +98,7 @@
 
 <div class="relative" bind:this={wrapper}>
 	<button
-		class="flex h-11 items-center gap-2 rounded-md border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700 md:h-10"
+		class="flex h-11 items-center gap-2 rounded-md border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700"
 		type="button"
 		aria-haspopup="menu"
 		aria-expanded={open}
@@ -107,7 +107,7 @@
 	>
 		<span
 			class="h-3 w-3 shrink-0 rounded-full"
-			style="background:{activeProfile?.color ?? '#b7f04c'}"
+			style="background:{activeProfile?.color ?? '#67B8A8'}"
 		></span>
 		<span
 			class="hidden min-[420px]:inline max-w-24 truncate text-sm font-semibold text-text-primary"
@@ -161,7 +161,7 @@
 							</button>
 							{#if profile.id !== 'default'}
 								<button
-									class="grid h-10 w-10 shrink-0 place-items-center rounded-md text-text-subtle transition hover:bg-surface-700 hover:text-text-primary"
+									class="grid h-11 w-11 shrink-0 place-items-center rounded-md text-text-subtle transition hover:bg-surface-700 hover:text-text-primary"
 									type="button"
 									aria-label="Rename {profile.name}"
 									role="menuitem"
@@ -177,7 +177,7 @@
 									>
 								</button>
 								<button
-									class="grid h-10 w-10 shrink-0 place-items-center rounded-md text-danger transition hover:bg-danger/15"
+									class="grid h-11 w-11 shrink-0 place-items-center rounded-md text-danger transition hover:bg-danger/15"
 									type="button"
 									class:opacity-40={profile.id === activeProfileId}
 									class:pointer-events-none={profile.id === activeProfileId}
@@ -211,13 +211,13 @@
 						{#if renamingId === profile.id}
 							<form class="flex gap-2 border-t border-border px-2.5 py-2.5" onsubmit={submitRename}>
 								<input
-									class="min-h-10 flex-1 rounded-md border border-border bg-surface-800 px-3 text-sm text-text-primary outline-none focus:border-accent"
+									class="min-h-11 flex-1 rounded-md border border-border bg-surface-800 px-3 text-sm text-text-primary outline-none focus:border-accent"
 									bind:value={renameValue}
 									placeholder="Profile name"
 									maxlength="24"
 									aria-label="Rename profile"
 								/>
-								<button class="btn btn-primary min-h-10" type="submit">Save</button>
+								<button class="btn btn-primary min-h-11" type="submit">Save</button>
 							</form>
 						{/if}
 					</div>
@@ -229,7 +229,7 @@
 					<label class="eyebrow" for="new-profile-name">Add profile</label>
 					<input
 						id="new-profile-name"
-						class="mt-2 min-h-10 w-full rounded-md border border-border bg-surface-800 px-3 text-sm text-text-primary outline-none focus:border-accent"
+						class="mt-2 min-h-11 w-full rounded-md border border-border bg-surface-800 px-3 text-sm text-text-primary outline-none focus:border-accent"
 						bind:value={newName}
 						placeholder="Name (e.g. Alex)"
 						maxlength="24"
@@ -237,7 +237,7 @@
 					<div class="mt-3 flex items-center gap-2" role="radiogroup" aria-label="Profile color">
 						{#each PROFILE_COLORS as color (color)}
 							<button
-								class="h-9 w-9 rounded-md border transition {newColor === color
+								class="h-11 w-11 rounded-md border transition {newColor === color
 									? 'border-accent ring-2 ring-accent/40'
 									: 'border-border hover:border-border-strong'}"
 								type="button"

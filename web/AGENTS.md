@@ -190,8 +190,8 @@ active course. Migration/isolation coverage lives in `migration.test.ts`.
 
 - `StatusChip.svelte` — assignment status badge.
 - `ProgressRing.svelte` — circular percentage (readiness/grade).
-- `BottomNav.svelte` / `MobileMenu.svelte` — course navigation (Home, Syllabus, Grades, Calendar).
-- `ProfileSwitcher.svelte` / `CourseSwitcher.svelte` — header chips → bottom sheets
+- `BottomNav.svelte` / `MobileMenu.svelte` — course navigation (Home, Syllabus, Grades, Calendar). `MobileMenu.svelte` is a self-contained hamburger trigger + top dropdown (mobile-first) for the secondary links (Quiz, Scenarios, PBQs, Progress, History) and the theme toggle.
+- `ProfileSwitcher.svelte` / `CourseSwitcher.svelte` — header chips → top dropdowns
   for profile (add/rename/delete, 2-profile cap) and course selection; switching
   sets the scope cookies and reloads.
 
@@ -230,7 +230,7 @@ scope isolation between profiles, and the 2-profile cap.
   `.btn` / `.btn-primary` / `.btn-ghost` / `.btn-danger` (≥44px touch targets, flat, sharp),
   `.chip` (square, 0 radius), `.eyebrow` (mono uppercase), `.gradient-text` (solid lime), `.pb-safe`.
 - **Mobile-first**: bottom nav (`BottomNav.svelte`) has 5 tabs with a raised center Practice
-  button; mobile menu is a bottom sheet (`MobileMenu.svelte`); gradebook/history tables become
+  button; the mobile "more" menu is a top dropdown (`MobileMenu.svelte`); gradebook/history tables become
   stacked cards below `md:`; `max-w-6xl` content column.
 - Progress colors: red (<60%), amber (60–84%), green (≥85%) via `getPercentColor` /
   `getBarColor` in `utils.ts`.

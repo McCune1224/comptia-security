@@ -117,7 +117,7 @@
 	</p>
 	<div class="relative" bind:this={container}>
 		<svg
-			class="pointer-events-none absolute inset-0 h-full w-full"
+			class="pointer-events-none absolute inset-0 hidden h-full w-full sm:block"
 			viewBox={`0 0 ${viewBox.width} ${viewBox.height}`}
 			preserveAspectRatio="none"
 			aria-hidden="true"
@@ -137,6 +137,13 @@
 		<div class="flex flex-col gap-5 sm:flex-row">
 			<div class="flex-1 space-y-2.5">
 				{#each premises as premise (premise.id)}
+					{@const matchedTargetId = matches[premise.id] ?? ''}
+					{@const matchedTarget = [...targets].find((t) => t.id === matchedTargetId)}
+					{@const inlineColor = feedbackMatches
+						? feedbackMatches[premise.id] === matchedTargetId
+							? 'text-success'
+							: 'text-danger'
+						: 'text-accent'}
 					<button
 						type="button"
 						data-connect-premise={premise.id}
@@ -152,9 +159,17 @@
 							if (e.key === 'Escape') selected = null;
 						}}
 					>
-						<span class="flex-1">{premise.text}</span>
+						<span class="min-w-0 flex-1">
+							<span class="block break-words">{premise.text}</span>
+							{#if matchedTarget}
+								<span
+									class="mt-0.5 block break-words text-xs font-bold {inlineColor} sm:hidden"
+									>→ {matchedTarget.text}</span
+								>
+							{/if}
+						</span>
 						{#if matches[premise.id]}
-							<span class="text-xs font-bold text-accent">✓</span>
+							<span class="shrink-0 text-xs font-bold text-accent">✓</span>
 						{/if}
 					</button>
 				{/each}

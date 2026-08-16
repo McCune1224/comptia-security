@@ -69,7 +69,7 @@ export async function POST(event: RequestEvent) {
 	if (body.action === 'create') {
 		if (typeof body.name !== 'string' || body.name.trim().length === 0)
 			return json({ error: { code: 'INVALID_REQUEST', message: 'name is required.' } }, { status: 400 });
-		const color = typeof body.color === 'string' ? body.color : '#b7f04c';
+		const color = typeof body.color === 'string' ? body.color : '#67B8A8';
 		try {
 			const profile = quizRepository.createProfile(body.name.trim().slice(0, 24), color, resolveScope(event).courseId);
 			return json({ ok: true, profile });

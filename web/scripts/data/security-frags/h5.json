@@ -1,0 +1,151 @@
+{
+ "hints": {
+  "mcq-5-001": "Anchor each layer to what the scenario says about it: management intent at the top, then mandatory rules, then step-by-step instructions, then optional recommendations. Map those four descriptions to the document names in order.",
+  "mcq-5-002": "Separate who is accountable for the data and its classification from who implements the technical safeguards, and keep the GDPR legal roles distinct. The senior executive described in the scenario fits exactly one of these roles.",
+  "mcq-5-003": "One concept is the duty to investigate and identify risk; the other is the obligation to act responsibly once risk is known. The company performed the first step but skipped the second.",
+  "mcq-5-004": "Standard change management requires the needed reviews and impact analysis before implementation. Ask which option respects that gate instead of bypassing, retrofitting, or delegating it.",
+  "mcq-5-005": "Consider what gives a policy authority across the organization and keeps it relevant over time, then rule out the choices that describe jargon, implementation detail, or a document that never changes.",
+  "mcq-5-006": "The governing document should pair the behavioral rule with the consequences for breaking it so enforcement is consistent and defensible. Ask which document was violated and what it is supposed to contain.",
+  "mcq-5-007": "Separate ultimate accountability and approval from implementation, advice, and independent review. The question points at the top of the governance chain - the body that owns the strategy, not the one that runs it.",
+  "mcq-5-008": "Work the ALE chain in order: first the loss from a single occurrence, then how many occurrences happen per year. Convert the once-every-two-years figure into a yearly rate before multiplying.",
+  "mcq-5-009": "Ask how the findings are expressed: monetary values computed from data, or judgment-based categories assigned by expertise. The method described relies on the latter, not dollar figures.",
+  "mcq-5-010": "Look at what happens to the risky activity itself: is it ended, reduced, shifted to another party, or tolerated with documentation? The scenario removes the activity altogether.",
+  "mcq-5-011": "The recognized response set has four members: eliminate the activity, reduce it, shift the financial burden, or formally tolerate it. Only two of the listed options are real members of that set - identify both.",
+  "mcq-5-012": "Two different targets are in play: how fast service must be back and how much data loss is tolerable. Each number in the scenario maps to one of them - restoration speed and the acceptable recovery window.",
+  "mcq-5-013": "The document is a living catalog of risks with owners, likelihood and impact ratings, and response plans, revisited on a schedule - not a one-time study. Look for the option built for ongoing tracking.",
+  "mcq-5-014": "Two governance terms differ in scope: one is the broad willingness to take risk set at the top, the other is the acceptable variation around an individual risk level. Decide which concept the board's statement expresses and which the legacy systems' situation tests.",
+  "mcq-5-015": "The key is the time dimension: the report includes independent testing of how controls actually performed over a full year, not just how they were designed at one point. Pick the report variant that matches that coverage.",
+  "mcq-5-016": "The contract carries measurable performance commitments and the remedies when they are missed. Which agreement type is built around quantified targets and consequences rather than intent, interconnection specifications, or health-data terms?",
+  "mcq-5-017": "Look for evidence-based assurance about the partner's actual security: an independent audit of the control environment over time, and the results of hands-on testing. Reject marketing, morale, and market data.",
+  "mcq-5-018": "The compliance need is proof that controls keep working, not merely that they were designed acceptably at one moment. Compare what each vendor's evidence covers - a point-in-time snapshot versus sustained operation - and pick the one that satisfies the requirement.",
+  "mcq-5-019": "The concern is protecting proprietary information from disclosure to others. Which agreement is specifically about keeping shared information confidential, as opposed to performance levels, cooperation intent, or health-data handling?",
+  "mcq-5-020": "The document must capture the technical security requirements of the link itself - encryption and authentication specifics - between two networks. Choose the agreement designed for connecting separate systems, not for service levels, secrecy, or intent.",
+  "mcq-5-021": "The exposure comes from parties behind the product that the organization does not directly contract with or control. Match that source to the risk category covering vendors, suppliers, and their subtiers.",
+  "mcq-5-022": "The trigger is where the data subjects live, not where the company is based - the law follows EU residents' personal data across borders. Identify the regulation with extraterritorial reach over that data.",
+  "mcq-5-023": "The trigger is the data type itself - cardholder data stored, processed, or transmitted. Which framework is tied directly to that data and the payment card brands?",
+  "mcq-5-024": "The data is health information held by a provider that transmits it electronically. Which law pairs privacy rules with security safeguards for exactly that data?",
+  "mcq-5-025": "Two of the listed rights are genuine, exercisable rights over one's own data - one removes the data from the organization's hands, the other lets the individual take their data elsewhere. The remaining choices describe demands no regulation grants.",
+  "mcq-5-027": "The records in question are education records held by a school that receives federal funding. Match the institution and data type to the law that protects student records specifically.",
+  "mcq-5-029": "Focus on how much knowledge the testers begin with. No credentials, no documentation, and no prior knowledge means they start exactly as an outsider would, discovering everything through their own reconnaissance.",
+  "mcq-5-030": "The team plays a live adversary with stealth requirements and a concrete objective, and the defenders are not given advance notice. Which exercise is defined by adversarial simulation with detection-avoidance goals?",
+  "mcq-5-031": "The central difference is whether testing stops at finding and reporting weaknesses or goes on to prove they can be exploited. Pick the two statements that capture that contrast; the others misstate cost, documentation, or access requirements.",
+  "mcq-5-032": "The objection concerns the auditor's impartiality relative to the group being reviewed. Consider what the reporting line must be for audit results to be seen as objective and unbiased.",
+  "mcq-5-033": "The distinguishing feature of this report variant is the period of time: it speaks to how controls were designed and how they performed across a stated window. The other choices describe a single-point snapshot, financial statements, or marketing claims.",
+  "mcq-5-034": "The defining behavior is real-time information exchange between the attackers and defenders during the engagement so both sides improve together. Which exercise is built on that collaboration?",
+  "mcq-5-035": "Read the three rates as different program signals: the click and credential rates show the recognition gap, while the reporting rate shows whether employees know the response path. The biggest improvement opportunity is the behavior that should be automatic once suspicion arises.",
+  "mcq-5-036": "The content is being differentiated by job function rather than delivered identically to everyone. Which approach is defined by tailoring material to each role's risks and duties?",
+  "mcq-5-037": "An effective program gives employees realistic practice at spotting phishing and a simple, safe way to hand suspicious messages to the security team. Reject options that punish, eliminate training, or demand memorization.",
+  "mcq-5-038": "The employee spotted the warning signs, did not engage with the request, and escalated it through the right channel. That sequence is precisely the conduct a mature awareness program tries to cultivate - describe what it demonstrates rather than the threat or a violation.",
+  "mcq-5-040": "The proposal borrows game mechanics - points, badges, and competition - to drive engagement in an activity that is not a game. Which technique is defined by applying those mechanics to training?",
+  "mcq-5-041": "The document is mandatory, approved at the board level, and states a high-level rule rather than steps or technical specifics. Place it at the very top of the document hierarchy.",
+  "mcq-5-042": "This role decides the legal basis and purpose of processing - the 'why' - rather than carrying out the processing, protecting it technically, or being the person the data is about.",
+  "mcq-5-044": "The decision is documented, an owner is named, and operations continue with the current controls and monitoring. Which response means formally tolerating the remaining risk rather than ending, reducing, or shifting the activity?",
+  "mcq-5-045": "The company is using the contract to verify the provider's security posture with independent evidence and ongoing visibility. Which provision grants the customer that verification power over the vendor?",
+  "mcq-5-046": "The need is a complete inventory of the components and versions inside each product so known vulnerabilities and abandoned libraries can be identified. Which practice produces and maintains exactly that inventory?",
+  "mcq-5-047": "The data is electronic health information held by a US healthcare organization. Which regulation mandates the three safeguard categories - administrative, physical, and technical - for that data?",
+  "mcq-5-048": "The deciding factor is how much inside knowledge the testers receive. With full architecture, credentials, and source code in hand, the team's job is breadth: find as many weaknesses as possible in limited time.",
+  "mcq-5-049": "A program-improvement metric must be measured repeatedly under the same conditions so the trend is meaningful. Which indicator is designed to be tracked campaign after campaign?",
+  "mcq-5-050": "Reporting must feel safe and effortless or employees will stay silent. Consider which approach removes fear while making the reporting path simple - and which ones push people to hide mistakes.",
+  "mcq-5-051": "Each audience receives content matched to its own risk profile rather than one shared program. Which practice is defined by segmenting training by role and tailoring it accordingly?",
+  "mcq-5-052": "The test targets human behavior - badge discipline and physical access procedures - through a staged impersonation. Which exercise type is built around testing people rather than systems?",
+  "mcq-5-053": "The session is discussion-based: stakeholders talk through a scenario and their responses without executing anything. Which exercise validates plans through guided conversation rather than live action?",
+  "mcq-5-054": "Two recovery targets come from the two stated limits: how long the portal may be down, and how much recent data may be lost. Match the one-hour figure to the target that drives backup frequency.",
+  "mcq-5-055": "Audit findings get remediation steps, an accountable owner, a target date, and tracking until closed. Which concept formalizes that closure process after an audit?",
+  "mcq-5-056": "The meeting reviews what happened, what worked, what failed, and what should change, producing improvements for next time. Which practice is the structured after-action review that closes the loop on an incident?",
+  "pbq-5-001": "Work the risk-quantification chain in order: loss per occurrence times occurrences per year gives expected annual loss, then compare that baseline against the cost and effect of a control. The final step classifies how remaining risk is handled.",
+  "pbq-5-001:step-9-1": "Annualized loss equals the loss from a single occurrence times how many occurrences happen per year. Use the observed frequency from the scenario, not a guessed rate.",
+  "pbq-5-001:step-9-2": "Net benefit of a control is the loss reduction it achieves minus what it costs to run. Start from the expected loss before, subtract the expected loss after, then subtract the annual cost.",
+  "pbq-5-001:step-9-3": "For each action, ask whether the risk is eliminated, reduced, moved to another party, formally tolerated, or split with a partner. The categories differ by what happens to the risk itself.",
+  "pbq-5-002": "The single loss expectancy is asset value times exposure factor - the expected loss from one occurrence, before any annual frequency is applied.",
+  "pbq-5-003": "Availability from reliability figures is uptime divided by total time - the sum of time between failures and time to repair. Convert the ratio to a percentage.",
+  "pbq-5-004": "Annual benefit compares the loss before the control with the loss after it, then subtracts the yearly cost of running the control. Order the calculation: reduction first, cost second.",
+  "pbq-5-005": "Classify each control twice: what type it is - physical, technical, or administrative - and what function it serves - stopping, detecting, or restoring. Then consider how to substitute alternative protection when a primary control cannot be used.",
+  "pbq-5-005:step-10-1": "Each control gets a type and a function: consider what it is made of - physical equipment, administrative rules, or technology - and what it does - stop, detect, or correct. Apply both dimensions to each item.",
+  "pbq-5-005:step-10-2": "Each constraint blocks the normal fix, so the right choice confines the exposure without removing the legacy constraint: surround the outdated system with boundary protection, translate the obsolete protocol at a midpoint, isolate the unpatched device, and protect the data itself.",
+  "pbq-5-006": "Think about which two controls reduce the chance and size of a breach with a third party: independent evidence of the processor's controls, and narrowing exactly what the processor can reach. Reject anything that widens access or relies on unverified claims.",
+  "pbq-5-007": "Two-step calculation: first the expected loss from a single occurrence (value times exposure factor), then multiply by how often the threat occurs each year.",
+  "pbq-5-008": "Each description maps to one rung of the documentation hierarchy plus a tracking document: management intent, specific mandatory requirements, task-level steps, optional recommendations, and a living catalog of identified risks. Order them by how binding and how detailed they are.",
+  "pbq-5-009": "Think about the natural flow of a business impact analysis: you must understand what the business needs before you can measure the impact of losing it, and you must measure impact before you can set targets and priorities. Arrange the steps in that reasoning order.",
+  "pbq-5-010": "Each setting should produce documented, enforceable verification of the vendor: evidence-based initial review, written data-protection terms, a binding commitment to report incidents on a schedule, and a standing right to keep checking. Reject shortcuts that trust the vendor on faith or check only once.",
+  "pbq-5-011": "The four blanks trace one calculation chain plus a final classification: loss from a single event, how often events happen per year, the product of the two, and the risk left over after controls. Match each term to its place in that sequence.",
+  "pbq-5-012": "Each role answers a different question: who is accountable for the data, who decides the purpose and means of processing, who handles data on instructions, and who implements the technical safeguards. Match the role that fits each question.",
+  "pbq-5-013": "For each action, decide what happens to the risk: is the activity discontinued, its likelihood reduced with controls, the financial burden moved to a carrier, the remainder formally tolerated, or responsibility shifted to a contracted partner?",
+  "pbq-5-014": "Match each purpose to the agreement built for it: a cooperative statement of intent, protection of confidential information, quantified performance commitments, the health-data contract, and the rules for a processor handling personal data on the controller's behalf.",
+  "pbq-5-015": "The handling regime follows the data type: health records, payment card data, employee personal data, proprietary code, and published marketing material each attract a different set of requirements - from strict regulated controls down to none.",
+  "pbq-5-016": "Separate the targets you plan from the measurements you observe: how fast a system must return, how much data loss is acceptable, the total outage the business can survive, the average gap between failures, the average time to restore, and a contractual commitment. Match each definition to the metric that names it.",
+  "pbq-5-801": "Sort each control by when it acts relative to an incident: before it happens to stop it, during or after to surface it, or after to restore from it. One bucket is a label no control in this set fits."
+ },
+ "replace": {
+  "pbq-5-011": {
+   "id": "pbq-5-011",
+   "domain": 5,
+   "objective": "5.2",
+   "format": "pbq",
+   "kind": "word-bank",
+   "prompt": "Complete each statement about risk management by placing the correct word in each blank. Each word is used once.\n\n1. The expected monetary loss from a single occurrence of a risk is the single loss ____ (SLE).\n\n2. The number of times a risk is expected to occur each year is the annualized rate of ____ (ARO).\n\n3. SLE multiplied by ARO gives the annualized loss ____ (ALE).\n\n4. The risk that remains after controls are applied is called ____ risk.",
+   "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+   "blanks": [
+    {
+     "id": "b1",
+     "label": "1. SLE full word"
+    },
+    {
+     "id": "b2",
+     "label": "2. ARO full word"
+    },
+    {
+     "id": "b3",
+     "label": "3. ALE full word"
+    },
+    {
+     "id": "b4",
+     "label": "4. Risk after controls"
+    }
+   ],
+   "explanation": "SLE = AV × EF; ARO = expected occurrences per year; ALE = SLE × ARO. Residual risk remains after controls; inherent risk exists before them.",
+   "sourceRefs": [
+    {
+     "source": "exam-objectives",
+     "section": "Objective 5.2"
+    },
+    {
+     "source": "study-guide",
+     "section": "Performance-Based Questions"
+    }
+   ],
+   "bank": [
+    {
+     "id": "w1",
+     "word": "expectancy"
+    },
+    {
+     "id": "w2",
+     "word": "occurrence"
+    },
+    {
+     "id": "w3",
+     "word": "expectancy"
+    },
+    {
+     "id": "w4",
+     "word": "residual"
+    },
+    {
+     "id": "d1",
+     "word": "inherent"
+    },
+    {
+     "id": "d2",
+     "word": "single loss expectancy"
+    }
+   ],
+   "correctAssignments": {
+    "b1": "w1",
+    "b2": "w2",
+    "b3": "w3",
+    "b4": "w4"
+   },
+   "hint": "The four blanks trace one calculation chain plus a final classification: loss from a single event, how often events happen per year, the product of the two, and the risk left over after controls. Match each term to its place in that sequence."
+  }
+ }
+}

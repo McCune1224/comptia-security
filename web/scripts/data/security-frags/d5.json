@@ -1,0 +1,203 @@
+{
+  "mcqs": [
+    {
+      "id": "mcq-5-058",
+      "domain": 5,
+      "objective": "5.2",
+      "format": "scenario",
+      "prompt": "Which metric is the best leading key risk indicator (KRI) for this board-level reporting?",
+      "context": "A regional credit union's CISO prepares a quarterly risk dashboard for the board of directors. The board wants early-warning signals that security risk is increasing before incidents occur, so leadership can intervene while conditions can still be changed. The CISO is selecting metrics from the current vulnerability, access, and incident data.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Percentage of internet-facing systems with known critical CVEs that remain unpatched beyond the remediation SLA",
+          "rationale": "A high or rising percentage signals growing exposure to exploitation before an incident occurs, making it a leading indicator that management can still act on."
+        },
+        {
+          "id": "b",
+          "text": "Number of confirmed security incidents reported in the previous quarter",
+          "rationale": "Incident counts describe what already happened, so they are lagging indicators rather than forward-looking KRIs."
+        },
+        {
+          "id": "c",
+          "text": "Total security budget expended during the current fiscal year",
+          "rationale": "Spending levels track finance, not the level of exposure or the likelihood of future harm."
+        },
+        {
+          "id": "d",
+          "text": "Number of employees who completed the annual security awareness course",
+          "rationale": "Training completion is an activity measure and does not directly signal rising exposure to a specific risk."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "A leading KRI rises or falls with exposure before damage occurs. Ask whether each metric predicts future risk that leadership can still influence, rather than merely recording past events.",
+      "explanation": "The percentage of internet-facing systems with unpatched critical CVEs is a leading KRI: it rises as remediation falls behind, signaling greater likelihood of exploitation while corrective action is still possible. Confirmed incidents are lagging indicators that report past outcomes. Budget figures measure spending rather than exposure, and training completion tracks activity instead of current risk level. Effective KRIs are measurable, tied to a specific risk, and give the board time to respond.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 5.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Risk Register and Key Risk Indicators"
+        },
+        {
+          "source": "nist",
+          "section": "NIST IR 8286 Enterprise Risk Management"
+        }
+      ]
+    },
+    {
+      "id": "mcq-5-059",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "prompt": "Which TWO actions correctly handle this conflict of interest? (Select TWO.)",
+      "context": "A mid-sized insurer hires an independent security firm to assess a prospective cloud vendor's controls before signing a contract. During kickoff, the assessment lead reveals that she owns shares in the vendor and previously consulted for them. The insurer's third-party risk policy requires unbiased vendor evaluations, and the vendor agreement includes a right-to-audit clause.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Disclose the relationship to the insurer and recuse the assessor from the engagement",
+          "rationale": "Disclosing the interest and removing the assessor from the evaluation preserves the independence the assessment requires."
+        },
+        {
+          "id": "b",
+          "text": "Replace the assessment team with personnel who have no personal or financial ties to the vendor",
+          "rationale": "Assigning unconflicted assessors eliminates the conflict at the source and keeps the evaluation objective."
+        },
+        {
+          "id": "c",
+          "text": "Let the assessor proceed because personal holdings do not affect technical findings",
+          "rationale": "An undisclosed financial interest can bias conclusions, so allowing participation without disclosure violates due diligence."
+        },
+        {
+          "id": "d",
+          "text": "Document the conflict in the final report after the evaluation is complete",
+          "rationale": "Disclosure after the fact does not remove the conflicted assessor's influence over the findings, so it fails to restore independence."
+        },
+        {
+          "id": "e",
+          "text": "Waive the conflict because the vendor has a strong compliance record",
+          "rationale": "A vendor's reputation does not neutralize an assessor's personal interest; an independent evaluation is still required."
+        },
+        {
+          "id": "f",
+          "text": "Allow participation but instruct the assessor to remain objective",
+          "rationale": "An instruction cannot offset a financial interest; the standard practice is recusal or replacement."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Independence is the point of third-party assessment. Think about actions that remove the conflicted person's influence before the work begins, rather than attempts to manage or explain the interest afterward.",
+      "explanation": "Conflict-of-interest handling in vendor assessment comes down to preserving independence: the interested assessor should be recused (a), and ideally the team replaced with people who have no ties to the vendor (b). Proceeding without disclosure (c), documenting the conflict only after the report is written (d), waiving it because of the vendor's record (e), or promising objectivity (f) all leave the conflicted party's influence in place and undermine the due-diligence value of the assessment.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Vendor Due Diligence"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-161 Supply Chain Risk Management"
+        }
+      ]
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "pbq-5-017",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about audits and assessments by placing the correct word in each blank. Each word is used once.\n\n1. ____ is a regulatory agency's formal review of an organization's records, processes, and controls.\n\n2. ____ is an independent party's signed statement that specified controls were in place and operating effectively.\n\n3. ____ is a structured review of security controls against a framework that identifies gaps and priorities.\n\n4. ____ is an authorized engagement that actively attempts to exploit discovered vulnerabilities.\n\n5. ____ is the phase of a penetration test that gathers information about a target without directly interacting with it.",
+      "context": "Click a word, then click the blank where it belongs. Two extra words are distractors.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "1. Regulator's formal review"
+        },
+        {
+          "id": "b2",
+          "label": "2. Independent signed statement"
+        },
+        {
+          "id": "b3",
+          "label": "3. Gap review against a framework"
+        },
+        {
+          "id": "b4",
+          "label": "4. Active exploitation attempt"
+        },
+        {
+          "id": "b5",
+          "label": "5. Passive information gathering"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "Audit"
+        },
+        {
+          "id": "w2",
+          "word": "Attestation"
+        },
+        {
+          "id": "w3",
+          "word": "Assessment"
+        },
+        {
+          "id": "w4",
+          "word": "Penetration test"
+        },
+        {
+          "id": "w5",
+          "word": "Reconnaissance"
+        },
+        {
+          "id": "w6",
+          "word": "Compliance"
+        },
+        {
+          "id": "w7",
+          "word": "Due diligence"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      },
+      "hint": "Distinguish each activity by who performs it and what it produces: a formal examination by an outside party, a signed conclusion, a baseline comparison, active exploitation, and a passive observation phase.",
+      "explanation": "An external audit is a formal, independent examination of records and controls, often performed by a regulator or a third-party firm. An attestation is a signed declaration that specified controls were in place and operating effectively. A security assessment measures controls against a framework or baseline to identify gaps and priorities. A penetration test actively exploits vulnerabilities to demonstrate real-world impact, and passive reconnaissance gathers information about the target without interacting with it, unlike active reconnaissance. Compliance is the state of meeting requirements, and due diligence is the pre-contract vetting of a vendor — neither describes these activities.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 5.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Audits and Assessments"
+        },
+        {
+          "source": "nist",
+          "section": "SP 800-115 Technical Guide to Information Security Testing and Assessment"
+        }
+      ]
+    }
+  ]
+}

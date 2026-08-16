@@ -1,4 +1,4 @@
-import type { CourseId, CourseMeta, Domain, SessionMode, SessionType } from '$lib/types';
+import type { CourseId, CourseMeta, Domain, ObjectiveId, SessionMode, SessionType } from '$lib/types';
 import { objectivesByDomain } from './question-bank';
 import {
 	APLUS_1201_OBJECTIVES,
@@ -25,8 +25,8 @@ export interface CourseLesson {
 	title: string;
 	summary: string;
 	content: string;
-	/** Primary exam objective id for the per-lesson "Drill this topic" launch (optional). */
-	objectiveId?: string;
+	/** Exam objective ids covered by the lesson — drives the per-objective drill links. */
+	objectiveIds?: ObjectiveId[];
 	position: number;
 }
 
@@ -127,350 +127,449 @@ export const COURSE_DEFINITION: CourseDefinition = {
 		{
 			id: 'lesson-1-1',
 			moduleId: 'week-1',
-			objectiveId: '1.1',
+			objectiveIds: ['1.1', '1.2', '1.3', '1.4'],
 			title: 'Domain 1 — General Security Concepts',
 			summary:
 				'CIA triad, AAA, security control types, Zero Trust architecture, physical security, deception technology, change management, and cryptography basics.',
-			content: `**Objectives covered:** 1.1–1.4 · **Exam weight:** 12% · **~11 questions**
+			content: `**Objectives covered:** 1.1–1.4 · **Exam weight:** Domain 1 total 12%
 
-## 1.1 Security controls (categories × types)
+## 1.1 Compare and contrast various types of security controls.
 
-Every exam scenario asks you to *classify a control*. Work through **two axes**: category (how it's implemented) and type (what it does).
+Classify every control on **two axes**: category (how it is implemented) and type (what it does). The same control can be both a category and a type — a firewall is technical AND preventive.
 
 | Category | What it is | Examples |
 |---|---|---|
-| Technical | Hardware/software mechanisms | Firewall, IPS, MFA, encryption, ACLs, EDR |
-| Managerial | Policy, procedure, risk decisions | Security policy, risk assessment, training plan, vendor due diligence |
-| Operational | People/process executed daily | Guard rotations, patching runbooks, user awareness, incident response |
-| Physical | Tangible barriers | Fences, bollards, locks, CCTV, mantraps, biometric readers |
+| Technical | Hardware or software mechanisms | Firewall, IPS, MFA, encryption, ACLs, EDR |
+| Managerial | Policy, procedure, and risk decisions | Security policy, risk assessment, training plan, vendor due diligence |
+| Operational | Day-to-day people and process | Guard rotations, patching runbooks, user awareness, incident response |
+| Physical | Tangible barriers and devices | Fences, bollards, locks, CCTV, mantraps, biometric readers |
 
 | Type | Purpose | Examples |
 |---|---|---|
-| Preventive | Stop it happening | Firewall rule, door lock, allow-listing |
+| Preventive | Stop the event before it happens | Firewall rule, door lock, allow-listing |
 | Deterrent | Discourage the attempt | Warning signs, camera presence, policy |
 | Detective | Find it after the fact | IDS, SIEM alert, audit log review, motion sensor |
 | Corrective | Restore after an incident | Backups, patch rollback, spare equipment |
-| Compensating | Alternative when primary control can't be used | Guards when biometric readers fail; IPS "virtual patch" for unpatchable legacy systems |
+| Compensating | Alternative when the primary control cannot be used | Guards when biometric readers fail; IPS "virtual patch" for unpatchable legacy systems |
 | Directive | Guide behavior | Policies, standards, procedures, posted rules |
 
-**Exam traps:** (1) "Managerial" ≠ "Operational" — policy/risk is managerial; hands-on execution is operational. (2) A control can be both a *type* and a *category* (e.g., a firewall is technical AND preventive). (3) Compensating controls are temporary/alternative, not the ideal.
+**Decision rule:** managerial controls are policy and risk decisions; operational controls are hands-on execution; technical controls are mechanisms; physical controls are tangible. **Scenario:** an administrator blocks a known exploit pattern with an inline IPS rule because the vendor cannot patch the device — a compensating, technical control.
 
-## 1.2 Core security concepts
+## 1.2 Summarize fundamental security concepts.
 
 - **CIA triad** — Confidentiality: encryption, permissions, least privilege. Integrity: hashing, digital signatures, file integrity monitoring. Availability: redundancy, failover, patching, backups, DDoS protection.
-- **Non-repudiation** — proof of origin/integrity; achieved with digital signatures + audit logs. Prevents "I didn't send that."
-- **AAA** — Authentication (prove identity: passwords, biometrics, certificates, tokens), Authorization (what you may do: RBAC/ABAC), Accounting (audit trail of actions). *Authenticating people vs systems*: systems authenticate via certificates, API keys, machine accounts, service accounts.
-- **Authorization models** — Discretionary (DAC: owner controls), Role-based (RBAC: by job function), Attribute-based (ABAC: by user/device/time/location attributes), Mandatory (MAC: labels + clearance, e.g., government).
-- **Gap analysis** — compare current state vs desired/target state (baseline, regulation, framework) to find missing controls.
+- **Non-repudiation** — proof of origin and integrity; achieved with digital signatures plus audit logs; prevents "I didn't send that."
+- **AAA** — Authentication (prove identity: passwords, biometrics, certificates, tokens), Authorization (what you may do: RBAC/ABAC/DAC/MAC), Accounting (audit trail of actions). People authenticate with credentials; systems authenticate with certificates, API keys, and service accounts.
+- **Gap analysis** — compare current state against a desired baseline, regulation, or framework to identify missing controls. **Scenario:** a gap analysis against PCI DSS reveals the company has no file-integrity monitoring.
+- **Zero trust** (NIST SP 800-207) — "never trust, always verify"; no implicit trust based on network location. It separates the **control plane** (policy engine and policy administrator decide access) from the **data plane** (the **policy enforcement point** allows or denies the session). Supporting ideas: adaptive identity, threat scope reduction, microsegmentation, ZTNA, and MFA everywhere.
+- **Physical security** — preventive: **bollards**, fencing, **access control vestibule** (mantrap), locks, biometric readers; detective: **video surveillance** (CCTV), motion and contact **sensors**, tamper detection; deterrent: lighting, signs, a **security guard** presence; plus **access badge** readers and badge policies for entry control.
+- **Deception technology** — **honeypot** (decoy system), **honeynet** (network of decoys), **honeyfile** (fake file that alerts when opened), **honeytoken** (fake credential or URL). Purpose: detect, analyze, and delay attackers rather than directly protect assets.
 
-## 1.2 Zero Trust (NIST SP 800-207)
+## 1.3 Explain the importance of change management processes and the impact to security.
 
-"Never trust, always verify" — no implicit trust based on network location. Built on **seven tenets**; exam-focus on:
+Formal change management sequence: request → **approval process** (change advisory board) → **impact analysis** → test → implement in a scheduled **maintenance window** → document → **backout plan** → post-implementation review. Security impact: unauthorized changes are prevented, rollback is always planned, and **separation of duties** keeps requester, approver, and implementer distinct.
 
-- **Control plane vs data plane** — Control plane decides access (policy engine → policy administrator); data plane enforces it (policy enforcement point / PEP). Decision and enforcement are separated.
-- **Policy Engine (PE) / Policy Administrator (PA) / Policy Enforcement Point (PEP)** — PE grants/denies; PA sets up the communication path (tokens, credentials); PEP allows/denies the session (e.g., identity-aware proxy, gateway).
-- **Adaptive identity** — trust score based on risk: user, device health, behavior, location. **Threat scope reduction** — minimize how much of the network an attacker can reach (microsegmentation). **Policy-driven access control** — access decisions from policy, not network location.
-- **Pillars/parts** — identity, device, network, application/workload, data; plus **implicit trust zones** eliminated.
-- Related: **microsegmentation** (north-south vs east-west traffic controls), **SASE/ZTNA** (cloud-delivered zero-trust access), **MFA everywhere**.
+- **Stakeholders** from every affected team must sign off before the change.
+- Maintain **allow lists** of approved changes and **deny lists** of prohibited ones.
+- Plan for **downtime**, **service restart**, and **application restart** steps, and list the **dependencies** of each system.
+- **Legacy applications** may not support rollback or automation, so they need extra testing.
+- Use **version control** for configuration files and code so changes are traceable and reversible.
+- Follow a documented **standard operating procedure** and keep **diagrams** of the target environment current so the impact analysis is accurate.
+- **Scenario:** an emergency patch to stop an active exploit is still logged, reviewed, and rolled back through the backout plan if it breaks the application.
 
-## 1.2 Physical security
+## 1.4 Explain the importance of using appropriate cryptographic solutions.
 
-- **Preventive physical** — bollards, fencing, access control vestibule (mantrap), biometric readers, hardware locks, cable locks, safes.
-- **Detective physical** — CCTV/video surveillance, motion sensors, contact sensors, pressure sensors, tamper detection.
-- **Deterrent** — lighting, signs, guards. **Corrective** — backup power, spare hardware, fire suppression (water, gas/clean agent).
-- **Types of sensors** — infrared, microwave, ultrasonic, pressure; each has pros/cons (e.g., pets vs motion).
-
-## 1.2 Deception & disruption
-
-- **Honeypot** — decoy system to attract attackers. **Honeynet** — network of decoys. **Honeyfile** — fake file (e.g., passwords.txt) that trips an alert when opened. **Honeytoken** — fake credential/data/URL that signals use. **Canary / canary token** — tripwire embedded in documents or systems. DNS sinkholes and spam traps are related deception.
-- Purpose: detect, analyze, and delay attackers — not to protect real assets directly.
-
-## 1.3 Change management
-
-Formal process to manage changes safely: **request → review/approval (CAB) → impact/risk assessment → sandbox/test → implement in change window → document → rollback plan → post-implementation review**. Key security points: no unauthorized changes (shadow IT), rollback always planned, change windows, backout procedures, and **separation of duties** — requester ≠ approver ≠ implementer. (Dirty-pipe style unpatched changes, emergency changes still need documentation.)
-
-## 1.4 Cryptography fundamentals
-
-- **Symmetric** — one shared key: AES, ChaCha20, 3DES (legacy). Fast; problem is key distribution.
-- **Asymmetric** — key pair: RSA, ECC, Diffie-Hellman. Solves key exchange; slow; used for encryption, signatures, key exchange.
-- **Hybrid** — TLS: asymmetric for handshake/key exchange, symmetric (session keys) for bulk data.
-- **Hashing** — one-way integrity: SHA-2/SHA-3; MD5 & SHA-1 broken (collisions). **Salting** — random per-password value added before hashing to defeat rainbow tables and identical-password detection. Use slow KDFs: bcrypt, scrypt, PBKDF2, Argon2.
-- **Digital signatures** — hash + encrypt with *private* key; verifies integrity AND non-repudiation. **Key exchange** — Diffie-Hellman (ECDH); **perfect forward secrecy** = ephemeral keys (DHE/ECDHE) so past sessions stay secret if a long-term key leaks.
-- **Key management** — key escrow, key rotation, key length, hardware security module (HSM), TPM, FIPS 140-2/3.
-
-## 1.4 Network ports quick drill
-
-The exam leans on a short list of well-known ports. Tap the cards to flip each one to its service, then drill them from memory.
-
-::widget port-flip-cards::
+- **Symmetric vs asymmetric** — symmetric (AES, ChaCha20) uses one shared key; asymmetric uses a **public key** (shared) and **private key** (secret): RSA, ECC, Diffie-Hellman. Hybrid: TLS uses asymmetric for the handshake and symmetric session keys for bulk data.
+- **Key management** — **key escrow** (a third party holds a copy of the key), key rotation, key length, a **key management system** (KMS) for centralized lifecycle, a **hardware security module** (HSM) for tamper-resistant key storage and crypto operations, a **trusted platform module** (TPM) for device identity and measured boot, and a **secure enclave** for isolated processing on a device.
+- **Encryption coverage** — **full-disk**, **file-level**, **volume**, **database**, and **record**-level encryption; choose the level based on where the data rests and how it is used.
+- **Hashing** — a one-way **hash** provides integrity (SHA-2/SHA-3; MD5 and SHA-1 are broken). **Salting** adds a random **salt** per password before hashing to defeat rainbow tables; **key stretching** with slow KDFs (bcrypt, scrypt, PBKDF2, Argon2) slows brute force.
+- **Digital signatures** — the signer encrypts a hash of the message with their **private key**; verification uses the public key. Signatures provide integrity, authentication of the signer, and **non-repudiation** — not confidentiality.
+- **Data protection techniques** — **steganography** hides data inside other data (images, audio); **tokenization** replaces a sensitive value with a token; **data masking** obscures data for display or testing.
+- **Blockchain** — an **open public ledger** of hashed, chained records that is tamper-evident; it uses hashing and digital signatures for integrity and provenance.
+- **PKI** — a **certificate authority** (CA) issues certificates and can revoke them via a **certificate revocation list** (CRL) or **OCSP**; a **self-signed** certificate is not issued by a CA; trust chains end at a **root of trust**; a **certificate signing request** (CSR) is sent to the CA to obtain a certificate; a **wildcard** certificate covers multiple subdomains.
+- **Scenario:** an e-commerce site uses a wildcard TLS certificate issued by a public CA and checks OCSP on every handshake; its breached password database is protected by salted, stretched hashes.
 
 ## Sample questions
 
-1. **Q:** A hospital cannot patch an MRI machine and installs an inline IPS rule that blocks the exploit pattern. Control type? **A:** Compensating — alternative protection because the primary control (patch) isn't possible.
-2. **Q:** In ZTA, which component renders a grant/deny decision? **A:** Policy Engine (control plane); the PEP enforces it on the data plane.
-3. **Q:** Which control type is an audit log review? **A:** Detective (also technical/operational category depending on implementation).`,
+1. **Q:** A hospital cannot patch an MRI machine, so an inline IPS rule blocks the exploit pattern. What type of control is this? **A:** Compensating — an alternative protection used because the primary control (patching) is not possible.
+2. **Q:** In a zero trust architecture, which component renders the grant/deny decision? **A:** The policy engine on the control plane; the policy enforcement point enforces that decision on the data plane.
+3. **Q:** Which cryptographic technique provides non-repudiation but not confidentiality? **A:** Digital signature — the signer encrypts a hash of the message with their private key, proving origin and integrity without hiding the content.`,
 			position: 1
 		},
 		{
 			id: 'lesson-1-2',
 			moduleId: 'week-1',
-			objectiveId: '2.1',
+			objectiveIds: ['2.1', '2.2', '2.3', '2.4', '2.5'],
 			title: 'Domain 2 — Threats, Vulnerabilities & Mitigations',
 			summary:
 				'Threat actors and attributes, threat vectors, malware, network/application/cryptographic/physical attacks, vulnerabilities, and mitigation techniques.',
-			content: `**Objectives covered:** 2.1–2.5 · **Exam weight:** 22% · **~20 questions** — the single heaviest domain
+			content: `**Objectives covered:** 2.1–2.5 · **Exam weight:** Domain 2 total 22%
 
-## 2.1 Threat actors & motivations
+## 2.1 Compare and contrast common threat actors and motivations.
 
 | Actor | Motivation | Hallmarks |
 |---|---|---|
-| Nation-state / APT | Espionage, IP theft, geopolitical | Custom malware, long dwell time, stealth, high resources |
-| Organized crime | Financial gain | Ransomware, credential theft, carding, RaaS |
+| Nation-state / APT | Espionage, IP theft, geopolitical advantage | Custom malware, long dwell time, stealth, high resources |
 | Hacktivist | Ideology, protest | Defacement, DDoS, data leaks, publicity |
-| Insider | Varies (financial, revenge, espionage, careless) | Legitimate access abused; malicious vs accidental |
-| Script kiddie | Notoriety, curiosity | Public tools, low skill, visible/traceable |
-| Shadow IT | (not an actor — a vector/condition) | Unapproved tech deployed by staff |
+| Organized crime | Financial gain | Ransomware, credential theft, carding, RaaS |
+| Insider threat | Financial gain, revenge, espionage, or carelessness | Legitimate access abused; malicious vs accidental |
+| Unskilled attacker | Notoriety, curiosity | Public tools, low skill, easily traced |
+| Shadow IT | Not an actor — a condition | Unapproved technology deployed by staff |
 
-**Attribute framework** — Internal vs external, resources/funding, sophistication, and motivation. **APT attributes**: no financial motive, custom tools, encrypted C2, multi-region infrastructure. **RaaS** (ransomware-as-a-service): developers rent malware to affiliates — organized crime model.
+**Attribute framework:** internal vs external, resources and funding, sophistication, and motivation. Compare goals: data exfiltration and espionage (nation-state, organized crime) vs disruption (hacktivist, disgruntled insider). APT attributes: no financial motive, custom tools, encrypted C2, multi-region infrastructure. RaaS (ransomware-as-a-service) is an organized-crime model. **Scenario:** a foreign group steals source code and stays silent for months — a nation-state actor with an espionage motivation.
 
-## 2.2 Threat vectors & social engineering
+## 2.2 Explain common threat vectors and attack surfaces.
 
-- **Vectors** — email, SMS, voice, web, removable media, supply chain, social media, cloud, physical. **Watering hole** — compromise a site the target group visits. **Supply chain** — compromise a vendor/upstream (build pipeline, dependencies, signed updates).
-- **Phishing family** — phishing (mass), spear phishing (targeted), whaling (executives), vishing (voice), smishing (SMS), business email compromise (BEC — impersonate exec, request wire transfer).
-- **Other SE** — pretexting (fabricated scenario), baiting (lure: USB drop), tailgating (follow through door without consent), piggybacking (with consent), quid pro quo (promise something in return), identity fraud, invoice scams, credential harvesting, **typosquatting** (lookalike domains) and **misinformation/disinformation**.
-- **Malware taxonomy** — virus (needs host), worm (self-propagating), trojan (disguised), RAT (remote access), ransomware (encryption + extortion; double extortion = exfil + encrypt), spyware, keylogger, rootkit (hides in kernel), botnet, logic bomb, fileless malware (in-memory), **polymorphic/metamorphic** (changes signature), **spam/malvertising** (malicious ads).
-- **Indicators** — unusual outbound connections, process masquerading (svch0st.exe), persistence in AppData/registry/startup, scheduled tasks, hidden processes.
+- **Delivery vectors** — email, SMS, instant messaging, image-based and file-based attachments, voice call (vishing), removable device drops, wireless networks, bluetooth connections, open service ports, default credentials, supply chain compromise, and managed service providers (an MSP breach cascades to every client). Also web, cloud, social media, and physical surfaces.
+- **Social engineering** — phishing (mass), spear phishing (targeted), whaling (executives), vishing (voice), smishing (SMS), business email compromise (BEC: impersonate an executive and request a wire transfer), pretexting (fabricated scenario), impersonation, watering hole (compromise a site the target group visits), typosquatting (lookalike domains), baiting, tailgating, and quid pro quo.
+- **Information influence** — misinformation (false but not intended to deceive) vs disinformation (false and deliberately spread to deceive). **Scenario:** an attacker registers \`paypa1.com\` and emails a PDF that looks like an invoice — typosquatting combined with a file-based vector.
 
-## 2.3 Vulnerabilities (application & OS)
+## 2.3 Explain various types of vulnerabilities.
 
-- **Injection** — SQLi (parameterized queries prevent), command injection, LDAP injection, XML injection. **XSS** — reflected, stored, DOM; CSRF (state-changing via authenticated session). **Buffer overflow** (C/C++, no bounds checking), **integer overflow**, **TOCTOU** race conditions, **IDOR** (direct object reference), **directory traversal** (../), **LFI/RFI**, **SSRF** (server makes requests to internal resources), **deserialization** attacks, **zero-day** (unknown to vendor).
-- **OS/other vulns** — misconfigurations, default credentials, unsupported/legacy systems, unpatched known CVEs, weak crypto (MD5/SHA-1/SSLv3), improper error handling (info disclosure, user enumeration), open ports/services, shadow IT.
-- **Cloud/supply chain/mobile** — exposed storage buckets, excessive IAM permissions, malicious dependencies, sideloading, jailbreaking, OTA updates.
+- **Application** — buffer overflow (missing bounds checks in C/C++), race conditions such as time-of-check to time-of-use (TOCTOU), SQL injection (prevent with parameterized queries), cross-site scripting (XSS), integer overflow, IDOR, directory traversal, deserialization flaws, and zero-day (unknown to the vendor).
+- **System** — operating system flaws, firmware vulnerabilities, end-of-life and legacy software with no patches, misconfiguration, default credentials, weak crypto, and unpatched CVEs.
+- **Virtualization and cloud** — virtual machine escape (breaking out of the hypervisor), resource reuse (remnants of prior tenants), and cloud-specific misconfigurations such as exposed storage buckets and excessive IAM permissions.
+- **Supply chain** — a software provider's build pipeline, dependencies, or signed updates are poisoned, so malicious libraries enter the product.
+- **Cryptographic** — weak algorithms, short keys, protocol downgrade, and poor randomness. **Mobile** — side loading untrusted apps and jailbreaking remove the platform's security controls.
+- **Scenario:** a legacy embedded device running end-of-life firmware is vulnerable to buffer overflow, and the vendor no longer issues patches.
 
-## 2.3 Vulnerabilities (network, cryptographic, physical)
+## 2.4 Given a scenario, analyze indicators of malicious activity.
 
-- **On-path / MITM** — ARP spoofing/poisoning, DNS poisoning (cache vs zone), rogue AP, evil twin, session hijacking, **replay attacks** (capture + resend; prevent with nonces/timestamps), **downgrade attacks** (force weaker protocol).
-- **Cryptographic attacks** — brute force, dictionary, rainbow table (defeated by salting), birthday attack (hash collisions), collision, **downgrade**, key reuse.
-- **Password attacks** — brute force (many tries, one account), password spraying (few passwords, many accounts — avoids lockout), credential stuffing (breached pairs), pass-the-hash (NTLM hash reuse from LSASS), Kerberoasting (offline crack of service tickets), golden ticket (KRBTGT hash → forge TGTs).
-- **DoS/DDoS** — SYN flood (half-open TCP), UDP flood, ICMP/ping flood, smurf, amplification (DNS/NTP/SSDP reflection), botnet-driven.
-- **Physical attacks** — RFID cloning, NFC relay, malicious USB (Rubber Ducky keystroke injection), BIOS attacks, side-channel (timing, power, EM), **evil maid**.
-- **OWASP Top 10 (2021)** — A01 Broken Access Control, A02 Cryptographic Failures, A03 Injection, A04 Insecure Design, A05 Security Misconfiguration, A06 Vulnerable & Outdated Components, A07 Identification & Authentication Failures, A08 Software & Data Integrity Failures, A09 Security Logging & Monitoring Failures, A10 SSRF.
+- **Malware indicators** — ransomware (encryption plus extortion; double extortion exfiltrates data before encrypting), trojan (disguised), worm (self-propagating), spyware (surveillance), keylogger (captures keystrokes), logic bomb (triggers on a condition), rootkit (hides in the kernel).
+- **Physical and environmental** — RFID cloning of access badges, and environmental threats such as HVAC, fire, and water damage.
+- **Network** — distributed denial-of-service (DDoS) floods, DNS poisoning and tunneling, on-path interception, credential replay (capture and resend), and downgrade attacks that force weaker protocols.
+- **Credential and access** — privilege escalation, password spraying and brute force, account lockout (or its suspicious absence), impossible travel (logins from far-apart locations), and pass-the-hash.
+- **Web and crypto** — directory traversal requests, request forgery, and cryptographic collision and birthday attacks on weak hashes.
+- **Behavioral** — resource consumption spikes, out-of-cycle logging, and missing logs; pair these with unusual outbound traffic, anomalous database read volume, and geographic irregularities. **Scenario:** a finance user logs in from two continents within ten minutes, then the SIEM shows out-of-cycle logins and missing logs on a file server.
 
-## 2.4 Malicious activity / indicators
+## 2.5 Explain the purpose of mitigation techniques used to secure the enterprise.
 
-- **Indicators of compromise** — unusual outbound traffic, anomalies in privileged account use, geographical irregularities, login red flags, increases in database read volume, HTML response sizes, DDLs in logs, bundles of files in wrong places.
-- **Attack kill chain (Lockheed Martin)** — Recon → Weaponization → Delivery → Exploitation → Installation → C2 → Actions on objectives. **MITRE ATT&CK** — tactical knowledge base: Reconnaissance, Resource Development, Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, C2, Exfiltration, Impact.
-- **Lateral movement techniques** — pass-the-hash, pass-the-ticket, PsExec/WinRM, RDP hopping. **Persistence** — registry run keys, scheduled tasks, services, startup folders, WMI subscriptions, bootkits.
-
-## 2.5 Mitigations
-
-- **Hardening** — patch management, disable unnecessary services/ports, remove default creds, secure config baselines, application allow-listing/deny-listing, least privilege, sandboxing, code signing, EDR/XDR, segmentation, MFA, **server-side validation** (never trust client), parameterized queries, input sanitization/encoding, output encoding, **secure coding**: memory-safe languages, bounds checking, fuzzing, SAST/DAST, DevSecOps.
-- **For social engineering** — user awareness training, phishing simulations, email filtering (SPF/DKIM/DMARC), MFA, verify-change procedures, clean desk, badge policies, visitor management.
+- **Network** — segmentation (including microsegmentation) and isolation limit lateral movement; access control list (ACL) rules and permissions enforce who reaches what; least privilege grants the minimum rights needed.
+- **Host** — application allow list (only approved software runs), patching (including virtual patches when a fix is unavailable), encryption of data at rest and in transit, endpoint protection (EDR/XDR/antivirus), a host-based firewall, and host-based intrusion prevention (HIPS).
+- **Hardening** — disabling ports and unused services, default password changes, secure configuration baselines, and removal of unneeded software.
+- **Ongoing** — monitoring with SIEM and log review; decommissioning systems with secure data sanitization; configuration enforcement through baselines, group policy, and automation.
+- **Scenario:** after a breach, the team segments the network, enables host-based firewalls, disables unused ports, and pushes a hardened baseline — then monitors for configuration drift.
 
 ## Sample questions
 
-1. **Q:** An attacker tries 3 common passwords against 1,000 accounts to avoid lockouts. Which attack? **A:** Password spraying.
-2. **Q:** Which defense prevents SQLi most completely? **A:** Parameterized queries/prepared statements (server-side).
-3. **Q:** Malware exfiltrates data before encrypting files for ransom. What model? **A:** Double extortion ransomware.`,
+1. **Q:** An attacker tries three common passwords against 1,000 accounts to avoid lockout thresholds. Which technique? **A:** Password spraying — few passwords against many accounts; brute force is many passwords against one account.
+2. **Q:** A vendor's signed update installer is replaced during the build. Which vector and vulnerability class does this combine? **A:** Supply chain vector via the software provider — the build pipeline and signed updates are trusted upstreams that can be poisoned.
+3. **Q:** A user account shows logins from two continents within minutes, followed by out-of-cycle logins and missing logs on a server. What indicators? **A:** Impossible travel plus out-of-cycle logging and missing logs — signs of credential theft with log tampering.`,
 			position: 2
 		},
 		{
 			id: 'lesson-2-1',
 			moduleId: 'week-2',
-			objectiveId: '3.1',
+			objectiveIds: ['3.1', '3.2', '3.3', '3.4'],
 			title: 'Domain 3 — Security Architecture',
 			summary:
 				'Cloud and on-premises architecture, segmentation, virtualization/containerization, IoT and ICS/SCADA, data protection, high availability and disaster recovery.',
-			content: `**Objectives covered:** 3.1–3.4 · **Exam weight:** 18% · **~16 questions**
+			content: `**Objectives covered:** 3.1–3.4 · **Exam weight:** Domain 3 total 18% · **~16 questions**
 
-## 3.1 Architecture models
+## 3.1 Compare and contrast security implications of different architecture models.
 
-- **Cloud deployment models** — public, private, hybrid, community, multi-cloud. **Service models** — IaaS (compute/storage/network), PaaS (platform: runtime, DB), SaaS (full app). **Shared responsibility** — security *of* the cloud = provider; security *in* the cloud = customer (varies by model; more customer responsibility in IaaS, more provider responsibility in SaaS).
-- **Other models** — on-premises, **serverless** (function-as-a-service, no server management, pay per execution), **microservices** (small independently deployable services), **infrastructure as code (IaC)** (Terraform/CloudFormation — treat config as versioned code), **VDI** (virtual desktops), **SDN** (software-defined networking — separates control plane from data plane), **SASE/SSE** (cloud security service edge).
-- **Cloud-specific risks** — misconfigured storage buckets, excessive IAM permissions, shared tenancy isolation failures, API key leaks, shadow cloud, region/data residency, lack of visibility (shadow IT), **VM escape**.
+Architecture choices set the attack surface, the shared-responsibility boundary, and how quickly you can patch, scale, and recover. Compare each model by what the organization controls versus what the provider manages.
+
+- **Cloud deployment models** — public (shared provider infrastructure), private (single tenant), **hybrid** (on-premises and cloud linked by shared identity and networking), community (shared by several organizations with common interests), multi-cloud (services from multiple providers). Security implications: hybrid and multi-cloud widen identity and data-flow complexity, and each model shifts the provider/customer **shared responsibility** line — more customer control in IaaS, more provider control in SaaS.
+- **Service models** — IaaS (compute/storage/network; customer secures the OS upward), PaaS (runtime and database managed; customer secures the application and data), SaaS (full application; customer secures usage and data classification).
+- **Infrastructure as code** — **infrastructure as code (IaC)** with Terraform, CloudFormation, or Ansible treats configuration as versioned, reviewed, repeatable code. Security implications: a misconfiguration is reproduced at scale, secrets must never live in templates, and drift detection keeps deployed state equal to the reviewed code.
+- **Serverless** — **serverless** functions run on demand with no server management (function-as-a-service). Security implications: ephemeral runtimes reduce the patching burden but enlarge dependency and identity exposure, so functions need least-privilege roles and strict input validation because the provider owns the runtime.
+- **Microservices** — **microservices** are small, independently deployable services communicating over APIs. Security implications: a larger east-west surface that requires mutual TLS, API gateways, and per-service identity.
+- **Virtualization** — **virtualization** uses a hypervisor (type 1 bare-metal vs type 2 hosted) to partition hardware into VMs. Security implications: hypervisor compromise or **VM escape** defeats every guest, and VM sprawl complicates inventory and patching.
+- **Containerization** — **containerization** shares the host kernel, making containers lighter and faster than VMs. Security implications: container escape, image supply chain, insecure registries, and orchestration (Kubernetes) misconfiguration — scan and sign images.
+- **IoT and OT** — **IoT** devices, **industrial control systems**, and **SCADA** systems run **embedded systems** and a **real-time operating system (RTOS)** to control physical processes (PLCs, sensors, HMIs). Security implications: long lifecycles with poor **patch availability** mean the **inability to patch** is common, so isolate them on **air-gapped** or heavily segmented OT networks and monitor with OT-aware sensors.
+- **Software-defined networking** — **software-defined networking (SDN)** separates the control plane from the data plane for centralized policy. Security implications: the SDN controller is a high-value target — compromising it can redirect or disable the whole network.
+- **Logical segmentation** — **logical segmentation** (VLANs, subnets, microsegmentation, zones) contains lateral movement; pair it with east-west inspection.
+- **Architecture properties** — **high availability** (redundancy so failures do not break service), **resilience** (graceful degradation), **scalability** (adding capacity under load), and **ease of recovery** (how quickly a rebuilt component returns) are designed in, not bolted on.
 
 ::widget osi-explorer::
 
-## 3.2 Security implications of architecture
+## 3.2 Given a scenario, apply security principles to secure enterprise infrastructure.
 
-- **Segmentation** — VLANs, DMZ, subnetting, microsegmentation, air gaps. Purpose: contain east-west movement. **East-west** = server-to-server; **north-south** = in/out of the network.
-- **Virtualization & containers** — hypervisor (type 1 bare-metal vs type 2 hosted), VMs, containers (share host kernel — lighter, faster), orchestration (Kubernetes), **VM escape attack**, container escape, image supply chain, insecure registries.
-- **IoT / ICS / SCADA** — embedded systems, RTOS, PLCs, fieldbus, **air-gapped** industrial networks; challenges: unpatched, long lifecycles, limited compute, default creds; OT security = segmentation + OT-aware IDS + vendor patches.
-- **Zero Trust architecture** — (see Domain 1.2) NIST SP 800-207: control/data plane separation, PEP, adaptive identity, microsegmentation, never trust/always verify. **ZTNA** = zero trust network access (identity-aware proxy).
-- **Mobile & wireless architecture** — MDM/UEM, BYOD/COPE/CYOD, geofencing, Wi-Fi: WPA2/WPA3, enterprise auth (802.1X, RADIUS), captive portals, rogue AP/evil twin defenses (WIDS/WIPS).
-- **Data considerations** — data classification, data sovereignty/residency, **data at rest / in transit / in use**, encryption, tokenization, masking, DLP, CASB (cloud access security broker — sits between users and cloud).
+Apply security principles by deciding where devices sit, how zones are separated, what happens when a control fails, and which appliance or protocol matches the risk.
+
+- **Device placement** — where a device sits determines what it can see and block: firewalls at the perimeter, WAFs in front of web servers, jump servers in the management zone, and monitoring sensors on network TAPs.
+- **Security zones** — segment the network into trusted tiers (external, screened subnet/DMZ, internal, management, guest) with strict inter-zone rules to shrink the **attack surface**.
+- **Failure modes** — **fail-open** lets traffic continue when a control fails (preserves availability, risks security — acceptable for out-of-band inspection); **fail-closed** denies traffic (preserves security, risks availability — required for NAC and most firewalls). Choose by asset criticality and control purpose.
+- **Inline vs tap** — an **inline** device sits in the data path and can block (IPS, firewall, WAF); a **tap** (test access point) passively copies traffic for monitoring with zero impact, which suits IDS and analyzers.
+- **Access and management** — a **jump server** (bastion host) is the single audited entry point to secure zones; a **proxy server** forwards client or server traffic, enabling filtering, caching, and TLS inspection.
+- **Detection and prevention** — an **intrusion detection system (IDS)** monitors copied traffic and alerts; an **intrusion prevention system (IPS)** sits **inline** and actively blocks.
+- **Traffic distribution** — a **load balancer** spreads requests across servers, performs health checks and TLS termination, and supports active-active or active-passive failover.
+- **Switch defenses** — **port security** restricts which devices can attach to a port (MAC limiting, 802.1X), preventing rogue switchports and CAM-table attacks.
+- **Firewall types** — a **web application firewall (WAF)** inspects HTTP/HTTPS payloads for application attacks; **unified threat management (UTM)** bundles firewall, IDS/IPS, antivirus, and web filtering in one appliance; a **next-generation firewall (NGFW)** adds application awareness, identity, and integrated IPS to stateful filtering.
+- **Secure access** — a **virtual private network (VPN)** provides **remote access** by **tunneling** encrypted traffic across untrusted networks; **transport layer security (TLS)** protects web, mail, and VPN traffic, while **IPsec** (ESP/AH with IKE) is the classic site-to-site VPN protocol — choose IPsec or TLS VPNs, never PPTP.
+- **WAN and edge** — **software-defined wide area network (SD-WAN)** centrally routes branch traffic over any transport; **secure access service edge (SASE)** merges SD-WAN with cloud-delivered security services (CASB, SWG, ZTNA).
+- **Selection of effective controls** — **selection of effective controls** matches each control to a specific risk, layers controls (defense in depth), verifies the control actually blocks the threat, and documents compensating controls when the preferred control cannot be deployed.
 
 ::widget topology-spotlight::
 
-## 3.3 Data protection
+## 3.3 Compare and contrast concepts and strategies to protect data.
 
-- **Protection techniques** — encryption (at rest: AES; in transit: TLS/IPSec), **hashing** (integrity), **tokenization** (replace sensitive value with token — PCI DSS friendly), **masking** (show partial), **obfuscation**, **DLP** (content inspection, egress control), **geo-fencing**, **permissions/ACLs**, **data classification labels**.
-- **DLP types** — network DLP (inspect traffic), endpoint DLP (local files/devices), storage DLP, cloud DLP. Triggers on patterns (SSN, credit card, PHI), keywords, exact data matching.
-- **Data roles** — data owner (business accountability), data controller (decides purpose/means), data processor (processes on behalf of controller), data custodian (technical stewardship), data steward (quality/classification governance).
+Protecting data starts with classification, then applies the right technique to the right state and enforces access around it.
 
-## 3.4 Resilience & recovery
+- **Data classifications** — **regulated** data (subject to PCI DSS, HIPAA, GDPR, SOX), **trade secret** (proprietary process or formula), **intellectual property** (patents, copyrights, designs), **financial information** (accounting and payment records), **sensitive** (needs protection by policy), and **confidential** (restricted access). Classification drives labeling, handling, and controls.
+- **Data states** — **data at rest** (stored), **data in transit** (moving across a network), **data in use** (in memory during processing — the hardest to protect, needing secure enclaves or memory encryption).
+- **Data sovereignty and geolocation** — **data sovereignty** requires data to remain subject to the laws of the country where it is stored; **geolocation** controls (geo-fencing, region pinning) enforce where data and services may reside.
+- **Protection techniques** — compare and contrast:
 
-- **High availability** — redundancy everywhere: power (UPS, generators), network (NIC teaming, redundant switches), storage (RAID, replication), compute (clusters), **failover**, **load balancing** (active-active vs active-passive), **geographic dispersal**.
-- **Backup types** — **full** (all data), **incremental** (changes since last backup — any type; restore needs last full + all incrementals), **differential** (changes since last full; restore needs last full + last differential), **synthetic full**. **Snapshots**, **replication** (synchronous vs asynchronous), **3-2-1 rule** (3 copies, 2 media, 1 offsite).
-- **DR metrics** — **RTO** (recovery time objective — how fast to restore), **RPO** (recovery point objective — max acceptable data loss). **DR sites** — hot (near-zero downtime, mirrored), warm (equipment ready, not running), cold (empty facility), mobile.
-- **Backup frequency** — tie to RPO: tighter RPO → more frequent backups. **Backup testing** — restore drills; **offline/immutable backups** to defeat ransomware.
-- **MTTR/MTBF** — mean time to repair / between failures.
+| Technique | What it does | Best for |
+|---|---|---|
+| **encryption** | Reversible transformation with a key | Confidentiality at rest and in transit |
+| **hashing** | One-way digest, not reversible | Integrity verification and password storage |
+| **masking** | Show only part of a value (e.g., \`••••-1234\`) | Displaying data to support staff |
+| **tokenization** | Replace a value with a random token; map stored safely | PCI DSS compliance for card data |
+| **obfuscation** | Make data hard to read without a key | Code and light data protection |
+
+- **Access control** — **segmentation** isolates sensitive data in separate zones or VPCs; **permission restrictions** (least privilege, ACLs, role-based access) limit who can read or modify it.
+- **Data loss prevention (DLP)** — network, endpoint, storage, and cloud DLP inspect content for patterns (SSN, card numbers, PHI), keywords, and exact data matches, then block or alert on egress.
+- **Data roles** — data owner (business accountability), data controller (decides purpose and means), data processor (processes on the controller's behalf), data custodian (technical stewardship), data steward (classification and quality governance).
+
+## 3.4 Explain the importance of resilience and recovery in security architecture.
+
+Resilience keeps service up through failure; recovery restores it within acceptable time and data-loss limits. Design both before an incident.
+
+- **High availability** — **load balancing** (active-active vs active-passive), **clustering** (multiple nodes acting as one service), **failover** (automatic switch to a standby), and **geographic dispersion** (replicas in separate regions) keep service up through component failure.
+- **Diversity** — **platform diversity** (different OS or vendor stacks) prevents a single vulnerability from taking down everything; **multi-cloud** spreads risk across providers at the cost of skill and tooling complexity.
+- **Continuity of operations** — **continuity of operations (COOP)** documents plans that keep essential functions running through disruption; **capacity planning** ensures enough headroom (compute, bandwidth, power) for failover and growth.
+- **Backups** — **backups** come in full, incremental (changes since any prior backup), differential (changes since the last full), and synthetic full forms; follow the **3-2-1** rule: three copies, on two media, one offsite. **Snapshots** capture point-in-time state; **replication** mirrors data synchronously or asynchronously; **journaling** (write-ahead logs) enables recovery to a precise point in time. Tie backup frequency to RPO and test restores regularly.
+- **Power resilience** — an **uninterruptible power supply (UPS)** bridges short outages; **generators** sustain long outages; redundant power feeds remove single points of failure.
+- **Testing** — **tabletop exercises** walk stakeholders through a scenario to validate plans; **parallel processing** and full DR drills prove systems actually recover.
+- **DR sites** — **hot site** (mirrored, near-zero downtime), **warm site** (equipment ready, data staged), **cold site** (empty facility).
+- **Metrics** — **recovery time objective (RTO)** (how fast to restore), **recovery point objective (RPO)** (maximum acceptable data loss), **mean time to repair (MTTR)** (how long to fix a failed component), **mean time between failures (MTBF)** (expected uptime between failures — higher is better).
 
 ## Sample questions
 
-1. **Q:** You need near-zero RTO and can afford continuous replication. Which DR site? **A:** Hot site.
-2. **Q:** Which backup strategy restores fastest with a single differential? **A:** Full weekly + differential daily (restore = last full + last differential).
-3. **Q:** Who decides *why* data is processed (purpose)? **A:** Data controller.`,
+1. **Q:** A hospital keeps MRI scanners on a physically isolated network because the vendor ships no security patches. Which architecture control is in use, and what risk does it accept? **A:** An **air-gapped** network with **inability to patch** — it accepts that updates cannot be applied and relies on isolation instead.
+2. **Q:** A compliance rule requires a control to deny traffic whenever it fails. Which failure mode, and what trade-off? **A:** **fail-closed** — traffic is blocked on failure, protecting security over availability.
+3. **Q:** You must restore service within 2 hours and lose no more than 15 minutes of data. Which two metrics define this requirement? **A:** **recovery time objective** (RTO) of 2 hours and **recovery point objective** (RPO) of 15 minutes.`,
 			position: 3
 		},
 		{
 			id: 'lesson-2-2',
 			moduleId: 'week-2',
-			objectiveId: '4.1',
+			objectiveIds: ['4.1', '4.2', '4.3', '4.4', '4.5'],
 			title: 'Domain 4 — Security Operations (Part I)',
 			summary:
 				'Secure baselines and hardening, endpoint security, mobile/wireless security, monitoring and logging, and vulnerability management.',
-			content: `**Objectives covered:** 4.1–4.5 · **Exam weight:** Domain 4 total is 28% (~25 questions), split across this lesson and lesson 3-1
+			content: `**Objectives covered:** 4.1–4.5 · **Exam weight:** Domain 4 total 28% (~25 questions), split across this lesson and lesson 3-1
 
-## 4.1 Baselines & hardening
+## 4.1 Given a scenario, apply common security techniques to computing resources.
 
-- **Secure baselines** — industry standards for secure config (CIS Benchmarks, vendor hardening guides, DISA STIGs). Apply to servers, workstations, network devices, cloud instances.
-- **Hardening checklist** — update/disable unnecessary services, patch management, remove default accounts/creds, disable guest accounts, **least functionality**, secure config of auth (MFA), password policy, **endpoint protection**, **host firewall**, **registry/group policy hardening**, disable USB ports (if policy), secure SNMP (v3), disable Telnet/TFTP, SSH keys not passwords, disable weak ciphers.
-- **Imaging & provisioning** — **golden image** (standardized, hardened), **baseline image**, **deployment** (PXE, MDT), **post-deployment hardening** script; avoid configuration drift via IaC/CMP (configuration management platform — Ansible/Puppet/Chef/Salt).
-- **Other** — patch management cadence, **compensating controls** for legacy systems, secure cloud storage config (S3 buckets), **least privilege** for service accounts, **application allow-listing**.
+Apply a secure baseline, harden the resource, and layer mobile, wireless, application, and monitoring techniques according to the asset's role.
 
-## 4.2 Endpoint security
+- **Secure baselines** — a **secure baseline** is the approved, hardened configuration for a device type, drawn from CIS benchmarks, DISA STIGs, or vendor guides; deploy it via golden images and enforce it with configuration management (Ansible, Puppet, Chef) to prevent drift.
+- **Hardening** — **hardening** reduces the attack surface: disable unnecessary services and accounts, remove default credentials, apply patches, enforce least functionality, configure host firewalls, disable weak protocols (Telnet, SNMPv1), and enable exploit mitigations (ASLR, DEP).
+- **Mobile management** — **mobile device management (MDM)** enrolls, configures, and wipes devices centrally; UEM adds all endpoint types; MAM manages apps. Deployment models: **bring your own device (BYOD)** (user-owned, less control), **corporate-owned, personally enabled (COPE)** (company device with personal use), and **choose your own device (CYOD)** (user picks from an approved catalog).
+- **Wireless security** — **WPA3** (SAE handshake, resistant to offline dictionary attacks, forward secrecy) over WPA2; enterprise authentication with **RADIUS** and 802.1X/EAP; disable WPS; detect rogue APs and evil twins with WIDS/WIPS. Run **site surveys** and **heat maps** to place APs for coverage and to spot weak or leaking signals.
+- **Cryptographic and authentication protocols** — **cryptographic protocols** (TLS for transport, IPsec for VPNs, AES for at-rest encryption) protect data; **authentication protocols** (EAP-TLS with mutual certificates, PEAP, Kerberos, 802.1X) verify identity — prefer certificate-based EAP-TLS over password-based methods.
+- **Application techniques** — **input validation** (allow lists, parameterized queries) blocks injection; **secure cookies** set \`HttpOnly\`, \`Secure\`, and \`SameSite\` to protect sessions; **static code analysis** finds flaws before deployment; **code signing** signs a hash of the code with the developer's private key to prove integrity and authenticity (it does not provide confidentiality); **sandboxing** runs untrusted code or applications in an isolated environment.
+- **Monitoring** — continuous **monitoring** of baselines, logs, and performance detects drift and anomalies early; apply it to every computing resource, not as an afterthought.
 
-- **EDR/XDR** — endpoint detection and response (behavioral analysis, containment, rollback); XDR extends to network/email/cloud. **HIDS/HIPS** on hosts.
-- **Protective tech** — antivirus/anti-malware (signature, heuristic, behavioral), **application allow-listing** (vs deny-listing), **secure boot** / UEFI, **TPM** (trusted platform module — hardware root of trust, stores keys, measured boot), **BitLocker** (uses TPM), **sandboxing**, **host firewall**, **patch management**, **file integrity monitoring** (Tripwire), **DLP endpoint agent**, **EMET/exploit mitigation** (ASLR, DEP, CFG).
-- **Other** — **email security** (gateway, SPF/DKIM/DMARC), **web filtering** (URL category, proxy), **NAC** (network access control — posture check before connecting: antivirus up-to-date, patched, compliant).
+## 4.2 Explain the security implications of proper hardware, software, and data asset management.
 
-## 4.3 Mobile & wireless
+Manage assets across their full lifecycle — acquisition through destruction — so every device and dataset is known, classified, and safely retired.
 
-- **Mobile device management (MDM)** — enroll, configure, wipe; **UEM** (unified endpoint management). **Deployment models** — BYOD (user device), COPE (corporate-owned, personally enabled), CYOD (choose your own device), **corporate-owned**. **MAM** (app-level mgmt), containerization.
-- **Mobile defenses** — screen locks, remote wipe/full wipe, geofencing, GPS, **jailbreaking/rooting detection**, storage segmentation, app allow-listing, TLS enforcement, disabling sideloading/OTG.
-- **Wi-Fi security** — WPA2 (CCMP/AES), WPA3 (SAE, protects against offline dictionary attack, forward secrecy), **WPA2-Enterprise / 802.1X** (RADIUS, EAP), captive portals (guest), **WPS disabled**, rogue AP detection (WIDS/WIPS), evil twin defense, **MAC filtering** (weak — spoofable), **disabling SSID broadcast** (weak), **PAP/CHAP/PEAP/EAP-TLS** (EAP-TLS strongest — mutual certs).
-- **Bluetooth** — bluejacking, bluesnarfing; disable when unused.
+- **Lifecycle overview** — move assets through **acquisition**, **procurement**, **ownership**, **classification**, **asset tracking**, **inventory**, **sanitization**, **destruction**, **certification**, and **data retention**.
+- **Acquisition vs procurement** — **acquisition** is how an asset is obtained (purchase, lease, cloud subscription); **procurement** is the organizational purchasing process — vet vendors, review supply-chain and licensing terms, and confirm support and warranty before signing.
+- **Ownership** — define who owns the asset and its data: corporate vs personal devices (BYOD), cloud data ownership, and data controller/processor obligations.
+- **Classification** — label assets and data by sensitivity (public, internal, confidential, restricted) so handling and controls match value.
+- **Tracking and inventory** — **asset tracking** (barcode/RFID tags, CMDB records) and **inventory** (agents or scanners) establish what exists, where it lives, and who owns it; **enumeration** of assets uncovers shadow IT and forgotten devices that otherwise become attack paths.
+- **Disposal** — **sanitization** removes data (degaussing, secure erase, cryptographic erase, overwriting); **destruction** physically destroys media (shredding, incineration, crushing); **certification** documents that sanitization or destruction met policy so media can be reused or retired safely.
+- **Data retention** — **data retention** policies define how long records are kept (legal, regulatory, business requirements), where they are stored, and when and how they are disposed; retention must survive employee departures and vendor changes.
 
-## 4.4 Monitoring & logging
+## 4.3 Explain various activities associated with vulnerability management.
 
-- **Log sources** — firewall, IDS/IPS, proxy, web server, DNS, email, authentication (AD), OS logs (Windows Event Log, syslog), application, cloud (CloudTrail), **NetFlow/IPFIX** (flow data), **packet captures** (pcap).
-- **SIEM** — centralized aggregation, correlation, alerting, dashboards, **SOAR** (automation/orchestration/response), **log management** (retention, WORM, immutability), **baselining** (learn normal), **trend analysis**, **user behavior analytics (UBA)**, **threat intelligence feeds** (OSINT, ISAC).
-- **Syslog** — standard log protocol (UDP 514, TLS 6514); severity levels 0–7 (0 emergency … 7 debug); **log integrity** — hashing, timestamping, secure transport, read-only storage.
-- **Metrics** — MTTR, MTTD (time to detect), false positive/negative, alert fatigue.
+Vulnerability management is a closed loop: discover, scan, validate, prioritize, remediate, rescan, and report.
 
-## 4.5 Vulnerability management
+- **Process** — discover assets → **vulnerability scan** → validate findings → **prioritize** → remediate (**patching** or compensating controls) → **rescanning** to verify → **audit** and **reporting** to stakeholders.
+- **Application security** — **application security** combines **static analysis** (SAST, inspecting source without running it) and **dynamic analysis** (DAST, probing a running application); add software composition analysis for open-source dependencies.
+- **Intelligence** — **threat feed** subscriptions, **open-source intelligence (OSINT)**, **information-sharing** groups (ISACs, CISA), and **dark web** monitoring surface emerging exploits and leaked credentials.
+- **Penetration testing** — authorized **penetration testing** (black box, gray box, white box) under rules of engagement validates real exploitability; red team vs blue team vs purple team exercises improve detection.
+- **Disclosure** — **responsible disclosure** coordinates with the vendor before public release; **bug bounty** programs pay researchers to find flaws.
+- **Scan quality** — a **false positive** reports a vulnerability that does not exist; a **false negative** misses a real one — tune scanners and validate manually to minimize both.
+- **Scoring and prioritization** — the **common vulnerability scoring system (CVSS)** rates severity from 0 to 10; **common vulnerability enumeration (CVE)** gives each issue a stable ID; prioritize by asset criticality × severity × exposure × threat intelligence (known-exploited lists first).
+- **Remediation decisions** — patch, apply **compensating controls** (IPS virtual patch, WAF rule), accept risk with documented **exceptions** or **exemptions** (with an owner and expiry), or decommission — then **rescanning** and **verification** confirm the fix; **audit** and **reporting** close the loop.
 
-- **Process** — discover assets → **scan** → **validate** (confirm real) → **prioritize/rank** → **remediate** → **re-scan** → report. **NVD/CVE/CVSS** — CVSS base score (0–10, critical ≥9.0), exploitability, impact; prioritize by criticality of asset × severity × exposure × threat intel (KEV — known exploited vulnerabilities).
-- **Scanning types** — authenticated vs unauthenticated, agent-based vs agentless, **external vs internal**, **continuous** (cloud), **passive vs active**; **SCAP** (standard config/assessment), **CVE feeds**, **benchmarks**.
-- **Remediation options** — patch, **compensating control** (IPS virtual patch, WAF), **exception/risk acceptance** with documentation, decommission, segmentation.
-- **Responsible disclosure** — vendor notified, coordinated public disclosure; **bug bounty** programs; **red team vs blue team vs purple team**; **penetration testing** (black box / white box / gray box) with **rules of engagement (ROE)**.
+## 4.4 Explain security alerting and monitoring concepts and tools.
+
+Monitoring and alerting turn raw activity into actionable signal; tools collect it, correlate it, and store it.
+
+- **Concepts** — **monitoring** collects activity; **log aggregation** centralizes logs from many sources; **alerting** notifies on rules; **scanning** (vulnerability, port) finds exposure; **reporting** summarizes for stakeholders; **archiving** preserves records for retention; **quarantine** isolates suspicious files or hosts; **alert tuning** reduces noise and alert fatigue.
+- **Automation standards** — the **security content automation protocol (SCAP)** standardizes vulnerability and configuration checks against **benchmarks** (CIS, STIG); **agents** installed on hosts report state even when the host is off-network.
+- **SIEM** — a **security information and event management (SIEM)** platform aggregates, correlates, and alerts on logs with dashboards; SOAR automates response playbooks on top of it. Baselining normal behavior enables anomaly detection and user behavior analytics.
+- **Endpoint tools** — **antivirus** (signature, heuristic, behavioral) and **data loss prevention (DLP)** agents protect hosts; EDR adds behavioral detection and response.
+- **Network tools** — the **simple network management protocol (SNMP)** polls and traps device health (use SNMPv3); **NetFlow** (IPFIX) records flow metadata for traffic analysis; **vulnerability scanners** (Nessus, Qualys, OpenVAS) continuously assess exposure; packet captures (pcap) inspect payloads when needed.
+- **Log sources** — firewalls, IDS/IPS, proxies, web servers, DNS, email, authentication, OS (syslog/Event Log), applications, and cloud services; protect log integrity with hashing, timestamping, and read-only or immutable storage, and keep retention aligned with policy and compliance.
+
+## 4.5 Given a scenario, modify enterprise capabilities to enhance security.
+
+When a capability must change, adjust the network, web, email, OS, protocol, and endpoint controls together so the modification reduces rather than shifts risk.
+
+- **Network segmentation** — place externally exposed services in **screened subnets** (DMZ) with strict **access lists** (ACLs) controlling what crosses zone boundaries; tighten firewall rule sets when services change and block everything not explicitly required.
+- **Detection and prevention** — deploy an **intrusion detection system (IDS)** on taps for visibility and an **intrusion prevention system (IPS)** inline to block; keep **signatures** current and tuned, and add behavioral rules for unknown threats.
+- **Web and DNS** — a **web filter** enforces **url scanning**, **content categorization**, and **reputation** ratings to block malicious or inappropriate sites; **DNS filtering** (sinkholes, DNS over HTTPS/TLS) blocks malware domains before connection.
+- **Email** — authenticate mail with **sender policy framework (SPF)** (which senders may send), **DKIM** (signed message hashes), and **DMARC** (policy for unauthenticated mail: quarantine or reject) to stop spoofing; gateways filter spam and malicious attachments.
+- **OS controls** — **group policy** centrally applies security settings to Windows fleets (password policy, software restriction, audit); **SELinux** enforces mandatory access control (MAC) on Linux by labeling processes and files and denying beyond-policy access.
+- **Protocol and port selection** — choose the **transport method** by confidentiality and integrity needs; **protocol selection** and **port selection** are paired decisions:
+
+| Secure choice | Port | Replaces | Port |
+|---|---|---|---|
+| SSH (secure shell) | 22 | Telnet | 23 |
+| HTTPS (TLS) | 443 | HTTP | 80 |
+| SFTP (over SSH) | 22 | FTP | 21 |
+| SMTP over TLS (STARTTLS) | 587 | SMTP plaintext | 25 |
+| DNS over TLS | 853 | DNS plaintext | 53 |
+| IPsec VPN (IKE) | 500/4500 | PPTP VPN | 1723 |
+| RDP with NLA | 3389 | RDP without NLA | 3389 |
+
+Disable legacy ports (23 Telnet, 21 FTP, 80 HTTP, 25 plain SMTP) and block everything not needed.
+
+::widget port-flip-cards::
+
+- **Data and endpoint controls** — **file integrity monitoring (FIM)** hashes critical files and alerts on change; **data loss prevention (DLP)** blocks sensitive egress; **network access control (NAC)** checks posture (patch level, AV status) and assigns allow, quarantine, or remediation actions before admission.
+- **Detection layers** — **endpoint detection and response (EDR)** monitors and contains host threats; **extended detection and response (XDR)** correlates EDR with network, email, cloud, and identity telemetry; **user behavior analytics (UBA)** baselines normal user activity and flags anomalies — integrate all of them into the SIEM for a single view.
 
 ## Sample questions
 
-1. **Q:** Which wireless protocol is resistant to offline dictionary attacks? **A:** WPA3 (SAE handshake).
-2. **Q:** An endpoint must pass posture checks before network access. Which control? **A:** NAC.
-3. **Q:** Which scan type has the most accurate results? **A:** Authenticated scan (has credentials, sees real config).`,
+1. **Q:** You must stop spoofed mail from your domain by telling receivers to reject messages that fail authentication. Which mechanism, and what policy value? **A:** **DMARC** with a \`p=reject\` policy — receivers enforce the published policy for mail that fails SPF and DKIM.
+2. **Q:** A security admin must confirm that sanitized drives can be reused. Which lifecycle activity documents that? **A:** **certification** — it records that sanitization met policy before reuse.
+3. **Q:** Which tool family would you add to correlate endpoint alerts with network, email, and cloud telemetry in one view? **A:** **extended detection and response (XDR)** — it unifies EDR, network, cloud, and identity signals for correlated detection.`,
 			position: 4
 		},
 		{
 			id: 'lesson-3-1',
 			moduleId: 'week-3',
-			objectiveId: '4.6',
+			objectiveIds: ['4.6', '4.7', '4.8', '4.9'],
 			title: 'Domain 4 — Security Operations (Part II)',
 			summary:
 				'Identity and access management, NAC, DLP, email and DNS security, incident response, and digital forensics.',
 			content: `**Objectives covered:** 4.6–4.9 · **Exam weight:** Domain 4 total is 28% (~25 questions)
 
-## 4.6 Identity & access management (IAM)
+## 4.6 Given a scenario, implement and maintain identity and access management.
 
-- **Identity lifecycle** — provisioning, on/off-boarding, **least privilege**, **separation of duties**, **time-based/role-based access**, **account audits** (recertification), deprovisioning on termination (disable/delete, revoke tokens, recover assets).
-- **Authentication methods** — knowledge (password/PIN), possession (smart card, token, phone), inherence (biometrics: fingerprint, retina, iris, voice, gait — **FAR/FRR** tradeoff, **EER**), location, behavior. **MFA** — two of three factors; **adaptive/auth step-up** — extra verification for risky actions.
-- **Directory & federation** — LDAP/AD, **SSO** (one login, many apps), **SAML** (XML security assertions, browser SSO), **OAuth 2.0** (authorization/delegation, tokens, scopes), **OpenID Connect (OIDC)** (identity layer on OAuth 2.0, ID token JWT), **Federation** — trust between IdPs/SPs. **Kerberos** — tickets (TGT/ST), timestamps; weaknesses: golden ticket, pass-the-ticket, Kerberoasting.
-- **PAM** — privileged access management: vault credentials, session recording, just-in-time (JIT) access, credential rotation. **Password manager**, **passwordless** (FIDO2/WebAuthn, passkeys), **account lockout vs password spraying** (lockout after N tries, but spraying avoids lockout).
-- **AAA protocols** — RADIUS (UDP 1812/1813, combines auth+accounting), TACACS+ (TCP 49, encrypts all, separates authorization, Cisco), **Diameter** (successor to RADIUS), **Kerberos** (default in AD).
+- **Identity lifecycle** — **provisioning** creates accounts and entitlements at onboarding; **de-provisioning** removes them on termination or role change (disable first, then delete; revoke tokens and certificates; recover laptops, badges, and **security keys**). Recertify accounts on a schedule so stale access never lingers.
+- **Permission models** — compare before choosing:
 
-## 4.7 Automation & orchestration
+| Model | Basis | Example |
+|---|---|---|
+| **Discretionary (DAC)** | owner sets permissions per object | share one folder with a teammate |
+| **Role-based (RBAC)** | access derives from job role | every help-desk analyst gets the same ticket queue |
+| **Rule-based** | conditions such as source, time, or action | block logins from foreign IPs |
+| **Attribute-based (ABAC)** | any attribute (department, clearance, device) | managers see reports only on managed laptops |
 
-- **SOAR** — security orchestration, automation, and response: playbooks/runbooks, ticket enrichment, automated containment (block IP, isolate host), case management. **SOAR ≠ SIEM** — SIEM detects/correlates; SOAR acts.
-- **Automation benefits** — speed (MTTR down), consistency, freeing analysts, reduced errors; **risks** — automation of destructive actions, false positives causing outages, **supply chain** of scripts (secure the pipeline: code review, versioning, least privilege credentials).
-- **Other automation** — **API-driven security** (firewall rules via API), **cloud security groups as code**, **GitOps**, **scheduled/triggered scans**, **webhooks**, **AI/ML** in security (UEBA, anomaly detection), **accounting for legacy systems** in automation (protocols lacking APIs — use adapters/bastions).
+Apply **time-of-day restrictions** (logins allowed only 6 a.m.–8 p.m.) and **least privilege** (only the access a task requires) to every assignment.
+- **Identity proofing** — verify the person before issuing credentials: in-person or video registration, document checks, knowledge-based verification. Used at onboarding, password reset, and for high-risk roles.
+- **Federation & SSO** — **federation** establishes trust between identity providers so credentials work across organizations; **single sign-on** (SSO) lets one login reach many applications. **LDAP** queries the directory for users, groups, and attributes; **OAuth** delegates authorization with scoped tokens; **SAML** (**security assertions markup language**) carries browser-based SSO assertions between the identity provider and service providers. **Attestation** — confirmation that a claim is true: device attestation proves hardware/OS state to NAC or MDM before access is granted.
+- **Authentication factors** — **multifactor authentication** requires two of knowledge, possession, and inherence. **Biometrics** (fingerprint, iris, voice, face) trade false-accept against false-reject rates; **security keys** are phishing-resistant hardware (FIDO2/WebAuthn, passkeys); **password managers** generate and store unique credentials; **passwordless** sign-in (passkey, biometric, magic link) removes shared secrets entirely.
+- **Privileged access management (PAM)** — vault admin credentials and rotate them (**password vaulting**), grant **just-in-time permissions** that expire when the task ends, and issue **ephemeral credentials** (short-lived tokens or session credentials) so a stolen secret dies quickly.
 
-## 4.8 Incident response
+## 4.7 Explain the importance of automation and orchestration related to secure operations.
 
-- **IR phases (NIST SP 800-61)** — **Preparation** → **Detection & Analysis** → **Containment, Eradication & Recovery** → **Post-Incident Activity**. (Alternative 6-phase: Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned.)
-- **Preparation** — IR plan/policy, **playbooks** (per incident type), **tabletop exercises**, training, tools, communication plan, **backups**.
-- **Detection & analysis** — indicators of compromise, triage, **scope the incident**, **chain of custody**, evidence preservation, **correlation** (SIEM), **containment** — isolate host (disconnect from network vs power off — **preserve volatile evidence first**).
-- **Containment** — short-term (disconnect) vs long-term (rebuild, failover). **Eradication** — remove malware, patch, clean. **Recovery** — restore from clean backups, validate, monitor. **Post-incident** — **lessons learned**, report, process improvement, **retention** of evidence, **root cause analysis**.
-- **Key concepts** — **dwell time** (time from compromise to detection), **MTTD/MTTR**, **containment vs eradication**, **preservation of evidence (order of volatility!)**, **communication plan** (internal/external, PR, legal, law enforcement), **escalation**.
+- **Automation** — scripts and tooling that run security tasks without manual steps; **orchestration** chains multiple automated tools into one workflow (SOAR playbooks). Use cases: **user provisioning** and **resource provisioning** (create accounts, spin up/down cloud resources, apply security groups), **guard rails** (automated checks that block non-compliant configurations before deploy), and **ticket creation** (alerts auto-open and enrich tickets with context).
+- **Benefits** — **efficiency** (tasks finish in seconds, reaction time drops), **enforcing baselines** (standard configurations applied consistently), and a **workforce multiplier** (a small team handles a much larger workload), plus fewer human errors and repeatable CI/testing.
+- **Cautions** — a failing script can become a **single point of failure** (one broken step halts the whole flow), unmaintained scripts accumulate **technical debt**, and every workflow needs **ongoing supportability** (owners, documentation, versioning, testing). Integrations run through **application programming interfaces** (APIs), so secure them with authentication, authorization, rate limits, and least-privilege credentials — and audit API logs for abuse.
 
-## 4.9 Digital forensics
+## 4.8 Explain appropriate incident response activities.
 
-- **Evidence handling** — **chain of custody** (who/when/where for every piece), **preservation** (bit-for-bit copies, write blockers), **acquisition** (forensic image, memory dump), **integrity** (hash: SHA-256), **legal hold**, **admissibility** (authenticity, reliability).
-- **Order of volatility** — collect most volatile first: **registers/cache → RAM → process table/network state → temporary files → disk → remote logs → archival media**.
-- **Forensic techniques** — **disk imaging** (dd, FTK, EnCase), **memory forensics** (Volatility), **file carving**, **timeline analysis** (MAC times), **log analysis**, **email/header analysis**, **mobile forensics** (NAND, SIM), **anti-forensics** (timestomping, wiping, steganography, encryption), **legal considerations** (warrant, jurisdiction, privacy).
-- **Data acquisition types** — static (powered off) vs live (running system — capture memory), **sprint vs full** (triage vs deep dive).
+- **IR process (NIST SP 800-61)** — **Preparation** (plan, playbooks, tools) → **Detection** (monitoring, alerts, triage) → **Containment** (isolate the host, preserve evidence) → **Eradication** (remove malware, patch the hole) → **Recovery** (restore from clean backups, validate) → **Lessons learned** (report, fix gaps). The classic six phases split the middle into Identification, Containment, Eradication, Recovery.
+- **Training & testing** — a **tabletop exercise** walks the team through a scenario verbally; a **simulation** runs a technical drill (for example, a fake ransomware host). Both expose gaps in roles, communications, and tools before a real incident.
+- **Analysis** — **root cause analysis** finds why the incident happened (not just what happened) so it cannot recur; **threat hunting** proactively searches for hidden compromise (dwell time, anomalies, indicators of compromise) instead of waiting for alerts.
+- **Digital forensics** — preserve evidence for both remediation and legal use: **legal hold** freezes relevant data when litigation is expected; **chain of custody** documents who handled each item, when, and why; **acquisition** makes forensic images of disk or memory with write blockers; **preservation** keeps bit-for-bit copies and hashes them (SHA-256) for integrity; **e-discovery** collects and produces electronic evidence for court. Collect in order of volatility: registers/cache → RAM → network state → disk → remote logs.
+
+## 4.9 Given a scenario, use data sources to support an investigation.
+
+| Source | What it shows | Typical question |
+|---|---|---|
+| **Firewall logs** | allowed/blocked flows, policy hits | Which host talked to the C2 IP? |
+| **Application logs** | app-level errors, auth events, transactions | Was the web app exploited? |
+| **Endpoint logs** | process, file, and registry activity on devices | What did the malware execute? |
+| **OS-specific security logs** | logon events, audit policy, account changes | Who logged in at 3 a.m.? |
+| **IPS/IDS logs** | detection alerts, signatures, anomalies | Which exploit signature fired? |
+| **Network logs** | flows, DNS, DHCP, NetFlow | How did the attacker move laterally? |
+
+- **Corroborate across sources** — pair **firewall logs** (connection) with **endpoint logs** (process) and **network logs** (flow) to reconstruct an attack path; never conclude from a single log.
+- **Supporting sources** — **vulnerability scans** show the patch and configuration gaps the attacker exploited; **automated reports** (scheduled compliance, status, or health reports) give baseline context; **dashboards** (SIEM/EDR visualizations) surface trends and anomalies; **packet captures** reveal full payloads and protocol details; **metadata** (file timestamps, email headers, document properties) establishes timing, origin, and authorship.
 
 ## Sample questions
 
-1. **Q:** What is the correct order of volatility for evidence collection? **A:** CPU cache/registers → RAM → network connections → disk → remote logs.
-2. **Q:** Which technology automates incident response actions via playbooks? **A:** SOAR.
-3. **Q:** You must capture memory from a live system. What type of acquisition? **A:** Live/volatile acquisition (memory dump first, before powering off).`,
+1. **Q:** A terminated employee's badge still opens the server room. Which control is missing? **A:** De-provisioning — access must be removed the moment employment ends, covering both logical and physical credentials.
+2. **Q:** During an investigation, a lawyer freezes an employee's mailbox and drives pending litigation. Which practice is this? **A:** Legal hold — it preserves potentially relevant electronic evidence so it is not destroyed.
+3. **Q:** Which data source best shows the actual payload of a suspicious connection? **A:** Packet capture — it records full packet contents, unlike summaries in firewall or flow logs.`,
 			position: 5
 		},
 		{
 			id: 'lesson-3-2',
 			moduleId: 'week-3',
-			objectiveId: '5.1',
+			objectiveIds: ['5.1', '5.2', '5.3', '5.4', '5.5', '5.6'],
 			title: 'Domain 5 — Security Program Management & Oversight',
 			summary:
 				'Governance and policy, risk management, third-party risk, compliance, audits and assessments, and security awareness.',
-			content: `**Objectives covered:** 5.1–5.6 · **Exam weight:** 20% · **~18 questions**
+			content: `**Objectives covered:** 5.1–5.6 · **Exam weight:** Domain 5 total is 20% (~18 questions)
 
-## 5.1 Governance
+## 5.1 Summarize elements of effective security governance.
 
-- **Document hierarchy** — **Policy** (high-level intent, mandatory, board-approved) → **Standard** (specific mandatory requirements: e.g., NIST 800-53, ISO 27001) → **Procedure** (step-by-step how-to) → **Guideline** (recommended, not mandatory).
-- **Roles** — **data owner** (accountable for data classification/use), **data controller** (decides purpose/means of processing), **data processor** (processes on behalf of controller), **data custodian** (implements technical controls), **data steward** (day-to-day data quality/governance), **sysadmin vs security admin separation**.
-- **Policies to know** — acceptable use (AUP), password, change management, data retention, incident response, BYOD, remote access, business continuity, privacy, onboarding/offboarding.
-- **Compliance frameworks** — NIST CSF 2.0 (six functions: **Govern, Identify, Protect, Detect, Respond, Recover** — GOVERN added in 2.0), NIST 800-53, ISO 27001/27002, CIS Controls, PCI DSS, HIPAA, GDPR, SOX, FISMA, FedRAMP.
+- **Document hierarchy** — **policies** (high-level mandatory intent, board-approved) → **standards** (specific mandatory requirements, e.g., NIST 800-53) → **procedures** (step-by-step how-to) → **guidelines** (recommended, not mandatory).
+- **Policy types** — the **acceptable use policy** (AUP) defines allowed use of systems; **information security policies** set the program's direction (password, data classification, retention); **business continuity** and **disaster recovery** plans keep operations alive and restore IT; the **incident response** policy defines roles and reporting; **software development lifecycle** (SDLC) policies require security gates in development; **change management** policies control how changes are approved, tested, and rolled back.
+- **Roles & responsibilities** — **owners** are accountable for the data and classification decisions; **controllers** decide the purpose and means of processing; **processors** handle data on the controller's behalf; **custodians** implement the technical controls; **stewards** manage day-to-day data quality and governance.
+- **Governance structures** — **boards** set strategy and risk appetite; **committees** (security, privacy, change advisory) make operational decisions; governance may be **centralized** (one team decides) or **decentralized** (business units own their security) — choose by organization size and risk profile.
+- **Monitoring and revision** — review policies on a fixed cycle (annually at minimum), after major incidents, and when regulations change; version and communicate every revision.
+- **External considerations** — **regulatory** (laws and standards), **legal** (contracts, liability), and **industry** (sector-specific frameworks such as PCI DSS or HIPAA) requirements shape policy content and the review cadence.
 
-## 5.2 Risk management
+## 5.2 Explain elements of the risk management process.
 
-- **Risk formula** — Risk = **Threat × Vulnerability × Impact** (likelihood × impact). **Residual risk** = risk left after controls; **inherent risk** = before controls. **Risk appetite/tolerance**.
-- **Quantitative** — **SLE** (single loss expectancy = AV × EF), **ARO** (annualized rate of occurrence), **ALE** = SLE × ARO. Example: asset $100k, EF 25% → SLE $25k; ARO 0.5 → ALE $12.5k/year.
-- **Qualitative** — rankings/scales (high/medium/low, likelihood × impact matrix), subjective.
-- **Risk responses** — **Avoid** (drop the activity), **Mitigate** (reduce likelihood/impact — controls), **Transfer** (insurance, outsourcing), **Accept** (documented residual risk, risk register). **Risk register** — catalog of risks (likelihood, impact, owner, response). **Risk matrix/heatmap** — likelihood vs impact.
-- **Other** — **Business Impact Analysis (BIA)** — identify critical systems, **MTD** (max tolerable downtime), **RTO/RPO**, **risk assessment steps** (identify assets/threats → assess vulnerabilities → determine likelihood/impact → prioritize → recommend controls). **Supply chain risk** — vendor risk assessments, SLAs, right-to-audit, insurance, **NIST SP 800-161** (supply chain risk management).
+- **Risk identification** — catalog threats, vulnerabilities, and assets; record each in a **risk register** with likelihood, impact, owner, response, and status.
+- **Risk assessment** — may be **ad hoc** (unplanned), **recurring** (scheduled), or **continuous** (driven by real-time monitoring).
+- **Risk analysis** — **qualitative** ranks by scales (high/medium/low, likelihood × impact); **quantitative** uses numbers: **exposure factor** (EF, the percentage of asset value lost), **single loss expectancy** (SLE = asset value × EF), **annualized rate of occurrence** (ARO, times per year), and **annualized loss expectancy** (ALE = SLE × ARO). Example: $200,000 asset, EF 25%, ARO 2 → SLE $50,000, ALE $100,000/year.
+- **Risk tolerance vs risk appetite** — **risk appetite** is how much risk the organization is willing to take overall; **risk tolerance** is the acceptable deviation for a specific objective. Set thresholds so decisions stay consistent.
+- **Risk responses** — **transfer** (insurance, outsourcing), **accept** (documented residual risk), **exemption** (permanent relief from a control, senior-approved), **exception** (temporary relief with a due date), **avoid** (drop the activity), and **mitigate** (reduce likelihood or impact with controls).
+- **Risk reporting** — regular summaries to management; **key risk indicators** (KRIs) flag when risk approaches tolerance (for example, the percentage of systems past the patch SLA).
+- **Business impact analysis (BIA)** — identifies critical systems and sets targets: **recovery time objective** (RTO, maximum acceptable downtime), **recovery point objective** (RPO, maximum acceptable data loss), **mean time to repair** (MTTR), and **mean time between failures** (MTBF).
 
-## 5.3 Third-party risk
+## 5.3 Explain the processes associated with third-party risk assessment and management.
 
-- **Vendor lifecycle** — due diligence → contract (SLA, NDA, **right to audit**, data protection terms) → onboarding → **continuous monitoring** (reassess) → offboarding. **SLA** — service levels (uptime, response times). **NDA** — confidentiality.
-- **Supply chain** — vet suppliers, **third-party risk management (TPRM)**, **open-source dependency risk** (SBOM — software bill of materials), **M&A due diligence**, **penetration testing requirements for vendors**, **insurance/cyber liability**, **exit strategy**.
-- **Contracts** — **SOW** (statement of work), **MOU/MOA**, **MSA**, **data processing agreement (DPA)**, **business associate agreement (BAA — HIPAA)**.
+- **Vendor assessment** — evaluate a vendor's security before contracting: evidence of internal audits, **independent assessments** (SOC 2, ISO certification), **supply chain analysis** (sub-tier suppliers, dependencies), and a **right-to-audit** clause that lets you inspect their controls.
+- **Vendor selection** — **due diligence** reviews financial health, reputation, and security posture; watch for **conflict of interest** (for example, an evaluator with a stake in the vendor).
+- **Agreement types** — match the document to the relationship:
 
-## 5.4 Compliance & assessments
+| Document | Purpose |
+|---|---|
+| **Service-level agreement** (SLA) | uptime, response, and performance commitments |
+| **Memorandum of agreement** (MOA) | formal collaboration with defined obligations |
+| **Memorandum of understanding** (MOU) | intent to cooperate, less formal |
+| **Master service agreement** (MSA) | umbrella terms for ongoing services |
+| **Statement of work** (SOW) | scope and deliverables for a specific engagement |
+| **Non-disclosure agreement** (NDA) | confidentiality of shared information |
+| **Business partners agreement** (BPA) | terms for partner relationships |
 
-- **Regulations** — **GDPR** (EU privacy: consent, right to be forgotten, breach notification ≤72h, DPO), **HIPAA** (US health: PHI, HITECH), **PCI DSS** (card data: 12 requirements, tokenization), **SOX** (financial reporting controls, auditor independence), **GLBA** (financial privacy), **FERPA** (education records), **CCPA/CPRA** (California consumer privacy). **Data residency/sovereignty** — where data may be stored.
-- **Assessments** — **security audit** (internal/external, attestation), **vulnerability assessment**, **penetration test** (black/white/gray box, **rules of engagement**, authorized scope), **gap analysis**, **compliance scan/report**, **audit trail/reporting**, **SOX audit vs SOC 2** (SOC 2 = trust services criteria), **FedRAMP** (cloud for US gov), **right-to-audit clauses**.
-- **Test types** — **black box** (no prior knowledge), **white box** (full knowledge/credentials), **gray box** (partial). **Red team** (adversarial), **blue team** (defenders), **purple team** (both, collaborative).
+- **Vendor monitoring** — reassess continuously, not only at onboarding: **questionnaires**, control evidence, and review of penetration test results; define **rules of engagement** (scope, authorization, timing) for any testing the vendor performs on your environment.
 
-## 5.5 Security awareness
+## 5.4 Summarize elements of effective security compliance.
 
-- **Training program** — onboarding, **annual/periodic refreshers**, **role-based training** (executives, developers, help desk), **phishing simulations** (measure click rates, follow-up training), **gamification** (badges, competitions), **campaigns** (posters, newsletters, videos).
-- **Content** — phishing/social engineering, password hygiene, clean desk, tailgating, mobile security, data classification, incident reporting (who/when), insider threat awareness, **GDPR/privacy basics**.
-- **Metrics** — phishing click rate, training completion rate, **time-to-report**, reduction in incidents. **Reporting channels** — help desk, security team, anonymous hotline; **no-blame culture** for reporting (encourage, don't punish).
+- **Compliance reporting** — provide internal (management, board) and external (regulators, auditors, customers) evidence that controls meet requirements. Non-compliance brings **fines**, **sanctions**, loss of license, and **reputational damage** — so track obligations and deadlines.
+- **Compliance monitoring** — exercise **due diligence** (and due care) in selecting and overseeing providers; collect **attestation** and acknowledgement that staff understand policies; automate evidence collection where possible.
+- **Privacy** — **privacy** rules protect individuals' information: the **data subject** is the person whose data is processed; the **controller** decides purpose and means; the **processor** acts on the controller's behalf; the **right to be forgotten** lets subjects request erasure; **data inventory and retention** maps what data exists, where, and how long it is kept.
+- **Key regulations** — **GDPR** (EU privacy, breach notification within 72 hours, right to be forgotten), **HIPAA** (US health data, PHI), **PCI DSS** (cardholder data), **SOX** (financial reporting controls), **FERPA** (education records), and **GLBA** (financial privacy). Know which apply to your organization's data types and locations.
 
-## 5.6 Security policies & operations (audit, disaster recovery)
+## 5.5 Explain types and purposes of audits and assessments.
 
-- **Business continuity vs disaster recovery** — BCP (keep business running), DRP (recover IT after disaster); **BIA**, **RTO/RPO**, **tabletop exercises**, **drills/failover tests**, **backup/restore testing**, **communication plan**, **alternate sites** (hot/warm/cold/mobile), **power** (UPS, generator), **supplier continuity**.
-- **Audit processes** — **internal audit** (independent review), **external audit** (third-party attestation), **audit findings → corrective action plans (CAP)**, **management review**, **continuous improvement (PDCA)**.
-- **Other** — **security KPIs/KRIs**, **board reporting**, **budgeting** for security, **insurance** (cyber liability), **benchmarking** vs peers, **lessons learned** loops.
+- **Audit types** — **internal** audits are run by the organization's own team; **external** audits are performed by an outside firm; **self-assessments** are lightweight internal reviews; **regulatory** audits verify compliance with specific laws; an **audit committee** (board-level) oversees the whole program; **independent third-party** assessments (SOC 2, ISO 27001 certification) add credibility for customers.
+- **Attestation** — the auditor's formal statement of findings (for example, a SOC 2 Type II attestation) that others rely on.
+- **Penetration testing** — authorized attacks that validate controls: **offensive** testing (red team) simulates attackers; **defensive** testing (blue team) validates detection and response; **integrated** (purple team) testing combines both for collaboration. Scope choices: **known environment** (white box, full knowledge) versus **unknown environment** (black box, no prior knowledge). Work begins with **reconnaissance** — **passive** (observing public information and OSINT, sending no traffic) or **active** (scanning and probing the target).
+
+## 5.6 Given a scenario, implement security awareness practices.
+
+- **Phishing** — run **phishing** campaigns (simulated emails) to measure click rates, train on recognizing attempts (urgency, spoofed domains, unexpected attachments), and define how to respond to reported messages (triage, block, notify).
+- **Anomalous behavior** — teach users to recognize **anomalous behavior** (unexpected prompts, odd file names, unusual account activity); build **insider threat** awareness — risky, unexpected, or unintentional actions by people with legitimate access.
+- **User guidance** — deliver **user guidance** through policies, handbooks, and onboarding; build **situational awareness** (tailgating, shoulder surfing, clean desk); cover **hybrid/remote work** (home networks, public Wi-Fi, VPN, screen privacy).
+- **Habits** — **password management** (unique passwords, password managers, no reuse) and careful handling of **removable media** (unknown USB devices, malware via thumb drives).
+- **Social engineering & OPSEC** — train against **social engineering** (pretexting, baiting, vishing) and protect **operational security** (do not reveal schedules, credentials, or internal details in public).
+- **Reporting and monitoring** — establish clear reporting channels (help desk, security team, anonymous hotline) with a no-blame culture; **reporting and monitoring** of click rates, completion rates, and time-to-report feeds program development and recurring refresher training.
 
 ## Sample questions
 
-1. **Q:** Asset value $200,000, exposure factor 10%, ARO 2. What is ALE? **A:** SLE = $20,000; ALE = $40,000/year.
-2. **Q:** Which risk response does purchasing cyber insurance represent? **A:** Transfer.
-3. **Q:** Which framework has six functions including Govern? **A:** NIST CSF 2.0.`,
+1. **Q:** A finance app stores cardholder data. Which regulation most directly applies? **A:** PCI DSS — it governs the processing, storage, and transmission of cardholder data.
+2. **Q:** Which risk response is a senior-approved permanent waiver from a required control? **A:** Exemption — it grants lasting relief, whereas an exception is temporary with a due date.
+3. **Q:** A firm sends simulated emails to staff and tracks who clicks. Which practice is this? **A:** Phishing campaign — part of a security awareness program that measures and reduces susceptibility.`,
 			position: 6
 		},
 		{
@@ -487,7 +586,7 @@ The exam leans on a short list of well-known ports. Tap the cards to flip each o
 - [ ] Both scenario/PBQ sets completed
 - [ ] Full Practice Exam #1 and #2 taken under real conditions (90 Q, 90 min, no notes)
 - [ ] Gradebook weak topics reviewed — redo targeted domain quizzes for anything < 80%
-- [ ] Score **750/900 (83.3%) or higher** on at least one full exam → the readiness ring on the home page should read "Exam-ready"
+- [ ] Score at or above the app's practice-readiness target (83.3%) on at least one full exam → the readiness ring on the home page should read "Exam-ready"
 
 ## Objective walkthrough drill
 
@@ -510,7 +609,7 @@ If you can't do all three, that objective goes on today's targeted review list. 
 ## Exam-day rules of engagement
 
 - **90 questions, 90 minutes** → about 1 minute per question. Flag hard ones and move on; budget the last 10 minutes for review.
-- **Scoring** — 750/900 (83.3%) to pass. No penalty for guessing — never leave a question blank.
+- **Scoring** — the official exam requires a scaled score of **750** (of 900); CompTIA publishes no raw-score conversion, so treat 83.3% here as the app's practice-readiness target, not an official pass percentage. No penalty for guessing — never leave a question blank.
 - **Multiple-select** — the prompt tells you exactly how many (e.g., "Which TWO…"). Match the count exactly.
 - **Eliminate obviously wrong answers** first (wrong protocol, wrong control category, wrong risk term) — Security+ distractors are often *real terms used wrongly*.
 - **"Best" / "MOST" / "FIRST"** questions — pick the answer that satisfies the stated constraint (cost, speed, security, availability), not just any correct-sounding control.
@@ -709,7 +808,7 @@ If you can't do all three, that objective goes on today's targeted review list. 
 			moduleId: 'week-4',
 			title: 'Full Practice Exam #3 (Final)',
 			description:
-				'Final 90-question, 90-minute exam. Target 750/900 scaled (83.3%) or higher — the real pass mark.',
+				'Final 90-question, 90-minute exam. Hit the app practice target (83.3%) or higher — the official exam requires a scaled 750 with no published raw-score conversion.',
 			kind: 'full',
 			category: 'full',
 			points: 90,
@@ -948,7 +1047,10 @@ export interface Readiness {
 	domainMastery: number | null;
 	examAverage: number | null;
 	examCount: number;
-	passingScale: number; // scaled score projection, 100–900
+	/** App-defined practice-readiness target (percent of the exam scale) — NOT an official projection. */
+	practiceTargetPercent: number;
+	/** Official scaled passing score (750 for SY0-701). CompTIA publishes no raw-score conversion. */
+	officialPassingScore: number;
 	ready: boolean;
 }
 
@@ -1003,8 +1105,7 @@ export function computeReadiness(
 						? 'Getting started'
 						: 'Not started';
 
-	const scaled = Math.round(100 + (score / 100) * (scaleMax - 100));
-	const passingPercent = (passingScore / scaleMax) * 100;
+	const practiceTargetPercent = Math.round((passingScore / scaleMax) * 1000) / 10;
 
 	return {
 		score,
@@ -1012,8 +1113,9 @@ export function computeReadiness(
 		domainMastery,
 		examAverage,
 		examCount: completedFullExams.length,
-		passingScale: scaled,
-		ready: score >= passingPercent
+		practiceTargetPercent,
+		officialPassingScore: passingScore,
+		ready: score >= (passingScore / scaleMax) * 100
 	};
 }
 

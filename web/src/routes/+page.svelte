@@ -36,7 +36,8 @@
 			domainMastery: number | null;
 			examAverage: number | null;
 			examCount: number;
-			passingScale: number;
+			practiceTargetPercent: number;
+			officialPassingScore: number;
 			ready: boolean;
 		};
 		gradebook: {
@@ -83,7 +84,7 @@
 		'bg-accent-secondary',
 		'bg-info',
 		'bg-success',
-		'bg-accent-warm'
+		'bg-warning'
 	];
 </script>
 
@@ -122,7 +123,7 @@
 						<span class="mx-2 text-text-subtle">·</span>
 						<span
 							class="font-bold {overview.daysUntilExam < 7
-								? 'text-accent-warm'
+								? 'text-warning'
 								: 'text-text-primary'}"
 						>
 							{overview.daysUntilExam < 0
@@ -169,12 +170,13 @@
 						<p
 							class="mt-2 text-sm font-bold {overview.readiness.ready
 								? 'text-success'
-								: 'text-accent-warm'}"
+								: 'text-warning'}"
 						>
 							{overview.readiness.label}
 						</p>
 						<p class="mt-1 text-xs text-text-muted">
-							Projected scaled score: {overview.readiness.passingScale}/900
+							App practice target: {overview.readiness.practiceTargetPercent}% · official pass:
+							{overview.readiness.officialPassingScore}/900 (no raw-score conversion published)
 						</p>
 					</div>
 					<div class="hidden h-24 w-px bg-border sm:block"></div>
@@ -200,7 +202,7 @@
 					<div class="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-accent/15">
 						<svg
 							viewBox="0 0 24 24"
-							class="h-6 w-6 text-accent-warm"
+							class="h-6 w-6 text-warning"
 							fill="currentColor"
 							><path
 								d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
@@ -272,7 +274,7 @@
 											class="mt-0.5 text-xs {item.daysUntilDue < 0
 												? 'text-danger'
 												: item.daysUntilDue <= 2
-													? 'text-accent-warm'
+													? 'text-warning'
 													: 'text-text-muted'}"
 										>
 											{relativeDue(item.daysUntilDue)} · {item.assignment.points} pts
@@ -459,7 +461,7 @@
 								class="num-display text-sm {session.percentage >= 85
 									? 'text-success'
 									: session.percentage >= 60
-										? 'text-accent-warm'
+										? 'text-warning'
 										: 'text-danger'}">{session.percentage}%</span
 							>
 						</a>

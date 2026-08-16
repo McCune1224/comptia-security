@@ -1,0 +1,171 @@
+{
+  "replace": {
+    "pbq-4-802": {
+      "id": "pbq-4-802",
+      "domain": 4,
+      "objective": "4.2",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "A security team is formalizing how the organization manages its computing assets from purchase to retirement. Match EACH asset-management activity to the description of what happens when it is performed.",
+      "context": "The organization wants every hardware, software, and data asset handled consistently across its lifecycle, from the moment it is requested until long after it is retired. Each activity below has a distinct purpose in that lifecycle.",
+      "premises": [
+        { "id": "p1", "text": "Acquisition/procurement" },
+        { "id": "p2", "text": "Assignment/accounting" },
+        { "id": "p3", "text": "Monitoring/asset tracking" },
+        { "id": "p4", "text": "Disposal/decommissioning" },
+        { "id": "p5", "text": "Data retention" },
+        { "id": "p6", "text": "Enumeration" }
+      ],
+      "targets": [
+        { "id": "t1", "text": "Sourcing hardware and software with security requirements included in purchase terms, such as baseline configurations and firmware update commitments" },
+        { "id": "t2", "text": "Recording which person or team owns each asset and labeling its sensitivity classification before it enters service" },
+        { "id": "t3", "text": "Maintaining a current inventory of systems and applications so their status, configuration, and location are always known" },
+        { "id": "t4", "text": "Sanitizing or destroying storage media and issuing certification that no recoverable data remains before hardware leaves the facility" },
+        { "id": "t5", "text": "Keeping records for a defined period that satisfies legal, regulatory, and business needs before they are disposed of" },
+        { "id": "t6", "text": "Discovering which devices are present on the network through active or passive scanning so the inventory reflects reality" }
+      ],
+      "extraTargets": [
+        { "id": "x1", "text": "Testing application code for vulnerabilities before it is released to production" },
+        { "id": "x2", "text": "Resetting passwords for accounts that may have been compromised in an incident" },
+        { "id": "x3", "text": "Negotiating uptime credits with a cloud provider for availability failures" }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5",
+        "p6": "t6"
+      },
+      "explanation": "Acquisition/procurement is where security enters the lifecycle: purchase terms should require baseline configurations and firmware update commitments (p1). Assignment/accounting records ownership and classification so every asset has an accountable party (p2). Monitoring/asset tracking keeps an accurate, current inventory, and enumeration discovers devices on the network — actively or passively — so the inventory reflects reality (p3, p6). Disposal/decommissioning sanitizes or destroys media and certifies that data cannot be recovered, while data retention defines how long records are kept to meet legal and business needs (p4, p5). Testing code before release, resetting compromised passwords, and negotiating uptime credits belong to secure development, incident response, and vendor management — not to asset-lifecycle stages (x1–x3).",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 4.2" },
+        { "source": "nist", "section": "NIST SP 800-53 CM-8 — System Component Inventory" },
+        { "source": "nist", "section": "NIST SP 800-88 — Guidelines for Media Sanitization" }
+      ],
+      "hint": "Walk through the lifecycle of an asset in order: how it is brought in, who is responsible for it and how it is labeled, how its existence and state stay known, how unknown devices are found, how it is retired without leaving data behind, and how long its records must be kept. Match each stage to the activity that describes it."
+    },
+    "pbq-5-016": {
+      "id": "pbq-5-016",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "pbq",
+      "kind": "matching",
+      "prompt": "An organization is strengthening its security awareness program. Match EACH awareness-program activity to the outcome it is designed to support.",
+      "context": "The program combines campaigns that test employee behavior with training and reporting channels that support employees every day. Each activity is intended to produce a specific security outcome.",
+      "premises": [
+        { "id": "p1", "text": "Running a simulated phishing campaign" },
+        { "id": "p2", "text": "Recognizing and reporting a suspicious message" },
+        { "id": "p3", "text": "Role-based training for privileged users" },
+        { "id": "p4", "text": "Clean-desk and removable-media guidance" },
+        { "id": "p5", "text": "Insider-threat awareness training" }
+      ],
+      "targets": [
+        { "id": "t1", "text": "Measures how many employees fall for realistic social-engineering lures and builds the habit of checking before clicking" },
+        { "id": "t2", "text": "Gives employees a clear channel to forward suspected scams and the security team a chance to verify and warn others" },
+        { "id": "t3", "text": "Reduces the chance that accounts with elevated access are compromised through targeted attacks" },
+        { "id": "t4", "text": "Keeps sensitive documents and portable storage from being left where unauthorized people can see or take them" },
+        { "id": "t5", "text": "Helps employees recognize risky, unexpected, or unintentional behavior that may indicate a threat from inside the organization" }
+      ],
+      "extraTargets": [
+        { "id": "x1", "text": "Sets the maximum acceptable downtime for critical systems after an outage" },
+        { "id": "x2", "text": "Determines which vendors are permitted to process regulated data" },
+        { "id": "x3", "text": "Defines the schedule for renewing the organization's digital certificates" }
+      ],
+      "correctMatches": {
+        "p1": "t1",
+        "p2": "t2",
+        "p3": "t3",
+        "p4": "t4",
+        "p5": "t5"
+      },
+      "explanation": "A simulated phishing campaign measures susceptibility and reinforces the habit of verifying before clicking (p1). Giving employees a straightforward way to report suspicious messages turns individual suspicions into early warnings the security team can investigate (p2). Privileged users are high-value targets, so role-based training is tailored to the attacks most likely to hit them (p3). Clean-desk and removable-media guidance keeps sensitive documents and portable storage from being exposed or lost (p4). Insider-threat awareness helps employees recognize risky, unexpected, or unintentional behavior that may indicate malicious or careless activity by people with legitimate access (p5). Downtime targets, vendor approvals, and certificate renewals are continuity, third-party risk, and PKI operations tasks — not awareness outcomes (x1–x3).",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.6" },
+        { "source": "study-guide", "section": "Security Awareness Program Elements" },
+        { "source": "cisa", "section": "Avoiding Social Engineering and Phishing Attacks" }
+      ],
+      "hint": "Think about what each activity is meant to achieve: testing and building detection habits, giving employees somewhere to send their suspicions, preparing specific groups for the attacks most likely to target them, protecting workspaces and portable storage, and helping people spot concerning behavior in themselves and coworkers. Match the activity to the outcome it serves."
+    },
+    "pbq-5-004": {
+      "id": "pbq-5-004",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about security awareness practices by placing the correct word or phrase in each blank. Each item is used once.\n\n1. Examining the sender address, hovering over links before clicking, and questioning urgent requests are part of recognizing a ____ attempt.\n\n2. Giving employees a clear way to forward a suspected scam to the security team is the ____ of suspicious messages.\n\n3. Using a unique passphrase for every account and enabling multi-factor authentication are the core of good ____ management.\n\n4. Training that helps employees recognize manipulation techniques such as pretexting, baiting, and quid pro quo is called ____ awareness.\n\n5. Keeping travel plans, project details, and internal procedures out of casual conversation is part of ____ security.\n\n6. Employees who alternate between working at home and in the office need extra guidance for ____ work environments.",
+      "context": "Click a word chip, then click the blank to assign it. Each item is used once; the extra chips are distractors.",
+      "blanks": [
+        { "id": "b1", "label": "1. Recognizing a fraudulent message" },
+        { "id": "b2", "label": "2. Channeling user suspicions to the team" },
+        { "id": "b3", "label": "3. Protecting accounts with strong credentials" },
+        { "id": "b4", "label": "4. Awareness of manipulation techniques" },
+        { "id": "b5", "label": "5. Guarding sensitive details in daily behavior" },
+        { "id": "b6", "label": "6. Working from home and the office" }
+      ],
+      "bank": [
+        { "id": "w1", "word": "phishing" },
+        { "id": "w2", "word": "reporting" },
+        { "id": "w3", "word": "password" },
+        { "id": "w4", "word": "social engineering" },
+        { "id": "w5", "word": "operational" },
+        { "id": "w6", "word": "hybrid/remote" },
+        { "id": "d1", "word": "whaling" },
+        { "id": "d2", "word": "tailgating" }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5",
+        "b6": "w6"
+      },
+      "explanation": "Recognizing a phishing attempt means examining sender addresses, hovering over links, and questioning urgency before acting (1). Reporting suspicious messages gives the security team a channel to investigate and warn others (2). Password management centers on unique passphrases and multi-factor authentication (3). Social-engineering awareness covers manipulation techniques such as pretexting, baiting, and quid pro quo (4). Operational security (OPSEC) keeps travel plans, projects, and internal procedures out of casual conversation and social media (5). Hybrid/remote work guidance covers VPN use, home network security, and protecting devices outside the office (6). Whaling targets senior executives specifically, and tailgating is a physical access technique — neither fits these statements.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.6" },
+        { "source": "study-guide", "section": "Security Awareness Program Elements" },
+        { "source": "nist", "section": "SP 800-50 Building a Cybersecurity and Privacy Learning Program" }
+      ],
+      "hint": "Each statement describes one topic that a security awareness program teaches. Read the full statement and choose the term that names the practice being described."
+    },
+    "pbq-5-801": {
+      "id": "pbq-5-801",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "pbq",
+      "kind": "sort",
+      "prompt": "Classify each activity by the type of audit or assessment it represents.",
+      "context": "The organization tracks its assurance activities so stakeholders understand who performs them and what kind of evidence they produce. Some activities are performed by the organization itself, some by independent parties, and some are authorized simulations of real attacks.",
+      "items": [
+        { "id": "i1", "text": "An in-house team reviews access-management controls and reports findings to the audit committee" },
+        { "id": "i2", "text": "A regulatory examiner inspects records to verify compliance with financial reporting requirements" },
+        { "id": "i3", "text": "An independent third-party firm tests controls and issues an attestation report" },
+        { "id": "i4", "text": "Authorized testers attempt to exploit weaknesses in a web application from an unknown-environment perspective" },
+        { "id": "i5", "text": "A business unit completes a self-assessment against an internal control checklist" },
+        { "id": "i6", "text": "Testers use physical social engineering to assess whether badge enforcement works" }
+      ],
+      "buckets": [
+        { "id": "b1", "label": "Internal audit" },
+        { "id": "b2", "label": "External audit" },
+        { "id": "b3", "label": "Penetration testing" },
+        { "id": "b4", "label": "Compliance reporting" }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b2",
+        "i3": "b2",
+        "i4": "b3",
+        "i5": "b1",
+        "i6": "b3"
+      },
+      "explanation": "Internal audits are performed by the organization's own team — including self-assessments against internal control checklists — and typically report to the audit committee (i1, i5). External audits are performed by independent parties: regulators, examiners, or third-party firms issuing attestation reports (i2, i3). Penetration testing is an authorized attack simulation that attempts to exploit weaknesses, including physical social-engineering tests of badge enforcement (i4, i6). Compliance reporting is submitting required status reports to regulators, which none of these activities is.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.5" },
+        { "source": "study-guide", "section": "Internal vs External Audits" },
+        { "source": "nist", "section": "SP 800-115 Technical Guide to Information Security Testing and Assessment" }
+      ],
+      "hint": "Think about who performs the activity and what it produces: a team inside the organization reviewing its own controls, an outside party providing an independent opinion or regulatory examination, or an authorized attempt to break security controls. One bucket is a category of activity none of these items represents."
+    }
+  }
+}

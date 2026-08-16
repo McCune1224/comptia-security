@@ -1,28 +1,31 @@
-# Mobile QA Report — 2026-08-13T22:29:25.521Z
+# Mobile QA Report — 2026-08-16T19:07:32.766Z
 
 ## Executive summary
 
 - **Gate status:** ✅ PASS (exit 0)
-- **Routes swept:** 11 owned + 1 deferred route(s)
-- **Kinds exercised:** choice, configuration, matching, word-bank
-- **Kinds NOT exercised (no bank items yet / post-merge re-audit):** evidence, multi-step, numeric, ordering, sort, hotspot
+- **Themes exercised:** dark (computed: dark), light (computed: light) (computed `data-theme` recorded per run)
+- **Routes swept:** 12 owned route(s)
+- **Kinds exercised:** choice, configuration, evidence, matching, multi-step, ordering, slider, sort, word-bank
+- **Kinds NOT exercised (no bank items yet — renderer supported, reported unavailable):** memory, numeric, hotspot
 - **Console errors:** 0 · **Page errors:** 0 · **Failed resources:** 0
-- **Findings:** 5 unique (0 high, 0 medium, 5 low/info)
-- **DB:** throwaway `/tmp/qa-283819.db` (never the user's real DB)
-- **Viewport:** 390×844 + 1400 @3x, hasTouch, dark theme
+- **Fixed-viewport checks:** 10 run
+- **Findings:** 1 unique (0 high, 0 medium, 1 low/info)
+- **DB:** throwaway `/tmp/qa-85967.db` (never the user's real DB)
+- **Viewports:** 390×844 + 1400 @3x, 320×568, 640×360 landscape, hasTouch, both themes
 
 ## Notes
 
-Post-fix audit run (fail-threshold gate). Drills seeded via POST /api/quiz/start; every kind answered + screenshotted. Routes swept for ≥44px touch targets + 390px overflow; console/page errors fail the gate.
+Post-fix audit run (fail-threshold gate), both themes. Drills seeded via POST /api/quiz/start; every kind answered + screenshotted. Routes swept for ≥44px touch targets + horizontal overflow; console/page errors fail the gate; fixed-viewport scenarios cover dropdowns, calendar, lesson drills, and bottom-nav clearance.
 
 
 ## Gate results
 
-- **Small touch targets (<44px) on owned routes:** 0
+- **Small touch targets (<44px):** 0
 - **Horizontal overflow:** 0
+- **Dropdown/viewport violations:** 0
 - **Console/page errors:** 0
 
-- ✅ none — all owned routes clear the ≥44×44px contract at 390px, no overflow, no console errors.
+- ✅ none — all owned routes clear the ≥44×44px contract, no overflow, no console errors.
 
 ## Console / page errors
 
@@ -34,14 +37,16 @@ Post-fix audit run (fail-threshold gate). Drills seeded via POST /api/quiz/start
 
 - **choice:** exercised + screenshotted
 - **configuration:** exercised + screenshotted
-- **evidence:** not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)
+- **evidence:** exercised + screenshotted
 - **matching:** exercised + screenshotted
-- **multi-step:** not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)
-- **numeric:** not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)
-- **ordering:** not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)
-- **sort:** not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)
+- **memory:** unavailable — no bank items in this build (renderer supported)
+- **multi-step:** exercised + screenshotted
+- **numeric:** unavailable — no bank items in this build (renderer supported)
+- **ordering:** exercised + screenshotted
+- **slider:** exercised + screenshotted
+- **sort:** exercised + screenshotted
 - **word-bank:** exercised + screenshotted
-- **hotspot:** not exercisable — no bank items in this build (engine kind; lands with WT-A/WT-D merges)
+- **hotspot:** unavailable — no bank items in this build (renderer supported)
 
 ## Screenshots
 
@@ -57,71 +62,92 @@ Post-fix audit run (fail-threshold gate). Drills seeded via POST /api/quiz/start
 - `screenshots/kind-multi-step-390x844.png`
 - `screenshots/kind-ordering-390x1400.png`
 - `screenshots/kind-ordering-390x844.png`
+- `screenshots/kind-slider-390x1400.png`
+- `screenshots/kind-slider-390x844.png`
+- `screenshots/kind-sort-390x1400.png`
+- `screenshots/kind-sort-390x844.png`
 - `screenshots/kind-word-bank-390x1400.png`
 - `screenshots/kind-word-bank-390x844.png`
 - `screenshots/page-calendar-390x1400.png`
 - `screenshots/page-calendar-390x844.png`
+- `screenshots/page-calendar-dark-390x1400.png`
+- `screenshots/page-calendar-dark-390x844.png`
+- `screenshots/page-calendar-light-390x1400.png`
+- `screenshots/page-calendar-light-390x844.png`
 - `screenshots/page-gradebook-390x1400.png`
 - `screenshots/page-gradebook-390x844.png`
+- `screenshots/page-gradebook-dark-390x1400.png`
+- `screenshots/page-gradebook-dark-390x844.png`
+- `screenshots/page-gradebook-light-390x1400.png`
+- `screenshots/page-gradebook-light-390x844.png`
 - `screenshots/page-history-390x1400.png`
 - `screenshots/page-history-390x844.png`
+- `screenshots/page-history-dark-390x1400.png`
+- `screenshots/page-history-dark-390x844.png`
+- `screenshots/page-history-light-390x1400.png`
+- `screenshots/page-history-light-390x844.png`
+- `screenshots/page-home-menu-dark-390x844.png`
+- `screenshots/page-home-menu-light-390x844.png`
 - `screenshots/page-mastery-390x1400.png`
 - `screenshots/page-mastery-390x844.png`
+- `screenshots/page-mastery-dark-390x1400.png`
+- `screenshots/page-mastery-dark-390x844.png`
+- `screenshots/page-mastery-light-390x1400.png`
+- `screenshots/page-mastery-light-390x844.png`
 - `screenshots/page-modules-week-1-390x1400.png`
 - `screenshots/page-modules-week-1-390x844.png`
+- `screenshots/page-modules-week-1-dark-390x1400.png`
+- `screenshots/page-modules-week-1-dark-390x844.png`
+- `screenshots/page-modules-week-1-light-390x1400.png`
+- `screenshots/page-modules-week-1-light-390x844.png`
 - `screenshots/page-page-390x1400.png`
 - `screenshots/page-page-390x844.png`
+- `screenshots/page-page-dark-390x1400.png`
+- `screenshots/page-page-dark-390x844.png`
+- `screenshots/page-page-light-390x1400.png`
+- `screenshots/page-page-light-390x844.png`
 - `screenshots/page-pbq-390x1400.png`
 - `screenshots/page-pbq-390x844.png`
+- `screenshots/page-pbq-dark-390x1400.png`
+- `screenshots/page-pbq-dark-390x844.png`
+- `screenshots/page-pbq-light-390x1400.png`
+- `screenshots/page-pbq-light-390x844.png`
 - `screenshots/page-progress-390x1400.png`
 - `screenshots/page-progress-390x844.png`
+- `screenshots/page-progress-dark-390x1400.png`
+- `screenshots/page-progress-dark-390x844.png`
+- `screenshots/page-progress-light-390x1400.png`
+- `screenshots/page-progress-light-390x844.png`
 - `screenshots/page-quiz-390x1400.png`
 - `screenshots/page-quiz-390x844.png`
+- `screenshots/page-quiz-dark-390x1400.png`
+- `screenshots/page-quiz-dark-390x844.png`
+- `screenshots/page-quiz-light-390x1400.png`
+- `screenshots/page-quiz-light-390x844.png`
 - `screenshots/page-review-390x1400.png`
 - `screenshots/page-review-390x844.png`
+- `screenshots/page-review-dark-390x1400.png`
+- `screenshots/page-review-dark-390x844.png`
+- `screenshots/page-review-light-390x1400.png`
+- `screenshots/page-review-light-390x844.png`
 - `screenshots/page-scenarios-390x1400.png`
 - `screenshots/page-scenarios-390x844.png`
+- `screenshots/page-scenarios-dark-390x1400.png`
+- `screenshots/page-scenarios-dark-390x844.png`
+- `screenshots/page-scenarios-light-390x1400.png`
+- `screenshots/page-scenarios-light-390x844.png`
 - `screenshots/page-syllabus-390x1400.png`
 - `screenshots/page-syllabus-390x844.png`
-
-## Remaining / deferred items (post-merge re-audit)
-
-- Deferred routes swept and logged only (sibling workstream ownership): see findings tagged `(deferred)` below.
-- Known, un-fixed by design: `/modules/[id]` lesson-complete ✓ (32×32) + "← Syllabus" (76×40) — owned by WT-C. ExamFlow question-navigator buttons (h-10 w-10 = 40px) — owned by WT-A. Both re-audited after their branches merge.
+- `screenshots/page-syllabus-dark-390x1400.png`
+- `screenshots/page-syllabus-dark-390x844.png`
+- `screenshots/page-syllabus-light-390x1400.png`
+- `screenshots/page-syllabus-light-390x844.png`
 
 ## Findings
 
-### Issue 1: 15 small touch targets (deferred — post-merge re-audit)
+### Issue 1: Ordering reorder verified
 
-- **Severity:** Info · **Category:** Accessibility
-- **Page:** `pbq#word-bank`
-- **Details:** e.g. button "1" 40×40px; button "2" 40×40px; button "3" 40×40px; button "4" 40×40px; button "5" 40×40px (+10 more)
-
-
-### Issue 2: 3 small touch targets (deferred — post-merge re-audit)
-
-- **Severity:** Info · **Category:** Accessibility
-- **Page:** `/modules/week-1`
-- **Details:** e.g. a "← Syllabus" 76×40px; button "Mark Domain 1 — General Security Concepts as rea" 32×32px; button "Mark Domain 2 — Threats, Vulnerabilities & Mitig" 32×32px
-
-
-### Issue 3: 5 small touch targets (deferred — post-merge re-audit)
-
-- **Severity:** Info · **Category:** Accessibility
-- **Page:** `pbq#configuration`
-- **Details:** e.g. button "1" 40×40px; button "2" 40×40px; button "3" 40×40px; button "4" 40×40px; button "5" 40×40px
-
-
-### Issue 4: 5 small touch targets (deferred — post-merge re-audit)
-
-- **Severity:** Info · **Category:** Accessibility
-- **Page:** `pbq#choice`
-- **Details:** e.g. button "1" 40×40px; button "2" 40×40px; button "3" 40×40px; button "4" 40×40px; button "5" 40×40px
-
-
-### Issue 5: 5 small touch targets (deferred — post-merge re-audit)
-
-- **Severity:** Info · **Category:** Accessibility
-- **Page:** `pbq#matching`
-- **Details:** e.g. button "1" 40×40px; button "2" 40×40px; button "3" 40×40px; button "4" 40×40px; button "5" 40×40px
+- **Severity:** Info · **Category:** UX
+- **Page:** `pbq`
+- **Details:** 0/16 touch drags reordered; 16 failed drags recovered via the keyboard fallback (CDP touch emulation flake — verify on a physical device).
 

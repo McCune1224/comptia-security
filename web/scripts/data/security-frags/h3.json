@@ -1,0 +1,508 @@
+{
+  "hints": {
+    "mcq-3-001": "Think about which deployment model exists specifically for several organizations with shared security, compliance, and cost concerns to use a common environment — rather than models that mix or multiply providers for a single organization.",
+    "mcq-3-002": "Split the question into two independent decisions: which hypervisor type installs directly on hardware for maximum performance, and which type runs as an application on top of an existing operating system.",
+    "mcq-3-003": "Consider which attack name describes code in one virtual machine reaching memory belonging to the host or other guests, then think about which layer between the guests and the hardware must be secured to stop it.",
+    "mcq-3-004": "Weigh the two problems together: systems that cannot receive updates or scans, and an isolation boundary that a physical connection can defeat. The strongest answer captures both weaknesses at once.",
+    "mcq-3-005": "The scenario is about a security check that runs automatically inside the delivery pipeline and blocks a risky change before it lands. Which Infrastructure as Code principle turns rules into enforced automation?",
+    "mcq-3-006": "The hospital needs centrally defined, host-to-host policies enforced across the network instead of rules configured device by device. Which architecture separates the control function from the forwarding devices to enable that?",
+    "mcq-3-007": "Draw the line between the layer the provider owns — the physical hosts, hypervisor, and firmware — and everything the customer configures above it. That division has a specific name in cloud security.",
+    "mcq-3-008": "Compare the isolation boundaries: one technology separates guests with virtualized hardware, while the other shares the host kernel and isolates at the process level. Which statement describes those boundaries correctly?",
+    "mcq-3-010": "The rule is directional: the less-trusted zone may start connections toward the more-trusted zone, but the reverse direction is blocked. Which principle describes allowing traffic in only one direction between zones?",
+    "mcq-3-011": "Match each requirement to the firewall type by what it must do: one needs deep, application-aware inspection with VPN and intrusion prevention, while the other must stay minimal and evaluate each packet by header fields alone without remembering connections.",
+    "mcq-3-012": "The gap in the current design is traffic that flows between workloads on the same host and never crosses a physical device. Which technique pushes policy enforcement down to the virtualization layer so that path is covered too?",
+    "mcq-3-013": "The requirement is a single, tightly controlled gateway that every administrator must pass through on the way to the restricted segment, with each session captured. Which placement funnels administrative traffic through one audited hop?",
+    "mcq-3-014": "Two changes work together: smarter routing that keeps cloud-bound traffic from detouring through headquarters, and security inspection delivered from the cloud edge close to each user. Which two approaches combine those ideas?",
+    "mcq-3-015": "The device actively interacts with attackers by posing as a real service, and it should sit where perimeter scanners are most likely to probe. Which decoy technology matches that behavior and placement?",
+    "mcq-3-016": "Separate the two needs: one control must inspect web requests in line before they reach the application, and the other must passively watch the traffic around the database for unusual patterns. Which devices fit those two placements?",
+    "mcq-3-017": "Every requirement pushes away from network-level connectivity: verify user and device first, create a tunnel to each specific application, and keep internal addressing hidden. Which architecture is built around per-application, identity-aware access?",
+    "mcq-3-018": "The key difference is memory: does the firewall remember the connections it has already seen, or does it treat every packet as new? Think about how return traffic is handled under each model.",
+    "mcq-3-041": "The goal is to stop a compromised server from easily reaching its peers by dividing the network into fine-grained zones with per-flow rules. Which concept limits east-west movement this way?",
+    "mcq-3-042": "Two root causes are stated: a vulnerable library inside the image and a container process running with elevated privileges. Which two hardening steps address exactly those causes?",
+    "mcq-3-043": "The control must keep unpatched industrial controllers off every reachable network path while still allowing the data they need. Which isolation approach separates them completely from the corporate network and internet?",
+    "mcq-3-044": "The requirement is access to specific applications only — no public exposure and no broad network access. Which technology brokers per-application access through an identity-aware proxy?",
+    "mcq-3-053": "The directory query must be encrypted, so the port for the secure version of the protocol is needed rather than its plaintext equivalent.",
+    "mcq-3-054": "Both selected protocols must encrypt authentication and data together. Identify the two file-transfer protocols built on secure channels rather than their cleartext predecessors.",
+    "mcq-3-055": "The replacement must give encrypted, interactive command-line management of network devices. Which protocol and port provide a secure remote shell?",
+    "mcq-3-019": "Sort the five data sets by sensitivity: which is meant to be public, which contains the most sensitive identifiers, and where do ordinary business records fall between the two?",
+    "mcq-3-020": "The threat is physical: the drives themselves are carried away. The control must keep stored data unreadable without key material that is held somewhere the thief does not get.",
+    "mcq-3-021": "Name the state of each data set first — being processed, stored, or moving — then match each state to the control that protects it. Two pairings are correct.",
+    "mcq-3-022": "Each exfiltration path needs a different vantage point: one watches mail leaving the network, one enforces rules on the device itself, and one must look inside encrypted traffic. Match the control type to the path it can see.",
+    "mcq-3-023": "The failure was about place: a copy of the data remained in another country after deletion was requested. Which concept governs where data is stored and which rules apply to it there?",
+    "mcq-3-024": "Consider the holder and the purpose of each element: the records are health-related and held by a healthcare entity. What does that context do to elements that might otherwise look like ordinary identifiers?",
+    "mcq-3-025": "The pods are ephemeral, so certificate management must be fully automated and short-lived. Which approach issues and rotates per-service credentials continuously without manual steps?",
+    "mcq-3-026": "The data is being processed in memory, so the protection must act on memory itself — not on disk or the network. Which technology creates a hardware-protected region for code and data while it is in use?",
+    "mcq-3-027": "The current rule matches on a single word and floods the team with noise. Which approach combines several signals so legitimate clinical communication is not mistaken for exfiltration?",
+    "mcq-3-045": "The technique must remove the real value from the system while still allowing it to be retrieved later through a secured mapping. Which approach replaces sensitive values with non-reversible placeholders stored apart from the data?",
+    "mcq-3-047": "The control inspects content on the device and blocks it from leaving through specific channels like removable media or email. Which category of data protection enforces egress rules based on content patterns?",
+    "mcq-3-048": "The policy fixes how long records must be kept and requires that they stay tamper-evident during that period. Which data lifecycle concept covers keeping data for a defined time with integrity protection?",
+    "mcq-3-028": "Two tolerances are given: how long the firm may be without the system, and how much recent data it may lose. Match each to the metric that measures it, then check the proposed solution against both.",
+    "mcq-3-029": "Balance the constraints: capital cost must stay low, activation must be quick, and data must be reasonably fresh. Which site type is pre-staged but not continuously running production — between the cheapest and the most expensive options?",
+    "mcq-3-030": "Count the copies, note the different media they sit on, and check whether any copy lives in a separate location. The strategy is named by those three characteristics.",
+    "mcq-3-031": "Two requirements must both be met: storage growth between full backups must stay small, and any moment within the last day must be recoverable. One backup type is the smallest possible; the other records every transaction so the database can be replayed to an exact time.",
+    "mcq-3-032": "The array must survive two simultaneous failures no matter which disks fail. Which RAID level uses double parity to guarantee that outcome across all six disks?",
+    "mcq-3-033": "The symptom appears when one client's requests land on different servers that each hold their own session state. Which load-balancing feature keeps a client on a single server for the life of the session?",
+    "mcq-3-034": "Three needs must be met at once: instant continuity for short interruptions, protection against voltage problems, and long-duration coverage for extended outages. Which pairing covers all three?",
+    "mcq-3-035": "Add up the complete timeline from failure to validated recovery, then compare it with the maximum downtime the business said it could survive. Keep the planning target, the measured actual, and the business limit distinct.",
+    "mcq-3-036": "The application tier already survives a single server loss; the remaining single point of failure sits behind it. Which change adds redundancy at that layer so one database failure cannot stop trading?",
+    "mcq-3-049": "Only two backup artifacts are needed to rebuild the data. Identify which one is the base and which one contains every change made since that base.",
+    "mcq-3-050": "Two limits are stated: the maximum time the system may be down and the maximum amount of recent data that may be lost. Assign each limit to the metric that measures it.",
+    "mcq-3-051": "The site is continuously replicated, fully equipped, and able to take over within minutes. Which site type is ready to run production almost immediately after a disaster?",
+    "mcq-3-052": "The backup was destroyed because it lived on the same storage as production. Which strategy keeps backups separate or write-protected so one encryption event cannot reach them?",
+    "mcq-3-037": "The provider delivers ready-to-use applications through a browser and the customer manages only accounts and content. Which service model leaves the customer with the least to manage?",
+    "mcq-3-038": "Part of the environment stays on-premises while part runs in a shared provider's infrastructure, and the two are connected. Which deployment model describes combining private and external infrastructure?",
+    "mcq-3-039": "Two practices are described: the application is broken into small independently deployable services, and the environment is provisioned from version-controlled definitions. Identify both.",
+    "mcq-3-040": "The provider owns the physical and virtualization layers while the customer owns configuration of access and policies. What is this division of cloud security obligations called?",
+    "pbq-3-001": "This scenario walks through the cloud migration step by step: classifying controls by what they do, choosing a segmentation design for a three-tier application, and setting boundary rules. Apply least access at every tier.",
+    "pbq-3-002": "This scenario moves through a planned change: documenting the current state, rolling out new restrictions safely, testing, cleaning up old rules, and closing out the change. Order the steps the way a controlled change is executed.",
+    "pbq-3-003": "Work from a default-deny mindset: the perimeter segment may serve the internet but must never start connections inward, internal users get selective outbound access, and management happens over a controlled path. Choose the most restrictive option that still satisfies each policy line.",
+    "pbq-3-004": "The sensor cannot be patched or replaced without stopping production, so the controls must reduce exposure and add oversight without touching the device itself. Look for measures that isolate it and that give visibility into its management activity.",
+    "pbq-3-005": "The design is active-passive: the secondary region stays idle during normal operations and only takes over after a failure. For each field, pick the option that keeps the standby quiet while still enabling a timely, automated handover.",
+    "pbq-3-006": "Compute the total by multiplying the size of each full copy by the number of copies that accumulate within the retention window. Watch the units and the interval at which copies are taken.",
+    "pbq-3-007": "Each component maps to the property that defines how it separates or exposes systems: the virtualization boundary, host-level sharing, network zone separation, and physical or logical disconnection.",
+    "pbq-3-008": "The scenario walks through shrinking PCI scope: removing card data from application systems, placing the secure store that keeps the mapping, and protecting that store's keys. At each step pick the option that confines cardholder data to the smallest possible footprint.",
+    "pbq-3-009": "The requirements are explicit: no public read or write, versioning on, encryption at rest with managed keys, and auditable access records. For each setting, choose the option that satisfies that requirement while keeping the configuration secure.",
+    "pbq-3-010": "Separate the two recovery metrics: one limits how much recent data may be lost, the other limits how long service may be down. Then recall what a backup that captures all changes since the last full backup is called, and what kind of site is continuously replicated and ready in minutes.",
+    "pbq-3-011": "Distinguish the backup types by what each captures relative to earlier backups, then determine the number of copies called for by the 3-2-1 rule.",
+    "pbq-3-012": "Each decision reduces risk in a specific way: where untrusted traffic is contained, how far a compromise can spread, what happens if container isolation fails, how legacy industrial devices are shielded, and how access is granted per identity.",
+    "pbq-3-013": "Each service listens on one well-known port by default. Recall the standard port for each protocol before allowing it through the firewall.",
+    "pbq-3-014": "Each legacy protocol has an encrypted counterpart that performs the same function. Match the cleartext service to its secure version for remote command, file transfer, web traffic, directory queries, and network monitoring.",
+    "pbq-3-015": "Rules are evaluated from the top down and the first match wins, with a final default drop. Think about which flows must be permitted before other rules can work, and place the catch-all where it cannot shadow legitimate traffic.",
+    "pbq-3-016": "Place each device in the zone that matches its exposure: internet-reachable services in the perimeter segment, the most sensitive data in the restricted segment, and untrusted devices isolated on their own segment.",
+    "pbq-3-017": "The five descriptions each match one technique by its defining property: a vaulted replacement that stays reversible, a partial display that keeps the format, a keyed transformation, a one-way integrity check, and a control that stops data movement.",
+    "pbq-3-801": "Apply the zero-trust mindset: requests are re-checked rather than assumed safe, movement between resources is tightly constrained, and identity is proven before anything is granted. One unused word reflects the traditional trust-everything model that zero trust rejects.",
+    "pbq-3-001:step-5-1": "Classify each control by what it does and where it acts: does it stop an event before it happens, detect it afterward, or restore service after an incident — and is the mechanism technical or physical?",
+    "pbq-3-001:step-5-2": "Think about which placement keeps the database least reachable while still supporting the application flow: the web tier is exposed to the internet, the application tier is trusted, and the data tier is most restricted.",
+    "pbq-3-001:step-5-3": "For each rule, think about the direction of the connection and who needs access. The most restrictive option that still supports the three-tier flow is correct; consider whether each path should be locked down by source, encryption, or a gateway.",
+    "pbq-3-002:step-6-1": "Think of the lifecycle as a sequence: know what exists, find its weaknesses, judge which matter most, decide what to fix first, make the fix, then confirm it worked.",
+    "pbq-3-002:step-6-2": "Weigh both severity and exposure: a critical, internet-reachable vulnerability demands fast action, while taking the asset offline entirely may be more disruption than the risk justifies.",
+    "pbq-3-002:step-6-3": "One action fixes the root cause across all affected machines, and the other confirms the fix actually took effect. Choose the pair that both remediates and verifies.",
+    "pbq-3-008:s1": "The technique must make the card number unavailable in the database yet still retrievable when a refund is needed. Which approach replaces the value with a placeholder that maps back through a secured store?",
+    "pbq-3-008:s2": "The store holds the most sensitive material, so it must be reachable by the smallest necessary set of systems. Where does that place it relative to the rest of the network?",
+    "pbq-3-008:s3": "Key material is only as safe as its storage and the people who can reach it. Which option protects keys in tamper-resistant hardware with controlled custody?"
+  },
+  "sourceRefs": {
+    "mcq-3-001": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Cloud Deployment Models"
+      }
+    ],
+    "mcq-3-002": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Virtualization"
+      }
+    ],
+    "mcq-3-003": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Virtualization Security"
+      }
+    ],
+    "mcq-3-004": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "cisa",
+        "section": "CISA ICS/OT guidance"
+      }
+    ],
+    "mcq-3-005": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Infrastructure as Code"
+      }
+    ],
+    "mcq-3-006": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "nist",
+        "section": "NIST SP 800-207 Zero Trust Architecture"
+      }
+    ],
+    "mcq-3-007": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "study-guide",
+        "section": "Cloud Security and Shared Responsibility Models"
+      }
+    ],
+    "mcq-3-008": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.1"
+      },
+      {
+        "source": "nist",
+        "section": "NIST SP 800-190 Application Container Security Guide"
+      }
+    ],
+    "mcq-3-010": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Network Segmentation"
+      }
+    ],
+    "mcq-3-011": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Firewalls and Security Zones"
+      }
+    ],
+    "mcq-3-012": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "nist",
+        "section": "NIST SP 800-207 Zero Trust Architecture"
+      }
+    ],
+    "mcq-3-013": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Secure Enterprise Infrastructure"
+      }
+    ],
+    "mcq-3-014": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Secure Enterprise Infrastructure"
+      }
+    ],
+    "mcq-3-015": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Deception and Disruption Technologies"
+      }
+    ],
+    "mcq-3-016": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Web Application Firewalls"
+      }
+    ],
+    "mcq-3-017": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "nist",
+        "section": "NIST SP 800-207 Zero Trust Architecture"
+      }
+    ],
+    "mcq-3-018": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.2"
+      },
+      {
+        "source": "study-guide",
+        "section": "Firewalls and Security Zones"
+      }
+    ],
+    "mcq-3-019": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Governance and Lifecycle Management"
+      }
+    ],
+    "mcq-3-020": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Security and Privacy"
+      }
+    ],
+    "mcq-3-021": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Security and Privacy"
+      }
+    ],
+    "mcq-3-022": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Loss Prevention"
+      }
+    ],
+    "mcq-3-023": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "GDPR"
+      }
+    ],
+    "mcq-3-024": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "HIPAA"
+      }
+    ],
+    "mcq-3-025": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "nist",
+        "section": "NIST SP 800-204A Service-Mesh Security"
+      }
+    ],
+    "mcq-3-026": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Security and Privacy"
+      }
+    ],
+    "mcq-3-027": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.3"
+      },
+      {
+        "source": "study-guide",
+        "section": "Data Loss Prevention"
+      }
+    ],
+    "mcq-3-028": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Disaster Recovery and Continuity"
+      }
+    ],
+    "mcq-3-029": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Disaster Recovery and Continuity"
+      }
+    ],
+    "mcq-3-030": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Disaster Recovery and Continuity"
+      }
+    ],
+    "mcq-3-031": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Disaster Recovery and Continuity"
+      }
+    ],
+    "mcq-3-032": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Redundancy and Fault Tolerance"
+      }
+    ],
+    "mcq-3-033": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Redundancy and Fault Tolerance"
+      }
+    ],
+    "mcq-3-034": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Resilience and Recovery"
+      }
+    ],
+    "mcq-3-035": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Disaster Recovery and Continuity"
+      }
+    ],
+    "mcq-3-036": [
+      {
+        "source": "exam-objectives",
+        "section": "Objective 3.4"
+      },
+      {
+        "source": "study-guide",
+        "section": "Redundancy and Fault Tolerance"
+      }
+    ]
+  },
+  "replace": {
+    "pbq-3-010": {
+      "id": "pbq-3-010",
+      "domain": 3,
+      "objective": "3.4",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about backups and disaster recovery by placing the correct word in each blank. Each word is used once.\n\n1. The maximum acceptable amount of data loss, measured in time, is the recovery ____ objective (RPO).\n\n2. A backup that copies all changes since the last full backup is called a ____ backup.\n\n3. The maximum acceptable downtime before systems must be restored is the recovery ____ objective (RTO).\n\n4. A disaster recovery site that is fully equipped and continuously replicated, able to take over in minutes, is called a ____ site.",
+      "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "1. RPO full word"
+        },
+        {
+          "id": "b2",
+          "label": "2. Since last full"
+        },
+        {
+          "id": "b3",
+          "label": "3. RTO full word"
+        },
+        {
+          "id": "b4",
+          "label": "4. Fastest failover site"
+        }
+      ],
+      "explanation": "RPO = max data loss (drives backup frequency); RTO = max downtime (drives recovery strategy). Differentials capture changes since the last full; hot sites are continuously replicated for near-zero downtime.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Performance-Based Questions"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "point"
+        },
+        {
+          "id": "w2",
+          "word": "differential"
+        },
+        {
+          "id": "w3",
+          "word": "time"
+        },
+        {
+          "id": "w4",
+          "word": "hot"
+        },
+        {
+          "id": "d1",
+          "word": "warm"
+        },
+        {
+          "id": "d2",
+          "word": "maximum tolerable downtime"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      }
+    }
+  }
+}

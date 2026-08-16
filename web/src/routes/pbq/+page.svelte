@@ -22,7 +22,7 @@
 	<div class="mx-auto max-w-lg space-y-6 py-4 sm:py-8">
 		<div>
 			<div
-				class="mb-3 grid h-12 w-12 place-items-center rounded-md bg-accent-warm/15 text-accent-warm"
+				class="mb-3 grid h-12 w-12 place-items-center rounded-md bg-warning/15 text-warning"
 			>
 				<svg
 					viewBox="0 0 24 24"

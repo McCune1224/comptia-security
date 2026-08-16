@@ -1,0 +1,231 @@
+{
+  "mcqs": [
+    {
+      "id": "mcq-1-046",
+      "domain": 1,
+      "objective": "1.2",
+      "format": "scenario",
+      "prompt": "What does the gap analysis primarily reveal?",
+      "context": "A regional bank adopts the NIST Cybersecurity Framework as its target baseline ahead of a compliance audit. The security team inventories every control currently deployed and maps each one to the framework's functions and categories to see how the organization's posture compares with the desired target state. Management needs a clear, prioritized view of what must change before committing budget to new security investments.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The expected monetary loss from a likely breach scenario",
+          "rationale": "Quantifying probable financial impact is quantitative risk analysis, which uses loss estimates and likelihood, not a comparison against a baseline."
+        },
+        {
+          "id": "b",
+          "text": "The controls that are missing or insufficient relative to the target baseline",
+          "rationale": "Gap analysis compares the current state with a desired baseline and produces the delta, so management knows exactly which controls to add or strengthen."
+        },
+        {
+          "id": "c",
+          "text": "The software vulnerabilities discovered by the latest vulnerability scan",
+          "rationale": "Enumerating exploitable weaknesses is vulnerability scanning, which finds flaws in systems rather than differences from a target framework."
+        },
+        {
+          "id": "d",
+          "text": "The average time to detect and respond to security incidents",
+          "rationale": "Detection and response times are operational performance metrics (such as MTTR), not an output of comparing current controls with a baseline."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "hint": "Think about what a comparison of a current state against a desired target state produces: a list of differences to act on, not a measurement of damage, flaws, or response speed.",
+      "explanation": "Gap analysis compares the organization's current security posture with a target baseline, such as a framework like the NIST CSF, and reports the differences: controls that are absent, partially implemented, or not meeting requirements. That output drives a prioritized remediation plan before the audit. It does not quantify monetary loss (quantitative risk analysis), enumerate exploitable flaws (vulnerability scanning), or measure operational performance such as response time.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 1.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Gap Analysis"
+        },
+        {
+          "source": "nist",
+          "section": "NIST CSF Framework Profiles"
+        }
+      ]
+    },
+    {
+      "id": "mcq-1-047",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "Which technique did the employee use to conceal the data?",
+      "context": "A defense contractor's security team investigates how confidential product blueprints left the building. The employee uploaded dozens of seemingly ordinary vacation photographs to a personal cloud account, and data-loss prevention inspection found nothing suspicious because every image appeared to be a normal, viewable JPEG. Forensic analysis later extracted the blueprint data from inside the image files, which had been modified so the changes were not visually apparent.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Encryption",
+          "rationale": "Encryption scrambles data with a key so it is unreadable, but the resulting ciphertext is detectable and a DLP tool would see it as encrypted content, not a normal image."
+        },
+        {
+          "id": "b",
+          "text": "Steganography",
+          "rationale": "Steganography hides the existence of a message by embedding it inside a carrier file such as an image or audio file, leaving the carrier looking normal and passing inspection."
+        },
+        {
+          "id": "c",
+          "text": "Tokenization",
+          "rationale": "Tokenization replaces sensitive values with non-sensitive placeholders for data protection, commonly for payment data; it does not hide data inside another file."
+        },
+        {
+          "id": "d",
+          "text": "Hashing",
+          "rationale": "Hashing is a one-way function that produces a fixed-size digest for integrity verification; it cannot be reversed to recover embedded blueprint data."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "hint": "Consider the difference between making data unreadable and concealing the very existence of the data inside another, innocent-looking file.",
+      "explanation": "The employee used steganography, which hides a message or file inside a carrier such as an image, audio, or video file so the carrier appears unchanged and evades inspection. Encryption would have produced visible ciphertext that a DLP tool could flag, tokenization substitutes placeholder values rather than hiding payloads in files, and hashing is a one-way integrity function that cannot carry recoverable data. Because the photos looked and opened normally, steganography is the technique that matches the scenario.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Steganography"
+        }
+      ]
+    },
+    {
+      "id": "mcq-1-048",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "scenario",
+      "prompt": "Which storage approach best meets the distributor's requirement for tamper-evident, multi-party provenance?",
+      "context": "A pharmaceutical distributor must share shipment provenance records with several independent manufacturers and regulators who do not trust one another's systems. Every party needs to verify that each recorded shipment step links to the one before it and that no single organization can rewrite history. The distributor must choose a storage model that preserves integrity even when the parties act adversarially, without relying on any one custodian to behave correctly.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A central relational database with row-level audit logging",
+          "rationale": "A central database gives one organization write authority, and its administrator could alter or delete logged rows, so integrity still depends on a single trusted custodian."
+        },
+        {
+          "id": "b",
+          "text": "A blockchain-based open public ledger",
+          "rationale": "A blockchain chains each block to the previous one through hashes and requires consensus among independent participants, so altering an earlier record breaks the chain and no single party controls history."
+        },
+        {
+          "id": "c",
+          "text": "A digitally signed document repository",
+          "rationale": "Digital signatures prove who created a record but the repository operator could still replace, delete, or reorder the history, so the solution relies on trust in that operator."
+        },
+        {
+          "id": "d",
+          "text": "A versioned file server with change tracking",
+          "rationale": "Version history can be rolled back or overwritten by administrators, and change tracking only detects modifications rather than preventing them across independent parties."
+        }
+      ],
+      "correctOptionIds": [
+        "b"
+      ],
+      "selectCount": 1,
+      "hint": "Think about which design makes every record cryptographically dependent on the one before it and requires agreement among independent parties before a record is accepted.",
+      "explanation": "A blockchain-based open public ledger satisfies the requirement because blocks are linked through hash values and new entries require consensus among independent participants, making the history tamper-evident and resistant to any single party rewriting it. A normal database, even with audit logging, gives one custodian the power to modify records. Digital signatures authenticate records but still rely on the repository operator, and versioned file storage detects changes rather than preventing them. Only the chained, consensus-based ledger removes the single point of trust across the multi-party supply chain.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Blockchain and Open Public Ledgers"
+        }
+      ]
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "pbq-1-015",
+      "domain": 1,
+      "objective": "1.3",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about change management by placing the correct word in each blank. Each word is used once.\n\n1. Before a change is applied, a formal ____ gives the right people a chance to review and authorize it.\n\n2. The change is verified through ____ in a staging environment before it is released to production.\n\n3. If a change fails in production, the ____ describes how to restore the system to its previous known-good state.\n\n4. Updated diagrams, policies, and procedures are captured as ____ so future operators know how the system is configured.\n\n5. ____ tracks revisions of configuration files so any change can be compared with earlier versions and reverted when needed.",
+      "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+      "blanks": [
+        {
+          "id": "b1",
+          "label": "1. Review and authorization before applying"
+        },
+        {
+          "id": "b2",
+          "label": "2. Verification in a staging environment"
+        },
+        {
+          "id": "b3",
+          "label": "3. Restore to previous state after failure"
+        },
+        {
+          "id": "b4",
+          "label": "4. Record updated diagrams and procedures"
+        },
+        {
+          "id": "b5",
+          "label": "5. Track and compare configuration revisions"
+        }
+      ],
+      "bank": [
+        {
+          "id": "w1",
+          "word": "Approval process"
+        },
+        {
+          "id": "w2",
+          "word": "Testing"
+        },
+        {
+          "id": "w3",
+          "word": "Backout plan"
+        },
+        {
+          "id": "w4",
+          "word": "Documentation"
+        },
+        {
+          "id": "w5",
+          "word": "Version control"
+        },
+        {
+          "id": "w6",
+          "word": "Maintenance window"
+        },
+        {
+          "id": "w7",
+          "word": "Impact analysis"
+        }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5"
+      },
+      "hint": "Walk through the change lifecycle from start to finish: who gives permission before a change is applied, how it is verified before reaching production, what happens if it fails, and how the final state is captured and tracked for the team.",
+      "explanation": "The approval process gives stakeholders and owners a formal review point before any change is authorized. Testing in staging verifies the change works before it reaches production. The backout plan defines the steps to restore the previous known-good state if the change fails. Documentation records updated diagrams, policies, and procedures so operations stay accurate. Version control tracks configuration revisions so changes can be compared or reverted. The distractors are real change-management concepts that fit different roles: the maintenance window schedules when a change may occur, and impact analysis estimates the effects of a change before approval.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 1.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Change Management"
+        }
+      ]
+    }
+  ]
+}

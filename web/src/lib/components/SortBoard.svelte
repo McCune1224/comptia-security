@@ -55,7 +55,7 @@
 				{#if !placed}
 					<button
 						type="button"
-						class="rounded-md border-2 px-3.5 py-2 text-sm font-medium transition {disabled
+						class="min-h-11 rounded-md border-2 px-3.5 py-2 text-sm font-medium transition {disabled
 							? 'cursor-default opacity-60'
 							: selected === item.id
 								? 'border-accent bg-accent/10 text-text-primary'
@@ -101,7 +101,7 @@
 							{#if inBucket}
 								<button
 									type="button"
-									class="rounded-md border-2 px-3.5 py-2 text-sm font-medium transition {disabled
+									class="min-h-11 rounded-md border-2 px-3.5 py-2 text-sm font-medium transition {disabled
 										? 'cursor-default'
 										: 'cursor-pointer'} {chipClass(item.id, bucket.id)}"
 									disabled={disabled}

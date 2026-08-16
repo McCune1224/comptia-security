@@ -1,0 +1,161 @@
+{
+ "hints": {
+  "mcq-2-001": "Look at which group has the resources and patience to operate undetected for years with custom tools. The defining trait is sustained, well-funded persistence rather than a quick financial or ideological payoff.",
+  "mcq-2-002": "Consider which actors would target industrial designs specifically and have the resources to run a months-long, low-noise operation: one is government-backed, the other has a direct commercial rivalry with the victim.",
+  "mcq-2-003": "Intentional misuse leaves a pattern that goes beyond routine duties \u2014 look for access that is both massively larger than the job requires and timed or sourced in ways normal work would not be.",
+  "mcq-2-004": "Notice which incident is about making a public statement versus which one is about money, then ask whether the two events share enough technique to plausibly come from one source.",
+  "mcq-2-005": "An actor that demands ransom is after money, and one that operates during business hours with public tools and no lateral movement looks like it seized an easy, unplanned opening rather than running a prepared campaign.",
+  "mcq-2-006": "Two distinct vector classes appear: one depends on human curiosity and a physical device, the other rides a wireless channel. The database flaw belongs to a different family entirely.",
+  "mcq-2-007": "Two influence levers are working at once: the sender claims a position that commands compliance, and the deadline pressures the victim to act before verifying.",
+  "mcq-2-008": "Ask how the code reached the victims: it traveled through a trusted product built by an outside party and was corrupted before it was ever shipped \u2014 not how the backdoor communicates afterward.",
+  "mcq-2-045": "Custom tools that have never been seen, an extremely long dwell time, and theft of operational data with no financial demand point to a highly resourced, politically motivated operator.",
+  "mcq-2-046": "The group runs like a business: it hires affiliates, markets services, and launders money \u2014 profit, not ideology or espionage, drives it.",
+  "mcq-2-047": "The access came from a legitimate account holder and the behavior was deliberate and repeated \u2014 categorize first by who holds the access, then by whether the intent appears accidental or intentional.",
+  "mcq-2-048": "The credential still worked long after the person left \u2014 the threat comes from an authorized account that should have been revoked, not from breaking in from outside.",
+  "mcq-2-009": "The deception is delivered through a real-time phone call rather than email or text \u2014 match the attack name to the channel and medium being used.",
+  "mcq-2-010": "The target is a senior executive and the request is a large financial transfer \u2014 classify by who is being targeted and the scale of the ask, not just by the lookalike sender address.",
+  "mcq-2-011": "The malware survives removal because it hides inside the system and reinfects from a concealed location \u2014 think about which type operates below the layer where normal detection works.",
+  "mcq-2-012": "One source hammering the same account with a huge number of guesses in a short window points to an exhaustive guessing approach. Contrast how the guesses are distributed across accounts.",
+  "mcq-2-013": "The payload lives inside the request the victim is tricked into opening and executes only when that response renders \u2014 compare where the malicious script is stored versus where it runs.",
+  "mcq-2-014": "Entering a condition that is always true changed what the query returned \u2014 the application is treating user input as part of a database command.",
+  "mcq-2-015": "The attacker does not decrypt or alter the captured traffic \u2014 they simply transmit the same captured exchange again and the server treats it as a fresh, legitimate session. Focus on what is done with the packets rather than where they are intercepted.",
+  "mcq-2-016": "The flood comes from many distinct sources at once and aims to exhaust server capacity \u2014 consider the scale and distribution of the sources, not the protocol used to generate the traffic.",
+  "mcq-2-017": "The caller built a believable cover story from researched details and used that story to get the help desk to act \u2014 identify the technique that relies on fabricating a scenario rather than exploiting pressure alone.",
+  "mcq-2-049": "The victims are infected simply by visiting a site they already trust \u2014 no lure is sent to them at all. The attacker waits where the prey gathers.",
+  "mcq-2-050": "The malware rode inside a trusted product through the legitimate distribution path \u2014 the compromise happened upstream, before the software ever reached the customer.",
+  "mcq-2-051": "The request arrives through a phone message and pressures the victim to call back \u2014 classify by the channel the deception travels over.",
+  "mcq-2-061": "A senior executive's identity is impersonated to authorize a fraudulent payment \u2014 this is a targeted fraud against a specific role, not a generic phishing blast.",
+  "mcq-2-062": "The attacker invents a believable role and story \u2014 a new contractor, a broken laptop, a deadline \u2014 to make the help desk comply. The technique is the fabricated scenario itself.",
+  "mcq-2-018": "The vulnerability was unknown to the vendor until it was reported, and no fix existed beforehand \u2014 the defining fact is the absence of prior knowledge and defense.",
+  "mcq-2-019": "Writing more data than a fixed-size memory region can hold corrupts adjacent memory \u2014 the attack succeeds because the length of the input is never checked against its capacity.",
+  "mcq-2-021": "Both actions pass their checks, but the final outcome depends on the timing of interleaved operations \u2014 the flaw is the window between checking a resource and using it.",
+  "mcq-2-023": "The system runs an operating system that can no longer receive security fixes, and regulations prevent replacing it \u2014 weigh which factor is the persistent, unmanageable exposure.",
+  "mcq-2-024": "The application verifies that you are logged in but never verifies that you are allowed to access the specific object you requested \u2014 changing an identifier grants access to someone else's data.",
+  "mcq-2-025": "The weakness is a default credential left in place on a production system \u2014 the flaw lies in how the system was set up, not in its input handling or code.",
+  "mcq-2-052": "The filename is treated as a filesystem path, so '..' sequences climb out of the intended folder \u2014 the flaw is in how the path is constructed and validated.",
+  "mcq-2-053": "Untrusted data is being turned back into live objects without checking what it will construct \u2014 the danger is that the payload itself dictates the code path.",
+  "mcq-2-054": "Group the findings: the weak hashing and the deprecated protocol are both failures of the cryptographic building blocks, while session tokens that can be guessed undermine the application's identity verification.",
+  "mcq-2-027": "Think about what would stop the abuse with the least collateral damage: isolating the DNS channel from external authorities while keeping the segment functional, rather than severing the host or disabling services.",
+  "mcq-2-028": "A known-bad file has already run somewhere \u2014 the highest-value next step is to determine the blast radius by checking where else that same artifact exists.",
+  "mcq-2-029": "A workstation with no user-facing role maintaining a continuous encrypted connection to one external address for weeks looks like automated, persistent signaling rather than routine browsing.",
+  "mcq-2-032": "The environment must both contain the sample and let you observe its real behavior \u2014 including how it reacts to network contact \u2014 so it cannot reach the outside but still reveals its intent.",
+  "mcq-2-033": "The hosts only reached the attacker because their queries for those names were answered \u2014 the most direct prevention is to stop the name resolution itself at the resolver.",
+  "mcq-2-034": "Precise artifacts let you pivot on what you already know, while behavioral descriptions keep detecting new variations that share the same techniques \u2014 a hunting program benefits from both kinds of input.",
+  "mcq-2-035": "Focus on the temporal component that reflects the availability of a fix for this specific environment. A vendor patch exists, so ask whether the remediation factor improves or worsens compared with the base assessment.",
+  "mcq-2-055": "Every guess is aimed at a single account with a different password each time \u2014 the attacker is exhausting possibilities against one target rather than distributing guesses across many.",
+  "mcq-2-056": "The compromise targets the master key of the entire domain, letting the attacker mint tickets that impersonate anyone \u2014 the damage is in the forging capability, not in cracking any single password.",
+  "mcq-2-057": "The victim of the traffic is a third party, and the DNS responses are many times larger than the queries \u2014 the attacker is turning a small request into a large flood aimed elsewhere.",
+  "mcq-2-063": "A small set of common guesses is tried across every account specifically to stay below lockout thresholds \u2014 the distribution across accounts is the defining pattern.",
+  "mcq-2-064": "Real username/password pairs stolen elsewhere are tried against an unrelated service, relying on people reusing the same credentials \u2014 no guessing or cracking is involved.",
+  "mcq-2-065": "The attacker never learns the plaintext password \u2014 they use the captured authentication material directly to authenticate elsewhere. The abuse happens at the authentication-protocol level, not by guessing.",
+  "mcq-2-066": "Both techniques work by obtaining or reusing the domain's ticket material rather than recovering plaintext passwords \u2014 one pulls tickets offline to crack, the other reuses stolen tickets in transit.",
+  "mcq-2-036": "With limited time and testing capacity, triage by real-world exploitability: prioritize the library vulnerabilities that are actively weaponized, and stage the rest.",
+  "mcq-2-037": "The most severe issue found is user input flowing straight into database commands \u2014 fix the root cause of that class first, before adding controls around it.",
+  "mcq-2-038": "You need to watch what the macro actually does when it runs \u2014 including its network calls \u2014 without any risk to real systems; an isolated, instrumented environment with a simulated internet is the fit.",
+  "mcq-2-039": "The OT devices cannot host agents or take patches, so the protection must come from the network itself \u2014 create a boundary with explicit, minimal allowed traffic between the two environments.",
+  "mcq-2-040": "The attacks are aimed at application logic inside HTTP requests, which a Layer 3/4 device never inspects \u2014 the control must understand web payloads at the application layer.",
+  "mcq-2-041": "Signature-based detection can only match what it has already seen. To catch novel patterns, you need something that learns what 'normal' looks like and flags deviations.",
+  "mcq-2-042": "The strongest layered response combines a control that inspects the request at the perimeter with a control that removes the underlying flaw in the code \u2014 one stops the probe, the other makes it harmless.",
+  "mcq-2-043": "Pick the source that is a recognized, comprehensive, vendor-neutral baseline for hardening a specific OS, rather than app-specific or internal guidance.",
+  "mcq-2-044": "Most web traffic today is encrypted, so a proxy that only sees plain HTTP will miss nearly everything \u2014 full coverage requires decrypting and inspecting both protocols at the edge.",
+  "mcq-2-058": "Stored scripts execute because the application re-emits user input as if it were safe markup \u2014 the fix is to render that data in a way the browser cannot interpret as code.",
+  "mcq-2-059": "Recovery depends on copies the malware cannot reach, and damage spreads only as far as accounts can write \u2014 combine an unalterable restore path with minimal access.",
+  "mcq-2-060": "The root cause is the physical channel itself \u2014 personal drives are the delivery method. The most direct fix removes or governs that channel at the endpoint.",
+  "pbq-2-001": "For each clue, ask what drives the actor: state-directed intelligence gathering, profit, public protest, legitimate access abused, or simply grabbing public tools with little skill.",
+  "pbq-2-002": "Classify by how the attacker first gained a foothold: a trusted distribution path, a wireless channel, a manipulated human, an in-transit interception, or exposed credentials.",
+  "pbq-2-003": "Compromise shows up as things that should not exist: a persistent process masquerading as a system service from a random path, and outbound queries to infrastructure created moments ago. Routine resource usage is not evidence.",
+  "pbq-2-004": "Work through the evidence one step at a time: first establish what happened in the log, then trace the initial access, then choose durable mitigations for the technique observed.",
+  "pbq-2-005": "Exfiltration shows up as an unusually large outbound transfer \u2014 look for a request that pushes far more data than a normal page load to an external destination.",
+  "pbq-2-006": "Tune each WAF rule to the intent of the traffic: outright attacks should be stopped, and the follow-up question asks how to restore service for a legitimate client without losing protection.",
+  "pbq-2-007": "Ask which options keep the data recoverable after encryption has already happened \u2014 controls that preserve an untouchable copy and a disciplined backup structure reduce consequence, while detection and prevention tools do not.",
+  "pbq-2-008": "Map each observed symptom to the flaw it exploits: input reaching a database query, script re-emitted as markup, path components climbing out of the web root, the server fetching a URL supplied by the client, and untrusted data rebuilt into live objects.",
+  "pbq-2-009": "Suspicion lives in the destination and the service: outbound connections from a workstation to unknown external addresses on ports commonly associated with command-and-control or remote management stand out, while local multicast and ordinary web and DNS use do not.",
+  "pbq-2-010": "Each setting should satisfy the policy's minimums: the strongest transport version the clients support, no content served that the organization did not create, administration reachable only through the authorized channel, and no directory contents exposed.",
+  "pbq-2-011": "A BEC follows the attacker's workflow: learn the organization, take on an executive's identity, deliver the fabricated request, collect the transfer, and then make the money hard to trace.",
+  "pbq-2-012": "Each statement describes how the attack is named by its mechanism: targeting many accounts with few guesses, taking over an active session, forcing weaker security parameters, and re-sending a captured exchange.",
+  "pbq-2-013": "Match each flaw to the defense that removes its root cause: separating data from commands, rendering output safely, making stored secrets expensive to crack, generating unpredictable tokens, and normalizing paths before use.",
+  "pbq-2-014": "Distinguish the techniques by their inputs: many accounts with few guesses, stolen pairs reused elsewhere, captured authentication material used directly, tickets pulled offline for cracking, and a forged master ticket.",
+  "pbq-2-015": "Tunneling hides data inside the DNS protocol itself \u2014 look for a query type or name that carries far more content than normal resolution, such as a record with an unusually long label.",
+  "pbq-2-016": "Injection attempts appear in the query string as encoded quote characters and logic operators, or as clauses that pull extra columns \u2014 the signature lives in the URL parameters.",
+  "pbq-2-017": "A successful intrusion stands out as a success that immediately follows a burst of failures for the same account from the same source \u2014 one event ties the pattern together.",
+  "pbq-2-801": "Categorize by the mechanism the attacker relies on: abusing credentials or sessions, injecting into code, or deceiving a person.",
+  "pbq-2-802": "Each technique is defined by its mechanism \u2014 recycled authentication material, offline ticket cracking, hijacking a library search order, corrupting name resolution, or a phone-based deception.",
+  "pbq-2-004:step-3-1": "A successful elevation of privilege is recorded as an event that grants an account new security privileges \u2014 a plain logon or process start alone is not the proof you need.",
+  "pbq-2-004:step-3-2": "To find where the attacker first entered, go back to the account's authentication history around the incident and identify its earliest source \u2014 don't destroy evidence or chase secondary artifacts.",
+  "pbq-2-004:step-3-3": "Each mitigation should fully implement its stated intent: deprecate the legacy authentication protocol, keep privileged accounts separate, protect credential material in memory, and rotate local administrator passwords automatically.",
+  "pbq-2-006:step-4-1": "Match the response to the threat: attempts that aim to exploit the application or its handlers should be refused outright, while traffic that is merely too aggressive from one source is better met with a challenge that distinguishes humans from scripts.",
+  "pbq-2-006:step-4-2": "Restore the legitimate client with the least risk: carve out a narrowly scoped exception tied to the app's known characteristics rather than disabling or weakening the whole control."
+ },
+ "replace": {
+  "pbq-2-012": {
+   "id": "pbq-2-012",
+   "domain": 2,
+   "objective": "2.4",
+   "format": "pbq",
+   "kind": "word-bank",
+   "prompt": "Complete each statement about common attacks by placing the correct word in each blank. Each word is used once.\n\n1. An attack that tries a few common passwords against many accounts to avoid lockouts is called password ____.\n\n2. Reusing a captured login session to impersonate a user is called session ____.\n\n3. Forcing a client to use an older, weaker protocol version is a ____ attack.\n\n4. An attack that replays a previously captured authentication exchange is called a ____ attack.",
+   "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+   "blanks": [
+    {
+     "id": "b1",
+     "label": "1. Many accounts, few passwords"
+    },
+    {
+     "id": "b2",
+     "label": "2. Stealing an active session"
+    },
+    {
+     "id": "b3",
+     "label": "3. Weaker protocol version"
+    },
+    {
+     "id": "b4",
+     "label": "4. Replayed authentication"
+    }
+   ],
+   "explanation": "Password spraying stays below lockout thresholds; session hijacking steals cookies/tokens; downgrade attacks force weak protocols (e.g., SSLv3/POODLE); replay attacks resend captured exchanges \u2014 blocked by nonces and timestamps.",
+   "sourceRefs": [
+    {
+     "source": "exam-objectives",
+     "section": "Objective 2.4"
+    },
+    {
+     "source": "study-guide",
+     "section": "Performance-Based Questions"
+    }
+   ],
+   "bank": [
+    {
+     "id": "w1",
+     "word": "spraying"
+    },
+    {
+     "id": "w2",
+     "word": "hijacking"
+    },
+    {
+     "id": "w3",
+     "word": "downgrade"
+    },
+    {
+     "id": "w4",
+     "word": "replay"
+    },
+    {
+     "id": "d1",
+     "word": "phishing"
+    },
+    {
+     "id": "d2",
+     "word": "smishing"
+    }
+   ],
+   "correctAssignments": {
+    "b1": "w1",
+    "b2": "w2",
+    "b3": "w3",
+    "b4": "w4"
+   }
+  }
+ }
+}

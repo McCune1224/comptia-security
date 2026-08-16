@@ -27,7 +27,7 @@
 	onclick={toggleTheme}
 >
 	<span
-		class="absolute left-2 text-accent-warm transition-opacity duration-200"
+		class="absolute left-2 text-warning transition-opacity duration-200"
 		class:opacity-0={isLight}
 		class:opacity-100={!isLight}
 		aria-hidden="true"
@@ -37,7 +37,7 @@
 		>
 	</span>
 	<span
-		class="absolute right-2 text-accent-warm transition-opacity duration-200"
+		class="absolute right-2 text-warning transition-opacity duration-200"
 		class:opacity-0={!isLight}
 		class:opacity-100={isLight}
 		aria-hidden="true"

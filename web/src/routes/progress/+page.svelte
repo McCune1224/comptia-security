@@ -23,7 +23,7 @@
 		'bg-accent-secondary',
 		'bg-info',
 		'bg-success',
-		'bg-accent-warm'
+		'bg-warning'
 	];
 
 	onMount(async () => {
@@ -34,8 +34,8 @@
 	function severity(topic: WeakTopic) {
 		if (topic.percentage < 50) return { label: 'Critical', class: 'bg-danger/10 text-danger' };
 		if (topic.percentage < 70)
-			return { label: 'Moderate', class: 'bg-accent-warm/10 text-accent-warm' };
-		return { label: 'Mild', class: 'bg-accent-warm/10 text-accent-warm' };
+			return { label: 'Moderate', class: 'bg-warning/10 text-warning' };
+		return { label: 'Mild', class: 'bg-warning/10 text-warning' };
 	}
 </script>
 
@@ -133,7 +133,7 @@
 			<section class="card p-5 sm:p-6">
 				<div class="flex items-center gap-3">
 					<div
-						class="grid h-10 w-10 place-items-center rounded-md bg-accent-warm/15 text-accent-warm"
+						class="grid h-10 w-10 place-items-center rounded-md bg-warning/15 text-warning"
 					>
 						<svg
 							viewBox="0 0 24 24"

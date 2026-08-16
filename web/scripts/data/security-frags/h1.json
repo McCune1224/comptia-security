@@ -1,0 +1,213 @@
+{
+ "hints": {
+  "mcq-1-001": "Classify each control twice: by what it does relative to an event (stop it first, detect it after, or repair it later) and by what kind of mechanism it is — software, hardware, or a physical barrier.",
+  "mcq-1-002": "Name each measure by its timing relative to the incident: one restores data after the damage, the other raises a flag when files change. Match the pair to those two functions.",
+  "mcq-1-003": "For each listed item, ask what it actually accomplishes — stopping, watching, discouraging, or repairing — and whether the mechanism is software, hardware, or people-based. Judge the action, not the label.",
+  "mcq-1-004": "Consider what each measure does after a problem occurs: one brings back a saved copy, the other lets you rewind to a prior consistent state. Both act after the fact.",
+  "mcq-1-005": "Separate the two ideas: one control is a stand-in for an unaffordable product that achieves the same goal, and the other influences behavior by threatening consequences.",
+  "mcq-1-006": "Find the single control that does two jobs at once: physically blocks vehicles and also steers drivers somewhere. Camera, guard, and fixed barrier options each cover only part of the requirement.",
+  "mcq-1-007": "In this architecture there are three roles: one decides, one relays the decision, and one actually sits in the path and allows or denies the traffic. Match the component to the action described in the last sentence.",
+  "mcq-1-008": "The dispute is about proof of authorship, not secrecy of the message. Think about which property lets a signature serve as lasting evidence of who approved the action.",
+  "mcq-1-009": "The investigation depends on a record of what each user did over time. Pick the AAA element whose whole job is keeping those historical usage records.",
+  "mcq-1-010": "The framework defines a small set of components that cooperate to decide access and carry out that decision. Look for the two that are named in the standard's core model rather than supporting technologies.",
+  "mcq-1-011": "The harm here is that records were changed without authorization, and the checksum trick defeated the existing check. Think about which goal was broken and which control watches for unauthorized changes using protected baselines.",
+  "mcq-1-012": "This is a trap planted inside real data rather than a decoy system or file. Think about the deception category that uses fake records, credentials, or tokens.",
+  "mcq-1-013": "The outage happened despite good planning — the question is what made the recovery fast. Focus on which documented element turns a failed change back into the working state.",
+  "mcq-1-014": "The approval step was skipped for good reason, but the process still requires accountability afterward. Pick the follow-up that keeps the change documented and reviewed.",
+  "mcq-1-015": "This document describes how to carry out a recurring task step by step. Distinguish it from the bodies that approve changes and the repositories that record what exists.",
+  "mcq-1-016": "Sort the three change categories by risk and urgency: routine and repeatable, requiring formal review, or needed immediately. The volume can be extended without disruption and has been done before.",
+  "mcq-1-017": "The policy needs the element that turns a failed change back into the prior state quickly. Think about what a change request carries to guarantee reversibility.",
+  "mcq-1-018": "A useful review body needs more than technicians: it should blend authority, compliance knowledge, technical depth, and a voice for the business units that feel the impact.",
+  "mcq-1-019": "Compare the two families on key size for the same strength and on signature speed. Decide whether the proposed mix is sound and whether either claim about the algorithms is false.",
+  "mcq-1-020": "The 40% match rate is the clue: a large precomputed lookup table is the attack. Pick the pair that names that attack and the fix that makes such tables useless.",
+  "mcq-1-021": "You need algorithms purpose-built for password storage that can be tuned to be slow and memory-hungry. Rule out the fast general-purpose digests and the MAC construction.",
+  "mcq-1-022": "The CA did its part, yet the browser connected anyway. Think about how browsers behave when the revocation check cannot complete or times out.",
+  "mcq-1-023": "The goal is to protect past sessions from a future key leak. Think about which key-exchange design means session keys are never derived from the long-term key.",
+  "mcq-1-024": "Quantum computers break the math behind RSA and classic Diffie-Hellman. Look for the replacement family NIST standardized that resists that class of attack.",
+  "mcq-1-025": "The policy itself is a governance document that sets direction and assigns responsibilities. Classify the document, not the technical tools that implement it.",
+  "mcq-1-026": "The signs change behavior by raising the perceived chance of being caught, but they block and detect nothing by themselves. Match that function to the control category.",
+  "mcq-1-027": "The preferred fix — a vendor patch — is impossible, so the team used alternative protections that achieve a similar effect. That substitution is the key classification.",
+  "mcq-1-028": "The workflow uncovers and records what happened. Think about which category's whole purpose is to surface events after the fact and document them.",
+  "mcq-1-029": "This component sits in the data path and terminates the user's session based on decisions made elsewhere. Name it by its enforcement role.",
+  "mcq-1-030": "The certificate is evidence that ties the action to the person who holds the key. The dispute is about denial of authorship, so pick the property that makes denial impossible.",
+  "mcq-1-031": "The decision changes as facts about the user and the patient change. That continuous evaluation of multiple attributes is the signature of one particular model.",
+  "mcq-1-033": "The described group reviews, assesses risk and impact, and approves before implementation. Pick the governance body that exists for exactly this purpose.",
+  "mcq-1-034": "A change that causes harm should be undone first, using the steps prepared before the change. Choose the action that returns the system to its known-good state.",
+  "mcq-1-035": "The practice isolates the change in a controlled, production-like place before it touches real systems. Name that practice.",
+  "mcq-1-036": "The rule splits request, approval, and verification across different people. That is the internal-control principle about dividing duties.",
+  "mcq-1-037": "You need proof of both unaltered content and genuine origin. One mechanism — using the vendor's own key material — delivers both.",
+  "mcq-1-038": "The precomputed table is the attacker's shortcut. Pick the defense that adds a unique, random input per account and slows down guessing.",
+  "mcq-1-039": "Fresh key material per session that is destroyed when the session ends is the hallmark of one specific property. Name it.",
+  "mcq-1-040": "The arrangement keeps a recoverable copy of keys with a trusted party so data stays accessible when the primary key is lost. That is the name of this practice.",
+  "mcq-1-041": "One plane decides, the other carries traffic. Pick the two components whose job is purely to render and relay the access decision.",
+  "mcq-1-042": "The service verifies identity and posture on every request and opens access to individual applications rather than the whole network. Match that description to the technology name.",
+  "mcq-1-043": "Signatures are verified with the opposite key of the one that signed. Successful verification tells you the content is unchanged and who produced it.",
+  "mcq-1-044": "The mechanism answers a single, real-time question about one certificate instead of publishing a whole list. Name the protocol that does this.",
+  "mcq-1-045": "The requirement is recoverability when the key holder disappears. Think about the practice of holding key copies in a trusted place for authorized recovery.",
+  "pbq-1-001": "Match each requirement to the control that serves it: restricting entry to a facility, catching abnormal activity in logs, and choosing the strongest physical protection for each area. Classify by what the control does.",
+  "pbq-1-002": "Walk through the sequence the steps describe: get ready and detect the problem, set priorities, contain and clean up, preserve evidence, then review. Each step tests one part of a disciplined response.",
+  "pbq-1-003": "The lifecycle proceeds in time: create the keys and ask for the certificate, have it issued and installed, then manage its validity until it is renewed or ends. Order the steps chronologically.",
+  "pbq-1-004": "The stated baseline sets the bar for every field: no legacy protocol versions, a suite that gives forward secrecy with 256-bit encryption, a modern signing algorithm, and strict revocation validation.",
+  "pbq-1-005": "Classify each control by its effect: discourage, stop, restore, reveal, or stand in when the preferred option is unavailable. Match the description to the category that best fits its primary function.",
+  "pbq-1-006": "RSA modulus recommendations have moved upward as factoring power grows. The target is at least 128-bit symmetric-equivalent strength, so consider where modern guidance sits above the older 2048-bit baseline.",
+  "pbq-1-007": "Trace one access attempt from start to finish: the request reaches the enforcement point, a decision is made, credentials are prepared, the session opens, and trust is re-checked. One listed step does not belong in this flow at all.",
+  "pbq-1-008": "The transfer must satisfy several goals at once: keep the data secret in transit, prove the received file matches the sent file, and bind the file to its sender. Match each goal to the mechanism designed for it.",
+  "pbq-1-009": "Read each blank's clue and map it to the concept, not the spelling: one shared key vs. two, a one-way function for integrity, the web protocol family, and the random value added before passwords are stored.",
+  "pbq-1-010": "Each blank names one of the core protection goals: keeping data secret, keeping it unaltered, keeping it reachable, and proving who performed an action.",
+  "pbq-1-011": "Match each example to the timing of the control: stopping an action before it happens, repairing damage afterward, raising an alert about activity, or discouraging attempts by raising perceived risk.",
+  "pbq-1-012": "Walk through the certificate vocabulary: the trusted entity that issues certificates, the message sent to ask for one, and the two ways to check current validity — one real-time, one as a published list.",
+  "pbq-1-013": "Match each requirement to the algorithm family designed for it: a symmetric cipher for bulk encryption, an authenticated mode for tunnels, a digest for integrity checks, a key-agreement scheme for shared keys, and a signature scheme for authenticity.",
+  "pbq-1-014": "Pick the certificate type by what it authenticates or protects: a distributed software release, a website, email between people, an individual logging in, or the authority that signs other certificates.",
+  "pbq-1-001:step-1-1": "Rank the options by how strongly each controls entry at a single point. The best choice combines something you are (a body feature) with a physical barrier that stops tailgating.",
+  "pbq-1-001:step-1-2": "One account used from far-apart locations within minutes is a behavior pattern. Look for the control that analyzes user behavior rather than static rules.",
+  "pbq-1-001:step-1-3": "For each area, pick the option that restricts access to authorized people and, where risk is highest, pairs the barrier with identity verification or an audit record.",
+  "pbq-1-002:step-2-1": "Sequence the phases as they happen in time: lay the groundwork, then recognize and analyze the incident, then stop the spread and recover, preserving evidence before cleanup, and finally review.",
+  "pbq-1-002:step-2-2": "The isolation call should weigh what the machine does for the organization. Think about which machine others depend on and what breaking its connectivity would cost.",
+  "pbq-1-002:step-2-3": "Before any cleanup or rebuild, two things must happen: capture the system's state for later analysis and record what was found with a clear chain of custody.",
+  "pbq-1-008:s1": "The suite must encrypt traffic and authenticate the endpoints while preventing eavesdropping. Rule out the options that send data in the clear or are unencrypted management protocols.",
+  "pbq-1-008:s2": "The strongest check compares a digest computed from the file's actual contents at both ends. Options based on size or timestamps can match even when content differs.",
+  "pbq-1-008:s3": "The goal is to bind the file to its sender so the sender cannot later deny it. That requires a mechanism only the sender can produce."
+ },
+ "replace": {
+  "pbq-1-009": {
+   "id": "pbq-1-009",
+   "domain": 1,
+   "objective": "1.4",
+   "format": "pbq",
+   "kind": "word-bank",
+   "prompt": "Complete each statement about cryptography by placing the correct word in each blank. Each word is used once.\n\n1. The cipher that uses the same key to encrypt and decrypt is called ____ encryption.\n\n2. A ____ is a one-way mathematical function used to verify data integrity.\n\n3. The protocol that provides confidentiality, integrity, and authentication for web traffic is ____.\n\n4. Adding a random value to each password before hashing is called ____.",
+   "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+   "blanks": [
+    {
+     "id": "b1",
+     "label": "1. Symmetric/Asymmetric?"
+    },
+    {
+     "id": "b2",
+     "label": "2. Integrity function"
+    },
+    {
+     "id": "b3",
+     "label": "3. Web security protocol"
+    },
+    {
+     "id": "b4",
+     "label": "4. Random value added to passwords"
+    }
+   ],
+   "explanation": "Symmetric crypto uses one shared key; hashes provide one-way integrity; TLS secures web traffic; salting defeats rainbow tables and identical-password detection.",
+   "sourceRefs": [
+    {
+     "source": "exam-objectives",
+     "section": "Objective 1.4"
+    },
+    {
+     "source": "study-guide",
+     "section": "Performance-Based Questions"
+    }
+   ],
+   "bank": [
+    {
+     "id": "w1",
+     "word": "symmetric"
+    },
+    {
+     "id": "w2",
+     "word": "hash"
+    },
+    {
+     "id": "w3",
+     "word": "tls"
+    },
+    {
+     "id": "w4",
+     "word": "salt"
+    },
+    {
+     "id": "d1",
+     "word": "asymmetric"
+    },
+    {
+     "id": "d2",
+     "word": "nonce"
+    }
+   ],
+   "correctAssignments": {
+    "b1": "w1",
+    "b2": "w2",
+    "b3": "w3",
+    "b4": "w4"
+   }
+  },
+  "pbq-1-012": {
+   "id": "pbq-1-012",
+   "domain": 1,
+   "objective": "1.4",
+   "format": "pbq",
+   "kind": "word-bank",
+   "prompt": "Complete each statement about public key infrastructure (PKI) by placing the correct word in each blank. Each word is used once.\n\n1. The trusted entity that issues and revokes digital certificates is called a certificate ____ (CA).\n\n2. The message containing a public key and identity information sent to a CA is a certificate signing ____ (CSR).\n\n3. The real-time protocol used to check a certificate's revocation status is ____.\n\n4. A published list of revoked certificates is the certificate ____ list (CRL).",
+   "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+   "blanks": [
+    {
+     "id": "b1",
+     "label": "1. CA full word"
+    },
+    {
+     "id": "b2",
+     "label": "2. CSR full word"
+    },
+    {
+     "id": "b3",
+     "label": "3. Real-time status protocol"
+    },
+    {
+     "id": "b4",
+     "label": "4. CRL full word"
+    }
+   ],
+   "explanation": "CA = certificate authority (issues/revokes certs); CSR = certificate signing request (public key + identity to the CA); OCSP provides real-time revocation status; CRL = certificate revocation list.",
+   "sourceRefs": [
+    {
+     "source": "exam-objectives",
+     "section": "Objective 1.4"
+    },
+    {
+     "source": "study-guide",
+     "section": "Public Key Infrastructure"
+    }
+   ],
+   "bank": [
+    {
+     "id": "w1",
+     "word": "authority"
+    },
+    {
+     "id": "w2",
+     "word": "request"
+    },
+    {
+     "id": "w3",
+     "word": "ocsp"
+    },
+    {
+     "id": "w4",
+     "word": "revocation"
+    },
+    {
+     "id": "d1",
+     "word": "certificate pinning"
+    },
+    {
+     "id": "d2",
+     "word": "key escrow"
+    }
+   ],
+   "correctAssignments": {
+    "b1": "w1",
+    "b2": "w2",
+    "b3": "w3",
+    "b4": "w4"
+   }
+  }
+ }
+}

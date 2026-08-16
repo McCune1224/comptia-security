@@ -1,0 +1,624 @@
+{
+  "replace": {
+    "mcq-4-005": {
+      "id": "mcq-4-005",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which two findings should the team remediate FIRST? (Select TWO.)",
+      "context": "A regional hospital's vulnerability management team is triaging the findings from its quarterly credentialed scan. Their remediation policy scores every finding by combining CVSS severity, known exploit activity, and the criticality classification of the affected asset from the asset inventory. The team has capacity to patch only two findings before the next change window.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "A CVSS 9.8 remote code execution flaw in the internet-facing patient portal web server, with working exploit code published in a public repository",
+          "rationale": "Remote exploitation of a critical, internet-facing asset with public exploit code represents the highest overall risk and warrants immediate out-of-cycle remediation."
+        },
+        {
+          "id": "b",
+          "text": "A CVSS 7.5 buffer overflow in an isolated training workstation that holds no patient data and is unreachable from production networks",
+          "rationale": "The high base score is offset by low asset criticality and limited exposure, so this finding should follow the normal patch cycle."
+        },
+        {
+          "id": "c",
+          "text": "A CVSS 6.5 unauthenticated access flaw in the internal print server that exposes print queues, with no known exploit activity",
+          "rationale": "Medium severity on a low-value asset with no observed exploitation does not clear the urgent-remediation threshold."
+        },
+        {
+          "id": "d",
+          "text": "A CVSS 8.6 vulnerability in the radiology imaging server that stores diagnostic images, with exploit activity reported on the team's subscribed threat feed",
+          "rationale": "A restricted-data asset essential to patient care combined with observed exploit activity makes this finding urgent under the risk-based policy."
+        },
+        {
+          "id": "e",
+          "text": "A CVSS 4.2 directory-listing weakness in the employee intranet portal that reveals staff names",
+          "rationale": "Low severity with minimal impact is deprioritized by risk-based scoring and can wait for routine patching."
+        },
+        {
+          "id": "f",
+          "text": "A CVSS 9.0 denial-of-service flaw in a development database containing only synthetic test records, reachable only from the administrator VLAN",
+          "rationale": "The high base score is mitigated by the isolated, non-production nature of the asset, so remediation can be deferred."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "d"
+      ],
+      "selectCount": 2,
+      "hint": "Compare each finding's base severity against the importance of the affected system and whether attackers are actually exploiting it in the wild.",
+      "explanation": "Risk-based prioritization weighs CVSS severity together with asset criticality and exploit availability. Option A combines a critical-severity flaw with public exploit code against an internet-facing system patients rely on. Option D adds observed exploit activity to a finding on an asset storing sensitive diagnostic data, so it also clears the urgent threshold. The remaining options involve low-value or isolated assets (B, F), medium severity with no exploitation (C), or minor impact (E), so they can follow the normal patch cycle.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-40 — Guide to Enterprise Patch Management Planning (prioritization)"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Vulnerability Management"
+        }
+      ]
+    },
+    "mcq-4-008": {
+      "id": "mcq-4-008",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "Which alert tuning action is MOST appropriate?",
+      "context": "A SIEM correlation rule designed to detect brute-force logins fires whenever five failed logins occur within one hour. The rule generates hundreds of alerts every day because a legacy accounting application repeatedly retries a locked-out service account, and none of the alerts correspond to a genuine attack. The SOC wants to keep the detection while eliminating the noise.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Adjust the rule to require a higher failure threshold over the same window and add an exception that suppresses the known service account's retries",
+          "rationale": "Raising the threshold from an observed baseline and excluding a known-benign pattern preserves the brute-force detection while removing the dominant noise source."
+        },
+        {
+          "id": "b",
+          "text": "Delete the correlation rule so the SOC stops receiving the alerts",
+          "rationale": "Removing the rule entirely eliminates coverage for genuine brute-force attacks, overcorrecting for the false positives."
+        },
+        {
+          "id": "c",
+          "text": "Increase the log retention period for authentication events to 180 days",
+          "rationale": "Retention supports later investigation but does nothing to reduce the number of alerts generated today."
+        },
+        {
+          "id": "d",
+          "text": "Suppress all alerts generated by the accounting application's source IP range",
+          "rationale": "Broad IP-based suppression can hide real attacks that originate from or target that application's hosts."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "The goal is to keep the detection for real threats while recognizing one particular, known-benign pattern that repeatedly triggers it.",
+      "explanation": "Alert tuning reduces false positives by adjusting thresholds and baselining legitimate behavior. Raising the failure threshold keeps the rule sensitive enough for genuine brute-force attempts, while an exception for the locked-out service account's retries removes the dominant noise source without suppressing alerts for other hosts. Deleting the rule or suppressing an entire IP range trades coverage for convenience, and retention changes do not affect alert volume.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-92 — Guide to Computer Security Log Management (log monitoring and alert tuning)"
+        }
+      ]
+    },
+    "mcq-4-011": {
+      "id": "mcq-4-011",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "How does this threat intelligence BEST support vulnerability identification?",
+      "context": "A manufacturing company's security team subscribes to a commercial threat feed and gathers OSINT from vendor advisories, public exploit discussions, and open-source reporting. The feed reports active exploitation of a vulnerability in the web-server software version the company runs. The team must decide how to use this intelligence within its vulnerability management process.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "It tells the team which assets to scan and verify first, because the feed ties the exploited vulnerability to specific software versions and observed attacker activity",
+          "rationale": "Threat feeds and OSINT direct scanning and verification toward systems most likely to be affected, prioritizing identification effort on relevant assets."
+        },
+        {
+          "id": "b",
+          "text": "It replaces the need for credentialed vulnerability scans, because the feed already lists affected products",
+          "rationale": "Intelligence guides and prioritizes scanning; it cannot substitute for directly assessing the organization's own environment."
+        },
+        {
+          "id": "c",
+          "text": "It provides a definitive list of every internal system that has already been compromised",
+          "rationale": "Feeds report external indicators and observed activity; they cannot enumerate an organization's internal compromise state."
+        },
+        {
+          "id": "d",
+          "text": "It lets the team skip patching any software the feed does not mention",
+          "rationale": "Absence from a feed does not mean a product is safe, so scans and patch reviews must still cover the full environment."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider the role intelligence plays in directing where the team looks first, rather than replacing the assessment itself.",
+      "explanation": "Threat intelligence supports identification by focusing scanning and verification on assets running software that is currently being exploited, so relevant exposures are found sooner. A feed or OSINT report describes external activity and product versions, so it cannot substitute for scans, list an organization's internal compromise state, or certify products it does not mention.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-150 — Guide to Cyber Threat Information Sharing"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Vulnerability Management"
+        }
+      ]
+    },
+    "mcq-4-013": {
+      "id": "mcq-4-013",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "Which two technologies should the team deploy? (Select TWO.)",
+      "context": "The network operations team at a logistics company wants two new monitoring capabilities: immediate notification when a switch interface goes down or a router reloads, and ongoing visibility into which internal hosts communicate with which external destinations so the SOC can spot unusual traffic patterns. The team is selecting technologies to add to its monitoring platform.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Configure SNMP traps so managed devices push unsolicited notifications to the monitoring server whenever status changes occur",
+          "rationale": "SNMP traps give event-driven, near-real-time alerts for device state changes without waiting for a polling cycle."
+        },
+        {
+          "id": "b",
+          "text": "Enable NetFlow export on the routers and switches, sending flow records to a collector for traffic analysis",
+          "rationale": "NetFlow summarizes traffic conversations with sources, destinations, ports, and volumes, providing the required flow-level visibility."
+        },
+        {
+          "id": "c",
+          "text": "Deploy a vulnerability scanner across the network to catalog missing patches",
+          "rationale": "Vulnerability scanners find configuration and patch weaknesses, not real-time device status or flow-level traffic patterns."
+        },
+        {
+          "id": "d",
+          "text": "Install a wireless intrusion prevention system at each distribution center",
+          "rationale": "Wireless IPS protects the air interface; it does not provide switch or router status nor internal-to-external flow analysis."
+        },
+        {
+          "id": "e",
+          "text": "Configure remote syslog forwarding for all device logs",
+          "rationale": "Syslog delivers event messages but no flow records, so it cannot provide the required traffic-conversation visibility."
+        },
+        {
+          "id": "f",
+          "text": "Mirror all network traffic to a single analysis workstation using SPAN ports",
+          "rationale": "Continuous full-packet capture is resource-intensive and does not summarize conversations the way NetFlow records do."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "One capability needs the devices to report status changes immediately; the other needs summarized records of traffic conversations.",
+      "explanation": "SNMP traps let managed devices push notifications as events happen, giving immediate awareness of interface or device failures, while NetFlow exports summarized records of every traffic conversation so the SOC can analyze communication patterns and volumes. Vulnerability scanning, wireless IPS, and packet mirroring address different monitoring goals, and syslog alone lacks flow-level data.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Monitoring and Alerting Tools"
+        }
+      ]
+    },
+    "mcq-4-015": {
+      "id": "mcq-4-015",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which interpretation of the CVSS data is correct?",
+      "context": "A vulnerability analyst is comparing two findings from a scan of a customer-facing application. Finding 1 has a CVSS base score of 9.8 with the vector AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H. Finding 2 has a CVSS base score of 8.1 with the vector AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:H. The team has capacity to address only one of the two findings this sprint.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Finding 1 should be analyzed and remediated first because its vector shows a network attack that needs no privileges and no user interaction, making real-world exploitation substantially more likely",
+          "rationale": "Network access with no required privileges or user interaction means any remote attacker can exploit the flaw unauthenticated, so exploitability outweighs the raw score difference."
+        },
+        {
+          "id": "b",
+          "text": "Finding 2 is more urgent because a local attack gives the attacker full control of the host",
+          "rationale": "Local access combined with high complexity, high privileges, and required user interaction makes Finding 2 far harder to exploit in practice."
+        },
+        {
+          "id": "c",
+          "text": "The two findings carry equivalent risk because their impact components are identical",
+          "rationale": "Impact is only one part of the vector; the attack vector, complexity, privileges, and user interaction differ materially between the two findings."
+        },
+        {
+          "id": "d",
+          "text": "The CVSS base score already accounts for the organization's environment, so no further analysis is needed",
+          "rationale": "Base scores describe the vulnerability generically; environmental metrics and asset context are applied separately by the analyst."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Look at the metric abbreviations, not just the final number, to judge how easily an attacker could actually exploit each flaw.",
+      "explanation": "A CVSS base score summarizes a vector, and the vector details matter more than the headline number. Finding 1's vector — network access, no privileges, no user interaction — makes it trivially exploitable by any remote attacker, so it warrants priority despite Finding 2's high impact components, which require local access, high privileges, a difficult attack, and user interaction. Comparing raw scores without reading the metrics can misorder remediation.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Vulnerability Analysis (CVSS)"
+        }
+      ]
+    },
+    "mcq-4-023": {
+      "id": "mcq-4-023",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which compensating control BEST reduces the risk posed by this unpatchable system?",
+      "context": "A credit union runs a legacy loan-origination application on an operating system the vendor has stopped supporting. A credentialed scan confirms a known, remotely exploitable vulnerability in that system, and the application cannot be replaced or upgraded for another year because it is tightly integrated with other systems.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Move the system to a restricted network segment with firewall rules that allow only authorized workstations and administrative jump hosts, and monitor traffic to and from the segment",
+          "rationale": "Segmentation and strict access control limit who can reach the vulnerable service, reducing exploitability while the system remains in service."
+        },
+        {
+          "id": "b",
+          "text": "Disable the vulnerability scanner's alert for this system so the finding stops appearing in reports",
+          "rationale": "Suppressing a finding hides risk and breaks auditability; it does not reduce the exposure."
+        },
+        {
+          "id": "c",
+          "text": "Install additional antivirus products on the system and rely on endpoint protection alone",
+          "rationale": "Endpoint protection helps but cannot close a network-reachable application vulnerability on an unsupported operating system."
+        },
+        {
+          "id": "d",
+          "text": "Formally accept the risk and record it in the risk register without implementing additional controls",
+          "rationale": "Acceptance documents residual risk but does not reduce it; a compensating control is expected when remediation is not possible."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Since the system cannot be patched or replaced, consider what can limit the number of parties able to reach the vulnerable service.",
+      "explanation": "When patching or replacement is impossible, compensating controls reduce exposure through other means. Network segmentation with restrictive firewall rules and monitored administrative access shrinks the attack surface of the unsupported system, which is the most effective available option. Suppressing findings hides risk, antivirus alone is insufficient for a network-exposed flaw, and risk acceptance without controls leaves the exposure unchanged.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Vulnerability Response and Remediation"
+        }
+      ]
+    },
+    "mcq-4-028": {
+      "id": "mcq-4-028",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "Which approach BEST meets this requirement using SCAP and benchmarks?",
+      "context": "A regulated healthcare organization must prove to auditors that 200 Linux servers matched the CIS hardening benchmark on the day they were deployed and must repeat the verification every quarter. The team wants the checks to be automated, repeatable, and expressed in standardized machine-readable content rather than manual checklists.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Run an SCAP-validated scanner against the CIS benchmark content, which produces standardized machine-readable result reports that can be archived as audit evidence",
+          "rationale": "SCAP content such as CIS benchmarks published as XCCDF and OVAL lets a validated scanner evaluate systems and emit standardized, timestamped results suitable for audits."
+        },
+        {
+          "id": "b",
+          "text": "Ask each server administrator to confirm in email that the servers were configured per the benchmark",
+          "rationale": "Manual attestation is not independently verifiable and does not scale or produce machine-readable evidence."
+        },
+        {
+          "id": "c",
+          "text": "Deploy a network intrusion detection system and retain its alert history as configuration proof",
+          "rationale": "IDS alerts detect network anomalies; they do not verify system configuration against a hardening baseline."
+        },
+        {
+          "id": "d",
+          "text": "Take a full-disk image of one representative server and retain it as evidence for all 200 systems",
+          "rationale": "A single image neither verifies every system's configuration nor compares any of them against the benchmark."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about which approach combines standardized configuration checks with automatically generated, repeatable evidence.",
+      "explanation": "SCAP defines a protocol for automated security-content checks; publishing a CIS benchmark as XCCDF policy with OVAL checks lets an SCAP-validated scanner evaluate systems and emit standardized result reports that can be archived as audit evidence. Manual email confirmation is not verifiable, IDS alerts measure network behavior rather than configuration, and a single disk image cannot represent the state of every server.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-126 — The Technical Specification for the Security Content Automation Protocol (SCAP)"
+        }
+      ]
+    },
+    "mcq-4-037": {
+      "id": "mcq-4-037",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "scenario",
+      "prompt": "Which two actions are MOST important for effective log aggregation and reporting? (Select TWO.)",
+      "context": "A retail chain with 40 stores is consolidating firewall, server, and application logs from all locations into one central platform so the SOC can correlate events across the enterprise and produce reports for management. The team must make two foundational decisions for the aggregation project.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Synchronize all sources to the same time source and normalize log formats so events can be correlated accurately",
+          "rationale": "Consistent timestamps and formats are prerequisites for reliable correlation and reporting across many different sources."
+        },
+        {
+          "id": "b",
+          "text": "Send logs to a central repository with indexed search and scheduled dashboards and reports for stakeholders",
+          "rationale": "Central storage with query and reporting capability is the core purpose of log aggregation."
+        },
+        {
+          "id": "c",
+          "text": "Keep logs only on each originating device to reduce bandwidth use on store links",
+          "rationale": "Local-only storage defeats centralized correlation and reporting across the enterprise."
+        },
+        {
+          "id": "d",
+          "text": "Delete logs older than 24 hours to limit storage cost",
+          "rationale": "Short retention destroys the historical data needed for trend reports and investigations."
+        },
+        {
+          "id": "e",
+          "text": "Transmit logs over the public internet without encryption to simplify connectivity",
+          "rationale": "Log data is sensitive and must be protected in transit; unencrypted public transport is unacceptable."
+        },
+        {
+          "id": "f",
+          "text": "Grant read access to the central repository to all employees so anyone can verify activity",
+          "rationale": "Broad access violates least privilege and exposes sensitive operational data to the entire workforce."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Consider what makes events from many different devices comparable in one place, and what the central platform must provide to be useful.",
+      "explanation": "Effective log aggregation depends on two foundations: synchronized, normalized events that can be correlated across sources, and a central repository that indexes the data and supports search, dashboards, and scheduled reporting. Keeping logs distributed, discarding history after a day, transmitting them insecurely, or opening the repository to everyone each break correlation, retention, confidentiality, or least privilege.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-92 — Guide to Computer Security Log Management (centralized log management)"
+        }
+      ]
+    },
+    "mcq-4-043": {
+      "id": "mcq-4-043",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which deployment approach BEST fits this mixed environment?",
+      "context": "A security team must choose a vulnerability scanning approach for two system groups: several hundred long-lived servers in the private data center, and short-lived cloud instances that are created and terminated within minutes by the development pipeline. The team wants continuous visibility into both environments.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Install lightweight agents on the persistent data-center servers for continuous assessment, and use agentless scanning for the cloud environment because ephemeral instances cannot reliably host agents",
+          "rationale": "Agents provide ongoing, authenticated coverage on persistent systems, while agentless scans suit instances too short-lived for a persistent agent."
+        },
+        {
+          "id": "b",
+          "text": "Use agentless scanning everywhere because agents are never allowed in any environment",
+          "rationale": "A blanket exclusion ignores the continuous-coverage and accuracy benefits agents provide on persistent servers."
+        },
+        {
+          "id": "c",
+          "text": "Install agents only on the short-lived cloud instances since they are more exposed, and audit the data-center servers manually",
+          "rationale": "Agents cannot persist on ephemeral instances, and manual audits do not scale to hundreds of servers."
+        },
+        {
+          "id": "d",
+          "text": "Rely exclusively on the endpoint protection product's reports and disable all vulnerability scanning",
+          "rationale": "Endpoint protection does not replace vulnerability assessment of operating system and application configurations."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider how long each type of system exists and whether a persistent software component can realistically stay deployed there.",
+      "explanation": "Agent-based scanning offers continuous, authenticated assessment on persistent systems, making it the right choice for the long-lived servers, while agentless scanning performs checks over the network or cloud APIs and suits ephemeral instances that do not persist long enough to host an agent. Reversing the two, banning agents outright, or substituting endpoint protection leaves significant coverage gaps.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4 — Tools: Agents/agentless"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Vulnerability Scanning Methods"
+        }
+      ]
+    },
+    "mcq-4-044": {
+      "id": "mcq-4-044",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "What BEST explains the difference between the two scans?",
+      "context": "A vulnerability scan of Windows workstations run with network probes only reported many missing patches and configuration weaknesses. When the same scope was scanned again using administrator credentials, the results contained fewer findings, and several items from the first report no longer appeared.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "The credentialed scan logged into each system and read the actual installed patches and settings, eliminating the guesswork and false positives that network-only probes produce",
+          "rationale": "Authenticated scans query real configuration data, so they are more accurate and produce fewer false positives than unauthenticated scans that infer state remotely."
+        },
+        {
+          "id": "b",
+          "text": "The credentialed scan traversed a firewall that filtered its traffic, so it simply saw fewer systems",
+          "rationale": "Firewall filtering would reduce scope or connectivity, not produce a more accurate result set for the same hosts."
+        },
+        {
+          "id": "c",
+          "text": "The unauthenticated scan used an outdated vulnerability database while the credentialed scan used a newer one",
+          "rationale": "Signature currency is not the reason credentialed results differ; the level of access to the target is."
+        },
+        {
+          "id": "d",
+          "text": "The credentialed scan only checked internet-facing systems, while the unauthenticated scan covered the whole network",
+          "rationale": "No scope change is implied, and a scope change would not explain the finding reduction on the same hosts."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about what additional information a scanner gains when it can log in to the target.",
+      "explanation": "Authenticated scans use supplied credentials to inspect each host's real configuration — installed patches, services, and settings — producing accurate results with fewer false positives. Unauthenticated scans must infer state from network responses, so they commonly over-report missing patches and misread configurations. Signature age or firewall filtering do not explain the difference when the same systems are assessed with and without credentials.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-115 — Technical Guide to Information Security Testing and Assessment (credentialed scanning)"
+        }
+      ]
+    },
+    "mcq-4-045": {
+      "id": "mcq-4-045",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which combination of classification inputs BEST represents the vulnerability's risk in this environment?",
+      "context": "A risk analyst is classifying the impact of a ransomware vulnerability scenario on a file server that also hosts the only copy of the payroll database. The analyst wants the classification to reflect how a compromise would affect this specific organization rather than the generic severity published by the vendor.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "An environmental CVSS score adjusted for the organization's high confidentiality and availability requirements, combined with an exposure factor reflecting the large proportion of the server's data a ransomware event would destroy",
+          "rationale": "Environmental metrics tailor the base score to the organization, and the exposure factor measures the percentage of asset value lost in an incident."
+        },
+        {
+          "id": "b",
+          "text": "The vendor's unmodified CVSS base score, because CVSS is a standard and should never be changed",
+          "rationale": "Environmental scoring exists precisely to customize base scores for an organization's context; the base score alone ignores local requirements."
+        },
+        {
+          "id": "c",
+          "text": "The number of public CVEs associated with the server's software vendor and product",
+          "rationale": "CVE count indicates historical issues but does not classify the impact of this particular vulnerability on this asset."
+        },
+        {
+          "id": "d",
+          "text": "The elapsed time since the vulnerability was publicly disclosed",
+          "rationale": "Disclosure age can inform exposure trends but is not an impact-classification factor for a specific asset."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Two ideas are involved: tailoring the published severity to this organization's circumstances, and measuring how much of the asset would actually be lost.",
+      "explanation": "Vulnerability classification combines the base score with environmental variables that reflect the organization's confidentiality, integrity, and availability requirements, and with an exposure factor that estimates the percentage of asset value an incident destroys. The payroll-bearing file server justifies elevated requirements and a high exposure factor. Leaving the base score unmodified, counting CVEs, or measuring disclosure age ignores the context that determines actual impact.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Domain 4 — Vulnerability Classification"
+        }
+      ]
+    },
+    "mcq-4-046": {
+      "id": "mcq-4-046",
+      "domain": 4,
+      "objective": "4.3",
+      "format": "scenario",
+      "prompt": "Which two actions BEST validate the remediation? (Select TWO.)",
+      "context": "A patch management team applied a critical security update to 150 servers in response to an actively exploited vulnerability. Before closing the remediation tickets, the team must confirm the fix actually took effect on every affected host and leave an auditable record.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Re-run the vulnerability scan against the affected servers and confirm the finding no longer appears for each host",
+          "rationale": "Rescanning directly verifies that the vulnerability is resolved across the environment."
+        },
+        {
+          "id": "b",
+          "text": "Audit the patch-management system's deployment reports and spot-check the installed-update state on representative servers",
+          "rationale": "Auditing the deployment records and verifying installed state on sampled hosts confirms and documents the remediation."
+        },
+        {
+          "id": "c",
+          "text": "Review the vendor advisory confirming the update fixes the vulnerability, then close the tickets",
+          "rationale": "The advisory shows the patch is the right one, but not that it was successfully applied to every host."
+        },
+        {
+          "id": "d",
+          "text": "Wait for the next quarterly scan to recheck the affected hosts",
+          "rationale": "Delaying verification for months leaves actively exploited risk unconfirmed and violates timely validation."
+        },
+        {
+          "id": "e",
+          "text": "Remove the update from a test server to confirm the vulnerability returns",
+          "rationale": "Intentionally reintroducing the flaw is destructive and unnecessary for validating the deployed patch."
+        },
+        {
+          "id": "f",
+          "text": "Survey users about whether they noticed any problems after the patch",
+          "rationale": "User feedback does not verify the technical remediation state of the systems."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "One action directly rechecks the affected systems, and the other confirms and records what was applied through management evidence.",
+      "explanation": "Validation of remediation combines rescanning — rerunning the scan to confirm the finding is resolved on each host — with audit and verification of the patch-management records and representative installed-state checks, which provide the evidence trail. Vendor advisories, waiting for the next scheduled scan, reverting the patch on a test system, or polling users each fail to confirm that the fix is actually in place everywhere it was needed.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.3"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-40 — Guide to Enterprise Patch Management Planning (verification)"
+        }
+      ]
+    }
+  }
+}

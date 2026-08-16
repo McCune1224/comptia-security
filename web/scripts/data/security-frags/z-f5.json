@@ -1,0 +1,164 @@
+{
+  "replace": {
+    "mcq-5-026": {
+      "id": "mcq-5-026",
+      "domain": 5,
+      "objective": "5.1",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which governance structure would BEST achieve the leadership's goal of consistent, uniformly enforced security across the group?",
+      "context": "A multinational retail group has grown by acquiring five regional chains, and each chain still runs its own security team with separate password rules, patch schedules, and incident response procedures. After a ransomware attack on one chain exposed the cost of these inconsistent practices, corporate leadership wants every division to follow the same security standards, enforced uniformly across the group.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Centralized governance, in which a corporate security office holds decision-making authority and sets standards that every division must follow",
+          "rationale": "Centralized governance concentrates decision-making authority at the top of the organization, which produces consistent decisions, clear authority, and one enforceable set of standards — exactly what leadership needs to end the patchwork of practices that preceded the attack."
+        },
+        {
+          "id": "b",
+          "text": "Decentralized governance, in which each regional chain retains decision-making authority so local teams can respond quickly to their own needs",
+          "rationale": "Decentralized governance distributes decision-making authority to each chain, enabling quicker, locally responsive decisions, but it is prone to inconsistencies — the very problem leadership is trying to eliminate."
+        },
+        {
+          "id": "c",
+          "text": "Committee-based governance, in which a cross-division steering committee reviews each chain's standards but cannot override local decisions",
+          "rationale": "A steering committee can coordinate across divisions, but without authority to override local decisions it cannot guarantee that standards are applied uniformly or enforced group-wide."
+        },
+        {
+          "id": "d",
+          "text": "Regulatory governance, in which divisions rely on government regulations and external audits to define and enforce their security requirements",
+          "rationale": "Regulations and external audits set minimum legal requirements from outside the organization; they do not establish an internal decision-making authority or enforce consistent standards across the group's divisions."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about where decision-making authority sits in each arrangement and which structure is designed to produce one enforceable set of standards across every division.",
+      "explanation": "Centralized governance places decision-making authority at the top (a corporate security office), producing consistent decisions and uniform, enforceable standards across all divisions — directly addressing the inconsistencies that led to the attack. Decentralized governance (b) keeps authority in each chain and is known for quicker local decisions at the cost of inconsistency, while a committee without override power (c) cannot enforce uniformity. Regulations and external audits (d) impose external minimums but are not an internal governance structure and cannot enforce consistent internal standards.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.1" },
+        { "source": "study-guide", "section": "Governance Structures" },
+        { "source": "nist", "section": "NIST SP 800-100 Information Security Handbook: A Guide for Managers" }
+      ]
+    },
+    "mcq-5-043": {
+      "id": "mcq-5-043",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which action BEST reflects how the internal audit process should handle the dispute?",
+      "context": "A manufacturer's internal audit team completed an audit of the ERP system and documented a high-severity finding: terminated employees keep active accounts for up to 30 days. The audit team reports to the board's audit committee, and the company's audit charter requires management to respond to every finding with a corrective action plan. The plant manager disputes the finding and proposes a plan the audit team considers insufficient.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The audit committee reviews the disputed finding and the proposed corrective action plan, and requires management to implement a plan that fully resolves the finding",
+          "rationale": "The audit committee — typically composed of board members — oversees audit and compliance activities, addresses issues raised by auditors, and ensures management implements corrective action plans that resolve findings, which is the intended end of the internal audit process."
+        },
+        {
+          "id": "b",
+          "text": "The plant manager closes the finding because the internal audit team is a staff function with no authority over operations",
+          "rationale": "Management cannot unilaterally close a finding; that would strip the audit process of its independence. Oversight of disputed findings belongs to the audit committee, not the manager being audited."
+        },
+        {
+          "id": "c",
+          "text": "The internal audit team rewrites the finding to match management's position so the audit report is accepted without friction",
+          "rationale": "Changing the finding to please management destroys the objectivity of the audit and defeats the purpose of documenting findings so that controls improve."
+        },
+        {
+          "id": "d",
+          "text": "The company hires an external auditor to re-perform the entire ERP audit before any corrective action is taken",
+          "rationale": "Re-running the entire ERP audit is disproportionate for a single disputed finding, and external audits are separate engagements — not the standard mechanism for resolving internal audit disputes."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about which body formally oversees the internal audit program when management and the audit team disagree, and about how findings are meant to be closed after a dispute.",
+      "explanation": "The audit committee, a board-level group that oversees audit and compliance activities, is the proper body to resolve disputes between the audit team and management and to require a corrective action plan that actually resolves the finding (a). Allowing the audited manager to close the finding (b) eliminates independence, rewriting the finding (c) destroys objectivity, and re-running the entire ERP audit externally (d) is disproportionate and is not the standard dispute-resolution step. The process ends when management implements a plan the committee accepts and the finding is tracked to closure.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.5" },
+        { "source": "study-guide", "section": "Internal vs External Audits" },
+        { "source": "nist", "section": "NIST SP 800-53A — Assessing Security and Privacy Controls in Federal Information Systems" }
+      ]
+    },
+    "mcq-5-049": {
+      "id": "mcq-5-049",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which action BEST satisfies the district's third-party risk management obligations?",
+      "context": "A school district plans to move student records to a cloud-based student information system offered by a small vendor. The vendor cannot provide a SOC 2 report and says its internal audit results are confidential, while its marketing materials promise strong security. District policy requires third-party due diligence before any student data is transferred.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Require the vendor to provide evidence of its internal audits or agree to a right-to-audit clause that lets the district verify controls before any data is transferred",
+          "rationale": "For a relationship involving regulated data, due diligence requires objective evidence of the vendor's control environment — evidence of internal audits or a contractual right-to-audit clause — obtained before data is shared, exactly as vendor assessment processes prescribe."
+        },
+        {
+          "id": "b",
+          "text": "Proceed with the data transfer because the vendor's marketing materials and website describe strong security practices",
+          "rationale": "Marketing claims are unverified assertions, not evidence of controls; they do not satisfy due diligence for systems that will hold regulated student records."
+        },
+        {
+          "id": "c",
+          "text": "Accept the vendor's completed self-assessment questionnaire as the only evidence needed for due diligence",
+          "rationale": "Questionnaires are one tool in vendor risk management, but when a vendor withholds audit evidence for a regulated data set, a self-reported questionnaire alone is insufficient due diligence."
+        },
+        {
+          "id": "d",
+          "text": "Sign the contract now and complete the vendor assessment after the first data migration",
+          "rationale": "Deferring the assessment until after migration exposes regulated data before the district has verified the vendor's controls; due diligence must precede the data transfer."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Focus on what counts as objective, verifiable evidence of a vendor's controls when no independent report exists, and on when that evidence must be obtained relative to sharing regulated data.",
+      "explanation": "Third-party risk management requires objective verification of a vendor's controls, so the district should demand evidence of the vendor's internal audits or negotiate a right-to-audit clause before transferring any data (a). Marketing claims (b) are unverified, a self-reported questionnaire alone (c) does not replace audit evidence for regulated data, and completing the assessment only after migration (d) leaves student records at risk before controls are verified. Due diligence must be completed before data changes hands.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.3" },
+        { "source": "study-guide", "section": "Vendor Due Diligence" },
+        { "source": "nist", "section": "NIST SP 800-161 Supply Chain Risk Management" }
+      ]
+    },
+    "mcq-5-050": {
+      "id": "mcq-5-050",
+      "domain": 5,
+      "objective": "5.5",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which type of audit or assessment is the credit union undergoing?",
+      "context": "A state regulator notifies a regional credit union that it will conduct an on-site examination of the credit union's information security program. The examiners will review policies and risk assessments, interview the CISO, sample access-control reports, and test selected controls. They will then issue findings that the credit union must remediate. The credit union has never undergone such an examination before.",
+      "options": [
+        {
+          "id": "a",
+          "text": "An external regulatory audit, in which an independent third party examines compliance with regulations and issues findings",
+          "rationale": "Regulatory examinations are external audits performed by third-party entities such as government regulators; they review evidence, test controls, validate compliance, and produce findings that the organization must remediate."
+        },
+        {
+          "id": "b",
+          "text": "An internal audit, in which the credit union's own audit team evaluates its controls",
+          "rationale": "Internal audits are conducted by the organization's own team, whereas these examiners come from a government regulator, making the engagement external."
+        },
+        {
+          "id": "c",
+          "text": "A penetration test, in which authorized testers attempt to exploit vulnerabilities in the credit union's network",
+          "rationale": "A penetration test simulates attacks to identify exploitable vulnerabilities; the examiners are reviewing and testing controls for compliance, not attempting to breach the network."
+        },
+        {
+          "id": "d",
+          "text": "A self-assessment, in which the credit union evaluates its own compliance against a checklist",
+          "rationale": "A self-assessment is performed internally by the organization against its own checklist; the regulator's examiners are independent of the credit union."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Consider who is performing the assessment and what authority they have to report findings that the organization must act on.",
+      "explanation": "Because the examiners are independent of the credit union and act for a government regulator, this is an external regulatory audit — examinations are the audit type regulators conduct (a). Internal audits (b) are run by the organization's own team, self-assessments (d) are internal checklists, and penetration tests (c) focus on exploiting vulnerabilities rather than verifying regulatory compliance. The examiners' authority to issue findings the credit union must remediate is what makes the engagement an external regulatory audit.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.5" },
+        { "source": "study-guide", "section": "Internal vs External Audits" },
+        { "source": "nist", "section": "NIST SP 800-53A — Assessing Security and Privacy Controls in Federal Information Systems" }
+      ]
+    }
+  }
+}

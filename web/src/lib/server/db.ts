@@ -147,7 +147,8 @@ export interface QuizRepository {
 		id: string,
 		index: number,
 		response: QuestionResponse,
-		answeredAt: string
+		answeredAt: string,
+		opts?: { incrementRetries?: boolean }
 	): void;
 	/** Marks a practice-mode hint as revealed for a question index (server-enforced cost). */
 	markHintUsed(id: string, index: number, updatedAt: string): void;
@@ -275,10 +276,10 @@ function seedCourse(db: Database.Database): void {
 		// Two profiles out of the box: Alex (default / Security+) and Ash (A+).
 		// ON CONFLICT DO NOTHING keeps later user renames and course prefs intact.
 		db.prepare(
-			"INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('default', 'Alex', '#b7f04c', 'secp-701', ?) ON CONFLICT(id) DO NOTHING"
+			"INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('default', 'Alex', '#67B8A8', 'secp-701', ?) ON CONFLICT(id) DO NOTHING"
 		).run(now);
 		db.prepare(
-			"INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('ash', 'Ash', '#4cc9f0', 'aplus-1201', ?) ON CONFLICT(id) DO NOTHING"
+			"INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('ash', 'Ash', '#82B5D5', 'aplus-1201', ?) ON CONFLICT(id) DO NOTHING"
 		).run(now);
 		const insertExamDate = db.prepare(
 			"INSERT INTO course_meta (profile_id, course_id, key, value) VALUES ('default', ?, 'exam_date', ?) ON CONFLICT(profile_id, course_id, key) DO NOTHING"
@@ -291,7 +292,7 @@ function seedCourse(db: Database.Database): void {
 			'INSERT INTO course_modules (id, course_id, week, title, description, position) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, week = excluded.week, title = excluded.title, description = excluded.description, position = excluded.position'
 		);
 		const insertLesson = db.prepare(
-			'INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, objective_id, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, objective_id = excluded.objective_id, position = excluded.position'
+			'INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, objective_ids, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, summary = excluded.summary, content = excluded.content, objective_ids = excluded.objective_ids, position = excluded.position'
 		);
 		const insertAssignment = db.prepare(
 			'INSERT INTO course_assignments (id, course_id, module_id, title, description, kind, category, points, count, domain, mode, duration_minutes, due_offset_days, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET course_id = excluded.course_id, module_id = excluded.module_id, title = excluded.title, description = excluded.description, kind = excluded.kind, category = excluded.category, points = excluded.points, count = excluded.count, domain = excluded.domain, mode = excluded.mode, duration_minutes = excluded.duration_minutes, due_offset_days = excluded.due_offset_days, position = excluded.position'
@@ -317,7 +318,7 @@ function seedCourse(db: Database.Database): void {
 					lesson.title,
 					lesson.summary,
 					lesson.content,
-					lesson.objectiveId ?? null,
+					lesson.objectiveIds ? JSON.stringify(lesson.objectiveIds) : null,
 					lesson.position
 				);
 			for (const assignment of definition.assignments)
@@ -352,8 +353,8 @@ export function createQuizRepository(
 	db.pragma('journal_mode = WAL');
 	db.pragma('busy_timeout = 5000');
 
-	// Fresh databases are created directly in the v6 shape; the migrate block
-	// below upgrades v5 files in place and no-ops on anything already v6.
+	// Fresh databases are created directly in the v8 shape; the migrate block
+	// below upgrades older files in place and no-ops on anything already v8.
 	db.exec(`
 		CREATE TABLE IF NOT EXISTS quiz_sessions (id TEXT PRIMARY KEY, started_at TEXT NOT NULL, completed_at TEXT, type TEXT NOT NULL, domain INTEGER, total_questions INTEGER NOT NULL DEFAULT 0, correct_answers INTEGER NOT NULL DEFAULT 0, mode TEXT NOT NULL DEFAULT 'practice', status TEXT NOT NULL DEFAULT 'active', points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT '', assignment_id TEXT, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701', elapsed_seconds INTEGER, duration_seconds INTEGER);
 		CREATE TABLE IF NOT EXISTS quiz_answers (id INTEGER PRIMARY KEY AUTOINCREMENT, session_id TEXT NOT NULL, question_index INTEGER NOT NULL, prompt TEXT NOT NULL DEFAULT '', domain INTEGER NOT NULL, category TEXT, correct_answer TEXT NOT NULL DEFAULT '', user_answer TEXT NOT NULL DEFAULT '', is_correct INTEGER NOT NULL DEFAULT 0, question_id TEXT, objective TEXT, response_json TEXT, points_earned REAL NOT NULL DEFAULT 0, points_possible REAL NOT NULL DEFAULT 0, profile_id TEXT NOT NULL DEFAULT 'default', course_id TEXT NOT NULL DEFAULT 'secp-701', FOREIGN KEY (session_id) REFERENCES quiz_sessions(id));
@@ -364,13 +365,13 @@ export function createQuizRepository(
 		CREATE TABLE IF NOT EXISTS study_log (profile_id TEXT NOT NULL, date_key TEXT NOT NULL, questions INTEGER NOT NULL DEFAULT 0, sessions INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL, PRIMARY KEY (profile_id, date_key));
 		CREATE TABLE IF NOT EXISTS course_meta (profile_id TEXT NOT NULL, course_id TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (profile_id, course_id, key));
 		CREATE TABLE IF NOT EXISTS course_modules (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', week INTEGER NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, position INTEGER NOT NULL);
-		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', objective_id TEXT, position INTEGER NOT NULL);
+		CREATE TABLE IF NOT EXISTS course_lessons (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, summary TEXT NOT NULL, content TEXT NOT NULL DEFAULT '', objective_ids TEXT, position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_assignments (id TEXT PRIMARY KEY, course_id TEXT NOT NULL DEFAULT 'secp-701', module_id TEXT NOT NULL, title TEXT NOT NULL, description TEXT NOT NULL, kind TEXT NOT NULL, category TEXT NOT NULL, points REAL NOT NULL, count INTEGER NOT NULL, domain INTEGER, mode TEXT NOT NULL, duration_minutes INTEGER NOT NULL, due_offset_days INTEGER NOT NULL, position INTEGER NOT NULL);
 		CREATE TABLE IF NOT EXISTS course_assignment_submissions (profile_id TEXT NOT NULL, assignment_id TEXT NOT NULL, session_id TEXT NOT NULL, earned REAL NOT NULL, percentage REAL NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, assignment_id, session_id));
 		CREATE TABLE IF NOT EXISTS course_lesson_completions (profile_id TEXT NOT NULL, lesson_id TEXT NOT NULL, completed_at TEXT NOT NULL, PRIMARY KEY (profile_id, lesson_id));
 		CREATE TABLE IF NOT EXISTS google_oauth (profile_id TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
 		CREATE TABLE IF NOT EXISTS google_synced_events (profile_id TEXT NOT NULL, source TEXT NOT NULL, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL, PRIMARY KEY (profile_id, source));
-		CREATE TABLE IF NOT EXISTS profiles (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL DEFAULT '#b7f04c', course_id TEXT NOT NULL DEFAULT 'secp-701', created_at TEXT NOT NULL);
+		CREATE TABLE IF NOT EXISTS profiles (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL DEFAULT '#67B8A8', course_id TEXT NOT NULL DEFAULT 'secp-701', created_at TEXT NOT NULL);
 	`);
 
 	const columns = (table: string) =>
@@ -433,14 +434,14 @@ export function createQuizRepository(
 		// course that profile was studying, instead of leaking the last course.
 		if (!has('profiles', 'course_id'))
 			db.exec("ALTER TABLE profiles ADD COLUMN course_id TEXT NOT NULL DEFAULT 'secp-701'");
-		// v8: practice-mode retry counter per question (no user_version bump needed —
-		// guarded column add, idempotent on every open).
+		// Guarded post-version repair (no schema-version bump): practice-mode
+		// retry/hint counters per question, idempotent on every open.
 		if (!has('quiz_session_responses', 'retries'))
 			db.exec('ALTER TABLE quiz_session_responses ADD COLUMN retries INTEGER NOT NULL DEFAULT 0');
 		if (!has('quiz_session_responses', 'hint_used'))
 			db.exec('ALTER TABLE quiz_session_responses ADD COLUMN hint_used INTEGER NOT NULL DEFAULT 0');
-		if (!has('course_lessons', 'objective_id'))
-			db.exec('ALTER TABLE course_lessons ADD COLUMN objective_id TEXT');
+		if (!has('course_lessons', 'objective_ids'))
+			db.exec('ALTER TABLE course_lessons ADD COLUMN objective_ids TEXT');
 
 		// B. Primary-key rebuilds — SQLite 12-step, backfilling all existing
 		// rows to the seeded default profile / Security+ course.
@@ -524,13 +525,44 @@ export function createQuizRepository(
 		db.exec(
 			"CREATE UNIQUE INDEX IF NOT EXISTS quiz_sessions_one_active_scope ON quiz_sessions(profile_id, course_id) WHERE status = 'active'"
 		);
-		db.pragma('user_version = 7');
+		// v8: course_lessons.objective_id -> objective_ids (JSON array). Guarded
+		// shape repair covers every historical layout: rename the old column when
+		// it is the only one, copy-and-drop when both exist, add when neither does.
+		if (has('course_lessons', 'objective_id') && !has('course_lessons', 'objective_ids')) {
+			db.exec('ALTER TABLE course_lessons RENAME COLUMN objective_id TO objective_ids');
+		} else if (has('course_lessons', 'objective_ids') && has('course_lessons', 'objective_id')) {
+			db.exec(
+				'UPDATE course_lessons SET objective_ids = objective_id WHERE objective_ids IS NULL AND objective_id IS NOT NULL'
+			);
+			db.exec('ALTER TABLE course_lessons DROP COLUMN objective_id');
+		}
+		// Stored scalars become one-element JSON arrays; valid JSON arrays are
+		// left untouched (idempotent on re-open).
+		const lessonObjectives = db
+			.prepare('SELECT id, objective_ids FROM course_lessons WHERE objective_ids IS NOT NULL')
+			.all() as { id: string; objective_ids: string }[];
+		const toArray = db.prepare('UPDATE course_lessons SET objective_ids = ? WHERE id = ?');
+		for (const row of lessonObjectives) {
+			let parsed: unknown;
+			try {
+				parsed = JSON.parse(row.objective_ids);
+			} catch {
+				parsed = null;
+			}
+			if (!Array.isArray(parsed)) toArray.run(JSON.stringify([row.objective_ids]), row.id);
+		}
+		// v8: retire the four acid-lime preset profile colors; every other custom
+		// color is preserved byte-for-byte.
+		db.prepare(
+			"UPDATE profiles SET color = CASE color WHEN '#b7f04c' THEN '#67B8A8' WHEN '#4cc9f0' THEN '#82B5D5' WHEN '#f0b04c' THEN '#E0B66A' WHEN '#f04c8a' THEN '#D894B8' ELSE color END"
+		).run();
+		db.pragma('user_version = 8');
 	});
 	const version = db.pragma('user_version', { simple: true });
 	const needsPostVersionRepair =
 		!columns('quiz_session_responses').has('retries') ||
 		!columns('quiz_session_responses').has('hint_used') ||
-		!columns('course_lessons').has('objective_id') ||
+		!columns('course_lessons').has('objective_ids') ||
 		!columns('quiz_sessions').has('elapsed_seconds') ||
 		!columns('quiz_sessions').has('duration_seconds');
 	const needsActiveSessionIndex =
@@ -539,7 +571,7 @@ export function createQuizRepository(
 				"SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'"
 			)
 			.get() as { 1: number } | undefined) === undefined;
-	if (version !== 7 || needsPostVersionRepair || needsActiveSessionIndex) migrate();
+	if (version !== 8 || needsPostVersionRepair || needsActiveSessionIndex) migrate();
 	seedCourse(db);
 
 	const make = (scope: Scope): QuizRepository => {
@@ -658,7 +690,8 @@ export function createQuizRepository(
 					.get(scope.profileId, scope.courseId) as { id: string } | undefined;
 				return row ? readSession(row.id) : null;
 			},
-			saveResponse(id, index, response, answeredAt) {
+			saveResponse(id, index, response, answeredAt, opts = {}) {
+				const { incrementRetries = true } = opts;
 				const save = db.transaction(() => {
 					const owned = db
 						.prepare(
@@ -667,7 +700,7 @@ export function createQuizRepository(
 						.get(id, scope.profileId, scope.courseId);
 					if (!owned) return;
 					db.prepare(
-						'INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, answered_at) VALUES (?, ?, ?, 0, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at, retries = retries + 1'
+						`INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, answered_at) VALUES (?, ?, ?, 0, 0, ?) ON CONFLICT(session_id, question_index) DO UPDATE SET response_json = excluded.response_json, answered_at = excluded.answered_at${incrementRetries ? ', retries = retries + 1' : ''}`
 					).run(id, index, JSON.stringify(response), answeredAt);
 					db.prepare(
 						'UPDATE quiz_sessions SET updated_at = ? WHERE id = ? AND profile_id = ? AND course_id = ?'
@@ -964,11 +997,17 @@ export function createQuizRepository(
 				return cache.read(
 					cache.key(scope, 'course-lessons'),
 					() =>
-						db
-							.prepare(
-								'SELECT id, module_id AS moduleId, title, summary, content, objective_id AS objectiveId, position FROM course_lessons WHERE course_id = ? ORDER BY position'
-							)
-							.all(scope.courseId) as unknown as CourseLesson[]
+						(
+							db
+								.prepare(
+									'SELECT id, module_id AS moduleId, title, summary, content, objective_ids AS objectiveIds, position FROM course_lessons WHERE course_id = ? ORDER BY position'
+								)
+								.all(scope.courseId) as unknown as (CourseLesson & { objectiveIds: string | null })[]
+						).map((lesson) => ({
+							...lesson,
+							// Parse the stored JSON explicitly — never cast the string to the array type.
+							objectiveIds: lesson.objectiveIds ? (JSON.parse(lesson.objectiveIds) as string[]) : undefined
+						}))
 				);
 			},
 			getCourseAssignments() {

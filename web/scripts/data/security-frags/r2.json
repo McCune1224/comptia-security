@@ -1,0 +1,102 @@
+{
+  "replace": {
+    "mcq-3-009": {
+      "id": "mcq-3-009",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which placement approach should the architect use to minimize the attack surface?",
+      "context": "A regional credit union needs customers to reach a new online loan-application gateway from the internet while keeping internal systems and administrative access as protected as possible. The gateway is managed remotely by the network team, and the architect must decide where the gateway, its database, and the management interface should live.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Host the gateway in a screened subnet with only the ports the service requires open inbound, and administer it only through a jump host on a separate management segment",
+          "rationale": "A screened subnet (DMZ) buffers the public service from trusted zones; limiting inbound traffic to required ports and isolating management behind a jump host keeps administrative access off the public path and reduces the attack surface."
+        },
+        {
+          "id": "b",
+          "text": "Place the gateway on the internal LAN and publish it with inbound NAT rules on the perimeter firewall",
+          "rationale": "NAT hides the gateway's address, but the device and its management interface still live inside the trusted LAN, so a compromise puts an attacker directly into the trusted zone and enlarges the attack surface."
+        },
+        {
+          "id": "c",
+          "text": "Attach the gateway directly to the internet router with its own public IP address on the untrusted segment",
+          "rationale": "A public IP with no protective zone between the device and the internet exposes the gateway and its management interface to everyone, leaving no buffer for the organization's other systems."
+        },
+        {
+          "id": "d",
+          "text": "Install the gateway beside the database servers so one firewall rule set can protect both",
+          "rationale": "Co-locating a public-facing gateway with sensitive database servers puts high-value data in the same blast radius and widens the internal attack surface instead of containing it."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about which zone should hold publicly reachable systems, what inbound access the service truly needs, and where administration should sit so it is never directly exposed to untrusted traffic.",
+      "explanation": "Placing the gateway in a screened subnet (DMZ) exposes only that zone to the internet, and limiting inbound traffic to the ports the service needs keeps exposure minimal. Isolating administration behind a jump host on a separate management segment keeps the management plane off the public path, which directly reduces the attack surface. Inbound NAT still places a trusted-LAN host in the external path, a direct public IP removes the protective zone entirely, and installing the gateway beside the databases widens the internal attack surface and puts sensitive data in the blast radius of a public service.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Security Zones and Screened Subnets"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-41 Rev. 1 — Guidelines on Firewalls and Firewall Policy"
+        }
+      ]
+    },
+    "mcq-3-038": {
+      "id": "mcq-3-038",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which control should the team implement?",
+      "context": "A university's network team protects wired access ports by allowing only pre-approved MAC addresses on each port. After an incident in which a student spoofed the MAC address of an approved lab computer and gained full network access from an active wall jack, the team wants to replace the static MAC allowlists with per-user identity-based authentication for every device that connects.",
+      "options": [
+        {
+          "id": "a",
+          "text": "802.1X port-based authentication with a RADIUS authentication server",
+          "rationale": "802.1X authenticates the user or device identity through the switch as authenticator to a RADIUS authentication server, so a spoofed MAC address no longer grants network access."
+        },
+        {
+          "id": "b",
+          "text": "Disable unused switch ports and place them in a quarantine VLAN",
+          "rationale": "Disabling unused ports removes easy physical access points, but it does nothing to authenticate devices that connect to active ports, so the spoofing path remains."
+        },
+        {
+          "id": "c",
+          "text": "Tighten the MAC allowlists to include the device hostname and operating system",
+          "rationale": "Adding hostname or operating-system details to a MAC allowlist does not stop MAC spoofing; the attacker still controls the address the switch sees on the wire."
+        },
+        {
+          "id": "d",
+          "text": "Enable DHCP snooping to reject frames from unknown source MAC addresses",
+          "rationale": "DHCP snooping validates DHCP messages and blocks rogue DHCP servers; it does not authenticate the identity of the device connected to the port."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider a control that verifies who or what is actually connecting rather than trusting a hardware address that can be copied, and think about where the credential check happens for port-based access.",
+      "explanation": "802.1X performs port-based authentication: the connecting device acts as the supplicant, the switch acts as the authenticator, and a RADIUS server validates the credentials, so a spoofed MAC no longer grants access. Disabling unused ports only shrinks the number of available wall jacks, and MAC allowlists, however detailed, remain trivially spoofable. DHCP snooping guards against rogue DHCP servers rather than device identity, so none of those alternatives authenticate the endpoint.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Port Security and 802.1X"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,382 @@
+{
+  "replace": {
+    "mcq-4-042": {
+      "id": "mcq-4-042",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "Which TWO controls would BEST reduce standing privilege while keeping the team productive? (Select TWO.)",
+      "context": "A regional bank's security audit finds that 12 IT staff members hold permanent domain administrator accounts used for routine break-fix work. The CISO wants to eliminate standing administrative privileges while still allowing administrators to complete elevated tasks such as patching, password resets, and maintenance-window changes.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy a privileged access management tool that grants just-in-time elevation for a specific task and automatically revokes the rights when the task window ends",
+          "rationale": "Just-in-time permissions grant elevation only for the duration of an approved task and revoke it automatically, removing standing rights without blocking necessary work."
+        },
+        {
+          "id": "b",
+          "text": "Store shared administrative credentials in a password vault that requires MFA to check out and rotates each password after use",
+          "rationale": "Password vaulting centralizes shared credentials behind MFA, tracks check-outs in an audit log, and rotates secrets so a checked-out password is not reused indefinitely."
+        },
+        {
+          "id": "c",
+          "text": "Increase the number of permanent administrative accounts so several staff members can handle elevated work in parallel",
+          "rationale": "More permanent administrative accounts enlarge the standing-privilege attack surface rather than reducing it."
+        },
+        {
+          "id": "d",
+          "text": "Assign every IT staff member direct membership in the Enterprise Admins group to simplify permission management",
+          "rationale": "Universal membership in the most powerful group concentrates permanent authority and violates least privilege."
+        },
+        {
+          "id": "e",
+          "text": "Keep the existing accounts but add a second security question to the administrative login screen",
+          "rationale": "An extra knowledge factor does not remove the permanent rights; it only adds friction on top of standing access."
+        },
+        {
+          "id": "f",
+          "text": "Change all administrative passwords quarterly and distribute them to staff on a shared spreadsheet",
+          "rationale": "Quarterly rotation of shared credentials still leaves always-valid secrets spread outside a managed vault, with no per-user accountability."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Think about controls that remove always-on administrative power rather than adding more authentication or more accounts.",
+      "explanation": "Just-in-time permissions (a) remove standing privileges by granting elevation only for an approved task window and revoking it automatically, while password vaulting (b) secures shared credentials with MFA, check-out tracking, and rotation; together these are the core privileged access management controls. Adding more admin accounts or granting universal Enterprise Admins membership expands the standing-privilege attack surface, a second security question does nothing to remove permanent rights, and rotating shared passwords on a spreadsheet provides no accountability.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "study-guide",
+          "section": "Privileged Access Management (PAM)"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-207 — Zero Trust Architecture (least privilege and access decisions)"
+        }
+      ]
+    },
+    "mcq-4-047": {
+      "id": "mcq-4-047",
+      "domain": 4,
+      "objective": "4.7",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which control would MOST effectively prevent this kind of unmanaged change from recurring?",
+      "context": "A logistics company manages the security groups of its cloud three-tier application as infrastructure as code through a CI/CD pipeline. An engineer manually opened SSH from the internet to the database tier in the cloud console during an incident, and the change went unnoticed until an audit two weeks later.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy guard rails that continuously compare the live security group configuration with the IaC-defined baseline and automatically remediate or block non-compliant changes",
+          "rationale": "Guard rails continuously enforce the declared baseline, so a manual console change is detected as drift and corrected or blocked automatically, closing the two-week detection gap."
+        },
+        {
+          "id": "b",
+          "text": "Require engineers to acknowledge a warning banner each time they open the cloud console",
+          "rationale": "A warning banner is passive and does not prevent or reverse an insecure change."
+        },
+        {
+          "id": "c",
+          "text": "Grant the engineering team API access to modify security groups directly so manual console changes are unnecessary",
+          "rationale": "Direct API access institutionalizes out-of-band changes, which is the same problem the pipeline was meant to eliminate."
+        },
+        {
+          "id": "d",
+          "text": "Perform a quarterly compliance review of all security group rules",
+          "rationale": "A quarterly review leaves a long window during which an insecure rule remains active."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about a control that continuously detects and corrects deviations from a defined, known-good state instead of relying on periodic reviews.",
+      "explanation": "Guard rails (a) enforce the known-good, IaC-defined configuration by monitoring for drift and taking automated corrective action, which closes the gap between a manual change and its detection. A warning banner is purely advisory, direct API access encourages unmanaged edits, and a quarterly review leaves the exposure in place far too long.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.7"
+        },
+        {
+          "source": "study-guide",
+          "section": "Automation and Orchestration"
+        }
+      ]
+    },
+    "mcq-4-050": {
+      "id": "mcq-4-050",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which action is MOST important to complete the de-provisioning of this employee's access?",
+      "context": "At 9:00 a.m. the identity team disables the Active Directory account of a project manager who was terminated the previous evening. The employee used SSO to reach the company's SaaS applications, held a corporate laptop, and owned several shared project folders on the file server.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Revoke the employee's SSO session tokens and remove her group memberships so federated applications stop accepting her credentials immediately",
+          "rationale": "De-provisioning must cover every authentication path; disabling the directory account alone does not end SSO sessions or cached tokens that still grant access to federated applications."
+        },
+        {
+          "id": "b",
+          "text": "Keep the disabled account active for 30 days in case the termination decision is reversed",
+          "rationale": "Leaving any path active after termination extends the access window and contradicts the goal of immediate removal."
+        },
+        {
+          "id": "c",
+          "text": "Delete her mailbox and project folders immediately to free storage",
+          "rationale": "Deleting data before ownership transfer and preservation review destroys potentially needed records and violates proper offboarding."
+        },
+        {
+          "id": "d",
+          "text": "Change the password on her laptop and return it to the equipment pool",
+          "rationale": "Reusing the laptop handles only one device; it does nothing about the still-active federated access."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Access usually lives in more places than the single account you disable first; consider what else still authenticates the person.",
+      "explanation": "De-provisioning (a) requires revoking every authentication path, including SSO sessions and group-based access in federated applications, not just disabling the directory account. Keeping the account active or only handling the laptop leaves access live, and deleting mailboxes and folders prematurely bypasses ownership transfer and preservation requirements.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "study-guide",
+          "section": "Identity and Access Management (IAM)"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-53 Rev. 5 — AC-2 Account Management (account provisioning and de-provisioning)"
+        }
+      ]
+    },
+    "mcq-4-052": {
+      "id": "mcq-4-052",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "Which TWO adjustments would BEST address the problem? (Select TWO.)",
+      "context": "A manufacturer's cleanroom doors use fingerprint readers. After the readers were tightened to keep unauthorized people out, employees are frequently rejected on their first attempt, which creates queues at the entrances. The security team must reduce the false rejections without increasing the chance of unauthorized entry.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lower the scanner's acceptance threshold so a wider range of matches is accepted, which reduces false rejections but increases the false acceptance rate",
+          "rationale": "This correctly describes the FAR/FRR tradeoff but increases the chance of accepting an impostor, which the facility explicitly cannot tolerate."
+        },
+        {
+          "id": "b",
+          "text": "Raise the scanner's acceptance threshold so only nearly identical prints are accepted, which also reduces false rejections",
+          "rationale": "Raising the threshold makes the reader stricter, which increases false rejections and worsens the queue problem."
+        },
+        {
+          "id": "c",
+          "text": "Enroll multiple fingerprints per employee so a genuine user whose first scan fails can retry with a different finger",
+          "rationale": "Multiple enrolled samples give genuine users a practical fallback, lowering false rejections without changing the threshold or raising the false acceptance rate."
+        },
+        {
+          "id": "d",
+          "text": "Tune the acceptance threshold to the crossover error rate so false accepts and false rejects are balanced rather than optimizing one at the expense of the other",
+          "rationale": "The crossover error rate is the setting where false accepts equal false rejects, giving a calibrated balance instead of over-optimizing one direction."
+        },
+        {
+          "id": "e",
+          "text": "Require two consecutive successful scans for every entry so a single poor scan cannot lock an employee out",
+          "rationale": "Requiring two scans doubles the opportunity for a false rejection and increases friction instead of reducing it."
+        },
+        {
+          "id": "f",
+          "text": "Replace the fingerprint readers with badge-only entry to eliminate false rejections entirely",
+          "rationale": "Badge-only entry removes the biometric (inherence) factor and its security value altogether."
+        }
+      ],
+      "correctOptionIds": [
+        "c",
+        "d"
+      ],
+      "selectCount": 2,
+      "hint": "The complaint is about legitimate users being turned away, not about impostors getting in; look for changes that help the first without helping the second.",
+      "explanation": "Enrolling multiple fingerprints (c) reduces false rejections without weakening the match threshold, and tuning to the crossover error rate (d) balances false accepts against false rejects instead of over-optimizing one. Lowering the threshold to accept a wider range (a) raises the false acceptance rate, raising the threshold (b) increases false rejections, and requiring two scans (e) doubles the failure opportunity; removing biometrics (f) discards the inherence factor entirely.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "study-guide",
+          "section": "Physical Security"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-63B — Digital Identity Guidelines (biometric verification and error rates)"
+        }
+      ]
+    },
+    "mcq-4-053": {
+      "id": "mcq-4-053",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which change is MOST effective at improving password security?",
+      "context": "A community bank's password policy requires eight characters with at least one uppercase letter, one number, and one symbol, and forces a change every 60 days. A penetration test shows that most employees satisfy the rule with predictable patterns such as 'Spring2024!'. The CISO asks the security team to modernize the policy.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Require passphrases of at least 12-16 characters, screen new passwords against known-breach lists, and drop the forced 60-day rotation",
+          "rationale": "Long passphrases raise the difficulty of guessing and cracking far more than character-class rules, breach screening blocks reused and already-compromised passwords, and removing arbitrary rotation stops predictable annual-pattern changes."
+        },
+        {
+          "id": "b",
+          "text": "Keep the eight-character minimum but require two symbols and three numbers to make the complexity rules stricter",
+          "rationale": "More complexity rules at a short length still push users toward predictable patterns and do little against modern cracking."
+        },
+        {
+          "id": "c",
+          "text": "Shorten the expiration interval to 30 days so stale passwords are replaced more often",
+          "rationale": "Frequent forced rotation is a leading driver of predictable, weak variations such as appending an incrementing number."
+        },
+        {
+          "id": "d",
+          "text": "Raise the minimum length to 12 characters while keeping the forced 60-day rotation",
+          "rationale": "Longer passwords help, but retaining forced rotation keeps the counterproductive behavior; the best answer combines length with breach screening and drops unnecessary rotation."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Consider where real password strength comes from and how mandatory, frequent changes shape the way users pick their next password.",
+      "explanation": "The most effective change (a) prioritizes length with passphrases, blocks passwords already exposed in breaches, and removes forced rotation that current guidance identifies as unnecessary and counterproductive. Complexity-only rules at short lengths (b) and shorter expiration (c) both drive predictable patterns, and (d) keeps the rotation problem while only partially improving length.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "study-guide",
+          "section": "Password Security"
+        },
+        {
+          "source": "nist",
+          "section": "NIST SP 800-63B — Digital Identity Guidelines (memorized secret length, complexity, and expiration)"
+        }
+      ]
+    },
+    "mcq-4-054": {
+      "id": "mcq-4-054",
+      "domain": 4,
+      "objective": "4.6",
+      "format": "scenario",
+      "kind": "single-choice",
+      "prompt": "Which approach should the portal use to authenticate users against the directory?",
+      "context": "A mid-size manufacturer runs an OpenLDAP directory as the central identity store for its on-premises systems. The developers of a new internal HR portal need to authenticate employees against that same corporate identity rather than maintaining a separate login database.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Perform an LDAP bind over LDAPS using the employee's credentials, then read group memberships from the directory for authorization",
+          "rationale": "LDAP natively supports authentication through the bind operation and provides attributes such as group memberships for authorization; LDAPS protects the credentials in transit."
+        },
+        {
+          "id": "b",
+          "text": "Synchronize all usernames and password hashes into the portal's own database so the directory is never contacted at runtime",
+          "rationale": "Copying password hashes into every application widens the exposure surface and breaks the single source of truth."
+        },
+        {
+          "id": "c",
+          "text": "Authenticate users through the network's RADIUS server because it is the company's central directory",
+          "rationale": "RADIUS is an AAA protocol for network access devices; it is not a directory and typically relies on a directory such as LDAP as its backend."
+        },
+        {
+          "id": "d",
+          "text": "Query employee records over SNMP so the portal can validate logins against directory attributes",
+          "rationale": "SNMP is a network management protocol and carries no authentication-bind semantics for user logins."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "hint": "Think about the protocol a directory service natively speaks for authenticating users and for reading the identity attributes needed to authorize them.",
+      "explanation": "LDAP's bind operation authenticates a user against the directory, and the same directory provides group memberships and attributes for authorization, with LDAPS protecting the exchange (a). Local password copies (b) spread credential material outside the identity store, RADIUS (c) is a network-access AAA protocol rather than a directory, and SNMP (d) is for network management, not login validation.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.6"
+        },
+        {
+          "source": "study-guide",
+          "section": "Protocols for SSO"
+        }
+      ]
+    },
+    "mcq-4-055": {
+      "id": "mcq-4-055",
+      "domain": 4,
+      "objective": "4.7",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "prompt": "Which TWO statements describe primary security benefits of this automation? (Select TWO.)",
+      "context": "A hospital group's IT team manually creates accounts for every new clinician, and onboarding often takes three days because access requests are handled one system at a time. The team plans to automate user provisioning by connecting the HR system to the identity provider so account lifecycles follow employee records.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Accounts are created consistently within minutes of the HR record, and the same workflow removes access when the record is terminated, closing the de-provisioning gap",
+          "rationale": "Automating the full joiner-mover-leaver lifecycle ties creation and removal to the authoritative HR record, eliminating both onboarding delays and stale accounts after termination."
+        },
+        {
+          "id": "b",
+          "text": "Role-based access is assigned automatically from department and title, reducing the over-permissioning that comes from manual template choices",
+          "rationale": "Role-driven assignment from department and title enforces least privilege consistently instead of depending on which template an administrator happens to pick."
+        },
+        {
+          "id": "c",
+          "text": "The automation assigns the same default password to every new account so users can log in without waiting",
+          "rationale": "A shared default password is itself a security risk; credentials must be individually generated and forced to change at first logon."
+        },
+        {
+          "id": "d",
+          "text": "Approval workflows are no longer needed because automated processes do not make mistakes",
+          "rationale": "Automation still requires oversight and approval guard rails; errors propagate faster when they are baked into code."
+        },
+        {
+          "id": "e",
+          "text": "Individual accountability becomes unnecessary because access decisions are now made by code",
+          "rationale": "Auditability and accountability are preserved — automated changes must be logged and attributable to the requesting role or process."
+        },
+        {
+          "id": "f",
+          "text": "Every system should receive the account regardless of role so no required access is ever missed",
+          "rationale": "Provisioning to every system regardless of role violates least privilege; access should be scoped to what the role needs."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "selectCount": 2,
+      "hint": "Look for benefits that come from making the join, move, and leave process consistent and role-driven instead of manual and per-system.",
+      "explanation": "The primary benefits (a, b) are a complete lifecycle tied to HR records — instant, consistent creation paired with reliable de-provisioning — and least-privilege role assignment driven by department and title. Shared default passwords (c) introduce risk, removing approvals (d) or accountability (e) breaks oversight, and provisioning everywhere (f) violates least privilege.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.7"
+        },
+        {
+          "source": "study-guide",
+          "section": "Automation and Orchestration"
+        }
+      ]
+    }
+  }
+}

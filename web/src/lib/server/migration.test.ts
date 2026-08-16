@@ -56,7 +56,7 @@ function createV5Fixture(file: string): void {
 const pkColumns = (db: Database.Database, table: string): string =>
 	(db.prepare(`SELECT group_concat(name, ',') AS cols FROM pragma_table_info('${table}') WHERE pk > 0`).get() as { cols: string }).cols;
 
-describe('v5 → v7 migration', () => {
+describe('v5 → v8 migration', () => {
 	it('upgrades a v5 database in place, preserving and backfilling all progress', () => {
 		const file = tempDb();
 		createV5Fixture(file);
@@ -66,7 +66,7 @@ describe('v5 → v7 migration', () => {
 		repo.close();
 
 		const db = new Database(file, { readonly: true });
-		expect(db.pragma('user_version', { simple: true })).toBe(7);
+		expect(db.pragma('user_version', { simple: true })).toBe(8);
 
 		// Row counts preserved.
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_sessions').get() as { c: number }).c).toBe(1);
@@ -114,47 +114,47 @@ describe('v5 → v7 migration', () => {
 		db.close();
 	});
 
-	it('is idempotent — reopening a v7 database is a no-op', () => {
+	it('is idempotent — reopening a v8 database is a no-op', () => {
 		const file = tempDb();
 		createV5Fixture(file);
 		createQuizRepository(file).close();
 		createQuizRepository(file).close();
 		const db = new Database(file, { readonly: true });
-		expect(db.pragma('user_version', { simple: true })).toBe(7);
+		expect(db.pragma('user_version', { simple: true })).toBe(8);
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_sessions').get() as { c: number }).c).toBe(1);
 		expect((db.prepare('SELECT COUNT(*) c FROM review_cards').get() as { c: number }).c).toBe(1);
 		expect((db.prepare("SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { value: string }).value).toBe('2026-09-30');
 		db.close();
 	});
 
-	it('repairs v7 databases that are missing guarded post-v7 columns before seeding', () => {
+	it('repairs v8 databases that are missing guarded post-version columns before seeding', () => {
 		const file = tempDb();
 		const initial = createQuizRepository(file);
 		initial.close();
 
 		const drifted = new Database(file);
-		drifted.exec('ALTER TABLE course_lessons DROP COLUMN objective_id');
+		drifted.exec('ALTER TABLE course_lessons DROP COLUMN objective_ids');
 		drifted.exec('ALTER TABLE quiz_session_responses DROP COLUMN hint_used');
-		drifted.pragma('user_version = 7');
+		drifted.pragma('user_version = 8');
 		drifted.close();
 
 		expect(() => createQuizRepository(file)).not.toThrow();
 		const repaired = new Database(file, { readonly: true });
 		const lessonColumns = repaired.prepare('PRAGMA table_info(course_lessons)').all() as { name: string }[];
 		const responseColumns = repaired.prepare('PRAGMA table_info(quiz_session_responses)').all() as { name: string }[];
-		expect(lessonColumns.map((column) => column.name)).toContain('objective_id');
+		expect(lessonColumns.map((column) => column.name)).toContain('objective_ids');
 		expect(responseColumns.map((column) => column.name)).toContain('hint_used');
 		repaired.close();
 	});
 
-	it('repairs v7 databases missing timing columns before completion writes', () => {
+	it('repairs v8 databases missing timing columns before completion writes', () => {
 		const file = tempDb();
 		createQuizRepository(file).close();
 
 		const drifted = new Database(file);
 		drifted.exec('ALTER TABLE quiz_sessions DROP COLUMN elapsed_seconds');
 		drifted.exec('ALTER TABLE quiz_sessions DROP COLUMN duration_seconds');
-		drifted.pragma('user_version = 7');
+		drifted.pragma('user_version = 8');
 		drifted.close();
 
 		const repository = createQuizRepository(file);
@@ -193,9 +193,87 @@ describe('v5 → v7 migration', () => {
 		expect(persisted).toEqual({ elapsed_seconds: 12, duration_seconds: 12 });
 		repository.close();
 	});
+
+	it('upgrades a real v7 database: JSON objective arrays, retired presets mapped, custom color untouched, idempotent on reopen', () => {
+		const file = tempDb();
+		// Build a genuine v7-shaped database from a fresh v8 one: scalar lesson
+		// objectives, the four retired preset colors, plus one custom color.
+		createQuizRepository(file).close();
+		const db = new Database(file);
+		db.exec('ALTER TABLE course_lessons RENAME COLUMN objective_ids TO objective_id');
+		db.exec(
+			"UPDATE course_lessons SET objective_id = CASE id WHEN 'lesson-1-1' THEN '1.1' WHEN 'lesson-1-2' THEN '2.1' WHEN 'lesson-2-1' THEN '3.1' WHEN 'lesson-2-2' THEN '4.1' WHEN 'lesson-3-1' THEN '4.6' WHEN 'lesson-3-2' THEN '5.1' ELSE NULL END"
+		);
+		db.exec(
+			"INSERT INTO course_lessons (id, course_id, module_id, title, summary, content, objective_id, position) VALUES ('lesson-x1', 'secp-701', 'week-4', 'Custom', 's', 'c', '5.6', 99)"
+		);
+		db.exec(
+			"INSERT INTO profiles (id, name, color, course_id, created_at) VALUES ('p1', 'P1', '#b7f04c', 'secp-701', '2026-08-01T00:00:00.000Z'), ('p2', 'P2', '#4cc9f0', 'secp-701', '2026-08-01T00:00:00.000Z'), ('p3', 'P3', '#f0b04c', 'secp-701', '2026-08-01T00:00:00.000Z'), ('p4', 'P4', '#f04c8a', 'secp-701', '2026-08-01T00:00:00.000Z'), ('p5', 'P5', '#a1b2c3', 'secp-701', '2026-08-01T00:00:00.000Z')"
+		);
+		db.prepare(
+			"INSERT INTO course_lesson_completions (profile_id, lesson_id, completed_at) VALUES ('default', 'lesson-1-1', '2026-08-01T09:00:00.000Z')"
+		).run();
+		db.prepare(
+			"INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, profile_id, course_id) VALUES ('v7-sess', '2026-08-01T10:00:00.000Z', 'quiz', 1, 0, 'practice', 'completed', '2026-08-01T10:30:00.000Z', 'default', 'secp-701')"
+		).run();
+		db.prepare(
+			"INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, result_json, updated_at) VALUES ('v7-sess', 1, NULL, 0, '[]', NULL, '2026-08-01T10:30:00.000Z')"
+		).run();
+		db.pragma('user_version = 7');
+		db.close();
+
+		// First open: v8 with JSON objective arrays and mapped profile colors.
+		createQuizRepository(file).close();
+		let reopened = new Database(file, { readonly: true });
+		expect(reopened.pragma('user_version', { simple: true })).toBe(8);
+		const lessonColumns = reopened.prepare('PRAGMA table_info(course_lessons)').all() as { name: string }[];
+		expect(lessonColumns.map((column) => column.name)).toContain('objective_ids');
+		expect(lessonColumns.map((column) => column.name)).not.toContain('objective_id');
+		// Seed upsert restores the full multi-objective arrays for registered lessons.
+		const seeded = reopened
+			.prepare("SELECT objective_ids FROM course_lessons WHERE id = 'lesson-1-1'")
+			.get() as { objective_ids: string };
+		expect(JSON.parse(seeded.objective_ids)).toEqual(['1.1', '1.2', '1.3', '1.4']);
+		// The unregistered custom lesson proves the scalar -> one-element array conversion.
+		const customLesson = reopened
+			.prepare("SELECT objective_ids FROM course_lessons WHERE id = 'lesson-x1'")
+			.get() as { objective_ids: string };
+		expect(JSON.parse(customLesson.objective_ids)).toEqual(['5.6']);
+		// Retired presets map to the graphite palette; custom colors are byte-for-byte unchanged.
+		const colorById = new Map(
+			(reopened.prepare('SELECT id, color FROM profiles').all() as { id: string; color: string }[]).map(
+				(row) => [row.id, row.color]
+			)
+		);
+		expect(colorById.get('default')).toBe('#67B8A8');
+		expect(colorById.get('ash')).toBe('#82B5D5');
+		expect(colorById.get('p1')).toBe('#67B8A8');
+		expect(colorById.get('p2')).toBe('#82B5D5');
+		expect(colorById.get('p3')).toBe('#E0B66A');
+		expect(colorById.get('p4')).toBe('#D894B8');
+		expect(colorById.get('p5')).toBe('#a1b2c3');
+		// Sessions/progress/completions survive the migration intact.
+		expect(
+			(reopened.prepare("SELECT COUNT(*) c FROM course_lesson_completions WHERE lesson_id = 'lesson-1-1'").get() as { c: number }).c
+		).toBe(1);
+		expect((reopened.prepare("SELECT COUNT(*) c FROM quiz_sessions WHERE id = 'v7-sess'").get() as { c: number }).c).toBe(1);
+		reopened.close();
+
+		// Second open: same result, no re-migration side effects.
+		createQuizRepository(file).close();
+		reopened = new Database(file, { readonly: true });
+		expect(reopened.pragma('user_version', { simple: true })).toBe(8);
+		expect(
+			(reopened.prepare("SELECT objective_ids FROM course_lessons WHERE id = 'lesson-x1'").get() as { objective_ids: string }).objective_ids
+		).toBe('["5.6"]');
+		expect(
+			(reopened.prepare("SELECT color FROM profiles WHERE id = 'p5'").get() as { color: string }).color
+		).toBe('#a1b2c3');
+		reopened.close();
+	});
 });
 	describe('fresh databases', () => {
-	it('reaches the v6 shape directly with both profiles and exam dates seeded', () => {
+	it('reaches the v8 shape directly with both profiles and exam dates seeded', () => {
 		const repo = createQuizRepository(':memory:');
 		expect(repo.getProfiles()).toHaveLength(2);
 		expect(repo.getProfiles().map((p) => p.id)).toEqual(['default', 'ash']);
@@ -285,7 +363,7 @@ describe('profile management', () => {
 	it('enforces the hard cap of two profiles (Alex + Ash seeded)', () => {
 		const repo = createQuizRepository(':memory:');
 		expect(repo.getProfiles()).toHaveLength(2);
-		expect(() => repo.createProfile('Third', '#f0b04c')).toThrow(`cap of ${MAX_PROFILES}`);
+		expect(() => repo.createProfile('Third', '#E0B66A')).toThrow(`cap of ${MAX_PROFILES}`);
 		repo.renameProfile('ash', 'Ash B');
 		expect(repo.getProfiles().find((p) => p.id === 'ash')?.name).toBe('Ash B');
 		repo.close();
@@ -302,7 +380,7 @@ describe('profile management', () => {
 
 		// New profiles inherit the caller-provided course.
 		repo.deleteProfile('ash');
-		const created = repo.createProfile('New', '#f0b04c', 'aplus-1201');
+		const created = repo.createProfile('New', '#D894B8', 'aplus-1201');
 		expect(created.courseId).toBe('aplus-1201');
 		repo.close();
 	});
@@ -322,7 +400,7 @@ describe('profile management', () => {
 		expect(createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getStudyLog()).toHaveLength(0);
 		expect(createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getActiveSession()).toBeNull();
 		// Cap freed.
-		repo.createProfile('New', '#b7f04c');
+		repo.createProfile('New', '#67B8A8');
 		expect(repo.getProfiles()).toHaveLength(2);
 		repo.close();
 	});

@@ -1,0 +1,41 @@
+{
+  "replace": {
+    "pbq-5-004": {
+      "id": "pbq-5-004",
+      "domain": 5,
+      "objective": "5.6",
+      "format": "pbq",
+      "kind": "sort",
+      "prompt": "Classify each security awareness activity by the program objective it most directly supports.",
+      "context": "Tap an activity, then tap the objective bucket where it belongs. Each activity goes into exactly one bucket; one bucket is a distractor that no activity belongs in.",
+      "items": [
+        { "id": "i1", "text": "Run quarterly simulated phishing campaigns" },
+        { "id": "i2", "text": "Verify a sender's identity before sharing credentials" },
+        { "id": "i3", "text": "Report suspicious email to the security team immediately" },
+        { "id": "i4", "text": "Escalate a suspected insider-threat indicator to the help desk" },
+        { "id": "i5", "text": "Complete annual role-based security training" },
+        { "id": "i6", "text": "Review clean-desk and removable-media guidance during onboarding" }
+      ],
+      "buckets": [
+        { "id": "b1", "label": "Phishing & social-engineering defense" },
+        { "id": "b2", "label": "Incident reporting" },
+        { "id": "b3", "label": "Ongoing training & guidance" },
+        { "id": "b4", "label": "Vulnerability scanning" }
+      ],
+      "correctBuckets": {
+        "i1": "b1",
+        "i2": "b1",
+        "i3": "b2",
+        "i4": "b2",
+        "i5": "b3",
+        "i6": "b3"
+      },
+      "hint": "Think about what each activity changes in employee behavior: resisting attacks, reporting incidents, or building knowledge over time.",
+      "explanation": "Simulated campaigns and identity-verification drills strengthen resistance to phishing and social engineering (b1). Reporting suspicious messages and escalating insider-threat indicators feed the organization's detection loop (b2). Annual role-based training and onboarding guidance build sustained awareness (b3). Vulnerability scanning is a technical control, not an awareness activity, so no item belongs in that bucket.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 5.6 — Given a scenario, implement security awareness practices" },
+        { "source": "study-guide", "section": "Security Program Management — Security Awareness" }
+      ]
+    }
+  }
+}

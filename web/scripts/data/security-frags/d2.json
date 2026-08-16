@@ -1,0 +1,288 @@
+{
+  "mcqs": [
+    {
+      "id": "mcq-2-067",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "Which threat vector delivered the malicious content?",
+      "context": "A mid-size law firm's security analyst investigates an alert from the email gateway. An attorney received an email from an unknown sender with a single JPEG attachment, which the gateway allowed because the file extension is a common image type and no malware signature matched. Endpoint forensics show that when the image was opened in a preview application, hidden data embedded inside the image pixels was extracted and executed, exfiltrating client documents to an external server. The image rendered normally in all other applications.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "File-based",
+          "rationale": "File-based vectors deliver a malicious executable or document directly; here the attachment is a benign-looking image with the payload concealed inside it."
+        },
+        {
+          "id": "b",
+          "text": "Image-based",
+          "rationale": "Embedding malicious content inside an image file is the image-based threat vector; the payload rode inside the image data and executed when the image was rendered."
+        },
+        {
+          "id": "c",
+          "text": "Message-based",
+          "rationale": "Message-based vectors describe the email, SMS, or instant-messaging channel used for delivery, not the image file that actually carried the payload."
+        },
+        {
+          "id": "d",
+          "text": "Removable device",
+          "rationale": "Removable-device vectors rely on USB drives or other portable media; no removable media was involved in this delivery."
+        }
+      ],
+      "correctOptionIds": ["b"],
+      "selectCount": 1,
+      "hint": "Identify which component of the message actually carried the hidden malicious content — consider the file type that hosted the payload rather than the channel that delivered it.",
+      "explanation": "The payload was concealed within the JPEG's image data and executed when the image was rendered, which is the image-based threat vector. A file-based vector would deliver a directly malicious file instead of hiding code inside a benign-looking image. Message-based describes the email transport channel, and removable device describes portable media — neither of those carried the payload.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.2" },
+        { "source": "study-guide", "section": "Attack Vectors" }
+      ]
+    },
+    {
+      "id": "mcq-2-068",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "scenario",
+      "prompt": "Which threat vector does this campaign represent?",
+      "context": "A regional credit union's threat-intelligence team investigates a viral social-media campaign claiming that the credit union's ATMs were compromised and member accounts drained. The claims are false. Analysis traces the campaign to a coordinated network of bot accounts operated by a competing financial firm that expects to gain customers as the credit union's reputation suffers.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Misinformation",
+          "rationale": "Misinformation is false information shared without intent to deceive; this campaign was deliberately engineered, so it does not qualify as mere misinformation."
+        },
+        {
+          "id": "b",
+          "text": "Disinformation",
+          "rationale": "Deliberately creating and spreading false information with the intent to deceive and harm is disinformation, a social-engineering vector."
+        },
+        {
+          "id": "c",
+          "text": "Pretexting",
+          "rationale": "Pretexting fabricates a scenario to extract information from a specific victim; this campaign spreads false claims publicly rather than manipulating one individual."
+        },
+        {
+          "id": "d",
+          "text": "Brand impersonation",
+          "rationale": "Brand impersonation poses as the organization itself; the campaign is about the credit union but never pretends to be it."
+        }
+      ],
+      "correctOptionIds": ["b"],
+      "selectCount": 1,
+      "hint": "Focus on who created the false information and whether the deception was intentional — the label changes with the creator's intent, not with whether the claim is true or damaging.",
+      "explanation": "Disinformation is false information deliberately created and spread with the intent to deceive or mislead, which matches the rival firm's coordinated bot campaign. Misinformation is also false but is shared without harmful intent, so it does not apply when the campaign was engineered for gain. Pretexting and brand impersonation are different social-engineering vectors involving fabricated scenarios with individuals or posing as the organization.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.2" },
+        { "source": "study-guide", "section": "Social Engineering" },
+        { "source": "cisa", "section": "MDM Planning and Incident Response Guide" }
+      ]
+    },
+    {
+      "id": "mcq-2-069",
+      "domain": 2,
+      "objective": "2.3",
+      "format": "scenario",
+      "prompt": "Which vulnerability class best describes this compromise?",
+      "context": "An engineering firm issues Android tablets to its field staff. An employee wants a free unit-conversion tool that is not available in the official app store, so the employee enables installation from unknown sources and downloads an APK from a third-party website. The app requests device-administrator privileges, and the firm's mobile device management (MDM) platform detects the app reading corporate email and location data. No operating system or app-store vulnerability is involved.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mobile device vulnerability from side loading",
+          "rationale": "Installing an app from outside the platform's official distribution channel is side loading, the mobile-device vulnerability the untrusted app exploited."
+        },
+        {
+          "id": "b",
+          "text": "Supply chain vulnerability",
+          "rationale": "Supply chain compromise requires a legitimate vendor's product to be altered at the source; here the app came from an untrusted third-party site chosen by the user."
+        },
+        {
+          "id": "c",
+          "text": "Misconfiguration vulnerability",
+          "rationale": "The device was set to allow unknown sources, but the vulnerability class is the installation practice of side loading, not an insecure server or network configuration."
+        },
+        {
+          "id": "d",
+          "text": "Zero-day vulnerability",
+          "rationale": "No unknown, unpatched flaw in the operating system or app store was exploited; the exposure came from installing untrusted software."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Think about how the software reached the device rather than what the software did after it was installed.",
+      "explanation": "Side loading — installing an application from outside the platform's official app-distribution channel — is listed under mobile device vulnerabilities and is exactly how the malicious app reached the tablet; the app then abused the device-administrator privileges it requested. Supply chain would require a legitimate provider's product to be compromised before delivery, and neither a zero-day flaw nor a server misconfiguration was present.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.3" },
+        { "source": "study-guide", "section": "Mobile Vulnerabilities and Attacks" },
+        { "source": "nist", "section": "SP 800-124 Rev. 2" }
+      ]
+    },
+    {
+      "id": "mcq-2-070",
+      "domain": 2,
+      "objective": "2.4",
+      "format": "scenario",
+      "prompt": "Which physical attack most likely occurred?",
+      "context": "A hospital's security analyst reviews badge-access logs and finds a server-room entry at 2:40 AM on a Sunday using badge 1187, issued to a nurse who is on vacation out of state. The card readers show the badge was used only that once. Physical security also reported a visitor lingering near the employee entrance holding a small hand-sized device at waist height. No lock tampering or forced-entry damage was found.",
+      "kind": "single-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "RFID cloning",
+          "rationale": "The badge's radio-frequency identifier was captured by the hand-held reader and copied onto a duplicate card, producing an entry that could not belong to the real employee."
+        },
+        {
+          "id": "b",
+          "text": "Credential replay",
+          "rationale": "Credential replay reuses captured network authentication exchanges; copying a badge's identifier is an RFID cloning attack at the physical layer, not a network replay."
+        },
+        {
+          "id": "c",
+          "text": "Environmental attack",
+          "rationale": "Environmental attacks target power, cooling, or climate controls such as HVAC; no facility system was involved in this entry."
+        },
+        {
+          "id": "d",
+          "text": "Brute force",
+          "rationale": "Physical brute force attacks a lock mechanism with many combinations or forced entry; no lock tampering or repeated attempts occurred."
+        }
+      ],
+      "correctOptionIds": ["a"],
+      "selectCount": 1,
+      "hint": "Consider how a contactless badge can be duplicated at a distance and whether the entry pattern itself could not belong to the real employee.",
+      "explanation": "RFID cloning copies the identifier from a contactless badge by scanning it at a distance and writing the captured data to a blank card; the hand-held device near the entrance and the single 2:40 AM entry with an on-vacation employee's badge are the indicators. Credential replay is a network-layer attack that reuses captured authentication material, environmental attacks abuse facility systems such as HVAC, and brute force would show lock tampering or repeated attempts — none of which occurred.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.4" },
+        { "source": "study-guide", "section": "Access Badge Cloning" },
+        { "source": "nist", "section": "SP 800-98" }
+      ]
+    },
+    {
+      "id": "mcq-2-071",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "scenario",
+      "prompt": "Which TWO actions must the bank take to decommission the retired servers securely? (Select TWO.)",
+      "context": "A regional bank replaces 30 servers in its primary data center. The retired servers stored customer records encrypted at rest and ran services using TLS certificates issued by the bank's internal certificate authority (CA). The bank must release the hardware to an approved recycling vendor without regulatory exposure or risk that the certificates can be misused.",
+      "kind": "multiple-choice",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sanitize each server's storage media before the hardware leaves the facility",
+          "rationale": "Media sanitization (purge or destroy per NIST SP 800-88) makes customer data irretrievable before the hardware changes hands."
+        },
+        {
+          "id": "b",
+          "text": "Revoke the servers' TLS certificates at the internal CA",
+          "rationale": "Revoking the certificates prevents the retired systems' identities from being used to impersonate the bank's services."
+        },
+        {
+          "id": "c",
+          "text": "Ship the servers to the recycling vendor immediately after shutdown",
+          "rationale": "Shipping unsanitized hardware moves data-bearing media out of the facility and risks exposure during transport and recycling."
+        },
+        {
+          "id": "d",
+          "text": "Erase only the boot drives and retain the data drives for reuse",
+          "rationale": "The data drives also hold sensitive records; leaving them unsanitized while reusing them in other systems violates decommissioning practice."
+        },
+        {
+          "id": "e",
+          "text": "Reinstall the operating system with a generic admin password before resale",
+          "rationale": "A generic password leaves a known credential on the device and does not remove data from the storage media."
+        }
+      ],
+      "correctOptionIds": ["a", "b"],
+      "selectCount": 2,
+      "hint": "Consider what must be done to both the data stored on the retired systems and the systems' digital identities before the hardware can be safely released.",
+      "explanation": "Secure decommissioning requires sanitizing storage media — clear, purge, or destroy per NIST SP 800-88 — so customer data cannot be recovered, and revoking the retired servers' certificates at the CA so their identities cannot be abused. Shipping the hardware without sanitization, erasing only some drives, or reinstalling an OS with a known password all leave data or identity exposure.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.5" },
+        { "source": "study-guide", "section": "Asset Disposal and Decommissioning" },
+        { "source": "nist", "section": "SP 800-88" }
+      ]
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "pbq-2-018",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about common threat vectors by placing the correct term in each blank. Each word is used once.\n\n1. A bulk email campaign that delivers a malicious link reaches users through a ____ vector.\n\n2. An employee connects a company laptop to an open, unencrypted hotel Wi-Fi network, exposing traffic through an unsecure ____ vector.\n\n3. An attacker compromises a managed service provider's remote-access tool and uses it to push malware into the provider's client networks — a ____ vector.\n\n4. An attacker impersonates a senior executive to pressure a finance employee into approving a fraudulent wire transfer — a ____ vector.",
+      "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+      "blanks": [
+        { "id": "b1", "label": "1. Delivery channel for a malicious-link email" },
+        { "id": "b2", "label": "2. Unsecured wireless connection" },
+        { "id": "b3", "label": "3. Compromised service-provider tool" },
+        { "id": "b4", "label": "4. Executive impersonation fraud" }
+      ],
+      "bank": [
+        { "id": "w1", "word": "Message-based" },
+        { "id": "w2", "word": "Network-based" },
+        { "id": "w3", "word": "Supply chain" },
+        { "id": "w4", "word": "Social engineering" },
+        { "id": "w5", "word": "File-based" },
+        { "id": "w6", "word": "Voice call" },
+        { "id": "w7", "word": "Zero-day" }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4"
+      },
+      "hint": "Match each statement to the broad category of pathway the attack used. Several statements describe related tactics, so focus on the defining characteristic of each scenario.",
+      "explanation": "Message-based vectors travel through email, SMS, or instant messaging. Network-based vectors exploit unsecured wired or wireless connections. Supply-chain vectors compromise a trusted provider, vendor, or supplier such as an MSP. Social-engineering vectors manipulate people through techniques such as impersonation. File-based, voice call, and zero-day are plausible-sounding terms but do not match these statements.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.2" },
+        { "source": "study-guide", "section": "Attack Vectors" }
+      ]
+    },
+    {
+      "id": "pbq-2-019",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "pbq",
+      "kind": "word-bank",
+      "prompt": "Complete each statement about enterprise mitigation techniques by placing the correct term in each blank. Each word is used once.\n\n1. Dividing a network into isolated zones so a compromise in one zone cannot spread freely is called ____.\n\n2. Granting each user and service only the permissions required for their role applies the principle of ____.\n\n3. Applying vendor security updates to close known vulnerabilities is called ____.\n\n4. Continuously reviewing logs, alerts, and traffic for signs of malicious activity is ____.\n\n5. Sanitizing storage media and revoking certificates before retiring hardware is part of ____.\n\n6. Disabling unnecessary ports and services and removing unneeded software strengthens systems through ____.",
+      "context": "Click a word chip, then click the blank to assign it. Each word is used once; extra words are distractors.",
+      "blanks": [
+        { "id": "b1", "label": "1. Network division into isolated zones" },
+        { "id": "b2", "label": "2. Minimum permissions per role" },
+        { "id": "b3", "label": "3. Applying vendor updates" },
+        { "id": "b4", "label": "4. Reviewing logs and alerts" },
+        { "id": "b5", "label": "5. Retiring hardware safely" },
+        { "id": "b6", "label": "6. Removing unnecessary software" }
+      ],
+      "bank": [
+        { "id": "w1", "word": "Segmentation" },
+        { "id": "w2", "word": "Least privilege" },
+        { "id": "w3", "word": "Patching" },
+        { "id": "w4", "word": "Monitoring" },
+        { "id": "w5", "word": "Decommissioning" },
+        { "id": "w6", "word": "Hardening" },
+        { "id": "w7", "word": "Encryption" },
+        { "id": "w8", "word": "Isolation" }
+      ],
+      "correctAssignments": {
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3",
+        "b4": "w4",
+        "b5": "w5",
+        "b6": "w6"
+      },
+      "hint": "Match each statement to the single enterprise practice it describes. The available words include several related security concepts, so read each statement's defining action carefully before assigning.",
+      "explanation": "Segmentation divides networks into zones that contain a compromise. Least privilege grants only the permissions a role requires. Patching applies vendor updates to close vulnerabilities. Monitoring reviews logs, alerts, and traffic for malicious activity. Decommissioning safely retires assets through sanitization and certificate revocation. Hardening removes unnecessary software and disables unneeded ports, services, and protocols. Encryption and isolation are related controls but do not match these statements.",
+      "sourceRefs": [
+        { "source": "exam-objectives", "section": "Objective 2.5" },
+        { "source": "study-guide", "section": "Hardening" },
+        { "source": "nist", "section": "SP 800-88" }
+      ]
+    }
+  ]
+}

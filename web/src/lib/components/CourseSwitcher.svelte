@@ -35,7 +35,7 @@
 
 <div class="relative" bind:this={wrapper}>
 	<button
-		class="flex h-11 items-center gap-1.5 rounded-md border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700 md:h-10"
+		class="flex h-11 items-center gap-1.5 rounded-md border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700"
 		type="button"
 		aria-haspopup="menu"
 		aria-expanded={open}
@@ -68,7 +68,7 @@
 
 	{#if open}
 		<div
-			class="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(18rem,calc(100vw-1rem))] rounded-md border border-border bg-surface-900 p-2 shadow-2xl"
+			class="absolute right-0 top-[calc(100%+0.5rem)] z-50 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-1rem))] overflow-y-auto rounded-md border border-border bg-surface-900 p-2 shadow-2xl"
 			role="menu"
 			aria-label="Course"
 		>
