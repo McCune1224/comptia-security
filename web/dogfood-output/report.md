@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-- **Gate status:** ✅ PASS (exit 0)
+- **Gate status:** PASS (exit 0)
 - **Themes exercised:** dark (computed: dark), light (computed: light) (computed `data-theme` recorded per run)
 - **Routes swept:** 12 owned route(s)
 - **Kinds exercised:** choice, configuration, evidence, matching, multi-step, ordering, slider, sort, word-bank
@@ -25,7 +25,7 @@ Post-fix audit run (fail-threshold gate), both themes. Drills seeded via POST /a
 - **Dropdown/viewport violations:** 0
 - **Console/page errors:** 0
 
-- ✅ none — all owned routes clear the ≥44×44px contract, no overflow, no console errors.
+- none — all owned routes clear the ≥44×44px contract, no overflow, no console errors.
 
 ## Console / page errors
 

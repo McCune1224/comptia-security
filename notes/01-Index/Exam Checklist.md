@@ -23,7 +23,7 @@
 ## After Exam
 - [ ] Recorded score
 - [ ] Updated study materials (if retaking)
-- [ ] Celebrated! 🎉
+- [ ] Celebrated!
 
 ---
 

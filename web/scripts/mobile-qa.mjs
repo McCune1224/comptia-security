@@ -116,7 +116,12 @@ function addViolation(scope, message) {
 }
 
 function slug(str) {
-	return str.replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'page';
+	return (
+		str
+			.replace(/[^a-z0-9]+/gi, '-')
+			.replace(/^-+|-+$/g, '')
+			.toLowerCase() || 'page'
+	);
 }
 
 // ---- console / request listeners ------------------------------------------
@@ -142,7 +147,9 @@ function attachListeners(page) {
 		if (res.status() >= 400 && res.url().includes('/api/')) {
 			res
 				.text()
-				.then((body) => console.log(`API-ERROR ${res.status()}: ${res.url()} — ${body.slice(0, 200)}`))
+				.then((body) =>
+					console.log(`API-ERROR ${res.status()}: ${res.url()} — ${body.slice(0, 200)}`)
+				)
 				.catch(() => {});
 		}
 	});
@@ -215,7 +222,8 @@ async function touchDrag(page, fromSelector, toSelector) {
 async function sweepPage(page) {
 	return page.evaluate((min) => {
 		const small = [];
-		const sel = 'button, a, [role="button"], [role="slider"], input, select, [tabindex]:not([tabindex="-1"])';
+		const sel =
+			'button, a, [role="button"], [role="slider"], input, select, [tabindex]:not([tabindex="-1"])';
 		for (const el of document.querySelectorAll(sel)) {
 			const style = getComputedStyle(el);
 			if (style.visibility === 'hidden' || style.display === 'none') continue;
@@ -285,7 +293,13 @@ async function sweepRoute(page, route, forceDeferred = false) {
 	}
 	if (overflow) {
 		const msg = `horizontal overflow at ${page.viewportSize()?.width ?? 'current'}px`;
-		addFinding(route, deferred ? 'Info' : 'Medium', 'Layout', `Horizontal overflow${deferred ? ' (deferred)' : ''}`, msg);
+		addFinding(
+			route,
+			deferred ? 'Info' : 'Medium',
+			'Layout',
+			`Horizontal overflow${deferred ? ' (deferred)' : ''}`,
+			msg
+		);
 		if (!deferred) addViolation(route, msg);
 	}
 	return { small: small.length, overflow };
@@ -342,7 +356,10 @@ async function detectKind(page, allowMultiStep = true) {
 		const text = document.body.innerText || '';
 		const low = text.toLowerCase();
 		// multi-step first: the step nav ("← Back") is unique to step children.
-		if (multi && [...document.querySelectorAll('button')].some((b) => b.textContent?.includes('← Back')))
+		if (
+			multi &&
+			[...document.querySelectorAll('button')].some((b) => b.textContent?.includes('← Back'))
+		)
 			return 'multi-step';
 		if (has('[data-connect-premise]')) return 'matching';
 		if (low.includes('tap a region')) return 'hotspot';
@@ -352,7 +369,7 @@ async function detectKind(page, allowMultiStep = true) {
 		if (low.includes('word bank —')) return 'word-bank';
 		if (low.includes('tap an item, then tap a bucket')) return 'sort';
 		if (has('[aria-label^="Reorder item"]')) return 'ordering';
-		if (has('button[aria-pressed]') && low.includes('flip') ) return 'memory';
+		if (has('button[aria-pressed]') && low.includes('flip')) return 'memory';
 		const mono = document.querySelectorAll('.font-mono input[type="checkbox"]').length;
 		if (mono > 0) return 'evidence';
 		if (has('input[type="radio"]') || has('input[type="checkbox"]')) return 'choice';
@@ -366,7 +383,10 @@ async function tapEnabled(locator) {
 	try {
 		const n = await locator.count();
 		if (!n) return false;
-		const enabled = await locator.first().isEnabled().catch(() => false);
+		const enabled = await locator
+			.first()
+			.isEnabled()
+			.catch(() => false);
 		if (!enabled) return false;
 		await locator.first().tap({ timeout: 3000 });
 		return true;
@@ -399,13 +419,19 @@ async function interactWithKind(page, kind) {
 		case 'choice': {
 			const radios = page.locator('input[data-answer-option][type="radio"]');
 			if (await radios.count()) {
-				await radios.first().tap({ timeout: 3000 }).catch(() => {});
+				await radios
+					.first()
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 			} else {
 				const want = await expectedChoiceCount(page);
 				const boxes = page.locator('input[data-answer-option][type="checkbox"]');
 				const n = await boxes.count();
 				for (let i = 0; i < Math.min(Math.min(want, 3), n); i++) {
-					await boxes.nth(i).tap({ timeout: 3000 }).catch(() => {});
+					await boxes
+						.nth(i)
+						.tap({ timeout: 3000 })
+						.catch(() => {});
 					await page.waitForTimeout(120);
 				}
 			}
@@ -416,9 +442,15 @@ async function interactWithKind(page, kind) {
 			const targets = page.locator('[data-connect-target]');
 			const n = await premises.count();
 			for (let i = 0; i < n; i++) {
-				await premises.nth(i).tap({ timeout: 3000 }).catch(() => {});
+				await premises
+					.nth(i)
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(120);
-				await targets.nth(i).tap({ timeout: 3000 }).catch(() => {});
+				await targets
+					.nth(i)
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(120);
 			}
 			break;
@@ -428,7 +460,10 @@ async function interactWithKind(page, kind) {
 			const regions = page.locator('button[aria-pressed]');
 			const n = await regions.count();
 			for (let i = 0; i < n; i++) {
-				await regions.nth(i).tap({ timeout: 3000 }).catch(() => {});
+				await regions
+					.nth(i)
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(100);
 			}
 			break;
@@ -438,9 +473,15 @@ async function interactWithKind(page, kind) {
 			const cards = page.locator('button[aria-label*="card" i], button[aria-pressed]');
 			const n = await cards.count();
 			for (let i = 0; i < Math.min(n, 8); i++) {
-				await cards.nth(i % n).tap({ timeout: 3000 }).catch(() => {});
+				await cards
+					.nth(i % n)
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(120);
-				await cards.nth((i + 1) % n).tap({ timeout: 3000 }).catch(() => {});
+				await cards
+					.nth((i + 1) % n)
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(180);
 			}
 			break;
@@ -457,9 +498,14 @@ async function interactWithKind(page, kind) {
 		}
 		case 'sort': {
 			for (let i = 0; i < 8; i++) {
-				const tray = page.locator('div.flex.flex-wrap.gap-2 > button[aria-pressed]:not([disabled])');
+				const tray = page.locator(
+					'div.flex.flex-wrap.gap-2 > button[aria-pressed]:not([disabled])'
+				);
 				if (!(await tray.count())) break;
-				await tray.first().tap({ timeout: 3000 }).catch(() => {});
+				await tray
+					.first()
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(150);
 				const bucketLabel = page.locator('div.rounded-md.border[role="button"] p').first();
 				await bucketLabel.tap({ timeout: 3000 }).catch(() => {});
@@ -481,7 +527,10 @@ async function interactWithKind(page, kind) {
 			const blanks = page.locator('button', { hasText: /^_+[0-9]+$/ });
 			const n = await blanks.count();
 			for (let i = 0; i < n; i++) {
-				await blanks.nth(i).tap({ timeout: 3000 }).catch(() => {});
+				await blanks
+					.nth(i)
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(120);
 				const chips = page
 					.locator('p:has-text("Word bank —")')
@@ -490,7 +539,10 @@ async function interactWithKind(page, kind) {
 					.locator('div.flex.flex-wrap')
 					.first()
 					.locator('button:not([disabled])');
-				await chips.first().tap({ timeout: 3000 }).catch(() => {});
+				await chips
+					.first()
+					.tap({ timeout: 3000 })
+					.catch(() => {});
 				await page.waitForTimeout(120);
 			}
 			break;
@@ -504,7 +556,10 @@ async function interactWithKind(page, kind) {
 				for (let j = 1; j < m; j++) {
 					const val = await opts.nth(j).getAttribute('value');
 					if (val) {
-						await selects.nth(i).selectOption(val).catch(() => {});
+						await selects
+							.nth(i)
+							.selectOption(val)
+							.catch(() => {});
 						break;
 					}
 				}
@@ -529,7 +584,9 @@ async function interactWithKind(page, kind) {
 			if (payloadQuestion) {
 				want = payloadQuestion.selectCount;
 			} else {
-				const m = text.match(/[Ss]elect (?:up to )?(ALL|the|TWO|THREE|FOUR|ONE|one|two|three|four)/);
+				const m = text.match(
+					/[Ss]elect (?:up to )?(ALL|the|TWO|THREE|FOUR|ONE|one|two|three|four)/
+				);
 				if (m) {
 					const w = m[1].toUpperCase();
 					if (w === 'ALL') want = Infinity;
@@ -540,14 +597,19 @@ async function interactWithKind(page, kind) {
 			const total = await boxes.count();
 			const n = Math.min(total, want === Infinity ? total : want);
 			for (let i = 0; i < n; i++) {
-				await boxes.nth(i).check({ timeout: 3000 }).catch(() => {});
+				await boxes
+					.nth(i)
+					.check({ timeout: 3000 })
+					.catch(() => {});
 			}
 			const afterEnabled = await page
 				.locator('button:has-text("Check Answer")')
 				.first()
 				.isEnabled()
 				.catch(() => false);
-			console.log(`evidence boxes=${total} want=${want === Infinity ? 'ALL' : want} checkEnabled=${afterEnabled}`);
+			console.log(
+				`evidence boxes=${total} want=${want === Infinity ? 'ALL' : want} checkEnabled=${afterEnabled}`
+			);
 			break;
 		}
 		case 'ordering': {
@@ -556,7 +618,9 @@ async function interactWithKind(page, kind) {
 			const order = () =>
 				page
 					.evaluate(() =>
-						[...document.querySelectorAll('[data-id]')].map((el) => el.getAttribute('data-id')).join(',')
+						[...document.querySelectorAll('[data-id]')]
+							.map((el) => el.getAttribute('data-id'))
+							.join(',')
 					)
 					.catch(() => '');
 			const before = await order();
@@ -647,7 +711,9 @@ async function driveSession(page, context, type, routeTag, body, tag, cap = 160)
 	const payload = await res.json().catch(() => ({}));
 	const sessionId = payload.session?.sessionId;
 	if (!res.ok() || !sessionId) {
-		throw new Error(`seed ${type} session failed: ${res.status()} ${JSON.stringify(payload).slice(0, 200)}`);
+		throw new Error(
+			`seed ${type} session failed: ${res.status()} ${JSON.stringify(payload).slice(0, 200)}`
+		);
 	}
 	activeSessions.add(sessionId);
 	const viewRes = await context.request.get(`${BASE}/api/quiz/session/${sessionId}`);
@@ -728,7 +794,10 @@ async function walkPages(page, theme) {
 			if (route === '/') {
 				const menu = page.locator('button[aria-label="Open menu"]');
 				if (await menu.count()) {
-					await menu.first().tap({ timeout: 3000 }).catch(() => {});
+					await menu
+						.first()
+						.tap({ timeout: 3000 })
+						.catch(() => {});
 					await page.waitForTimeout(600);
 					await screenshot(page, `page-home-menu-${theme}-390x844`, VIEWPORT);
 					await page.keyboard.press('Escape');
@@ -779,7 +848,10 @@ async function fixedViewportScenarios(page, context, theme) {
 	const assertBottomNavClear = async (label) => {
 		// The fixed bottom nav must not cover the final assessment action once
 		// the user has scrolled it into view.
-		const navBox = await page.locator('nav[aria-label="Primary navigation"]').boundingBox().catch(() => null);
+		const navBox = await page
+			.locator('nav[aria-label="Primary navigation"]')
+			.boundingBox()
+			.catch(() => null);
 		if (!navBox) return;
 		const submit = page.locator('button:has-text("Submit")').last();
 		await submit.scrollIntoViewIfNeeded().catch(() => {});
@@ -799,12 +871,26 @@ async function fixedViewportScenarios(page, context, theme) {
 		const panels = page.locator('[role="menu"]');
 		const n = await panels.count();
 		for (let i = 0; i < n; i++) {
-			const box = await panels.nth(i).boundingBox().catch(() => null);
+			const box = await panels
+				.nth(i)
+				.boundingBox()
+				.catch(() => null);
 			if (!box) continue;
-			if (box.x < 0 || box.y < 0 || box.x + box.width > page.viewportSize().width + 1 || box.y + box.height > page.viewportSize().height + 1) {
-				addViolation(scope, `${label}: dropdown leaves the viewport (${Math.round(box.x)},${Math.round(box.y)} ${Math.round(box.width)}×${Math.round(box.height)} at ${page.viewportSize().width}×${page.viewportSize().height})`);
+			if (
+				box.x < 0 ||
+				box.y < 0 ||
+				box.x + box.width > page.viewportSize().width + 1 ||
+				box.y + box.height > page.viewportSize().height + 1
+			) {
+				addViolation(
+					scope,
+					`${label}: dropdown leaves the viewport (${Math.round(box.x)},${Math.round(box.y)} ${Math.round(box.width)}×${Math.round(box.height)} at ${page.viewportSize().width}×${page.viewportSize().height})`
+				);
 			}
-			const scrollable = await panels.nth(i).evaluate((el) => el.scrollHeight > el.clientHeight + 4).catch(() => false);
+			const scrollable = await panels
+				.nth(i)
+				.evaluate((el) => el.scrollHeight > el.clientHeight + 4)
+				.catch(() => false);
 			if (box.height >= page.viewportSize().height - 40 && !scrollable) {
 				addViolation(scope, `${label}: dropdown fills the viewport but does not scroll internally`);
 			}
@@ -813,99 +899,108 @@ async function fixedViewportScenarios(page, context, theme) {
 		await page.waitForTimeout(400);
 	};
 
-	await check(LANDSCAPE, 'dropdowns',
-		async () => {
-			await page.goto(`${BASE}/`);
-			await page.waitForTimeout(1200);
-			await dropdownContained('MobileMenu', 'button[aria-label="Open menu"]');
-			await dropdownContained('CourseSwitcher', 'button[aria-label="Switch course"]');
-			await dropdownContained('ProfileSwitcher', 'button[aria-label="Switch profile"]');
-			await assertNoPageOverflow('landscape dropdowns');
-		});
+	await check(LANDSCAPE, 'dropdowns', async () => {
+		await page.goto(`${BASE}/`);
+		await page.waitForTimeout(1200);
+		await dropdownContained('MobileMenu', 'button[aria-label="Open menu"]');
+		await dropdownContained('CourseSwitcher', 'button[aria-label="Switch course"]');
+		await dropdownContained('ProfileSwitcher', 'button[aria-label="Switch profile"]');
+		await assertNoPageOverflow('landscape dropdowns');
+	});
 
-	await check(NARROW, 'calendar',
-		async () => {
-			await page.goto(`${BASE}/calendar`);
-			await page.waitForTimeout(1200);
-			await assertNoPageOverflow('calendar 320px');
-			// Select a calendar day — day cells must stay ≥44px tall within the scroller.
-			const day = page.locator('button').filter({ has: page.locator('span') }).first();
-			const dayBox = await day.boundingBox().catch(() => null);
-			if (dayBox && (dayBox.width < 20 || dayBox.height < 40)) {
-				addViolation(scope, `calendar day cell too small (${Math.round(dayBox.width)}×${Math.round(dayBox.height)})`);
-			}
-			await day.tap({ timeout: 3000 }).catch(() => {});
-			await page.waitForTimeout(400);
-		});
+	await check(NARROW, 'calendar', async () => {
+		await page.goto(`${BASE}/calendar`);
+		await page.waitForTimeout(1200);
+		await assertNoPageOverflow('calendar 320px');
+		// Select a calendar day — day cells must stay ≥44px tall within the scroller.
+		const day = page
+			.locator('button')
+			.filter({ has: page.locator('span') })
+			.first();
+		const dayBox = await day.boundingBox().catch(() => null);
+		if (dayBox && (dayBox.width < 20 || dayBox.height < 40)) {
+			addViolation(
+				scope,
+				`calendar day cell too small (${Math.round(dayBox.width)}×${Math.round(dayBox.height)})`
+			);
+		}
+		await day.tap({ timeout: 3000 }).catch(() => {});
+		await page.waitForTimeout(400);
+	});
 
-	await check(NARROW, 'lesson drills',
-		async () => {
-			await page.goto(`${BASE}/modules/week-1`);
-			await page.waitForTimeout(1200);
-			await assertNoPageOverflow('lesson 320px');
-			// Open the first lesson, then verify an objective drill link starts a 5-question session.
-			const lessonRow = page.locator('[role="button"]').filter({ hasText: 'Domain 1' }).first();
-			await lessonRow.tap({ timeout: 3000 }).catch(() => {});
-			await page.waitForTimeout(600);
-			const drill = page.locator('a', { hasText: /^Drill \d+\.\d+$/ }).first();
-			const drillBox = await drill.boundingBox().catch(() => null);
-			if (!meetsTap(drillBox)) addViolation(scope, `objective drill link < ${MIN_TAP}px`);
-			const href = await drill.getAttribute('href').catch(() => null);
-			const match = href ? /objective=([\d.]+)&count=5/.exec(href) : null;
-			if (!match) {
-				addViolation(scope, 'objective drill link does not target a 5-question objective session');
-				return;
-			}
-			await page.goto(`${BASE}${href}`);
-			await page.waitForTimeout(1500);
-			const text = await page.evaluate(() => document.body.innerText || '');
-			if (!/Q1\s+OF\s+5/i.test(text)) addViolation(scope, `objective drill did not start a 5-question session (${href})`);
-			// The bottom nav must not cover the action row on a drill.
-			await assertBottomNavClear('drill');
-			// Abandon the drill session so the next theme's seeded sessions are not blocked.
-			const sessionId = new URL(page.url()).searchParams.get('session');
-			if (sessionId) {
-				await context.request.delete(`${BASE}/api/quiz/session/${sessionId}`).catch(() => {});
-				activeSessions.delete(sessionId);
-			}
-		});
+	await check(NARROW, 'lesson drills', async () => {
+		await page.goto(`${BASE}/modules/week-1`);
+		await page.waitForTimeout(1200);
+		await assertNoPageOverflow('lesson 320px');
+		// Open the first lesson, then verify an objective drill link starts a 5-question session.
+		const lessonRow = page.locator('[role="button"]').filter({ hasText: 'Domain 1' }).first();
+		await lessonRow.tap({ timeout: 3000 }).catch(() => {});
+		await page.waitForTimeout(600);
+		const drill = page.locator('a', { hasText: /^Drill \d+\.\d+$/ }).first();
+		const drillBox = await drill.boundingBox().catch(() => null);
+		if (!meetsTap(drillBox)) addViolation(scope, `objective drill link < ${MIN_TAP}px`);
+		const href = await drill.getAttribute('href').catch(() => null);
+		const match = href ? /objective=([\d.]+)&count=5/.exec(href) : null;
+		if (!match) {
+			addViolation(scope, 'objective drill link does not target a 5-question objective session');
+			return;
+		}
+		await page.goto(`${BASE}${href}`);
+		await page.waitForTimeout(1500);
+		const text = await page.evaluate(() => document.body.innerText || '');
+		if (!/Q1\s+OF\s+5/i.test(text))
+			addViolation(scope, `objective drill did not start a 5-question session (${href})`);
+		// The bottom nav must not cover the action row on a drill.
+		await assertBottomNavClear('drill');
+		// Abandon the drill session so the next theme's seeded sessions are not blocked.
+		const sessionId = new URL(page.url()).searchParams.get('session');
+		if (sessionId) {
+			await context.request.delete(`${BASE}/api/quiz/session/${sessionId}`).catch(() => {});
+			activeSessions.delete(sessionId);
+		}
+	});
 
-	await check(NARROW, 'dashboard',
-		async () => {
-			await page.goto(`${BASE}/`);
-			await page.waitForTimeout(1200);
-			await assertNoPageOverflow('dashboard 320px');
-			// Bottom nav tabs remain ≥44px and fully visible.
-			const nav = page.locator('nav[aria-label="Primary navigation"] a');
-			const n = await nav.count();
-			for (let i = 0; i < n; i++) {
-				const box = await nav.nth(i).boundingBox().catch(() => null);
-				if (!meetsTap(box)) addViolation(scope, `bottom nav tab ${i} < ${MIN_TAP}px`);
-			}
-		});
+	await check(NARROW, 'dashboard', async () => {
+		await page.goto(`${BASE}/`);
+		await page.waitForTimeout(1200);
+		await assertNoPageOverflow('dashboard 320px');
+		// Bottom nav tabs remain ≥44px and fully visible.
+		const nav = page.locator('nav[aria-label="Primary navigation"] a');
+		const n = await nav.count();
+		for (let i = 0; i < n; i++) {
+			const box = await nav
+				.nth(i)
+				.boundingBox()
+				.catch(() => null);
+			if (!meetsTap(box)) addViolation(scope, `bottom nav tab ${i} < ${MIN_TAP}px`);
+		}
+	});
 
-	await check(VIEWPORT, 'assessment action row',
-		async () => {
-			// Drive one choice question inside a seeded session and confirm the
-			// fixed bottom nav never covers the action row.
-			const res = await context.request.post(`${BASE}/api/quiz/start`, {
-				data: { type: 'quiz', count: 3, mode: 'practice' }
-			});
-			const payload = await res.json().catch(() => ({}));
-			const sessionId = payload.session?.sessionId;
-			if (!sessionId) return;
-			activeSessions.add(sessionId);
-			await page.goto(`${BASE}/quiz?session=${sessionId}`);
-			await page.waitForTimeout(1200);
-			await assertBottomNavClear('assessment action row');
-			await abandonSession(context, sessionId);
+	await check(VIEWPORT, 'assessment action row', async () => {
+		// Drive one choice question inside a seeded session and confirm the
+		// fixed bottom nav never covers the action row.
+		const res = await context.request.post(`${BASE}/api/quiz/start`, {
+			data: { type: 'quiz', count: 3, mode: 'practice' }
 		});
+		const payload = await res.json().catch(() => ({}));
+		const sessionId = payload.session?.sessionId;
+		if (!sessionId) return;
+		activeSessions.add(sessionId);
+		await page.goto(`${BASE}/quiz?session=${sessionId}`);
+		await page.waitForTimeout(1200);
+		await assertBottomNavClear('assessment action row');
+		await abandonSession(context, sessionId);
+	});
 }
 
 // ---- report ---------------------------------------------------------------
 function writeReport(summary) {
 	const final = [...findings];
-	if (orderingAttempts > 0 && orderingFailures === orderingAttempts && orderingKeyboardRecovered === 0) {
+	if (
+		orderingAttempts > 0 &&
+		orderingFailures === orderingAttempts &&
+		orderingKeyboardRecovered === 0
+	) {
 		final.push({
 			pageUrl: 'pbq',
 			severity: 'High',
@@ -955,7 +1050,7 @@ function writeReport(summary) {
 
 ## Executive summary
 
-- **Gate status:** ${gateViolations.length === 0 ? '✅ PASS (exit 0)' : `❌ FAIL (${gateViolations.length} violation(s), exit 1)`}
+- **Gate status:** ${gateViolations.length === 0 ? 'PASS (exit 0)' : `FAIL (${gateViolations.length} violation(s), exit 1)`}
 - **Themes exercised:** ${THEMES_SEEN.join(', ') || 'none'} (computed \`data-theme\` recorded per run)
 - **Routes swept:** ${OWNED_ROUTES.length} owned route(s)
 - **Kinds exercised:** ${[...KINDS_SEEN].sort().join(', ') || 'none'}${notSeen.length ? `\n- **Kinds NOT exercised (no bank items yet — renderer supported, reported unavailable):** ${notSeen.join(', ')}` : ''}
@@ -973,7 +1068,7 @@ ${summary ? `## Notes\n\n${summary}\n\n` : ''}
 - **Dropdown/viewport violations:** ${gateViolations.filter((v) => v.message.includes('dropdown') || v.message.includes('covers')).length}
 - **Console/page errors:** ${consoleErrors.length + pageErrors.length + failedRequests.length}
 
-${gateViolations.length ? gateViolations.map((v) => `- ❌ \`[${v.scope}]\` ${v.message}`).join('\n') : '- ✅ none — all owned routes clear the ≥44×44px contract, no overflow, no console errors.'}
+${gateViolations.length ? gateViolations.map((v) => `- \`[${v.scope}]\` ${v.message}`).join('\n') : '- none — all owned routes clear the ≥44×44px contract, no overflow, no console errors.'}
 
 ## Console / page errors
 
@@ -1025,9 +1120,25 @@ try {
 		// Re-seed until all kinds with bank items (slider/evidence included) are seen.
 		const EXERCISABLE = KINDS.filter((k) => !['memory', 'hotspot', 'numeric'].includes(k));
 		for (let seed = 0; seed < 4 && EXERCISABLE.some((k) => !KINDS_SEEN.has(k)); seed++) {
-			await driveSession(page, context, 'pbq', 'pbq', { type: 'pbq', count: 30, mode: 'practice' }, `pbq-${theme}-s${seed}`, 170);
+			await driveSession(
+				page,
+				context,
+				'pbq',
+				'pbq',
+				{ type: 'pbq', count: 30, mode: 'practice' },
+				`pbq-${theme}-s${seed}`,
+				170
+			);
 		}
-		await driveSession(page, context, 'quiz', 'quiz', { type: 'quiz', count: 24, mode: 'practice' }, `quiz-${theme}`, 60);
+		await driveSession(
+			page,
+			context,
+			'quiz',
+			'quiz',
+			{ type: 'quiz', count: 24, mode: 'practice' },
+			`quiz-${theme}`,
+			60
+		);
 
 		// 2) Full route walk — touch sweep + overflow + dual-viewport screenshots.
 		await walkPages(page, theme);
@@ -1050,14 +1161,20 @@ try {
 		`DONE — themes: ${THEMES_SEEN.join(' | ')} | kinds: ${[...KINDS_SEEN].sort().join(', ')} | gate violations: ${gateViolations.length} | console errors: ${consoleTotal}`
 	);
 	if (gateViolations.length === 0 && consoleTotal === 0) {
-		console.log('GATE: PASS — zero <44px targets, zero overflow, zero console errors, both themes.');
+		console.log(
+			'GATE: PASS — zero <44px targets, zero overflow, zero console errors, both themes.'
+		);
 		process.exit(0);
 	}
 	if (REPORT_ONLY) {
-		console.log(`GATE: FAIL would exit 1 (${gateViolations.length} violations, ${consoleTotal} console errors) — report-only mode, exiting 0.`);
+		console.log(
+			`GATE: FAIL would exit 1 (${gateViolations.length} violations, ${consoleTotal} console errors) — report-only mode, exiting 0.`
+		);
 		process.exit(0);
 	}
-	console.log(`GATE: FAIL — ${gateViolations.length} violations, ${consoleTotal} console/page errors.`);
+	console.log(
+		`GATE: FAIL — ${gateViolations.length} violations, ${consoleTotal} console/page errors.`
+	);
 	process.exit(1);
 } catch (err) {
 	console.error(`FATAL: ${err.message}`);

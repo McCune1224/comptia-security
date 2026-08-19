@@ -37,7 +37,12 @@ describe('planSyncEvents', () => {
 describe('google oauth storage', () => {
 	it('round-trips and clears the single oauth row', () => {
 		expect(quizRepository.getGoogleOAuth()).toBeNull();
-		quizRepository.saveGoogleOAuth({ accessToken: 'a', refreshToken: 'r', expiresAt: 123, email: 'me@example.com' });
+		quizRepository.saveGoogleOAuth({
+			accessToken: 'a',
+			refreshToken: 'r',
+			expiresAt: 123,
+			email: 'me@example.com'
+		});
 		expect(quizRepository.getGoogleOAuth()).toMatchObject({
 			accessToken: 'a',
 			refreshToken: 'r',
@@ -50,21 +55,49 @@ describe('google oauth storage', () => {
 	});
 
 	it('keeps calendarId when saving a refresh (calendarId omitted)', () => {
-		quizRepository.saveGoogleOAuth({ accessToken: 'a', refreshToken: 'r', expiresAt: 1, email: 'e', calendarId: 'cal-9' });
-		quizRepository.saveGoogleOAuth({ accessToken: 'b', refreshToken: 'r', expiresAt: 2, email: 'e' });
+		quizRepository.saveGoogleOAuth({
+			accessToken: 'a',
+			refreshToken: 'r',
+			expiresAt: 1,
+			email: 'e',
+			calendarId: 'cal-9'
+		});
+		quizRepository.saveGoogleOAuth({
+			accessToken: 'b',
+			refreshToken: 'r',
+			expiresAt: 2,
+			email: 'e'
+		});
 		expect(quizRepository.getGoogleOAuth()?.calendarId).toBe('cal-9');
 		quizRepository.clearGoogleOAuth();
 	});
 
 	it('tracks, updates and removes synced events by source', () => {
-		quizRepository.recordSyncedEvent('exam', 'evt-1', '🎓 Exam', '2026-08-31', '2026-08-05T00:00:00Z');
-		quizRepository.recordSyncedEvent('assignment:week-1-checkpoint', 'evt-2', '📝 Checkpoint', '2026-08-29', '2026-08-05T00:00:00Z');
-		quizRepository.recordSyncedEvent('exam', 'evt-1b', '🎓 Exam', '2026-08-31', '2026-08-06T00:00:00Z');
+		quizRepository.recordSyncedEvent('exam', 'evt-1', 'Exam', '2026-08-31', '2026-08-05T00:00:00Z');
+		quizRepository.recordSyncedEvent(
+			'assignment:week-1-checkpoint',
+			'evt-2',
+			'Checkpoint',
+			'2026-08-29',
+			'2026-08-05T00:00:00Z'
+		);
+		quizRepository.recordSyncedEvent(
+			'exam',
+			'evt-1b',
+			'Exam',
+			'2026-08-31',
+			'2026-08-06T00:00:00Z'
+		);
 		expect(quizRepository.getSyncedEvents()).toHaveLength(2);
-		expect(quizRepository.getSyncedEvents().find((row) => row.source === 'exam')?.eventId).toBe('evt-1b');
+		expect(quizRepository.getSyncedEvents().find((row) => row.source === 'exam')?.eventId).toBe(
+			'evt-1b'
+		);
 		quizRepository.removeSyncedEvent('exam');
-		expect(quizRepository.getSyncedEvents().map((row) => row.source)).toEqual(['assignment:week-1-checkpoint']);
-		for (const row of quizRepository.getSyncedEvents()) quizRepository.removeSyncedEvent(row.source);
+		expect(quizRepository.getSyncedEvents().map((row) => row.source)).toEqual([
+			'assignment:week-1-checkpoint'
+		]);
+		for (const row of quizRepository.getSyncedEvents())
+			quizRepository.removeSyncedEvent(row.source);
 		expect(quizRepository.getSyncedEvents()).toHaveLength(0);
 	});
 });

@@ -37,7 +37,9 @@
 	});
 
 	const wallFiltered = $derived(
-		domainFilter === null ? (data?.wall ?? []) : (data?.wall ?? []).filter((item) => item.domain === domainFilter)
+		domainFilter === null
+			? (data?.wall ?? [])
+			: (data?.wall ?? []).filter((item) => item.domain === domainFilter)
 	);
 
 	function kindLabel(kind: string): string {
@@ -95,8 +97,8 @@
 					<p class="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
 						A short mix of <span class="font-semibold text-text-primary">due-for-review</span>,
 						<span class="font-semibold text-text-primary">weakest objectives</span>, and
-						<span class="font-semibold text-text-primary">new questions</span> — built fresh every
-						day. Ten minutes keeps the forgetting curve honest.
+						<span class="font-semibold text-text-primary">new questions</span> — built fresh every day.
+						Ten minutes keeps the forgetting curve honest.
 					</p>
 					<div class="mt-6 flex flex-wrap items-center gap-3">
 						<button
@@ -119,10 +121,7 @@
 				<div class="flex items-center justify-around gap-6 lg:justify-end">
 					<div class="text-center">
 						<div class="flex items-center justify-center gap-2">
-							<svg
-								viewBox="0 0 24 24"
-								class="h-8 w-8 text-warning"
-								fill="currentColor"
+							<svg viewBox="0 0 24 24" class="h-8 w-8 text-warning" fill="currentColor"
 								><path
 									d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
 								/></svg
@@ -183,25 +182,32 @@
 						Questions you've missed. Nail each one twice in a row and it falls off the wall.
 					</p>
 				</div>
-				<button class="btn btn-ghost shrink-0" type="button" onclick={() => goto('/quiz?review=wall')}>
+				<button
+					class="btn btn-ghost shrink-0"
+					type="button"
+					onclick={() => goto('/quiz?review=wall')}
+				>
 					Drill the wall
 				</button>
 			</div>
 			{#if data.summary.wallCount === 0}
 				<p class="mt-5 rounded-md bg-success/10 p-4 text-sm text-success">
-					🎉 Wall cleared — nothing you've missed is still unmastered.
+					Wall cleared — nothing you've missed is still unmastered.
 				</p>
 			{:else}
 				<div class="mt-4 flex flex-wrap gap-2">
 					<button
-						class="chip {domainFilter === null ? 'bg-accent text-on-accent' : 'bg-surface-700 text-text-muted'}"
+						class="chip {domainFilter === null
+							? 'bg-accent text-on-accent'
+							: 'bg-surface-700 text-text-muted'}"
 						type="button"
-						onclick={() => (domainFilter = null)}
-						>All ({data.summary.wallCount})</button
+						onclick={() => (domainFilter = null)}>All ({data.summary.wallCount})</button
 					>
 					{#each [1, 2, 3, 4, 5] as domain (domain)}
 						<button
-							class="chip {domainFilter === domain ? 'bg-accent text-on-accent' : 'bg-surface-700 text-text-muted'}"
+							class="chip {domainFilter === domain
+								? 'bg-accent text-on-accent'
+								: 'bg-surface-700 text-text-muted'}"
 							title={DOMAIN_NAMES[domain]}
 							type="button"
 							onclick={() => (domainFilter = domainFilter === domain ? null : domain)}
@@ -216,15 +222,14 @@
 						>
 							<div class="min-w-0">
 								<div class="flex flex-wrap items-center gap-2">
-									<span class="chip bg-surface-700 text-text-secondary"
-										>{kindLabel(item.kind)}</span
+									<span class="chip bg-surface-700 text-text-secondary">{kindLabel(item.kind)}</span
 									>
-									<span class="chip bg-surface-700 text-text-muted"
-										>Objective {item.objective}</span
+									<span class="chip bg-surface-700 text-text-muted">Objective {item.objective}</span
 									>
 									<span
-										class="chip {item.wrongCount >= 3 ? 'bg-danger/15 text-danger' : 'bg-warning/15 text-warning'}"
-										>×{item.wrongCount} missed</span
+										class="chip {item.wrongCount >= 3
+											? 'bg-danger/15 text-danger'
+											: 'bg-warning/15 text-warning'}">×{item.wrongCount} missed</span
 									>
 								</div>
 								<p class="mt-2 line-clamp-2 text-sm leading-5 text-text-primary">

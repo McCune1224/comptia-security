@@ -20,16 +20,16 @@ Example: `2024-01-15-LogN-Pacific-85.md`
 ## Domain Performance
 | Domain | Questions | Correct | % | Status |
 |--------|-----------|---------|---|--------|
-| Domain 1 | 11 | 9 | 82% | 🟡 |
-| Domain 2 | 20 | 17 | 85% | 🟢 |
-| Domain 3 | 16 | 12 | 75% | 🔴 |
-| Domain 4 | 25 | 20 | 80% | 🟡 |
-| Domain 5 | 18 | 16 | 89% | 🟢 |
+| Domain 1 | 11 | 9 | 82% | Needs work |
+| Domain 2 | 20 | 17 | 85% | Good |
+| Domain 3 | 16 | 12 | 75% | Weak |
+| Domain 4 | 25 | 20 | 80% | Needs work |
+| Domain 5 | 18 | 16 | 89% | Good |
 
 Legend:
-🟢 85%+ (Good)
-🟡 75-84% (Needs improvement)
-🔴 <75% (Priority study area)
+Good: 85%+
+Needs improvement: 75-84%
+Priority study area: <75%
 
 ## Detailed Review
 

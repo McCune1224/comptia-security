@@ -38,23 +38,49 @@ function createV5Fixture(file: string): void {
 		CREATE TABLE google_oauth (id INTEGER PRIMARY KEY CHECK (id = 1), access_token TEXT NOT NULL, refresh_token TEXT NOT NULL, expires_at INTEGER NOT NULL, email TEXT NOT NULL, calendar_id TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
 		CREATE TABLE google_synced_events (source TEXT PRIMARY KEY, event_id TEXT NOT NULL, summary TEXT NOT NULL, due_date TEXT NOT NULL, synced_at TEXT NOT NULL);
 	`);
-	db.prepare("INSERT INTO quiz_sessions (id, started_at, completed_at, type, domain, total_questions, correct_answers, mode, status, points_earned, points_possible, updated_at, assignment_id) VALUES ('sess-1', '2026-08-01T10:00:00.000Z', '2026-08-01T10:30:00.000Z', 'quiz', 1, 20, 18, 'practice', 'completed', 18, 20, '2026-08-01T10:30:00.000Z', 'a1-1')").run();
-	db.prepare("INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, result_json, updated_at) VALUES ('sess-1', 1, NULL, 0, '[]', '{}', '2026-08-01T10:30:00.000Z')").run();
-	db.prepare("INSERT INTO quiz_answers (session_id, question_index, prompt, domain, category, correct_answer, user_answer, is_correct, question_id, objective, response_json, points_earned, points_possible) VALUES ('sess-1', 0, 'q', 1, 'x', '', '{}', 1, 'q-1-1', '1.1', '{}', 1, 1), ('sess-1', 1, 'q', 1, 'x', '', '{}', 0, 'q-1-2', '1.2', '{}', 0, 1)").run();
-	db.prepare('INSERT INTO domain_progress (domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at) VALUES (1, 10, 8, 8, 10, NULL)').run();
-	db.prepare("INSERT INTO review_cards (question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at) VALUES ('q-1-1', 3, 2.6, 0, '2026-08-05', 'correct', 3, '2026-08-01T00:00:00.000Z')").run();
-	db.prepare("INSERT INTO study_log (date_key, questions, sessions, updated_at) VALUES ('2026-08-01', 20, 1, '2026-08-01T10:30:00.000Z')").run();
+	db.prepare(
+		"INSERT INTO quiz_sessions (id, started_at, completed_at, type, domain, total_questions, correct_answers, mode, status, points_earned, points_possible, updated_at, assignment_id) VALUES ('sess-1', '2026-08-01T10:00:00.000Z', '2026-08-01T10:30:00.000Z', 'quiz', 1, 20, 18, 'practice', 'completed', 18, 20, '2026-08-01T10:30:00.000Z', 'a1-1')"
+	).run();
+	db.prepare(
+		"INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, result_json, updated_at) VALUES ('sess-1', 1, NULL, 0, '[]', '{}', '2026-08-01T10:30:00.000Z')"
+	).run();
+	db.prepare(
+		"INSERT INTO quiz_answers (session_id, question_index, prompt, domain, category, correct_answer, user_answer, is_correct, question_id, objective, response_json, points_earned, points_possible) VALUES ('sess-1', 0, 'q', 1, 'x', '', '{}', 1, 'q-1-1', '1.1', '{}', 1, 1), ('sess-1', 1, 'q', 1, 'x', '', '{}', 0, 'q-1-2', '1.2', '{}', 0, 1)"
+	).run();
+	db.prepare(
+		'INSERT INTO domain_progress (domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at) VALUES (1, 10, 8, 8, 10, NULL)'
+	).run();
+	db.prepare(
+		"INSERT INTO review_cards (question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at) VALUES ('q-1-1', 3, 2.6, 0, '2026-08-05', 'correct', 3, '2026-08-01T00:00:00.000Z')"
+	).run();
+	db.prepare(
+		"INSERT INTO study_log (date_key, questions, sessions, updated_at) VALUES ('2026-08-01', 20, 1, '2026-08-01T10:30:00.000Z')"
+	).run();
 	db.prepare("INSERT INTO course_meta (key, value) VALUES ('exam_date', '2026-09-30')").run();
-	db.prepare("INSERT INTO course_assignment_submissions (assignment_id, session_id, earned, percentage, completed_at) VALUES ('a1-1', 'sess-1', 18, 90, '2026-08-01T10:30:00.000Z')").run();
-	db.prepare("INSERT INTO course_lesson_completions (lesson_id, completed_at) VALUES ('lesson-1-1', '2026-08-01T09:00:00.000Z')").run();
-	db.prepare("INSERT INTO google_oauth (id, access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at) VALUES (1, 'tok', 'ref', 123, 'me@example.com', 'cal-1', '2026-08-01T00:00:00.000Z', '2026-08-01T00:00:00.000Z')").run();
-	db.prepare("INSERT INTO google_synced_events (source, event_id, summary, due_date, synced_at) VALUES ('exam', 'evt-1', '🎓 Exam', '2026-09-30', '2026-08-01T00:00:00.000Z')").run();
+	db.prepare(
+		"INSERT INTO course_assignment_submissions (assignment_id, session_id, earned, percentage, completed_at) VALUES ('a1-1', 'sess-1', 18, 90, '2026-08-01T10:30:00.000Z')"
+	).run();
+	db.prepare(
+		"INSERT INTO course_lesson_completions (lesson_id, completed_at) VALUES ('lesson-1-1', '2026-08-01T09:00:00.000Z')"
+	).run();
+	db.prepare(
+		"INSERT INTO google_oauth (id, access_token, refresh_token, expires_at, email, calendar_id, created_at, updated_at) VALUES (1, 'tok', 'ref', 123, 'me@example.com', 'cal-1', '2026-08-01T00:00:00.000Z', '2026-08-01T00:00:00.000Z')"
+	).run();
+	db.prepare(
+		"INSERT INTO google_synced_events (source, event_id, summary, due_date, synced_at) VALUES ('exam', 'evt-1', 'Exam', '2026-09-30', '2026-08-01T00:00:00.000Z')"
+	).run();
 	db.pragma('user_version = 5');
 	db.close();
 }
 
 const pkColumns = (db: Database.Database, table: string): string =>
-	(db.prepare(`SELECT group_concat(name, ',') AS cols FROM pragma_table_info('${table}') WHERE pk > 0`).get() as { cols: string }).cols;
+	(
+		db
+			.prepare(
+				`SELECT group_concat(name, ',') AS cols FROM pragma_table_info('${table}') WHERE pk > 0`
+			)
+			.get() as { cols: string }
+	).cols;
 
 describe('v5 → v8 migration', () => {
 	it('upgrades a v5 database in place, preserving and backfilling all progress', () => {
@@ -72,45 +98,139 @@ describe('v5 → v8 migration', () => {
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_sessions').get() as { c: number }).c).toBe(1);
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_answers').get() as { c: number }).c).toBe(2);
 		expect((db.prepare('SELECT COUNT(*) c FROM review_cards').get() as { c: number }).c).toBe(1);
-		expect((db.prepare('SELECT COUNT(*) c FROM course_assignment_submissions').get() as { c: number }).c).toBe(1);
-		expect((db.prepare('SELECT COUNT(*) c FROM google_synced_events').get() as { c: number }).c).toBe(1);
-		expect((db.prepare('PRAGMA table_info(quiz_sessions)').all() as { name: string }[]).map((column) => column.name)).toEqual(expect.arrayContaining(['elapsed_seconds', 'duration_seconds']));
+		expect(
+			(db.prepare('SELECT COUNT(*) c FROM course_assignment_submissions').get() as { c: number }).c
+		).toBe(1);
+		expect(
+			(db.prepare('SELECT COUNT(*) c FROM google_synced_events').get() as { c: number }).c
+		).toBe(1);
+		expect(
+			(db.prepare('PRAGMA table_info(quiz_sessions)').all() as { name: string }[]).map(
+				(column) => column.name
+			)
+		).toEqual(expect.arrayContaining(['elapsed_seconds', 'duration_seconds']));
 
 		// Sessions + answers backfilled to ('default','secp-701').
-		const session = db.prepare("SELECT profile_id, course_id FROM quiz_sessions WHERE id = 'sess-1'").get() as { profile_id: string; course_id: string };
+		const session = db
+			.prepare("SELECT profile_id, course_id FROM quiz_sessions WHERE id = 'sess-1'")
+			.get() as { profile_id: string; course_id: string };
 		expect(session).toEqual({ profile_id: 'default', course_id: 'secp-701' });
-		expect((db.prepare("SELECT COUNT(*) c FROM quiz_answers WHERE profile_id = 'default' AND course_id = 'secp-701'").get() as { c: number }).c).toBe(2);
+		expect(
+			(
+				db
+					.prepare(
+						"SELECT COUNT(*) c FROM quiz_answers WHERE profile_id = 'default' AND course_id = 'secp-701'"
+					)
+					.get() as { c: number }
+			).c
+		).toBe(2);
 
 		// Primary keys rebuilt on all 8 tables.
 		expect(pkColumns(db, 'domain_progress')).toBe('profile_id,course_id,domain');
 		expect(pkColumns(db, 'review_cards')).toBe('profile_id,course_id,question_id');
 		expect(pkColumns(db, 'study_log')).toBe('profile_id,date_key');
 		expect(pkColumns(db, 'course_meta')).toBe('profile_id,course_id,key');
-		expect(pkColumns(db, 'course_assignment_submissions')).toBe('profile_id,assignment_id,session_id');
+		expect(pkColumns(db, 'course_assignment_submissions')).toBe(
+			'profile_id,assignment_id,session_id'
+		);
 		expect(pkColumns(db, 'course_lesson_completions')).toBe('profile_id,lesson_id');
 		expect(pkColumns(db, 'google_oauth')).toBe('profile_id');
 		expect(pkColumns(db, 'google_synced_events')).toBe('profile_id,source');
 
 		// Scoped rows backfilled.
-		expect((db.prepare("SELECT COUNT(*) c FROM domain_progress WHERE profile_id = 'default' AND course_id = 'secp-701'").get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT COUNT(*) c FROM review_cards WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT COUNT(*) c FROM study_log WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT COUNT(*) c FROM course_assignment_submissions WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT COUNT(*) c FROM course_lesson_completions WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT COUNT(*) c FROM google_oauth WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT COUNT(*) c FROM google_synced_events WHERE profile_id = 'default'").get() as { c: number }).c).toBe(1);
+		expect(
+			(
+				db
+					.prepare(
+						"SELECT COUNT(*) c FROM domain_progress WHERE profile_id = 'default' AND course_id = 'secp-701'"
+					)
+					.get() as { c: number }
+			).c
+		).toBe(1);
+		expect(
+			(
+				db.prepare("SELECT COUNT(*) c FROM review_cards WHERE profile_id = 'default'").get() as {
+					c: number;
+				}
+			).c
+		).toBe(1);
+		expect(
+			(
+				db.prepare("SELECT COUNT(*) c FROM study_log WHERE profile_id = 'default'").get() as {
+					c: number;
+				}
+			).c
+		).toBe(1);
+		expect(
+			(
+				db
+					.prepare(
+						"SELECT COUNT(*) c FROM course_assignment_submissions WHERE profile_id = 'default'"
+					)
+					.get() as { c: number }
+			).c
+		).toBe(1);
+		expect(
+			(
+				db
+					.prepare("SELECT COUNT(*) c FROM course_lesson_completions WHERE profile_id = 'default'")
+					.get() as { c: number }
+			).c
+		).toBe(1);
+		expect(
+			(
+				db.prepare("SELECT COUNT(*) c FROM google_oauth WHERE profile_id = 'default'").get() as {
+					c: number;
+				}
+			).c
+		).toBe(1);
+		expect(
+			(
+				db
+					.prepare("SELECT COUNT(*) c FROM google_synced_events WHERE profile_id = 'default'")
+					.get() as { c: number }
+			).c
+		).toBe(1);
 
 		// The user's exam date survives, now scoped (one row per active course
 		// after seeding — this asserts the migrated secp-701 row).
-		const exam = db.prepare("SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { value: string };
+		const exam = db
+			.prepare(
+				"SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'"
+			)
+			.get() as { value: string };
 		expect(exam.value).toBe('2026-09-30');
-		expect((db.prepare("SELECT COUNT(*) c FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { c: number }).c).toBe(1);
+		expect(
+			(
+				db
+					.prepare(
+						"SELECT COUNT(*) c FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'"
+					)
+					.get() as { c: number }
+			).c
+		).toBe(1);
 
 		// Profiles seeded; content tables carry course_id.
-		expect(db.prepare("SELECT name FROM profiles WHERE id = 'default'").get()).toMatchObject({ name: 'Alex' });
-		expect(db.prepare("SELECT name FROM profiles WHERE id = 'ash'").get()).toMatchObject({ name: 'Ash' });
-		expect((db.prepare("SELECT COUNT(*) c FROM course_modules WHERE course_id = 'secp-701'").get() as { c: number }).c).toBe(4);
-		expect((db.prepare("SELECT COUNT(*) c FROM course_lessons WHERE course_id = 'secp-701'").get() as { c: number }).c).toBe(7);
+		expect(db.prepare("SELECT name FROM profiles WHERE id = 'default'").get()).toMatchObject({
+			name: 'Alex'
+		});
+		expect(db.prepare("SELECT name FROM profiles WHERE id = 'ash'").get()).toMatchObject({
+			name: 'Ash'
+		});
+		expect(
+			(
+				db.prepare("SELECT COUNT(*) c FROM course_modules WHERE course_id = 'secp-701'").get() as {
+					c: number;
+				}
+			).c
+		).toBe(4);
+		expect(
+			(
+				db.prepare("SELECT COUNT(*) c FROM course_lessons WHERE course_id = 'secp-701'").get() as {
+					c: number;
+				}
+			).c
+		).toBe(7);
 		db.close();
 	});
 
@@ -123,7 +243,15 @@ describe('v5 → v8 migration', () => {
 		expect(db.pragma('user_version', { simple: true })).toBe(8);
 		expect((db.prepare('SELECT COUNT(*) c FROM quiz_sessions').get() as { c: number }).c).toBe(1);
 		expect((db.prepare('SELECT COUNT(*) c FROM review_cards').get() as { c: number }).c).toBe(1);
-		expect((db.prepare("SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'").get() as { value: string }).value).toBe('2026-09-30');
+		expect(
+			(
+				db
+					.prepare(
+						"SELECT value FROM course_meta WHERE profile_id = 'default' AND course_id = 'secp-701' AND key = 'exam_date'"
+					)
+					.get() as { value: string }
+			).value
+		).toBe('2026-09-30');
 		db.close();
 	});
 
@@ -140,8 +268,12 @@ describe('v5 → v8 migration', () => {
 
 		expect(() => createQuizRepository(file)).not.toThrow();
 		const repaired = new Database(file, { readonly: true });
-		const lessonColumns = repaired.prepare('PRAGMA table_info(course_lessons)').all() as { name: string }[];
-		const responseColumns = repaired.prepare('PRAGMA table_info(quiz_session_responses)').all() as { name: string }[];
+		const lessonColumns = repaired.prepare('PRAGMA table_info(course_lessons)').all() as {
+			name: string;
+		}[];
+		const responseColumns = repaired.prepare('PRAGMA table_info(quiz_session_responses)').all() as {
+			name: string;
+		}[];
 		expect(lessonColumns.map((column) => column.name)).toContain('objective_ids');
 		expect(responseColumns.map((column) => column.name)).toContain('hint_used');
 		repaired.close();
@@ -177,7 +309,10 @@ describe('v5 → v8 migration', () => {
 			earnedPoints: 0,
 			possiblePoints: 0,
 			domainBreakdown: Object.fromEntries(
-				[1, 2, 3, 4, 5].map((domain) => [domain, { totalQuestions: 0, fullyCorrect: 0, earnedPoints: 0, possiblePoints: 0 }])
+				[1, 2, 3, 4, 5].map((domain) => [
+					domain,
+					{ totalQuestions: 0, fullyCorrect: 0, earnedPoints: 0, possiblePoints: 0 }
+				])
 			),
 			objectiveBreakdown: {},
 			completedAt: '2026-08-10T12:00:12.000Z',
@@ -186,10 +321,15 @@ describe('v5 → v8 migration', () => {
 			review: []
 		} as unknown as QuizResult;
 
-		expect(scoped.complete('legacy-timing', result, [], result.completedAt)).toEqual({ result, finalized: true });
-		const persisted = new Database(file, { readonly: true }).prepare(
-			"SELECT elapsed_seconds, duration_seconds FROM quiz_sessions WHERE id = 'legacy-timing'"
-		).get() as { elapsed_seconds: number; duration_seconds: number };
+		expect(scoped.complete('legacy-timing', result, [], result.completedAt)).toEqual({
+			result,
+			finalized: true
+		});
+		const persisted = new Database(file, { readonly: true })
+			.prepare(
+				"SELECT elapsed_seconds, duration_seconds FROM quiz_sessions WHERE id = 'legacy-timing'"
+			)
+			.get() as { elapsed_seconds: number; duration_seconds: number };
 		expect(persisted).toEqual({ elapsed_seconds: 12, duration_seconds: 12 });
 		repository.close();
 	});
@@ -226,7 +366,9 @@ describe('v5 → v8 migration', () => {
 		createQuizRepository(file).close();
 		let reopened = new Database(file, { readonly: true });
 		expect(reopened.pragma('user_version', { simple: true })).toBe(8);
-		const lessonColumns = reopened.prepare('PRAGMA table_info(course_lessons)').all() as { name: string }[];
+		const lessonColumns = reopened.prepare('PRAGMA table_info(course_lessons)').all() as {
+			name: string;
+		}[];
 		expect(lessonColumns.map((column) => column.name)).toContain('objective_ids');
 		expect(lessonColumns.map((column) => column.name)).not.toContain('objective_id');
 		// Seed upsert restores the full multi-objective arrays for registered lessons.
@@ -241,9 +383,9 @@ describe('v5 → v8 migration', () => {
 		expect(JSON.parse(customLesson.objective_ids)).toEqual(['5.6']);
 		// Retired presets map to the graphite palette; custom colors are byte-for-byte unchanged.
 		const colorById = new Map(
-			(reopened.prepare('SELECT id, color FROM profiles').all() as { id: string; color: string }[]).map(
-				(row) => [row.id, row.color]
-			)
+			(
+				reopened.prepare('SELECT id, color FROM profiles').all() as { id: string; color: string }[]
+			).map((row) => [row.id, row.color])
 		);
 		expect(colorById.get('default')).toBe('#67B8A8');
 		expect(colorById.get('ash')).toBe('#82B5D5');
@@ -254,9 +396,21 @@ describe('v5 → v8 migration', () => {
 		expect(colorById.get('p5')).toBe('#a1b2c3');
 		// Sessions/progress/completions survive the migration intact.
 		expect(
-			(reopened.prepare("SELECT COUNT(*) c FROM course_lesson_completions WHERE lesson_id = 'lesson-1-1'").get() as { c: number }).c
+			(
+				reopened
+					.prepare(
+						"SELECT COUNT(*) c FROM course_lesson_completions WHERE lesson_id = 'lesson-1-1'"
+					)
+					.get() as { c: number }
+			).c
 		).toBe(1);
-		expect((reopened.prepare("SELECT COUNT(*) c FROM quiz_sessions WHERE id = 'v7-sess'").get() as { c: number }).c).toBe(1);
+		expect(
+			(
+				reopened.prepare("SELECT COUNT(*) c FROM quiz_sessions WHERE id = 'v7-sess'").get() as {
+					c: number;
+				}
+			).c
+		).toBe(1);
 		reopened.close();
 
 		// Second open: same result, no re-migration side effects.
@@ -264,21 +418,34 @@ describe('v5 → v8 migration', () => {
 		reopened = new Database(file, { readonly: true });
 		expect(reopened.pragma('user_version', { simple: true })).toBe(8);
 		expect(
-			(reopened.prepare("SELECT objective_ids FROM course_lessons WHERE id = 'lesson-x1'").get() as { objective_ids: string }).objective_ids
+			(
+				reopened
+					.prepare("SELECT objective_ids FROM course_lessons WHERE id = 'lesson-x1'")
+					.get() as { objective_ids: string }
+			).objective_ids
 		).toBe('["5.6"]');
 		expect(
-			(reopened.prepare("SELECT color FROM profiles WHERE id = 'p5'").get() as { color: string }).color
+			(reopened.prepare("SELECT color FROM profiles WHERE id = 'p5'").get() as { color: string })
+				.color
 		).toBe('#a1b2c3');
 		reopened.close();
 	});
 });
-	describe('fresh databases', () => {
+describe('fresh databases', () => {
 	it('reaches the v8 shape directly with both profiles and exam dates seeded', () => {
 		const repo = createQuizRepository(':memory:');
 		expect(repo.getProfiles()).toHaveLength(2);
 		expect(repo.getProfiles().map((p) => p.id)).toEqual(['default', 'ash']);
-		expect(repo.getProfiles().find((p) => p.id === 'default')).toMatchObject({ id: 'default', name: 'Alex', courseId: 'secp-701' });
-		expect(repo.getProfiles().find((p) => p.id === 'ash')).toMatchObject({ id: 'ash', name: 'Ash', courseId: 'aplus-1201' });
+		expect(repo.getProfiles().find((p) => p.id === 'default')).toMatchObject({
+			id: 'default',
+			name: 'Alex',
+			courseId: 'secp-701'
+		});
+		expect(repo.getProfiles().find((p) => p.id === 'ash')).toMatchObject({
+			id: 'ash',
+			name: 'Ash',
+			courseId: 'aplus-1201'
+		});
 		expect(repo.getExamDate()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 		expect(repo.getCourseModules()).toHaveLength(4);
 		expect(repo.getCourseLessons()).toHaveLength(7);
@@ -296,12 +463,29 @@ describe('scope isolation', () => {
 		const alice = createScopedRepo(repo, { profileId: 'alice', courseId: 'secp-701' });
 		const bob = createScopedRepo(repo, { profileId: 'bob', courseId: 'secp-701' });
 
-		alice.createSession({ id: 'a-sess', type: 'quiz', mode: 'practice', domain: 1, startedAt: '2026-08-05T10:00:00.000Z', deadlineAt: null, questions: [] });
+		alice.createSession({
+			id: 'a-sess',
+			type: 'quiz',
+			mode: 'practice',
+			domain: 1,
+			startedAt: '2026-08-05T10:00:00.000Z',
+			deadlineAt: null,
+			questions: []
+		});
 		expect(alice.getActiveSession()?.summary.id).toBe('a-sess');
 		expect(bob.getActiveSession()).toBeNull();
 		expect(bob.getSession('a-sess')).toBeNull(); // cross-scope session lookup is a miss
 
-		alice.upsertReviewCard({ questionId: 'q-1', intervalDays: 2, ease: 2.5, lapses: 0, dueAt: '2026-08-07', lastResult: 'correct', reviewCount: 1, firstSeenAt: '2026-08-05T00:00:00.000Z' });
+		alice.upsertReviewCard({
+			questionId: 'q-1',
+			intervalDays: 2,
+			ease: 2.5,
+			lapses: 0,
+			dueAt: '2026-08-07',
+			lastResult: 'correct',
+			reviewCount: 1,
+			firstSeenAt: '2026-08-05T00:00:00.000Z'
+		});
 		expect(alice.getReviewCards()).toHaveLength(1);
 		expect(bob.getReviewCards()).toHaveLength(0);
 
@@ -313,15 +497,26 @@ describe('scope isolation', () => {
 		expect(alice.getStudyLog()).toHaveLength(1);
 		expect(bob.getStudyLog()).toHaveLength(0);
 
-		alice.recordSubmission({ assignmentId: 'a1-1', sessionId: 'a-sess', earned: 18, percentage: 90, completedAt: '2026-08-05T10:00:00.000Z' });
+		alice.recordSubmission({
+			assignmentId: 'a1-1',
+			sessionId: 'a-sess',
+			earned: 18,
+			percentage: 90,
+			completedAt: '2026-08-05T10:00:00.000Z'
+		});
 		expect(alice.getSubmissions()).toHaveLength(1);
 		expect(bob.getSubmissions()).toHaveLength(0);
 
-		alice.saveGoogleOAuth({ accessToken: 'a', refreshToken: 'r', expiresAt: 1, email: 'a@example.com' });
+		alice.saveGoogleOAuth({
+			accessToken: 'a',
+			refreshToken: 'r',
+			expiresAt: 1,
+			email: 'a@example.com'
+		});
 		expect(alice.getGoogleOAuth()?.email).toBe('a@example.com');
 		expect(bob.getGoogleOAuth()).toBeNull();
 
-		alice.recordSyncedEvent('exam', 'evt-1', '🎓 Exam', '2026-10-15', '2026-08-05T00:00:00.000Z');
+		alice.recordSyncedEvent('exam', 'evt-1', 'Exam', '2026-10-15', '2026-08-05T00:00:00.000Z');
 		expect(alice.getSyncedEvents()).toHaveLength(1);
 		expect(bob.getSyncedEvents()).toHaveLength(0);
 
@@ -341,14 +536,39 @@ describe('scope isolation', () => {
 		const alice = createScopedRepo(repo, { profileId: 'alice', courseId: 'secp-701' });
 		const bob = createScopedRepo(repo, { profileId: 'bob', courseId: 'secp-701' });
 
-		alice.createSession({ id: 's1', type: 'quiz', mode: 'practice', domain: 1, startedAt: '2026-08-05T10:00:00.000Z', deadlineAt: null, questions: [] });
+		alice.createSession({
+			id: 's1',
+			type: 'quiz',
+			mode: 'practice',
+			domain: 1,
+			startedAt: '2026-08-05T10:00:00.000Z',
+			deadlineAt: null,
+			questions: []
+		});
 		const result = {
-			sessionId: 's1', type: 'quiz' as const, mode: 'practice' as const, earnedPoints: 0, possiblePoints: 0,
-			percentage: 0, fullyCorrect: 0, totalQuestions: 0, flaggedQuestionIndexes: [], objectiveBreakdown: {},
-			domainBreakdown: { 1: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 2: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 3: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 4: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }, 5: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 } },
-			completedAt: '2026-08-05T10:30:00.000Z', review: []
+			sessionId: 's1',
+			type: 'quiz' as const,
+			mode: 'practice' as const,
+			earnedPoints: 0,
+			possiblePoints: 0,
+			percentage: 0,
+			fullyCorrect: 0,
+			totalQuestions: 0,
+			flaggedQuestionIndexes: [],
+			objectiveBreakdown: {},
+			domainBreakdown: {
+				1: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 },
+				2: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 },
+				3: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 },
+				4: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 },
+				5: { earnedPoints: 0, possiblePoints: 0, fullyCorrect: 0, totalQuestions: 0 }
+			},
+			completedAt: '2026-08-05T10:30:00.000Z',
+			review: []
 		};
-		expect(() => bob.complete('s1', result, [], '2026-08-05T10:30:00.000Z')).toThrow('outside the active scope');
+		expect(() => bob.complete('s1', result, [], '2026-08-05T10:30:00.000Z')).toThrow(
+			'outside the active scope'
+		);
 		expect(bob.getAllCompletedSessions()).toHaveLength(0);
 		expect(alice.getAllCompletedSessions()).toHaveLength(0);
 		alice.complete('s1', result, [], '2026-08-05T10:30:00.000Z');
@@ -369,7 +589,7 @@ describe('profile management', () => {
 		repo.close();
 	});
 
-	it('remembers each profile\'s course (profile→course coupling)', () => {
+	it("remembers each profile's course (profile→course coupling)", () => {
 		const repo = createQuizRepository(':memory:');
 		expect(repo.getProfiles().find((p) => p.id === 'default')?.courseId).toBe('secp-701');
 		expect(repo.getProfiles().find((p) => p.id === 'ash')?.courseId).toBe('aplus-1201');
@@ -390,15 +610,27 @@ describe('profile management', () => {
 		const scope = createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' });
 		scope.setExamDate('2026-11-01');
 		scope.recordStudyDay('2026-08-05', 5, '2026-08-05T00:00:00.000Z');
-		scope.createSession({ id: 'ash-sess', type: 'quiz', mode: 'practice', domain: null, startedAt: '2026-08-05T10:00:00.000Z', deadlineAt: null, questions: [] });
+		scope.createSession({
+			id: 'ash-sess',
+			type: 'quiz',
+			mode: 'practice',
+			domain: null,
+			startedAt: '2026-08-05T10:00:00.000Z',
+			deadlineAt: null,
+			questions: []
+		});
 
 		expect(() => repo.deleteProfile('default')).toThrow('default profile cannot be deleted');
 		repo.deleteProfile('ash');
 		expect(repo.getProfiles().map((p) => p.id)).toEqual(['default']);
 		expect(repo.getProfiles()).toHaveLength(1);
 		// Data for the deleted profile is gone.
-		expect(createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getStudyLog()).toHaveLength(0);
-		expect(createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getActiveSession()).toBeNull();
+		expect(
+			createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getStudyLog()
+		).toHaveLength(0);
+		expect(
+			createScopedRepo(repo, { profileId: 'ash', courseId: 'secp-701' }).getActiveSession()
+		).toBeNull();
 		// Cap freed.
 		repo.createProfile('New', '#67B8A8');
 		expect(repo.getProfiles()).toHaveLength(2);
@@ -416,20 +648,36 @@ describe('seed upsert healing', () => {
 		// columns), then the v6 ALTER backfilled them with the 'secp-701'
 		// DEFAULT. INSERT OR IGNORE could never repair that; the seed upsert can.
 		const db = new Database(file);
-		db.prepare("UPDATE course_modules SET course_id = 'secp-701' WHERE id LIKE 'ap1-%' OR id LIKE 'ap2-%'").run();
-		db.prepare("UPDATE course_assignments SET course_id = 'secp-701' WHERE id LIKE 'ap1-%' OR id LIKE 'ap2-%'").run();
+		db.prepare(
+			"UPDATE course_modules SET course_id = 'secp-701' WHERE id LIKE 'ap1-%' OR id LIKE 'ap2-%'"
+		).run();
+		db.prepare(
+			"UPDATE course_assignments SET course_id = 'secp-701' WHERE id LIKE 'ap1-%' OR id LIKE 'ap2-%'"
+		).run();
 		db.close();
 
 		// Reopen: seeding must upsert the correct course_id back, not ignore.
 		createQuizRepository(file).close();
 
 		const healed = new Database(file, { readonly: true });
-		expect(healed.prepare('SELECT course_id, COUNT(*) c FROM course_modules GROUP BY course_id ORDER BY course_id').all()).toEqual([
+		expect(
+			healed
+				.prepare(
+					'SELECT course_id, COUNT(*) c FROM course_modules GROUP BY course_id ORDER BY course_id'
+				)
+				.all()
+		).toEqual([
 			{ course_id: 'aplus-1201', c: 4 },
 			{ course_id: 'aplus-1202', c: 4 },
 			{ course_id: 'secp-701', c: 4 }
 		]);
-		expect(healed.prepare('SELECT course_id, COUNT(*) c FROM course_assignments GROUP BY course_id ORDER BY course_id').all()).toEqual([
+		expect(
+			healed
+				.prepare(
+					'SELECT course_id, COUNT(*) c FROM course_assignments GROUP BY course_id ORDER BY course_id'
+				)
+				.all()
+		).toEqual([
 			{ course_id: 'aplus-1201', c: 12 },
 			{ course_id: 'aplus-1202', c: 12 },
 			{ course_id: 'secp-701', c: 12 }
@@ -463,15 +711,31 @@ describe('active-session restart recovery', () => {
 		createQuizRepository(file).close();
 
 		const repaired = new Database(file, { readonly: true });
-		expect(repaired.prepare("SELECT id FROM quiz_sessions WHERE status = 'active' AND profile_id = 'default' AND course_id = 'secp-701'").all()).toEqual([{ id: 'newer-active' }]);
-		expect(repaired.prepare("SELECT status FROM quiz_sessions WHERE id = 'older-active'").get()).toEqual({ status: 'abandoned' });
-		expect(repaired.prepare("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'").get()).toEqual({ 1: 1 });
+		expect(
+			repaired
+				.prepare(
+					"SELECT id FROM quiz_sessions WHERE status = 'active' AND profile_id = 'default' AND course_id = 'secp-701'"
+				)
+				.all()
+		).toEqual([{ id: 'newer-active' }]);
+		expect(
+			repaired.prepare("SELECT status FROM quiz_sessions WHERE id = 'older-active'").get()
+		).toEqual({ status: 'abandoned' });
+		expect(
+			repaired
+				.prepare(
+					"SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = 'quiz_sessions_one_active_scope'"
+				)
+				.get()
+		).toEqual({ 1: 1 });
 		repaired.close();
 
 		const enforced = new Database(file);
 		expect(() =>
 			enforced
-				.prepare("INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id, profile_id, course_id) VALUES ('duplicate-active', '2026-08-01T11:00:00.000Z', 'quiz', 1, 0, 'practice', 'active', '2026-08-01T11:00:00.000Z', NULL, 'default', 'secp-701')")
+				.prepare(
+					"INSERT INTO quiz_sessions (id, started_at, type, domain, total_questions, mode, status, updated_at, assignment_id, profile_id, course_id) VALUES ('duplicate-active', '2026-08-01T11:00:00.000Z', 'quiz', 1, 0, 'practice', 'active', '2026-08-01T11:00:00.000Z', NULL, 'default', 'secp-701')"
+				)
 				.run()
 		).toThrow(/UNIQUE constraint failed/i);
 		enforced.close();

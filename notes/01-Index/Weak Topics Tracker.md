@@ -9,7 +9,7 @@
 - [ ] 
 
 ## Recently Mastered
-- [ ] ~~Topic~~ ✅ {{date:YYYY-MM-DD}}
+- [ ] ~~Topic~~ {{date:YYYY-MM-DD}}
 
 ---
 

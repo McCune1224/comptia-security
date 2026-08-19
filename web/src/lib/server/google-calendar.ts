@@ -1,6 +1,13 @@
 import { env } from '$env/dynamic/private';
 import crypto from 'node:crypto';
-import { createScopedRepo, DEFAULT_SCOPE, quizRepository, type Scope, type StoredGoogleOAuth as GoogleOAuth, type StoredSyncedEvent as SyncedEvent } from './db';
+import {
+	createScopedRepo,
+	DEFAULT_SCOPE,
+	quizRepository,
+	type Scope,
+	type StoredGoogleOAuth as GoogleOAuth,
+	type StoredSyncedEvent as SyncedEvent
+} from './db';
 import { assignmentDueDate, COURSE_META } from './course';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -21,7 +28,8 @@ const AUTH_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 const API_BASE = 'https://www.googleapis.com/calendar/v3';
 
-const PREP_CALENDAR_NAME = (courseId: string): string => `${COURSE_META[courseId as keyof typeof COURSE_META]?.title ?? 'Security+'} Prep`;
+const PREP_CALENDAR_NAME = (courseId: string): string =>
+	`${COURSE_META[courseId as keyof typeof COURSE_META]?.title ?? 'Security+'} Prep`;
 
 export interface CalendarEventView {
 	id: string;
@@ -50,7 +58,9 @@ function credentials(): { clientId: string; clientSecret: string } {
 	const clientId = env.GOOGLE_CLIENT_ID;
 	const clientSecret = env.GOOGLE_CLIENT_SECRET;
 	if (!clientId || !clientSecret)
-		throw new Error('GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set (see web/.env.example).');
+		throw new Error(
+			'GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set (see web/.env.example).'
+		);
 	return { clientId, clientSecret };
 }
 
@@ -62,7 +72,11 @@ export function redirectUri(requestUrl: string | URL): string {
 
 // ── OAuth flow ───────────────────────────────────────────────────────────────
 
-export function buildAuthUrl(requestUrl: string | URL): { url: string; state: string; verifier: string } {
+export function buildAuthUrl(requestUrl: string | URL): {
+	url: string;
+	state: string;
+	verifier: string;
+} {
 	const { clientId } = credentials();
 	const state = crypto.randomUUID();
 	const verifier = base64Url(crypto.randomBytes(32));
@@ -95,7 +109,11 @@ export async function exchangeCode(
 		grant_type: 'authorization_code',
 		code_verifier: verifier
 	});
-	const response = await fetch(TOKEN_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+	const response = await fetch(TOKEN_ENDPOINT, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		body
+	});
 	const data = (await response.json()) as {
 		access_token?: string;
 		refresh_token?: string;
@@ -104,8 +122,11 @@ export async function exchangeCode(
 		error_description?: string;
 	};
 	if (!response.ok || !data.access_token)
-		throw new Error(`Google token exchange failed: ${data.error ?? response.status} ${data.error_description ?? ''}`.trim());
-	if (!data.refresh_token) throw new Error('Google did not return a refresh token — revoke access and reconnect.');
+		throw new Error(
+			`Google token exchange failed: ${data.error ?? response.status} ${data.error_description ?? ''}`.trim()
+		);
+	if (!data.refresh_token)
+		throw new Error('Google did not return a refresh token — revoke access and reconnect.');
 	return {
 		accessToken: data.access_token,
 		refreshToken: data.refresh_token,
@@ -119,7 +140,10 @@ export async function getOAuth(scope: Scope = DEFAULT_SCOPE): Promise<GoogleOAut
 	return createScopedRepo(quizRepository, scope).getGoogleOAuth();
 }
 
-export async function saveOAuth(token: Omit<GoogleOAuth, 'calendarId'> & { calendarId?: string | null }, scope: Scope = DEFAULT_SCOPE): Promise<void> {
+export async function saveOAuth(
+	token: Omit<GoogleOAuth, 'calendarId'> & { calendarId?: string | null },
+	scope: Scope = DEFAULT_SCOPE
+): Promise<void> {
 	createScopedRepo(quizRepository, scope).saveGoogleOAuth(token);
 }
 
@@ -135,10 +159,20 @@ async function refreshAccessToken(oauth: GoogleOAuth, scope: Scope): Promise<str
 		refresh_token: oauth.refreshToken,
 		grant_type: 'refresh_token'
 	});
-	const response = await fetch(TOKEN_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
-	const data = (await response.json()) as { access_token?: string; expires_in?: number; error?: string };
+	const response = await fetch(TOKEN_ENDPOINT, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		body
+	});
+	const data = (await response.json()) as {
+		access_token?: string;
+		expires_in?: number;
+		error?: string;
+	};
 	if (!response.ok || !data.access_token)
-		throw new Error(`Google token refresh failed: ${data.error ?? response.status} — reconnect from the calendar page.`);
+		throw new Error(
+			`Google token refresh failed: ${data.error ?? response.status} — reconnect from the calendar page.`
+		);
 	createScopedRepo(quizRepository, scope).saveGoogleOAuth({
 		...oauth,
 		accessToken: data.access_token,
@@ -156,7 +190,8 @@ async function withToken<T>(fn: (token: string) => Promise<T>, scope: Scope): Pr
 	try {
 		return await fn(token);
 	} catch (error) {
-		if (error instanceof GoogleApiError && error.status === 401) return await fn(await refreshAccessToken(oauth, scope));
+		if (error instanceof GoogleApiError && error.status === 401)
+			return await fn(await refreshAccessToken(oauth, scope));
 		throw error;
 	}
 }
@@ -182,11 +217,20 @@ class GoogleCalendarError extends Error {
 async function api<T>(token: string, path: string, init: RequestInit = {}): Promise<T> {
 	const response = await fetch(`${API_BASE}${path}`, {
 		...init,
-		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(init.headers ?? {}) }
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+			...(init.headers ?? {})
+		}
 	});
 	if (!response.ok) {
-		const detail = (await response.json().catch(() => null)) as { error?: { message?: string } } | null;
-		throw new GoogleApiError(response.status, detail?.error?.message ?? `Calendar API ${response.status}`);
+		const detail = (await response.json().catch(() => null)) as {
+			error?: { message?: string };
+		} | null;
+		throw new GoogleApiError(
+			response.status,
+			detail?.error?.message ?? `Calendar API ${response.status}`
+		);
 	}
 	return (await response.json()) as T;
 }
@@ -209,24 +253,46 @@ interface CalendarEvent {
 
 /** The user's email: the id of their primary calendar. */
 export async function fetchPrimaryEmail(token: string): Promise<string> {
-	const data = await api<{ items: CalendarListEntry[] }>(token, '/users/me/calendarList?minAccessRole=reader&maxResults=50');
+	const data = await api<{ items: CalendarListEntry[] }>(
+		token,
+		'/users/me/calendarList?minAccessRole=reader&maxResults=50'
+	);
 	const primary = data.items.find((entry) => entry.primary);
-	if (!primary?.id) throw new GoogleCalendarError('GOOGLE_ERROR', 'Could not find your primary Google Calendar.');
+	if (!primary?.id)
+		throw new GoogleCalendarError('GOOGLE_ERROR', 'Could not find your primary Google Calendar.');
 	return primary.id;
 }
 
 /** Events across all visible calendars in [startDate, endDate], deduped by id. */
-export async function fetchCalendarEvents(startDate: string, endDate: string, scope: Scope = DEFAULT_SCOPE): Promise<CalendarEventView[]> {
+export async function fetchCalendarEvents(
+	startDate: string,
+	endDate: string,
+	scope: Scope = DEFAULT_SCOPE
+): Promise<CalendarEventView[]> {
 	return withToken(async (token) => {
-		const list = await api<{ items: CalendarListEntry[] }>(token, '/users/me/calendarList?maxResults=50');
-		const calendars = list.items.filter((entry) => entry.selected !== false && entry.accessRole !== 'freeBusyReader').slice(0, 8);
+		const list = await api<{ items: CalendarListEntry[] }>(
+			token,
+			'/users/me/calendarList?maxResults=50'
+		);
+		const calendars = list.items
+			.filter((entry) => entry.selected !== false && entry.accessRole !== 'freeBusyReader')
+			.slice(0, 8);
 		const timeMin = `${startDate}T00:00:00Z`;
 		const timeMax = `${endDate}T23:59:59Z`;
 		const results = await Promise.all(
 			calendars.map(async (calendar) => {
-				const params = new URLSearchParams({ timeMin, timeMax, singleEvents: 'true', orderBy: 'startTime', maxResults: '250' });
+				const params = new URLSearchParams({
+					timeMin,
+					timeMax,
+					singleEvents: 'true',
+					orderBy: 'startTime',
+					maxResults: '250'
+				});
 				try {
-					const data = await api<{ items: CalendarEvent[] }>(token, `/calendars/${encodeURIComponent(calendar.id)}/events?${params}`);
+					const data = await api<{ items: CalendarEvent[] }>(
+						token,
+						`/calendars/${encodeURIComponent(calendar.id)}/events?${params}`
+					);
 					return data.items.map((event) => toEventView(event, calendar.summary));
 				} catch (error) {
 					if (error instanceof GoogleApiError && error.status === 404) return []; // calendar deleted since listing
@@ -235,7 +301,10 @@ export async function fetchCalendarEvents(startDate: string, endDate: string, sc
 			})
 		);
 		const seen = new Set<string>();
-		return results.flat().filter((event) => (seen.has(event.id) ? false : (seen.add(event.id), true))).sort((a, b) => a.start.localeCompare(b.start));
+		return results
+			.flat()
+			.filter((event) => (seen.has(event.id) ? false : (seen.add(event.id), true)))
+			.sort((a, b) => a.start.localeCompare(b.start));
 	}, scope);
 }
 
@@ -268,8 +337,8 @@ export function planSyncEvents(scope: Scope = DEFAULT_SCOPE): PlannedEvent[] {
 	const planned: PlannedEvent[] = [
 		{
 			source: 'exam',
-			summary: `🎓 ${examName}`,
-			description: 'CompTIA exam day. You\'ve got this!',
+			summary: examName,
+			description: "CompTIA exam day. You've got this!",
 			date: examDate
 		}
 	];
@@ -277,7 +346,7 @@ export function planSyncEvents(scope: Scope = DEFAULT_SCOPE): PlannedEvent[] {
 		const due = assignmentDueDate(assignment, examDate);
 		planned.push({
 			source: `assignment:${assignment.id}`,
-			summary: `📝 ${assignment.title}`,
+			summary: assignment.title,
 			description: `Due before the ${examName.split(' ')[0] ?? 'exam'} (${examDate}). From the ${COURSE_META[scope.courseId]?.title ?? 'Security+'} course app.`,
 			date: toDateKey(due)
 		});
@@ -304,7 +373,13 @@ function allDayEvent(planned: PlannedEvent): Record<string, unknown> {
 		description: planned.description,
 		start: { date: planned.date },
 		end: { date: nextDayKey(planned.date) },
-		reminders: { useDefault: false, overrides: [{ method: 'popup', minutes: 1440 }, { method: 'popup', minutes: 60 }] }
+		reminders: {
+			useDefault: false,
+			overrides: [
+				{ method: 'popup', minutes: 1440 },
+				{ method: 'popup', minutes: 60 }
+			]
+		}
 	};
 }
 
@@ -329,7 +404,10 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 		if (!calendarId) {
 			const created = await api<{ id: string }>(token, '/calendars', {
 				method: 'POST',
-				body: JSON.stringify({ summary: calendarName, description: 'Course deadlines pushed by the study app.' })
+				body: JSON.stringify({
+					summary: calendarName,
+					description: 'Course deadlines pushed by the study app.'
+				})
 			});
 			calendarId = created.id;
 			repo.saveGoogleOAuth({ ...oauth, calendarId });
@@ -346,10 +424,18 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 			const body = JSON.stringify(allDayEvent(item));
 			if (row && row.dueDate === item.date && row.summary === item.summary) continue; // nothing changed
 			if (row) {
-				await api(token, `/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(row.eventId)}`, { method: 'PUT', body });
+				await api(
+					token,
+					`/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(row.eventId)}`,
+					{ method: 'PUT', body }
+				);
 				updated++;
 			} else {
-				const event = await api<{ id: string }>(token, `/calendars/${encodeURIComponent(calendarId)}/events`, { method: 'POST', body });
+				const event = await api<{ id: string }>(
+					token,
+					`/calendars/${encodeURIComponent(calendarId)}/events`,
+					{ method: 'POST', body }
+				);
 				repo.recordSyncedEvent(item.source, event.id, item.summary, item.date, syncedAt);
 				created++;
 			}
@@ -361,7 +447,11 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 		for (const row of existing.values()) {
 			if (plannedSources.has(row.source)) continue;
 			try {
-				await api(token, `/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(row.eventId)}`, { method: 'DELETE' });
+				await api(
+					token,
+					`/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(row.eventId)}`,
+					{ method: 'DELETE' }
+				);
 			} catch (error) {
 				if (!(error instanceof GoogleApiError && error.status === 404)) throw error; // already gone is fine
 			}

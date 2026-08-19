@@ -156,7 +156,13 @@
 											stroke="currentColor"
 											stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
 										>
-									{:else}✓{/if}
+									{:else}<svg
+											viewBox="0 0 24 24"
+											class="h-4 w-4 text-text-subtle"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+										>{/if}
 								</button>
 								<span class="flex-1 font-bold text-text-primary">{lesson.title}</span>
 								<span class="hidden text-xs text-text-muted sm:block"

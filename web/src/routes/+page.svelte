@@ -79,13 +79,7 @@
 						: 'Full Exam';
 	}
 
-	const domainColors = [
-		'bg-accent',
-		'bg-accent-secondary',
-		'bg-info',
-		'bg-success',
-		'bg-warning'
-	];
+	const domainColors = ['bg-accent', 'bg-accent-secondary', 'bg-info', 'bg-success', 'bg-warning'];
 </script>
 
 <div class="space-y-6 sm:space-y-8">
@@ -122,9 +116,7 @@
 						Exam: <span class="font-semibold text-text-primary">{overview.examDateLabel}</span>
 						<span class="mx-2 text-text-subtle">·</span>
 						<span
-							class="font-bold {overview.daysUntilExam < 7
-								? 'text-warning'
-								: 'text-text-primary'}"
+							class="font-bold {overview.daysUntilExam < 7 ? 'text-warning' : 'text-text-primary'}"
 						>
 							{overview.daysUntilExam < 0
 								? `Exam passed ${-overview.daysUntilExam} days ago`
@@ -200,10 +192,7 @@
 			>
 				<div class="flex items-center gap-4">
 					<div class="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-accent/15">
-						<svg
-							viewBox="0 0 24 24"
-							class="h-6 w-6 text-warning"
-							fill="currentColor"
+						<svg viewBox="0 0 24 24" class="h-6 w-6 text-warning" fill="currentColor"
 							><path
 								d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
 							/></svg
@@ -225,12 +214,13 @@
 					</div>
 				</div>
 				<div class="flex items-center gap-3">
-					<a
-						class="btn btn-primary flex-1 sm:flex-none"
-						href="/quiz?review=daily"
+					<a class="btn btn-primary flex-1 sm:flex-none" href="/quiz?review=daily"
 						>Start today's review</a
 					>
-					<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/review">Review →</a>
+					<a
+						class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline"
+						href="/review">Review →</a
+					>
 				</div>
 			</section>
 		{/if}
@@ -249,11 +239,14 @@
 						>
 						What's due
 					</h2>
-					<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/calendar">Calendar →</a>
+					<a
+						class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline"
+						href="/calendar">Calendar →</a
+					>
 				</div>
 				{#if overview.toDo.length === 0}
 					<p class="mt-5 rounded-md bg-success/10 p-4 text-sm text-success">
-						🎉 Everything is submitted. Great work — keep the momentum with a practice session.
+						Everything is submitted. Great work — keep the momentum with a practice session.
 					</p>
 				{:else}
 					<div class="mt-4 space-y-2.5">
@@ -339,64 +332,63 @@
 					>
 					<a
 						class="mt-3 block min-h-[44px] text-center text-sm font-bold text-accent hover:underline"
-						href="/mastery"
-						>Objective mastery →</a
+						href="/mastery">Objective mastery →</a
 					>
 				</div>
 			</section>
 		</div>
 
 		<!-- Quick drills -->
-	<section>
-		<div class="mb-4 flex items-center justify-between">
-			<h2 class="h-display text-xl text-text-primary">Quick drills</h2>
-			<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/history">History →</a>
-		</div>
-		<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
-			<a
-				href="/pbq"
-				class="card group p-4 transition-all duration-200 hover:border-accent/50"
-			>
-				<p class="eyebrow">Hands-on</p>
-				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">PBQs</p>
-				<p class="mt-1 text-xs text-text-muted">Connect, sort, configure</p>
-			</a>
-			<a
-				href="/scenarios"
-				class="card group p-4 transition-all duration-200 hover:border-accent/50"
-			>
-				<p class="eyebrow">Scenario</p>
-				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">Scenarios</p>
-				<p class="mt-1 text-xs text-text-muted">Applied judgment</p>
-			</a>
-			<a
-				href="/mastery"
-				class="card group p-4 transition-all duration-200 hover:border-accent/50"
-			>
-				<p class="eyebrow">Weak spots</p>
-				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent"
-					>Mastery drill</p
+		<section>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="h-display text-xl text-text-primary">Quick drills</h2>
+				<a
+					class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline"
+					href="/history">History →</a
 				>
-				<p class="mt-1 text-xs text-text-muted">Objective grid</p>
-			</a>
-			<a
-				href="/review"
-				class="card group p-4 transition-all duration-200 hover:border-accent/50"
-			>
-				<p class="eyebrow">Recall</p>
-				<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent"
-					>Daily review</p
+			</div>
+			<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+				<a href="/pbq" class="card group p-4 transition-all duration-200 hover:border-accent/50">
+					<p class="eyebrow">Hands-on</p>
+					<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">PBQs</p>
+					<p class="mt-1 text-xs text-text-muted">Connect, sort, configure</p>
+				</a>
+				<a
+					href="/scenarios"
+					class="card group p-4 transition-all duration-200 hover:border-accent/50"
 				>
-				<p class="mt-1 text-xs text-text-muted">Spaced cards</p>
-			</a>
-		</div>
-	</section>
+					<p class="eyebrow">Scenario</p>
+					<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">Scenarios</p>
+					<p class="mt-1 text-xs text-text-muted">Applied judgment</p>
+				</a>
+				<a
+					href="/mastery"
+					class="card group p-4 transition-all duration-200 hover:border-accent/50"
+				>
+					<p class="eyebrow">Weak spots</p>
+					<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">
+						Mastery drill
+					</p>
+					<p class="mt-1 text-xs text-text-muted">Objective grid</p>
+				</a>
+				<a href="/review" class="card group p-4 transition-all duration-200 hover:border-accent/50">
+					<p class="eyebrow">Recall</p>
+					<p class="h-display mt-1 text-lg text-text-primary group-hover:text-accent">
+						Daily review
+					</p>
+					<p class="mt-1 text-xs text-text-muted">Spaced cards</p>
+				</a>
+			</div>
+		</section>
 
-	<!-- Modules -->
+		<!-- Modules -->
 		<section>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="h-display text-xl text-text-primary">Course modules</h2>
-				<a class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline" href="/syllabus">Full syllabus</a>
+				<a
+					class="inline-flex min-h-[44px] items-center text-sm font-bold text-accent hover:underline"
+					href="/syllabus">Full syllabus</a
+				>
 			</div>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				{#each overview.modules as module (module.module.id)}
@@ -443,7 +435,9 @@
 			<section class="card p-5 sm:p-6">
 				<div class="flex items-center justify-between">
 					<h2 class="h-display text-xl text-text-primary">Recent sessions</h2>
-					<a class="touch-target text-sm font-bold text-accent hover:underline" href="/history">View all</a>
+					<a class="touch-target text-sm font-bold text-accent hover:underline" href="/history"
+						>View all</a
+					>
 				</div>
 				<div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
 					{#each overview.recentSessions as session (session.id)}

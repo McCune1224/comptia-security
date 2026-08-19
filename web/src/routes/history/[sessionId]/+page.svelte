@@ -10,7 +10,9 @@
 	let filter = $state<'all' | 'correct' | 'incorrect' | 'flagged'>('all');
 	let retaking = $state(false);
 
-	let missedCount = $derived(result ? result.review.filter((review) => !review.feedback.fullyCorrect).length : 0);
+	let missedCount = $derived(
+		result ? result.review.filter((review) => !review.feedback.fullyCorrect).length : 0
+	);
 
 	async function retakeMissed() {
 		if (!result || retaking) return;
@@ -311,7 +313,10 @@
 								? 'text-success'
 								: 'text-danger'}"
 						>
-							{review.feedback.earnedPoints}/{review.feedback.possiblePoints}{result.mode === 'practice' && review.retryCount > 0 ? ' · retry-adjusted' : ''}
+							{review.feedback.earnedPoints}/{review.feedback.possiblePoints}{result.mode ===
+								'practice' && review.retryCount > 0
+								? ' · retry-adjusted'
+								: ''}
 						</span>
 					</div>
 
@@ -457,7 +462,19 @@
 												? 'bg-danger/10 text-danger'
 												: 'text-text-secondary'}"
 									>
-										{isCorrect ? '✓ ' : isSelected ? '✗ ' : '  '}{line.text}
+										{#if isCorrect}<svg
+												viewBox="0 0 24 24"
+												class="mr-1 inline h-3.5 w-3.5 align-[-1px]"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+											>{:else if isSelected}<svg
+												viewBox="0 0 24 24"
+												class="mr-1 inline h-3.5 w-3.5 align-[-1px]"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="3"><path d="M18 6 6 18M6 6l12 12" /></svg
+											>{/if}{line.text}
 									</div>
 								{/each}
 							</div>
@@ -603,7 +620,19 @@
 												: tapped
 													? 'text-danger'
 													: 'text-text-muted'}"
-											>{correct ? '✓ correct' : tapped ? '✗ your pick' : 'not selected'}</span
+											>{#if correct}<svg
+													viewBox="0 0 24 24"
+													class="mr-1 inline h-3.5 w-3.5 align-[-1px]"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+												>correct{:else if tapped}<svg
+													viewBox="0 0 24 24"
+													class="mr-1 inline h-3.5 w-3.5 align-[-1px]"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="3"><path d="M18 6 6 18M6 6l12 12" /></svg
+												>your pick{:else}not selected{/if}</span
 										>
 									</div>
 								</div>
@@ -630,7 +659,19 @@
 												: matched
 													? 'text-danger'
 													: 'text-text-muted'}"
-											>{correct ? '✓ matched' : matched ? '✗ your match' : 'not matched'}</span
+											>{#if correct}<svg
+													viewBox="0 0 24 24"
+													class="mr-1 inline h-3.5 w-3.5 align-[-1px]"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+												>matched{:else if matched}<svg
+													viewBox="0 0 24 24"
+													class="mr-1 inline h-3.5 w-3.5 align-[-1px]"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="3"><path d="M18 6 6 18M6 6l12 12" /></svg
+												>your match{:else}not matched{/if}</span
 										>
 									</div>
 								</div>

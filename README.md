@@ -7,7 +7,7 @@ The app combines a structured four-week course plan with adaptive practice, grad
 PBQs, full-length exams, spaced repetition, a weighted gradebook, and exam-readiness tracking. It is
 designed for focused study on desktop or mobile and runs locally with SQLite.
 
-> 💡 **A personal project first.** This is the tool I built and dogfooded for my own study sessions —
+> **A personal project first.** This is the tool I built and dogfooded for my own study sessions —
 > the course plan, banks, and schedules are tuned for how *I* study, not a generic audience, and it
 > isn't a configurable product. That said, it's open source for a reason: fork it, use it, and steal
 > whatever ideas work for you. If you'd like to see it go further, PRs are welcome.

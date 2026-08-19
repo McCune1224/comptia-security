@@ -153,7 +153,7 @@
 								? 'border-accent bg-accent/10 text-text-primary'
 								: 'border-border text-text-primary hover:border-border-strong'}"
 						aria-pressed={selected === premise.id}
-						disabled={disabled}
+						{disabled}
 						onclick={() => onPremiseTap(premise.id)}
 						onkeydown={(e) => {
 							if (e.key === 'Escape') selected = null;
@@ -162,14 +162,21 @@
 						<span class="min-w-0 flex-1">
 							<span class="block break-words">{premise.text}</span>
 							{#if matchedTarget}
-								<span
-									class="mt-0.5 block break-words text-xs font-bold {inlineColor} sm:hidden"
+								<span class="mt-0.5 block break-words text-xs font-bold {inlineColor} sm:hidden"
 									>→ {matchedTarget.text}</span
 								>
 							{/if}
 						</span>
 						{#if matches[premise.id]}
-							<span class="shrink-0 text-xs font-bold text-accent">✓</span>
+							<span class="shrink-0 text-accent"
+								><svg
+									viewBox="0 0 24 24"
+									class="h-4 w-4"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+								></span
+							>
 						{/if}
 					</button>
 				{/each}
@@ -187,7 +194,7 @@
 								: selected
 									? 'border-border text-text-primary hover:border-accent hover:text-accent'
 									: 'border-border text-text-primary hover:border-border-strong'}"
-						disabled={disabled}
+						{disabled}
 						onclick={() => onTargetTap(target.id)}
 						onkeydown={(e) => {
 							if (e.key === 'Escape') selected = null;

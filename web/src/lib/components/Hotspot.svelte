@@ -74,8 +74,15 @@
 		{:else if template === 'topology-basic'}
 			<div
 				class="absolute inset-x-[5%] top-[2%] flex h-[18%] items-center justify-center rounded-md border-2 border-dashed border-border-strong bg-surface-700/60 text-xs font-bold text-text-secondary"
-				>☁ Internet</div
 			>
+				<svg
+					viewBox="0 0 24 24"
+					class="h-5 w-5"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg
+				> Internet
+			</div>
 			{#each TOPOLOGY_ANCHORS.filter((a) => a.id !== 'cloud') as anchor}
 				<div
 					class="absolute flex items-center justify-center rounded-md border border-border bg-surface-700 text-center text-[11px] font-semibold text-text-secondary"
@@ -102,8 +109,9 @@
 			</div>
 			<div
 				class="absolute inset-x-[2%] top-[62%] flex items-center justify-center rounded-md border border-dashed border-border-strong bg-surface-700/50 py-3 text-xs font-bold text-text-secondary"
-				>Ethernet frame</div
 			>
+				Ethernet frame
+			</div>
 		{:else if template === 'log-lines'}
 			{#each regions as region}
 				<div
@@ -129,7 +137,7 @@
 				style:height="{region.y2 - region.y1}%"
 				aria-pressed={selectedIds.includes(region.id)}
 				aria-label={region.label}
-				disabled={disabled}
+				{disabled}
 				onclick={() => toggle(region.id)}
 			>
 				{#if template !== 'log-lines' && template !== 'osi-stack'}

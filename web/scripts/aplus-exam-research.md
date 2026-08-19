@@ -6,7 +6,7 @@ root), Professor Messer / ExamCompass / Crucial Exams indexes, and test-taker
 reports. Use to author exam-aligned A+ bank content — never to reproduce leaked
 items or vendor question text (CompTIA IP / braindump policy).
 
-## ⚠️ Version decision: target V15 (220-1201 / 220-1202) ONLY
+## Version decision: target V15 (220-1201 / 220-1202) ONLY
 
 - **220-1101 / 220-1102 (V14) retired September 25, 2025** (English). Dead — do not build for it.
 - **V15 launched March 25, 2025**; estimated retirement ~September 2028. Must pass both cores
@@ -18,13 +18,13 @@ items or vendor question text (CompTIA IP / braindump policy).
 - Types: single + multiple response MCQ, drag-and-drop, performance-based questions (PBQs).
 - **Domains (27 objectives across 5 domains):**
 
-| Domain | Weight | Objectives | Objective count |
-|---|---|---|---|
-| 1.0 Mobile Devices | 13% | 1.1–1.3 | 3 |
-| 2.0 Networking | 23% | 2.1–2.8 | 8 |
-| 3.0 Hardware | 25% | 3.1–3.8 | 8 |
-| 4.0 Virtualization and Cloud Computing | 11% | 4.1–4.2 | 2 |
-| 5.0 Hardware and Network Troubleshooting | 28% | 5.1–5.6 | 6 |
+| Domain                                   | Weight | Objectives | Objective count |
+| ---------------------------------------- | ------ | ---------- | --------------- |
+| 1.0 Mobile Devices                       | 13%    | 1.1–1.3    | 3               |
+| 2.0 Networking                           | 23%    | 2.1–2.8    | 8               |
+| 3.0 Hardware                             | 25%    | 3.1–3.8    | 8               |
+| 4.0 Virtualization and Cloud Computing   | 11%    | 4.1–4.2    | 2               |
+| 5.0 Hardware and Network Troubleshooting | 28%    | 5.1–5.6    | 6               |
 
 - **The troubleshooting methodology (identify → theory → test → plan → verify → document) is
   NOT tested in V15** — competency standard only. Don't author methodology questions.
@@ -37,12 +37,12 @@ items or vendor question text (CompTIA IP / braindump policy).
 - **Domains (36 objectives across 4 domains — NOTE: the older plan's "30 objectives"
   count is stale; v4.0 of the doc has 4.1–4.10 in Domain 4):**
 
-| Domain | Weight | Objectives | Objective count |
-|---|---|---|---|
-| 1.0 Operating Systems | 28% | 1.1–1.11 | 11 |
-| 2.0 Security | 28% | 2.1–2.11 | 11 |
-| 3.0 Software Troubleshooting | 23% | 3.1–3.4 | 4 |
-| 4.0 Operational Procedures | 21% | 4.1–4.10 | 10 |
+| Domain                       | Weight | Objectives | Objective count |
+| ---------------------------- | ------ | ---------- | --------------- |
+| 1.0 Operating Systems        | 28%    | 1.1–1.11   | 11              |
+| 2.0 Security                 | 28%    | 2.1–2.11   | 11              |
+| 3.0 Software Troubleshooting | 23%    | 3.1–3.4    | 4               |
+| 4.0 Operational Procedures   | 21%    | 4.1–4.10   | 10              |
 
 - Windows scope: Windows 10 + 11 (up to end of Mainstream Support).
 - Notable objectives: 2.6 SOHO malware removal 9-step process (ordering-PBQ material),

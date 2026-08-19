@@ -359,8 +359,17 @@
 						<div class="flex flex-wrap items-center justify-between gap-3">
 							<div class="flex items-center gap-3">
 								<span
-									class="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-border-strong text-lg"
-									>📅</span
+									class="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-border-strong"
+									><svg
+										viewBox="0 0 24 24"
+										class="h-5 w-5"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.8"
+										><rect x="3" y="4" width="18" height="18" rx="2" /><path
+											d="M16 2v4M8 2v4M3 10h18"
+										/></svg
+									></span
 								>
 								<div>
 									<h2 class="h-display text-xl text-text-primary">Google Calendar</h2>
@@ -383,7 +392,16 @@
 								aria-pressed={showGoogle}
 								onclick={() => (showGoogle = !showGoogle)}
 							>
-								{showGoogle ? '✓ ' : ''}Show Google events
+								{#if showGoogle}
+									<svg
+										viewBox="0 0 24 24"
+										class="mr-1.5 inline h-4 w-4 align-[-2px]"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+									>
+								{/if}
+								Show Google events
 							</button>
 							<div class="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
 								<span>
@@ -455,16 +473,19 @@
 						<div
 							class="grid grid-cols-7 gap-0.5 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
 						>
-							{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div class="py-2">
-								{day}
-							</div>{/each}
+							{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div
+									class="py-2"
+								>
+									{day}
+								</div>{/each}
 						</div>
 						<div class="grid grid-cols-7 gap-0.5">
 							{#each Array(firstWeekday) as _}<div></div>{/each}
 							{#each Array(daysInMonth) as _, index (index)}
 								{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
 								{@const items = byDay[keyFor(day)] ?? []}
-								{@const gitems = gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
+								{@const gitems =
+									gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
 								<button
 									class="flex min-h-14 flex-col items-start rounded-md border p-1.5 text-left transition sm:min-h-16 {isToday(
 										day
@@ -596,7 +617,7 @@
 				<h2 class="h-display text-xl text-text-primary">Next up</h2>
 				{#if nextUp.length === 0}
 					<p class="mt-4 rounded-md bg-success/10 p-4 text-sm text-success">
-						Nothing on the horizon. 🎉
+						Nothing on the horizon.
 					</p>
 				{:else}
 					<div class="mt-4 space-y-2">
