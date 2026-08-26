@@ -262,8 +262,8 @@
       "domain": 1,
       "objective": "1.2",
       "format": "scenario",
-      "prompt": "A security architect needs to select a control that both prevents unauthorized vehicle access to a facility loading dock and directs delivery vehicles to a specific inspection area. Which control type best fulfills both requirements simultaneously?",
-      "context": null,
+      "prompt": "Which control type best fulfills both requirements simultaneously?",
+      "context": "A security architect needs to select a control that both prevents unauthorized vehicle access to a facility loading dock and directs delivery vehicles to a specific inspection area.",
       "kind": "single-choice",
       "options": [
         {
@@ -450,8 +450,8 @@
       "domain": 1,
       "objective": "1.2",
       "format": "scenario",
-      "prompt": "A security engineer is designing a Zero Trust network architecture. Which TWO of the following are core components of the Zero Trust policy decision and enforcement framework as defined by NIST SP 800-207? (Select TWO.)",
-      "context": null,
+      "prompt": "Which TWO of the following are core components of the Zero Trust policy decision and enforcement framework as defined by NIST SP 800-207? (Select TWO.)",
+      "context": "A security engineer is designing a Zero Trust network architecture.",
       "kind": "multiple-choice",
       "options": [
         {
@@ -550,8 +550,8 @@
       "domain": 1,
       "objective": "1.2",
       "format": "scenario",
-      "prompt": "An organization deploys a fake record in its customer database that appears to be a valid credit-card entry. The record contains unique markers detectable only by the organization. Which type of deception technology is this?",
-      "context": null,
+      "prompt": "Which type of deception technology is this?",
+      "context": "An organization deploys a fake record in its customer database that appears to be a valid credit-card entry. The record contains unique markers detectable only by the organization.",
       "kind": "single-choice",
       "options": [
         {
@@ -692,7 +692,7 @@
       "objective": "1.3",
       "format": "scenario",
       "prompt": "Which of the following best describes the purpose of a standard operating procedure (SOP) in the change management process?",
-      "context": null,
+      "context": "Change management defines how system modifications are proposed, reviewed, approved, and reversed.",
       "kind": "single-choice",
       "options": [
         {
@@ -785,8 +785,8 @@
       "domain": 1,
       "objective": "1.3",
       "format": "scenario",
-      "prompt": "An organization is drafting its change management policy. Which of the following elements should be included to ensure that failed changes can be reversed quickly and predictably?",
-      "context": null,
+      "prompt": "Which of the following elements should be included to ensure that failed changes can be reversed quickly and predictably?",
+      "context": "An organization is drafting its change management policy.",
       "kind": "single-choice",
       "options": [
         {
@@ -973,8 +973,8 @@
       "domain": 1,
       "objective": "1.4",
       "format": "scenario",
-      "prompt": "A security architect is designing a password storage system and wants to use a key-stretching algorithm that is resistant to both GPU-based parallel attacks and ASIC-based brute-force attacks. Which TWO of the following algorithms meet this requirement? (Select TWO.)",
-      "context": null,
+      "prompt": "Which TWO of the following algorithms meet this requirement? (Select TWO.)",
+      "context": "A security architect is designing a password storage system and wants to use a key-stretching algorithm that is resistant to both GPU-based parallel attacks and ASIC-based brute-force attacks.",
       "kind": "multiple-choice",
       "options": [
         {
@@ -1073,8 +1073,8 @@
       "domain": 1,
       "objective": "1.4",
       "format": "scenario",
-      "prompt": "A security engineer is configuring TLS for a web application that handles sensitive financial data. The engineer wants to ensure that even if the server's long-term private key is compromised in the future, past session keys cannot be decrypted. Which cryptographic property should the engineer enable?",
-      "context": null,
+      "prompt": "Which cryptographic property should the engineer enable?",
+      "context": "A security engineer is configuring TLS for a web application that handles sensitive financial data. The engineer wants to ensure that even if the server’s long-term private key is compromised in the future, past session keys cannot be decrypted.",
       "kind": "single-choice",
       "options": [
         {
@@ -1120,8 +1120,8 @@
       "domain": 1,
       "objective": "1.4",
       "format": "scenario",
-      "prompt": "An organization's cryptographic inventory includes RSA-2048 for digital signatures, ECDHE for key exchange, and AES-256-GCM for bulk encryption. A security consultant warns that sufficiently large quantum computers will eventually break RSA and ECDHE. Which of the following describes the quantum-resistant alternatives the organization should evaluate?",
-      "context": null,
+      "prompt": "Which of the following describes the quantum-resistant alternatives the organization should evaluate?",
+      "context": "An organization’s cryptographic inventory includes RSA-2048 for digital signatures, ECDHE for key exchange, and AES-256-GCM for bulk encryption. A security consultant warns that sufficiently large quantum computers will eventually break RSA and ECDHE.",
       "kind": "single-choice",
       "options": [
         {
@@ -3654,7 +3654,7 @@
       "objective": "3.1",
       "format": "scenario",
       "prompt": "Which statement accurately describes the security differences between virtual machines and containers?",
-      "context": "",
+      "context": "Both virtual machines and containers isolate workloads, but they do so at different layers of the stack.",
       "kind": "single-choice",
       "options": [
         {
@@ -3903,8 +3903,8 @@
       "domain": 3,
       "objective": "3.2",
       "format": "scenario",
-      "prompt": "A security administrator needs to allow a small number of approved administrators to SSH into a highly restricted PCI DSS network segment that has no direct internet connectivity. All administrative sessions must be logged and monitored. What device placement strategy satisfies these requirements?",
-      "context": "",
+      "prompt": "What device placement strategy satisfies these requirements?",
+      "context": "A security administrator needs to allow a small number of approved administrators to SSH into a highly restricted PCI DSS network segment that has no direct internet connectivity. All administrative sessions must be logged and monitored.",
       "kind": "single-choice",
       "options": [
         {
@@ -4149,8 +4149,8 @@
       "domain": 3,
       "objective": "3.2",
       "format": "scenario",
-      "prompt": "A security engineer configures a firewall rule allowing inbound HTTPS traffic. A stateless firewall and a stateful firewall process this rule differently. Which statement accurately describes the difference?",
-      "context": "",
+      "prompt": "Which statement accurately describes the difference?",
+      "context": "A security engineer configures a firewall rule allowing inbound HTTPS traffic. A stateless firewall and a stateful firewall process this rule differently.",
       "kind": "single-choice",
       "options": [
         {
@@ -4489,8 +4489,8 @@
       "domain": 3,
       "objective": "3.3",
       "format": "scenario",
-      "prompt": "A company needs to ensure that all internal application traffic between microservices is encrypted. The services communicate using REST APIs and run on Kubernetes pods that are frequently created and destroyed. Traditional TLS with static certificates is impractical because of the dynamic pod lifecycle. Which solution should the security architect choose?",
-      "context": "",
+      "prompt": "Which solution should the security architect choose?",
+      "context": "A company needs to ensure that all internal application traffic between microservices is encrypted. The services communicate using REST APIs and run on Kubernetes pods that are frequently created and destroyed. Traditional TLS with static certificates is impractical because of the dynamic pod lifecycle.",
       "kind": "single-choice",
       "options": [
         {
@@ -4536,8 +4536,8 @@
       "domain": 3,
       "objective": "3.3",
       "format": "scenario",
-      "prompt": "A company processes highly sensitive payroll data using an in-memory database. The security architect is concerned about cold boot attacks, DMA attacks via Thunderbolt ports, and the hypervisor reading guest memory. Which technology protects data while it is being actively processed in RAM?",
-      "context": "",
+      "prompt": "Which technology protects data while it is being actively processed in RAM?",
+      "context": "A company processes highly sensitive payroll data using an in-memory database. The security architect is concerned about cold boot attacks, DMA attacks via Thunderbolt ports, and the hypervisor reading guest memory.",
       "kind": "single-choice",
       "options": [
         {
@@ -4824,8 +4824,8 @@
       "domain": 3,
       "objective": "3.4",
       "format": "scenario",
-      "prompt": "A database administrator configures a disk array with six physical disks. The system requires maximum read performance and fault tolerance — the array must survive two simultaneous disk failures without data loss. Which RAID configuration meets these requirements?",
-      "context": "",
+      "prompt": "Which RAID configuration meets these requirements?",
+      "context": "A database administrator configures a disk array with six physical disks. The system requires maximum read performance and fault tolerance — the array must survive two simultaneous disk failures without data loss.",
       "kind": "single-choice",
       "options": [
         {
@@ -4965,8 +4965,8 @@
       "domain": 3,
       "objective": "3.4",
       "format": "scenario",
-      "prompt": "A company experiences a ransomware attack that encrypts all servers. IT takes 6 hours to detect the attack, 4 hours to restore from clean backups, and 2 hours to validate data integrity and resume operations. The business can survive a maximum of 12 hours without the system. Which statement BEST interprets the MTD, MTTR, and RTO relationship?",
-      "context": "",
+      "prompt": "Which statement BEST interprets the MTD, MTTR, and RTO relationship?",
+      "context": "A company experiences a ransomware attack that encrypts all servers. IT takes 6 hours to detect the attack, 4 hours to restore from clean backups, and 2 hours to validate data integrity and resume operations. The business can survive a maximum of 12 hours without the system.",
       "kind": "single-choice",
       "options": [
         {
@@ -5059,7 +5059,7 @@
       "domain": 4,
       "objective": "4.1",
       "format": "scenario",
-      "prompt": "What is the MOST likely cause?",
+      "prompt": "Why do four servers still have root SSH login enabled after the CIS Level 2 Ansible deployment?",
       "context": "A security team uses Ansible to apply CIS Level 2 benchmarks to 40 Linux servers. After deployment, an auditor finds four servers still have root SSH login enabled.",
       "kind": "single-choice",
       "options": [
@@ -5157,8 +5157,8 @@
       "domain": 4,
       "objective": "4.1",
       "format": "scenario",
-      "prompt": "What is the MOST likely explanation?",
-      "context": "After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings. Group Policy confirms the GPO is still linked and enforced. After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings three weeks later. Group Policy confirms the GPO is still linked and enforced.",
+      "prompt": "Why did the six servers revert to weaker TLS settings even though the GPO is linked and enforced?",
+      "context": "After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings three weeks later. Group Policy confirms the GPO is still linked and enforced.",
       "kind": "single-choice",
       "options": [
         {
@@ -5314,7 +5314,7 @@
       "objective": "4.1",
       "format": "scenario",
       "prompt": "Which Splunk correlation BEST identifies this drift?",
-      "context": "A SOC analyst uses Splunk to detect configuration drift on Windows servers. A registry key change was unauthorized. A SOC analyst uses Splunk to detect configuration drift on Windows servers. A search identifies that the 'RestrictAnonymous' registry key was changed on 12 servers without change management approval.",
+      "context": "A SOC analyst uses Splunk to detect configuration drift on Windows servers. A registry key change was unauthorized. A search identifies that the 'RestrictAnonymous' registry key was changed on 12 servers without change management approval.",
       "kind": "single-choice",
       "options": [
         {
@@ -5458,8 +5458,8 @@
       "domain": 4,
       "objective": "4.2",
       "format": "scenario",
-      "prompt": "A Splunk correlation rule triggers an impossible-travel alert: a user authenticated from New York at 09:05 UTC and London at 09:35 UTC. The user is a remote employee who uses a company VPN. What is the MOST likely explanation?",
-      "context": "A Splunk correlation rule for impossible travel triggers. A user authenticated from New York at 09:05 and London at 09:35. The user uses a company VPN.",
+      "prompt": "Why did the impossible-travel alert most likely fire for this VPN user?",
+      "context": "A Splunk correlation rule triggers an impossible-travel alert: a user authenticated from New York at 09:05 UTC and London at 09:35 UTC. The user is a remote employee who uses a company VPN.",
       "kind": "single-choice",
       "options": [
         {
@@ -5708,7 +5708,7 @@
       "domain": 4,
       "objective": "4.4",
       "format": "scenario",
-      "prompt": "A company must comply with PCI DSS requirement 10.7, retaining audit trail history for at least 12 months. The SIEM team configures Elasticsearch hot/warm/cold storage tiers. After 14 months, logs from month 10 are unsearchable. What is the MOST likely cause?",
+      "prompt": "Why are month-10 logs unsearchable after 14 months even though the SIEM uses hot/warm/cold storage tiers?",
       "context": "A company configures Elasticsearch hot/warm/cold storage for PCI DSS compliance. After 14 months, logs from month 10 are unsearchable.",
       "kind": "single-choice",
       "options": [
@@ -6099,7 +6099,7 @@
       "domain": 4,
       "objective": "4.7",
       "format": "scenario",
-      "prompt": "A SOAR playbook detects a compromised host using EDR signals and triggers network isolation via a switch management API. The playbook runs successfully, but the isolated host continues communicating with internal servers. What is the MOST likely cause?",
+      "prompt": "Why does the isolated host keep communicating with internal servers after the SOAR playbook triggers network isolation?",
       "context": "A SOAR playbook triggers network isolation via a switch API, but the isolated host continues communicating with internal servers.",
       "kind": "single-choice",
       "options": [
@@ -7433,8 +7433,8 @@
       "domain": 4,
       "objective": "4.9",
       "format": "scenario",
-      "prompt": "A penetration tester runs 'nmap -sS -sV -O -p 1-10000 10.0.0.1'. All 10,000 ports show as 'filtered' but the web application is accessible via a browser. Why did Nmap report all ports as filtered?",
-      "context": "A tester runs 'nmap -sS -sV -O -p 1-10000 10.0.0.1'. All ports show filtered but web app is accessible via browser.",
+      "prompt": "Why did Nmap report all ports as filtered?",
+      "context": "A penetration tester runs 'nmap -sS -sV -O -p 1-10000 10.0.0.1'. All 10,000 ports show as 'filtered' but the web application is accessible via a browser.",
       "kind": "single-choice",
       "options": [
         {
@@ -11157,8 +11157,8 @@
       "domain": 2,
       "objective": "2.5",
       "format": "scenario",
-      "prompt": "A development team is remediating a stored XSS vulnerability in a web application. Which control is the MOST effective primary defense?",
-      "context": "Remediating stored XSS in a web application — choose the most effective primary defense.",
+      "prompt": "Which control is the MOST effective primary defense?",
+      "context": "A development team is remediating a stored XSS vulnerability in a web application.",
       "kind": "single-choice",
       "options": [
         {
@@ -16794,7 +16794,7 @@
       "domain": 1,
       "objective": "1.4",
       "format": "pbq",
-      "prompt": "An organization is setting up a new internal certificate authority to issue digital certificates for corporate web applications and internal wireless networks. Arrange the PKI certificate lifecycle steps in the correct order from initial key generation through certificate revocation or expiration.",
+      "prompt": "Arrange the PKI certificate lifecycle steps in the correct order from initial key generation through certificate revocation or expiration.",
       "kind": "ordering",
       "explanation": "The certificate lifecycle follows a strict sequence from key generation through CSR submission, CA verification, issuance, deployment, ongoing monitoring, and finally renewal or revocation. Skipping verification steps or deploying a certificate before it is issued are dangerous errors that could allow an attacker to obtain a fraudulent certificate. Understanding this lifecycle is essential for Security+ Objective 1.4 covering identity and access management concepts.",
       "sourceRefs": [
@@ -16841,14 +16841,15 @@
         "i5",
         "i6"
       ],
-      "hint": "The lifecycle proceeds in time: create the keys and ask for the certificate, have it issued and installed, then manage its validity until it is renewed or ends. Order the steps chronologically."
+      "hint": "The lifecycle proceeds in time: create the keys and ask for the certificate, have it issued and installed, then manage its validity until it is renewed or ends. Order the steps chronologically.",
+      "context": "An organization is setting up a new internal certificate authority to issue digital certificates for corporate web applications and internal wireless networks."
     },
     {
       "id": "pbq-1-004",
       "domain": 1,
       "objective": "1.4",
       "format": "pbq",
-      "prompt": "You are a security analyst hardening a production public-facing web server that handles customer transactions. Configure each TLS parameter to meet the organization's security baseline, which requires TLS 1.2 or higher, AES-256 encryption, forward secrecy, and strong certificate validation.",
+      "prompt": "Configure each TLS parameter to meet the organization’s security baseline, which requires TLS 1.2 or higher, AES-256 encryption, forward secrecy, and strong certificate validation.",
       "kind": "configuration",
       "explanation": "TLS hardening requires selecting secure protocols and cipher suites while rejecting legacy options. TLS 1.0 and 1.1 are deprecated due to known vulnerabilities and must be disabled. Forward secrecy ensures session keys are not compromised even if the server's private key is later exposed. SHA-1 signatures are cryptographically weak and have been deprecated by modern browsers. ECDSA certificates provide better performance and security than RSA at equivalent key lengths. Disabling SSLv2/v3 and RC4 is mandatory as these are comprehensively broken. Perfect forward secrecy using ECDHE ensures each session has a unique key even if the long-term key is compromised.",
       "sourceRefs": [
@@ -16957,7 +16958,8 @@
         "f3": "a",
         "f4": "a"
       },
-      "hint": "The stated baseline sets the bar for every field: no legacy protocol versions, a suite that gives forward secrecy with 256-bit encryption, a modern signing algorithm, and strict revocation validation."
+      "hint": "The stated baseline sets the bar for every field: no legacy protocol versions, a suite that gives forward secrecy with 256-bit encryption, a modern signing algorithm, and strict revocation validation.",
+      "context": "You are a security analyst hardening a production public-facing web server that handles customer transactions."
     },
     {
       "id": "pbq-2-001",
@@ -25503,7 +25505,8 @@
         "p4": "t4",
         "p5": "t5"
       },
-      "hint": "Each technique is defined by its mechanism — recycled authentication material, offline ticket cracking, hijacking a library search order, corrupting name resolution, or a phone-based deception."
+      "hint": "Each technique is defined by its mechanism — recycled authentication material, offline ticket cracking, hijacking a library search order, corrupting name resolution, or a phone-based deception.",
+      "context": "Attack recognition depends on mapping each technique to the indicator that defines it."
     },
     {
       "id": "pbq-4-803",
@@ -25584,7 +25587,8 @@
         "p4": "t4",
         "p5": "t5"
       },
-      "hint": "Each legacy protocol has a modern replacement that provides the same function with encryption or stronger authentication. Match the insecure protocol to its secure counterpart."
+      "hint": "Each legacy protocol has a modern replacement that provides the same function with encryption or stronger authentication. Match the insecure protocol to its secure counterpart.",
+      "context": "Legacy protocols often transmit data in cleartext or with weak authentication and have modern, stronger replacements."
     },
     {
       "id": "pbq-4-804",
@@ -25641,7 +25645,8 @@
         "b2": "w2",
         "b3": "w3"
       },
-      "hint": "Federation exchanges identity in defined formats: one is the markup used for SAML assertions, one is the token type issued by OIDC, and one is the protocol Microsoft's stack commonly uses."
+      "hint": "Federation exchanges identity in defined formats: one is the markup used for SAML assertions, one is the token type issued by OIDC, and one is the protocol Microsoft's stack commonly uses.",
+      "context": "Federated identity lets a user authenticate once and be recognized across separate systems."
     },
     {
       "id": "pbq-3-801",
@@ -25698,14 +25703,15 @@
         "b2": "w2",
         "b3": "w3"
       },
-      "hint": "Apply the zero-trust mindset: requests are re-checked rather than assumed safe, movement between resources is tightly constrained, and identity is proven before anything is granted. One unused word reflects the traditional trust-everything model that zero trust rejects."
+      "hint": "Apply the zero-trust mindset: requests are re-checked rather than assumed safe, movement between resources is tightly constrained, and identity is proven before anything is granted. One unused word reflects the traditional trust-everything model that zero trust rejects.",
+      "context": "Zero trust replaces implicit network trust with per-request verification."
     },
     {
       "id": "pbq-4-805",
       "domain": 4,
       "objective": "4.6",
       "format": "pbq",
-      "prompt": "An administrator is enabling MFA for a VPN. Configure the policy with the most secure settings.",
+      "prompt": "Configure the policy with the most secure settings.",
       "explanation": "Password + TOTP is the standard secure pairing, a 15-minute token lifetime limits replay window, and a lockout threshold of 5 stops brute force without excessive lockouts.",
       "sourceRefs": [
         {
@@ -25814,14 +25820,15 @@
         "f3": "o2",
         "f4": "o2"
       },
-      "hint": "The strongest MFA policy combines something you know with something you possess, keeps session tokens short, and locks the account after a few failed attempts."
+      "hint": "The strongest MFA policy combines something you know with something you possess, keeps session tokens short, and locks the account after a few failed attempts.",
+      "context": "An administrator is enabling MFA for a VPN."
     },
     {
       "id": "pbq-4-806",
       "domain": 4,
       "objective": "4.4",
       "format": "pbq",
-      "prompt": "A SOC is tuning a SIEM rule that detects credential-stuffing bursts. Configure the correlation rule.",
+      "prompt": "Configure the correlation rule.",
       "explanation": "A 15-minute correlation window catches bursts, high severity escalates them, grouping by source IP pinpoints the attacker, and blocking the source is the appropriate automated response.",
       "sourceRefs": [
         {
@@ -25930,7 +25937,8 @@
         "f3": "o1",
         "f4": "o2"
       },
-      "hint": "A credential-stuffing burst is many failed logons from one origin in a short window. Tune the rule to group those attempts, set severity to match confirmed attacker behavior, and respond automatically at the network edge."
+      "hint": "A credential-stuffing burst is many failed logons from one origin in a short window. Tune the rule to group those attempts, set severity to match confirmed attacker behavior, and respond automatically at the network edge.",
+      "context": "A SOC is tuning a SIEM rule that detects credential-stuffing bursts."
     },
     {
       "id": "pbq-1-015",
