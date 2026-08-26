@@ -470,19 +470,18 @@
 
 	$effect(() => {
 		if (question?.kind !== 'ordering' || !orderingEl) return;
-		const ids =
-			draft?.kind === 'ordering' ? [...draft.itemIds] : question.items.map((item) => item.id);
-		const instance = new Sortable(orderingEl, {
+		const el = orderingEl;
+		const instance = new Sortable(el, {
 			animation: 150,
+			forceFallback: true,
 			handle: '.drag-handle',
-			onEnd: (evt) => {
-				const reorder = [
-					...(draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id))
-				];
-				if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
-				const [moved] = reorder.splice(evt.oldIndex, 1);
-				reorder.splice(evt.newIndex, 0, moved);
-				draft = { kind: 'ordering', itemIds: reorder };
+			onEnd: () => {
+				// Sortable has already moved the DOM nodes to the new order; read that
+				// order back so the reactive re-render reflects exactly what the user sees.
+				const itemIds = Array.from(el.querySelectorAll('[data-id]'))
+					.map((node) => node.getAttribute('data-id'))
+					.filter((id): id is string => Boolean(id));
+				if (itemIds.length) draft = { kind: 'ordering', itemIds };
 			}
 		});
 		return () => instance.destroy();
@@ -492,19 +491,16 @@
 		if (question?.kind !== 'multi-step') return;
 		const step = question.steps[subStep];
 		if (step?.kind !== 'ordering' || !subOrderingEl) return;
-		const subDraft = getSubResponse();
-		const ids = subDraft?.kind === 'ordering' ? [...subDraft.itemIds] : step.items.map((i) => i.id);
-		const instance = new Sortable(subOrderingEl, {
+		const el = subOrderingEl;
+		const instance = new Sortable(el, {
 			animation: 150,
+			forceFallback: true,
 			handle: '.drag-handle',
-			onEnd: (evt) => {
-				const current = getSubResponse();
-				const reorder =
-					current?.kind === 'ordering' ? [...current.itemIds] : step.items.map((i) => i.id);
-				if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
-				const [moved] = reorder.splice(evt.oldIndex, 1);
-				reorder.splice(evt.newIndex, 0, moved);
-				updateSubResponse({ kind: 'ordering', itemIds: reorder });
+			onEnd: () => {
+				const itemIds = Array.from(el.querySelectorAll('[data-id]'))
+					.map((node) => node.getAttribute('data-id'))
+					.filter((id): id is string => Boolean(id));
+				if (itemIds.length) updateSubResponse({ kind: 'ordering', itemIds });
 			}
 		});
 		return () => instance.destroy();
@@ -868,7 +864,8 @@
 				</div>
 			{:else if question.kind === 'ordering'}
 				<div bind:this={orderingEl} class="space-y-3">
-					{#each draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id) as id, itemIndex}
+					{#key (draft?.kind === 'ordering' ? JSON.stringify(draft.itemIds) : JSON.stringify(question.items.map((item) => item.id)))}
+				{#each draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id) as id, itemIndex}
 						<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
 							<button
 								class="drag-handle grid h-11 w-11 cursor-grab active:cursor-grabbing place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
@@ -909,6 +906,7 @@
 								>{question.items.find((item) => item.id === id)?.text}</span
 							>
 						</div>{/each}
+				{/key}
 				</div>
 			{:else if question.kind === 'matching'}
 				<MatchConnect
@@ -1154,6 +1152,7 @@
 					{:else if step.kind === 'ordering'}
 						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 						<div bind:this={subOrderingEl} class="space-y-3">
+							{#key (subDraft?.kind === 'ordering' ? JSON.stringify(subDraft.itemIds) : JSON.stringify(step.items.map((i) => i.id)))}
 							{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map((i) => i.id) as id, itemIndex}
 								<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
 									<button
@@ -1191,6 +1190,7 @@
 									>
 								</div>
 							{/each}
+						{/key}
 						</div>
 					{:else if step.kind === 'matching'}
 						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
