@@ -508,7 +508,7 @@ Laptop and mobile hardware is built for serviceability (FRUs — field-replaceab
 
 ## PBQ strategy
 
-- **Do PBQs first or last** — they're the most time-consuming; many test-takers flag and return.
+- **PBQs open the exam** — CompTIA presents PBQs first; do them while your brain is fresh, then return to the multiple-choice.
 - **Read the scenario twice** — PBQs bury the key constraint ("MOST secure", "FIRST step", "least expensive").
 - **Ordering** — find the anchor step (only one can be first/last) and build outward.
 - **Matching** — match the sure pairs first; leftover targets narrow the rest.

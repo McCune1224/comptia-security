@@ -600,7 +600,8 @@ If you can't do all three, that objective goes on today's targeted review list. 
 
 ## PBQ strategy
 
-- **Do PBQs first or last** — they're the most time-consuming; many test-takers flag them and return after the multiple-choice.
+- **PBQs open the exam** — the real SY0-701 presents its 3–5 PBQs first, and they are worth roughly 20–30% of the score (here, 5 PBQs at ~6 MCQ-points each ≈ 26%). Do them while your brain is fresh; the simulated full exam mirrors this by placing PBQs at the start.
+- **Don't skip them** — simulation PBQs can be flagged and returned to, but you can't reach the multiple-choice until you've at least opened each one.
 - **Read the scenario twice** — PBQs often bury the key constraint (e.g., "least privilege," "most cost-effective," "must work during a network outage").
 - **Ordering/matching PBQs** — look for the *anchor* (a step that can only go in one position, a term with only one sensible match) and build outward.
 - **Configuration PBQs** — "best practice" is almost always: enable encryption, enable logging, use MFA/least privilege, disable default accounts, set secure protocols (TLS ≥ 1.2, SSH not Telnet, SNMPv3).
@@ -609,7 +610,7 @@ If you can't do all three, that objective goes on today's targeted review list. 
 ## Exam-day rules of engagement
 
 - **90 questions, 90 minutes** → about 1 minute per question. Flag hard ones and move on; budget the last 10 minutes for review.
-- **Scoring** — the official exam requires a scaled score of **750** (of 900); CompTIA publishes no raw-score conversion, so treat 83.3% here as the app's practice-readiness target, not an official pass percentage. No penalty for guessing — never leave a question blank.
+- **Scoring** — the official exam requires a scaled score of **750** (of 900); CompTIA publishes no raw-score conversion, so treat 83.3% here as the app's practice-readiness target, not an official pass percentage. In the simulated exam, PBQs carry the heavier weight, so a strong PBQ performance moves your percentage far more than one MCQ. No penalty for guessing — never leave a question blank.
 - **Multiple-select** — the prompt tells you exactly how many (e.g., "Which TWO…"). Match the count exactly.
 - **Eliminate obviously wrong answers** first (wrong protocol, wrong control category, wrong risk term) — Security+ distractors are often *real terms used wrongly*.
 - **"Best" / "MOST" / "FIRST"** questions — pick the answer that satisfies the stated constraint (cost, speed, security, availability), not just any correct-sounding control.

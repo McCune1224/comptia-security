@@ -96,6 +96,30 @@ describe('QuizService', () => {
 		repository.close();
 	});
 
+	it('opens the full exam with PBQs and weights them at ~26% of the score', () => {
+		const repository = createQuizRepository(':memory:');
+		let seed = 7;
+		const service = createQuizService({
+			repository,
+			bank: loadQuestionBank(),
+			rng: () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = service.startSession({ type: 'full' });
+		// Real exam opens with PBQs; MCQs follow and are interleaved across domains.
+		expect(session.questions.slice(0, 5).every((q) => q.format === 'pbq')).toBe(true);
+		expect(session.questions.slice(5).every((q) => q.format !== 'pbq')).toBe(true);
+		const result = service.completeSession(session.sessionId);
+		expect(result.totalQuestions).toBe(90);
+		// 85 MCQs (1 pt) + 5 PBQs (6 pts each) = 115 possible points -> PBQs ≈ 26%.
+		expect(result.possiblePoints).toBe(85 + 5 * 6);
+		const pbqPoints = result.review
+			.filter((r) => r.question.format === 'pbq')
+			.reduce((sum) => sum + 6, 0);
+		expect(pbqPoints / result.possiblePoints).toBeCloseTo((5 * 6) / 115, 5);
+		repository.close();
+	});
+
 	it('allows two practice retries with point decay and locks the third', () => {
 		const repository = createQuizRepository(':memory:');
 		const choicePbq: QuestionDefinition = {

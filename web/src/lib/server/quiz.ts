@@ -77,11 +77,18 @@ export interface QuizService {
 export interface ExamConfig {
 	domains: Domain[];
 	quotas: Record<number, number>;
+	/**
+	 * Points a PBQ contributes to the simulated score. The real SY0-701 weights
+	 * PBQs at roughly 20–30% of the total; with 5 PBQs this makes each worth ~6
+	 * MCQs (30 / (85 + 30) ≈ 26%). MCQs are always worth 1. Undefined → 1.
+	 */
+	pbqPoints?: number;
 }
 
 export const DEFAULT_EXAM_CONFIG: ExamConfig = {
 	domains: [1, 2, 3, 4, 5],
-	quotas: { 1: 11, 2: 20, 3: 16, 4: 25, 5: 18 }
+	quotas: { 1: 11, 2: 20, 3: 16, 4: 25, 5: 18 },
+	pbqPoints: 6
 };
 
 export const MAX_PRACTICE_RETRIES = 2;
@@ -349,15 +356,23 @@ export function createQuizService({
 			stored.summary.mode === 'practice'
 				? RETRY_FACTORS[Math.min(retries, MAX_PRACTICE_RETRIES)]
 				: 1;
+		let totalEarned = 0;
+		let totalPossible = 0;
 		const review = stored.questions.map((question, index) => {
 			const response = stored.responses[index] ?? null;
 			const feedback = scoreQuestion(question, response, {
 				hintUsed: stored.hints[index] ?? false
 			});
+			// PBQs carry exam-weighted points so the simulated score mirrors the real
+			// exam, where PBQs are worth a much larger share than a single MCQ.
 			feedback.earnedPoints *= attemptFactor(stored.retries[index] ?? 0);
+			const qPoints = question.format === 'pbq' ? (examConfig.pbqPoints ?? 1) : 1;
+			const weighted = feedback.earnedPoints * qPoints;
+			totalEarned += weighted;
+			totalPossible += qPoints;
 			const domain = domainBreakdown[question.domain];
-			domain.earnedPoints += feedback.earnedPoints;
-			domain.possiblePoints++;
+			domain.earnedPoints += weighted;
+			domain.possiblePoints += qPoints;
 			domain.totalQuestions++;
 			if (feedback.fullyCorrect) domain.fullyCorrect++;
 			const objective = objectiveBreakdown[question.objective] ?? {
@@ -366,8 +381,8 @@ export function createQuizService({
 				fullyCorrect: 0,
 				totalQuestions: 0
 			};
-			objective.earnedPoints += feedback.earnedPoints;
-			objective.possiblePoints++;
+			objective.earnedPoints += weighted;
+			objective.possiblePoints += qPoints;
 			objective.totalQuestions++;
 			if (feedback.fullyCorrect) objective.fullyCorrect++;
 			objectiveBreakdown[question.objective] = objective;
@@ -378,7 +393,7 @@ export function createQuizService({
 				retryCount: stored.retries[index] ?? 0
 			};
 		});
-		const earnedPoints = review.reduce((total, item) => total + item.feedback.earnedPoints, 0);
+		const earnedPoints = totalEarned;
 		const elapsedSeconds = stored.summary.mode === 'practice'
 			? Math.max(0, Math.floor((new Date(now().toISOString()).getTime() - new Date(stored.summary.started_at).getTime()) / 1000))
 			: undefined;
@@ -387,8 +402,8 @@ export function createQuizService({
 			type: stored.summary.type,
 			mode: stored.summary.mode,
 			earnedPoints,
-			possiblePoints: stored.questions.length,
-			percentage: Math.round((earnedPoints / stored.questions.length) * 1000) / 10,
+			possiblePoints: totalPossible,
+			percentage: totalPossible ? Math.round((earnedPoints / totalPossible) * 1000) / 10 : 0,
 			fullyCorrect: review.filter((item) => item.feedback.fullyCorrect).length,
 			totalQuestions: stored.questions.length,
 			flaggedQuestionIndexes: stored.flags,
@@ -495,14 +510,17 @@ export function createQuizService({
 					'INVALID_REQUEST',
 					`Bank cannot assemble ${examConfig.domains.length} distinct PBQ interactions.`
 				);
-			selected = [...pbqs];
+			// The real exam opens with the PBQs. Keep them first, and interleave the
+			// domain-weighted MCQs so domains are not presented in contiguous blocks.
+			const mcqs: QuestionDefinition[] = [];
 			for (const domain of examConfig.domains)
-				selected.push(
+				mcqs.push(
 					...shuffle(
 						bank.mcqs.filter((question) => question.domain === domain),
 						rng
 					).slice(0, examConfig.quotas[domain] - 1)
 				);
+			selected = [...pbqs, ...shuffle(mcqs, rng)];
 		} else {
 			const filtered = source.filter(
 				(question) =>
@@ -521,7 +539,11 @@ export function createQuizService({
 				});
 			selected = shuffle(filtered, rng).slice(0, count);
 		}
-		selected = shuffle(selected, rng).map((question) => presentation(question, rng));
+		// Full exams already order PBQs-first with interleaved MCQs; every other
+		// session type gets a fresh outer shuffle so question order varies.
+		selected = (input.type === 'full' ? selected : shuffle(selected, rng)).map(
+			(question) => presentation(question, rng)
+		);
 		const startedAt = now().toISOString();
 		const deadlineAt =
 			mode === 'exam'

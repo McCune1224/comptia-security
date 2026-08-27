@@ -51,7 +51,9 @@ targeted five-question practice session.
 
 - Four weekly modules covering all five Security+ exam domains
 - Seven lessons with interactive study widgets
-- Objective quizzes, scenario sets, PBQs, and 90-question timed full exams
+- Objective quizzes, scenario sets, PBQs, and 90-question timed full exams that mirror the real
+  SY0-701: PBQs open the exam and carry ~26% of the score (5 PBQs at ~6 MCQ-points each), with
+  domain quotas 11/20/16/25/18 across the five domains
 - Interactive PBQ formats including matching, ordering, configuration, evidence, hotspot, sorting,
   word-bank, and multi-step tasks
 - Daily spaced-repetition review with streaks, heatmap, and weak-topic recovery

@@ -33,7 +33,10 @@ export function examConfigFor(courseId: CourseId): ExamConfig {
 		quotas[domain] = quota;
 		remaining -= quota;
 	});
-	return { domains: [...meta.domains] as Domain[], quotas };
+	// SY0-701 weights PBQs at ~20–30% of the score; A+ courses keep the prior
+	// 1-point-per-question model until their PBQ weighting is validated.
+	const pbqPoints = courseId === 'secp-701' ? 6 : 1;
+	return { domains: [...meta.domains] as Domain[], quotas, pbqPoints };
 }
 
 export interface ScopedServices {
