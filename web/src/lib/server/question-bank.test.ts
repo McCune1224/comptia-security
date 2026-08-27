@@ -335,10 +335,15 @@ describe('question bank', () => {
 
 	it('has the required authored allocation and redacts public questions', () => {
 		const bank = loadQuestionBank();
-		expect(bank.mcqs).toHaveLength(332);
+		expect(bank.mcqs.length).toBeGreaterThanOrEqual(523);
 		expect(bank.pbqs).toHaveLength(105);
-		expect(bank.mcqs.filter((question) => question.format === 'scenario')).toHaveLength(332);
-		expect(new Set([...bank.mcqs, ...bank.pbqs].map((question) => question.id)).size).toBe(437);
+		// Scenario is no longer 100%; it shares the bank with recall/keyword/short-form.
+		const scenario = bank.mcqs.filter((question) => question.style === 'scenario').length;
+		expect(scenario).toBeLessThanOrEqual(170);
+		expect(bank.mcqs.filter((question) => question.style === 'recall').length).toBeGreaterThanOrEqual(80);
+		expect(bank.mcqs.filter((question) => question.style === 'keyword').length).toBeGreaterThanOrEqual(60);
+		expect(bank.mcqs.filter((question) => question.style === 'short-form').length).toBeGreaterThanOrEqual(12);
+		expect(new Set([...bank.mcqs, ...bank.pbqs].map((question) => question.id)).size).toBe(bank.mcqs.length + bank.pbqs.length);
 		const publicQuestion = toPublicQuestion(bank.mcqs[0]);
 		expect(JSON.stringify(publicQuestion)).not.toContain('correctOptionIds');
 		expect(JSON.stringify(publicQuestion)).not.toContain('rationale');

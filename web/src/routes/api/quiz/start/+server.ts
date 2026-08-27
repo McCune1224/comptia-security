@@ -1,5 +1,5 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
-import type { Domain, SessionMode, SessionType } from '$lib/types';
+import type { Domain, QuestionStyle, SessionMode, SessionType } from '$lib/types';
 import { apiError, readJson } from '$lib/server/api';
 import { resolveScope } from '$lib/server/scope';
 import { scopedServices } from '$lib/server/services';
@@ -14,6 +14,7 @@ export async function POST(event: RequestEvent) {
 		const objective = body.objective;
 		const assignmentId = body.assignmentId;
 		const reviewSource = body.reviewSource;
+		const style = body.style;
 		if (
 			typeof type !== 'string' ||
 			!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(type) ||
@@ -25,7 +26,10 @@ export async function POST(event: RequestEvent) {
 			(objective !== undefined &&
 				(typeof objective !== 'string' || !/^[1-5]\.[1-9]$/.test(objective))) ||
 			(assignmentId !== undefined && typeof assignmentId !== 'string') ||
-			(reviewSource !== undefined && reviewSource !== 'daily' && reviewSource !== 'wall')
+			(reviewSource !== undefined && reviewSource !== 'daily' && reviewSource !== 'wall') ||
+			(style !== undefined &&
+				(typeof style !== 'string' ||
+					!['recall', 'scenario', 'keyword', 'short-form', 'mixed'].includes(style)))
 		)
 			return json(
 				{ error: { code: 'INVALID_REQUEST', message: 'Invalid start-session fields.' } },
@@ -39,7 +43,8 @@ export async function POST(event: RequestEvent) {
 				...(domain ? { domain: domain as Domain } : {}),
 				...(objective ? { objective: objective as `1.1` } : {}),
 				...(assignmentId ? { assignmentId: assignmentId as string } : {}),
-				...(reviewSource ? { reviewSource: reviewSource as 'daily' | 'wall' } : {})
+				...(reviewSource ? { reviewSource: reviewSource as 'daily' | 'wall' } : {}),
+				...(style ? { style: style as QuestionStyle } : {})
 			})
 		});
 	} catch (error) {

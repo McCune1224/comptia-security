@@ -5,6 +5,7 @@ import type {
 	PublicQuestion,
 	QuestionFormat,
 	QuestionResponse,
+	QuestionStyle,
 	SourceRef
 } from '$lib/types';
 import rawBank from './data/question-bank.json';
@@ -15,6 +16,8 @@ export interface DefinitionBase {
 	domain: Domain;
 	objective: ObjectiveId;
 	format: QuestionFormat;
+	/** MCQ practice-style classifier (recall | scenario | keyword | short-form). Absent on PBQs. */
+	style?: QuestionStyle;
 	prompt: string;
 	context?: string;
 	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
@@ -172,8 +175,12 @@ export interface CourseBankSpec {
 	mcqDomainTotals: Record<number, number>;
 	/** multiple-choice (multi-select) kind count per domain */
 	multiTotals: Record<number, number>;
-	/** scenario-format count per domain (all A+ MCQs are scenario) */
-	scenarioTotals: Record<number, number>;
+	/** scenario-format count per domain (all A+ MCQs are scenario). Kept optional for A+ compatibility. */
+	scenarioTotals?: Record<number, number>;
+	/** MCQ practice-style minimums (e.g. { recall: 80, keyword: 60, 'short-form': 12 }). Secp-701 only. */
+	styleFloors?: Partial<Record<QuestionStyle, number>>;
+	/** MCQ scenario-style maximum (secp-701 only). Enforces a minority share of paragraph questions. */
+	scenarioCeiling?: number;
 	/** optional per-domain PBQ floor (checked when provided) */
 	pbqDomainTotals?: Record<number, number>;
 	/** Security+ quality gates — optional; banks that omit them stay valid. */
@@ -185,7 +192,7 @@ export interface CourseBankSpec {
 
 export const SECP701_BANK_SPEC: CourseBankSpec = {
 	courseId: 'secp-701',
-	mcqTotal: 332,
+	mcqTotal: 523,
 	pbqTotal: 105,
 	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
 	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
@@ -200,7 +207,10 @@ export const SECP701_BANK_SPEC: CourseBankSpec = {
 	},
 	mcqDomainTotals: { 1: 48, 2: 71, 3: 62, 4: 92, 5: 59 },
 	multiTotals: { 1: 6, 2: 11, 3: 9, 4: 13, 5: 7 },
-	scenarioTotals: { 1: 48, 2: 71, 3: 62, 4: 92, 5: 59 },
+	// Scenario is no longer forced to 100%. The bank now carries a realistic mix:
+	// recall (self-contained), keyword (BEST/MOST/FIRST), short-form (word-bank), scenario (paragraph).
+	styleFloors: { recall: 80, keyword: 60, 'short-form': 12 },
+	scenarioCeiling: 170,
 	pbqDomainTotals: { 1: 15, 2: 21, 3: 19, 4: 32, 5: 18 },
 	requireAuthoredHints: true,
 	minSourceRefs: 2,
@@ -243,7 +253,7 @@ function isValidHotspot(question: HotspotDefinition): boolean {
 }
 
 export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = SECP701_BANK_SPEC): void {
-	if (bank.mcqs.length !== spec.mcqTotal) fail('mcqs', `expected ${spec.mcqTotal} items, found ${bank.mcqs.length}`);
+	if (bank.mcqs.length < spec.mcqTotal) fail('mcqs', `expected at least ${spec.mcqTotal} items, found ${bank.mcqs.length}`);
 	if (bank.pbqs.length !== spec.pbqTotal) fail('pbqs', `expected ${spec.pbqTotal} items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
@@ -252,9 +262,18 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		fail('bank', 'prompts must be unique (normalized)');
 	for (const domain of spec.domains) {
 		const mcqs = bank.mcqs.filter((question) => question.domain === domain);
-		if (mcqs.length !== spec.mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected ${spec.mcqDomainTotals[domain]} items`);
-		if (mcqs.filter((question) => question.kind === 'multiple-choice').length !== spec.multiTotals[domain]) fail(`mcq-${domain}`, 'invalid multiple-choice count');
-		if (mcqs.filter((question) => question.format === 'scenario').length !== spec.scenarioTotals[domain]) fail(`mcq-${domain}`, 'invalid scenario count');
+		if (mcqs.length < spec.mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected at least ${spec.mcqDomainTotals[domain]} items`);
+		if (mcqs.filter((question) => question.kind === 'multiple-choice').length < spec.multiTotals[domain]) fail(`mcq-${domain}`, 'too few multiple-choice items');
+	}
+	if (spec.scenarioCeiling !== undefined) {
+		const scenario = bank.mcqs.filter((question) => question.style === 'scenario').length;
+		if (scenario > spec.scenarioCeiling) fail('mcq-scenario', `scenario count ${scenario} exceeds ceiling ${spec.scenarioCeiling}`);
+	}
+	if (spec.styleFloors) {
+		for (const [style, min] of Object.entries(spec.styleFloors)) {
+			const count = bank.mcqs.filter((question) => question.style === style).length;
+			if (count < (min as number)) fail(`mcq-${style}`, `expected at least ${min} ${style} items`);
+		}
 	}
 	if (spec.pbqDomainTotals) {
 		for (const domain of spec.domains) {
@@ -263,7 +282,7 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		}
 	}
 	for (const [objective, expected] of Object.entries(spec.mcqObjectiveTotals) as [ObjectiveId, number][]) {
-		if (bank.mcqs.filter((question) => question.objective === objective).length !== expected) fail(objective, `expected ${expected} MCQs`);
+		if (bank.mcqs.filter((question) => question.objective === objective).length < expected) fail(objective, `expected at least ${expected} MCQs`);
 	}
 	if (spec.pbqObjectiveMinimum) {
 		for (const objective of Object.keys(spec.mcqObjectiveTotals)) {
@@ -283,6 +302,10 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 	}
 	for (const question of all) {
 		if (!spec.objectivesByDomain[question.domain].includes(question.objective)) fail(question.id, 'objective does not belong to domain');
+		if (spec.styleFloors && question.format !== 'pbq') {
+			if (!question.style || !['recall', 'scenario', 'keyword', 'short-form'].includes(question.style))
+				fail(question.id, 'MCQ requires a valid style (recall|scenario|keyword|short-form)');
+		}
 		if (!question.id.match(question.format === 'pbq' ? spec.pbqIdPattern : spec.mcqIdPattern)) fail(question.id, 'invalid ID or format');
 		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0) fail(question.id, 'missing authored content or source reference');
 		if (question.sourceRefs.some((ref, i) => !ref.section.trim() || question.sourceRefs.findIndex((other) => other.source === ref.source && other.section === ref.section) !== i)) fail(question.id, 'source references must be unique and non-empty');
@@ -342,7 +365,7 @@ export function loadQuestionBank(): QuestionBank {
 }
 
 export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion {
-	const base = { id: definition.id, domain: definition.domain, objective: definition.objective, format: definition.format, prompt: definition.prompt, ...(definition.context ? { context: definition.context } : {}), ...(definition.hint ? { hint: definition.hint } : {}) };
+	const base = { id: definition.id, domain: definition.domain, objective: definition.objective, format: definition.format, ...(definition.style ? { style: definition.style } : {}), prompt: definition.prompt, ...(definition.context ? { context: definition.context } : {}), ...(definition.hint ? { hint: definition.hint } : {}) };
 	switch (definition.kind) {
 		case 'single-choice':
 		case 'multiple-choice': return { ...base, kind: definition.kind, options: definition.options.map(({ id, text }) => ({ id, text })), selectCount: definition.selectCount };

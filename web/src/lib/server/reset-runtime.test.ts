@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import Database from 'better-sqlite3';
 import { createQuizRepository } from './db';
-import { loadQuestionBank } from './question-bank';
+import { loadQuestionBank, correctResponse } from './question-bank';
 import { createQuizService } from './quiz';
 
 describe('reset-runtime script', () => {
@@ -17,13 +17,14 @@ describe('reset-runtime script', () => {
 		const service = createQuizService({ repository, bank, rng: () => 0.5 });
 		// Seed real runtime rows, including quiz_answers (FK -> quiz_sessions).
 		const session = service.startSession({ type: 'quiz', count: 5 });
+		// The MCQ bank now mixes choice and non-choice kinds (e.g. word-bank short-form),
+		// so respond with each question's correct shape. Sessions expose public questions,
+		// so resolve the full definition from the bank to build a valid response.
+		const byId = new Map([...bank.mcqs, ...bank.pbqs].map((question) => [question.id, question]));
 		for (let i = 0; i < session.questions.length; i++) {
-			const question = session.questions[i];
-			const optionIds =
-				question.kind === 'single-choice' || question.kind === 'multiple-choice'
-					? question.options.slice(0, question.kind === 'multiple-choice' ? question.selectCount : 1).map((option) => option.id)
-					: [];
-			service.saveResponse(session.sessionId, i, { kind: 'choice', optionIds });
+			const def = byId.get(session.questions[i].id);
+			if (!def) throw new Error(`missing definition for ${session.questions[i].id}`);
+			service.saveResponse(session.sessionId, i, correctResponse(def));
 		}
 		service.completeSession(session.sessionId);
 		repository.close();

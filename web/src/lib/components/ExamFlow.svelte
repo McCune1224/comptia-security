@@ -12,6 +12,7 @@
 		QuestionFeedback,
 		QuestionResponse,
 		QuizResult,
+		QuestionStyle,
 		SessionType,
 		SessionView
 	} from '$lib/types';
@@ -25,6 +26,7 @@
 		objective,
 		assignmentId,
 		reviewSource,
+		style,
 		onDone
 	}: {
 		type: SessionType;
@@ -34,6 +36,7 @@
 		objective?: string;
 		assignmentId?: string;
 		reviewSource?: 'daily' | 'wall';
+		style?: QuestionStyle | 'mixed';
 		onDone?: () => void;
 	} = $props();
 	let session = $state<SessionView | null>(null);
@@ -275,7 +278,8 @@
 					domain,
 					objective,
 					...(assignmentId ? { assignmentId } : {}),
-					...(reviewSource ? { reviewSource } : {})
+					...(reviewSource ? { reviewSource } : {}),
+					...(style ? { style } : {})
 				})
 			});
 			const data = await response.json();

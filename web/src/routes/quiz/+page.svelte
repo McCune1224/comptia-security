@@ -26,6 +26,14 @@
 	let mode = $state<'practice' | 'exam'>(
 		(page.url.searchParams.get('mode') as 'practice' | 'exam') || 'practice'
 	);
+	let style = $state<'mixed' | 'recall' | 'scenario' | 'keyword' | 'short-form'>(
+		(page.url.searchParams.get('style') as
+			| 'mixed'
+			| 'recall'
+			| 'scenario'
+			| 'keyword'
+			| 'short-form') || 'mixed'
+	);
 	let assignmentId = $state<string | undefined>(
 		page.url.searchParams.get('assignment') ?? undefined
 	);
@@ -42,6 +50,7 @@
 		domain={reviewSource ? undefined : domain}
 		objective={reviewSource ? undefined : objective}
 		mode={reviewSource ? 'practice' : mode}
+		style={reviewSource ? undefined : style}
 		{assignmentId}
 		{reviewSource}
 		onDone={() => {
@@ -104,6 +113,15 @@
 					></label
 				>
 			{/if}
+			<label class="block text-sm font-bold text-text-secondary"
+				>Question style<select class="mt-1.5" bind:value={style}
+					><option value="mixed">Mixed (all styles)</option><option value="recall"
+					>Recall (definitions)</option
+					><option value="short-form">Short-form</option><option value="keyword"
+					>BEST / MOST / FIRST</option
+					><option value="scenario">Scenario (paragraph)</option></select
+				></label
+			>
 			<fieldset>
 				<legend class="mb-1.5 block text-sm font-bold text-text-secondary">Session mode</legend>
 				<div class="grid grid-cols-2 rounded-md bg-surface-700 p-1">
@@ -126,7 +144,7 @@
 				class="btn btn-primary w-full sm:w-auto"
 				onclick={() =>
 					goto(
-						`/quiz?start=1&count=${count}&domain=${domain ?? ''}&objective=${objective ?? ''}&mode=${mode}`
+						`/quiz?start=1&count=${count}&domain=${domain ?? ''}&objective=${objective ?? ''}&mode=${mode}&style=${style}`
 					)}
 				>Start quiz</button
 			>

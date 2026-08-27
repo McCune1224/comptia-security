@@ -6,6 +6,7 @@ import type {
 	PublicQuestion,
 	QuestionResponse,
 	QuizResult,
+	QuestionStyle,
 	SessionMode,
 	SessionType,
 	SessionView
@@ -447,6 +448,8 @@ export function createQuizService({
 		assignmentId?: string;
 		reviewSource?: ReviewSource;
 		questionIds?: string[];
+		/** MCQ practice-style filter: recall | scenario | keyword | short-form | mixed. */
+		style?: QuestionStyle | 'mixed';
 	}): SessionView => {
 		const active = repository.getActiveSession();
 		if (active) {
@@ -466,6 +469,7 @@ export function createQuizService({
 			(input.objective !== undefined &&
 				(input.type !== 'quiz' || !/^[1-5]\.[1-9]\d?$/.test(input.objective))) ||
 			(input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall') ||
+			(input.style !== undefined && !['recall', 'scenario', 'keyword', 'short-form', 'mixed'].includes(input.style)) ||
 			(input.questionIds !== undefined &&
 				(!Array.isArray(input.questionIds) ||
 					input.questionIds.length < 1 ||
@@ -473,11 +477,18 @@ export function createQuizService({
 					input.questionIds.some((id) => typeof id !== 'string')))
 		)
 			throw new QuizServiceError('INVALID_REQUEST', 'Invalid session type, mode, or domain.');
+		// A styled quiz filters MCQs by practice style; `type: 'scenario'` is an alias for style 'scenario'.
+		const styleFilter =
+			input.type === 'scenario'
+				? 'scenario'
+				: input.style && input.style !== 'mixed'
+					? input.style
+					: undefined;
 		const source =
 			input.type === 'pbq'
 				? bank.pbqs
-				: input.type === 'scenario'
-					? bank.mcqs.filter((question) => question.format === 'scenario')
+				: styleFilter
+					? bank.mcqs.filter((question) => question.style === styleFilter)
 					: bank.mcqs;
 		const count =
 			input.type === 'full'

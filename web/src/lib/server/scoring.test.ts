@@ -15,7 +15,7 @@ describe('scoreQuestion', () => {
 
 	it('scores partial ordering, matching, configuration, and numeric tolerance', () => {
 		const order = bank.pbqs.find((question) => question.kind === 'ordering')!;
-		expect(scoreQuestion(order, { kind: 'ordering', itemIds: [order.correctOrder[0], ...order.correctOrder.slice(2), order.correctOrder[1]] }).earnedPoints).toBe(1 / 6);
+		expect(scoreQuestion(order, { kind: 'ordering', itemIds: [order.correctOrder[0], ...order.correctOrder.slice(2), order.correctOrder[1]] }).earnedPoints).toBe(1 / order.correctOrder.length);
 		const numeric: NumericDefinition = {
 			id: 'pbq-5-997',
 			domain: 5,

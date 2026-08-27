@@ -34,6 +34,15 @@ export type SessionMode = 'practice' | 'exam';
 export type SessionStatus = 'active' | 'completed' | 'abandoned';
 export type QuestionFormat = 'standard' | 'scenario' | 'pbq';
 
+/**
+ * MCQ practice-style classifier that drives the practice-mode filters.
+ * - `recall` — self-contained definition/term question (no scenario paragraph).
+ * - `scenario` — a paragraph `context` the question depends on.
+ * - `keyword` — BEST/MOST/FIRST/LEAST/GREATEST decision question.
+ * - `short-form` — short-answer style (word-bank / fill), not a long scenario.
+ */
+export type QuestionStyle = 'recall' | 'scenario' | 'keyword' | 'short-form';
+
 /** Question kinds the server can generate an answer-safe auto-hint for (practice mode). */
 export const AUTO_HINTABLE_KINDS = [
 	'single-choice',
@@ -59,6 +68,8 @@ export interface PublicQuestionBase {
 	domain: Domain;
 	objective: ObjectiveId;
 	format: QuestionFormat;
+	/** Practice-style classifier; present on MCQs, absent on PBQs. */
+	style?: QuestionStyle;
 	prompt: string;
 	context?: string;
 	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
