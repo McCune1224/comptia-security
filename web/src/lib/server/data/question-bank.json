@@ -11,18 +11,18 @@
       "options": [
         {
           "id": "a",
-          "text": "Preventive, Physical, Detective",
-          "rationale": "Biometrics are preventive, not detective — they prevent unauthorized access at the door."
+          "text": "Technical preventive, Physical deterrent, Technical detective",
+          "rationale": "Bollards physically prevent vehicle access (not just deterrent), and biometrics are preventive (block entry), not detective."
         },
         {
           "id": "b",
-          "text": "Detective, Deterrent, Corrective",
-          "rationale": "An IPS that blocks is preventive, not detective. Bollards are physical/preventive, not just deterrent."
+          "text": "Technical detective, Physical preventive, Managerial preventive",
+          "rationale": "An IPS that blocks traffic is preventive, not detective. Biometrics are a technical control, not managerial."
         },
         {
           "id": "c",
-          "text": "Preventive and biometric, Physical — the IPS and biometric scanner work together for prevention",
-          "rationale": "Correct categories but omits that bollards are also a physical control type and biometrics are technical."
+          "text": "Technical corrective, Physical corrective, Technical preventive",
+          "rationale": "An IPS blocks before compromise (preventive, not corrective). Bollards prevent damage, not correct it."
         },
         {
           "id": "d",
@@ -615,8 +615,8 @@
       "options": [
         {
           "id": "a",
-          "text": "The change request form — because it captured the risk assessment",
-          "rationale": "The risk assessment identifies risk but does not minimize impact during a failure — a remediation plan does."
+          "text": "The risk assessment — because it identified potential failure points before the change",
+          "rationale": "A risk assessment identifies risks but does not minimize impact during a failure — a remediation plan does."
         },
         {
           "id": "b",
