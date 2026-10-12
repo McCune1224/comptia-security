@@ -12,14 +12,16 @@
  *      containment, calendar, lesson objective drills, and the fixed bottom
  *      nav never covering the final assessment action.
  *
- * Env: PORT (default 4899), QUIZ_DB_PATH (default /tmp/qa-<pid>.db)
- * Never points at the user's real data/quiz.db.
+ * Env: PORT (default 4899), QA_DATABASE_URL (required — a throwaway PostgreSQL
+ * database; it must differ from DATABASE_URL so real data is never touched).
+ * The QA database is wiped and re-initialized via db:setup + db:seed on boot.
  */
-import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, writeFileSync, rmSync, readdirSync } from 'node:fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -27,7 +29,15 @@ const ROOT = join(__dirname, '..');
 const OUT = join(ROOT, 'dogfood-output');
 const SHOTS = join(OUT, 'screenshots');
 const PORT = process.env.PORT || '4899';
-const DB = process.env.QUIZ_DB_PATH || `/tmp/qa-${process.pid}.db`;
+const DB = process.env.QA_DATABASE_URL;
+if (!DB) {
+	console.error('QA_DATABASE_URL is required (a throwaway PostgreSQL database URL).');
+	process.exit(2);
+}
+if (process.env.DATABASE_URL && DB === process.env.DATABASE_URL) {
+	console.error('QA_DATABASE_URL must differ from DATABASE_URL — QA wipes all data in it.');
+	process.exit(2);
+}
 const BASE = `http://localhost:${PORT}`;
 const VIEWPORT = { width: 390, height: 844 };
 const TALL = { width: 390, height: 1400 };
@@ -306,13 +316,31 @@ async function sweepRoute(page, route, forceDeferred = false) {
 }
 
 // ---- server boot ----------------------------------------------------------
+async function resetQaDatabase() {
+	const sql = postgres(DB, { max: 1 });
+	try {
+		await sql.unsafe('DROP SCHEMA IF EXISTS public CASCADE');
+		await sql.unsafe('CREATE SCHEMA public');
+	} finally {
+		await sql.end();
+	}
+	for (const script of ['setup-pg.ts', 'seed-pg.ts']) {
+		const result = spawnSync('npx', ['tsx', `scripts/${script}`], {
+			cwd: ROOT,
+			env: { ...process.env, DATABASE_URL: DB },
+			stdio: 'pipe',
+			encoding: 'utf-8'
+		});
+		if (result.status !== 0)
+			throw new Error(`${script} failed:\n${(result.stderr || result.stdout || '').slice(-2000)}`);
+	}
+}
+
 async function bootServer() {
-	rmSync(DB, { force: true });
-	rmSync(`${DB}-wal`, { force: true });
-	rmSync(`${DB}-shm`, { force: true });
+	await resetQaDatabase();
 	const child = spawn('node', ['build/index.js'], {
 		cwd: ROOT,
-		env: { ...process.env, PORT, QUIZ_DB_PATH: DB },
+		env: { ...process.env, PORT, DATABASE_URL: DB },
 		stdio: ['ignore', 'pipe', 'pipe']
 	});
 	let out = '';
@@ -1187,7 +1215,4 @@ try {
 			server.kill('SIGKILL');
 		} catch {}
 	}
-	rmSync(DB, { force: true });
-	rmSync(`${DB}-wal`, { force: true });
-	rmSync(`${DB}-shm`, { force: true });
 }

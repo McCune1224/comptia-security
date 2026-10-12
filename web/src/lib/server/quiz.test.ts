@@ -1,103 +1,144 @@
 import { describe, expect, it } from 'vitest';
 import type { ObjectiveId, PublicChoiceQuestion } from '$lib/types';
-import { createQuizRepository } from './db';
+import { createTestRepository } from './test-db';
 import { loadQuestionBank, type QuestionDefinition } from './question-bank';
 import { createQuizService } from './quiz';
 
 describe('QuizService', () => {
-	it('adds an answer-neutral practice summary and omits it for exam mode', () => {
-		const repository = createQuizRepository(':memory:');
+	it('adds an answer-neutral practice summary and omits it for exam mode', async () => {
+		const repository = await createTestRepository();
 		const question: QuestionDefinition = {
-			id: 'pbq-1-summary', domain: 1, objective: '1.1', format: 'pbq',
+			id: 'pbq-1-summary',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
 			context: 'A security team is reviewing an access-control decision.',
-			prompt: 'Which control is most appropriate?', explanation: 'MFA is correct.',
-			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'single-choice',
-			options: [{ id: 'a', text: 'MFA', rationale: 'Correct.' }, { id: 'b', text: 'Backups', rationale: 'Wrong.' }, { id: 'c', text: 'Patching', rationale: 'Wrong.' }, { id: 'd', text: 'Hashing', rationale: 'Wrong.' }],
-			correctOptionIds: ['a'], selectCount: 1
+			prompt: 'Which control is most appropriate?',
+			explanation: 'MFA is correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Backups', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Patching', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Hashing', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
 		};
-		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5 });
-		const practice = service.startSession({ type: 'pbq', count: 1 });
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [question] },
+			rng: () => 0.5
+		});
+		const practice = await service.startSession({ type: 'pbq', count: 1 });
 		expect(practice.questions[0].practiceSummary?.text).toContain('security team');
 		expect(JSON.stringify(practice.questions[0].practiceSummary)).not.toContain('MFA');
-		service.abandonSession(practice.sessionId);
-		const exam = service.startSession({ type: 'pbq', mode: 'exam', count: 1 });
+		await service.abandonSession(practice.sessionId);
+		const exam = await service.startSession({ type: 'pbq', mode: 'exam', count: 1 });
 		expect(exam.questions[0].practiceSummary).toBeUndefined();
-		repository.close();
+		await repository.close();
 	});
 
-	it('fails closed when question context contains an answer-bearing value', () => {
-		const repository = createQuizRepository(':memory:');
+	it('fails closed when question context contains an answer-bearing value', async () => {
+		const repository = await createTestRepository();
 		const question: QuestionDefinition = {
-			id: 'pbq-1-summary-leak', domain: 1, objective: '1.1', format: 'pbq',
-			context: 'The correct answer is MFA.', prompt: 'Choose the control.', explanation: 'MFA is correct.',
-			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'single-choice',
-			options: [{ id: 'a', text: 'MFA', rationale: 'Correct.' }, { id: 'b', text: 'Backups', rationale: 'Wrong.' }, { id: 'c', text: 'Patching', rationale: 'Wrong.' }, { id: 'd', text: 'Hashing', rationale: 'Wrong.' }],
-			correctOptionIds: ['a'], selectCount: 1
+			id: 'pbq-1-summary-leak',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			context: 'The correct answer is MFA.',
+			prompt: 'Choose the control.',
+			explanation: 'MFA is correct.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Backups', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Patching', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Hashing', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
 		};
-		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5 });
-		expect(service.startSession({ type: 'pbq', count: 1 }).questions[0].practiceSummary).toBeUndefined();
-		repository.close();
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [question] },
+			rng: () => 0.5
+		});
+		expect(
+			(await service.startSession({ type: 'pbq', count: 1 })).questions[0].practiceSummary
+		).toBeUndefined();
+		await repository.close();
 	});
 
-	it('fails closed for multi-step contexts that contain a child-step answer', () => {
-		const repository = createQuizRepository(':memory:');
+	it('fails closed for multi-step contexts that contain a child-step answer', async () => {
+		const repository = await createTestRepository();
 		const step: QuestionDefinition = {
-			id: 'pbq-1-ms-step', domain: 1, objective: '1.1', format: 'pbq',
-			prompt: 'Which control blocks credential reuse?', explanation: 'MFA resists credential reuse.',
-			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'single-choice',
-			options: [{ id: 'a', text: 'MFA', rationale: 'Correct.' }, { id: 'b', text: 'Backups', rationale: 'Wrong.' }, { id: 'c', text: 'Patching', rationale: 'Wrong.' }, { id: 'd', text: 'Hashing', rationale: 'Wrong.' }],
-			correctOptionIds: ['a'], selectCount: 1
+			id: 'pbq-1-ms-step',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Which control blocks credential reuse?',
+			explanation: 'MFA resists credential reuse.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Backups', rationale: 'Wrong.' },
+				{ id: 'c', text: 'Patching', rationale: 'Wrong.' },
+				{ id: 'd', text: 'Hashing', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
 		};
 		const question: QuestionDefinition = {
-			id: 'pbq-1-ms-leak', domain: 1, objective: '1.1', format: 'pbq',
+			id: 'pbq-1-ms-leak',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
 			context: 'The incident response team decides MFA should be mandatory for admin accounts.',
-			prompt: 'Respond to the incident.', explanation: 'Parent-level explanation.',
-			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }], kind: 'multi-step', steps: [step]
+			prompt: 'Respond to the incident.',
+			explanation: 'Parent-level explanation.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'multi-step',
+			steps: [step]
 		};
-		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5 });
-		expect(service.startSession({ type: 'pbq', count: 1 }).questions[0].practiceSummary).toBeUndefined();
-		repository.close();
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [question] },
+			rng: () => 0.5
+		});
+		expect(
+			(await service.startSession({ type: 'pbq', count: 1 })).questions[0].practiceSummary
+		).toBeUndefined();
+		await repository.close();
 	});
 
-	it('reports elapsed practice time on resume and persists completion duration', () => {
-		const repository = createQuizRepository(':memory:');
+	it('reports elapsed practice time on resume and persists completion duration', async () => {
+		const repository = await createTestRepository();
 		let current = new Date('2026-07-22T12:00:00.000Z');
 		const question = loadQuestionBank().pbqs[0];
-		const service = createQuizService({ repository, bank: { mcqs: [], pbqs: [question] }, rng: () => 0.5, now: () => current });
-		const session = service.startSession({ type: 'pbq', count: 1 });
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [question] },
+			rng: () => 0.5,
+			now: () => current
+		});
+		const session = await service.startSession({ type: 'pbq', count: 1 });
 		current = new Date('2026-07-22T12:01:05.000Z');
-		expect((service.getSession(session.sessionId) as typeof session).elapsedSeconds).toBe(65);
-		const result = service.completeSession(session.sessionId);
+		expect(((await service.getSession(session.sessionId)) as typeof session).elapsedSeconds).toBe(
+			65
+		);
+		const result = await service.completeSession(session.sessionId);
 		expect(result.elapsedSeconds).toBe(65);
 		expect(result.durationSeconds).toBe(65);
-		expect(repository.getAllCompletedSessions()[0].duration_seconds).toBe(65);
-		repository.close();
+		expect((await repository.getAllCompletedSessions())[0].duration_seconds).toBe(65);
+		await repository.close();
 	});
 
-	it('assembles a stable 90-question full exam and persists response replacement', () => {
-		const repository = createQuizRepository(':memory:');
-		let seed = 7;
-		const service = createQuizService({ repository, bank: loadQuestionBank(), rng: () => ((seed = seed * 16807 % 2147483647) - 1) / 2147483646, now: () => new Date('2026-07-22T12:00:00.000Z') });
-		const session = service.startSession({ type: 'full' });
-		expect(session.totalQuestions).toBe(90);
-		expect(session.questions.filter((question) => question.format === 'pbq')).toHaveLength(5);
-		expect(session.questions.filter((question) => question.domain === 1)).toHaveLength(11);
-		const choiceIndex = session.questions.findIndex((question) => question.kind === 'single-choice');
-		const choice = session.questions[choiceIndex] as PublicChoiceQuestion;
-		service.saveResponse(session.sessionId, choiceIndex, { kind: 'choice', optionIds: [choice.options[0].id] });
-		service.saveResponse(session.sessionId, choiceIndex, { kind: 'choice', optionIds: [choice.options[1].id] });
-		const resumed = service.getSession(session.sessionId) as typeof session;
-		expect(resumed.responses[choiceIndex].kind).toBe('choice');
-		expect((resumed.responses[choiceIndex] as { optionIds: string[] }).optionIds).toEqual([choice.options[1].id]);
-		expect(() => service.startSession({ type: 'pbq', count: 5 })).toThrow('Resume or abandon the active session first.');
-		expect(service.getActiveSession()).toMatchObject({ sessionId: session.sessionId, type: 'full', totalQuestions: 90 });
-		service.abandonSession(session.sessionId);
-		expect(service.startSession({ type: 'pbq', count: 5 }).questions).toHaveLength(5);
-		repository.close();
-	});
-
-	it('opens the full exam with PBQs and weights them at ~26% of the score', () => {
-		const repository = createQuizRepository(':memory:');
+	it('assembles a stable 90-question full exam and persists response replacement', async () => {
+		const repository = await createTestRepository();
 		let seed = 7;
 		const service = createQuizService({
 			repository,
@@ -105,11 +146,54 @@ describe('QuizService', () => {
 			rng: () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'full' });
+		const session = await service.startSession({ type: 'full' });
+		expect(session.totalQuestions).toBe(90);
+		expect(session.questions.filter((question) => question.format === 'pbq')).toHaveLength(5);
+		expect(session.questions.filter((question) => question.domain === 1)).toHaveLength(11);
+		const choiceIndex = session.questions.findIndex(
+			(question) => question.kind === 'single-choice'
+		);
+		const choice = session.questions[choiceIndex] as PublicChoiceQuestion;
+		await service.saveResponse(session.sessionId, choiceIndex, {
+			kind: 'choice',
+			optionIds: [choice.options[0].id]
+		});
+		await service.saveResponse(session.sessionId, choiceIndex, {
+			kind: 'choice',
+			optionIds: [choice.options[1].id]
+		});
+		const resumed = (await service.getSession(session.sessionId)) as typeof session;
+		expect(resumed.responses[choiceIndex].kind).toBe('choice');
+		expect((resumed.responses[choiceIndex] as { optionIds: string[] }).optionIds).toEqual([
+			choice.options[1].id
+		]);
+		await expect(service.startSession({ type: 'pbq', count: 5 })).rejects.toThrow(
+			'Resume or abandon the active session first.'
+		);
+		expect(await service.getActiveSession()).toMatchObject({
+			sessionId: session.sessionId,
+			type: 'full',
+			totalQuestions: 90
+		});
+		await service.abandonSession(session.sessionId);
+		expect((await service.startSession({ type: 'pbq', count: 5 })).questions).toHaveLength(5);
+		await repository.close();
+	});
+
+	it('opens the full exam with PBQs and weights them at ~26% of the score', async () => {
+		const repository = await createTestRepository();
+		let seed = 7;
+		const service = createQuizService({
+			repository,
+			bank: loadQuestionBank(),
+			rng: () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = await service.startSession({ type: 'full' });
 		// Real exam opens with PBQs; MCQs follow and are interleaved across domains.
 		expect(session.questions.slice(0, 5).every((q) => q.format === 'pbq')).toBe(true);
 		expect(session.questions.slice(5).every((q) => q.format !== 'pbq')).toBe(true);
-		const result = service.completeSession(session.sessionId);
+		const result = await service.completeSession(session.sessionId);
 		expect(result.totalQuestions).toBe(90);
 		// 85 MCQs (1 pt) + 5 PBQs (6 pts each) = 115 possible points -> PBQs ≈ 26%.
 		expect(result.possiblePoints).toBe(85 + 5 * 6);
@@ -117,11 +201,11 @@ describe('QuizService', () => {
 			.filter((r) => r.question.format === 'pbq')
 			.reduce((sum) => sum + 6, 0);
 		expect(pbqPoints / result.possiblePoints).toBeCloseTo((5 * 6) / 115, 5);
-		repository.close();
+		await repository.close();
 	});
 
-	it('allows two practice retries with point decay and locks the third', () => {
-		const repository = createQuizRepository(':memory:');
+	it('allows two practice retries with point decay and locks the third', async () => {
+		const repository = await createTestRepository();
 		const choicePbq: QuestionDefinition = {
 			id: 'pbq-1-999',
 			domain: 1,
@@ -146,30 +230,44 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1 });
+		const session = await service.startSession({ type: 'pbq', count: 1 });
 		// Attempt 1: wrong -> 0 points, retry unlocked.
-		const first = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
+		const first = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['b']
+		});
 		expect(first.feedback?.earnedPoints).toBe(0);
-		expect((service.getSession(session.sessionId) as typeof session).retries[0]).toBe(0);
+		expect(((await service.getSession(session.sessionId)) as typeof session).retries[0]).toBe(0);
 		// Retry 1: correct -> 60%.
-		const second = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const second = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
 		expect(second.feedback?.earnedPoints).toBeCloseTo(0.6);
 		// Retry 2 (third attempt): correct -> 30%.
-		const third = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const third = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
 		expect(third.feedback?.earnedPoints).toBeCloseTo(0.3);
 		// Fourth attempt is locked.
-		expect(() => service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] })).toThrow('Practice responses are locked after feedback.');
+		await expect(
+			service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] })
+		).rejects.toThrow('Practice responses are locked after feedback.');
 		// Completion applies the final attempt's factor; full correctness is preserved.
-		const result = service.completeSession(session.sessionId);
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBeCloseTo(0.3);
 		expect(result.review[0].feedback.fullyCorrect).toBe(true);
 		expect(result.review[0].retryCount).toBe(2);
-		expect(repository.complete(session.sessionId, result, [], result.completedAt)).toEqual({ result, finalized: false });
-		repository.close();
+		expect(await repository.complete(session.sessionId, result, [], result.completedAt)).toEqual({
+			result,
+			finalized: false
+		});
+		await repository.close();
 	});
 
-	it('round-trips hotspot responses through a PBQ session with an injected bank', () => {
-		const repository = createQuizRepository(':memory:');
+	it('round-trips hotspot responses through a PBQ session with an injected bank', async () => {
+		const repository = await createTestRepository();
 		const hotspotPbq: QuestionDefinition = {
 			id: 'pbq-5-995',
 			domain: 5,
@@ -196,30 +294,30 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1 });
+		const session = await service.startSession({ type: 'pbq', count: 1 });
 		expect(session.questions[0].kind).toBe('hotspot');
 		// Public view must not leak the correct flag.
 		const pub = session.questions[0];
 		expect(pub.kind === 'hotspot' && 'correct' in pub.regions[0]).toBe(false);
 		// Correct response -> full credit.
-		service.saveResponse(session.sessionId, 0, { kind: 'hotspot', regionIds: ['r5'] });
-		const result = service.completeSession(session.sessionId);
+		await service.saveResponse(session.sessionId, 0, { kind: 'hotspot', regionIds: ['r5'] });
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBe(1);
 		// Wrong + a penalty tap -> 0.
-		const wrong = service.startSession({ type: 'pbq', count: 1 });
-		service.saveResponse(wrong.sessionId, 0, { kind: 'hotspot', regionIds: ['r5', 'r1'] });
-		const wrongResult = service.completeSession(wrong.sessionId);
+		const wrong = await service.startSession({ type: 'pbq', count: 1 });
+		await service.saveResponse(wrong.sessionId, 0, { kind: 'hotspot', regionIds: ['r5', 'r1'] });
+		const wrongResult = await service.completeSession(wrong.sessionId);
 		expect(wrongResult.review[0].feedback.earnedPoints).toBe(0);
 		// Unknown region id -> INVALID_REQUEST.
-		const invalid = service.startSession({ type: 'pbq', count: 1 });
-		expect(() =>
+		const invalid = await service.startSession({ type: 'pbq', count: 1 });
+		await expect(
 			service.saveResponse(invalid.sessionId, 0, { kind: 'hotspot', regionIds: ['zzz'] })
-		).toThrow('Response does not match the question interaction.');
-		repository.close();
+		).rejects.toThrow('Response does not match the question interaction.');
+		await repository.close();
 	});
 
-	it('round-trips memory responses through a PBQ session with an injected bank', () => {
-		const repository = createQuizRepository(':memory:');
+	it('round-trips memory responses through a PBQ session with an injected bank', async () => {
+		const repository = await createTestRepository();
 		const memoryPbq: QuestionDefinition = {
 			id: 'pbq-5-994',
 			domain: 5,
@@ -242,27 +340,33 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1 });
+		const session = await service.startSession({ type: 'pbq', count: 1 });
 		expect(session.questions[0].kind).toBe('memory');
 		// Correct response -> full credit.
-		service.saveResponse(session.sessionId, 0, { kind: 'memory', matchedPairIds: ['p1', 'p2', 'p3', 'p4'] });
-		const result = service.completeSession(session.sessionId);
+		await service.saveResponse(session.sessionId, 0, {
+			kind: 'memory',
+			matchedPairIds: ['p1', 'p2', 'p3', 'p4']
+		});
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBe(1);
 		// Partial -> 0.5.
-		const partial = service.startSession({ type: 'pbq', count: 1 });
-		service.saveResponse(partial.sessionId, 0, { kind: 'memory', matchedPairIds: ['p1', 'p2'] });
-		const partialResult = service.completeSession(partial.sessionId);
+		const partial = await service.startSession({ type: 'pbq', count: 1 });
+		await service.saveResponse(partial.sessionId, 0, {
+			kind: 'memory',
+			matchedPairIds: ['p1', 'p2']
+		});
+		const partialResult = await service.completeSession(partial.sessionId);
 		expect(partialResult.review[0].feedback.earnedPoints).toBe(0.5);
 		// Unknown pair id -> INVALID_REQUEST.
-		const invalid = service.startSession({ type: 'pbq', count: 1 });
-		expect(() =>
+		const invalid = await service.startSession({ type: 'pbq', count: 1 });
+		await expect(
 			service.saveResponse(invalid.sessionId, 0, { kind: 'memory', matchedPairIds: ['zzz'] })
-		).toThrow('Response does not match the question interaction.');
-		repository.close();
+		).rejects.toThrow('Response does not match the question interaction.');
+		await repository.close();
 	});
 
-	it('applies the practice-mode hint point cost server-side', () => {
-		const repository = createQuizRepository(':memory:');
+	it('applies the practice-mode hint point cost server-side', async () => {
+		const repository = await createTestRepository();
 		const choicePbq: QuestionDefinition = {
 			id: 'pbq-5-988',
 			domain: 5,
@@ -289,29 +393,34 @@ describe('QuizService', () => {
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
 		// Public view exposes the authored hint but the correct answer stays secret.
-		const plain = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
-		expect(plain.questions[0].kind === 'single-choice' && plain.questions[0].hint).toBe('The service listens on TCP 22.');
+		const plain = await service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		expect(plain.questions[0].kind === 'single-choice' && plain.questions[0].hint).toBe(
+			'The service listens on TCP 22.'
+		);
 		// First attempt, no hint -> full points.
-		service.saveResponse(plain.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
-		const plainResult = service.completeSession(plain.sessionId);
+		await service.saveResponse(plain.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const plainResult = await service.completeSession(plain.sessionId);
 		expect(plainResult.review[0].feedback.earnedPoints).toBe(1);
 		// Reveal the hint server-side, then retry -> 0.6 (retry) × 0.75 (hint) = 0.45.
-		const hinted = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
-		service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
-		const revealed = service.revealHint(hinted.sessionId, 0);
+		const hinted = await service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		await service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['b'] });
+		const revealed = await service.revealHint(hinted.sessionId, 0);
 		expect(revealed.hint.text).toBe('The service listens on TCP 22.');
-		const retry = service.saveResponse(hinted.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const retry = await service.saveResponse(hinted.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
 		expect(retry.feedback?.earnedPoints).toBeCloseTo(0.6 * 0.75);
-		const hintedResult = service.completeSession(hinted.sessionId);
+		const hintedResult = await service.completeSession(hinted.sessionId);
 		expect(hintedResult.review[0].feedback.earnedPoints).toBeCloseTo(0.6 * 0.75);
 		// Exam mode strips the hint entirely.
-		const exam = service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
+		const exam = await service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
 		expect(exam.questions[0].kind === 'single-choice' && exam.questions[0].hint).toBeUndefined();
-		repository.close();
+		await repository.close();
 	});
 
-	it('generates answer-safe auto-hints and rejects hint reveals outside practice', () => {
-		const repository = createQuizRepository(':memory:');
+	it('generates answer-safe auto-hints and rejects hint reveals outside practice', async () => {
+		const repository = await createTestRepository();
 		const choicePbq: QuestionDefinition = {
 			id: 'pbq-5-987',
 			domain: 5,
@@ -336,25 +445,30 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
-		service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
-		const hint = service.revealHint(session.sessionId, 0);
+		const session = await service.startSession({ type: 'pbq', count: 1, mode: 'practice' });
+		await service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const hint = await service.revealHint(session.sessionId, 0);
 		expect(hint.hint.text).toMatch(/incorrect/);
 		expect(hint.hint.text.toLowerCase()).not.toContain('ssh');
-		expect(service.revealHint(session.sessionId, 0).hint.text).toBe(hint.hint.text);
-		service.completeSession(session.sessionId);
+		expect((await service.revealHint(session.sessionId, 0)).hint.text).toBe(hint.hint.text);
+		await service.completeSession(session.sessionId);
 		// Graded sessions refuse hints.
-		const graded = service.startSession({ type: 'pbq', count: 1, mode: 'practice', assignmentId: 'assign-1' });
-		expect(() => service.revealHint(graded.sessionId, 0)).toThrow(/graded/);
+		const graded = await service.startSession({
+			type: 'pbq',
+			count: 1,
+			mode: 'practice',
+			assignmentId: 'assign-1'
+		});
+		await expect(service.revealHint(graded.sessionId, 0)).rejects.toThrow(/graded/);
 		// Exam sessions refuse hints.
-		service.abandonSession(graded.sessionId);
-		const exam = service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
-		expect(() => service.revealHint(exam.sessionId, 0)).toThrow(/practice mode/);
-		repository.close();
+		await service.abandonSession(graded.sessionId);
+		const exam = await service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
+		await expect(service.revealHint(exam.sessionId, 0)).rejects.toThrow(/practice mode/);
+		await repository.close();
 	});
 
-	it('withholds feedback and locks responses for graded assignment sessions', () => {
-		const repository = createQuizRepository(':memory:');
+	it('withholds feedback and locks responses for graded assignment sessions', async () => {
+		const repository = await createTestRepository();
 		const question: QuestionDefinition = {
 			id: 'pbq-1-graded',
 			domain: 1,
@@ -379,19 +493,29 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1, mode: 'practice', assignmentId: 'assign-week-1' });
+		const session = await service.startSession({
+			type: 'pbq',
+			count: 1,
+			mode: 'practice',
+			assignmentId: 'assign-week-1'
+		});
 		expect(session.assignmentId).toBe('assign-week-1');
-		const saved = service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] });
+		const saved = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
 		expect(saved).toEqual({ saved: true });
-		expect(() => service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['b'] })).toThrow(/locked/);
-		const result = service.completeSession(session.sessionId);
+		await expect(
+			service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['b'] })
+		).rejects.toThrow(/locked/);
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBe(1);
-		expect(repository.getSubmissions().length).toBe(1);
-		repository.close();
+		expect(await repository.getSubmissions()).toHaveLength(1);
+		await repository.close();
 	});
 
-	it('starts a retake session from the missed questions of a completed session', () => {
-		const repository = createQuizRepository(':memory:');
+	it('starts a retake session from the missed questions of a completed session', async () => {
+		const repository = await createTestRepository();
 		const good: QuestionDefinition = {
 			id: 'pbq-1-retake-good',
 			domain: 1,
@@ -434,31 +558,38 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 2 });
+		const session = await service.startSession({ type: 'pbq', count: 2 });
 		const goodIndex = session.questions.findIndex((q) => q.id === 'pbq-1-retake-good');
 		const missedIndex = session.questions.findIndex((q) => q.id === 'pbq-1-retake-missed');
-		service.saveResponse(session.sessionId, goodIndex, { kind: 'choice', optionIds: ['a'] });
-		service.saveResponse(session.sessionId, missedIndex, { kind: 'choice', optionIds: ['a'] });
-		const result = service.completeSession(session.sessionId);
+		await service.saveResponse(session.sessionId, goodIndex, { kind: 'choice', optionIds: ['a'] });
+		await service.saveResponse(session.sessionId, missedIndex, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review.filter((item) => !item.feedback.fullyCorrect)).toHaveLength(1);
-		const retake = service.retakeSession(session.sessionId);
+		const retake = await service.retakeSession(session.sessionId);
 		expect(retake.mode).toBe('practice');
 		expect(retake.questions.map((q) => q.id)).toEqual(['pbq-1-retake-missed']);
 		// Retaking a session with no missed questions fails.
-		service.abandonSession(retake.sessionId);
-		const perfect = service.startSession({ type: 'pbq', count: 1 });
-		service.saveResponse(perfect.sessionId, 0, {
+		await service.abandonSession(retake.sessionId);
+		const perfect = await service.startSession({ type: 'pbq', count: 1 });
+		await service.saveResponse(perfect.sessionId, 0, {
 			kind: 'choice',
-			optionIds: perfect.questions[0].kind === 'single-choice' || perfect.questions[0].kind === 'multiple-choice' ? ['a'] : []
+			optionIds:
+				perfect.questions[0].kind === 'single-choice' ||
+				perfect.questions[0].kind === 'multiple-choice'
+					? ['a']
+					: []
 		});
-		const perfectResult = service.completeSession(perfect.sessionId);
+		const perfectResult = await service.completeSession(perfect.sessionId);
 		if (perfectResult.review.every((item) => item.feedback.fullyCorrect))
-			expect(() => service.retakeSession(perfect.sessionId)).toThrow(/No missed/);
-		repository.close();
+			await expect(service.retakeSession(perfect.sessionId)).rejects.toThrow(/No missed/);
+		await repository.close();
 	});
 
-	it('round-trips slider responses through a PBQ session with an injected bank', () => {
-		const repository = createQuizRepository(':memory:');
+	it('round-trips slider responses through a PBQ session with an injected bank', async () => {
+		const repository = await createTestRepository();
 		const sliderPbq: QuestionDefinition = {
 			id: 'pbq-5-991',
 			domain: 5,
@@ -481,25 +612,25 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1 });
+		const session = await service.startSession({ type: 'pbq', count: 1 });
 		expect(session.questions[0].kind).toBe('slider');
 		// Public view must not leak the correct value.
 		const pub = session.questions[0];
 		expect(pub.kind === 'slider' && 'correctValue' in pub).toBe(false);
 		// Within tolerance -> full credit.
-		service.saveResponse(session.sessionId, 0, { kind: 'slider', value: 22 });
-		const result = service.completeSession(session.sessionId);
+		await service.saveResponse(session.sessionId, 0, { kind: 'slider', value: 22 });
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBe(1);
 		// Out-of-range value -> INVALID_REQUEST.
-		const invalid = service.startSession({ type: 'pbq', count: 1 });
-		expect(() =>
+		const invalid = await service.startSession({ type: 'pbq', count: 1 });
+		await expect(
 			service.saveResponse(invalid.sessionId, 0, { kind: 'slider', value: 99999 })
-		).toThrow('Response does not match the question interaction.');
-		repository.close();
+		).rejects.toThrow('Response does not match the question interaction.');
+		await repository.close();
 	});
 
-	it('round-trips sort responses through a PBQ session with an injected bank', () => {
-		const repository = createQuizRepository(':memory:');
+	it('round-trips sort responses through a PBQ session with an injected bank', async () => {
+		const repository = await createTestRepository();
 		const sortPbq: QuestionDefinition = {
 			id: 'pbq-5-999',
 			domain: 5,
@@ -529,23 +660,26 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 1 });
+		const session = await service.startSession({ type: 'pbq', count: 1 });
 		expect(session.questions[0].kind).toBe('sort');
-		service.saveResponse(session.sessionId, 0, { kind: 'sort', assignments: sortPbq.correctBuckets });
-		const result = service.completeSession(session.sessionId);
+		await service.saveResponse(session.sessionId, 0, {
+			kind: 'sort',
+			assignments: sortPbq.correctBuckets
+		});
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[0].feedback.earnedPoints).toBe(1);
-		const wrong = service.startSession({ type: 'pbq', count: 1 });
-		service.saveResponse(wrong.sessionId, 0, {
+		const wrong = await service.startSession({ type: 'pbq', count: 1 });
+		await service.saveResponse(wrong.sessionId, 0, {
 			kind: 'sort',
 			assignments: { i1: 'b2', i2: 'b1', i3: 'b3', i4: 'b1' }
 		});
-		const wrongResult = service.completeSession(wrong.sessionId);
+		const wrongResult = await service.completeSession(wrong.sessionId);
 		expect(wrongResult.review[0].feedback.earnedPoints).toBe(1 / 4);
-		repository.close();
+		await repository.close();
 	});
 
-	it('round-trips fill-blank and word-bank responses through a PBQ session', () => {
-		const repository = createQuizRepository(':memory:');
+	it('round-trips fill-blank and word-bank responses through a PBQ session', async () => {
+		const repository = await createTestRepository();
 		const fillPbq: QuestionDefinition = {
 			id: 'pbq-1-997',
 			domain: 1,
@@ -557,8 +691,18 @@ describe('QuizService', () => {
 			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
 			kind: 'fill-blank',
 			blanks: [
-				{ id: 'b1', label: 'Cipher type', placeholder: 'term', acceptedAnswers: ['symmetric', 'symmetrical'] },
-				{ id: 'b2', label: 'Password randomness', placeholder: 'term', acceptedAnswers: ['salt', 'salting'] }
+				{
+					id: 'b1',
+					label: 'Cipher type',
+					placeholder: 'term',
+					acceptedAnswers: ['symmetric', 'symmetrical']
+				},
+				{
+					id: 'b2',
+					label: 'Password randomness',
+					placeholder: 'term',
+					acceptedAnswers: ['salt', 'salting']
+				}
 			]
 		};
 		const wbPbq: QuestionDefinition = {
@@ -588,34 +732,51 @@ describe('QuizService', () => {
 			rng: () => 0.5,
 			now: () => new Date('2026-07-22T12:00:00.000Z')
 		});
-		const session = service.startSession({ type: 'pbq', count: 2 });
+		const session = await service.startSession({ type: 'pbq', count: 2 });
 		const fillIndex = session.questions.findIndex((q) => q.kind === 'fill-blank');
 		const wbIndex = session.questions.findIndex((q) => q.kind === 'word-bank');
 		expect(fillIndex).toBeGreaterThanOrEqual(0);
 		expect(wbIndex).toBeGreaterThanOrEqual(0);
 		// Case- and whitespace-insensitive normalization: padded uppercase is fully correct.
-		service.saveResponse(session.sessionId, fillIndex, { kind: 'fill-blank', values: { b1: '  SYMMETRIC  ', b2: 'salt' } });
-		service.saveResponse(session.sessionId, wbIndex, { kind: 'word-bank', assignments: wbPbq.correctAssignments });
-		const result = service.completeSession(session.sessionId);
+		await service.saveResponse(session.sessionId, fillIndex, {
+			kind: 'fill-blank',
+			values: { b1: '  SYMMETRIC  ', b2: 'salt' }
+		});
+		await service.saveResponse(session.sessionId, wbIndex, {
+			kind: 'word-bank',
+			assignments: wbPbq.correctAssignments
+		});
+		const result = await service.completeSession(session.sessionId);
 		expect(result.review[fillIndex].feedback.earnedPoints).toBe(1);
 		expect(result.review[wbIndex].feedback.earnedPoints).toBe(1);
-		repository.close();
+		await repository.close();
 	});
 
-	it('filters quiz sessions by objective and rejects misuse', () => {
-		const repository = createQuizRepository(':memory:');
+	it('filters quiz sessions by objective and rejects misuse', async () => {
+		const repository = await createTestRepository();
 		const bank = loadQuestionBank();
-		const service = createQuizService({ repository, bank, rng: () => 0.5, now: () => new Date('2026-07-22T12:00:00.000Z') });
+		const service = createQuizService({
+			repository,
+			bank,
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
 		// Objective outside the valid set is rejected up front (no active session yet).
-		expect(() => service.startSession({ type: 'quiz', objective: '9.9' as ObjectiveId, count: 5 })).toThrow('Invalid session type, mode, or domain.');
+		await expect(
+			service.startSession({ type: 'quiz', objective: '9.9' as ObjectiveId, count: 5 })
+		).rejects.toThrow('Invalid session type, mode, or domain.');
 		// Objective is only valid for quiz sessions.
-		expect(() => service.startSession({ type: 'pbq', objective: '1.1', count: 5 })).toThrow('Invalid session type, mode, or domain.');
-		const session = service.startSession({ type: 'quiz', objective: '1.1', count: 5 });
+		await expect(service.startSession({ type: 'pbq', objective: '1.1', count: 5 })).rejects.toThrow(
+			'Invalid session type, mode, or domain.'
+		);
+		const session = await service.startSession({ type: 'quiz', objective: '1.1', count: 5 });
 		expect(session.questions).toHaveLength(5);
 		expect(session.questions.every((q) => q.objective === '1.1')).toBe(true);
 		// A real objective with too few questions reports availability.
-		service.abandonSession(session.sessionId);
-		expect(() => service.startSession({ type: 'quiz', objective: '1.1', count: 50 })).toThrow('Requested count is unavailable.');
-		repository.close();
+		await service.abandonSession(session.sessionId);
+		await expect(
+			service.startSession({ type: 'quiz', objective: '1.1', count: 50 })
+		).rejects.toThrow('Requested count is unavailable.');
+		await repository.close();
 	});
 });

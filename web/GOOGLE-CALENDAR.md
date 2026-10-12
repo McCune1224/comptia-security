@@ -9,7 +9,7 @@ The calendar page (`/calendar`) does two things with your Google account:
    with popup reminders 1 day and 1 hour before. Re-syncing updates or removes events
    as your schedule changes (e.g. when you move the exam date on the Syllabus page).
 
-This is a single-user personal app: the OAuth token is stored in `data/quiz.db`
+This is a single-user personal app: the OAuth token is stored in PostgreSQL
 (`google_oauth` table), and synced events are tracked in `google_synced_events` so
 re-syncs never duplicate.
 

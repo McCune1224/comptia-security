@@ -39,7 +39,8 @@ export class ScopedReadCache {
 		return `${CACHE_VERSION}:${projection}:profile=${scope.profileId}:course=${scope.courseId}`;
 	}
 
-	read<T>(key: string, load: () => T): T {
+	/** Async-aware: the resolved value is what gets cloned into the cache. */
+	async read<T>(key: string, load: () => T | Promise<T>): Promise<T> {
 		const now = Date.now();
 		try {
 			const cached = this.entries.get(key);
@@ -57,7 +58,7 @@ export class ScopedReadCache {
 			this.stats.misses++;
 			this.stats.dbReads++;
 		}
-		const value = load();
+		const value = await load();
 		try {
 			this.entries.set(key, { value: structuredClone(value), expiresAt: now + this.ttlMs });
 			while (this.entries.size > this.maxEntries)

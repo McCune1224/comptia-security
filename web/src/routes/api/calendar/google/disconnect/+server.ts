@@ -4,8 +4,9 @@ import { resolveScope } from '$lib/server/scope';
 import { scopedServices } from '$lib/server/services';
 
 export async function POST(event: RequestEvent) {
-	const scope = resolveScope(event);
+	const scope = await resolveScope(event);
 	await clearOAuth(scope);
-	scopedServices(scope).repo.getSyncedEvents().forEach((row) => scopedServices(scope).repo.removeSyncedEvent(row.source));
+	for (const row of await scopedServices(scope).repo.getSyncedEvents())
+		await scopedServices(scope).repo.removeSyncedEvent(row.source);
 	return json({ ok: true });
 }

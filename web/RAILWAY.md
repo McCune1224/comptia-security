@@ -84,7 +84,7 @@ If you have existing SQLite data you want to migrate:
 cp /path/to/your/quiz.db ./data/quiz.db
 
 # Run the migration script
-railway run npx tsx scripts/migrate-sqlite-to-pg.ts --sqlite-path ./data/quiz.db
+railway run npm run db:migrate
 ```
 
 ## Environment Variables Reference
@@ -101,12 +101,14 @@ railway run npx tsx scripts/migrate-sqlite-to-pg.ts --sqlite-path ./data/quiz.db
 
 ### Database Choice
 
-- **Local development**: Uses SQLite (zero-config, file-based)
-- **Production (Railway)**: Uses PostgreSQL (managed, scalable)
+PostgreSQL is the only runtime database, in every environment:
 
-The app automatically detects the database based on the `DATABASE_URL` environment variable:
-- If `DATABASE_URL` is set → PostgreSQL
-- If `DATABASE_URL` is not set → SQLite (local file)
+- `DATABASE_URL` resolves through the same mechanism as the Google Calendar
+  credentials (`$env/dynamic/private`): `web/.env` in local dev, the Railway
+  environment in production.
+- A missing/unreachable `DATABASE_URL` is a hard error — there is no file-based
+  fallback.
+- Tests use a separate `TEST_DATABASE_URL` and never touch `DATABASE_URL`.
 
 ### File Structure
 
@@ -116,27 +118,30 @@ comptia-security/
 ├── railway.toml          # Railway configuration
 └── web/
     ├── src/lib/server/
-    │   ├── db.ts           # SQLite database layer (local dev)
-    │   ├── db-pg.ts        # PostgreSQL database layer (production)
-    │   └── schema-pg.sql   # PostgreSQL schema
+    │   ├── db.ts           # QuizRepository contract (promise-based)
+    │   ├── db-pg.ts        # PostgreSQL implementation
+    │   ├── schema-pg.ts    # PostgreSQL schema (single source of DDL)
+    │   └── pg-seed.ts      # Shared course-content seeding
     └── scripts/
-        ├── setup-pg.ts           # Initialize PostgreSQL schema
-        ├── seed-pg.ts            # Seed course data
-        └── migrate-sqlite-to-pg.ts  # Migrate from SQLite
+        ├── setup-pg.ts               # Initialize PostgreSQL schema (db:setup)
+        ├── seed-pg.ts                # Seed course data (db:seed)
+        └── migrate-sqlite-to-pg.ts   # Import legacy SQLite data (db:migrate)
 ```
 
 ## Local Development
 
-For local development, continue using SQLite:
+Local development uses PostgreSQL too:
 
 ```bash
 # Install dependencies
 npm install
 
+# Point DATABASE_URL at any PostgreSQL instance (web/.env), then:
+npm run db:setup
+npm run db:seed
+
 # Run development server
 npm run dev
-
-# Database is automatically created at data/quiz.db
 ```
 
 ## Production Build

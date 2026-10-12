@@ -4,10 +4,15 @@ import { resolveScope } from '$lib/server/scope';
 import { scopedServices } from '$lib/server/services';
 
 export async function GET(event: RequestEvent) {
-	const scope = resolveScope(event);
+	const scope = await resolveScope(event);
 	const oauth = await getOAuth(scope);
-	const synced = scopedServices(scope).repo.getSyncedEvents();
-	const lastSyncAt = synced.length ? synced.map((row) => row.syncedAt).sort().at(-1) ?? null : null;
+	const synced = await scopedServices(scope).repo.getSyncedEvents();
+	const lastSyncAt = synced.length
+		? (synced
+				.map((row) => row.syncedAt)
+				.sort()
+				.at(-1) ?? null)
+		: null;
 	return json({
 		configured: googleConfigured(),
 		connected: Boolean(oauth),

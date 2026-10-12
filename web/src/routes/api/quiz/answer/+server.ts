@@ -7,14 +7,30 @@ import { scopedServices } from '$lib/server/services';
 export async function PUT(event: RequestEvent) {
 	try {
 		const body = await readJson(event.request);
-		if (typeof body.sessionId !== 'string' || !Number.isInteger(body.questionIndex) || !body.response || typeof body.response !== 'object') return json({ error: { code: 'INVALID_REQUEST', message: 'sessionId, questionIndex, and response are required.' } }, { status: 400 });
+		if (
+			typeof body.sessionId !== 'string' ||
+			!Number.isInteger(body.questionIndex) ||
+			!body.response ||
+			typeof body.response !== 'object'
+		)
+			return json(
+				{
+					error: {
+						code: 'INVALID_REQUEST',
+						message: 'sessionId, questionIndex, and response are required.'
+					}
+				},
+				{ status: 400 }
+			);
 		return json(
-			scopedServices(resolveScope(event)).quiz.saveResponse(
+			await scopedServices(await resolveScope(event)).quiz.saveResponse(
 				body.sessionId,
 				body.questionIndex as number,
 				body.response as QuestionResponse,
 				typeof body.check === 'boolean' ? { check: body.check } : {}
 			)
 		);
-	} catch (error) { return apiError(error); }
+	} catch (error) {
+		return apiError(error);
+	}
 }

@@ -1,8 +1,7 @@
 import type { Domain, ObjectiveId } from '$lib/types';
 import { OBJECTIVES_BY_DOMAIN } from '$lib/utils';
 import type { QuestionBank } from './question-bank';
-import { loadQuestionBank } from './question-bank';
-import { quizRepository, type QuizRepository } from './db';
+import type { QuizRepository } from './db';
 
 export interface ObjectiveMastery {
 	objective: ObjectiveId;
@@ -29,13 +28,13 @@ export interface MasteryMatrix {
 	totalAttempted: number;
 }
 
-export function computeMastery(
+export async function computeMastery(
 	repository: QuizRepository,
 	bank: QuestionBank,
 	objectives: Record<number, ObjectiveId[]> = OBJECTIVES_BY_DOMAIN
-): MasteryMatrix {
+): Promise<MasteryMatrix> {
 	const progress = new Map(
-		repository.getObjectiveProgress().map((row) => [row.objective, row] as const)
+		(await repository.getObjectiveProgress()).map((row) => [row.objective, row] as const)
 	);
 	const available = new Map<string, number>();
 	for (const question of bank.mcqs) {
@@ -81,8 +80,4 @@ export function computeMastery(
 		domains,
 		totalAttempted: objectiveItems.reduce((sum, item) => sum + item.attempted, 0)
 	};
-}
-
-export function getMasteryMatrix(): MasteryMatrix {
-	return computeMastery(quizRepository, loadQuestionBank());
 }

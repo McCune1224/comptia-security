@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createQuizRepository, type ReviewCardRow } from './db';
+import type { ReviewCardRow } from './db';
+import { createTestRepository } from './test-db';
 import { loadQuestionBank } from './question-bank';
 import { createQuizService } from './quiz';
 import {
@@ -12,8 +13,8 @@ import {
 
 const NOW = new Date('2026-08-05T10:30:00');
 
-function makeService() {
-	const repository = createQuizRepository(':memory:');
+async function makeService() {
+	const repository = await createTestRepository();
 	const bank = loadQuestionBank();
 	const service = createReviewService({ repository, bank, now: () => NOW, rng: () => 0.42 });
 	return { repository, bank, service };
@@ -71,7 +72,11 @@ describe('scheduleReview (SM-2-lite)', () => {
 	});
 
 	it('a wrong answer resets the interval, increments lapses, and drops ease', () => {
-		let current = scheduleReview(card({ intervalDays: 8, ease: 2.7, lapses: 0, lastResult: 'correct' }), true, localDateKey(NOW));
+		let current = scheduleReview(
+			card({ intervalDays: 8, ease: 2.7, lapses: 0, lastResult: 'correct' }),
+			true,
+			localDateKey(NOW)
+		);
 		expect(current.ease).toBeCloseTo(2.8);
 		current = scheduleReview(current, false, current.dueAt);
 		expect(current.intervalDays).toBe(1);
@@ -91,7 +96,9 @@ describe('scheduleReview (SM-2-lite)', () => {
 describe('computeStreak', () => {
 	it('counts consecutive days ending today', () => {
 		const today = localDateKey(NOW);
-		const days = [today, addDaysKey(today, -1), addDaysKey(today, -2)].map((dateKey) => ({ dateKey }));
+		const days = [today, addDaysKey(today, -1), addDaysKey(today, -2)].map((dateKey) => ({
+			dateKey
+		}));
 		expect(computeStreak(days, today)).toBe(3);
 	});
 
@@ -109,13 +116,17 @@ describe('computeStreak', () => {
 });
 
 describe('recordCompletion', () => {
-	it('logs a study day for every session type but only writes cards for review', () => {
-		const { repository, service } = makeService();
-		service.recordCompletion([{ questionId: 'mcq-1-001', points: 1 }], NOW.toISOString(), 'quiz');
-		expect(repository.getStudyLog()).toHaveLength(1);
-		expect(repository.getReviewCards()).toHaveLength(0);
+	it('logs a study day for every session type but only writes cards for review', async () => {
+		const { repository, service } = await makeService();
+		await service.recordCompletion(
+			[{ questionId: 'mcq-1-001', points: 1 }],
+			NOW.toISOString(),
+			'quiz'
+		);
+		expect(await repository.getStudyLog()).toHaveLength(1);
+		expect(await repository.getReviewCards()).toHaveLength(0);
 
-		service.recordCompletion(
+		await service.recordCompletion(
 			[
 				{ questionId: 'mcq-1-001', points: 1 },
 				{ questionId: 'mcq-1-002', points: 0 }
@@ -123,49 +134,63 @@ describe('recordCompletion', () => {
 			NOW.toISOString(),
 			'review'
 		);
-		const cards = repository.getReviewCards();
+		const cards = await repository.getReviewCards();
 		expect(cards).toHaveLength(2);
 		const correct = cards.find((item) => item.questionId === 'mcq-1-001');
 		expect(correct?.lastResult).toBe('correct');
 		const wrong = cards.find((item) => item.questionId === 'mcq-1-002');
 		expect(wrong?.lapses).toBe(1);
+		await repository.close();
 	});
 
-	it('upserts the same day instead of duplicating rows', () => {
-		const { repository, service } = makeService();
-		service.recordCompletion([{ questionId: 'mcq-1-001', points: 1 }], NOW.toISOString(), 'review');
-		service.recordCompletion([{ questionId: 'mcq-1-002', points: 1 }], NOW.toISOString(), 'review');
-		const days = repository.getStudyLog();
+	it('upserts the same day instead of duplicating rows', async () => {
+		const { repository, service } = await makeService();
+		await service.recordCompletion(
+			[{ questionId: 'mcq-1-001', points: 1 }],
+			NOW.toISOString(),
+			'review'
+		);
+		await service.recordCompletion(
+			[{ questionId: 'mcq-1-002', points: 1 }],
+			NOW.toISOString(),
+			'review'
+		);
+		const days = await repository.getStudyLog();
 		expect(days).toHaveLength(1);
 		expect(days[0].questions).toBe(2);
 		expect(days[0].sessions).toBe(2);
+		await repository.close();
 	});
 });
 
 describe('composeQueue', () => {
-	it('returns fresh unseen questions when nothing is due or weak', () => {
-		const { repository, service } = makeService();
-		const queue = service.composeQueue({ source: 'daily', count: 10 });
+	it('returns fresh unseen questions when nothing is due or weak', async () => {
+		const { repository, service } = await makeService();
+		const queue = await service.composeQueue({ source: 'daily', count: 10 });
 		expect(queue).toHaveLength(10);
 		expect(new Set(queue.map((q) => q.id)).size).toBe(10);
-		const answered = new Set(repository.getAnsweredQuestionIds());
+		const answered = new Set(await repository.getAnsweredQuestionIds());
 		expect(queue.every((q) => !answered.has(q.id))).toBe(true);
+		await repository.close();
 	});
 
-	it('prioritizes due review cards, lapses first', () => {
-		const { repository, service } = makeService();
+	it('prioritizes due review cards, lapses first', async () => {
+		const { repository, service } = await makeService();
 		const today = localDateKey(NOW);
-		const first = repository.upsertReviewCard(card({ questionId: 'mcq-1-001', dueAt: addDaysKey(today, -2), lapses: 1 }));
-		const second = repository.upsertReviewCard(card({ questionId: 'mcq-1-002', dueAt: addDaysKey(today, -5), lapses: 0 }));
-		void first;
-		void second;
-		const queue = service.composeQueue({ source: 'daily', count: 10 });
+		await repository.upsertReviewCard(
+			card({ questionId: 'mcq-1-001', dueAt: addDaysKey(today, -2), lapses: 1 })
+		);
+		await repository.upsertReviewCard(
+			card({ questionId: 'mcq-1-002', dueAt: addDaysKey(today, -5), lapses: 0 })
+		);
+		const queue = await service.composeQueue({ source: 'daily', count: 10 });
 		expect(queue[0].id).toBe('mcq-1-001');
 		expect(queue[1].id).toBe('mcq-1-002');
+		await repository.close();
 	});
 
-	it('pulls questions from weak objectives answered wrong in real sessions', () => {
-		const { repository, bank, service } = makeService();
+	it('pulls questions from weak objectives answered wrong in real sessions', async () => {
+		const { repository, bank, service } = await makeService();
 		const weakQuestions = bank.mcqs.filter((q) => q.objective === '2.4').slice(0, 5);
 		const quizService = createQuizService({
 			repository,
@@ -174,7 +199,7 @@ describe('composeQueue', () => {
 			now: () => NOW,
 			reviewSvc: service
 		});
-		repository.createSession({
+		await repository.createSession({
 			id: 'seed-session',
 			type: 'quiz',
 			mode: 'practice',
@@ -185,22 +210,36 @@ describe('composeQueue', () => {
 		});
 		for (const [index, question] of weakQuestions.entries()) {
 			if (question.kind !== 'single-choice' && question.kind !== 'multiple-choice') continue;
-			const wrong = question.options.find((option) => !question.correctOptionIds.includes(option.id))!;
-			quizService.saveResponse('seed-session', index, { kind: 'choice', optionIds: [wrong.id] });
+			const wrong = question.options.find(
+				(option) => !question.correctOptionIds.includes(option.id)
+			)!;
+			await quizService.saveResponse('seed-session', index, {
+				kind: 'choice',
+				optionIds: [wrong.id]
+			});
 		}
-		quizService.completeSession('seed-session');
-		expect(repository.getWeakTopics().some((topic) => topic.objective === '2.4')).toBe(true);
+		await quizService.completeSession('seed-session');
+		expect((await repository.getWeakTopics()).some((topic) => topic.objective === '2.4')).toBe(
+			true
+		);
 
-		const queue = service.composeQueue({ source: 'daily', count: 10 });
+		const queue = await service.composeQueue({ source: 'daily', count: 10 });
 		// No due cards → the first picks come from the weak-objective pool.
 		expect(queue.slice(0, 3).every((q) => q.objective === '2.4')).toBe(true);
+		await repository.close();
 	});
 
-	it('wall source returns only wall-of-shame questions', () => {
-		const { repository, bank, service } = makeService();
+	it('wall source returns only wall-of-shame questions', async () => {
+		const { repository, bank, service } = await makeService();
 		const picked = bank.mcqs.filter((q) => q.kind === 'single-choice').slice(0, 4);
-		const quizService = createQuizService({ repository, bank, rng: () => 0.5, now: () => NOW, reviewSvc: service });
-		repository.createSession({
+		const quizService = createQuizService({
+			repository,
+			bank,
+			rng: () => 0.5,
+			now: () => NOW,
+			reviewSvc: service
+		});
+		await repository.createSession({
 			id: 'seed-wall',
 			type: 'quiz',
 			mode: 'practice',
@@ -210,22 +249,31 @@ describe('composeQueue', () => {
 			questions: picked
 		});
 		for (const [index, question] of picked.entries()) {
-			const wrong = question.options.find((option) => !question.correctOptionIds.includes(option.id))!;
-			quizService.saveResponse('seed-wall', index, { kind: 'choice', optionIds: [wrong.id] });
+			const wrong = question.options.find(
+				(option) => !question.correctOptionIds.includes(option.id)
+			)!;
+			await quizService.saveResponse('seed-wall', index, { kind: 'choice', optionIds: [wrong.id] });
 		}
-		quizService.completeSession('seed-wall');
+		await quizService.completeSession('seed-wall');
 
-		const queue = service.composeQueue({ source: 'wall', count: 10 });
+		const queue = await service.composeQueue({ source: 'wall', count: 10 });
 		expect(queue).toHaveLength(4);
 		expect(new Set(queue.map((q) => q.id))).toEqual(new Set(picked.map((q) => q.id)));
+		await repository.close();
 	});
 
-	it('never returns an empty queue', () => {
-		const { repository, bank, service } = makeService();
+	it('never returns an empty queue', async () => {
+		const { repository, bank, service } = await makeService();
 		// Every question answered correctly and every card mastered → all pools empty.
 		const all = [...bank.mcqs, ...bank.pbqs].slice(0, 40);
-		const quizService = createQuizService({ repository, bank, rng: () => 0.5, now: () => NOW, reviewSvc: service });
-		repository.createSession({
+		const quizService = createQuizService({
+			repository,
+			bank,
+			rng: () => 0.5,
+			now: () => NOW,
+			reviewSvc: service
+		});
+		await repository.createSession({
 			id: 'seed-correct',
 			type: 'quiz',
 			mode: 'practice',
@@ -234,16 +282,23 @@ describe('composeQueue', () => {
 			deadlineAt: null,
 			questions: all.filter((q) => q.kind === 'single-choice').slice(0, 5)
 		});
-		expect(service.composeQueue({ source: 'daily', count: 10 }).length).toBeGreaterThan(0);
+		expect((await service.composeQueue({ source: 'daily', count: 10 })).length).toBeGreaterThan(0);
+		await repository.close();
 	});
 });
 
 describe('wallItems and summary', () => {
-	it('shows missed questions and drops them once mastered by review', () => {
-		const { repository, bank, service } = makeService();
+	it('shows missed questions and drops them once mastered by review', async () => {
+		const { repository, bank, service } = await makeService();
 		const picked = bank.mcqs.filter((q) => q.kind === 'single-choice').slice(0, 2);
-		const quizService = createQuizService({ repository, bank, rng: () => 0.5, now: () => NOW, reviewSvc: service });
-		repository.createSession({
+		const quizService = createQuizService({
+			repository,
+			bank,
+			rng: () => 0.5,
+			now: () => NOW,
+			reviewSvc: service
+		});
+		await repository.createSession({
 			id: 'seed-wall-2',
 			type: 'quiz',
 			mode: 'practice',
@@ -253,35 +308,48 @@ describe('wallItems and summary', () => {
 			questions: picked
 		});
 		for (const [index, question] of picked.entries()) {
-			const wrong = question.options.find((option) => !question.correctOptionIds.includes(option.id))!;
-			quizService.saveResponse('seed-wall-2', index, { kind: 'choice', optionIds: [wrong.id] });
+			const wrong = question.options.find(
+				(option) => !question.correctOptionIds.includes(option.id)
+			)!;
+			await quizService.saveResponse('seed-wall-2', index, {
+				kind: 'choice',
+				optionIds: [wrong.id]
+			});
 		}
-		quizService.completeSession('seed-wall-2');
+		await quizService.completeSession('seed-wall-2');
 
-		const wall = service.wallItems();
+		const wall = await service.wallItems();
 		expect(wall).toHaveLength(2);
 		expect(wall[0].wrongCount).toBe(1);
 
 		// Master: two consecutive corrects in review reach interval >= 3.
-		repository.upsertReviewCard(card({ questionId: picked[0].id, intervalDays: 3, lastResult: 'correct', reviewCount: 2 }));
-		const remaining = service.wallItems();
+		await repository.upsertReviewCard(
+			card({ questionId: picked[0].id, intervalDays: 3, lastResult: 'correct', reviewCount: 2 })
+		);
+		const remaining = await service.wallItems();
 		expect(remaining.map((item) => item.questionId)).toEqual([picked[1].id]);
+		await repository.close();
 	});
 
-	it('summarizes streak, due count, wall, and a full 84-day heatmap', () => {
-		const { repository, service } = makeService();
+	it('summarizes streak, due count, wall, and a full 84-day heatmap', async () => {
+		const { repository, service } = await makeService();
 		const today = localDateKey(NOW);
-		repository.recordStudyDay(addDaysKey(today, -1), 10, NOW.toISOString());
-		repository.recordStudyDay(addDaysKey(today, -2), 7, NOW.toISOString());
-		repository.upsertReviewCard(card({ questionId: 'mcq-1-001', dueAt: addDaysKey(today, -1) }));
-		repository.upsertReviewCard(card({ questionId: 'mcq-1-002', dueAt: addDaysKey(today, 2) }));
+		await repository.recordStudyDay(addDaysKey(today, -1), 10, NOW.toISOString());
+		await repository.recordStudyDay(addDaysKey(today, -2), 7, NOW.toISOString());
+		await repository.upsertReviewCard(
+			card({ questionId: 'mcq-1-001', dueAt: addDaysKey(today, -1) })
+		);
+		await repository.upsertReviewCard(
+			card({ questionId: 'mcq-1-002', dueAt: addDaysKey(today, 2) })
+		);
 
-		const summary = service.summary();
+		const summary = await service.summary();
 		expect(summary.streak).toBe(2);
 		expect(summary.todayQuestions).toBe(0);
 		expect(summary.dueCount).toBe(1);
 		expect(summary.heatmap).toHaveLength(84);
 		expect(summary.heatmap[83]).toEqual({ date: today, questions: 0 });
 		expect(summary.heatmap[82]).toEqual({ date: addDaysKey(today, -1), questions: 10 });
+		await repository.close();
 	});
 });

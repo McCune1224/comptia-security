@@ -1,7 +1,6 @@
 import type { Domain, ObjectiveId } from '$lib/types';
 import type { QuestionDefinition, QuestionBank } from './question-bank';
-import { loadQuestionBank } from './question-bank';
-import { quizRepository, type QuizRepository, type ReviewCardRow } from './db';
+import type { QuizRepository, ReviewCardRow } from './db';
 
 export type ReviewSource = 'daily' | 'wall';
 
@@ -31,14 +30,17 @@ export interface ReviewSummary {
 }
 
 export interface ReviewService {
-	summary(now?: Date): ReviewSummary;
-	composeQueue(input: { source: ReviewSource; count?: number }, now?: Date): QuestionDefinition[];
+	summary(now?: Date): Promise<ReviewSummary>;
+	composeQueue(
+		input: { source: ReviewSource; count?: number },
+		now?: Date
+	): Promise<QuestionDefinition[]>;
 	recordCompletion(
 		answers: { questionId: string; points: number }[],
 		completedAt: string,
 		sessionType: string
-	): void;
-	wallItems(now?: Date): WallItem[];
+	): Promise<void>;
+	wallItems(now?: Date): Promise<WallItem[]>;
 }
 
 /** Local-calendar date key (YYYY-MM-DD) — never UTC, so date-only logic can't shift days. */
@@ -129,13 +131,14 @@ export function createReviewService({
 }): ReviewService {
 	const allQuestions = (): QuestionDefinition[] => [...bank.mcqs, ...bank.pbqs];
 
-	const cardMap = () => new Map(repository.getReviewCards().map((card) => [card.questionId, card]));
+	const cardMap = async () =>
+		new Map((await repository.getReviewCards()).map((card) => [card.questionId, card]));
 
 	/** Questions answered wrong at least once and not yet proven mastered by review cards. */
-	function wallItems(date = now()): WallItem[] {
-		const cards = cardMap();
+	async function wallItems(date = now()): Promise<WallItem[]> {
+		const cards = await cardMap();
 		const missed = new Map<string, { wrongCount: number; lastWrongAt: string | null }>();
-		for (const row of repository.getAnswerHistory()) {
+		for (const row of await repository.getAnswerHistory()) {
 			if (row.isCorrect) continue;
 			const existing = missed.get(row.questionId) ?? { wrongCount: 0, lastWrongAt: null };
 			existing.wrongCount++;
@@ -166,20 +169,23 @@ export function createReviewService({
 			.sort((a, b) => (b.lastWrongAt ?? '').localeCompare(a.lastWrongAt ?? ''));
 	}
 
-	function composeQueue(input: { source: ReviewSource; count?: number }, date = now()): QuestionDefinition[] {
+	async function composeQueue(
+		input: { source: ReviewSource; count?: number },
+		date = now()
+	): Promise<QuestionDefinition[]> {
 		const count = input.count ?? 10;
 		const todayKey = localDateKey(date);
 		const all = allQuestions();
 		const byId = new Map(all.map((question) => [question.id, question]));
-		const cards = cardMap();
-		const answered = new Set(repository.getAnsweredQuestionIds());
+		const cards = await cardMap();
+		const answered = new Set(await repository.getAnsweredQuestionIds());
 		const selected: QuestionDefinition[] = [];
 		const add = (question: QuestionDefinition | undefined) => {
 			if (question && !selected.some((item) => item.id === question.id)) selected.push(question);
 		};
 
 		if (input.source === 'wall') {
-			const wallIds = new Set(wallItems(date).map((item) => item.questionId));
+			const wallIds = new Set((await wallItems(date)).map((item) => item.questionId));
 			for (const question of shuffle(all, rng)) if (wallIds.has(question.id)) add(question);
 			return selected.slice(0, count);
 		}
@@ -188,10 +194,13 @@ export function createReviewService({
 		const due = [...cards.values()]
 			.filter((card) => card.dueAt <= todayKey)
 			.sort((a, b) => b.lapses - a.lapses || a.dueAt.localeCompare(b.dueAt));
-		for (const card of due.slice(0, Math.max(1, Math.floor(count / 2)))) add(byId.get(card.questionId));
+		for (const card of due.slice(0, Math.max(1, Math.floor(count / 2))))
+			add(byId.get(card.questionId));
 
 		// 2. Weak objectives next (from quiz_answers history, threshold <85% on >=3 attempts).
-		const weakObjectives = new Set(repository.getWeakTopics().map((topic) => topic.objective));
+		const weakObjectives = new Set(
+			(await repository.getWeakTopics()).map((topic) => topic.objective)
+		);
 		for (const question of shuffle(all, rng)) {
 			if (!weakObjectives.has(question.objective)) continue;
 			add(question);
@@ -213,28 +222,28 @@ export function createReviewService({
 		return selected.slice(0, count);
 	}
 
-	function recordCompletion(
+	async function recordCompletion(
 		answers: { questionId: string; points: number }[],
 		completedAt: string,
 		sessionType: string
-	): void {
+	): Promise<void> {
 		const todayKey = localDateKey(new Date(completedAt));
-		repository.recordStudyDay(todayKey, answers.length, completedAt);
+		await repository.recordStudyDay(todayKey, answers.length, completedAt);
 		if (sessionType !== 'review') return;
-		const cards = cardMap();
+		const cards = await cardMap();
 		for (const answer of answers) {
 			const next = scheduleReview(cards.get(answer.questionId), answer.points >= 1, todayKey);
-			repository.upsertReviewCard({ ...next, questionId: answer.questionId });
+			await repository.upsertReviewCard({ ...next, questionId: answer.questionId });
 		}
 	}
 
-	function summary(date = now()): ReviewSummary {
+	async function summary(date = now()): Promise<ReviewSummary> {
 		const todayKey = localDateKey(date);
-		const cards = cardMap();
-		const log = repository.getStudyLog();
+		const cards = await cardMap();
+		const log = await repository.getStudyLog();
 		const byDay = new Map(log.map((day) => [day.dateKey, day]));
 		const today = byDay.get(todayKey);
-		const wall = wallItems(date);
+		const wall = await wallItems(date);
 		const wallByDomain: Record<Domain, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 		for (const item of wall) wallByDomain[item.domain]++;
 		// Last 12 weeks (84 days) ending today.
@@ -250,15 +259,9 @@ export function createReviewService({
 			wallCount: wall.length,
 			wallByDomain,
 			heatmap,
-			lastStudyAt:
-				log.length > 0 ? log[log.length - 1].updatedAt : null
+			lastStudyAt: log.length > 0 ? log[log.length - 1].updatedAt : null
 		};
 	}
 
 	return { summary, composeQueue, recordCompletion, wallItems };
 }
-
-export const reviewService = createReviewService({
-	repository: quizRepository,
-	bank: loadQuestionBank()
-});

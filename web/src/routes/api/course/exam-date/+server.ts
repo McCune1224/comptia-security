@@ -11,7 +11,7 @@ export async function POST(event: RequestEvent) {
 				{ error: { code: 'INVALID_REQUEST', message: 'examDate must be YYYY-MM-DD.' } },
 				{ status: 400 }
 			);
-		scopedServices(resolveScope(event)).course.setExamDate(body.examDate);
+		await scopedServices(await resolveScope(event)).course.setExamDate(body.examDate);
 		return json({ ok: true, examDate: body.examDate });
 	} catch (error) {
 		return apiError(error);

@@ -1,6 +1,7 @@
 import type { CourseId, Domain } from '$lib/types';
 import { COURSE_META } from './course';
-import { createScopedRepo, quizRepository, type QuizRepository, type Scope } from './db';
+import { quizRepository } from './db-pg';
+import { createScopedRepo, type QuizRepository, type Scope } from './db';
 import { loadQuestionBank, type QuestionBank } from './question-bank';
 import { createQuizService, DEFAULT_EXAM_CONFIG, type ExamConfig, type QuizService } from './quiz';
 import { createReviewService, type ReviewService } from './review';
@@ -22,7 +23,10 @@ export function getQuestionBank(): QuestionBank {
 export function examConfigFor(courseId: CourseId): ExamConfig {
 	const meta = COURSE_META[courseId];
 	if (!meta) return DEFAULT_EXAM_CONFIG;
-	const totalWeight = meta.domains.reduce((sum, domain) => sum + (meta.domainWeights[domain] ?? 0), 0);
+	const totalWeight = meta.domains.reduce(
+		(sum, domain) => sum + (meta.domainWeights[domain] ?? 0),
+		0
+	);
 	const quotas: Record<number, number> = {};
 	let remaining = 90;
 	meta.domains.forEach((domain, index) => {
@@ -45,7 +49,7 @@ export interface ScopedServices {
 	quiz: QuizService;
 	review: ReviewService;
 	course: CourseService;
-	mastery(): MasteryMatrix;
+	mastery(): Promise<MasteryMatrix>;
 }
 
 /** Services bound to one profile + course, sharing the module singleton connection. */

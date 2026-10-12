@@ -65,24 +65,28 @@ targeted five-question practice session.
   acronyms live in `anki/`, with matching flashcard notes in the vault
 - Mobile-first — bottom navigation, ≥44px touch targets, and a layout that works one-handed between
   meetings
-- Cheap to deploy — offline-first with self-hosted fonts and SQLite storage, no external services;
-  runs on a single small VPS (or a free-tier host) via `make deploy` (systemd)
+- Cheap to deploy — offline-first with self-hosted fonts and PostgreSQL storage, no external
+  services; runs on a single small VPS (or a free-tier host) via `make deploy` (systemd)
 - Optional Google Calendar synchronization for exam and assignment deadlines
 - Responsive dark study-tool interface with light-theme support
 
 ## Quick Start
 
-Requirements: Node.js 22 or newer.
+Requirements: Node.js 22 or newer, and a reachable PostgreSQL server.
 
 ```bash
 cd web
 npm install
+cp .env.example .env          # then fill in DATABASE_URL + TEST_DATABASE_URL
+npm run db:setup              # create tables + indexes
+npm run db:seed               # seed course content + default profiles
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). The first run creates and seeds a local
-`data/quiz.db` database. The default exam date is set automatically and can be changed from the
-Syllabus page.
+Open [http://localhost:5173](http://localhost:5173). Seeding sets the default
+exam date (today + 28 days) and creates the two default profiles; change the
+exam date from the Syllabus page. `npm run db:migrate` imports legacy data from
+an old SQLite `data/quiz.db`.
 
 ## Verify
 
@@ -98,7 +102,7 @@ npm run build
 
 - SvelteKit 5 with Svelte runes
 - Tailwind CSS v4
-- SQLite with `better-sqlite3`
+- PostgreSQL (`postgres` driver) — the only runtime database
 - Vitest for unit and service tests
 - Playwright for end-to-end coverage
 - Self-hosted Inter and Space Grotesk fonts
@@ -109,8 +113,8 @@ npm run build
 web/                          Course learning app (SvelteKit 5)
 ├── src/routes/               Course pages and API routes
 ├── src/lib/components/       Shared UI and interactive PBQ components
-├── src/lib/server/           SQLite services, course model, quiz engine, and review engine
-├── scripts/                  Question-bank and content tooling
+├── src/lib/server/           PostgreSQL repository, course model, quiz engine, and review engine
+├── scripts/                  Question-bank, content tooling, and db setup/seed/migrate scripts
 ├── e2e/                      Playwright end-to-end tests
 └── static/screenshots/       README product screenshots
 notes/                        Obsidian study vault (domains, flashcards, exam resources)

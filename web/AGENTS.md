@@ -3,7 +3,7 @@
 ## Overview
 
 A Blackboard-style **course learning system** for CompTIA certification exam prep, built with
-SvelteKit 5 (runes) and SQLite. It combines a structured course (4 weekly modules, lessons, and
+SvelteKit 5 (runes) and PostgreSQL. It combines a structured course (4 weekly modules, lessons, and
 deadline-driven graded assignments) with the quiz engine (MCQs, scenarios, PBQs, full-length exams)
 and rigorous evaluation (weighted gradebook, exam-readiness meter).
 
@@ -18,7 +18,8 @@ and registry wiring are data/service-level and verified by tests and the smoke s
 ```
 course.ts (definition + scheduling + gradebook logic)
     ↕
-db.ts (better-sqlite3 — sessions, answers, domain progress, course tables)
+db.ts (promise-based QuizRepository contract) → db-pg.ts (PostgreSQL implementation;
+    DATABASE_URL resolved via $env/dynamic/private — sessions, answers, domain progress, course tables)
     ↕
 course-service.ts (aggregates course + gradebook + readiness views)
     ↕
@@ -30,9 +31,12 @@ API routes → SvelteKit pages (course home, syllabus, modules, assignments, gra
 - **No SSR needed** — all page data is fetched client-side via `fetch('/api/...')`.
 - **No authentication** — local multi-profile app. Scope (which profile + course a
   request acts as) comes from `profile_id` / `course_id` cookies, resolved by
-  `resolveScope(event)` in `src/lib/server/scope.ts`; every API route builds a
+  `resolveScope(event)` in `src/lib/server/scope.ts` (async); every API route builds a
   scoped view via `scopedServices(scope)` (`src/lib/server/services.ts`).
-- **No ORM** — raw `better-sqlite3` queries; schema auto-created + migrated (user_version 6).
+- **No ORM** — raw `postgres` queries in `db-pg.ts`; the schema lives in
+  `schema-pg.ts` and is applied by `npm run db:setup` (idempotent). Seeding
+  (`pg-seed.ts`) is shared by `npm run db:seed`, the repository's `seed()`, and
+  the test helper.
 
 ## Course Model (`src/lib/server/course.ts`)
 
@@ -123,8 +127,8 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
 
 User data is scoped by `profile_id` (+ `course_id` where progress is per-course);
 `profiles` holds the (max 2) local users. The `quizRepository` singleton in
-`db.ts` is scope-agnostic — `createScopedRepo(repo, scope)` returns a bound view
-over the same connection, and all reads/writes filter by the scope.
+`db-pg.ts` is scope-agnostic — `createScopedRepo(repo, scope)` returns a bound view
+over the same pool, and all reads/writes filter by the scope.
 
 - `profiles` — id, name, color (hard cap `MAX_PROFILES = 2`; `default` is seeded and undeletable).
 - Quiz engine: `quiz_sessions`, `quiz_answers`, `domain_progress` — scoped by
@@ -138,11 +142,22 @@ over the same connection, and all reads/writes filter by the scope.
 - Google Calendar: `google_oauth` (one row per profile), `google_synced_events`
   (`(profile_id, source)`).
 
-The v5 → v6 migration (transactional, idempotent, `user_version = 6`) adds the
-scope columns and rebuilds the 8 tables whose primary key changed, backfilling
-all pre-existing rows to `('default', 'secp-701')`. Fresh databases are created
-in the v6 shape directly; `seedCourse` seeds the default profile + exam date per
-active course. Migration/isolation coverage lives in `migration.test.ts`.
+The active-session invariant (one per scope) is enforced by the partial unique
+index `quiz_sessions_one_active_scope`; the schema is created by `db:setup` and
+`seedCourseContent` seeds the two default profiles + exam date per active
+course. Scope isolation and profile-cap coverage lives in `db-pg.test.ts`.
+
+## Initialization
+
+```bash
+npm run db:setup      # apply schema-pg.ts to DATABASE_URL (idempotent)
+npm run db:seed       # seed course content + default profiles (idempotent)
+npm run db:migrate    # import legacy SQLite data/quiz.db (optional)
+```
+
+Tests run against `TEST_DATABASE_URL` (an isolated database that the suite
+wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
+`vite.config.ts` forces sequential file execution for that reason.
 
 ## API Routes
 
@@ -211,14 +226,14 @@ active course. Migration/isolation coverage lives in `migration.test.ts`.
 npm run dev          # dev server on localhost:5173
 npm run build        # production build (adapter-node)
 npm run check        # svelte-check type checking
-npm run test         # vitest (121 tests: quiz, scoring, question-bank, cards, course, hints, migration, scope)
+npm run test         # vitest, against TEST_DATABASE_URL
 ```
 
 `course.test.ts` covers the course definition, scheduling, assignment status, gradebook math,
-readiness, and the course service end-to-end. DB tests use `:memory:`; the module-level
-`quizRepository` singleton uses `:memory:` under vitest (`process.env.VITEST`) to avoid file races.
-`migration.test.ts` covers the v5→v6 migration (fixture upgrade, idempotency, fresh-DB parity),
-scope isolation between profiles, and the 2-profile cap.
+readiness, and the course service end-to-end. DB tests use `createTestRepository()` from
+`test-db.ts` (fresh truncated + reseeded Postgres per call, `TEST_DATABASE_URL` only).
+`db-pg.test.ts` covers scope isolation between profiles, the 2-profile cap,
+DB-enforced single active session, completion timing persistence, and seed healing.
 
 ## Styling
 

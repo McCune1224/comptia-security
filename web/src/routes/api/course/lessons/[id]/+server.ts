@@ -11,10 +11,10 @@ export async function POST(event: RequestEvent<{ id: string }>) {
 				{ error: { code: 'INVALID_REQUEST', message: 'completed must be a boolean.' } },
 				{ status: 400 }
 			);
-		const services = scopedServices(resolveScope(event));
-		if (!services.course.getLesson(event.params.id))
+		const services = scopedServices(await resolveScope(event));
+		if (!(await services.course.getLesson(event.params.id)))
 			return json({ error: { code: 'NOT_FOUND', message: 'Lesson not found.' } }, { status: 404 });
-		services.course.setLessonCompleted(event.params.id, body.completed);
+		await services.course.setLessonCompleted(event.params.id, body.completed);
 		return json({ ok: true, lessonId: event.params.id, completed: body.completed });
 	} catch (error) {
 		return apiError(error);

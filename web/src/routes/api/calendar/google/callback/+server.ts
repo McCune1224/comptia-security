@@ -16,7 +16,7 @@ export async function GET(event: RequestEvent) {
 	try {
 		const token = await exchangeCode(code, pendingState.verifier, request.url);
 		const email = await fetchPrimaryEmail(token.accessToken);
-		await saveOAuth({ ...token, email }, resolveScope(event));
+		await saveOAuth({ ...token, email }, await resolveScope(event));
 	} catch (error) {
 		console.error('Google OAuth callback failed:', error);
 		redirect(302, '/calendar?error=auth');

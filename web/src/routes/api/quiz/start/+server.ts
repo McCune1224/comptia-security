@@ -36,7 +36,7 @@ export async function POST(event: RequestEvent) {
 				{ status: 400 }
 			);
 		return json({
-			session: scopedServices(resolveScope(event)).quiz.startSession({
+			session: await scopedServices(await resolveScope(event)).quiz.startSession({
 				type: type as SessionType,
 				...(mode ? { mode: mode as SessionMode } : {}),
 				...(count ? { count } : {}),

@@ -1,7 +1,8 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 import type { CourseId } from '$lib/types';
 import { ACTIVE_COURSES, COURSE_META } from '$lib/server/course';
-import { DEFAULT_SCOPE, quizRepository } from '$lib/server/db';
+import { DEFAULT_SCOPE } from '$lib/server/db';
+import { quizRepository } from '$lib/server/db-pg';
 import { resolveScope } from '$lib/server/scope';
 
 const SCOPE_COOKIE = {
@@ -14,11 +15,11 @@ const SCOPE_COOKIE = {
 };
 
 /** Current scope + available profiles and courses (drives both switchers). */
-export function GET(event: RequestEvent) {
-	const scope = resolveScope(event);
+export async function GET(event: RequestEvent) {
+	const scope = await resolveScope(event);
 	return json({
 		scope,
-		profiles: quizRepository.getProfiles(),
+		profiles: await quizRepository.getProfiles(),
 		courses: ACTIVE_COURSES.map((id) => ({
 			id,
 			title: COURSE_META[id]?.title ?? id,
@@ -30,17 +31,21 @@ export function GET(event: RequestEvent) {
 export async function POST(event: RequestEvent) {
 	const body = (await event.request.json().catch(() => null)) as Record<string, unknown> | null;
 	if (!body || typeof body.action !== 'string')
-		return json({ error: { code: 'INVALID_REQUEST', message: 'action is required.' } }, { status: 400 });
+		return json(
+			{ error: { code: 'INVALID_REQUEST', message: 'action is required.' } },
+			{ status: 400 }
+		);
 
 	// Switch the active profile and/or course (cookies only — no auth).
 	// Profile and course are COUPLED: switching profiles restores that
 	// profile's own course; switching courses updates the active profile's
 	// preference, so the next profile switch comes back to the right course.
 	if (body.action === 'switch') {
-		const scope = resolveScope(event);
-		const profiles = quizRepository.getProfiles();
+		const scope = await resolveScope(event);
+		const profiles = await quizRepository.getProfiles();
 		const switchProfile =
-			typeof body.profileId === 'string' && profiles.some((profile) => profile.id === body.profileId)
+			typeof body.profileId === 'string' &&
+			profiles.some((profile) => profile.id === body.profileId)
 				? body.profileId
 				: undefined;
 		const switchCourse =
@@ -56,7 +61,7 @@ export async function POST(event: RequestEvent) {
 		}
 		if (switchCourse) {
 			// Remember this course as the selected profile's preference.
-			quizRepository.setProfileCourse(profileId, switchCourse);
+			await quizRepository.setProfileCourse(profileId, switchCourse);
 		}
 
 		event.cookies.set('profile_id', profileId, SCOPE_COOKIE);
@@ -68,40 +73,71 @@ export async function POST(event: RequestEvent) {
 	// The new profile inherits the active profile's current course.
 	if (body.action === 'create') {
 		if (typeof body.name !== 'string' || body.name.trim().length === 0)
-			return json({ error: { code: 'INVALID_REQUEST', message: 'name is required.' } }, { status: 400 });
+			return json(
+				{ error: { code: 'INVALID_REQUEST', message: 'name is required.' } },
+				{ status: 400 }
+			);
 		const color = typeof body.color === 'string' ? body.color : '#67B8A8';
 		try {
-			const profile = quizRepository.createProfile(body.name.trim().slice(0, 24), color, resolveScope(event).courseId);
+			const profile = await quizRepository.createProfile(
+				body.name.trim().slice(0, 24),
+				color,
+				(await resolveScope(event)).courseId
+			);
 			return json({ ok: true, profile });
 		} catch (error) {
-			return json({ error: { code: 'PROFILE_CAP', message: (error as Error).message } }, { status: 400 });
+			return json(
+				{ error: { code: 'PROFILE_CAP', message: (error as Error).message } },
+				{ status: 400 }
+			);
 		}
 	}
 
 	// Rename a profile.
 	if (body.action === 'rename') {
-		if (typeof body.profileId !== 'string' || typeof body.name !== 'string' || body.name.trim().length === 0)
-			return json({ error: { code: 'INVALID_REQUEST', message: 'profileId and name are required.' } }, { status: 400 });
-		quizRepository.renameProfile(body.profileId, body.name.trim().slice(0, 24));
+		if (
+			typeof body.profileId !== 'string' ||
+			typeof body.name !== 'string' ||
+			body.name.trim().length === 0
+		)
+			return json(
+				{ error: { code: 'INVALID_REQUEST', message: 'profileId and name are required.' } },
+				{ status: 400 }
+			);
+		await quizRepository.renameProfile(body.profileId, body.name.trim().slice(0, 24));
 		return json({ ok: true });
 	}
 
-	return json({ error: { code: 'INVALID_REQUEST', message: `Unknown scope action: ${body.action}` } }, { status: 400 });
+	return json(
+		{ error: { code: 'INVALID_REQUEST', message: `Unknown scope action: ${body.action}` } },
+		{ status: 400 }
+	);
 }
 
-export function DELETE(event: RequestEvent) {
+export async function DELETE(event: RequestEvent) {
 	const profileId = event.url.searchParams.get('profileId');
 	if (!profileId)
-		return json({ error: { code: 'INVALID_REQUEST', message: 'profileId is required.' } }, { status: 400 });
-	if (profileId === resolveScope(event).profileId)
 		return json(
-			{ error: { code: 'ACTIVE_PROFILE', message: 'Switch away from the profile before deleting it.' } },
+			{ error: { code: 'INVALID_REQUEST', message: 'profileId is required.' } },
+			{ status: 400 }
+		);
+	if (profileId === (await resolveScope(event)).profileId)
+		return json(
+			{
+				error: {
+					code: 'ACTIVE_PROFILE',
+					message: 'Switch away from the profile before deleting it.'
+				}
+			},
 			{ status: 400 }
 		);
 	try {
-		quizRepository.deleteProfile(profileId);
+		await quizRepository.deleteProfile(profileId);
 		return json({ ok: true });
 	} catch (error) {
-		return json({ error: { code: 'INVALID_REQUEST', message: (error as Error).message } }, { status: 400 });
+		return json(
+			{ error: { code: 'INVALID_REQUEST', message: (error as Error).message } },
+			{ status: 400 }
+		);
 	}
 }

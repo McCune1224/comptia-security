@@ -5,7 +5,7 @@ static quiz app into a structured college-style course: weekly modules with less
 graded assignments, a weighted gradebook, an exam-readiness meter, and a calendar of everything due —
 all anchored to your actual exam date.
 
-Built with SvelteKit 5 (runes), Tailwind CSS v4, and SQLite (better-sqlite3).
+Built with SvelteKit 5 (runes), Tailwind CSS v4, and PostgreSQL.
 
 ## What you get
 
@@ -68,17 +68,22 @@ study actions.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
+cp .env.example .env          # then fill in DATABASE_URL + TEST_DATABASE_URL
+npm run db:setup              # create tables + indexes in DATABASE_URL
+npm run db:seed               # seed course content + default profiles
+npm run dev                   # http://localhost:5173
 ```
 
-First run seeds the course, sets your exam date to today + 28 days, and creates
-`data/quiz.db`. Change the exam date anytime from the Syllabus page.
+Seeding sets your exam date to today + 28 days and creates the two default
+profiles (Alex on Security+, Ash on A+). Change the exam date anytime from the
+Syllabus page. To import legacy data from an old SQLite `data/quiz.db`, run
+`npm run db:migrate`.
 
 ## Verify
 
 ```bash
 npm run check      # svelte-check (0 errors)
-npm run test       # vitest — 23 tests
+npm run test       # vitest — runs against TEST_DATABASE_URL (never DATABASE_URL)
 npm run build      # production build (adapter-node)
 ```
 

@@ -1,5 +1,5 @@
 import type { CourseId, QuizResult, SessionType } from '$lib/types';
-import { quizRepository, type QuizRepository } from './db';
+import type { QuizRepository } from './db';
 import {
 	COURSE_DEFINITION,
 	COURSES,
@@ -54,16 +54,16 @@ export interface AssignmentView {
 }
 
 export interface CourseService {
-	getOverview(): CourseOverview;
-	getSyllabus(): ModuleView[];
-	getModule(moduleId: string): ModuleView | null;
-	getAssignment(assignmentId: string): AssignmentView | null;
-	getLesson(lessonId: string): CourseLesson | null;
-	getGradebook(): Gradebook;
-	getReadiness(): Readiness;
-	setExamDate(examDate: string): void;
-	setLessonCompleted(lessonId: string, completed: boolean): void;
-	recordCompletion(assignmentId: string, sessionId: string, result: QuizResult): void;
+	getOverview(): Promise<CourseOverview>;
+	getSyllabus(): Promise<ModuleView[]>;
+	getModule(moduleId: string): Promise<ModuleView | null>;
+	getAssignment(assignmentId: string): Promise<AssignmentView | null>;
+	getLesson(lessonId: string): Promise<CourseLesson | null>;
+	getGradebook(): Promise<Gradebook>;
+	getReadiness(): Promise<Readiness>;
+	setExamDate(examDate: string): Promise<void>;
+	setLessonCompleted(lessonId: string, completed: boolean): Promise<void>;
+	recordCompletion(assignmentId: string, sessionId: string, result: QuizResult): Promise<void>;
 }
 
 function buildAssignmentView(
@@ -88,32 +88,56 @@ function buildAssignmentView(
 	};
 }
 
-export function createCourseService({ repository, courseId }: { repository: QuizRepository; courseId?: CourseId }): CourseService {
+export function createCourseService({
+	repository,
+	courseId
+}: {
+	repository: QuizRepository;
+	courseId?: CourseId;
+}): CourseService {
 	// Per-course parameters: readiness math uses the course's domains + exam
 	// weights; the gradebook uses the course's category weights. Defaults to
 	// the Security+ definition when the course has no registry entry.
 	const meta = courseId ? COURSE_META[courseId] : undefined;
 	const definition = courseId ? COURSES[courseId] : undefined;
 	const readinessDomains = meta?.domains ?? [1, 2, 3, 4, 5];
-	const readinessQuotas = (meta?.domainWeights ?? { 1: 12, 2: 22, 3: 18, 4: 28, 5: 20 }) as Record<number, number>;
+	const readinessQuotas = (meta?.domainWeights ?? { 1: 12, 2: 22, 3: 18, 4: 28, 5: 20 }) as Record<
+		number,
+		number
+	>;
 	const gradeWeights = definition?.gradeWeights ?? COURSE_DEFINITION.gradeWeights;
-	const readinessFor = (domainProgress: Record<number, { percentage: number; possiblePoints: number }>, completedExams: { percentage: number }[]): Readiness =>
-		computeReadiness(domainProgress, completedExams, definition?.passingScore ?? COURSE_DEFINITION.passingScore, definition?.scaleMax ?? COURSE_DEFINITION.scaleMax, readinessDomains, readinessQuotas);
+	const readinessFor = (
+		domainProgress: Record<number, { percentage: number; possiblePoints: number }>,
+		completedExams: { percentage: number }[]
+	): Readiness =>
+		computeReadiness(
+			domainProgress,
+			completedExams,
+			definition?.passingScore ?? COURSE_DEFINITION.passingScore,
+			definition?.scaleMax ?? COURSE_DEFINITION.scaleMax,
+			readinessDomains,
+			readinessQuotas
+		);
 
 	return {
-		getOverview() {
-			const examDate = repository.getExamDate();
-			const modules = repository.getCourseModules();
-			const lessons = repository.getCourseLessons();
-			const assignments = repository.getCourseAssignments();
-			const completions = repository.getLessonCompletions();
-			const submissions = repository.getSubmissions();
-			const activeSession = repository.getActiveSession();
+		async getOverview() {
+			const examDate = await repository.getExamDate();
+			const modules = await repository.getCourseModules();
+			const lessons = await repository.getCourseLessons();
+			const assignments = await repository.getCourseAssignments();
+			const completions = await repository.getLessonCompletions();
+			const submissions = await repository.getSubmissions();
+			const activeSession = await repository.getActiveSession();
 			const activeAssignmentId = activeSession?.summary.assignment_id ?? null;
-			const gradebook = computeGradebook(assignments, submissions, examDate, activeAssignmentId, gradeWeights);
-			const domainProgress = repository.getAllDomainProgress();
-			const completedExams = repository
-				.getAllCompletedSessions()
+			const gradebook = computeGradebook(
+				assignments,
+				submissions,
+				examDate,
+				activeAssignmentId,
+				gradeWeights
+			);
+			const domainProgress = await repository.getAllDomainProgress();
+			const completedExams = (await repository.getAllCompletedSessions())
 				.filter((s) => s.type === 'full' && s.points_possible > 0)
 				.map((s) => ({
 					percentage: Math.round((s.points_earned / s.points_possible) * 1000) / 10
@@ -157,7 +181,7 @@ export function createCourseService({ repository, courseId }: { repository: Quiz
 				gradebook,
 				modules: moduleViews,
 				toDo,
-				recentSessions: repository.getRecentSessions(5).map((s) => ({
+				recentSessions: (await repository.getRecentSessions(5)).map((s) => ({
 					id: s.id,
 					date: s.completed_at ?? s.started_at,
 					type: s.type,
@@ -168,47 +192,47 @@ export function createCourseService({ repository, courseId }: { repository: Quiz
 				activeSessionId: activeSession?.summary.id ?? null
 			};
 		},
-		getSyllabus() {
-			return this.getOverview().modules;
+		async getSyllabus() {
+			return (await this.getOverview()).modules;
 		},
-		getModule(moduleId) {
-			return this.getOverview().modules.find((m) => m.module.id === moduleId) ?? null;
+		async getModule(moduleId) {
+			return (await this.getOverview()).modules.find((m) => m.module.id === moduleId) ?? null;
 		},
-		getAssignment(assignmentId) {
-			const overview = this.getOverview();
+		async getAssignment(assignmentId) {
+			const overview = await this.getOverview();
 			const view = overview.modules
 				.flatMap((m) => m.assignments)
 				.find((a) => a.assignment.id === assignmentId);
 			return view ?? null;
 		},
-		getLesson(lessonId) {
-			return repository.getCourseLessons().find((l) => l.id === lessonId) ?? null;
+		async getLesson(lessonId) {
+			return (await repository.getCourseLessons()).find((l) => l.id === lessonId) ?? null;
 		},
-		getGradebook() {
-			const examDate = repository.getExamDate();
-			const assignments = repository.getCourseAssignments();
-			const submissions = repository.getSubmissions();
-			const activeAssignmentId = repository.getActiveSession()?.summary.assignment_id ?? null;
+		async getGradebook() {
+			const examDate = await repository.getExamDate();
+			const assignments = await repository.getCourseAssignments();
+			const submissions = await repository.getSubmissions();
+			const activeAssignmentId =
+				(await repository.getActiveSession())?.summary.assignment_id ?? null;
 			return computeGradebook(assignments, submissions, examDate, activeAssignmentId, gradeWeights);
 		},
-		getReadiness() {
-			const domainProgress = repository.getAllDomainProgress();
-			const completedExams = repository
-				.getAllCompletedSessions()
+		async getReadiness() {
+			const domainProgress = await repository.getAllDomainProgress();
+			const completedExams = (await repository.getAllCompletedSessions())
 				.filter((s) => s.type === 'full' && s.points_possible > 0)
 				.map((s) => ({
 					percentage: Math.round((s.points_earned / s.points_possible) * 1000) / 10
 				}));
 			return readinessFor(domainProgress, completedExams);
 		},
-		setExamDate(examDate) {
-			repository.setExamDate(examDate);
+		async setExamDate(examDate) {
+			await repository.setExamDate(examDate);
 		},
-		setLessonCompleted(lessonId, completed) {
-			repository.setLessonCompleted(lessonId, completed);
+		async setLessonCompleted(lessonId, completed) {
+			await repository.setLessonCompleted(lessonId, completed);
 		},
-		recordCompletion(assignmentId, sessionId, result) {
-			repository.recordSubmission({
+		async recordCompletion(assignmentId, sessionId, result) {
+			await repository.recordSubmission({
 				assignmentId,
 				sessionId,
 				earned: result.earnedPoints,
@@ -218,8 +242,6 @@ export function createCourseService({ repository, courseId }: { repository: Quiz
 		}
 	};
 }
-
-export const courseService = createCourseService({ repository: quizRepository });
 
 export type { SessionType };
 export { COURSE_DEFINITION };

@@ -11,9 +11,8 @@ import type {
 	SessionType,
 	SessionView
 } from '$lib/types';
-import { quizRepository, type QuizRepository, type StoredSession } from './db';
+import type { QuizRepository, StoredSession } from './db';
 import {
-	loadQuestionBank,
 	toPublicQuestion,
 	practiceSummary,
 	type QuestionBank,
@@ -50,25 +49,25 @@ export interface QuizService {
 		reviewSource?: ReviewSource;
 		/** Explicit question ids (retake flows); overrides random bank selection. */
 		questionIds?: string[];
-	}): SessionView;
-	getSession(sessionId: string): SessionView | QuizResult;
-	getActiveSession(): ActiveSessionSummary | null;
+	}): Promise<SessionView>;
+	getSession(sessionId: string): Promise<SessionView | QuizResult>;
+	getActiveSession(): Promise<ActiveSessionSummary | null>;
 	saveResponse(
 		sessionId: string,
 		questionIndex: number,
 		response: QuestionResponse,
 		opts?: { check?: boolean }
-	): { saved: true; feedback?: ReturnType<typeof scoreQuestion> };
+	): Promise<{ saved: true; feedback?: ReturnType<typeof scoreQuestion> }>;
 	/** Practice-mode hint reveal; records the 25% point cost server-side. */
-	revealHint(sessionId: string, questionIndex: number): { hint: { text: string } };
+	revealHint(sessionId: string, questionIndex: number): Promise<{ hint: { text: string } }>;
 	/** Starts a practice session from the missed questions of a completed session. */
-	retakeSession(sessionId: string): SessionView;
+	retakeSession(sessionId: string): Promise<SessionView>;
 	updateSession(
 		sessionId: string,
 		update: { currentIndex?: number; flag?: { questionIndex: number; value: boolean } }
-	): SessionView;
-	abandonSession(sessionId: string): void;
-	completeSession(sessionId: string): QuizResult;
+	): Promise<SessionView>;
+	abandonSession(sessionId: string): Promise<void>;
+	completeSession(sessionId: string): Promise<QuizResult>;
 }
 
 /**
@@ -129,9 +128,20 @@ function asView(stored: StoredSession, clock = new Date()): SessionView {
 		const summary = stored.summary.mode === 'practice' ? practiceSummary(question) : undefined;
 		return summary ? { ...publicQuestion, practiceSummary: summary } : publicQuestion;
 	});
-	const elapsedSeconds = stored.summary.mode === 'practice'
-		? Math.max(0, Math.floor(((stored.summary.completed_at ? new Date(stored.summary.completed_at) : clock).getTime() - new Date(stored.summary.started_at).getTime()) / 1000))
-		: undefined;
+	const elapsedSeconds =
+		stored.summary.mode === 'practice'
+			? Math.max(
+					0,
+					Math.floor(
+						((stored.summary.completed_at
+							? new Date(stored.summary.completed_at)
+							: clock
+						).getTime() -
+							new Date(stored.summary.started_at).getTime()) /
+							1000
+					)
+				)
+			: undefined;
 	return {
 		sessionId: stored.summary.id,
 		type: stored.summary.type,
@@ -325,23 +335,23 @@ export function createQuizService({
 	examConfig?: ExamConfig;
 	courseSvc?: CourseService;
 }): QuizService {
-	const expire = (stored: StoredSession): StoredSession => {
+	const expire = async (stored: StoredSession): Promise<StoredSession> => {
 		if (
 			stored.summary.status === 'active' &&
 			stored.deadlineAt &&
 			new Date(stored.deadlineAt) <= now()
 		) {
-			complete(stored);
-			return repository.getSession(stored.summary.id)!;
+			await complete(stored);
+			return (await repository.getSession(stored.summary.id))!;
 		}
 		return stored;
 	};
-	const requireStored = (id: string) => {
-		const stored = repository.getSession(id);
+	const requireStored = async (id: string) => {
+		const stored = await repository.getSession(id);
 		if (!stored) throw new QuizServiceError('SESSION_NOT_FOUND', 'Session was not found.');
 		return expire(stored);
 	};
-	const complete = (stored: StoredSession): QuizResult => {
+	const complete = async (stored: StoredSession): Promise<QuizResult> => {
 		if (stored.summary.status === 'completed' && stored.result) return stored.result;
 		if (stored.summary.status !== 'active')
 			throw new QuizServiceError('SESSION_CLOSED', 'Session is not active.');
@@ -395,9 +405,17 @@ export function createQuizService({
 			};
 		});
 		const earnedPoints = totalEarned;
-		const elapsedSeconds = stored.summary.mode === 'practice'
-			? Math.max(0, Math.floor((new Date(now().toISOString()).getTime() - new Date(stored.summary.started_at).getTime()) / 1000))
-			: undefined;
+		const elapsedSeconds =
+			stored.summary.mode === 'practice'
+				? Math.max(
+						0,
+						Math.floor(
+							(new Date(now().toISOString()).getTime() -
+								new Date(stored.summary.started_at).getTime()) /
+								1000
+						)
+					)
+				: undefined;
 		const result: QuizResult = {
 			sessionId: stored.summary.id,
 			type: stored.summary.type,
@@ -414,7 +432,7 @@ export function createQuizService({
 			...(elapsedSeconds !== undefined ? { elapsedSeconds, durationSeconds: elapsedSeconds } : {}),
 			review
 		};
-		const completion = repository.complete(
+		const completion = await repository.complete(
 			stored.summary.id,
 			result,
 			review.map((item, index) => ({
@@ -428,8 +446,8 @@ export function createQuizService({
 		if (!completion.finalized) return completion.result;
 		const finalized = completion.result;
 		if (stored.summary.assignment_id)
-			courseSvc.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
-		reviewSvc.recordCompletion(
+			await courseSvc.recordCompletion(stored.summary.assignment_id, stored.summary.id, finalized);
+		await reviewSvc.recordCompletion(
 			stored.questions.map((question, index) => ({
 				questionId: question.id,
 				points: review[index].feedback.earnedPoints
@@ -439,7 +457,7 @@ export function createQuizService({
 		);
 		return finalized;
 	};
-	const startSession = (input: {
+	const startSession = async (input: {
 		type: SessionType;
 		mode?: SessionMode;
 		count?: number;
@@ -450,10 +468,10 @@ export function createQuizService({
 		questionIds?: string[];
 		/** MCQ practice-style filter: recall | scenario | keyword | short-form | mixed. */
 		style?: QuestionStyle | 'mixed';
-	}): SessionView => {
-		const active = repository.getActiveSession();
+	}): Promise<SessionView> => {
+		const active = await repository.getActiveSession();
 		if (active) {
-			const current = expire(active);
+			const current = await expire(active);
 			if (current.summary.status === 'active')
 				throw new QuizServiceError(
 					'ACTIVE_SESSION_EXISTS',
@@ -468,8 +486,11 @@ export function createQuizService({
 			(input.type !== 'quiz' && input.domain !== undefined) ||
 			(input.objective !== undefined &&
 				(input.type !== 'quiz' || !/^[1-5]\.[1-9]\d?$/.test(input.objective))) ||
-			(input.type === 'review' && input.reviewSource !== 'daily' && input.reviewSource !== 'wall') ||
-			(input.style !== undefined && !['recall', 'scenario', 'keyword', 'short-form', 'mixed'].includes(input.style)) ||
+			(input.type === 'review' &&
+				input.reviewSource !== 'daily' &&
+				input.reviewSource !== 'wall') ||
+			(input.style !== undefined &&
+				!['recall', 'scenario', 'keyword', 'short-form', 'mixed'].includes(input.style)) ||
 			(input.questionIds !== undefined &&
 				(!Array.isArray(input.questionIds) ||
 					input.questionIds.length < 1 ||
@@ -505,7 +526,7 @@ export function createQuizService({
 		if (input.type === 'review') {
 			if (count < 1 || count > 20)
 				throw new QuizServiceError('INVALID_REQUEST', 'Review count must be between 1 and 20.');
-			selected = reviewSvc.composeQueue({ source: input.reviewSource!, count }, now());
+			selected = await reviewSvc.composeQueue({ source: input.reviewSource!, count }, now());
 		} else if (input.questionIds?.length) {
 			const pool = [...bank.mcqs, ...bank.pbqs];
 			const byId = new Map(pool.map((question) => [question.id, question]));
@@ -552,8 +573,8 @@ export function createQuizService({
 		}
 		// Full exams already order PBQs-first with interleaved MCQs; every other
 		// session type gets a fresh outer shuffle so question order varies.
-		selected = (input.type === 'full' ? selected : shuffle(selected, rng)).map(
-			(question) => presentation(question, rng)
+		selected = (input.type === 'full' ? selected : shuffle(selected, rng)).map((question) =>
+			presentation(question, rng)
 		);
 		const startedAt = now().toISOString();
 		const deadlineAt =
@@ -563,7 +584,7 @@ export function createQuizService({
 					).toISOString()
 				: null;
 		try {
-			repository.createSession({
+			await repository.createSession({
 				id: crypto.randomUUID(),
 				type: input.type,
 				mode,
@@ -574,30 +595,35 @@ export function createQuizService({
 				assignmentId: input.assignmentId ?? null
 			});
 		} catch (error) {
-			if (error instanceof Error && /quiz_sessions_one_active_scope|UNIQUE constraint failed/i.test(error.message))
+			if (
+				error instanceof Error &&
+				/quiz_sessions_one_active_scope|UNIQUE constraint failed|duplicate key value/i.test(
+					error.message
+				)
+			)
 				throw new QuizServiceError(
 					'ACTIVE_SESSION_EXISTS',
 					'Resume or abandon the active session first.'
 				);
 			throw error;
 		}
-		return asView(repository.getActiveSession()!, now());
+		return asView((await repository.getActiveSession())!, now());
 	};
 	return {
 		startSession,
-		getSession(id) {
-			const stored = requireStored(id);
+		async getSession(id) {
+			const stored = await requireStored(id);
 			return stored.summary.status === 'completed' && stored.result
 				? stored.result
 				: asView(stored, now());
 		},
-		getActiveSession() {
-			const stored = repository.getActiveSession();
-			return stored ? summary(expire(stored)) : null;
+		async getActiveSession() {
+			const stored = await repository.getActiveSession();
+			return stored ? summary(await expire(stored)) : null;
 		},
-		saveResponse(id, questionIndex, response, opts = {}) {
+		async saveResponse(id, questionIndex, response, opts = {}) {
 			const { check } = opts;
-			const stored = requireStored(id);
+			const stored = await requireStored(id);
 			if (stored.summary.status !== 'active')
 				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
 			if (
@@ -628,7 +654,7 @@ export function createQuizService({
 			// when explicitly checked. Silent drafts (check: false, or exam/graded) persist
 			// without revealing the answer or bumping the retry/lock counter.
 			const wantFeedback = check !== false && !graded && stored.summary.mode === 'practice';
-			repository.saveResponse(id, questionIndex, response, now().toISOString(), {
+			await repository.saveResponse(id, questionIndex, response, now().toISOString(), {
 				incrementRetries: wantFeedback
 			});
 			if (!wantFeedback) return { saved: true as const };
@@ -639,14 +665,17 @@ export function createQuizService({
 				RETRY_FACTORS[Math.min((stored.retries[questionIndex] ?? 0) + 1, MAX_PRACTICE_RETRIES)];
 			return { saved: true as const, feedback };
 		},
-		revealHint(id, questionIndex) {
-			const stored = requireStored(id);
+		async revealHint(id, questionIndex) {
+			const stored = await requireStored(id);
 			if (stored.summary.status !== 'active')
 				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
 			if (stored.summary.mode !== 'practice')
 				throw new QuizServiceError('INVALID_REQUEST', 'Hints are only available in practice mode.');
 			if (stored.summary.assignment_id)
-				throw new QuizServiceError('INVALID_REQUEST', 'Hints are not available for graded assignments.');
+				throw new QuizServiceError(
+					'INVALID_REQUEST',
+					'Hints are not available for graded assignments.'
+				);
 			if (
 				!Number.isInteger(questionIndex) ||
 				questionIndex < 0 ||
@@ -657,11 +686,11 @@ export function createQuizService({
 			const text = question.hint?.trim() || autoHint(question);
 			if (!text)
 				throw new QuizServiceError('INVALID_REQUEST', 'No hint is available for this question.');
-			repository.markHintUsed(id, questionIndex, now().toISOString());
+			await repository.markHintUsed(id, questionIndex, now().toISOString());
 			return { hint: { text } };
 		},
-		retakeSession(id) {
-			const stored = requireStored(id);
+		async retakeSession(id) {
+			const stored = await requireStored(id);
 			if (stored.summary.status !== 'completed' || !stored.result)
 				throw new QuizServiceError('INVALID_REQUEST', 'Only completed sessions can be retaken.');
 			const missedIds = stored.result.review
@@ -671,8 +700,8 @@ export function createQuizService({
 				throw new QuizServiceError('INVALID_REQUEST', 'No missed questions to retake.');
 			return startSession({ type: 'quiz', mode: 'practice', questionIds: missedIds });
 		},
-		updateSession(id, update) {
-			const stored = requireStored(id);
+		async updateSession(id, update) {
+			const stored = await requireStored(id);
 			if (stored.summary.status !== 'active')
 				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
 			if (
@@ -689,21 +718,16 @@ export function createQuizService({
 					update.flag.questionIndex >= stored.questions.length)
 			)
 				throw new QuizServiceError('INVALID_REQUEST', 'Question index is out of range.');
-			repository.updateState(id, update.currentIndex, update.flag, now().toISOString());
-			return asView(requireStored(id), now());
+			await repository.updateState(id, update.currentIndex, update.flag, now().toISOString());
+			return asView(await requireStored(id), now());
 		},
-		abandonSession(id) {
-			const stored = requireStored(id);
-			if (!repository.abandon(id, now().toISOString()))
+		async abandonSession(id) {
+			const stored = await requireStored(id);
+			if (!(await repository.abandon(id, now().toISOString())))
 				throw new QuizServiceError('SESSION_CLOSED', 'Session is closed.');
 		},
-		completeSession(id) {
-			return complete(requireStored(id));
+		async completeSession(id) {
+			return complete(await requireStored(id));
 		}
 	};
 }
-
-export const quizService = createQuizService({
-	repository: quizRepository,
-	bank: loadQuestionBank()
-});

@@ -1,8 +1,5 @@
-import { afterAll, describe, expect, it } from 'vitest';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import { createQuizRepository, type QuizRepository } from './db';
+import { describe, expect, it } from 'vitest';
+import { createTestRepository } from './test-db';
 import { createQuizService } from './quiz';
 import { createReviewService } from './review';
 import { loadAplus1201Bank } from './bank-aplus-1201';
@@ -11,14 +8,8 @@ import { APLUS_1201_EXAM_CONFIG, APLUS_1202_EXAM_CONFIG } from './aplus-courses'
 import { correctResponse, type QuestionBank } from './question-bank';
 import type { PublicQuestion, QuestionResponse } from '$lib/types';
 
-// Per-worker path: vitest runs test FILES in parallel workers, and a fixed
-// /tmp path meant two workers (e.g. primary + a linked worktree copy) shared
-// one SQLite file — one worker's active session tripped the other's
-// startSession. PID-scoping keeps each worker on its own throwaway DB.
-const SMOKE_DB = path.join(os.tmpdir(), `smoke-aplus-${process.pid}.db`);
-
-function makeService(course: '1201' | '1202') {
-	const repository = createQuizRepository(SMOKE_DB);
+async function makeService(course: '1201' | '1202') {
+	const repository = await createTestRepository();
 	const bank: QuestionBank = course === '1201' ? loadAplus1201Bank() : loadAplus1202Bank();
 	const reviewSvc = createReviewService({ repository, bank });
 	const service = createQuizService({
@@ -37,40 +28,33 @@ function correctAnswer(bank: QuestionBank, question: PublicQuestion): QuestionRe
 }
 
 describe('A+ full-exam smoke (throwaway DB)', () => {
-	it('starts, answers, and completes a 90-Q full exam for Core 1 (220-1201)', () => {
-		const { repository, bank, service } = makeService('1201');
-		const session = service.startSession({ type: 'full' });
+	it('starts, answers, and completes a 90-Q full exam for Core 1 (220-1201)', async () => {
+		const { repository, bank, service } = await makeService('1201');
+		const session = await service.startSession({ type: 'full' });
 		expect(session.totalQuestions).toBe(90);
 		expect(session.questions.filter((q) => q.format === 'pbq').length).toBe(5);
 		for (let i = 0; i < session.questions.length; i++) {
-			service.saveResponse(session.sessionId, i, correctAnswer(bank, session.questions[i]));
+			await service.saveResponse(session.sessionId, i, correctAnswer(bank, session.questions[i]));
 		}
-		const result = service.completeSession(session.sessionId);
+		const result = await service.completeSession(session.sessionId);
 		expect(result.totalQuestions).toBe(90);
 		expect(result.fullyCorrect).toBe(90);
 		expect(result.percentage).toBe(100);
-		repository.close();
+		await repository.close();
 	});
 
-	it('starts, answers, and completes a 90-Q full exam for Core 2 (220-1202)', () => {
-		const { repository, bank, service } = makeService('1202');
-		const session = service.startSession({ type: 'full' });
+	it('starts, answers, and completes a 90-Q full exam for Core 2 (220-1202)', async () => {
+		const { repository, bank, service } = await makeService('1202');
+		const session = await service.startSession({ type: 'full' });
 		expect(session.totalQuestions).toBe(90);
 		expect(session.questions.filter((q) => q.format === 'pbq').length).toBe(4);
 		for (let i = 0; i < session.questions.length; i++) {
-			service.saveResponse(session.sessionId, i, correctAnswer(bank, session.questions[i]));
+			await service.saveResponse(session.sessionId, i, correctAnswer(bank, session.questions[i]));
 		}
-		const result = service.completeSession(session.sessionId);
+		const result = await service.completeSession(session.sessionId);
 		expect(result.totalQuestions).toBe(90);
 		expect(result.fullyCorrect).toBe(90);
 		expect(result.percentage).toBe(100);
-		repository.close();
-	});
-
-	afterAll(() => {
-		for (const suffix of ['', '-wal', '-shm']) {
-			const file = SMOKE_DB + suffix;
-			if (fs.existsSync(file)) fs.unlinkSync(file);
-		}
+		await repository.close();
 	});
 });

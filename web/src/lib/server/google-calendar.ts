@@ -3,11 +3,11 @@ import crypto from 'node:crypto';
 import {
 	createScopedRepo,
 	DEFAULT_SCOPE,
-	quizRepository,
 	type Scope,
 	type StoredGoogleOAuth as GoogleOAuth,
 	type StoredSyncedEvent as SyncedEvent
 } from './db';
+import { quizRepository } from './db-pg';
 import { assignmentDueDate, COURSE_META } from './course';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -144,11 +144,11 @@ export async function saveOAuth(
 	token: Omit<GoogleOAuth, 'calendarId'> & { calendarId?: string | null },
 	scope: Scope = DEFAULT_SCOPE
 ): Promise<void> {
-	createScopedRepo(quizRepository, scope).saveGoogleOAuth(token);
+	await createScopedRepo(quizRepository, scope).saveGoogleOAuth(token);
 }
 
 export async function clearOAuth(scope: Scope = DEFAULT_SCOPE): Promise<void> {
-	createScopedRepo(quizRepository, scope).clearGoogleOAuth();
+	await createScopedRepo(quizRepository, scope).clearGoogleOAuth();
 }
 
 async function refreshAccessToken(oauth: GoogleOAuth, scope: Scope): Promise<string> {
@@ -173,7 +173,7 @@ async function refreshAccessToken(oauth: GoogleOAuth, scope: Scope): Promise<str
 		throw new Error(
 			`Google token refresh failed: ${data.error ?? response.status} — reconnect from the calendar page.`
 		);
-	createScopedRepo(quizRepository, scope).saveGoogleOAuth({
+	await createScopedRepo(quizRepository, scope).saveGoogleOAuth({
 		...oauth,
 		accessToken: data.access_token,
 		expiresAt: Date.now() + (data.expires_in ?? 3600) * 1000 - 60_000
@@ -330,9 +330,9 @@ function toEventView(event: CalendarEvent, calendarName: string): CalendarEventV
 
 // ── Deadline sync (push course deadlines into a dedicated calendar) ─────────
 
-export function planSyncEvents(scope: Scope = DEFAULT_SCOPE): PlannedEvent[] {
+export async function planSyncEvents(scope: Scope = DEFAULT_SCOPE): Promise<PlannedEvent[]> {
 	const repo = createScopedRepo(quizRepository, scope);
-	const examDate = repo.getExamDate();
+	const examDate = await repo.getExamDate();
 	const examName = COURSE_META[scope.courseId]?.examName ?? 'Certification Exam';
 	const planned: PlannedEvent[] = [
 		{
@@ -342,7 +342,7 @@ export function planSyncEvents(scope: Scope = DEFAULT_SCOPE): PlannedEvent[] {
 			date: examDate
 		}
 	];
-	for (const assignment of repo.getCourseAssignments()) {
+	for (const assignment of await repo.getCourseAssignments()) {
 		const due = assignmentDueDate(assignment, examDate);
 		planned.push({
 			source: `assignment:${assignment.id}`,
@@ -410,11 +410,11 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 				})
 			});
 			calendarId = created.id;
-			repo.saveGoogleOAuth({ ...oauth, calendarId });
+			await repo.saveGoogleOAuth({ ...oauth, calendarId });
 		}
 
-		const planned = planSyncEvents(scope);
-		const existing = new Map(repo.getSyncedEvents().map((row) => [row.source, row]));
+		const planned = await planSyncEvents(scope);
+		const existing = new Map((await repo.getSyncedEvents()).map((row) => [row.source, row]));
 		let created = 0;
 		let updated = 0;
 		const syncedAt = new Date().toISOString();
@@ -436,7 +436,7 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 					`/calendars/${encodeURIComponent(calendarId)}/events`,
 					{ method: 'POST', body }
 				);
-				repo.recordSyncedEvent(item.source, event.id, item.summary, item.date, syncedAt);
+				await repo.recordSyncedEvent(item.source, event.id, item.summary, item.date, syncedAt);
 				created++;
 			}
 		}
@@ -455,7 +455,7 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 			} catch (error) {
 				if (!(error instanceof GoogleApiError && error.status === 404)) throw error; // already gone is fine
 			}
-			repo.removeSyncedEvent(row.source);
+			await repo.removeSyncedEvent(row.source);
 			deleted++;
 		}
 

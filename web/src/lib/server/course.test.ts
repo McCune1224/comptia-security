@@ -11,7 +11,7 @@ import {
 	sessionLaunchFor
 } from './course';
 import { createCourseService } from './course-service';
-import { createQuizRepository } from './db';
+import { createTestRepository } from './test-db';
 
 describe('CourseDefinition', () => {
 	it('has 4 modules, 7 lessons, and 12 assignments covering all categories', () => {
@@ -196,8 +196,8 @@ describe('LetterGrade', () => {
 });
 
 describe('CourseService', () => {
-	it('seeds every active course and reports a scoped overview with deadlines', () => {
-		const repository = createQuizRepository(':memory:');
+	it('seeds every active course and reports a scoped overview with deadlines', async () => {
+		const repository = await createTestRepository();
 		// ACTIVE_COURSES seeds every registered course into the shared tables.
 		// The repository default view is bound to the default scope (secp-701),
 		// so verify each course's seed through its own scoped view.
@@ -208,13 +208,13 @@ describe('CourseService', () => {
 		};
 		for (const [courseId, moduleIds] of Object.entries(expectedSeeds)) {
 			const scoped = repository.forScope({ profileId: 'default', courseId: courseId as CourseId });
-			expect(scoped.getCourseModules().map((m) => m.id)).toEqual(moduleIds);
-			expect(scoped.getCourseAssignments()).toHaveLength(12);
+			expect((await scoped.getCourseModules()).map((m) => m.id)).toEqual(moduleIds);
+			expect(await scoped.getCourseAssignments()).toHaveLength(12);
 		}
 
 		// Default-scope overview: secp-701's 4 modules + 12 assignments.
 		const service = createCourseService({ repository });
-		const overview = service.getOverview();
+		const overview = await service.getOverview();
 		expect(overview.modules).toHaveLength(4);
 		expect(overview.toDo.length).toBeGreaterThan(0);
 		expect(overview.examDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
@@ -222,23 +222,23 @@ describe('CourseService', () => {
 		// Default exam date is the end of the current month.
 		expect(overview.daysUntilExam).toBeGreaterThanOrEqual(0);
 		expect(overview.daysUntilExam).toBeLessThanOrEqual(31);
-		repository.close();
+		await repository.close();
 	});
 
-	it('reschedules everything when the exam date changes', () => {
-		const repository = createQuizRepository(':memory:');
+	it('reschedules everything when the exam date changes', async () => {
+		const repository = await createTestRepository();
 		const service = createCourseService({ repository });
-		service.setExamDate('2026-10-15');
-		const overview = service.getOverview();
+		await service.setExamDate('2026-10-15');
+		const overview = await service.getOverview();
 		expect(overview.examDate).toBe('2026-10-15');
 		const firstDue = overview.modules[0].assignments[0];
 		expect(firstDue.assignment.id).toBe('a1-1');
 		expect(firstDue.dueDateLabel).toBe('Sep 21, 2026'); // -24 days
-		repository.close();
+		await repository.close();
 	});
 
-	it('records submissions and reflects them in the gradebook', () => {
-		const repository = createQuizRepository(':memory:');
+	it('records submissions and reflects them in the gradebook', async () => {
+		const repository = await createTestRepository();
 		const service = createCourseService({ repository });
 		const emptyBreakdown = {
 			earnedPoints: 0,
@@ -267,23 +267,23 @@ describe('CourseService', () => {
 			completedAt: '2026-08-01T00:00:00.000Z',
 			review: []
 		};
-		service.recordCompletion('a1-1', 'sess-1', result);
-		const gradebook = service.getGradebook();
+		await service.recordCompletion('a1-1', 'sess-1', result);
+		const gradebook = await service.getGradebook();
 		expect(gradebook.submittedAssignments).toBe(1);
 		const row = gradebook.assignments.find((a) => a.assignment.id === 'a1-1')!;
 		expect(row.status).toBe('submitted');
 		expect(row.percentage).toBe(90);
-		repository.close();
+		await repository.close();
 	});
 
-	it('tracks lesson completions', () => {
-		const repository = createQuizRepository(':memory:');
+	it('tracks lesson completions', async () => {
+		const repository = await createTestRepository();
 		const service = createCourseService({ repository });
-		service.setLessonCompleted('lesson-1-1', true);
-		const module = service.getModule('week-1');
+		await service.setLessonCompleted('lesson-1-1', true);
+		const module = await service.getModule('week-1');
 		expect(module?.lessons.find((l) => l.id === 'lesson-1-1')?.completed).toBe(true);
 		expect(module?.lessonsCompleted).toBe(1);
-		repository.close();
+		await repository.close();
 	});
 
 	it('defaults the exam date to the end of the current month', () => {
