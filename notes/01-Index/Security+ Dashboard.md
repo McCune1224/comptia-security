@@ -31,6 +31,7 @@
 - [[CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf|Official Objectives PDF]]
 - [[Weak Topics Tracker]]
 - [[Exam Checklist]]
+- [[SY0-701-Coverage-Audit|Coverage Audit — is the material enough?]]
 
 ---
 

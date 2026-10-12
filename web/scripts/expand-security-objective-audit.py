@@ -95,8 +95,13 @@ def main():
             if target is None:
                 print(f"WARN: replace for unknown id {qid}")
                 continue
+            # A fragment may predate fields that the bank added later (`style`,
+            # `hint`, ...). Preserve any key the replacement omits instead of
+            # clobbering the whole record, so re-running never strips data.
+            merged = dict(target)
+            merged.update(replacement)
             target.clear()
-            target.update(replacement)
+            target.update(merged)
             replaces += 1
     if added_mcqs or added_pbqs or hints or refs or retags or replaces:
         save_bank(bank)

@@ -349,4 +349,154 @@ describe('question bank', () => {
 		expect(JSON.stringify(publicQuestion)).not.toContain('rationale');
 		expect(JSON.stringify(publicQuestion)).not.toContain('explanation');
 	});
+
+	// Regression guards for defects found by the factual audit (see
+	// notes/05-Exam-Prep/SY0-701-Coverage-Audit.md). Each assertion pins a
+	// question that was ambiguous, mis-keyed, or factually wrong.
+	const questionsById = () => {
+		const bank = loadQuestionBank();
+		const byId = new Map([...bank.mcqs, ...bank.pbqs].map((question) => [question.id, question]));
+		const get = (id: string) => {
+			const question = byId.get(id);
+			if (!question) throw new Error(`expected question ${id} in the bank`);
+			return question;
+		};
+		const keyedOption = (question: ChoiceDefinition) => {
+			const option = question.options.find((candidate) => question.correctOptionIds.includes(candidate.id));
+			if (!option) throw new Error(`${question.id}: key does not resolve to an option`);
+			return option;
+		};
+		return { byId, get, keyedOption };
+	};
+
+	it('keeps audited items unambiguous and factually correct', () => {
+		const { get, keyedOption } = questionsById();
+
+		// A select-TWO item cannot key an option whose own rationale calls it false.
+		const multi = get('mcq-2-004') as ChoiceDefinition;
+		expect(multi.kind).toBe('single-choice');
+		expect(multi.correctOptionIds).toHaveLength(1);
+
+		// A detective/compensating tie is not a valid select-TWO key.
+		const controls = get('mcq-1-005') as ChoiceDefinition;
+		expect(controls.kind).toBe('single-choice');
+		expect(controls.correctOptionIds).toHaveLength(1);
+
+		// Stateless and packet-filtering are synonyms, so a keyed pair must not
+		// contain both.
+		const firewalls = get('mcq-3-011') as ChoiceDefinition;
+		expect(firewalls.kind).toBe('multiple-choice');
+		const keyedFirewallTexts = firewalls.options
+			.filter((option) => firewalls.correctOptionIds.includes(option.id))
+			.map((option) => option.text.toLowerCase());
+		expect(keyedFirewallTexts.filter((text) => text.includes('stateless'))).toHaveLength(1);
+		expect(keyedFirewallTexts.filter((text) => text.includes('packet-filtering'))).toHaveLength(0);
+
+		// PACS/DICOM does not use port 389 (LDAP).
+		expect(JSON.stringify(get('mcq-3-006'))).not.toContain('port 389');
+
+		// PII cannot be labeled Internal when the same item calls it Confidential.
+		const classification = get('mcq-3-019') as ChoiceDefinition;
+		expect(classification.kind).toBe('single-choice');
+		expect(keyedOption(classification).text.startsWith('Confidential')).toBe(true);
+
+		// Model inversion must not be labeled model extraction.
+		const ai = JSON.stringify(get('pbq-3-008'));
+		expect(ai).toContain('Model inversion');
+		expect(ai).toContain('Model extraction');
+	});
+
+	it('keeps near-duplicate prompts out of the bank', () => {
+		const { get } = questionsById();
+		const normal = (text: string) => text.trim().toLowerCase().replace(/\s+/g, ' ');
+		expect(normal(get('mcq-3-050').prompt)).not.toBe(normal(get('mcq-4-141').prompt));
+	});
+
+	// Objective tags drive the mastery matrix and per-objective drills, so a
+	// mislabeled item sends study time to the wrong objective. These clusters
+	// were realigned to the official SY0-701 objectives.
+	it('tags objective clusters to the objectives they actually test', () => {
+		const { get } = questionsById();
+		const objectiveOf = (id: string) => get(id).objective;
+
+		// Cryptography terms belong to 1.4 (not 1.2 fundamental concepts).
+		for (const id of ['mcq-1-065', 'mcq-1-066', 'mcq-1-067', 'mcq-1-068', 'mcq-1-069', 'mcq-1-070', 'mcq-1-078', 'mcq-1-081', 'mcq-1-082']) {
+			expect(objectiveOf(id), id).toBe('1.4');
+		}
+		// Malware-type definitions belong to 2.4 (not 2.1 threat actors).
+		for (const id of ['mcq-2-072', 'mcq-2-073', 'mcq-2-074', 'mcq-2-075', 'mcq-2-076', 'mcq-2-077', 'mcq-2-078', 'mcq-2-079', 'mcq-2-080', 'mcq-2-081']) {
+			expect(objectiveOf(id), id).toBe('2.4');
+		}
+		// IR phases belong to 4.8; IAM models to 4.6; backup types to 3.4.
+		for (const id of ['mcq-4-093', 'mcq-4-094', 'mcq-4-095', 'mcq-4-096', 'mcq-4-097', 'mcq-4-098', 'mcq-4-100', 'mcq-4-101', 'mcq-4-102']) {
+			expect(objectiveOf(id), id).toBe('4.8');
+		}
+		for (const id of ['mcq-4-108', 'mcq-4-109', 'mcq-4-110', 'mcq-4-111', 'mcq-4-112']) {
+			expect(objectiveOf(id), id).toBe('4.6');
+		}
+		for (const id of ['mcq-3-180', 'mcq-3-181', 'mcq-3-182']) {
+			expect(objectiveOf(id), id).toBe('3.4');
+		}
+		// Risk-management terms belong to 5.2 (not 5.1 governance).
+		for (const id of ['mcq-5-060', 'mcq-5-061', 'mcq-5-062', 'mcq-5-063', 'mcq-5-064', 'mcq-5-065', 'mcq-5-066', 'mcq-5-067', 'mcq-5-068']) {
+			expect(objectiveOf(id), id).toBe('5.2');
+		}
+		// Privacy regulation terms belong to 5.4, not 1.4 cryptography.
+		for (const id of ['mcq-5-127', 'mcq-5-128', 'mcq-5-129']) {
+			expect(objectiveOf(id), id).toBe('5.4');
+		}
+	});
+
+	// Batch-3 read-through guards: each pins a defect found by inspecting every
+	// item, so the same class of error cannot silently return.
+	it('keeps batch-3 audited items keyed to the correct answer', () => {
+		const { get, keyedOption } = questionsById();
+
+		// A definition item's key must be the term the explanation defines, and
+		// the option must exist (a displaced key made Authorization vanish).
+		const authorization = get('mcq-1-055') as ChoiceDefinition;
+		expect(authorization.options.some((option) => option.text === 'Authorization')).toBe(true);
+		expect(authorization.correctOptionIds).toHaveLength(1);
+		expect(authorization.explanation.startsWith(keyedOption(authorization).text)).toBe(true);
+
+		// The printed log is documentary evidence, not demonstrative.
+		const evidence = get('mcq-4-041') as ChoiceDefinition;
+		expect(keyedOption(evidence).text.startsWith('Documentary')).toBe(true);
+
+		// A single-answer item must not ask the reader to choose two.
+		expect(get('mcq-3-002').prompt).not.toContain('Choose TWO');
+	});
+
+	it('keeps the batch-3 objective retags in place', () => {
+		const { get } = questionsById();
+		const objectiveOf = (id: string) => get(id).objective;
+		// RTO/RPO/MTTR/MTBF are resilience metrics.
+		for (const id of ['mcq-3-183', 'mcq-3-184', 'mcq-3-185', 'mcq-3-186']) {
+			expect(objectiveOf(id), id).toBe('3.4');
+		}
+		// Immutable backup is resilience.
+		expect(objectiveOf('mcq-3-187')).toBe('3.4');
+		// NIST CSF framing is governance.
+		expect(objectiveOf('mcq-5-130')).toBe('5.1');
+		// MITRE ATT&CK is threat intelligence.
+		expect(objectiveOf('mcq-2-175')).toBe('2.4');
+		// Detection tools belong to monitoring.
+		for (const id of ['mcq-4-103', 'mcq-4-104', 'mcq-4-105', 'mcq-4-106', 'mcq-4-107']) {
+			expect(objectiveOf(id), id).toBe('4.4');
+		}
+		// Logon-event analysis is monitoring, not asset management.
+		expect(objectiveOf('mcq-4-010')).toBe('4.4');
+	});
+
+	it('has no duplicate definition answers in the bank', () => {
+		const bank = loadQuestionBank();
+		const counts = new Map<string, number>();
+		for (const question of bank.mcqs) {
+			if (question.kind !== 'single-choice' || !question.prompt.startsWith('Which security term is defined as')) continue;
+			const keyed = question.options.find((option) => question.correctOptionIds.includes(option.id));
+			if (!keyed) throw new Error(`${question.id}: key does not resolve to an option`);
+			counts.set(keyed.text, (counts.get(keyed.text) ?? 0) + 1);
+		}
+		expect([...counts.entries()].filter(([, n]) => n > 1)).toEqual([]);
+	});
 });

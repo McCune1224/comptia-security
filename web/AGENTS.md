@@ -51,7 +51,7 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
     assembles 5 PBQs (one distinct kind per domain) placed **first**, then domain-weighted MCQs
     interleaved; PBQs are scored at `ExamConfig.pbqPoints` (SY0-701 = 6, so 5 PBQs ≈ 26% of the
     score) while MCQs are worth 1 — mirroring the real exam's 20–30% PBQ weight.
-- **Question banks:** Security+ 332 MCQs (48/71/62/92/59 across Domains 1–5, all scenario-format)
+- **Question banks:** Security+ 692 MCQs (104/164/166/139/119 across Domains 1–5; styles: recall 376, keyword 159, scenario 109, short-form 48)
   + 105 PBQs (matching, ordering, evidence, configuration, numeric, word-bank, sort, multi-step). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
   multi-selects) **+ 20 PBQs** (3/5/4/2/6 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
   MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 20 PBQs** (5/6/4/5 per domain,

@@ -111,7 +111,11 @@
             "zero trust",
             "control plane",
             "data plane",
-            "policy enforcement point"
+            "policy enforcement point",
+            "policy-driven access control",
+            "policy administrator",
+            "implicit trust zones",
+            "subject/system"
           ],
           "questionIds": [
             "mcq-1-007",
@@ -132,7 +136,11 @@
             "video surveillance",
             "security guard",
             "access badge",
-            "sensors"
+            "sensors",
+            "infrared",
+            "pressure",
+            "microwave",
+            "ultrasonic"
           ],
           "questionIds": [
             "mcq-1-006"
@@ -167,7 +175,9 @@
             "stakeholders",
             "impact analysis",
             "backout plan",
-            "maintenance window"
+            "maintenance window",
+            "ownership",
+            "test results"
           ],
           "questionIds": [
             "mcq-1-013",
@@ -190,7 +200,8 @@
             "service restart",
             "application restart",
             "legacy applications",
-            "dependencies"
+            "dependencies",
+            "restricted activities"
           ],
           "questionIds": [
             "mcq-1-014",
@@ -241,7 +252,12 @@
             "file-level",
             "volume",
             "database",
-            "record"
+            "record",
+            "partition",
+            "transport/communication",
+            "key exchange",
+            "key length",
+            "algorithm"
           ],
           "questionIds": [
             "mcq-1-024"
@@ -345,7 +361,8 @@
             "self-signed",
             "root of trust",
             "certificate signing request",
-            "wildcard"
+            "wildcard",
+            "third-party"
           ],
           "questionIds": [
             "mcq-1-022",
@@ -405,7 +422,11 @@
             "espionage",
             "financial gain",
             "revenge",
-            "disruption"
+            "disruption",
+            "blackmail",
+            "war",
+            "ethical",
+            "philosophical"
           ],
           "questionIds": [
             "mcq-2-003",
@@ -474,7 +495,8 @@
           "label": "Removable device vectors",
           "lessonId": "lesson-1-2",
           "lessonTerms": [
-            "removable device"
+            "removable device",
+            "unsupported systems"
           ],
           "questionIds": [
             "mcq-2-011",
@@ -488,7 +510,10 @@
           "lessonTerms": [
             "wireless",
             "bluetooth",
-            "open service ports"
+            "open service ports",
+            "client-based",
+            "agentless",
+            "wired"
           ],
           "questionIds": [
             "mcq-2-031",
@@ -512,7 +537,9 @@
           "lessonId": "lesson-1-2",
           "lessonTerms": [
             "supply chain",
-            "managed service providers"
+            "managed service providers",
+            "vendors",
+            "suppliers"
           ],
           "questionIds": [
             "mcq-2-050"
@@ -532,7 +559,8 @@
             "business email compromise",
             "pretexting",
             "watering hole",
-            "typosquatting"
+            "typosquatting",
+            "brand impersonation"
           ],
           "questionIds": [
             "mcq-2-009",
@@ -560,7 +588,9 @@
             "buffer overflow",
             "race conditions",
             "time-of-check",
-            "time-of-use"
+            "time-of-use",
+            "memory injection",
+            "malicious update"
           ],
           "questionIds": [
             "mcq-2-019",
@@ -625,7 +655,8 @@
           "lessonTerms": [
             "supply chain",
             "software provider",
-            "cloud-specific"
+            "cloud-specific",
+            "hardware provider"
           ],
           "questionIds": [
             "mcq-2-018",
@@ -694,7 +725,9 @@
             "spyware",
             "keylogger",
             "logic bomb",
-            "rootkit"
+            "rootkit",
+            "bloatware",
+            "virus"
           ],
           "questionIds": [
             "mcq-2-032",
@@ -721,7 +754,10 @@
             "distributed denial-of-service",
             "dns",
             "on-path",
-            "credential replay"
+            "credential replay",
+            "amplified",
+            "reflected",
+            "malicious code"
           ],
           "questionIds": [
             "mcq-2-015",
@@ -736,7 +772,9 @@
           "lessonTerms": [
             "privilege escalation",
             "directory traversal",
-            "forgery"
+            "forgery",
+            "replay",
+            "injection"
           ],
           "questionIds": [
             "mcq-2-056"
@@ -779,7 +817,11 @@
             "impossible travel",
             "resource consumption",
             "out-of-cycle logging",
-            "missing logs"
+            "missing logs",
+            "concurrent session",
+            "blocked content",
+            "resource inaccessibility",
+            "published/documented"
           ],
           "questionIds": [
             "mcq-2-027",
@@ -854,7 +896,8 @@
             "host-based firewall",
             "host-based intrusion prevention",
             "disabling ports",
-            "default password changes"
+            "default password changes",
+            "removal of unnecessary software"
           ],
           "questionIds": [
             "mcq-2-043",
@@ -909,7 +952,10 @@
             "infrastructure as code",
             "serverless",
             "microservices",
-            "hybrid"
+            "hybrid",
+            "responsibility matrix",
+            "third-party vendor",
+            "on-premises"
           ],
           "questionIds": [
             "mcq-3-001",
@@ -975,7 +1021,15 @@
             "ease of recovery",
             "patch availability",
             "inability to patch",
-            "high availability"
+            "high availability",
+            "centralized",
+            "decentralized",
+            "cost",
+            "responsiveness",
+            "ease of deployment",
+            "risk transference",
+            "power",
+            "compute"
           ],
           "questionIds": [
             "mcq-3-040",
@@ -999,7 +1053,8 @@
             "fail-open",
             "fail-closed",
             "inline",
-            "tap"
+            "tap",
+            "active vs passive"
           ],
           "questionIds": [
             "mcq-3-010",
@@ -1033,7 +1088,9 @@
           "lessonTerms": [
             "web application firewall",
             "unified threat management",
-            "next-generation firewall"
+            "next-generation firewall",
+            "layer 4",
+            "layer 7"
           ],
           "questionIds": [
             "mcq-3-011",
@@ -1089,7 +1146,10 @@
             "regulated",
             "trade secret",
             "intellectual property",
-            "financial information"
+            "financial information",
+            "legal information",
+            "human-readable",
+            "non-human-readable"
           ],
           "questionIds": [
             "mcq-3-019",
@@ -1102,7 +1162,8 @@
           "lessonId": "lesson-2-1",
           "lessonTerms": [
             "sensitive",
-            "confidential"
+            "confidential",
+            "critical"
           ],
           "questionIds": [
             "mcq-3-019"
@@ -1138,7 +1199,8 @@
             "tokenization",
             "obfuscation",
             "segmentation",
-            "permission restrictions"
+            "permission restrictions",
+            "geographic restrictions"
           ],
           "questionIds": [
             "mcq-3-022",
@@ -1213,7 +1275,10 @@
           "lessonId": "lesson-2-1",
           "lessonTerms": [
             "continuity of operations",
-            "capacity planning"
+            "capacity planning",
+            "people",
+            "technology",
+            "infrastructure"
           ],
           "questionIds": [
             "mcq-3-062"
@@ -1267,7 +1332,8 @@
           "lessonTerms": [
             "tabletop exercises",
             "failover",
-            "parallel processing"
+            "parallel processing",
+            "simulation"
           ],
           "questionIds": [
             "mcq-3-028",
@@ -1302,7 +1368,10 @@
           "label": "Secure baselines (establish, deploy, maintain)",
           "lessonId": "lesson-2-2",
           "lessonTerms": [
-            "secure baseline"
+            "secure baseline",
+            "establish",
+            "deploy",
+            "maintain"
           ],
           "questionIds": [
             "mcq-4-001",
@@ -1316,7 +1385,9 @@
           "label": "Hardening targets (mobile devices, workstations, switches, routers, cloud infrastructure, servers, ICS/SCADA, embedded, RTOS, IoT)",
           "lessonId": "lesson-2-2",
           "lessonTerms": [
-            "hardening"
+            "hardening",
+            "switches",
+            "routers"
           ],
           "questionIds": [
             "mcq-4-003",
@@ -1331,7 +1402,9 @@
             "mobile device management",
             "bring your own device",
             "corporate-owned, personally enabled",
-            "choose your own device"
+            "choose your own device",
+            "cellular",
+            "bluetooth"
           ],
           "questionIds": [
             "mcq-4-061",
@@ -1493,7 +1566,10 @@
             "dark web",
             "penetration testing",
             "responsible disclosure",
-            "bug bounty"
+            "bug bounty",
+            "package monitoring",
+            "proprietary/third-party",
+            "system/process audit"
           ],
           "questionIds": [
             "mcq-4-020",
@@ -1515,7 +1591,11 @@
             "false negative",
             "common vulnerability scoring system",
             "common vulnerability enumeration",
-            "prioritize"
+            "prioritize",
+            "environmental variables",
+            "industry/organizational impact",
+            "risk tolerance",
+            "vulnerability classification"
           ],
           "questionIds": [
             "mcq-4-065",
@@ -1533,7 +1613,8 @@
             "exemptions",
             "rescanning",
             "verification",
-            "audit"
+            "audit",
+            "insurance"
           ],
           "questionIds": [
             "mcq-4-065",
@@ -1612,7 +1693,8 @@
             "data loss prevention",
             "simple network management protocol",
             "netflow",
-            "vulnerability scanners"
+            "vulnerability scanners",
+            "agentless"
           ],
           "questionIds": [
             "mcq-4-014",
@@ -1664,7 +1746,10 @@
             "web filter",
             "url scanning",
             "content categorization",
-            "reputation"
+            "reputation",
+            "agent-based",
+            "centralized proxy",
+            "block rules"
           ],
           "questionIds": [
             "mcq-4-035"
@@ -1703,7 +1788,8 @@
             "dns filtering",
             "dmarc",
             "dkim",
-            "sender policy framework"
+            "sender policy framework",
+            "gateway"
           ],
           "questionIds": [
             "pbq-4-021"
@@ -1785,7 +1871,8 @@
             "attribute-based",
             "rule-based",
             "time-of-day restrictions",
-            "least privilege"
+            "least privilege",
+            "mandatory"
           ],
           "questionIds": [
             "mcq-4-090",
@@ -1812,7 +1899,8 @@
             "single sign-on",
             "ldap",
             "oauth",
-            "security assertions markup language"
+            "security assertions markup language",
+            "interoperability"
           ],
           "questionIds": [
             "mcq-4-067",
@@ -1839,7 +1927,10 @@
           "lessonTerms": [
             "multifactor authentication",
             "biometrics",
-            "security keys"
+            "security keys",
+            "somewhere you are",
+            "soft tokens",
+            "hard tokens"
           ],
           "questionIds": [
             "pbq-4-805",
@@ -1852,7 +1943,12 @@
           "lessonId": "lesson-3-1",
           "lessonTerms": [
             "password managers",
-            "passwordless"
+            "passwordless",
+            "length",
+            "complexity",
+            "reuse",
+            "expiration",
+            "age"
           ],
           "questionIds": [
             "mcq-4-056",
@@ -1890,7 +1986,10 @@
             "user provisioning",
             "resource provisioning",
             "guard rails",
-            "ticket creation"
+            "ticket creation",
+            "security groups",
+            "escalation",
+            "enabling/disabling services and access"
           ],
           "questionIds": [
             "mcq-4-069",
@@ -1906,7 +2005,10 @@
           "lessonTerms": [
             "efficiency",
             "enforcing baselines",
-            "workforce multiplier"
+            "workforce multiplier",
+            "standard infrastructure configurations",
+            "employee retention",
+            "reaction time"
           ],
           "questionIds": [
             "mcq-4-017",
@@ -1921,7 +2023,9 @@
             "single point of failure",
             "technical debt",
             "ongoing supportability",
-            "application programming interfaces"
+            "application programming interfaces",
+            "complexity",
+            "cost"
           ],
           "questionIds": [
             "mcq-4-021",
@@ -1980,7 +2084,8 @@
             "chain of custody",
             "acquisition",
             "preservation",
-            "e-discovery"
+            "e-discovery",
+            "reporting"
           ],
           "questionIds": [
             "mcq-4-029",
@@ -2050,7 +2155,11 @@
             "guidelines",
             "policies",
             "standards",
-            "procedures"
+            "procedures",
+            "onboarding/offboarding",
+            "playbooks",
+            "physical security",
+            "encryption"
           ],
           "questionIds": [
             "mcq-5-001",
@@ -2101,7 +2210,8 @@
             "boards",
             "committees",
             "centralized",
-            "decentralized"
+            "decentralized",
+            "government entities"
           ],
           "questionIds": [
             "mcq-5-007",
@@ -2126,7 +2236,10 @@
           "lessonTerms": [
             "regulatory",
             "legal",
-            "industry"
+            "industry",
+            "local/regional",
+            "national",
+            "global"
           ],
           "questionIds": [
             "mcq-5-003"
@@ -2159,7 +2272,8 @@
             "risk assessment",
             "ad hoc",
             "recurring",
-            "continuous"
+            "continuous",
+            "one-time"
           ],
           "questionIds": [
             "mcq-5-009"
@@ -2175,7 +2289,10 @@
             "single loss expectancy",
             "annualized loss expectancy",
             "annualized rate of occurrence",
-            "exposure factor"
+            "exposure factor",
+            "probability",
+            "likelihood",
+            "impact"
           ],
           "questionIds": [
             "mcq-5-008",
@@ -2192,7 +2309,12 @@
           "lessonId": "lesson-3-2",
           "lessonTerms": [
             "risk tolerance",
-            "risk appetite"
+            "risk appetite",
+            "risk threshold",
+            "expansionary",
+            "conservative",
+            "neutral",
+            "risk owner"
           ],
           "questionIds": [
             "mcq-5-014"
@@ -2293,7 +2415,8 @@
             "master service agreement",
             "statement of work",
             "non-disclosure agreement",
-            "business partners agreement"
+            "business partners agreement",
+            "work order"
           ],
           "questionIds": [
             "mcq-5-016",
@@ -2330,7 +2453,8 @@
             "compliance reporting",
             "fines",
             "sanctions",
-            "reputational damage"
+            "reputational damage",
+            "contractual impacts"
           ],
           "questionIds": [
             "mcq-5-022",
@@ -2343,7 +2467,9 @@
           "lessonId": "lesson-3-2",
           "lessonTerms": [
             "due diligence",
-            "attestation"
+            "attestation",
+            "internal and external",
+            "automation"
           ],
           "questionIds": [
             "mcq-5-015"
@@ -2359,7 +2485,10 @@
             "controller",
             "processor",
             "right to be forgotten",
-            "data inventory and retention"
+            "data inventory and retention",
+            "local/regional",
+            "national",
+            "global"
           ],
           "questionIds": [
             "mcq-5-025",
@@ -2404,7 +2533,8 @@
             "audit committee",
             "self-assessments",
             "regulatory",
-            "independent third-party"
+            "independent third-party",
+            "examinations"
           ],
           "questionIds": [
             "mcq-5-032",
@@ -2441,7 +2571,9 @@
             "unknown environment",
             "reconnaissance",
             "passive",
-            "active"
+            "active",
+            "physical",
+            "partially known environment"
           ],
           "questionIds": [
             "mcq-5-029",
@@ -2504,7 +2636,8 @@
           "lessonId": "lesson-3-2",
           "lessonTerms": [
             "password management",
-            "removable media"
+            "removable media",
+            "cables"
           ],
           "questionIds": [
             "mcq-5-037"
@@ -2527,7 +2660,11 @@
           "label": "Reporting and monitoring (initial, recurring) and program development/execution",
           "lessonId": "lesson-3-2",
           "lessonTerms": [
-            "reporting and monitoring"
+            "reporting and monitoring",
+            "initial",
+            "recurring",
+            "development",
+            "execution"
           ],
           "questionIds": [
             "mcq-5-039",

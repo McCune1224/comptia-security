@@ -102,7 +102,7 @@
       "objective": "1.1",
       "format": "standard",
       "prompt": "Which TWO controls are correctly classified? (Select TWO.)",
-      "context": "A financial institution deploys the following controls: (1) mantrap with badge + PIN + weight sensor, (2) DLP agent blocking credit-card data, (3) quarterly security-awareness training, (4) security guard at lobby desk. A financial institution deploys the following controls: (1) A mantrap at the entrance to the vault area that requires badge + PIN + weight sensor verification. (2) A data-loss prevention agent on all endpoints that blocks credit-card numbers from being emailed. (3) Quarterly security-awareness training for all employees. (4) A security guard who checks badges at the lobby desk.",
+      "context": "A financial institution deploys the following controls: (1) A mantrap at the entrance to the vault area that requires badge + PIN + weight sensor verification. (2) A data-loss prevention agent on all endpoints that blocks credit-card numbers from being emailed. (3) Quarterly security-awareness training for all employees. (4) A security guard who checks badges at the lobby desk.",
       "kind": "multiple-choice",
       "options": [
         {
@@ -172,11 +172,11 @@
         {
           "id": "b",
           "text": "Corrective and Detective",
-          "rationale": "Restoring from backup corrects the corruption (corrective). Transaction logs that detect future corruption (by comparing states) are detective. However, the transaction logs in this scenario are used for rollback, which is corrective, not detective."
+          "rationale": "Restoring from backup is corrective. Transaction logs used for rollback are also corrective, not detective — the logs repair the database rather than merely reporting that something changed."
         },
         {
           "id": "c",
-          "text": "Corrective and Corrective — both transaction log rollback and backup recovery restore data",
+          "text": "Corrective and corrective — both transaction-log rollback and backup recovery restore data",
           "rationale": "Restoring from backup repairs the existing damage (corrective). Transaction-log rollback also repairs corruption by reverting to a known-good state (corrective). Both fix problems after they occur."
         },
         {
@@ -189,7 +189,7 @@
         "c"
       ],
       "selectCount": 1,
-      "explanation": "Restoring from backup is a corrective control — it repairs damage after it occurs. Transaction-log rollback is also corrective — it allows reverting the database to a consistent state after corruption. The scenario deliberately tries to confuse by making the transaction log seem detective, but since it is used for rollback (correction), it is corrective. Controls are classified by their primary purpose, not by the tool name.",
+      "explanation": "Restoring from backup is a corrective control because it repairs damage after it occurs. Transaction-log rollback is also corrective because it reverts the database to a consistent state after corruption. The scenario names two corrective controls applied to the same incident, which is why the pairing is corrective and corrective.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -210,45 +210,34 @@
       "format": "standard",
       "prompt": "A small business uses a syslog server with alerts (instead of commercial SIEM) and a login warning banner. A small business cannot afford a commercial SIEM solution. Instead, the IT administrator configures a centralized syslog server that collects logs from all network devices and sets up automated email alerts for critical events. The administrator also posts a warning banner on the login screen stating, 'Unauthorized access is prohibited and will be prosecuted.' Which TWO control types are being used? (Select TWO.)",
       "context": null,
-      "kind": "multiple-choice",
+      "kind": "single-choice",
       "options": [
         {
           "id": "a",
-          "text": "The syslog server with alerts is a detective control because it identifies potential incidents after they occur.",
-          "rationale": "Log collection and alerting identify suspicious activity — this is detective. It reveals what happened."
+          "text": "The syslog server with alerts is a detective control, and the warning banner is a deterrent control",
+          "rationale": "Log aggregation with alerting finds suspicious activity after the fact (detective). A banner that threatens prosecution discourages intruders without blocking them (deterrent)."
         },
         {
           "id": "b",
-          "text": "The syslog server is a compensating control because it provides SIEM-like detection at lower cost.",
-          "rationale": "The company substitutes a syslog server for a commercial SIEM (which they cannot afford). This is the textbook definition of a compensating control — an alternative measure that achieves the same security objective."
+          "text": "The syslog server is a preventive control, and the warning banner is a directive control",
+          "rationale": "A syslog server does not block activity, so it is not preventive. A banner guides behavior, but its security purpose here is deterrence."
         },
         {
           "id": "c",
-          "text": "The warning banner is a preventive control because it blocks unauthorized users.",
-          "rationale": "A warning banner does not technically block anyone — it informs, which is primarily a deterrent control."
+          "text": "Both are detective controls",
+          "rationale": "A warning banner does not detect anything; it discourages and guides. Only the syslog server with alerts is detective."
         },
         {
           "id": "d",
-          "text": "The warning banner is a deterrent control because it discourages unauthorized access by threatening prosecution.",
-          "rationale": "Warning banners deter intruders by informing them of consequences — they do not prevent access but discourage it."
-        },
-        {
-          "id": "e",
-          "text": "The syslog server is a corrective control because it fixes log data after incidents.",
-          "rationale": "Log collection does not fix anything; it records events. Corrective controls repair damage."
-        },
-        {
-          "id": "f",
-          "text": "The warning banner is a directive control because it tells users what behavior is expected.",
-          "rationale": "While banners have a directive element, their primary security purpose in this context is deterrence through threat of prosecution."
+          "text": "Both are corrective controls",
+          "rationale": "Neither control restores a system after an incident. Corrective controls include backups and patch rollback."
         }
       ],
       "correctOptionIds": [
-        "b",
-        "d"
+        "a"
       ],
-      "selectCount": 2,
-      "explanation": "The syslog server substitutes for an unaffordable commercial SIEM — this is a compensating control (alternative control achieving equivalent protection). The warning banner threatens prosecution — this is a deterrent control (discourages violations). Option (a) is true about detection but (b) is more precise: the syslog server is specifically a compensating control because it is a substitute, not a standard implementation. Option (c) confuses deterrent with preventive. Options (e) and (f) misclassify the controls.",
+      "selectCount": 1,
+      "explanation": "The syslog server collects logs and alerts on critical events, which is detective. The warning banner discourages unauthorized access by threatening prosecution, which is deterrent. The server also substitutes for an unaffordable SIEM, so a compensating role is present, but the unambiguous pairing is detective plus deterrent.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -513,7 +502,7 @@
       "domain": 1,
       "objective": "1.2",
       "format": "standard",
-      "prompt": "A user receives a payroll direct deposit that is $237.18 more than their usual amount. The accounting department investigates and discovers that a threat actor modified three fields in the payroll database: the employee's hourly rate, the overtime multiplier, and the tax-withholding code. The database checksums for those records still match the stored values because the actor updated both the data and the checksums simultaneously. Which element of the CIA triad was primarily compromised, and which control would have prevented this?",
+      "prompt": "A user receives a payroll direct deposit that is $237.18 more than their usual amount. The accounting department investigates and discovers that a threat actor modified three fields in the payroll database: the employee's hourly rate, the overtime multiplier, and the tax-withholding code. The database checksums for those records still match the stored values because the actor updated both the data and the checksums simultaneously. Which element of the CIA triad was primarily compromised, and which control would have detected the unauthorized change?",
       "context": "A threat actor modifies payroll database fields (hourly rate, overtime multiplier, tax-withholding code) and updates checksums to match. The change was not detected until a user noticed an incorrect payment.",
       "kind": "single-choice",
       "options": [
@@ -1271,7 +1260,7 @@
         {
           "id": "f",
           "text": "Competitor-sponsored",
-          "rationale": "A competitor could fund IP theft, but the sophisticated techniques suggest a well-resourced actor."
+          "rationale": "A competitor benefits commercially from stolen design data, but Security+ groups commercial IP theft under nation-state or organized-crime actors. It is the second-best fit here and is keyed alongside nation-state."
         }
       ],
       "correctOptionIds": [
@@ -1279,7 +1268,7 @@
         "f"
       ],
       "selectCount": 2,
-      "explanation": "Watering hole attacks and encrypted DNS tunnels are sophisticated techniques. Targeting CAD files suggests industrial espionage. Nation-state actors (a) often conduct industrial espionage, and competitor-sponsored actors (f) may fund such operations.",
+      "explanation": "Watering-hole attacks, encrypted DNS tunnels, and patient, low-noise exfiltration of CAD designs point to a resourceful actor conducting industrial espionage: a nation-state APT is the strongest single answer, and a commercially motivated competitor-sponsored actor is the next most consistent. Organized crime is financially motivated but typically uses ransomware, insiders already hold access, hacktivists seek publicity, and Shadow IT is not an external actor.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -1357,7 +1346,7 @@
       "domain": 2,
       "objective": "2.1",
       "format": "standard",
-      "kind": "multiple-choice",
+      "kind": "single-choice",
       "prompt": "An organization experiences two incidents simultaneously. Incident A: A government embassy website is defaced with protest messages, and internal emails are leaked to the press. Incident B: A hospital's patient database is encrypted, and attackers demand 50 bitcoin. Which TWO threat actor types MOST likely correspond to these incidents? (Select TWO.)",
       "context": "Two incidents: embassy defacement with email leaks, and hospital ransomware demanding 50 bitcoin.",
       "options": [
@@ -1378,25 +1367,14 @@
         },
         {
           "id": "d",
-          "text": "Incident A is insider threat; Incident B is nation-state",
-          "rationale": "An insider could leak emails, but embassy defacement suggests an external group. Nation-states focus on espionage, not hospital ransomware."
-        },
-        {
-          "id": "e",
-          "text": "Both incidents were nation-state sponsored",
-          "rationale": "Nation-states avoid attention-grabbing defacements and do not conduct random ransomware against domestic hospitals."
-        },
-        {
-          "id": "f",
           "text": "Both incidents are likely from the same threat actor",
-          "rationale": "The motivations and methods are completely different — these are almost certainly unrelated threat actors."
+          "rationale": "The motivations and methods are completely different, so the two incidents are almost certainly unrelated attackers."
         }
       ],
       "correctOptionIds": [
-        "a",
-        "f"
+        "a"
       ],
-      "selectCount": 2,
+      "selectCount": 1,
       "explanation": "Incident A (defacement, political leaks) is hacktivist. Incident B (ransomware demanding bitcoin) is organized crime. These are unrelated attackers with different motivations.",
       "sourceRefs": [
         {
@@ -1652,36 +1630,42 @@
       "domain": 2,
       "objective": "2.2",
       "format": "standard",
-      "kind": "single-choice",
+      "kind": "multiple-choice",
       "prompt": "A user receives a voicemail claiming to be from IT, stating their account will be disabled unless they call back and provide their domain password. The caller ID shows the company's support number. What attack type is this?",
       "context": "Voicemail impersonating IT support demanding domain password under threat of account disablement, with spoofed caller ID.",
       "options": [
         {
           "id": "a",
-          "text": "Phishing",
-          "rationale": "Phishing is email-based. This uses voice communication."
+          "text": "The caller spoofed an internal number to impersonate the IT help desk",
+          "rationale": "Vishing relies on voice-call impersonation. A spoofed internal number is a classic vishing indicator."
         },
         {
           "id": "b",
-          "text": "Vishing",
-          "rationale": "Vishing (voice phishing) uses phone calls or voicemail to trick victims into revealing information. The spoofed caller ID is a classic vishing technique."
+          "text": "The caller used urgency and a threat of account lockout to force a fast decision",
+          "rationale": "Manufactured urgency and consequences are core social-engineering pressure tactics, and they are reported through a voice channel here."
         },
         {
           "id": "c",
-          "text": "Smishing",
-          "rationale": "Smishing uses SMS text messages, not voice calls."
+          "text": "The message arrived as an email attachment",
+          "rationale": "No email or attachment is involved. The contact happened over a phone call."
         },
         {
           "id": "d",
-          "text": "Pretexting",
-          "rationale": "Pretexting is the broader technique, but vishing is the specific attack type when delivered by phone."
+          "text": "The caller used a lookalike domain to trick the user",
+          "rationale": "Typosquatting is a domain-based trick. This scenario involves a phone call, not a web address."
+        },
+        {
+          "id": "e",
+          "text": "The employee was targeted through a compromised third-party website",
+          "rationale": "Nothing in the scenario involves a watering-hole or supply-chain compromise."
         }
       ],
       "correctOptionIds": [
+        "a",
         "b"
       ],
-      "selectCount": 1,
-      "explanation": "Vishing (voice phishing) uses phone calls or voicemail. The 'v' stands for voice. Security+ distinguishes phishing (email), vishing (voice), and smishing (SMS).",
+      "selectCount": 2,
+      "explanation": "The attack is vishing: a voice call that impersonates IT and uses urgency plus a lockout threat to pressure the victim into acting quickly. No email, lookalike domain, or website compromise is involved.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -1825,7 +1809,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "50,000 attempts against one username is brute force. The attacker had the username from a data breach but not the password, so they tried many passwords until one succeeded.",
+      "explanation": "50,000 attempts against one account is brute force: many passwords tried against a single username. The username came from a breach but the password did not, so it is not credential stuffing (which replays known username/password pairs) or password spraying (few passwords across many accounts).",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -2797,7 +2781,7 @@
         "c"
       ],
       "selectCount": 1,
-      "explanation": "INetSim simulates internet services on a closed network, enabling the malware to attempt its full attack sequence including C2 callbacks and encrypted communication, while all traffic stays within the isolated analysis network. This is the industry-standard sandboxing technique for malware behavioral analysis.",
+      "explanation": "INetSim simulates internet services on an isolated network so the sample can attempt its full attack sequence — DNS resolution, C2 callbacks, encrypted communication — while all traffic stays contained. Removing the network adapter prevents C2 contact but also hides the network indicators the researcher needs to observe. A public sandbox may tip off the adversary and prevents local instrumentation.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -3440,7 +3424,7 @@
       "domain": 3,
       "objective": "3.1",
       "format": "standard",
-      "prompt": "A security architect is evaluating virtualization platforms for two use cases: (1) a bare-metal deployment consolidating six legacy servers onto a single host where the hypervisor must have direct hardware access with no host OS overhead, and (2) a developer workstation running multiple Linux distros for testing where the hypervisor runs on top of Windows 11. Which hypervisor types correspond to each use case? (Choose TWO.)",
+      "prompt": "A security architect is evaluating virtualization platforms for two use cases: (1) a bare-metal deployment consolidating six legacy servers onto a single host where the hypervisor must have direct hardware access with no host OS overhead, and (2) a developer workstation running multiple Linux distros for testing where the hypervisor runs on top of Windows 11. Which hypervisor types correspond to each use case?",
       "context": "Two virtualization use cases: (1) production server consolidation requiring direct hardware access with no underlying OS, and (2) a developer workstation running multiple test VMs on top of Windows 11.",
       "kind": "single-choice",
       "options": [
@@ -3469,7 +3453,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "Type 1 (bare-metal) hypervisors like VMware ESXi or Hyper-V Server run directly on hardware with no host OS, maximizing performance for server consolidation. Type 2 (hosted) hypervisors like VMware Workstation or VirtualBox run as applications on an existing OS, appropriate for developer workstations. The question tests understanding that 'type' refers to architecture, not a numbering scheme.",
+      "explanation": "Type 1 (bare-metal) hypervisors such as VMware ESXi or Hyper-V Server run directly on hardware with no host OS, giving maximum performance for server consolidation. Type 2 (hosted) hypervisors such as VMware Workstation or VirtualBox run as applications on an existing OS, which suits a developer workstation. Containers share the host kernel and cannot run guest kernels of different Linux distributions, and embedded hypervisors are firmware-based devices.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -3548,7 +3532,7 @@
         {
           "id": "b",
           "text": "Lack of network segmentation between IT and OT",
-          "rationale": "The scenario states the OT network IS isolated with an air gap. The problem is that a contractor bypassed that isolation, not that segmentation doesn't exist."
+          "rationale": "The OT network is described as isolated, so lack of segmentation is not the issue; the failure was that the isolation was bypassed by a direct physical connection."
         },
         {
           "id": "c",
@@ -3632,7 +3616,7 @@
       "domain": 3,
       "objective": "3.1",
       "format": "standard",
-      "prompt": "A hospital network uses traditional networking where each switch and router makes independent forwarding decisions. The security team wants to implement microsegmentation so that the MRI imaging systems can ONLY talk to the PACS server on port 389, and the PACS server can ONLY accept connections from imaging systems — enforced centrally, not per-device ACLs. Which architecture change is required?",
+      "prompt": "A hospital network uses traditional networking where each switch and router makes independent forwarding decisions. The security team wants to implement microsegmentation so that the MRI imaging systems can ONLY talk to the PACS server on port 104, and the PACS server can ONLY accept connections from imaging systems — enforced centrally, not per-device ACLs. Which architecture change is required?",
       "context": "A hospital wants microsegmentation with centrally enforced policies between MRI imaging systems and a PACS server, currently using traditional distributed routing decisions.",
       "kind": "single-choice",
       "options": [
@@ -3757,7 +3741,7 @@
         "c"
       ],
       "selectCount": 1,
-      "explanation": "VMs virtualize hardware with a hypervisor, each running its own OS kernel — providing hardware-enforced isolation. Containers virtualize the OS, sharing the host kernel via namespaces (process isolation) and cgroups (resource limits). Container breakout typically requires fewer privileges than VM escape because the kernel attack surface is shared.",
+      "explanation": "VMs virtualize hardware under a hypervisor, so each guest runs its own kernel and the isolation boundary is enforced in hardware (with EPT/SLAT). Containers share the host kernel and isolate at the process level using namespaces and cgroups, which makes breakout easier than VM escape because the shared kernel and its syscalls are a larger attack surface.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -3857,7 +3841,7 @@
         "b"
       ],
       "selectCount": 1,
-      "explanation": "Unidirectional traffic is a core DMZ security principle. The DMZ initiates connections inward to request data, but internal systems never initiate connections outward to the DMZ. This prevents lateral movement: if an attacker compromises the DMZ web server, they cannot use it to connect back to internal systems because return connections are blocked.",
+      "explanation": "Traffic is allowed only in the direction the service requires: the less-trusted DMZ may initiate toward the trusted zone, but the trusted zone never initiates back toward the DMZ. This default-deny, one-way design prevents a compromised DMZ host from pivoting inward. Stateful inspection tracks sessions, egress filtering inspects outbound content, and defense in depth is a broader layering strategy — none is the directional rule described.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -3907,8 +3891,8 @@
         },
         {
           "id": "f",
-          "text": "NGFW for requirement 1; packet-filtering firewall for requirement 2",
-          "rationale": "NGFW matches req 1. Packet-filtering firewalls check header fields (IP, port, protocol) per-packet with no state tracking and minimal overhead — the correct match for req 2."
+          "text": "Proxy firewall for requirement 1; NGFW for requirement 2",
+          "rationale": "A proxy firewall terminates and re-establishes connections (stateful, high overhead) and lacks the integrated IPS and VPN termination requirement 1 needs. An NGFW is overkill and adds latency to the isolated SCADA network in requirement 2."
         }
       ],
       "correctOptionIds": [
@@ -4119,7 +4103,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "A honeypot is a decoy system designed to attract attackers. It mimics legitimate services and provides early warning of reconnaissance. Placing it in the DMZ ensures it's reachable from the internet but isolated from production systems. Using slow handshakes and realistic banners is a common honeypot technique (e.g., using Cowrie or Dionaea) to engage attackers and buy time for detection.",
+      "explanation": "A honeypot is a decoy system that mimics real services to attract and observe attackers and provide early warning of reconnaissance. Placing it in the DMZ keeps it reachable from the internet while isolating it from production systems. An IDS is passive monitoring, a honeynet is a network of multiple honeypots, and honeytokens are fake data records inside real systems.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -4293,8 +4277,8 @@
         },
         {
           "id": "b",
-          "text": "Internal, Confidential, Restricted, Public, Internal",
-          "rationale": "Customer names/emails qualify as Internal (business-use data but not highly sensitive). Encrypted backups are Confidential. Salaries with SSNs are Restricted — the highest sensitivity. Marketing brochures are intentionally Public. VoIP metadata is Internal — useful for business but not sensitive enough for Confidential."
+          "text": "Confidential, Confidential, Restricted, Public, Internal",
+          "rationale": "Customer names/emails are PII and belong at Confidential. Encrypted backups are Confidential. Salaries with SSNs are Restricted, the highest sensitivity. Marketing brochures are Public. Internal VoIP metadata is Internal."
         },
         {
           "id": "c",
@@ -4311,7 +4295,7 @@
         "b"
       ],
       "selectCount": 1,
-      "explanation": "Standard classification: Public (no access restrictions, intended for public consumption), Internal (business-use data that shouldn't be public but isn't highly sensitive), Confidential (sensitive data requiring protection, e.g., PII, financial records, backups), Restricted (highly sensitive data with severe impact if disclosed, e.g., SSNs, trade secrets). Customer names/emails are PII but alone are typically Internal-to-Confidential. SSNs are Restricted. Marketing materials are Public. Backups inherit the classification of their contents.",
+      "explanation": "Standard classification: Public (no access restrictions, intended for public consumption), Internal (business-use data that should not be public but is not highly sensitive), Confidential (sensitive data requiring protection, e.g., PII, financial records, backups), Restricted (highly sensitive data with severe impact if disclosed, e.g., SSNs, trade secrets). Customer names/emails are PII and belong at Confidential. SSNs are Restricted. Marketing materials are Public. Backups inherit the classification of their contents.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -4850,7 +4834,7 @@
         "b"
       ],
       "selectCount": 1,
-      "explanation": "The 3-2-1 rule: three total copies, two different media types, one offsite. Local disk (copy 1, medium 1), offsite tape vault (copy 2, medium 2, offsite), georedundant copy (copy 3). The fire destroying the primary + same-room NAS violated the 3-2-1 rule — both copies were on the same medium (disk) in the same location.",
+      "explanation": "The 3-2-1 rule requires three copies of the data, on two different media types, with at least one copy offsite. The new design has local disk (copy 1), offsite tape (copy 2 on a second medium), and a geographic replica (copy 3). The original design failed the rule because the primary and its only backup sat in the same room on the same medium.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -4904,7 +4888,7 @@
         "c"
       ],
       "selectCount": 2,
-      "explanation": "Daily incremental backups minimize storage (each captures only the previous day's changes) while weekly fulls provide a clean restore baseline. Transaction log backups every 15 minutes enable point-in-time recovery to any moment within the 24-hour window — essential for compliance scenarios where even a few minutes of data loss is unacceptable. Note: the 'daily' incrementals + 15-minute log shipping is the standard approach.",
+      "explanation": "Daily incrementals capture only changes since the previous backup, so total storage stays small, while 15-minute transaction-log backups let the database be replayed to any moment within the day — point-in-time recovery. Differentials grow larger each day and only restore to the time of the backup, and nightly fulls waste storage and bandwidth.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -5264,13 +5248,13 @@
       "objective": "4.1",
       "format": "standard",
       "prompt": "Why did the six servers revert to weaker TLS settings even though the GPO is linked and enforced?",
-      "context": "After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings three weeks later. Group Policy confirms the GPO is still linked and enforced.",
+      "context": "After applying a Windows Server hardening baseline via GPO, six servers have reverted to weaker TLS settings three weeks later. Group Policy confirms the GPO is linked and has the Enforced setting applied.",
       "kind": "single-choice",
       "options": [
         {
           "id": "a",
-          "text": "A local administrator used Local Group Policy Editor to modify the TLS settings, overriding the domain GPO",
-          "rationale": "Local Group Policy can override domain GPO settings if the domain GPO is not set to 'Enforced'."
+          "text": "A local administrator changed the TLS settings with the Local Group Policy Editor, and the servers' local policy takes precedence in this scenario",
+          "rationale": "Local Group Policy Objects are normally overridden by domain GPOs, but local settings can win when they are written directly to the local registry or when the domain GPO does not manage that specific value. Precedence must be verified and local GPO processing restricted."
         },
         {
           "id": "b",
@@ -5292,7 +5276,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "Local Group Policy can override domain-level GPO settings if the domain policy is not enforced. Domain GPOs should be set to 'Enforced' and Local Group Policy should be restricted via the 'Turn off Local Group Policy Objects processing' setting.",
+      "explanation": "Group Policy normally reapplies at every refresh, so a reverted setting points to a competing configuration source writing the same values. Local Group Policy or direct registry edits on the host are the usual culprits; the fix is to restrict local GPO processing and confirm the domain GPO actually manages the TLS registry values. Windows Update, reboots, and antivirus do not override Group Policy security settings.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -5616,7 +5600,7 @@
     {
       "id": "mcq-4-010",
       "domain": 4,
-      "objective": "4.2",
+      "objective": "4.4",
       "format": "standard",
       "prompt": "A Windows server shows 500 failed logon attempts (Event ID 4625) from a single IP address within 10 minutes, followed by a successful logon (Event ID 4624) with Logon Type 3 from the same IP. Which conclusion is MOST accurate?",
       "context": "A Windows server shows 500 Event ID 4625 failures from one IP, then one Event ID 4624 success from the same IP with Logon Type 3.",
@@ -6109,7 +6093,7 @@
         "d"
       ],
       "selectCount": 2,
-      "explanation": "Full automation is appropriate when: the indicator is highly reliable, the action is reversible or low-risk, and speed is critical. Actions with potential business disruption typically require human approval.",
+      "explanation": "Full automation is appropriate when the signal is high-confidence and the action is low-regret. Isolation of a host confirmed to be talking to known C2 infrastructure and quarantine of a file detected by multiple independent engines both meet that bar. Failed-login bursts, dark-web credential matches, generic parent-child process alerts, and disk-space warnings are each too ambiguous or too broad to act on without human review.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -7165,8 +7149,8 @@
       "options": [
         {
           "id": "a",
-          "text": "Demonstrative evidence — testimony — real evidence: all three are admissible forms of evidence in the trial",
-          "rationale": "Printed log is demonstrative (visual aid), expert testimony is testimonial (sworn statement), hard drive is real evidence (physical object)."
+          "text": "Documentary — testimonial — real: the log is a written record, the expert statement is testimonial, and the drive is the physical object",
+          "rationale": "A printed log is documentary evidence (a writing or record), expert testimony is testimonial evidence (a sworn statement), and the original hard drive is real evidence (a physical object)."
         },
         {
           "id": "b",
@@ -7188,7 +7172,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "Four evidence types: Real (physical objects), Documentary (writings/records), Demonstrative (visual aids), Testimonial (sworn statements). Understanding classification is critical for admissibility.",
+      "explanation": "Evidence is classified by its form: real evidence is a physical object (the hard drive), documentary evidence is a writing or record (the printed log), demonstrative evidence illustrates testimony (a chart or diagram), and testimonial evidence is a sworn statement (the expert witness). The printed log is therefore documentary, not demonstrative.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -7774,7 +7758,7 @@
       ],
       "selectCount": 2,
       "hint": "The complaint is about legitimate users being turned away, not about impostors getting in; look for changes that help the first without helping the second.",
-      "explanation": "Enrolling multiple fingerprints (c) reduces false rejections without weakening the match threshold, and tuning to the crossover error rate (d) balances false accepts against false rejects instead of over-optimizing one. Lowering the threshold to accept a wider range (a) raises the false acceptance rate, raising the threshold (b) increases false rejections, and requiring two scans (e) doubles the failure opportunity; removing biometrics (f) discards the inherence factor entirely.",
+      "explanation": "False rejection rate (FRR) is the share of legitimate users who are wrongly refused; false acceptance rate (FAR) is the share of impostors wrongly admitted. Enrolling several fingerprints per user gives genuine users a fallback without loosening the match threshold, and tuning to the crossover error rate balances FAR against FRR instead of over-optimising one. Lowering the threshold would raise FAR, raising it would worsen FRR, and removing the biometric factor discards inherence entirely.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -10112,7 +10096,7 @@
       "domain": 1,
       "objective": "1.1",
       "format": "standard",
-      "prompt": "A security analyst reviews alerts and notices that the intrusion detection system generated 40 alerts overnight, of which 3 were confirmed true positives. The analyst opens a ticket for each alert, investigates, and documents the outcome. In this workflow, the analyst's review and documentation activity itself is BEST classified as which control type?",
+      "prompt": "An analyst reviews 40 IDS alerts overnight, confirms 3 are true positives, opens a ticket for each, investigates, and documents the outcome. Within the control framework, which control type do the IDS and the analyst's triage together represent?",
       "context": "An analyst reviews 40 IDS alerts, confirms 3 true positives, opens tickets, investigates, and documents outcomes.",
       "kind": "single-choice",
       "options": [
@@ -10141,7 +10125,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "Detective controls identify and document security events. Log review, alert triage, and audit analysis are detective activities; they discover incidents that prevention missed. The IDS is the technical detective control and the analyst review is the operational detective process.",
+      "explanation": "Detective controls identify and document security events. The IDS is the technical detective control and the analyst's triage, ticketing, and documentation are the operational detective process that follows it. Prevention would stop the event, correction would restore a system, and deterrence would discourage the attacker; none of those describes reviewing alerts after the fact.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -15576,7 +15560,7 @@
       ],
       "selectCount": 1,
       "hint": "Recovery that replays committed work without relying on a backup depends on a record written before the change is made final. Think about the mechanism that logs each transaction's intent ahead of the data update.",
-      "explanation": "A write-ahead journal records each transaction's changes to a log before the transaction is committed, so after a crash the database can replay (redo) committed transactions and roll back (undo) incomplete ones — no backup is required. Replication, point-in-time snapshots, and ECC memory do not provide this redo/undo capability. Filesystems use the same journaling principle to protect metadata during sudden power loss.",
+      "explanation": "A write-ahead journal records each transaction's changes to durable storage before the commit, so after a crash the database replays committed work (redo) and rolls back incomplete work (undo) without restoring a backup. Replication keeps a current copy elsewhere, a snapshot restores a point-in-time copy and loses later commits, and ECC memory corrects transient RAM bit flips — none provides redo/undo crash recovery.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -16914,30 +16898,30 @@
       "options": [
         {
           "id": "a",
-          "text": "MTTR",
-          "rationale": "MTTR does not match the definition given."
+          "text": "Authorization",
+          "rationale": "Authorization grants or denies access to a resource based on the authenticated identity. It follows authentication and decides what the proven identity may do."
         },
         {
           "id": "b",
-          "text": "SaaS",
-          "rationale": "SaaS does not match the definition given."
+          "text": "Identification",
+          "rationale": "Identification is the act of claiming an identity before it is proven. Authorization happens after authentication and decides what the proven identity may access."
         },
         {
           "id": "c",
-          "text": "Authorization",
-          "rationale": "Authorization is the term that matches this definition."
+          "text": "Accounting",
+          "rationale": "Accounting logs and tracks user activity for auditing. It does not grant or deny access."
         },
         {
           "id": "d",
-          "text": "DevSecOps",
-          "rationale": "DevSecOps does not match the definition given."
+          "text": "Authentication",
+          "rationale": "Authentication verifies that a claimed identity is genuine. It answers 'who are you', while authorization decides what you may access."
         }
       ],
       "correctOptionIds": [
-        "c"
+        "a"
       ],
       "selectCount": 1,
-      "explanation": "Authorization: The process of granting or denying access to a resource based on the authenticated identity.",
+      "explanation": "Authorization is the process of granting or denying access to a resource based on an authenticated identity. Authentication proves identity; authorization decides what the proven identity may do; accounting records what was done.",
       "hint": "Consider the Security+ objective 1.1 concept that fits this description.",
       "sourceRefs": [
         {
@@ -17376,7 +17360,7 @@
     {
       "id": "mcq-1-065",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"An encryption method that uses a single shared secret key for both encryption and decryption.\"?",
@@ -17423,7 +17407,7 @@
     {
       "id": "mcq-1-066",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"An encryption method that uses a public and private key pair for encryption and decryption.\"?",
@@ -17470,7 +17454,7 @@
     {
       "id": "mcq-1-067",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A one-way function that produces a fixed-length digest used to verify data integrity.\"?",
@@ -17517,7 +17501,7 @@
     {
       "id": "mcq-1-068",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A hash of a message encrypted with the sender's private key, providing integrity and non-repudiation.\"?",
@@ -17564,7 +17548,7 @@
     {
       "id": "mcq-1-069",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The system of hardware, software, and policies that manages digital certificates and public-key encryption.\"?",
@@ -17611,7 +17595,7 @@
     {
       "id": "mcq-1-070",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Adding random data to a password before hashing to defend against rainbow table attacks.\"?",
@@ -17844,9 +17828,9 @@
       ]
     },
     {
-      "id": "mcq-1-075",
-      "domain": 1,
-      "objective": "1.4",
+      "id": "mcq-5-127",
+      "domain": 5,
+      "objective": "5.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The EU General Data Protection Regulation governing the handling of personal data of EU residents.\"?",
@@ -17891,9 +17875,9 @@
       ]
     },
     {
-      "id": "mcq-1-076",
-      "domain": 1,
-      "objective": "1.4",
+      "id": "mcq-5-128",
+      "domain": 5,
+      "objective": "5.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Personally Identifiable Information: data that can be used on its own or with other data to identify a person.\"?",
@@ -17938,9 +17922,9 @@
       ]
     },
     {
-      "id": "mcq-1-077",
-      "domain": 1,
-      "objective": "1.4",
+      "id": "mcq-5-129",
+      "domain": 5,
+      "objective": "5.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Protected Health Information: medical and health data protected under HIPAA.\"?",
@@ -17987,7 +17971,7 @@
     {
       "id": "mcq-2-072",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malware that attaches to a host file and requires user action to spread.\"?",
@@ -18034,7 +18018,7 @@
     {
       "id": "mcq-2-073",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Self-replicating malware that spreads across networks without user interaction.\"?",
@@ -18081,7 +18065,7 @@
     {
       "id": "mcq-2-074",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malware disguised as legitimate software to trick users into installing it.\"?",
@@ -18128,7 +18112,7 @@
     {
       "id": "mcq-2-075",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malware that encrypts a victim's files and demands payment for the decryption key.\"?",
@@ -18175,7 +18159,7 @@
     {
       "id": "mcq-2-076",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malware that hides its presence by operating at a low level of the operating system, often the kernel.\"?",
@@ -18222,7 +18206,7 @@
     {
       "id": "mcq-2-077",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malware that secretly gathers information about a user's activity without consent.\"?",
@@ -18269,7 +18253,7 @@
     {
       "id": "mcq-2-078",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Remote Access Trojan: malware that gives an attacker covert control of an infected system.\"?",
@@ -18316,7 +18300,7 @@
     {
       "id": "mcq-2-079",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malicious code that triggers when a specific condition, such as a date, is met.\"?",
@@ -18363,7 +18347,7 @@
     {
       "id": "mcq-2-080",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A network of compromised machines controlled by an attacker, often used for DDoS or spam.\"?",
@@ -18410,7 +18394,7 @@
     {
       "id": "mcq-2-081",
       "domain": 2,
-      "objective": "2.1",
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Malware that resides in memory and uses legitimate system tools, leaving little on disk.\"?",
@@ -20100,53 +20084,6 @@
       ]
     },
     {
-      "id": "mcq-3-063",
-      "domain": 3,
-      "objective": "3.1",
-      "format": "standard",
-      "style": "recall",
-      "prompt": "Which security term is defined as: \"Transport Layer Security: a protocol that encrypts traffic in transit, succeeding SSL.\"?",
-      "kind": "single-choice",
-      "options": [
-        {
-          "id": "a",
-          "text": "SOX",
-          "rationale": "SOX does not match the definition given."
-        },
-        {
-          "id": "b",
-          "text": "Tailgating",
-          "rationale": "Tailgating does not match the definition given."
-        },
-        {
-          "id": "c",
-          "text": "Pretexting",
-          "rationale": "Pretexting does not match the definition given."
-        },
-        {
-          "id": "d",
-          "text": "TLS",
-          "rationale": "TLS is the term that matches this definition."
-        }
-      ],
-      "correctOptionIds": [
-        "d"
-      ],
-      "selectCount": 1,
-      "explanation": "TLS: Transport Layer Security: a protocol that encrypts traffic in transit, succeeding SSL.",
-      "hint": "Consider the Security+ objective 3.1 concept that fits this description.",
-      "sourceRefs": [
-        {
-          "source": "comptia",
-          "section": "3.1"
-        },
-        {
-          "source": "professor-messer",
-          "section": "SY0-701 3.1"
-        }
-      ]
-    },
-    {
       "id": "mcq-3-064",
       "domain": 3,
       "objective": "3.1",
@@ -20378,53 +20315,6 @@
         {
           "source": "professor-messer",
           "section": "SY0-701 3.1"
-        }
-      ]
-    },
-    {
-      "id": "mcq-3-069",
-      "domain": 3,
-      "objective": "3.2",
-      "format": "standard",
-      "style": "recall",
-      "prompt": "Which security term is defined as: \"A Virtual LAN that segments broadcast traffic logically rather than by physical wiring.\"?",
-      "kind": "single-choice",
-      "options": [
-        {
-          "id": "a",
-          "text": "Need to know",
-          "rationale": "Need to know does not match the definition given."
-        },
-        {
-          "id": "b",
-          "text": "MOU",
-          "rationale": "MOU does not match the definition given."
-        },
-        {
-          "id": "c",
-          "text": "Bastion host",
-          "rationale": "Bastion host does not match the definition given."
-        },
-        {
-          "id": "d",
-          "text": "VLAN",
-          "rationale": "VLAN is the term that matches this definition."
-        }
-      ],
-      "correctOptionIds": [
-        "d"
-      ],
-      "selectCount": 1,
-      "explanation": "VLAN: A Virtual LAN that segments broadcast traffic logically rather than by physical wiring.",
-      "hint": "Consider the Security+ objective 3.2 concept that fits this description.",
-      "sourceRefs": [
-        {
-          "source": "comptia",
-          "section": "3.2"
-        },
-        {
-          "source": "professor-messer",
-          "section": "SY0-701 3.2"
         }
       ]
     },
@@ -20792,53 +20682,6 @@
       ],
       "selectCount": 1,
       "explanation": "TACACS+: A Cisco protocol that separates authentication, authorization, and accounting and encrypts the whole session.",
-      "hint": "Consider the Security+ objective 3.3 concept that fits this description.",
-      "sourceRefs": [
-        {
-          "source": "comptia",
-          "section": "3.3"
-        },
-        {
-          "source": "professor-messer",
-          "section": "SY0-701 3.3"
-        }
-      ]
-    },
-    {
-      "id": "mcq-3-078",
-      "domain": 3,
-      "objective": "3.3",
-      "format": "standard",
-      "style": "recall",
-      "prompt": "Which security term is defined as: \"A network authentication protocol that uses tickets and a trusted key distribution center.\"?",
-      "kind": "single-choice",
-      "options": [
-        {
-          "id": "a",
-          "text": "Trojan",
-          "rationale": "Trojan does not match the definition given."
-        },
-        {
-          "id": "b",
-          "text": "NIDS",
-          "rationale": "NIDS does not match the definition given."
-        },
-        {
-          "id": "c",
-          "text": "MOU",
-          "rationale": "MOU does not match the definition given."
-        },
-        {
-          "id": "d",
-          "text": "Kerberos",
-          "rationale": "Kerberos is the term that matches this definition."
-        }
-      ],
-      "correctOptionIds": [
-        "d"
-      ],
-      "selectCount": 1,
-      "explanation": "Kerberos: A network authentication protocol that uses tickets and a trusted key distribution center.",
       "hint": "Consider the Security+ objective 3.3 concept that fits this description.",
       "sourceRefs": [
         {
@@ -21747,7 +21590,7 @@
     {
       "id": "mcq-4-093",
       "domain": 4,
-      "objective": "4.1",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The incident response phase that builds the team, tools, and plans before an event occurs.\"?",
@@ -21794,7 +21637,7 @@
     {
       "id": "mcq-4-094",
       "domain": 4,
-      "objective": "4.1",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The incident response phase that detects and confirms that an event is occurring.\"?",
@@ -21841,7 +21684,7 @@
     {
       "id": "mcq-4-095",
       "domain": 4,
-      "objective": "4.1",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The incident response phase that limits the scope and impact of an incident.\"?",
@@ -21888,7 +21731,7 @@
     {
       "id": "mcq-4-096",
       "domain": 4,
-      "objective": "4.1",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The incident response phase that removes the root cause and attacker presence.\"?",
@@ -21935,7 +21778,7 @@
     {
       "id": "mcq-4-097",
       "domain": 4,
-      "objective": "4.1",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The incident response phase that restores systems to normal operations and validates integrity.\"?",
@@ -21982,7 +21825,7 @@
     {
       "id": "mcq-4-098",
       "domain": 4,
-      "objective": "4.1",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The final incident response phase that reviews the event and improves future response.\"?",
@@ -22029,7 +21872,7 @@
     {
       "id": "mcq-4-099",
       "domain": 4,
-      "objective": "4.2",
+      "objective": "4.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A standard protocol for sending and collecting system log messages, often to a central server.\"?",
@@ -22076,7 +21919,7 @@
     {
       "id": "mcq-4-100",
       "domain": 4,
-      "objective": "4.2",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A documented, unbroken record of who handled evidence and when, preserving its integrity.\"?",
@@ -22123,7 +21966,7 @@
     {
       "id": "mcq-4-101",
       "domain": 4,
-      "objective": "4.2",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A directive to preserve relevant data and suspend deletion during litigation or investigation.\"?",
@@ -22170,7 +22013,7 @@
     {
       "id": "mcq-4-102",
       "domain": 4,
-      "objective": "4.2",
+      "objective": "4.8",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The process of identifying, collecting, and producing electronic evidence for legal matters.\"?",
@@ -22217,7 +22060,7 @@
     {
       "id": "mcq-4-103",
       "domain": 4,
-      "objective": "4.3",
+      "objective": "4.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Data Loss Prevention: controls that detect and block exfiltration of sensitive data.\"?",
@@ -22264,7 +22107,7 @@
     {
       "id": "mcq-4-104",
       "domain": 4,
-      "objective": "4.3",
+      "objective": "4.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Network Access Control: enforces policy on devices before allowing them onto the network.\"?",
@@ -22311,7 +22154,7 @@
     {
       "id": "mcq-4-105",
       "domain": 4,
-      "objective": "4.3",
+      "objective": "4.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"User and Entity Behavior Analytics: baselines behavior to flag anomalous insider or compromised activity.\"?",
@@ -22358,7 +22201,7 @@
     {
       "id": "mcq-4-106",
       "domain": 4,
-      "objective": "4.3",
+      "objective": "4.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Network Intrusion Detection System: monitors traffic for suspicious patterns and alerts.\"?",
@@ -22405,7 +22248,7 @@
     {
       "id": "mcq-4-107",
       "domain": 4,
-      "objective": "4.3",
+      "objective": "4.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Network Intrusion Prevention System: monitors traffic and actively blocks detected intrusions.\"?",
@@ -22452,7 +22295,7 @@
     {
       "id": "mcq-4-108",
       "domain": 4,
-      "objective": "4.4",
+      "objective": "4.6",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Role-Based Access Control: grants permissions based on a user's assigned role.\"?",
@@ -22499,7 +22342,7 @@
     {
       "id": "mcq-4-109",
       "domain": 4,
-      "objective": "4.4",
+      "objective": "4.6",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Attribute-Based Access Control: grants access using policies over user, resource, and environment attributes.\"?",
@@ -22546,7 +22389,7 @@
     {
       "id": "mcq-4-110",
       "domain": 4,
-      "objective": "4.4",
+      "objective": "4.6",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Mandatory Access Control: the system enforces access based on fixed labels, not user choice.\"?",
@@ -22593,7 +22436,7 @@
     {
       "id": "mcq-4-111",
       "domain": 4,
-      "objective": "4.4",
+      "objective": "4.6",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Discretionary Access Control: the resource owner decides who can access it.\"?",
@@ -22640,7 +22483,7 @@
     {
       "id": "mcq-4-112",
       "domain": 4,
-      "objective": "4.4",
+      "objective": "4.6",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Privileged Access Management: controls and monitors accounts with elevated permissions.\"?",
@@ -22685,9 +22528,9 @@
       ]
     },
     {
-      "id": "mcq-4-113",
-      "domain": 4,
-      "objective": "4.4",
+      "id": "mcq-3-179",
+      "domain": 3,
+      "objective": "3.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A hardened intermediary that administrators use to reach sensitive systems.\"?",
@@ -22732,9 +22575,9 @@
       ]
     },
     {
-      "id": "mcq-4-114",
-      "domain": 4,
-      "objective": "4.5",
+      "id": "mcq-3-183",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Recovery Time Objective: the maximum acceptable time to restore a system after an outage.\"?",
@@ -22779,9 +22622,9 @@
       ]
     },
     {
-      "id": "mcq-4-115",
-      "domain": 4,
-      "objective": "4.5",
+      "id": "mcq-3-184",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Recovery Point Objective: the maximum acceptable amount of data loss measured in time.\"?",
@@ -22826,9 +22669,9 @@
       ]
     },
     {
-      "id": "mcq-4-116",
-      "domain": 4,
-      "objective": "4.5",
+      "id": "mcq-3-185",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Mean Time To Repair/Recover: the average time to restore a failed component or service.\"?",
@@ -22873,9 +22716,9 @@
       ]
     },
     {
-      "id": "mcq-4-117",
-      "domain": 4,
-      "objective": "4.5",
+      "id": "mcq-3-186",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Mean Time Between Failures: the average elapsed time between hardware or system failures.\"?",
@@ -22920,9 +22763,9 @@
       ]
     },
     {
-      "id": "mcq-4-118",
-      "domain": 4,
-      "objective": "4.6",
+      "id": "mcq-3-180",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A complete copy of all selected data; the slowest to create and fastest to restore.\"?",
@@ -22967,9 +22810,9 @@
       ]
     },
     {
-      "id": "mcq-4-119",
-      "domain": 4,
-      "objective": "4.6",
+      "id": "mcq-3-181",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Backs up only the data changed since the last backup of any type; fast to create, slow to restore.\"?",
@@ -23014,9 +22857,9 @@
       ]
     },
     {
-      "id": "mcq-4-120",
-      "domain": 4,
-      "objective": "4.6",
+      "id": "mcq-3-182",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Backs up data changed since the last full backup; larger than incremental but faster to restore.\"?",
@@ -23061,9 +22904,9 @@
       ]
     },
     {
-      "id": "mcq-4-121",
-      "domain": 4,
-      "objective": "4.7",
+      "id": "mcq-5-130",
+      "domain": 5,
+      "objective": "5.1",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The National Institute of Standards and Technology Cybersecurity Framework of functions and categories.\"?",
@@ -23108,9 +22951,9 @@
       ]
     },
     {
-      "id": "mcq-4-122",
-      "domain": 4,
-      "objective": "4.7",
+      "id": "mcq-2-175",
+      "domain": 2,
+      "objective": "2.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A knowledge base of adversary tactics and techniques based on real-world observations.\"?",
@@ -23157,7 +23000,7 @@
     {
       "id": "mcq-4-123",
       "domain": 4,
-      "objective": "4.8",
+      "objective": "4.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Defines how long logs and records are kept to meet operational and compliance needs.\"?",
@@ -23202,9 +23045,9 @@
       ]
     },
     {
-      "id": "mcq-4-124",
-      "domain": 4,
-      "objective": "4.9",
+      "id": "mcq-3-187",
+      "domain": 3,
+      "objective": "3.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A backup that cannot be altered or deleted for a defined period, defending against ransomware.\"?",
@@ -23251,7 +23094,7 @@
     {
       "id": "mcq-5-060",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The likelihood that a threat will exploit a vulnerability and cause harm to an asset.\"?",
@@ -23298,7 +23141,7 @@
     {
       "id": "mcq-5-061",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The risk that remains after controls have been applied.\"?",
@@ -23345,7 +23188,7 @@
     {
       "id": "mcq-5-062",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Shifting the financial impact of a risk to a third party, commonly through insurance.\"?",
@@ -23392,7 +23235,7 @@
     {
       "id": "mcq-5-063",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Formally acknowledging a risk and choosing to tolerate it without further action.\"?",
@@ -23439,7 +23282,7 @@
     {
       "id": "mcq-5-064",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Eliminating the activity or asset that creates the risk.\"?",
@@ -23486,7 +23329,7 @@
     {
       "id": "mcq-5-065",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Risk analysis that uses numeric values such as ALE, SLE, and ARO.\"?",
@@ -23533,7 +23376,7 @@
     {
       "id": "mcq-5-066",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Single Loss Expectancy: the monetary loss from a single occurrence of a risk.\"?",
@@ -23580,7 +23423,7 @@
     {
       "id": "mcq-5-067",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Annualized Loss Expectancy: the expected yearly loss from a risk (SLE x ARO).\"?",
@@ -23627,7 +23470,7 @@
     {
       "id": "mcq-5-068",
       "domain": 5,
-      "objective": "5.1",
+      "objective": "5.2",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Annualized Rate of Occurrence: how many times per year a risk is expected to happen.\"?",
@@ -24377,9 +24220,9 @@
       ]
     },
     {
-      "id": "mcq-5-084",
-      "domain": 5,
-      "objective": "5.5",
+      "id": "mcq-1-123",
+      "domain": 1,
+      "objective": "1.3",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"A controlled process for proposing, approving, and implementing changes to systems.\"?",
@@ -24426,7 +24269,7 @@
     {
       "id": "mcq-5-085",
       "domain": 5,
-      "objective": "5.5",
+      "objective": "5.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"The reasonable steps an organization takes to protect assets and prevent harm.\"?",
@@ -24567,7 +24410,7 @@
     {
       "id": "mcq-1-078",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "short-form",
       "prompt": "A ____ function such as SHA-256 produces a fixed-length digest used to verify ____, while a ____ uses a private key to prove non-repudiation.",
@@ -26572,7 +26415,7 @@
       "objective": "3.1",
       "format": "standard",
       "style": "recall",
-      "prompt": "Which security term is defined as: \"Lightweight Directory Access Protocol: queries directories, using TCP port 389 (636 for LDAPS).\"?",
+      "prompt": "Which security term is defined as: \"A protocol for monitoring and managing network devices such as switches and routers, using UDP ports 161 and 162.\"?",
       "kind": "single-choice",
       "options": [
         {
@@ -26592,15 +26435,15 @@
         },
         {
           "id": "d",
-          "text": "LDAP",
-          "rationale": "LDAP is the term that matches this definition."
+          "text": "SNMP",
+          "rationale": "SNMP is the term that matches this definition."
         }
       ],
       "correctOptionIds": [
         "d"
       ],
       "selectCount": 1,
-      "explanation": "LDAP: Lightweight Directory Access Protocol: queries directories, using TCP port 389 (636 for LDAPS).",
+      "explanation": "SNMP: a protocol for monitoring and managing network devices, using UDP 161 for polling and 162 for traps. LDAP queries directories on TCP 389.",
       "hint": "Consider the Security+ objective 3.1 concept that fits this description.",
       "sourceRefs": [
         {
@@ -26755,59 +26598,12 @@
       ]
     },
     {
-      "id": "mcq-3-121",
-      "domain": 3,
-      "objective": "3.1",
-      "format": "standard",
-      "style": "recall",
-      "prompt": "Which security term is defined as: \"Simple Network Management Protocol: monitors devices, using UDP ports 161 and 162.\"?",
-      "kind": "single-choice",
-      "options": [
-        {
-          "id": "a",
-          "text": "NIST CSF",
-          "rationale": "NIST CSF does not match the definition given."
-        },
-        {
-          "id": "b",
-          "text": "SNMP",
-          "rationale": "SNMP is the term that matches this definition."
-        },
-        {
-          "id": "c",
-          "text": "Honeypot",
-          "rationale": "Honeypot does not match the definition given."
-        },
-        {
-          "id": "d",
-          "text": "Residual risk",
-          "rationale": "Residual risk does not match the definition given."
-        }
-      ],
-      "correctOptionIds": [
-        "b"
-      ],
-      "selectCount": 1,
-      "explanation": "SNMP: Simple Network Management Protocol: monitors devices, using UDP ports 161 and 162.",
-      "hint": "Consider the Security+ objective 3.1 concept that fits this description.",
-      "sourceRefs": [
-        {
-          "source": "comptia",
-          "section": "3.1"
-        },
-        {
-          "source": "professor-messer",
-          "section": "SY0-701 3.1"
-        }
-      ]
-    },
-    {
       "id": "mcq-3-122",
       "domain": 3,
       "objective": "3.1",
       "format": "standard",
       "style": "recall",
-      "prompt": "Which security term is defined as: \"Standard for sending system logs, using UDP port 514 (6514 with TLS).\"?",
+      "prompt": "Which security term is defined as: \"A protocol that records IP flow metadata such as source, destination, and byte counts for traffic analysis.\"?",
       "kind": "single-choice",
       "options": [
         {
@@ -26827,15 +26623,15 @@
         },
         {
           "id": "d",
-          "text": "Syslog",
-          "rationale": "Syslog is the term that matches this definition."
+          "text": "NetFlow",
+          "rationale": "NetFlow is the term that matches this definition."
         }
       ],
       "correctOptionIds": [
         "d"
       ],
       "selectCount": 1,
-      "explanation": "Syslog: Standard for sending system logs, using UDP port 514 (6514 with TLS).",
+      "explanation": "NetFlow records IP flow metadata for traffic analysis. Syslog sends system log messages on UDP 514.",
       "hint": "Consider the Security+ objective 3.1 concept that fits this description.",
       "sourceRefs": [
         {
@@ -26854,7 +26650,7 @@
       "objective": "3.1",
       "format": "standard",
       "style": "recall",
-      "prompt": "Which security term is defined as: \"Secures IP traffic; IKE uses UDP port 500 and NAT traversal uses UDP port 4500.\"?",
+      "prompt": "Which security term is defined as: \"A protocol that protects application traffic in transit and uses TCP port 443 for HTTPS.\"?",
       "kind": "single-choice",
       "options": [
         {
@@ -26869,8 +26665,8 @@
         },
         {
           "id": "c",
-          "text": "IPsec",
-          "rationale": "IPsec is the term that matches this definition."
+          "text": "TLS",
+          "rationale": "TLS is the term that matches this definition."
         },
         {
           "id": "d",
@@ -26882,7 +26678,7 @@
         "c"
       ],
       "selectCount": 1,
-      "explanation": "IPsec: Secures IP traffic; IKE uses UDP port 500 and NAT traversal uses UDP port 4500.",
+      "explanation": "TLS protects application traffic in transit and secures HTTPS on TCP 443. IPsec secures IP traffic with AH and ESP over ports 500/4500.",
       "hint": "Consider the Security+ objective 3.1 concept that fits this description.",
       "sourceRefs": [
         {
@@ -26901,7 +26697,7 @@
       "objective": "3.3",
       "format": "standard",
       "style": "recall",
-      "prompt": "Which security term is defined as: \"Network authentication using tickets, using TCP/UDP port 88.\"?",
+      "prompt": "Which security term is defined as: \"A set of extensions that cryptographically sign DNS records to prevent spoofing, using port 53.\"?",
       "kind": "single-choice",
       "options": [
         {
@@ -26921,15 +26717,15 @@
         },
         {
           "id": "d",
-          "text": "Kerberos",
-          "rationale": "Kerberos is the term that matches this definition."
+          "text": "DNSSEC",
+          "rationale": "DNSSEC is the term that matches this definition."
         }
       ],
       "correctOptionIds": [
         "d"
       ],
       "selectCount": 1,
-      "explanation": "Kerberos: Network authentication using tickets, using TCP/UDP port 88.",
+      "explanation": "DNSSEC cryptographically signs DNS records to prevent spoofing and cache poisoning, and operates over port 53. Kerberos is ticket-based authentication on port 88.",
       "hint": "Consider the Security+ objective 3.3 concept that fits this description.",
       "sourceRefs": [
         {
@@ -26948,13 +26744,13 @@
       "objective": "3.3",
       "format": "standard",
       "style": "recall",
-      "prompt": "Which security term is defined as: \"Centralized AAA for network access, using UDP ports 1812 (auth) and 1813 (accounting).\"?",
+      "prompt": "Which security term is defined as: \"A network authentication protocol that uses tickets, a key distribution center, and TCP/UDP port 88.\"?",
       "kind": "single-choice",
       "options": [
         {
           "id": "a",
-          "text": "RADIUS",
-          "rationale": "RADIUS is the term that matches this definition."
+          "text": "Kerberos",
+          "rationale": "Kerberos is the term that matches this definition."
         },
         {
           "id": "b",
@@ -26976,54 +26772,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "RADIUS: Centralized AAA for network access, using UDP ports 1812 (auth) and 1813 (accounting).",
-      "hint": "Consider the Security+ objective 3.3 concept that fits this description.",
-      "sourceRefs": [
-        {
-          "source": "comptia",
-          "section": "3.3"
-        },
-        {
-          "source": "professor-messer",
-          "section": "SY0-701 3.3"
-        }
-      ]
-    },
-    {
-      "id": "mcq-3-126",
-      "domain": 3,
-      "objective": "3.3",
-      "format": "standard",
-      "style": "recall",
-      "prompt": "Which security term is defined as: \"Cisco AAA protocol that encrypts the whole session, using TCP port 49.\"?",
-      "kind": "single-choice",
-      "options": [
-        {
-          "id": "a",
-          "text": "SNMP",
-          "rationale": "SNMP does not match the definition given."
-        },
-        {
-          "id": "b",
-          "text": "PCI DSS",
-          "rationale": "PCI DSS does not match the definition given."
-        },
-        {
-          "id": "c",
-          "text": "TACACS+",
-          "rationale": "TACACS+ is the term that matches this definition."
-        },
-        {
-          "id": "d",
-          "text": "Virus",
-          "rationale": "Virus does not match the definition given."
-        }
-      ],
-      "correctOptionIds": [
-        "c"
-      ],
-      "selectCount": 1,
-      "explanation": "TACACS+: Cisco AAA protocol that encrypts the whole session, using TCP port 49.",
+      "explanation": "Kerberos: ticket-based network authentication using a key distribution center on TCP/UDP port 88. RADIUS provides centralized AAA on UDP 1812/1813.",
       "hint": "Consider the Security+ objective 3.3 concept that fits this description.",
       "sourceRefs": [
         {
@@ -27462,7 +27211,7 @@
     {
       "id": "mcq-1-081",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Certificate Authority: a trusted entity that issues and signs digital certificates.\"?",
@@ -27509,7 +27258,7 @@
     {
       "id": "mcq-1-082",
       "domain": 1,
-      "objective": "1.2",
+      "objective": "1.4",
       "format": "standard",
       "style": "recall",
       "prompt": "Which security term is defined as: \"Certificate Signing Request: the message a requester sends to a CA to obtain a certificate.\"?",
@@ -29251,7 +29000,7 @@
       "objective": "1.3",
       "format": "standard",
       "style": "recall",
-      "prompt": "Which security term is defined as: \"Dividing a network into tiny zones with per-zone policy to limit lateral movement.\"?",
+      "prompt": "Which security term is defined as: \"A logical network segment created on a switch to separate traffic without separate physical hardware.\"?",
       "kind": "single-choice",
       "options": [
         {
@@ -29271,15 +29020,15 @@
         },
         {
           "id": "d",
-          "text": "Microsegmentation",
-          "rationale": "Microsegmentation is the term that matches this definition."
+          "text": "VLAN",
+          "rationale": "VLAN is the term that matches this definition."
         }
       ],
       "correctOptionIds": [
         "d"
       ],
       "selectCount": 1,
-      "explanation": "Microsegmentation: Dividing a network into tiny zones with per-zone policy to limit lateral movement.",
+      "explanation": "VLAN: a logical network segment on a switch that separates traffic without separate hardware. Microsegmentation applies granular per-workload policy, often in software.",
       "hint": "Consider the Security+ objective 1.3 concept that fits this description.",
       "sourceRefs": [
         {
@@ -30501,7 +30250,7 @@
         "a"
       ],
       "selectCount": 1,
-      "explanation": "Input validation: Rejecting malformed input at the boundary to prevent injection and overflow flaws.",
+      "explanation": "Input validation rejects malformed or unexpected input at the trust boundary, which blocks injection and overflow classes such as SQL injection, XSS, and buffer overflow. It is a preventive application-layer control.",
       "hint": "Consider the Security+ objective 1.1 concept that fits this description.",
       "sourceRefs": [
         {
@@ -31742,35 +31491,35 @@
       "objective": "4.5",
       "format": "standard",
       "style": "keyword",
-      "prompt": "A system can tolerate at most 1 hour of downtime and 15 minutes of data loss. Which pair of metrics defines this?",
+      "prompt": "A system can tolerate at most 1 hour of downtime and 15 minutes of data loss. Which statement correctly applies these metrics to the backup design?",
       "kind": "single-choice",
       "options": [
         {
           "id": "a",
-          "text": "RTO 1h, RPO 15m",
-          "rationale": "Correct: RTO is max acceptable downtime; RPO is max acceptable data loss. The values map directly."
+          "text": "The backup frequency must satisfy the RPO of 15 minutes",
+          "rationale": "RPO is the maximum acceptable data loss, so backups or replication must run at least every 15 minutes to bound the loss."
         },
         {
           "id": "b",
-          "text": "MTBF 1h, MTTR 15m",
-          "rationale": "Incorrect: MTBF 1h, MTTR 15m addresses a different concern than the one the scenario asks about."
+          "text": "The backup frequency must satisfy the RTO of 15 minutes",
+          "rationale": "RTO concerns how fast service is restored, not how much data may be lost. It does not set backup frequency."
         },
         {
           "id": "c",
-          "text": "RTO 15m, RPO 1h",
-          "rationale": "Incorrect: RTO 15m, RPO 1h addresses a different concern than the one the scenario asks about."
+          "text": "The MTBF of 1 hour sets how often backups run",
+          "rationale": "MTBF is the expected time between failures, a reliability statistic. It does not schedule backups."
         },
         {
           "id": "d",
-          "text": "MTD 1h, WRT 15m",
-          "rationale": "Incorrect: MTD 1h, WRT 15m addresses a different concern than the one the scenario asks about."
+          "text": "The MTTR of 15 minutes is the maximum data loss allowed",
+          "rationale": "MTTR is the average time to repair a failed component, not an amount of data."
         }
       ],
       "correctOptionIds": [
         "a"
       ],
       "selectCount": 1,
-      "explanation": "RTO is max acceptable downtime; RPO is max acceptable data loss. The values map directly.",
+      "explanation": "A maximum loss of 15 minutes of data is the recovery point objective, so replication or backups must run at least every 15 minutes. The one-hour downtime tolerance is the recovery time objective and governs how fast the service must come back, not how often backups run.",
       "hint": "Identify the option that most directly satisfies the constraint stated in the scenario.",
       "sourceRefs": [
         {
@@ -31781,7 +31530,8 @@
           "source": "professor-messer",
           "section": "SY0-701 4.5"
         }
-      ]
+      ],
+      "context": "Max 1 hour downtime tolerated; max 15 minutes of data loss tolerated. The team is choosing a backup and replication schedule."
     },
     {
       "id": "mcq-4-142",
@@ -33933,50 +33683,50 @@
       "objective": "5.3",
       "format": "standard",
       "style": "short-form",
-      "prompt": "The U.S. DoD supply-chain framework is ____, a service-org control audit is ____, and U.S. cloud authorization is ____.",
+      "prompt": "The ____ grants a client the right to audit a vendor's controls, a ____ sets uptime and response commitments, and a ____ keeps shared information confidential.",
       "kind": "word-bank",
       "blanks": [
         {
           "id": "b1",
-          "label": "DoD"
+          "label": "Audit clause"
         },
         {
           "id": "b2",
-          "label": "Audit"
+          "label": "Service commitment"
         },
         {
           "id": "b3",
-          "label": "Cloud"
+          "label": "Confidentiality"
         }
       ],
       "bank": [
         {
           "id": "w1",
-          "word": "SOC 2"
+          "word": "right-to-audit clause"
         },
         {
           "id": "w2",
-          "word": "SOAR"
+          "word": "service-level agreement"
         },
         {
           "id": "w3",
-          "word": "CMMC"
+          "word": "non-disclosure agreement"
         },
         {
           "id": "w4",
-          "word": "FedRAMP"
+          "word": "memorandum of understanding"
         },
         {
           "id": "w5",
-          "word": "MFA"
+          "word": "statement of work"
         }
       ],
       "correctAssignments": {
-        "b1": "w3",
-        "b2": "w1",
-        "b3": "w4"
+        "b1": "w1",
+        "b2": "w2",
+        "b3": "w3"
       },
-      "explanation": "Fill each blank with the term that correctly completes the statement.",
+      "explanation": "A right-to-audit clause lets the client inspect a vendor's controls. A service-level agreement sets uptime and response commitments. A non-disclosure agreement keeps shared information confidential.",
       "hint": "Match each blank to the Security+ objective 5.3 term that fits.",
       "sourceRefs": [
         {
@@ -34482,6 +34232,65 @@
         {
           "source": "professor-messer",
           "section": "SY0-701 5.1"
+        }
+      ]
+    },
+    {
+      "id": "mcq-1-122",
+      "domain": 1,
+      "objective": "1.1",
+      "format": "scenario",
+      "kind": "multiple-choice",
+      "style": "scenario",
+      "prompt": "Which TWO control types describe the safeguards in this scenario? (Select TWO.)",
+      "context": "A data center installs a vault door that requires two staff members to open it together, and mounts signage stating that all access is recorded and will be prosecuted. The door physically blocks entry; the signage changes nothing about the door mechanism.",
+      "hint": "One safeguard physically stops the act; the other only discourages it.",
+      "selectCount": 2,
+      "options": [
+        {
+          "id": "a",
+          "text": "The vault door is a preventive control",
+          "rationale": "A physical barrier that blocks entry stops the act before it happens, which is preventive."
+        },
+        {
+          "id": "b",
+          "text": "The signage is a deterrent control",
+          "rationale": "Signage discourages an attempt by warning of consequences without blocking anything, which is deterrent."
+        },
+        {
+          "id": "c",
+          "text": "The vault door is a detective control",
+          "rationale": "Detective controls identify activity after the fact (IDS, log review). The door detects nothing."
+        },
+        {
+          "id": "d",
+          "text": "The signage is a corrective control",
+          "rationale": "Corrective controls restore service after an incident (backups, patch rollback). Signage repairs nothing."
+        },
+        {
+          "id": "e",
+          "text": "Both safeguards are compensating controls",
+          "rationale": "A compensating control substitutes for a control that cannot be used. Nothing here is a substitute."
+        },
+        {
+          "id": "f",
+          "text": "Both safeguards are directive controls",
+          "rationale": "Directive controls guide behavior through policy. The door is a physical mechanism, not guidance."
+        }
+      ],
+      "correctOptionIds": [
+        "a",
+        "b"
+      ],
+      "explanation": "The door physically blocks entry, so it is preventive. The signage discourages an attempt by threatening consequences, so it is deterrent. Neither detects nor corrects anything.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "1.1 Compare and contrast various types of security controls"
+        },
+        {
+          "source": "study-guide",
+          "section": "Security Control Categories and Types"
         }
       ]
     }
@@ -36418,11 +36227,11 @@
         },
         {
           "id": "f3",
-          "label": "Internal to Internet outbound",
+          "label": "Internal to Internet outbound web access",
           "options": [
             {
               "id": "a",
-              "text": "Allow HTTP, HTTPS, and DNS (ports 80, 443, 53)"
+              "text": "Allow HTTP and HTTPS only (ports 80, 443)"
             },
             {
               "id": "b",
@@ -36486,11 +36295,11 @@
       "correctValues": {
         "f1": "d",
         "f2": "a",
-        "f3": "d",
+        "f3": "a",
         "f4": "d",
         "f5": "b"
       },
-      "explanation": "Only HTTPS reaches the DMZ (port 443). The DMZ is blocked from the internal network entirely. Internal egress is restricted to specific trusted resolvers. DMZ administration comes only from bastion IPs on 443, and the catch-all is implicit deny so anything unmatched is dropped.",
+      "explanation": "Only HTTPS reaches the DMZ (port 443). The DMZ is blocked from the internal network entirely. Internal egress allows only web protocols (HTTP/HTTPS), with DNS restricted to trusted resolvers. DMZ administration comes only from bastion IPs on 443, and the catch-all is implicit deny so anything unmatched is dropped.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -38951,7 +38760,7 @@
           "options": [
             {
               "id": "f6o1",
-              "text": "Disabled"
+              "text": "Disabled (rely on 802.1X/EAP instead)"
             },
             {
               "id": "f6o2",
@@ -38974,9 +38783,9 @@
         "f3": "f3o3",
         "f4": "f4o3",
         "f5": "f5o2",
-        "f6": "f6o2"
+        "f6": "f6o1"
       },
-      "explanation": "WPA3-Enterprise with 802.1X/EAP and AES-CCMP gives per-user, certificate-based authentication and strong encryption; disabling WPS removes a well-known weak point; isolating guests on a separate VLAN and using a MAC allowlist add layered defense-in-depth.",
+      "explanation": "WPA3-Enterprise with 802.1X/EAP and AES-CCMP gives per-user, certificate-based authentication and strong encryption. WPS is disabled to remove a well-known weak point, guests are isolated on a separate VLAN, and MAC filtering is left disabled because MAC addresses are spoofable and add no real security beyond 802.1X.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
@@ -39213,11 +39022,15 @@
             },
             {
               "id": "p4",
-              "text": "An attacker queries the model repeatedly to reconstruct its private training data."
+              "text": "An attacker repeatedly queries the model and uses the responses to build a functionally equivalent copy of it."
             },
             {
               "id": "p5",
               "text": "An attacker determines whether a specific record was present in the training set."
+            },
+            {
+              "id": "p6",
+              "text": "An attacker probes the model repeatedly and uses the answers to reconstruct it."
             }
           ],
           "targets": [
@@ -39240,12 +39053,20 @@
             {
               "id": "t5",
               "text": "Membership inference"
+            },
+            {
+              "id": "t6",
+              "text": "Model inversion"
             }
           ],
           "extraTargets": [
             {
               "id": "e1",
               "text": "A misconfigured firewall rule that exposes a port"
+            },
+            {
+              "id": "e2",
+              "text": "A model leak caused by storing API keys in a public repository"
             }
           ],
           "correctMatches": {
@@ -39253,7 +39074,8 @@
             "p2": "t2",
             "p3": "t3",
             "p4": "t4",
-            "p5": "t5"
+            "p5": "t5",
+            "p6": "t6"
           },
           "explanation": "Prompt injection manipulates instructions; data poisoning corrupts training; adversarial examples exploit model sensitivity; model extraction and membership inference are privacy attacks against the model and its data.",
           "sourceRefs": [
@@ -43303,7 +43125,7 @@
       "premises": [
         {
           "id": "p1",
-          "text": "Users cannot open files; extensions changed to .crypt and a ransom note appeared."
+          "text": "Backups are restored and the encrypted server is rebuilt from a clean image."
         },
         {
           "id": "p2",
@@ -43325,7 +43147,7 @@
       "targets": [
         {
           "id": "t1",
-          "text": "Eradication & Recovery (ransomware)"
+          "text": "Eradication & Recovery (restore from clean backup)"
         },
         {
           "id": "t2",
