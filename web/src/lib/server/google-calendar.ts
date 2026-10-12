@@ -137,18 +137,18 @@ export async function exchangeCode(
 // ── Token management ─────────────────────────────────────────────────────────
 
 export async function getOAuth(scope: Scope = DEFAULT_SCOPE): Promise<GoogleOAuth | null> {
-	return createScopedRepo(quizRepository, scope).getGoogleOAuth();
+	return createScopedRepo(quizRepository(), scope).getGoogleOAuth();
 }
 
 export async function saveOAuth(
 	token: Omit<GoogleOAuth, 'calendarId'> & { calendarId?: string | null },
 	scope: Scope = DEFAULT_SCOPE
 ): Promise<void> {
-	await createScopedRepo(quizRepository, scope).saveGoogleOAuth(token);
+	await createScopedRepo(quizRepository(), scope).saveGoogleOAuth(token);
 }
 
 export async function clearOAuth(scope: Scope = DEFAULT_SCOPE): Promise<void> {
-	await createScopedRepo(quizRepository, scope).clearGoogleOAuth();
+	await createScopedRepo(quizRepository(), scope).clearGoogleOAuth();
 }
 
 async function refreshAccessToken(oauth: GoogleOAuth, scope: Scope): Promise<string> {
@@ -173,7 +173,7 @@ async function refreshAccessToken(oauth: GoogleOAuth, scope: Scope): Promise<str
 		throw new Error(
 			`Google token refresh failed: ${data.error ?? response.status} — reconnect from the calendar page.`
 		);
-	await createScopedRepo(quizRepository, scope).saveGoogleOAuth({
+	await createScopedRepo(quizRepository(), scope).saveGoogleOAuth({
 		...oauth,
 		accessToken: data.access_token,
 		expiresAt: Date.now() + (data.expires_in ?? 3600) * 1000 - 60_000
@@ -331,7 +331,7 @@ function toEventView(event: CalendarEvent, calendarName: string): CalendarEventV
 // ── Deadline sync (push course deadlines into a dedicated calendar) ─────────
 
 export async function planSyncEvents(scope: Scope = DEFAULT_SCOPE): Promise<PlannedEvent[]> {
-	const repo = createScopedRepo(quizRepository, scope);
+	const repo = createScopedRepo(quizRepository(), scope);
 	const examDate = await repo.getExamDate();
 	const examName = COURSE_META[scope.courseId]?.examName ?? 'Certification Exam';
 	const planned: PlannedEvent[] = [
@@ -395,7 +395,7 @@ export interface SyncResult {
 /** Pushes exam + assignment deadlines into a dedicated per-course "… Prep" calendar. */
 export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promise<SyncResult> {
 	return withToken(async (token) => {
-		const repo = createScopedRepo(quizRepository, scope);
+		const repo = createScopedRepo(quizRepository(), scope);
 		const oauth = await getOAuth(scope);
 		if (!oauth) throw new GoogleCalendarError('NOT_CONNECTED', 'Connect a Google account first.');
 

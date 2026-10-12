@@ -501,14 +501,17 @@ export function testDatabaseUrl(): string {
 }
 
 /**
- * App-wide singleton; bound to the default scope and re-scoped per request.
- * Under vitest it binds to the isolated test database instead — mirroring the
- * old SQLite repository's `:memory:`-under-vitest behavior — so singleton-backed
- * paths (resolveScope, planSyncEvents) read the same data the tests write.
+ * App-wide singleton, created on first use rather than at module scope. Lazy
+ * because the SvelteKit build's analyse step imports server modules without a
+ * runtime environment — resolving DATABASE_URL eagerly would fail `vite build`.
+ * Under vitest it binds to the isolated test database instead, mirroring the
+ * old SQLite repository's `:memory:`-under-vitest behavior.
  */
-export const quizRepository = createPgQuizRepository(
-	process.env.VITEST ? testDatabaseUrl() : undefined
-);
+let singleton: QuizRepository | null = null;
+export function quizRepository(): QuizRepository {
+	singleton ??= createPgQuizRepository(process.env.VITEST ? testDatabaseUrl() : undefined);
+	return singleton;
+}
 function parseStoredSession(
 	row: SessionRow & StateRow,
 	responseRows: {

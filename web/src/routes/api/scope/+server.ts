@@ -19,7 +19,7 @@ export async function GET(event: RequestEvent) {
 	const scope = await resolveScope(event);
 	return json({
 		scope,
-		profiles: await quizRepository.getProfiles(),
+		profiles: await quizRepository().getProfiles(),
 		courses: ACTIVE_COURSES.map((id) => ({
 			id,
 			title: COURSE_META[id]?.title ?? id,
@@ -42,7 +42,7 @@ export async function POST(event: RequestEvent) {
 	// preference, so the next profile switch comes back to the right course.
 	if (body.action === 'switch') {
 		const scope = await resolveScope(event);
-		const profiles = await quizRepository.getProfiles();
+		const profiles = await quizRepository().getProfiles();
 		const switchProfile =
 			typeof body.profileId === 'string' &&
 			profiles.some((profile) => profile.id === body.profileId)
@@ -61,7 +61,7 @@ export async function POST(event: RequestEvent) {
 		}
 		if (switchCourse) {
 			// Remember this course as the selected profile's preference.
-			await quizRepository.setProfileCourse(profileId, switchCourse);
+			await quizRepository().setProfileCourse(profileId, switchCourse);
 		}
 
 		event.cookies.set('profile_id', profileId, SCOPE_COOKIE);
@@ -79,7 +79,7 @@ export async function POST(event: RequestEvent) {
 			);
 		const color = typeof body.color === 'string' ? body.color : '#67B8A8';
 		try {
-			const profile = await quizRepository.createProfile(
+			const profile = await quizRepository().createProfile(
 				body.name.trim().slice(0, 24),
 				color,
 				(await resolveScope(event)).courseId
@@ -104,7 +104,7 @@ export async function POST(event: RequestEvent) {
 				{ error: { code: 'INVALID_REQUEST', message: 'profileId and name are required.' } },
 				{ status: 400 }
 			);
-		await quizRepository.renameProfile(body.profileId, body.name.trim().slice(0, 24));
+		await quizRepository().renameProfile(body.profileId, body.name.trim().slice(0, 24));
 		return json({ ok: true });
 	}
 
@@ -132,7 +132,7 @@ export async function DELETE(event: RequestEvent) {
 			{ status: 400 }
 		);
 	try {
-		await quizRepository.deleteProfile(profileId);
+		await quizRepository().deleteProfile(profileId);
 		return json({ ok: true });
 	} catch (error) {
 		return json(

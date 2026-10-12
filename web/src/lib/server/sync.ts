@@ -14,7 +14,7 @@ const syncFile = (relative: string, content: string, label: string) => {
 };
 
 export async function syncDashboard(scope: Scope = DEFAULT_SCOPE): Promise<string> {
-	const progress = await createScopedRepo(quizRepository, scope).getAllDomainProgress();
+	const progress = await createScopedRepo(quizRepository(), scope).getAllDomainProgress();
 	return syncFile(
 		'QuizApp-Dashboard.md',
 		`# Security+ Quiz Dashboard\n\n${Object.entries(progress)
@@ -28,7 +28,7 @@ export async function syncDashboard(scope: Scope = DEFAULT_SCOPE): Promise<strin
 }
 
 export async function syncWeakTopics(scope: Scope = DEFAULT_SCOPE): Promise<string> {
-	const topics = await createScopedRepo(quizRepository, scope).getWeakTopics();
+	const topics = await createScopedRepo(quizRepository(), scope).getWeakTopics();
 	return syncFile(
 		'QuizApp-Weak-Topics.md',
 		`# Security+ Weak Topics\n\n${topics.map((topic) => `- Objective ${topic.objective}: ${topic.earnedPoints.toFixed(2)}/${topic.possiblePoints} (${topic.percentage}%, ${topic.severity})`).join('\n')}\n`,

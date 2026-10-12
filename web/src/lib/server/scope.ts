@@ -10,7 +10,7 @@ import { DEFAULT_SCOPE, type Scope } from './db';
  */
 export async function resolveScope(event: RequestEvent): Promise<Scope> {
 	const cookieProfile = event.cookies.get('profile_id');
-	const profiles = await quizRepository.getProfiles();
+	const profiles = await quizRepository().getProfiles();
 	const selectedProfile = profiles.find((profile) => profile.id === cookieProfile);
 	const profileId = selectedProfile?.id ?? DEFAULT_SCOPE.profileId;
 	const cookieCourse = event.cookies.get('course_id');

@@ -54,7 +54,7 @@ export interface ScopedServices {
 
 /** Services bound to one profile + course, sharing the module singleton connection. */
 export function scopedServices(scope: Scope): ScopedServices {
-	const repo = createScopedRepo(quizRepository, scope);
+	const repo = createScopedRepo(quizRepository(), scope);
 	const bank = getQuestionBank();
 	const review = createReviewService({ repository: repo, bank });
 	const course = createCourseService({ repository: repo, courseId: scope.courseId });
