@@ -81,6 +81,19 @@ export async function drawSessionMatching(
 }
 
 /**
+ * Click a cell in the question rail.
+ *
+ * The cell's accessible name is "Question N, <state>" (aria-label), which
+ * overrides the bare number in its text content, so match on that prefix.
+ */
+export async function clickQuestion(page: Page, index: number): Promise<void> {
+	await page
+		.getByRole('button', { name: new RegExp(`^Question ${index + 1}\\b`) })
+		.first()
+		.click();
+}
+
+/**
  * Open a session in the runner and move to a question.
  *
  * The runner hydrates asynchronously, and hydrate() resets the index to the
@@ -92,10 +105,5 @@ export async function drawSessionMatching(
 export async function openSessionQuestion(page: Page, url: string, index: number): Promise<void> {
 	await page.goto(url);
 	await page.waitForSelector('button[title^="Question "]');
-	if (index > 0) {
-		await page
-			.getByRole('button', { name: String(index + 1), exact: true })
-			.first()
-			.click();
-	}
+	if (index > 0) await clickQuestion(page, index);
 }

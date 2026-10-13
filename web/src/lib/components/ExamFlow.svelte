@@ -17,6 +17,7 @@
 		SessionView
 	} from '$lib/types';
 	import { AUTO_HINTABLE_KINDS } from '$lib/types';
+	import { hasDraftWork, isDraftComplete } from '$lib/draft-state';
 
 	let {
 		type,
@@ -50,6 +51,16 @@
 	let timer = $state('');
 	let activeConflict = $state<ActiveSessionSummary | null>(null);
 	let question = $derived(session?.questions[index]);
+	/** Count of questions with a COMPLETE response — partial drafts don't count as answered. */
+	function completeAnsweredCount(): number {
+		const s = session;
+		if (!s) return 0;
+		return s.questions.reduce(
+			(count, q, qi) => count + (isDraftComplete(q, s.responses[qi]) ? 1 : 0),
+			0
+		);
+	}
+	let answeredCount = $derived(completeAnsweredCount());
 	const MAX_PRACTICE_RETRIES = 2;
 	let streak = $state(0);
 	let sessionScore = $state(0);
@@ -375,7 +386,7 @@
 			}
 			if (replacingResponse) session.retries[index] = (session.retries[index] ?? 0) + 1;
 			session.responses[index] = draft;
-			session.answeredCount = Object.keys(session.responses).length;
+			session.answeredCount = completeAnsweredCount();
 		} catch (cause) {
 			error = cause instanceof Error ? cause.message : 'Unable to save response';
 		} finally {
@@ -387,27 +398,17 @@
 	 *  Used when navigating away so answers are never lost. */
 	async function silentSave() {
 		if (!session || !draft || feedback) return;
-		// A partially answered multi-step carries real work (a reordered step, a completed
-		// one), so keep it in practice, where a response never locks. A graded assignment
-		// locks on first save, so there it still waits until every step is answered.
-		const multiStepReady =
-			question?.kind !== 'multi-step'
-				? true
-				: Boolean(session.assignmentId)
-					? allSubStepsAnswered()
-					: draft.kind === 'multi-step' && draft.stepResponses.some((step) => step !== null);
-		const answered =
-			choiceAnswered() &&
-			multiStepReady &&
-			blanksAnswered() &&
-			sortAnswered() &&
-			matchingAnswered() &&
-			hotspotAnswered() &&
-			memoryAnswered() &&
-			sliderAnswered();
-		if (!answered) return;
+		const graded = Boolean(session.assignmentId);
+		// Practice saves ANY draft that carries real work — a half-filled word-bank,
+		// matching, sort, or choice draft is still the learner's answer in progress.
+		// Graded sessions keep the "complete only" rule (isDraftComplete covers
+		// multi-step: every step answered, the old allSubStepsAnswered rule), because
+		// the server locks a graded response on its first save — a partial draft would
+		// freeze the question in its incomplete state.
+		const ready = graded ? isDraftComplete(question, draft) : hasDraftWork(question, draft);
+		if (!ready) return;
 		// Graded responses lock after the first save — don't re-save an already-saved question.
-		if (Boolean(session.assignmentId) && session.responses[index] !== undefined) return;
+		if (graded && session.responses[index] !== undefined) return;
 		error = '';
 		try {
 			const response = await fetch('/api/quiz/answer', {
@@ -422,7 +423,7 @@
 			});
 			if (!response.ok) return;
 			session.responses[index] = draft;
-			session.answeredCount = Object.keys(session.responses).length;
+			session.answeredCount = completeAnsweredCount();
 			savedAck = Boolean(session.assignmentId);
 		} catch {
 			// best-effort persistence; leave the in-memory draft intact
@@ -449,7 +450,7 @@
 		await silentSave();
 		if (
 			!confirm(
-				`Submit now? ${session.totalQuestions - session.answeredCount} questions are unanswered.`
+				`Submit now? ${session.totalQuestions - completeAnsweredCount()} questions are unanswered.`
 			)
 		)
 			return;
@@ -674,6 +675,7 @@
 
 {#if error}
 	<div
+		aria-live="polite"
 		class="mb-4 flex items-center justify-between gap-3 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"
 	>
 		<span>{error}</span><button
@@ -827,12 +829,12 @@
 					<div
 						class="h-full rounded bg-accent transition-all duration-300"
 						style="width: {session.totalQuestions
-							? (session.answeredCount / session.totalQuestions) * 100
+							? (answeredCount / session.totalQuestions) * 100
 							: 0}%"
 					></div>
 				</div>
 				<span class="shrink-0 text-xs font-semibold text-text-muted">
-					{session.answeredCount}/{session.totalQuestions} answered
+					{answeredCount}/{session.totalQuestions} answered
 				</span>
 			</div>
 		</header>
@@ -842,7 +844,9 @@
 			{#if showGrid}
 				<div class="mb-4 flex flex-wrap gap-2">
 					{#each Array.from({ length: session.totalQuestions }) as _, qi}
-						{@const isAnswered = session.responses[qi] !== undefined}
+						{@const cellResponse = session.responses[qi]}
+						{@const isAnswered = isDraftComplete(session.questions[qi], cellResponse)}
+						{@const isPartial = !isAnswered && cellResponse !== undefined}
 						{@const isFlagged = session.flaggedQuestionIndexes.includes(qi)}
 						{@const isCurrent = qi === index}
 						<button
@@ -856,7 +860,15 @@
 							type="button"
 							title="Question {qi + 1}{isFlagged ? ' (flagged)' : ''}{isAnswered
 								? ' (answered)'
-								: ''}"
+								: isPartial
+									? ' (in progress)'
+									: ''}"
+							aria-label="Question {qi + 1}{isFlagged ? ', flagged' : ''}{isAnswered
+								? ', answered'
+								: isPartial
+									? ', in progress'
+									: ', unanswered'}"
+							aria-current={isCurrent ? 'true' : undefined}
 							onclick={() => move(qi)}
 						>
 							{qi + 1}
@@ -1490,6 +1502,7 @@
 							? 'Check Answer'
 							: 'Save Answer'}</button
 				>
+				<span class="sr-only" role="status">{saving ? 'Saving…' : ''}</span>
 				<button
 					class="btn btn-ghost h-11 px-4"
 					type="button"
@@ -1510,7 +1523,7 @@
 			</div>
 
 			{#if savedAck && !feedback}
-				<div class="mt-3">
+				<div class="mt-3" aria-live="polite">
 					<span class="chip bg-surface-700 text-text-secondary"
 						>Answer saved — your score will be shown after you submit.</span
 					>
@@ -1519,6 +1532,7 @@
 
 			{#if feedback}
 				<div
+					aria-live="polite"
 					class="mt-5 rounded-xl border border-border border-l-4 p-4 transition duration-200 {feedback.fullyCorrect
 						? 'border-l-success bg-success/10'
 						: feedback.earnedPoints > 0

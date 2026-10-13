@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
 	abandonSession,
+	clickQuestion,
 	drawSessionMatching,
 	openSessionQuestion,
 	type SessionQuestion
@@ -29,10 +30,7 @@ async function dragHandle(page: import('@playwright/test').Page, from: number, t
 
 /** Move to a question through the runner's rail, confirming the move took. */
 async function moveToQuestion(page: import('@playwright/test').Page, index: number) {
-	await page
-		.getByRole('button', { name: String(index + 1), exact: true })
-		.first()
-		.click();
+	await clickQuestion(page, index);
 	// The counter reads "Q14 of 30" (the uppercase look is CSS only). Waiting for it
 	// proves the move landed; the target question may not be an ordering task, so do
 	// not wait for a drag handle here.

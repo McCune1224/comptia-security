@@ -18,6 +18,7 @@ import {
 	type QuestionBank,
 	type QuestionDefinition
 } from './question-bank';
+import { isDraftComplete } from '$lib/draft-state';
 import { autoHint } from './hints';
 import { scoreQuestion } from './scoring';
 import { createCourseService, type CourseService } from './course-service';
@@ -104,7 +105,9 @@ export const RETRY_FACTORS = [1, 0.6, 0.3];
  * save-time feedback and the completion review cannot disagree.
  */
 function practiceAttemptFactor(storedRetries: number): number {
-	return RETRY_FACTORS[Math.min(storedRetries, MAX_PRACTICE_RETRIES)];
+	// A negative count is an unscored row (a draft, flag, or hint reveal created
+	// it): score that like a first attempt rather than indexing off the array.
+	return RETRY_FACTORS[Math.min(Math.max(storedRetries, 0), MAX_PRACTICE_RETRIES)];
 }
 
 function shuffle<T>(items: T[], rng: () => number): T[] {
@@ -160,7 +163,11 @@ function asView(stored: StoredSession, clock = new Date()): SessionView {
 		mode: stored.summary.mode,
 		startedAt: stored.summary.started_at,
 		...(stored.deadlineAt ? { deadlineAt: stored.deadlineAt } : {}),
-		answeredCount: Object.keys(stored.responses).length,
+		// Count only fully-answered questions: a partially filled draft persists on
+		// navigation but is not "answered" for progress purposes.
+		answeredCount: Object.keys(stored.responses).filter((key) =>
+			isDraftComplete(stored.questions[Number(key)], stored.responses[Number(key)])
+		).length,
 		totalQuestions: questions.length,
 		currentIndex: stored.currentIndex,
 		status: stored.summary.status,
@@ -186,14 +193,25 @@ function summary(stored: StoredSession): ActiveSessionSummary {
 	return active;
 }
 
-function validateResponse(question: QuestionDefinition, response: QuestionResponse): void {
+/** Validation strictness: `complete` = scored/graded saves require a finished answer;
+ *  `draft` = a silent practice/exam save may carry partial work, but only real work. */
+type ResponseMode = 'complete' | 'draft';
+
+function validateResponse(
+	question: QuestionDefinition,
+	response: QuestionResponse,
+	mode: ResponseMode = 'complete'
+): void {
+	const draft = mode === 'draft';
+	const countOk = (count: number, expected: number): boolean =>
+		draft ? count >= 1 && count <= expected : count === expected;
 	const distinct = (ids: string[]) => ids.length === new Set(ids).size;
 	if (
 		(question.kind === 'single-choice' || question.kind === 'multiple-choice') &&
 		response.kind === 'choice'
 	) {
 		if (
-			response.optionIds.length !== question.selectCount ||
+			!countOk(response.optionIds.length, question.selectCount) ||
 			!distinct(response.optionIds) ||
 			!response.optionIds.every((id) => question.options.some((option) => option.id === id))
 		)
@@ -203,25 +221,27 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	if (
 		question.kind === 'ordering' &&
 		response.kind === 'ordering' &&
-		response.itemIds.length === question.items.length &&
+		countOk(response.itemIds.length, question.items.length) &&
 		distinct(response.itemIds) &&
 		response.itemIds.every((id) => question.items.some((item) => item.id === id))
 	)
 		return;
-	if (
-		question.kind === 'matching' &&
-		response.kind === 'matching' &&
-		Object.keys(response.matches).length === question.premises.length &&
-		question.premises.every((premise) => {
-			const matchId = response.matches[premise.id];
-			return (
-				question.targets.some((target) => target.id === matchId) ||
-				(question.extraTargets?.some((extra) => extra.id === matchId) ?? false)
-			);
-		}) &&
-		distinct(Object.values(response.matches))
-	)
-		return;
+	if (question.kind === 'matching' && response.kind === 'matching') {
+		const premiseIds = Object.keys(response.matches);
+		if (
+			countOk(premiseIds.length, question.premises.length) &&
+			premiseIds.every((premiseId) =>
+				question.premises.some((premise) => premise.id === premiseId)
+			) &&
+			Object.values(response.matches).every(
+				(matchId) =>
+					question.targets.some((target) => target.id === matchId) ||
+					(question.extraTargets?.some((extra) => extra.id === matchId) ?? false)
+			) &&
+			distinct(Object.values(response.matches))
+		)
+			return;
+	}
 	if (question.kind === 'numeric' && response.kind === 'numeric' && Number.isFinite(response.value))
 		return;
 	if (
@@ -235,46 +255,60 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 	if (
 		question.kind === 'evidence' &&
 		response.kind === 'evidence' &&
-		response.lineIds.length === question.selectCount &&
+		countOk(response.lineIds.length, question.selectCount) &&
 		distinct(response.lineIds) &&
 		response.lineIds.every((id) => question.artifact.lines.some((line) => line.id === id))
 	)
 		return;
-	if (
-		question.kind === 'configuration' &&
-		response.kind === 'configuration' &&
-		Object.keys(response.values).length === question.fields.length &&
-		question.fields.every((field) =>
-			field.options.some((option) => option.id === response.values[field.id])
+	if (question.kind === 'configuration' && response.kind === 'configuration') {
+		const fieldIds = Object.keys(response.values);
+		if (
+			countOk(fieldIds.length, question.fields.length) &&
+			fieldIds.every((fieldId) => question.fields.some((field) => field.id === fieldId)) &&
+			question.fields.every(
+				(field) =>
+					(draft && response.values[field.id] === undefined) ||
+					field.options.some((option) => option.id === response.values[field.id])
+			)
 		)
-	)
-		return;
-	if (
-		question.kind === 'fill-blank' &&
-		response.kind === 'fill-blank' &&
-		Object.keys(response.values).length === question.blanks.length &&
-		question.blanks.every((blank) => typeof response.values[blank.id] === 'string')
-	)
-		return;
-	if (
-		question.kind === 'word-bank' &&
-		response.kind === 'word-bank' &&
-		Object.keys(response.assignments).length === question.blanks.length &&
-		question.blanks.every((blank) =>
-			question.bank.some((word) => word.id === response.assignments[blank.id])
-		) &&
-		new Set(Object.values(response.assignments)).size === question.blanks.length
-	)
-		return;
-	if (
-		question.kind === 'sort' &&
-		response.kind === 'sort' &&
-		Object.keys(response.assignments).length === question.items.length &&
-		question.items.every((item) =>
-			question.buckets.some((bucket) => bucket.id === response.assignments[item.id])
+			return;
+	}
+	if (question.kind === 'fill-blank' && response.kind === 'fill-blank') {
+		const blankIds = Object.keys(response.values);
+		if (
+			countOk(blankIds.length, question.blanks.length) &&
+			blankIds.every((blankId) => question.blanks.some((blank) => blank.id === blankId)) &&
+			question.blanks.every(
+				(blank) =>
+					(draft && response.values[blank.id] === undefined) ||
+					typeof response.values[blank.id] === 'string'
+			)
 		)
-	)
-		return;
+			return;
+	}
+	if (question.kind === 'word-bank' && response.kind === 'word-bank') {
+		const assignedBlankIds = Object.keys(response.assignments);
+		if (
+			countOk(assignedBlankIds.length, question.blanks.length) &&
+			assignedBlankIds.every((blankId) => question.blanks.some((blank) => blank.id === blankId)) &&
+			Object.values(response.assignments).every((wordId) =>
+				question.bank.some((word) => word.id === wordId)
+			) &&
+			new Set(Object.values(response.assignments)).size === assignedBlankIds.length
+		)
+			return;
+	}
+	if (question.kind === 'sort' && response.kind === 'sort') {
+		const itemIds = Object.keys(response.assignments);
+		if (
+			countOk(itemIds.length, question.items.length) &&
+			itemIds.every((itemId) => question.items.some((item) => item.id === itemId)) &&
+			Object.values(response.assignments).every((bucketId) =>
+				question.buckets.some((bucket) => bucket.id === bucketId)
+			)
+		)
+			return;
+	}
 	if (
 		question.kind === 'hotspot' &&
 		response.kind === 'hotspot' &&
@@ -299,9 +333,11 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 			// steps that carry an answer so partial progress can be persisted.
 			const step = response.stepResponses[i];
 			if (step === null || step === undefined) continue;
-			validateResponse(question.steps[i], step);
+			validateResponse(question.steps[i], step, mode);
 		}
-		return;
+		// A draft must carry at least one answered step — an all-null draft is no work.
+		if (!draft || response.stepResponses.some((step) => step !== null && step !== undefined))
+			return;
 	}
 	throw new QuizServiceError(
 		'INVALID_REQUEST',
@@ -415,7 +451,7 @@ export function createQuizService({
 				question: toPublicQuestion(question),
 				response,
 				feedback,
-				retryCount: stored.retries[index] ?? 0
+				retryCount: Math.max(0, stored.retries[index] ?? 0)
 			};
 		});
 		const earnedPoints = totalEarned;
@@ -663,7 +699,11 @@ export function createQuizService({
 					'Practice responses are locked after feedback.'
 				);
 			const question = stored.questions[questionIndex];
-			validateResponse(question, response);
+			// Silent drafts (check: false) in non-graded sessions may carry partial work so
+			// navigating away never discards it. Scored saves and graded assignments stay
+			// strict: a graded response locks the question on its first stored save.
+			const draftSave = check === false && !graded;
+			validateResponse(question, response, draftSave ? 'draft' : 'complete');
 			// Free-practice responses return feedback and count as a scored attempt only
 			// when explicitly checked. Silent drafts (check: false, or exam/graded) persist
 			// without revealing the answer or bumping the retry/lock counter.
@@ -676,8 +716,9 @@ export function createQuizService({
 				hintUsed: stored.hints[questionIndex] ?? false
 			});
 			// Index by the retry count this save stores: an absent row inserts 0 (first
-			// attempt), an existing row increments on conflict. That is the same count
-			// complete() reads back, so the save score and the completion review agree.
+			// attempt), an existing row increments on conflict, and an unscored draft
+			// row (-1) lands on 0 as well. That is the same count complete() reads back,
+			// so the save score and the completion review agree.
 			const retriesAfterSave =
 				questionIndex in stored.retries ? (stored.retries[questionIndex] ?? 0) + 1 : 0;
 			feedback.earnedPoints *= practiceAttemptFactor(retriesAfterSave);

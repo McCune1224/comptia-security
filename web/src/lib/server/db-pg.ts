@@ -187,6 +187,10 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 				return rows.length > 0 ? readSession(rows[0].id) : null;
 			},
 			async saveResponse(id, index, response, answeredAt, opts = {}) {
+				// `retries` counts SCORED attempts. Rows created without one (silent draft,
+				// flag, hint reveal) store -1, so the scored upsert's `retries + 1` lands on 0
+				// for the first real attempt. Row existence alone must never imply a prior
+				// attempt, or drafting, flagging, or asking for a hint would cost 40%.
 				const { incrementRetries = true } = opts;
 				await sql.begin(async (tx) => {
 					const owned =
@@ -199,7 +203,7 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 							SET response_json = EXCLUDED.response_json, answered_at = EXCLUDED.answered_at, retries = quiz_session_responses.retries + 1`;
 					else
 						await tx`INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, answered_at)
-							VALUES (${id}, ${index}, ${JSON.stringify(response)}, 0, 0, ${answeredAt})
+							VALUES (${id}, ${index}, ${JSON.stringify(response)}, 0, -1, ${answeredAt})
 							ON CONFLICT (session_id, question_index) DO UPDATE
 							SET response_json = EXCLUDED.response_json, answered_at = EXCLUDED.answered_at`;
 					await tx`UPDATE quiz_sessions SET updated_at = ${answeredAt} WHERE id = ${id} AND profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
@@ -210,8 +214,8 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 					const owned =
 						await tx`SELECT 1 FROM quiz_sessions WHERE id = ${id} AND profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
 					if (owned.length === 0) return;
-					await tx`INSERT INTO quiz_session_responses (session_id, question_index, hint_used)
-						VALUES (${id}, ${index}, 1)
+					await tx`INSERT INTO quiz_session_responses (session_id, question_index, hint_used, retries)
+						VALUES (${id}, ${index}, 1, -1)
 						ON CONFLICT (session_id, question_index) DO UPDATE SET hint_used = 1`;
 					await tx`UPDATE quiz_sessions SET updated_at = ${updatedAt} WHERE id = ${id} AND profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
 				});
@@ -224,8 +228,8 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 					if (currentIndex !== undefined)
 						await tx`UPDATE quiz_session_state SET current_index = ${currentIndex}, updated_at = ${updatedAt} WHERE session_id = ${id}`;
 					if (flag)
-						await tx`INSERT INTO quiz_session_responses (session_id, question_index, flagged)
-							VALUES (${id}, ${flag.questionIndex}, ${flag.value ? 1 : 0})
+						await tx`INSERT INTO quiz_session_responses (session_id, question_index, flagged, retries)
+							VALUES (${id}, ${flag.questionIndex}, ${flag.value ? 1 : 0}, -1)
 							ON CONFLICT (session_id, question_index) DO UPDATE SET flagged = EXCLUDED.flagged`;
 					await tx`UPDATE quiz_sessions SET updated_at = ${updatedAt} WHERE id = ${id} AND profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
 				});

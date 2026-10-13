@@ -654,6 +654,195 @@ describe('QuizService', () => {
 		await repository.close();
 	});
 
+	it('persists partial practice drafts without counting them as answered', async () => {
+		const repository = await createTestRepository();
+		const wbPbq: QuestionDefinition = {
+			id: 'pbq-1-partial-draft',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt: 'Fill both blanks.',
+			explanation: 'Symmetric ciphers share one key; salts randomize password hashes.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'word-bank',
+			blanks: [
+				{ id: 'b1', label: 'Cipher type' },
+				{ id: 'b2', label: 'Password randomness' }
+			],
+			bank: [
+				{ id: 'w1', word: 'key' },
+				{ id: 'w2', word: 'salt' },
+				{ id: 'd1', word: 'nonce' }
+			],
+			correctAssignments: { b1: 'w1', b2: 'w2' }
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [wbPbq] },
+			rng: () => 0.5
+		});
+		const partial = { kind: 'word-bank' as const, assignments: { b1: 'w1' } };
+
+		// A silent practice draft (check: false) carries half the answer and must persist
+		// so navigating away never discards it — but it is not "answered" yet.
+		const session = await service.startSession({ type: 'pbq', count: 1 });
+		expect(await service.saveResponse(session.sessionId, 0, partial, { check: false })).toEqual({
+			saved: true
+		});
+		const resumed = (await service.getSession(session.sessionId)) as typeof session;
+		expect(resumed.responses[0]).toEqual(partial);
+		expect(resumed.answeredCount).toBe(0);
+		// Completion scores the stored draft: filled blank earns credit, missing one does not.
+		const practice = await service.completeSession(session.sessionId);
+		expect(practice.review[0].feedback.earnedPoints).toBeCloseTo(0.5);
+
+		// Scored practice saves stay strict — an incomplete answer is still rejected.
+		const scored = await service.startSession({ type: 'pbq', count: 1 });
+		await expect(
+			service.saveResponse(scored.sessionId, 0, partial, { check: true })
+		).rejects.toThrow('Response does not match the question interaction.');
+		await service.abandonSession(scored.sessionId);
+
+		// Exam drafts may be partial and persist for flag-and-return.
+		const exam = await service.startSession({ type: 'pbq', count: 1, mode: 'exam' });
+		expect(await service.saveResponse(exam.sessionId, 0, partial, { check: false })).toEqual({
+			saved: true
+		});
+		await service.abandonSession(exam.sessionId);
+
+		// Graded assignments stay strict even for a silent draft: their first stored
+		// response locks the question, so a partial must never land.
+		const graded = await service.startSession({
+			type: 'pbq',
+			count: 1,
+			mode: 'practice',
+			assignmentId: 'assign-week-1'
+		});
+		await expect(
+			service.saveResponse(graded.sessionId, 0, partial, { check: false })
+		).rejects.toThrow('Response does not match the question interaction.');
+		await repository.close();
+	});
+
+	it('never charges the first scored attempt for an unscored row (draft, flag, hint)', async () => {
+		const repository = await createTestRepository();
+		const wordBank: QuestionDefinition = {
+			id: 'pbq-1-unscored-wb',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt: 'Fill both blanks.',
+			explanation: 'Key and salt.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'word-bank',
+			blanks: [
+				{ id: 'b1', label: 'Cipher type' },
+				{ id: 'b2', label: 'Password randomness' }
+			],
+			bank: [
+				{ id: 'w1', word: 'key' },
+				{ id: 'w2', word: 'salt' }
+			],
+			correctAssignments: { b1: 'w1', b2: 'w2' }
+		};
+		const flagChoice: QuestionDefinition = {
+			id: 'pbq-1-unscored-flag',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Flag target: which control prevents tailgating?',
+			explanation: 'Mantrap.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'Mantrap', rationale: 'Correct.' },
+				{ id: 'b', text: 'Bollards', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const hintChoice: QuestionDefinition = {
+			id: 'pbq-1-unscored-hint',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Hint target: which port is SSH?',
+			explanation: 'TCP 22.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			hint: 'SSH uses a well-known port below 1024.',
+			options: [
+				{ id: 'a', text: 'TCP 22', rationale: 'Correct.' },
+				{ id: 'b', text: 'TCP 443', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [wordBank, flagChoice, hintChoice] },
+			rng: () => 0.5
+		});
+		const session = await service.startSession({ type: 'pbq', count: 3, mode: 'practice' });
+		const questions = session.questions;
+		const draftIndex = questions.findIndex((q) => q.kind === 'word-bank');
+		const flagIndex = questions.findIndex((q) => q.prompt.startsWith('Flag target'));
+		const hintIndex = questions.findIndex((q) => q.prompt.startsWith('Hint target'));
+		expect(draftIndex).toBeGreaterThanOrEqual(0);
+		expect(flagIndex).toBeGreaterThanOrEqual(0);
+		expect(hintIndex).toBeGreaterThanOrEqual(0);
+
+		// Each of the three row creators runs BEFORE any scored attempt…
+		await service.saveResponse(
+			session.sessionId,
+			draftIndex,
+			{ kind: 'word-bank', assignments: { b1: 'w1' } },
+			{ check: false }
+		);
+		await service.updateSession(session.sessionId, {
+			flag: { questionIndex: flagIndex, value: true }
+		});
+		await service.revealHint(session.sessionId, hintIndex);
+
+		// …and none of them may cost the first real attempt full credit.
+		const draftSave = await service.saveResponse(
+			session.sessionId,
+			draftIndex,
+			{ kind: 'word-bank', assignments: { b1: 'w1', b2: 'w2' } },
+			{ check: true }
+		);
+		expect(draftSave.feedback?.earnedPoints).toBe(1);
+		const flagSave = await service.saveResponse(
+			session.sessionId,
+			flagIndex,
+			{ kind: 'choice', optionIds: ['a'] },
+			{ check: true }
+		);
+		expect(flagSave.feedback?.earnedPoints).toBe(1);
+		const hintSave = await service.saveResponse(
+			session.sessionId,
+			hintIndex,
+			{ kind: 'choice', optionIds: ['a'] },
+			{ check: true }
+		);
+		// First attempt with a hint: full credit minus the 25% hint cost — never a
+		// retry decay on top (1 × 0.75, not 0.6 × 0.75).
+		expect(hintSave.feedback?.earnedPoints).toBeCloseTo(0.75);
+
+		// All three rows still read as "no prior scored attempts".
+		const stored = (await service.getSession(session.sessionId)) as typeof session;
+		expect(stored.retries[draftIndex]).toBe(0);
+		expect(stored.retries[flagIndex]).toBe(0);
+		expect(stored.retries[hintIndex]).toBe(0);
+
+		// The completion review agrees with the save-time scores.
+		const result = await service.completeSession(session.sessionId);
+		expect(result.review[draftIndex].feedback.earnedPoints).toBe(1);
+		expect(result.review[flagIndex].feedback.earnedPoints).toBe(1);
+		expect(result.review[hintIndex].feedback.earnedPoints).toBeCloseTo(0.75);
+		await repository.close();
+	});
+
 	it('starts a retake session from the missed questions of a completed session', async () => {
 		const repository = await createTestRepository();
 		const good: QuestionDefinition = {
