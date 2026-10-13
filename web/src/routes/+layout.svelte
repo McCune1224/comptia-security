@@ -129,6 +129,15 @@
 	}
 </script>
 
+<!-- First focusable element in the shell: keyboard users can jump straight past
+     the rail and header to the page content. -->
+<a
+	href="#main-content"
+	class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded focus:border focus:border-border focus:bg-surface-800 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-text-secondary"
+>
+	Skip to content
+</a>
+
 <AppRail {currentPath} bind:pinned onopenpalette={() => (paletteOpen = true)} />
 <CommandPalette bind:open={paletteOpen} />
 
@@ -213,7 +222,11 @@
 		</header>
 	</div>
 
-	<main class="mx-auto w-full max-w-7xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:px-8 xl:pb-14">
+	<main
+		id="main-content"
+		tabindex="-1"
+		class="mx-auto w-full max-w-7xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:px-8 xl:pb-14"
+	>
 		{@render children()}
 	</main>
 

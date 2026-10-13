@@ -33,6 +33,7 @@
 
 	let assignments = $state<AssignmentView[]>([]);
 	let error = $state('');
+	let loading = $state(true);
 	let today = $state(new Date());
 	let viewMonth = $state(new Date());
 	let selectedDay = $state<Date | null>(null);
@@ -90,11 +91,15 @@
 	});
 
 	onMount(async () => {
-		const response = await fetch('/api/course/syllabus');
-		if (response.ok) {
-			const data = await response.json();
-			assignments = data.modules.flatMap((m: { assignments: AssignmentView[] }) => m.assignments);
-		} else error = 'Unable to load the calendar.';
+		try {
+			const response = await fetch('/api/course/syllabus');
+			if (response.ok) {
+				const data = await response.json();
+				assignments = data.modules.flatMap((m: { assignments: AssignmentView[] }) => m.assignments);
+			} else error = 'Unable to load the calendar.';
+		} finally {
+			loading = false;
+		}
 
 		await loadStatus();
 
@@ -377,6 +382,15 @@
 
 {#if error}
 	<section class="card p-6 text-danger">{error}</section>
+{:else if loading}
+	<div class="grid min-h-64 place-items-center">
+		<div class="text-center">
+			<span
+				class="mx-auto block h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
+			></span>
+			<p class="serif-italic mt-4 text-text-secondary">Loading the calendar…</p>
+		</div>
+	</div>
 {:else}
 	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
 		<div class="space-y-6 sm:space-y-8">
@@ -493,7 +507,11 @@
 						</div>
 					{/if}
 					{#if gcalNotice}
-						<p class="mt-4 rounded-xl border border-info/20 bg-info/10 px-3 py-2 text-sm text-info">
+						<p
+							class="mt-4 rounded-xl border border-info/20 bg-info/10 px-3 py-2 text-sm text-info"
+							role="status"
+							aria-live="polite"
+						>
 							{gcalNotice}
 						</p>
 					{/if}

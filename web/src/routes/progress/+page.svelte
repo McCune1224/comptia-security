@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { onMount } from 'svelte';
 	import ProgressRing from '$lib/components/ProgressRing.svelte';
 	import StatusChip from '$lib/components/StatusChip.svelte';
 	import ContextRail from '$lib/components/ContextRail.svelte';
@@ -91,20 +90,47 @@
 		return VALID_TABS.find((tab) => tab === requested) ?? 'grades';
 	});
 
-	onMount(async () => {
-		const [gradeResponse, masteryResponse, historyResponse] = await Promise.all([
-			fetch('/api/gradebook'),
-			fetch('/api/mastery'),
-			fetch('/api/history')
-		]);
-		if (gradeResponse.ok) gradeData = await gradeResponse.json();
+	// Lazy per-tab loading: `activeTab` derives from the URL (tab switches are
+	// `goto` links that do NOT remount this page), so an effect keyed on it
+	// fetches each tab's data on first visit only. Loaded data is cached in the
+	// state above and never refetched during the visit.
+	async function loadGrades() {
+		const response = await fetch('/api/gradebook');
+		if (response.ok) gradeData = await response.json();
 		else gradeError = 'Unable to load the gradebook.';
-		if (masteryResponse.ok) masteryData = await masteryResponse.json();
+	}
+
+	async function loadMastery() {
+		const response = await fetch('/api/mastery');
+		if (response.ok) masteryData = await response.json();
 		else masteryError = 'Unable to load mastery data.';
-		if (historyResponse.ok) {
-			const data = await historyResponse.json();
+	}
+
+	async function loadSessions() {
+		const response = await fetch('/api/history');
+		if (response.ok) {
+			const data = await response.json();
 			sessions = data.sessions ?? [];
 		}
+	}
+
+	// One-shot per tab per visit — the flags also guard against a duplicate
+	// fetch if the effect re-runs while a request is still in flight. Named
+	// `requested`, not `loading`, to stay clear of the loading snippet below.
+	const requested = { grades: false, mastery: false, sessions: false } as Record<Tab, boolean>;
+
+	$effect(() => {
+		const tab = activeTab;
+		// The context rail renders the gradebook summary on every tab, so grades
+		// always load; mastery and sessions stay lazy until their tab is opened.
+		if (!requested.grades) {
+			requested.grades = true;
+			void loadGrades();
+		}
+		if (tab === 'grades' || requested[tab]) return;
+		requested[tab] = true;
+		if (tab === 'mastery') void loadMastery();
+		else void loadSessions();
 	});
 
 	function kindLabel(kind: string): string {

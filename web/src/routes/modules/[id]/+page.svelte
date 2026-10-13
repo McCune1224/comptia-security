@@ -50,17 +50,28 @@
 
 	onMount(load);
 
-	async function toggleLesson(lesson: LessonView) {
-		const completed = !lesson.completed;
-		lesson.completed = completed;
+	function recountLessons() {
 		if (moduleView) {
 			moduleView.lessonsCompleted = moduleView.lessons.filter((l) => l.completed).length;
 		}
-		await fetch(`/api/course/lessons/${lesson.id}`, {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ completed })
-		});
+	}
+
+	async function toggleLesson(lesson: LessonView) {
+		const completed = !lesson.completed;
+		lesson.completed = completed;
+		recountLessons();
+		try {
+			const response = await fetch(`/api/course/lessons/${lesson.id}`, {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ completed })
+			});
+			if (!response.ok) throw new Error(`lesson save failed (${response.status})`);
+		} catch {
+			// The server did not accept the change — roll the optimistic toggle back.
+			lesson.completed = !completed;
+			recountLessons();
+		}
 	}
 
 	async function jumpToLesson(lessonId: string) {

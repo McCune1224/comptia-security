@@ -47,9 +47,12 @@
 		entries = [...sections, ...extra];
 	}
 
+	// Fetch the module entries once per page lifetime and keep them for every
+	// subsequent open. This is safe because a profile/course switch reloads the
+	// whole page (+layout.svelte: window.location.reload()), which remounts the
+	// palette, and module ids/titles/weeks are static course content.
 	$effect(() => {
 		if (open) {
-			loadedLessons = false;
 			query = '';
 			cursor = 0;
 			void loadLessons();

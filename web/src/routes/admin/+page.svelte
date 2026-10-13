@@ -32,12 +32,14 @@
 	let edits = $state<Record<string, string>>({});
 	let busyAssignment = $state<string | null>(null);
 	let dueDateMessage = $state('');
+	let dueDateOk = $state(false);
 
 	// Reset gate — two explicit steps: reveal panel, then type RESET.
 	let resetOpen = $state(false);
 	let resetPhrase = $state('');
 	let resetting = $state(false);
 	let resetMessage = $state('');
+	let resetOk = $state(false);
 
 	let importing = $state(false);
 	let backupMessage = $state('');
@@ -84,6 +86,7 @@
 		const value = edits[assignment.assignment.id];
 		const dueDate = value === '' || value === undefined ? null : parseDateKey(value);
 		if (value !== undefined && value !== '' && dueDate === null) {
+			dueDateOk = false;
 			dueDateMessage = 'Use a real calendar date in YYYY-MM-DD format.';
 			return;
 		}
@@ -96,6 +99,7 @@
 		});
 		busyAssignment = null;
 		if (response.ok) {
+			dueDateOk = true;
 			dueDateMessage =
 				dueDate === null
 					? `Override cleared — ${assignment.assignment.title} follows the schedule again.`
@@ -105,6 +109,7 @@
 			const payload = (await response.json().catch(() => null)) as {
 				error?: { message?: string };
 			} | null;
+			dueDateOk = false;
 			dueDateMessage = payload?.error?.message ?? 'Could not save the override.';
 		}
 	}
@@ -121,12 +126,14 @@
 		if (response.ok) {
 			resetOpen = false;
 			resetPhrase = '';
+			resetOk = true;
 			resetMessage = 'Progress wiped for this profile and course.';
 			await load();
 		} else {
 			const payload = (await response.json().catch(() => null)) as {
 				error?: { message?: string };
 			} | null;
+			resetOk = false;
 			resetMessage = payload?.error?.message ?? 'Reset failed.';
 		}
 	}
@@ -250,6 +257,15 @@
 
 {#if loadError}
 	<section class="card p-6 text-danger">{loadError}</section>
+{:else if !syllabus}
+	<div class="grid min-h-64 place-items-center">
+		<div class="text-center">
+			<span
+				class="mx-auto block h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
+			></span>
+			<p class="serif-italic mt-4 text-text-secondary">Loading the back office…</p>
+		</div>
+	</div>
 {:else}
 	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
 		<div class="space-y-6">
@@ -281,7 +297,13 @@
 					</p>
 				</div>
 				{#if dueDateMessage}
-					<p class="text-xs font-semibold text-accent">{dueDateMessage}</p>
+					<p
+						class="text-xs font-semibold {dueDateOk ? 'text-success' : 'text-danger'}"
+						role="status"
+						aria-live="polite"
+					>
+						{dueDateMessage}
+					</p>
 				{/if}
 				<ul class="space-y-2.5">
 					{#each assignments as item (item.assignment.id)}
@@ -355,7 +377,11 @@
 					</label>
 				</div>
 				{#if backupMessage}
-					<p class="text-xs font-semibold {backupOk ? 'text-success' : 'text-danger'}">
+					<p
+						class="text-xs font-semibold {backupOk ? 'text-success' : 'text-danger'}"
+						role="status"
+						aria-live="polite"
+					>
 						{backupMessage}
 					</p>
 				{/if}
@@ -410,7 +436,13 @@
 					</div>
 				{/if}
 				{#if resetMessage}
-					<p class="text-xs font-semibold text-accent">{resetMessage}</p>
+					<p
+						class="text-xs font-semibold {resetOk ? 'text-success' : 'text-danger'}"
+						role="status"
+						aria-live="polite"
+					>
+						{resetMessage}
+					</p>
 				{/if}
 			</section>
 
