@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import StatusChip from '$lib/components/StatusChip.svelte';
+	import ContextRail from '$lib/components/ContextRail.svelte';
 
 	type AssignmentView = {
 		assignment: { id: string; title: string; kind: string };
@@ -301,388 +302,407 @@
 	}
 </script>
 
-<div class="mx-auto max-w-5xl space-y-8">
-	<div>
-		<p class="eyebrow">Deadlines</p>
-		<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">Course calendar</h1>
-		<p class="mt-3 text-text-secondary">
-			Every assignment due date, anchored to your exam date — plus your Google events.
-		</p>
+{#snippet nextUpCard()}
+	<div class="card p-5">
+		<h2 class="h-display text-xl text-text-primary">Next up</h2>
+		{#if nextUp.length === 0}
+			<p class="mt-4 rounded bg-success/10 p-4 text-sm text-success">Nothing on the horizon.</p>
+		{:else}
+			<div class="mt-4 space-y-2">
+				{#each nextUp as item (item.key)}
+					{#if item.assignment}
+						<a
+							href="/assignments/{item.assignment.assignment.id}"
+							class="block rounded border border-border bg-surface-900/50 p-3 transition hover:border-border-strong hover:bg-surface-700/50"
+						>
+							<div class="flex items-center justify-between gap-2">
+								<p class="min-w-0 flex-1 truncate text-sm font-bold text-text-primary">
+									{item.assignment.assignment.title}
+								</p>
+								<span class={`chip shrink-0 ${statusTone(item.assignment.status)}`}>
+									{item.assignment.status === 'submitted'
+										? 'Done'
+										: item.assignment.status === 'overdue'
+											? 'Overdue'
+											: item.assignment.status === 'due-soon'
+												? 'Soon'
+												: item.assignment.status === 'in-progress'
+													? 'In progress'
+													: 'Open'}
+								</span>
+							</div>
+							<p
+								class="mt-1 text-xs {item.assignment.daysUntilDue < 0
+									? 'text-danger'
+									: item.assignment.daysUntilDue <= 2
+										? 'text-warning'
+										: 'text-text-muted'}"
+							>
+								{item.assignment.dueDateLabel}
+								{#if item.assignment.daysUntilDue < 0}· {item.assignment.daysUntilDue === -1
+										? 'yesterday'
+										: `${-item.assignment.daysUntilDue} days ago`}{:else if item.assignment.daysUntilDue === 0}·
+									today{:else if item.assignment.daysUntilDue === 1}· tomorrow{:else}· {item
+										.assignment.daysUntilDue} days{/if}
+							</p>
+						</a>
+					{:else if item.event}
+						<a
+							href={item.event.url || '#'}
+							target="_blank"
+							rel="noreferrer"
+							class="block rounded border border-border bg-surface-900/50 p-3 transition hover:border-border-strong hover:bg-surface-700/50"
+						>
+							<p class="truncate text-sm font-bold text-text-primary">{item.event.summary}</p>
+							<p class="mt-1 text-xs text-text-muted">
+								{whenLabel(item.event)} · {item.event.calendarName}
+							</p>
+						</a>
+					{/if}
+				{/each}
+			</div>
+		{/if}
 	</div>
+{/snippet}
 
-	{#if error}
-		<section class="card p-6 text-danger">{error}</section>
-	{:else}
-		{#if gcal}
-			<section class="card p-5 sm:p-6">
-				{#if !gcal.configured}
-					<div>
-						<h2 class="h-display text-xl text-text-primary">Google Calendar</h2>
-						<p class="mt-1 text-sm leading-relaxed text-text-secondary">
-							Set <code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
-								>GOOGLE_CLIENT_ID</code
-							>
-							and
-							<code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
-								>GOOGLE_CLIENT_SECRET</code
-							>
-							in
-							<code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
-								>web/.env</code
-							>
-							to connect (see
-							<code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
-								>web/GOOGLE-CALENDAR.md</code
-							>).
-						</p>
-					</div>
-				{:else if !gcal.connected}
-					<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<header class="card p-6 sm:p-8">
+	<p class="eyebrow">Deadlines</p>
+	<h1 class="h-display mt-2 text-3xl text-text-primary sm:text-4xl">
+		Course <span class="serif-italic text-accent">calendar</span>
+	</h1>
+	<p class="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
+		Every assignment due date, anchored to your exam date — plus your Google events.
+	</p>
+</header>
+
+{#if error}
+	<section class="card p-6 text-danger">{error}</section>
+{:else}
+	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
+		<div class="space-y-6 sm:space-y-8">
+			{#if gcal}
+				<section class="card p-5 sm:p-6">
+					{#if !gcal.configured}
 						<div>
 							<h2 class="h-display text-xl text-text-primary">Google Calendar</h2>
 							<p class="mt-1 text-sm leading-relaxed text-text-secondary">
-								See your real events next to course deadlines, and push deadlines to your phone for
-								reminders.
+								Set <code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
+									>GOOGLE_CLIENT_ID</code
+								>
+								and
+								<code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
+									>GOOGLE_CLIENT_SECRET</code
+								>
+								in
+								<code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
+									>web/.env</code
+								>
+								to connect (see
+								<code class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary"
+									>web/GOOGLE-CALENDAR.md</code
+								>).
 							</p>
 						</div>
-						<button
-							class="btn btn-primary shrink-0"
-							type="button"
-							onclick={connect}
-							disabled={gcalBusy}
-						>
-							{gcalBusy ? 'Connecting…' : 'Connect Google Calendar'}
-						</button>
-					</div>
-				{:else}
-					<div class="flex flex-col gap-4">
-						<div class="flex flex-wrap items-center justify-between gap-3">
-							<div class="flex items-center gap-3">
-								<span
-									class="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-border-strong"
-									><svg
-										viewBox="0 0 24 24"
-										class="h-5 w-5"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="1.8"
-										><rect x="3" y="4" width="18" height="18" rx="2" /><path
-											d="M16 2v4M8 2v4M3 10h18"
-										/></svg
-									></span
-								>
-								<div>
-									<h2 class="h-display text-xl text-text-primary">Google Calendar</h2>
-									<p class="text-sm text-text-secondary">Connected as {gcal.email}</p>
-								</div>
+					{:else if !gcal.connected}
+						<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+							<div>
+								<h2 class="h-display text-xl text-text-primary">Google Calendar</h2>
+								<p class="mt-1 text-sm leading-relaxed text-text-secondary">
+									See your real events next to course deadlines, and push deadlines to your phone
+									for reminders.
+								</p>
 							</div>
 							<button
-								class="touch-target text-sm font-semibold text-danger transition hover:text-danger/70 disabled:opacity-50"
+								class="btn btn-primary shrink-0"
 								type="button"
-								onclick={disconnect}
+								onclick={connect}
 								disabled={gcalBusy}
 							>
-								Disconnect
+								{gcalBusy ? 'Connecting…' : 'Connect Google Calendar'}
 							</button>
 						</div>
-						<div class="flex flex-wrap items-center gap-3 border-t border-border pt-4">
-							<button
-								class="btn btn-ghost h-11 px-3 text-xs"
-								type="button"
-								aria-pressed={showGoogle}
-								onclick={() => (showGoogle = !showGoogle)}
-							>
-								{#if showGoogle}
-									<svg
-										viewBox="0 0 24 24"
-										class="mr-1.5 inline h-4 w-4 align-[-2px]"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+					{:else}
+						<div class="flex flex-col gap-4">
+							<div class="flex flex-wrap items-center justify-between gap-3">
+								<div class="flex items-center gap-3">
+									<span
+										class="grid h-11 w-11 shrink-0 place-items-center rounded bg-accent-secondary/10 text-accent-secondary"
+										><svg
+											viewBox="0 0 24 24"
+											class="h-5 w-5"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="1.8"
+											><rect x="3" y="4" width="18" height="18" rx="2" /><path
+												d="M16 2v4M8 2v4M3 10h18"
+											/></svg
+										></span
 									>
-								{/if}
-								Show Google events
-							</button>
-							<div class="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
-								<span>
-									{gcal.syncedCount} deadline{gcal.syncedCount === 1 ? '' : 's'} pushed
-									{#if gcal.lastSyncAt}
-										· synced {new Date(gcal.lastSyncAt).toLocaleDateString('en-US', {
-											month: 'short',
-											day: 'numeric'
-										})}
-									{/if}
-								</span>
+									<div>
+										<h2 class="h-display text-xl text-text-primary">Google Calendar</h2>
+										<p class="text-sm text-text-secondary">Connected as {gcal.email}</p>
+									</div>
+								</div>
 								<button
-									class="btn btn-primary h-11 px-4 text-xs"
+									class="touch-target text-sm font-semibold text-danger transition hover:text-danger/70 disabled:opacity-50"
 									type="button"
-									onclick={() => syncDeadlines()}
+									onclick={disconnect}
 									disabled={gcalBusy}
 								>
-									{gcalBusy ? 'Syncing…' : 'Sync now'}
+									Disconnect
 								</button>
+							</div>
+							<div class="flex flex-wrap items-center gap-3 border-t border-border pt-4">
+								<button
+									class="btn btn-ghost h-11 px-3 text-xs"
+									type="button"
+									aria-pressed={showGoogle}
+									onclick={() => (showGoogle = !showGoogle)}
+								>
+									{#if showGoogle}
+										<svg
+											viewBox="0 0 24 24"
+											class="mr-1.5 inline h-4 w-4 align-[-2px]"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+										>
+									{/if}
+									Show Google events
+								</button>
+								<div class="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
+									<span>
+										{gcal.syncedCount} deadline{gcal.syncedCount === 1 ? '' : 's'} pushed
+										{#if gcal.lastSyncAt}
+											· synced {new Date(gcal.lastSyncAt).toLocaleDateString('en-US', {
+												month: 'short',
+												day: 'numeric'
+											})}
+										{/if}
+									</span>
+									<button
+										class="btn btn-primary h-11 px-4 text-xs"
+										type="button"
+										onclick={() => syncDeadlines()}
+										disabled={gcalBusy}
+									>
+										{gcalBusy ? 'Syncing…' : 'Sync now'}
+									</button>
+								</div>
+							</div>
+						</div>
+					{/if}
+					{#if gcalNotice}
+						<p class="mt-4 rounded-xl border border-info/20 bg-info/10 px-3 py-2 text-sm text-info">
+							{gcalNotice}
+						</p>
+					{/if}
+				</section>
+			{/if}
+
+			<div class="grid gap-6">
+				<section class="card p-3 sm:p-6">
+					<div class="mb-4 flex items-center justify-between">
+						<h2 class="h-display text-xl text-text-primary">{monthLabel}</h2>
+						<div class="flex gap-2">
+							<button
+								class="grid h-11 w-11 place-items-center rounded border border-border text-text-secondary transition hover:border-border-strong hover:bg-surface-700 hover:text-text-primary"
+								type="button"
+								aria-label="Previous month"
+								onclick={() => shiftMonth(-1)}
+							>
+								<svg
+									viewBox="0 0 24 24"
+									class="h-4 w-4"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"><path d="m15 18-6-6 6-6" /></svg
+								>
+							</button>
+							<button
+								class="grid h-11 w-11 place-items-center rounded border border-border text-text-secondary transition hover:border-border-strong hover:bg-surface-700 hover:text-text-primary"
+								type="button"
+								aria-label="Next month"
+								onclick={() => shiftMonth(1)}
+							>
+								<svg
+									viewBox="0 0 24 24"
+									class="h-4 w-4"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"><path d="m9 6 6 6-6 6" /></svg
+								>
+							</button>
+						</div>
+					</div>
+					<div class="overflow-x-auto">
+						<div class="min-w-[22rem]">
+							<div
+								class="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted"
+							>
+								{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div
+										class="py-2"
+									>
+										{day}
+									</div>{/each}
+							</div>
+							<div class="grid grid-cols-7 gap-1">
+								{#each Array(firstWeekday) as _}<div></div>{/each}
+								{#each Array(daysInMonth) as _, index (index)}
+									{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
+									{@const items = byDay[keyFor(day)] ?? []}
+									{@const gitems =
+										gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
+									<button
+										class="flex min-h-14 flex-col items-start rounded-lg border p-1.5 text-left transition sm:min-h-16 {isToday(
+											day
+										)
+											? 'border-accent/70 bg-accent/10 ring-2 ring-accent/30'
+											: 'border-border bg-surface-900/50 hover:border-border-strong hover:bg-surface-700/50'}"
+										type="button"
+										onclick={() =>
+											(selectedDay =
+												selectedDay && keyFor(selectedDay) === keyFor(day) ? null : day)}
+									>
+										<span
+											class="text-xs font-bold {isToday(day)
+												? 'text-accent'
+												: inPast(day)
+													? 'text-text-subtle'
+													: 'text-text-secondary'}">{index + 1}</span
+										>
+										{#if items.length || gitems.length}
+											<span class="mt-auto flex flex-wrap items-center gap-0.5">
+												{#each items as item (item.assignment.id)}
+													<span
+														class="block h-1.5 w-1.5 rounded-full {item.status === 'submitted'
+															? 'bg-success'
+															: item.status === 'overdue'
+																? 'bg-danger'
+																: item.status === 'due-soon'
+																	? 'bg-warning'
+																	: item.status === 'in-progress'
+																		? 'bg-info'
+																		: 'bg-surface-600'}"
+														title={item.assignment.title}
+													></span>
+												{/each}
+												{#each gitems.slice(0, 3) as event (event.id)}
+													<span
+														class="block h-1.5 w-1.5 rounded-full bg-accent-secondary"
+														title={`${event.summary} (Google)`}
+													></span>
+												{/each}
+												{#if gitems.length > 3}
+													<span class="text-[9px] font-semibold leading-3 text-text-muted"
+														>+{gitems.length - 3}</span
+													>
+												{/if}
+											</span>
+										{/if}
+									</button>
+								{/each}
 							</div>
 						</div>
 					</div>
-				{/if}
-				{#if gcalNotice}
-					<p class="mt-4 rounded-md border border-info/20 bg-info/10 px-3 py-2 text-sm text-info">
-						{gcalNotice}
-					</p>
-				{/if}
-			</section>
-		{/if}
-
-		<div class="grid gap-6 lg:grid-cols-3">
-			<section class="card p-3 sm:p-6 lg:col-span-2">
-				<div class="mb-4 flex items-center justify-between">
-					<h2 class="h-display text-xl text-text-primary">{monthLabel}</h2>
-					<div class="flex gap-2">
-						<button
-							class="grid h-11 w-11 place-items-center rounded-md border border-border-strong text-text-secondary transition hover:border-border-strong hover:text-text-primary"
-							type="button"
-							aria-label="Previous month"
-							onclick={() => shiftMonth(-1)}
-						>
-							<svg
-								viewBox="0 0 24 24"
-								class="h-4 w-4"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"><path d="m15 18-6-6 6-6" /></svg
-							>
-						</button>
-						<button
-							class="grid h-11 w-11 place-items-center rounded-md border border-border-strong text-text-secondary transition hover:border-border-strong hover:text-text-primary"
-							type="button"
-							aria-label="Next month"
-							onclick={() => shiftMonth(1)}
-						>
-							<svg
-								viewBox="0 0 24 24"
-								class="h-4 w-4"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"><path d="m9 6 6 6-6 6" /></svg
-							>
-						</button>
-					</div>
-				</div>
-				<div class="overflow-x-auto">
-					<div class="min-w-[22rem]">
-						<div
-							class="grid grid-cols-7 gap-0.5 text-center text-xs font-bold uppercase tracking-wide text-text-muted"
-						>
-							{#each ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as day (day)}<div
-									class="py-2"
-								>
-									{day}
-								</div>{/each}
-						</div>
-						<div class="grid grid-cols-7 gap-0.5">
-							{#each Array(firstWeekday) as _}<div></div>{/each}
-							{#each Array(daysInMonth) as _, index (index)}
-								{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
-								{@const items = byDay[keyFor(day)] ?? []}
-								{@const gitems =
-									gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
-								<button
-									class="flex min-h-14 flex-col items-start rounded-md border p-1.5 text-left transition sm:min-h-16 {isToday(
-										day
-									)
-										? 'border-accent/60 bg-accent/10'
-										: 'border-border bg-surface-800/40 hover:bg-surface-700/60'}"
-									type="button"
-									onclick={() =>
-										(selectedDay = selectedDay && keyFor(selectedDay) === keyFor(day) ? null : day)}
-								>
-									<span
-										class="text-xs font-bold {isToday(day)
-											? 'text-accent'
-											: inPast(day)
-												? 'text-text-subtle'
-												: 'text-text-secondary'}">{index + 1}</span
-									>
-									{#if items.length || gitems.length}
-										<span class="mt-auto flex flex-wrap items-center gap-0.5">
-											{#each items as item (item.assignment.id)}
-												<span
-													class="block h-1.5 w-1.5 rounded-full {item.status === 'submitted'
-														? 'bg-success'
-														: item.status === 'overdue'
-															? 'bg-danger'
-															: item.status === 'due-soon'
-																? 'bg-warning'
-																: item.status === 'in-progress'
-																	? 'bg-info'
-																	: 'bg-surface-600'}"
-													title={item.assignment.title}
-												></span>
-											{/each}
-											{#each gitems.slice(0, 3) as event (event.id)}
-												<span
-													class="block h-1.5 w-1.5 rounded-full bg-accent-secondary"
-													title={`${event.summary} (Google)`}
-												></span>
-											{/each}
-											{#if gitems.length > 3}
-												<span class="text-[9px] font-semibold leading-3 text-text-muted"
-													>+{gitems.length - 3}</span
-												>
-											{/if}
-										</span>
-									{/if}
-								</button>
-							{/each}
-						</div>
-					</div>
-				</div>
-				<div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-text-muted">
-					<span class="flex items-center gap-1.5"
-						><span class="h-2 w-2 rounded-full bg-accent"></span> course deadline</span
-					>
-					{#if gcal?.connected}
+					<div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-text-muted">
 						<span class="flex items-center gap-1.5"
-							><span class="h-2 w-2 rounded-full bg-accent-secondary"></span> Google event</span
+							><span class="h-2 w-2 rounded-full bg-accent"></span> course deadline</span
 						>
-					{/if}
-				</div>
-				{#if selectedDay}
-					{@const items = byDay[keyFor(selectedDay)] ?? []}
-					{@const gitems =
-						gcal?.connected && showGoogle ? (gcalByDay[keyFor(selectedDay)] ?? []) : []}
-					<div class="mt-4 rounded-md border border-border bg-surface-800/60 p-4">
-						<p class="mb-3 text-sm font-bold text-text-primary">
-							{keyFor(selectedDay)}
-							{#if isToday(selectedDay)}<span class="ml-2 text-xs font-semibold text-accent"
-									>Today</span
-								>{/if}
-						</p>
-						{#if items.length === 0 && gitems.length === 0}
-							<p class="text-sm text-text-muted">No assignments or events this day.</p>
-						{:else}
-							{#if items.length}
-								<p class="mb-2 text-xs font-bold uppercase tracking-wide text-text-muted">
-									Course deadlines
-								</p>
-								<div class="space-y-2">
-									{#each items as item (item.assignment.id)}
-										<a
-											href="/assignments/{item.assignment.id}"
-											class="flex items-center justify-between gap-3 rounded-md bg-surface-700/50 p-3 transition hover:bg-surface-700/80"
-										>
-											<span class="text-sm font-bold text-text-primary"
-												>{item.assignment.title}</span
-											>
-											<StatusChip status={item.status} />
-										</a>
-									{/each}
-								</div>
-							{/if}
-							{#if gitems.length}
-								<p class="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-text-muted">
-									Google events
-								</p>
-								<div class="space-y-2">
-									{#each gitems as event (event.id)}
-										<a
-											href={event.url || '#'}
-											target="_blank"
-											rel="noreferrer"
-											class="flex items-center justify-between gap-3 rounded-md bg-surface-700/50 p-3 transition hover:bg-surface-700/80"
-										>
-											<div class="min-w-0">
-												<p class="truncate text-sm font-bold text-text-primary">{event.summary}</p>
-												<p class="mt-0.5 text-xs text-text-muted">
-													{event.allDay ? 'All day' : event.startTime} · {event.calendarName}
-												</p>
-											</div>
-											<svg
-												viewBox="0 0 24 24"
-												class="h-4 w-4 shrink-0 text-text-muted"
-												fill="none"
-												stroke="currentColor"
-												stroke-width="2"><path d="M7 17 17 7M7 7h10v10" /></svg
-											>
-										</a>
-									{/each}
-								</div>
-							{/if}
+						{#if gcal?.connected}
+							<span class="flex items-center gap-1.5"
+								><span class="h-2 w-2 rounded-full bg-accent-secondary"></span> Google event</span
+							>
 						{/if}
 					</div>
-				{/if}
-			</section>
-
-			<section class="card h-fit p-5 sm:p-6">
-				<h2 class="h-display text-xl text-text-primary">Next up</h2>
-				{#if nextUp.length === 0}
-					<p class="mt-4 rounded-md bg-success/10 p-4 text-sm text-success">
-						Nothing on the horizon.
-					</p>
-				{:else}
-					<div class="mt-4 space-y-2">
-						{#each nextUp as item (item.key)}
-							{#if item.assignment}
-								<a
-									href="/assignments/{item.assignment.assignment.id}"
-									class="flex items-center justify-between gap-2 rounded-md border border-border bg-surface-800/60 p-3 transition hover:border-border-strong hover:bg-surface-700/60"
-								>
-									<div class="min-w-0">
-										<p class="truncate text-sm font-bold text-text-primary">
-											{item.assignment.assignment.title}
-										</p>
-										<p
-											class="mt-0.5 text-xs {item.assignment.daysUntilDue < 0
-												? 'text-danger'
-												: item.assignment.daysUntilDue <= 2
-													? 'text-warning'
-													: 'text-text-muted'}"
-										>
-											{item.assignment.dueDateLabel}
-											{#if item.assignment.daysUntilDue < 0}· {item.assignment.daysUntilDue === -1
-													? 'yesterday'
-													: `${-item.assignment.daysUntilDue} days ago`}{:else if item.assignment.daysUntilDue === 0}·
-												today{:else if item.assignment.daysUntilDue === 1}· tomorrow{:else}· {item
-													.assignment.daysUntilDue} days{/if}
-										</p>
+					{#if selectedDay}
+						{@const items = byDay[keyFor(selectedDay)] ?? []}
+						{@const gitems =
+							gcal?.connected && showGoogle ? (gcalByDay[keyFor(selectedDay)] ?? []) : []}
+						<div class="mt-4 rounded-xl border border-border bg-surface-900/50 p-4">
+							<p class="mb-3 text-sm font-bold text-text-primary">
+								{keyFor(selectedDay)}
+								{#if isToday(selectedDay)}<span class="ml-2 text-xs font-semibold text-accent"
+										>Today</span
+									>{/if}
+							</p>
+							{#if items.length === 0 && gitems.length === 0}
+								<p class="text-sm text-text-muted">No assignments or events this day.</p>
+							{:else}
+								{#if items.length}
+									<p class="mb-2 text-xs font-bold uppercase tracking-wide text-text-muted">
+										Course deadlines
+									</p>
+									<div class="space-y-2">
+										{#each items as item (item.assignment.id)}
+											<a
+												href="/assignments/{item.assignment.id}"
+												class="flex items-center justify-between gap-3 rounded-lg bg-surface-800 p-3 transition hover:bg-surface-700"
+											>
+												<span class="text-sm font-bold text-text-primary"
+													>{item.assignment.title}</span
+												>
+												<StatusChip status={item.status} />
+											</a>
+										{/each}
 									</div>
-									<span
-										class={`shrink-0 rounded px-2 py-0.5 text-[10px] font-bold ${statusTone(item.assignment.status)}`}
-									>
-										{item.assignment.status === 'submitted'
-											? 'Done'
-											: item.assignment.status === 'overdue'
-												? 'Overdue'
-												: item.assignment.status === 'due-soon'
-													? 'Soon'
-													: item.assignment.status === 'in-progress'
-														? 'In progress'
-														: 'Open'}
-									</span>
-								</a>
-							{:else if item.event}
-								<a
-									href={item.event.url || '#'}
-									target="_blank"
-									rel="noreferrer"
-									class="flex items-center justify-between gap-2 rounded-md border border-border bg-surface-800/60 p-3 transition hover:border-border-strong hover:bg-surface-700/60"
-								>
-									<div class="min-w-0">
-										<p class="truncate text-sm font-bold text-text-primary">{item.event.summary}</p>
-										<p class="mt-0.5 text-xs text-text-muted">
-											{whenLabel(item.event)} · {item.event.calendarName}
-										</p>
+								{/if}
+								{#if gitems.length}
+									<p class="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-text-muted">
+										Google events
+									</p>
+									<div class="space-y-2">
+										{#each gitems as event (event.id)}
+											<a
+												href={event.url || '#'}
+												target="_blank"
+												rel="noreferrer"
+												class="flex items-center justify-between gap-3 rounded-lg bg-surface-800 p-3 transition hover:bg-surface-700"
+											>
+												<div class="min-w-0">
+													<p class="truncate text-sm font-bold text-text-primary">
+														{event.summary}
+													</p>
+													<p class="mt-0.5 text-xs text-text-muted">
+														{event.allDay ? 'All day' : event.startTime} · {event.calendarName}
+													</p>
+												</div>
+												<svg
+													viewBox="0 0 24 24"
+													class="h-4 w-4 shrink-0 text-text-muted"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="2"><path d="M7 17 17 7M7 7h10v10" /></svg
+												>
+											</a>
+										{/each}
 									</div>
-									<span
-										class="shrink-0 rounded bg-accent-secondary/15 px-2 py-0.5 text-[10px] font-bold text-accent-secondary"
-										>Google</span
-									>
-								</a>
+								{/if}
 							{/if}
-						{/each}
-					</div>
-				{/if}
-			</section>
+						</div>
+					{/if}
+				</section>
+			</div>
 		</div>
-	{/if}
-</div>
+
+		<ContextRail title="Coming up">
+			{@render nextUpCard()}
+
+			<nav class="card p-5" aria-label="Related">
+				<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Related</p>
+				<div class="mt-3 space-y-1">
+					<a
+						href="/syllabus"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Full schedule</a
+					>
+					<a
+						href="/admin"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Exam date &amp; overrides</a
+					>
+				</div>
+			</nav>
+		</ContextRail>
+	</div>
+{/if}

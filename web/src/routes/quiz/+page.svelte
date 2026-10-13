@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import ExamFlow from '$lib/components/ExamFlow.svelte';
+	import DrillLauncher from '$lib/components/DrillLauncher.svelte';
 	import type { SessionType } from '$lib/types';
 	import { DOMAIN_NAMES, OBJECTIVES_BY_DOMAIN } from '$lib/utils';
 
@@ -20,9 +21,7 @@
 	let domain = $state<number | undefined>(
 		page.url.searchParams.get('domain') ? Number(page.url.searchParams.get('domain')) : undefined
 	);
-	let objective = $state<string | undefined>(
-		page.url.searchParams.get('objective') ?? undefined
-	);
+	let objective = $state<string | undefined>(page.url.searchParams.get('objective') ?? undefined);
 	let mode = $state<'practice' | 'exam'>(
 		(page.url.searchParams.get('mode') as 'practice' | 'exam') || 'practice'
 	);
@@ -63,91 +62,83 @@
 		}}
 	/>
 {:else}
-	<div class="mx-auto max-w-lg space-y-6 py-4 sm:py-8">
-		<div>
-			<div class="mb-3 grid h-12 w-12 place-items-center rounded-md bg-accent/15 text-accent">
-				<svg
-					viewBox="0 0 24 24"
-					class="h-6 w-6"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.8"
-					><rect x="5" y="3" width="14" height="18" rx="2" /><path
-						d="M9 3h6v3H9zM9 11h6M9 15h4"
-					/></svg
+	<DrillLauncher
+		eyebrow="Practice · Ungraded"
+		titleLead="Free Practice"
+		titleAccent="Quiz"
+		lede="Build confidence across Security+ objectives with focused, adaptive practice. Free practice sessions don't count toward your course grade."
+		tone="accent"
+		note="Wrong answers here still feed the wall of shame and your review queue, so guessing blind costs you later. Use the hint instead."
+	>
+		{#snippet icon()}
+			<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"
+				><rect x="5" y="3" width="14" height="18" rx="2" /><path
+					d="M9 3h6v3H9zM9 11h6M9 15h4"
+				/></svg
+			>
+		{/snippet}
+		<label class="block text-sm font-semibold text-text-secondary"
+			>Question count<select class="mt-1.5" bind:value={count}
+				><option value={5}>5 questions</option><option value={10}>10 questions</option><option
+					value={20}>20 questions</option
+				><option value={50}>50 questions</option></select
+			></label
+		>
+		<label class="block text-sm font-semibold text-text-secondary"
+			>Domain<select class="mt-1.5" bind:value={domain}
+				><option value={undefined}>All domains</option>{#each [1, 2, 3, 4, 5] as item}<option
+						value={item}>{DOMAIN_NAMES[item]}</option
+					>{/each}</select
+			></label
+		>
+		{#if domain}
+			<label class="block text-sm font-semibold text-text-secondary"
+				>Objective<select
+					class="mt-1.5"
+					bind:value={objective}
+					onchange={() => {
+						if (objective) count = 5;
+						else count = 20;
+					}}
+					><option value={undefined}>All objectives</option
+					>{#each OBJECTIVES_BY_DOMAIN[domain] as item}<option value={item}>{item}</option
+						>{/each}</select
+				></label
+			>
+		{/if}
+		<label class="block text-sm font-semibold text-text-secondary"
+			>Question style<select class="mt-1.5" bind:value={style}
+				><option value="mixed">Mixed (all styles)</option><option value="recall"
+					>Recall (definitions)</option
+				><option value="short-form">Short-form</option><option value="keyword"
+					>BEST / MOST / FIRST</option
+				><option value="scenario">Scenario (paragraph)</option></select
+			></label
+		>
+		<fieldset>
+			<legend class="mb-1.5 block text-sm font-semibold text-text-secondary">Session mode</legend>
+			<div class="grid grid-cols-2 rounded bg-surface-600/60 p-1">
+				<button
+					class="min-h-11 rounded px-3 text-sm font-semibold transition {mode === 'practice'
+						? 'bg-surface-800 text-text-primary shadow-[var(--shadow-card)]'
+						: 'text-text-muted hover:text-text-secondary'}"
+					type="button"
+					onclick={() => (mode = 'practice')}>Practice</button
+				><button
+					class="min-h-11 rounded px-3 text-sm font-semibold transition {mode === 'exam'
+						? 'bg-surface-800 text-text-primary shadow-[var(--shadow-card)]'
+						: 'text-text-muted hover:text-text-secondary'}"
+					type="button"
+					onclick={() => (mode = 'exam')}>Exam</button
 				>
 			</div>
-			<h1 class="h-display text-3xl text-text-primary">Free Practice Quiz</h1>
-			<p class="mt-2 leading-relaxed text-text-secondary">
-				Build confidence across Security+ objectives with focused, adaptive practice. Free practice
-				sessions don't count toward your course grade.
-			</p>
-		</div>
-		<div class="card space-y-5 p-6 sm:p-8">
-			<label class="block text-sm font-bold text-text-secondary"
-				>Question count<select class="mt-1.5" bind:value={count}
-					><option value={5}>5 questions</option><option value={10}>10 questions</option><option
-						value={20}>20 questions</option
-					><option value={50}>50 questions</option></select
-				></label
-			>
-			<label class="block text-sm font-bold text-text-secondary"
-				>Domain<select class="mt-1.5" bind:value={domain}
-					><option value={undefined}>All domains</option>{#each [1, 2, 3, 4, 5] as item}<option
-							value={item}>{DOMAIN_NAMES[item]}</option
-						>{/each}</select
-				></label
-			>
-			{#if domain}
-				<label class="block text-sm font-bold text-text-secondary"
-					>Objective<select
-						class="mt-1.5"
-						bind:value={objective}
-						onchange={() => {
-							if (objective) count = 5;
-							else count = 20;
-						}}
-						><option value={undefined}>All objectives</option
-						>{#each OBJECTIVES_BY_DOMAIN[domain] as item}<option value={item}>{item}</option
-						>{/each}</select
-					></label
-				>
-			{/if}
-			<label class="block text-sm font-bold text-text-secondary"
-				>Question style<select class="mt-1.5" bind:value={style}
-					><option value="mixed">Mixed (all styles)</option><option value="recall"
-					>Recall (definitions)</option
-					><option value="short-form">Short-form</option><option value="keyword"
-					>BEST / MOST / FIRST</option
-					><option value="scenario">Scenario (paragraph)</option></select
-				></label
-			>
-			<fieldset>
-				<legend class="mb-1.5 block text-sm font-bold text-text-secondary">Session mode</legend>
-				<div class="grid grid-cols-2 rounded-md bg-surface-700 p-1">
-					<button
-						class="min-h-11 rounded px-3 text-sm font-bold transition {mode === 'practice'
-							? 'bg-surface-800 text-text-primary'
-							: 'text-text-muted'}"
-						type="button"
-						onclick={() => (mode = 'practice')}>Practice</button
-					><button
-						class="min-h-11 rounded px-3 text-sm font-bold transition {mode === 'exam'
-							? 'bg-surface-800 text-text-primary'
-							: 'text-text-muted'}"
-						type="button"
-						onclick={() => (mode = 'exam')}>Exam</button
-					>
-				</div>
-			</fieldset>
-			<button
-				class="btn btn-primary w-full sm:w-auto"
-				onclick={() =>
-					goto(
-						`/quiz?start=1&count=${count}&domain=${domain ?? ''}&objective=${objective ?? ''}&mode=${mode}&style=${style}`
-					)}
-				>Start quiz</button
-			>
-		</div>
-	</div>
+		</fieldset>
+		<button
+			class="btn btn-primary w-full sm:w-auto"
+			onclick={() =>
+				goto(
+					`/quiz?start=1&count=${count}&domain=${domain ?? ''}&objective=${objective ?? ''}&mode=${mode}&style=${style}`
+				)}>Start quiz</button
+		>
+	</DrillLauncher>
 {/if}

@@ -59,13 +59,14 @@
 		const isFlipped = flipped.includes(card.key);
 		const isFaceUp = isMatched || isFlipped || revealed;
 		if (feedbackCorrectIds) {
-			if (feedbackCorrectIds.includes(card.pairId)) return 'border-success bg-success/15 text-success';
+			if (feedbackCorrectIds.includes(card.pairId))
+				return 'border-success bg-success/15 text-success';
 			if (isMatched) return 'border-danger bg-danger/15 text-danger';
 			return 'border-border bg-surface-800 text-text-muted';
 		}
 		if (isFaceUp) {
 			return isMatched
-				? 'border-accent bg-accent/15 text-text-primary'
+				? 'border-accent bg-accent/10 text-text-primary'
 				: 'border-border-strong bg-surface-600 text-text-primary';
 		}
 		return 'border-border bg-surface-700 text-text-muted';
@@ -76,9 +77,9 @@
 	{#each cards as card (card.key)}
 		<button
 			type="button"
-			class="flex min-h-[52px] items-center justify-center rounded-md border p-2 text-center text-sm font-semibold transition {cardClass(card)} {disabled || revealed
-				? 'cursor-default'
-				: 'cursor-pointer'}"
+			class="flex min-h-[52px] items-center justify-center rounded-xl border p-2 text-center text-sm font-semibold transition {cardClass(
+				card
+			)} {disabled || revealed ? 'cursor-default' : 'cursor-pointer'}"
 			aria-pressed={matched.has(card.pairId) || flipped.includes(card.key)}
 			aria-label={matched.has(card.pairId) || flipped.includes(card.key) || revealed
 				? `${card.text} (${card.pairId})`
@@ -95,7 +96,5 @@
 	{/each}
 </div>
 {#if !disabled && !revealed}
-	<p class="mt-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
-		Tap two cards to find a pair
-	</p>
+	<p class="serif-italic mt-2 text-xs text-text-muted">Tap two cards to find a pair</p>
 {/if}

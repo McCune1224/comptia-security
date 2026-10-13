@@ -175,13 +175,13 @@
 <div class="mx-auto max-w-5xl space-y-6">
 	<nav class="flex items-center gap-2 text-sm text-text-secondary">
 		<a
-			class="inline-flex min-h-11 items-center font-bold text-accent transition hover:underline"
-			href="/history">← Back to history</a
+			class="touch-target text-sm font-semibold text-accent hover:underline"
+			href="/progress?tab=sessions">← Back to history</a
 		>
 	</nav>
 
 	{#if error}
-		<div class="rounded-md border border-danger/40 bg-danger/10 p-4 text-center text-danger">
+		<div class="rounded-xl border border-danger/40 bg-danger/10 p-4 text-center text-danger">
 			{error}
 		</div>
 	{:else if !result}
@@ -231,13 +231,13 @@
 						{@const pct = score.possiblePoints
 							? Math.round((score.earnedPoints / score.possiblePoints) * 100)
 							: 0}
-						<div class="rounded-md border border-border bg-surface-800/60 p-3">
+						<div class="rounded-xl border border-border bg-surface-900/50 p-3">
 							<p class="text-xs text-text-muted">Domain {domain}</p>
 							<p class="num-display mt-1 text-base text-text-primary">
 								{score.earnedPoints.toFixed(1)}/{score.possiblePoints}
 							</p>
-							<div class="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-600">
-								<div class="h-full rounded-full {getBarColor(pct)}" style="width: {pct}%"></div>
+							<div class="mt-1 h-1.5 overflow-hidden rounded bg-surface-600">
+								<div class="h-full rounded {getBarColor(pct)}" style="width: {pct}%"></div>
 							</div>
 						</div>
 					{/each}
@@ -290,24 +290,16 @@
 			{#each filtered as review, i}
 				{@const q = review.question}
 				<div
-					class="glass rounded-md p-5 border-l-4 {review.feedback.fullyCorrect
+					class="card p-5 border-l-4 {review.feedback.fullyCorrect
 						? 'border-l-success'
 						: review.feedback.earnedPoints > 0
 							? 'border-l-warning'
 							: 'border-l-danger'}"
 				>
 					<div class="mb-3 flex flex-wrap items-center gap-2">
-						<span
-							class="rounded-md bg-surface-700 px-2.5 py-1 text-xs font-semibold text-text-primary"
-						>
-							Q{i + 1}
-						</span>
-						<span class="rounded-md bg-info/10 px-2.5 py-1 text-xs font-medium text-info">
-							Domain {q.domain}
-						</span>
-						<span class="rounded-md bg-surface-700 px-2.5 py-1 text-xs text-text-muted">
-							{q.kind.replace('-', ' ')}
-						</span>
+						<span class="chip bg-surface-700 text-text-secondary">Q{i + 1}</span>
+						<span class="chip bg-info/10 text-info">Domain {q.domain}</span>
+						<span class="chip bg-surface-700 text-text-muted">{q.kind.replace('-', ' ')}</span>
 						<span
 							class="ml-auto text-sm font-semibold {review.feedback.fullyCorrect
 								? 'text-success'
@@ -322,7 +314,7 @@
 
 					{#if q.context}
 						<div
-							class="mb-3 rounded-md border border-info/20 bg-info/5 p-3 text-sm leading-relaxed text-text-secondary"
+							class="mb-3 rounded-xl border border-info/20 bg-info/5 p-3 text-sm leading-relaxed text-text-secondary"
 						>
 							{q.context}
 						</div>
@@ -340,7 +332,7 @@
 									review.response?.kind === 'choice' &&
 									review.response.optionIds.includes(option.id)}
 								<div
-									class="rounded-md border-2 p-3 text-sm {isCorrect
+									class="rounded-lg border-2 p-3 text-sm {isCorrect
 										? 'border-success bg-success/10'
 										: isSelected
 											? 'border-danger bg-danger/10'
@@ -410,7 +402,8 @@
 										: ''}
 								{@const isMatchCorrect = userMatch === correctMatch}
 								<div
-									class="rounded-md bg-surface-700/60 p-3 text-sm {!isMatchCorrect && userMatch
+									class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm {!isMatchCorrect &&
+									userMatch
 										? 'border border-danger/30'
 										: ''}"
 								>
@@ -492,7 +485,7 @@
 										? review.feedback.correctResponse.values[field.id]
 										: ''}
 								{@const isConfigCorrect = userValue === correctVal}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-secondary">{field.label}</span>
 										<span class="font-medium {isConfigCorrect ? 'text-success' : 'text-danger'}">
@@ -524,7 +517,7 @@
 								{@const correctValue = correctValues[bi] ?? ''}
 								{@const isBlankCorrect =
 									userValue.trim().toLowerCase() === correctValue.trim().toLowerCase()}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-secondary">{blank.label}</span>
 										<span class="font-medium {isBlankCorrect ? 'text-success' : 'text-danger'}"
@@ -552,7 +545,7 @@
 										? (review.feedback.correctResponse.assignments[blank.id] ?? '')
 										: ''}
 								{@const isWordCorrect = userWordId === correctWordId}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-secondary">{blank.label}</span>
 										<span class="font-medium {isWordCorrect ? 'text-success' : 'text-danger'}"
@@ -583,7 +576,7 @@
 										? (review.feedback.correctResponse.assignments[item.id] ?? '')
 										: ''}
 								{@const isSortCorrect = userBucket === correctBucket}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-primary">{item.text}</span>
 										<span class="font-medium {isSortCorrect ? 'text-success' : 'text-danger'}"
@@ -611,7 +604,7 @@
 								{@const correct =
 									review.feedback.correctResponse.kind === 'hotspot' &&
 									review.feedback.correctResponse.regionIds.includes(region.id)}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-primary">{region.label}</span>
 										<span
@@ -650,7 +643,7 @@
 								{@const correct =
 									review.feedback.correctResponse.kind === 'memory' &&
 									review.feedback.correctResponse.matchedPairIds.includes(pair.id)}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<div class="flex items-center gap-2">
 										<span class="flex-1 text-text-primary">{pair.a} ↔ {pair.b}</span>
 										<span
@@ -678,7 +671,7 @@
 							{/each}
 						</div>
 					{:else if q.kind === 'slider'}
-						<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+						<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 							<p class="text-text-primary">
 								Your answer:
 								{review.response?.kind === 'slider'
@@ -699,7 +692,7 @@
 							</p>
 							{#each q.steps as step, si}
 								{@const stepFeedback = review.feedback.stepFeedback?.[si]}
-								<div class="rounded-md bg-surface-700/60 p-3 text-sm">
+								<div class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm">
 									<p class="mb-1 font-medium text-text-primary">Step {si + 1}: {step.prompt}</p>
 									{#if stepFeedback}
 										<p class="text-xs {stepFeedback.fullyCorrect ? 'text-success' : 'text-danger'}">
@@ -712,7 +705,7 @@
 					{/if}
 
 					<div
-						class="mt-4 rounded-md border-l-4 p-3 text-sm {review.feedback.fullyCorrect
+						class="mt-4 rounded-lg border-l-4 p-3 text-sm {review.feedback.fullyCorrect
 							? 'border-l-success bg-success/10'
 							: 'border-l-warning bg-warning/10'}"
 					>
@@ -723,7 +716,9 @@
 						{#if review.feedback.sourceRefs?.length}
 							<div class="mt-2 flex flex-wrap gap-2">
 								{#each review.feedback.sourceRefs as ref}
-									<span class="rounded-md bg-surface-800 px-2 py-0.5 text-xs text-text-muted">
+									<span
+										class="rounded border border-border bg-surface-800 px-2 py-0.5 text-xs text-text-muted"
+									>
 										{ref.source}: {ref.section}
 									</span>
 								{/each}
@@ -735,7 +730,7 @@
 		</div>
 
 		{#if filtered.length === 0}
-			<div class="glass rounded-md p-8 text-center">
+			<div class="card p-8 text-center">
 				<p class="text-text-secondary">No questions match the selected filter.</p>
 			</div>
 		{/if}

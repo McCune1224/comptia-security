@@ -40,7 +40,7 @@
 			if (selected) return 'border-danger bg-danger/15 text-danger';
 			return 'border-border bg-transparent text-text-muted';
 		}
-		if (selected) return 'border-accent bg-accent/20 text-text-primary';
+		if (selected) return 'border-accent bg-accent/10 text-text-primary';
 		return 'border-border/70 bg-transparent text-text-muted hover:border-accent hover:text-text-primary';
 	}
 
@@ -54,10 +54,10 @@
 
 <div class="space-y-2">
 	{#if def}
-		<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">{def.description}</p>
+		<p class="serif-italic text-sm text-text-muted">{def.description}</p>
 	{/if}
 	<div
-		class="relative w-full overflow-hidden rounded-md border border-border bg-surface-800"
+		class="relative w-full overflow-hidden rounded-xl border border-border bg-surface-800"
 		style:min-height="{minHeight()}px"
 	>
 		<!-- Template background (all in 0-100 normalized space) -->
@@ -73,7 +73,7 @@
 			{/each}
 		{:else if template === 'topology-basic'}
 			<div
-				class="absolute inset-x-[5%] top-[2%] flex h-[18%] items-center justify-center rounded-md border-2 border-dashed border-border-strong bg-surface-700/60 text-xs font-bold text-text-secondary"
+				class="absolute inset-x-[5%] top-[2%] flex h-[18%] items-center justify-center rounded-lg border-2 border-dashed border-border-strong bg-surface-900/60 text-xs font-bold text-text-secondary"
 			>
 				<svg
 					viewBox="0 0 24 24"
@@ -85,7 +85,7 @@
 			</div>
 			{#each TOPOLOGY_ANCHORS.filter((a) => a.id !== 'cloud') as anchor}
 				<div
-					class="absolute flex items-center justify-center rounded-md border border-border bg-surface-700 text-center text-[11px] font-semibold text-text-secondary"
+					class="absolute flex items-center justify-center rounded-lg border border-border bg-surface-900 text-center text-[11px] font-semibold text-text-secondary"
 					style:left="{anchor.x1}%"
 					style:top="{anchor.y1}%"
 					style:width="{anchor.x2 - anchor.x1}%"
@@ -96,7 +96,7 @@
 			{/each}
 		{:else if template === 'packet-frame'}
 			<div
-				class="absolute left-[2%] right-[2%] top-[30%] flex h-[24%] overflow-hidden rounded-md border border-border"
+				class="absolute left-[2%] right-[2%] top-[30%] flex h-[24%] overflow-hidden rounded-lg border border-border"
 			>
 				{#each PACKET_BANDS as band}
 					<div
@@ -108,7 +108,7 @@
 				{/each}
 			</div>
 			<div
-				class="absolute inset-x-[2%] top-[62%] flex items-center justify-center rounded-md border border-dashed border-border-strong bg-surface-700/50 py-3 text-xs font-bold text-text-secondary"
+				class="absolute inset-x-[2%] top-[62%] flex items-center justify-center rounded-lg border border-dashed border-border-strong bg-surface-900/50 py-3 text-xs font-bold text-text-secondary"
 			>
 				Ethernet frame
 			</div>
@@ -128,7 +128,7 @@
 		{#each regions as region (region.id)}
 			<button
 				type="button"
-				class="absolute rounded-sm border-2 transition {regionClass(region.id)} {disabled
+				class="absolute rounded-lg border-2 transition {regionClass(region.id)} {disabled
 					? 'cursor-default'
 					: 'cursor-pointer'}"
 				style:left="{region.x1}%"
@@ -147,8 +147,6 @@
 		{/each}
 	</div>
 	{#if !disabled}
-		<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
-			Tap a region — tap again to remove
-		</p>
+		<p class="serif-italic text-xs text-text-muted">Tap a region — tap again to remove</p>
 	{/if}
 </div>

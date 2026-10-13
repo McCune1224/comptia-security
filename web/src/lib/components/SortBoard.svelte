@@ -44,8 +44,8 @@
 	}
 </script>
 
-<div class="space-y-2">
-	<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
+<div class="space-y-3">
+	<p class="serif-italic text-sm text-text-muted">
 		Tap an item, then tap a bucket — tap a placed item to move it back
 	</p>
 	<div class="flex flex-col gap-4">
@@ -55,13 +55,13 @@
 				{#if !placed}
 					<button
 						type="button"
-						class="min-h-11 rounded-md border-2 px-3.5 py-2 text-sm font-medium transition {disabled
+						class="min-h-11 rounded border px-4 py-2 text-sm font-medium transition {disabled
 							? 'cursor-default opacity-60'
 							: selected === item.id
 								? 'border-accent bg-accent/10 text-text-primary'
-								: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
+								: 'border-border-strong bg-surface-800 text-text-primary hover:border-accent hover:text-accent'}"
 						aria-pressed={selected === item.id}
-						disabled={disabled}
+						{disabled}
 						onclick={() => onItemTap(item.id)}
 						onkeydown={(e) => {
 							if (e.key === 'Escape') selected = null;
@@ -78,12 +78,14 @@
 					.filter((item) => assignments[item.id] === bucket.id)
 					.map((item) => item.id)}
 				<div
-					class="rounded-md border border-border bg-surface-700/60 p-3 {selected
+					class="rounded-xl border border-border bg-surface-900/50 p-3.5 {selected
 						? 'cursor-pointer border-dashed border-border-strong'
 						: ''}"
 					role="button"
 					tabindex="0"
-					aria-label={selected ? `Place selected item in ${bucket.label}` : `${bucket.label} bucket`}
+					aria-label={selected
+						? `Place selected item in ${bucket.label}`
+						: `${bucket.label} bucket`}
 					onclick={() => onBucketTap(bucket.id)}
 					onkeydown={(e) => {
 						if (e.key === 'Enter' || e.key === ' ') {
@@ -101,10 +103,10 @@
 							{#if inBucket}
 								<button
 									type="button"
-									class="min-h-11 rounded-md border-2 px-3.5 py-2 text-sm font-medium transition {disabled
+									class="min-h-11 rounded border px-4 py-2 text-sm font-medium transition {disabled
 										? 'cursor-default'
 										: 'cursor-pointer'} {chipClass(item.id, bucket.id)}"
-									disabled={disabled}
+									{disabled}
 									onclick={() => onItemTap(item.id)}
 								>
 									{item.text}

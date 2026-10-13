@@ -111,8 +111,8 @@
 	}
 </script>
 
-<div class="space-y-2">
-	<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
+<div class="space-y-3">
+	<p class="serif-italic text-sm text-text-muted">
 		Tap a term, then tap its match — tap a match to remove it
 	</p>
 	<div class="relative" bind:this={container}>
@@ -147,11 +147,11 @@
 					<button
 						type="button"
 						data-connect-premise={premise.id}
-						class="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md border-2 px-4 text-left text-sm font-medium transition {disabled
+						class="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-xl border px-4 text-left text-sm font-medium transition {disabled
 							? 'cursor-default opacity-70'
 							: selected === premise.id
 								? 'border-accent bg-accent/10 text-text-primary'
-								: 'border-border text-text-primary hover:border-border-strong'}"
+								: 'border-border bg-surface-800 text-text-primary hover:border-border-strong hover:bg-surface-700/50'}"
 						aria-pressed={selected === premise.id}
 						{disabled}
 						onclick={() => onPremiseTap(premise.id)}
@@ -187,13 +187,13 @@
 					<button
 						type="button"
 						data-connect-target={target.id}
-						class="flex min-h-[44px] items-center justify-center gap-2 rounded-md border-2 px-3 text-center text-sm font-medium transition {disabled
+						class="flex min-h-[44px] items-center justify-center gap-2 rounded-xl border px-3 text-center text-sm font-medium transition {disabled
 							? 'cursor-default opacity-70'
 							: used
-								? 'cursor-pointer border-accent/60 bg-accent/15 text-accent'
+								? 'cursor-pointer border-accent/60 bg-accent/10 text-accent'
 								: selected
-									? 'border-border text-text-primary hover:border-accent hover:text-accent'
-									: 'border-border text-text-primary hover:border-border-strong'}"
+									? 'border-border bg-surface-800 text-text-primary hover:border-accent hover:text-accent'
+									: 'border-border bg-surface-800 text-text-primary hover:border-border-strong hover:bg-surface-700/50'}"
 						{disabled}
 						onclick={() => onTargetTap(target.id)}
 						onkeydown={(e) => {

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import ExamDateEditor from '$lib/components/ExamDateEditor.svelte';
 	import { parseDateKey } from '$lib/utils';
+	import ContextRail from '$lib/components/ContextRail.svelte';
 
 	type Profile = { id: string; name: string; color: string; courseId: string };
 	type Course = { id: string; title: string; shortTitle: string };
@@ -227,301 +228,346 @@
 	}
 </script>
 
-<div class="mx-auto max-w-5xl space-y-8">
-	<header>
-		<p class="eyebrow">Self-service administration</p>
-		<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">Admin</h1>
-		{#if scopeInfo}
-			<p class="mt-3 text-sm text-text-secondary">
-				Acting as
-				<span class="font-bold text-text-primary"
-					>{activeProfile?.name ?? scopeInfo.scope.profileId}</span
-				>
-				in
-				<span class="font-bold text-text-primary"
-					>{activeCourse?.title ?? scopeInfo.scope.courseId}</span
-				>
-				— scope comes from your active profile &amp; course cookies, not from this page.
-			</p>
-		{/if}
-	</header>
+<header class="card p-6 sm:p-8">
+	<p class="eyebrow">Self-service administration</p>
+	<h1 class="h-display mt-2 text-3xl text-text-primary sm:text-4xl">
+		The <span class="serif-italic text-accent">back office</span>
+	</h1>
+	{#if scopeInfo}
+		<p class="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary">
+			Acting as
+			<span class="font-bold text-text-primary"
+				>{activeProfile?.name ?? scopeInfo.scope.profileId}</span
+			>
+			in
+			<span class="font-bold text-text-primary"
+				>{activeCourse?.title ?? scopeInfo.scope.courseId}</span
+			>
+			— scope comes from your active profile &amp; course cookies, not from this page.
+		</p>
+	{/if}
+</header>
 
-	{#if loadError}
-		<section class="card p-6 text-danger">{loadError}</section>
-	{:else}
-		<!-- Exam date -->
-		<section class="card space-y-3 p-5 sm:p-6">
-			<div>
-				<h2 class="h-display text-xl text-text-primary">Exam date</h2>
-				<p class="mt-1 text-sm text-text-muted">
-					Moving the exam reschedules every assignment that has no due-date override.
-				</p>
-			</div>
-			{#if syllabus}
-				<ExamDateEditor
-					examDate={syllabus.examDate}
-					onsaved={async () => {
-						await load();
-					}}
-				/>
-			{/if}
-		</section>
-
-		<!-- Per-assignment due dates -->
-		<section class="card space-y-3 p-5 sm:p-6">
-			<div>
-				<h2 class="h-display text-xl text-text-primary">Assignment due dates</h2>
-				<p class="mt-1 text-sm text-text-muted">
-					Pin an explicit due date to override the schedule ({overrideCount} pinned). Clear the override
-					to follow the exam-anchored schedule again.
-				</p>
-			</div>
-			{#if dueDateMessage}
-				<p class="text-xs font-semibold text-accent">{dueDateMessage}</p>
-			{/if}
-			<ul class="divide-y divide-border">
-				{#each assignments as item (item.assignment.id)}
-					<li class="flex flex-wrap items-center gap-3 py-3">
-						<span class="chip w-20 shrink-0 justify-center bg-surface-700 text-text-muted"
-							>{kindLabel(item.assignment.kind)}</span
-						>
-						<span class="min-w-0 flex-1">
-							<span class="block truncate text-sm font-bold text-text-primary"
-								>{item.assignment.title}</span
-							>
-							<span class="block text-xs text-text-muted">
-								{item.dueDateLabel}
-								{#if item.overridden}
-									<span class="text-accent">· pinned (schedule: {item.derivedDueDateLabel})</span>
-								{/if}
-							</span>
-						</span>
-						<input
-							type="date"
-							class="h-11 rounded-md border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
-							aria-label="New due date for {item.assignment.title}"
-							bind:value={edits[item.assignment.id]}
-						/>
-						<button
-							class="btn btn-primary h-11 px-4 text-xs"
-							type="button"
-							disabled={busyAssignment === item.assignment.id ||
-								(!edits[item.assignment.id] && !item.overridden)}
-							onclick={() => saveDueDate(item)}
-						>
-							{#if edits[item.assignment.id]}
-								Pin
-							{:else}
-								Clear
-							{/if}
-						</button>
-					</li>
-				{/each}
-			</ul>
-		</section>
-
-		<!-- Backup & restore -->
-		<section class="card space-y-3 p-5 sm:p-6">
-			<div>
-				<h2 class="h-display text-xl text-text-primary">Backup &amp; restore</h2>
-				<p class="mt-1 text-sm text-text-muted">
-					Export all progress for this profile + course (sessions, answers, domain progress, review
-					cards, study log, submissions, lesson completions, exam date, pinned due dates) as JSON.
-					Importing replaces this scope's progress with the file's — the file must belong to the
-					same course.
-				</p>
-			</div>
-			<div class="flex flex-wrap items-center gap-3">
-				<a class="btn btn-ghost h-11 px-4 text-xs" href="/api/admin/backup" download>
-					Export backup
-				</a>
-				<label class="btn btn-ghost h-11 cursor-pointer px-4 text-xs">
-					{importing ? 'Importing…' : 'Import backup'}
-					<input
-						type="file"
-						accept="application/json,.json"
-						class="hidden"
-						disabled={importing}
-						onchange={(event) => {
-							const file = event.currentTarget.files?.[0];
-							if (file) void importBackup(file);
-							event.currentTarget.value = '';
+{#if loadError}
+	<section class="card p-6 text-danger">{loadError}</section>
+{:else}
+	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
+		<div class="space-y-6">
+			<!-- Exam date -->
+			<section class="card space-y-3 p-5 sm:p-6" id="exam-date">
+				<div>
+					<h2 class="h-display text-xl text-text-primary">Exam date</h2>
+					<p class="mt-1 text-sm text-text-muted">
+						Moving the exam reschedules every assignment that has no due-date override.
+					</p>
+				</div>
+				{#if syllabus}
+					<ExamDateEditor
+						examDate={syllabus.examDate}
+						onsaved={async () => {
+							await load();
 						}}
 					/>
-				</label>
-			</div>
-			{#if backupMessage}
-				<p class="text-xs font-semibold {backupOk ? 'text-success' : 'text-danger'}">
-					{backupMessage}
-				</p>
-			{/if}
-		</section>
+				{/if}
+			</section>
 
-		<!-- Danger zone -->
-		<section class="card space-y-3 border-danger/50 p-5 sm:p-6">
-			<div>
-				<h2 class="h-display text-xl text-danger">Danger zone</h2>
-				<p class="mt-1 text-sm text-text-muted">
-					Reset erases, for the active profile and course only: quiz sessions &amp; answers, domain
-					progress, review cards, the study log (streaks and heatmap are per-profile), assignment
-					submissions, and lesson completions. Profiles, course content, the exam date, and pinned
-					due dates survive.
-				</p>
-			</div>
-			{#if !resetOpen}
-				<button
-					class="btn btn-danger h-11 px-4 text-xs"
-					type="button"
-					onclick={() => (resetOpen = true)}
-				>
-					Reset all progress…
-				</button>
-			{:else}
-				<div class="space-y-3 rounded-md border border-danger/50 bg-surface-800/60 p-4">
-					<p class="text-sm text-text-secondary">
-						This cannot be undone. Type <span class="font-bold text-danger">RESET</span> to confirm.
+			<!-- Per-assignment due dates -->
+			<section class="card space-y-3 p-5 sm:p-6" id="due-dates">
+				<div>
+					<h2 class="h-display text-xl text-text-primary">Assignment due dates</h2>
+					<p class="mt-1 text-sm text-text-muted">
+						Pin an explicit due date to override the schedule ({overrideCount} pinned). Clear the override
+						to follow the exam-anchored schedule again.
 					</p>
-					<input
-						class="h-11 w-48 rounded-md border border-border-strong bg-surface-900 px-3 text-sm text-text-primary"
-						type="text"
-						bind:value={resetPhrase}
-						aria-label="Type RESET to confirm"
-					/>
-					<div class="flex gap-2">
-						<button
-							class="btn btn-danger h-11 px-4 text-xs"
-							type="button"
-							disabled={resetPhrase !== 'RESET' || resetting}
-							onclick={resetProgress}
-						>
-							{resetting ? 'Wiping…' : 'Wipe progress'}
-						</button>
-						<button
-							class="btn btn-ghost h-11 px-4 text-xs"
-							type="button"
-							onclick={() => {
-								resetOpen = false;
-								resetPhrase = '';
-							}}
-						>
-							Cancel
-						</button>
-					</div>
 				</div>
-			{/if}
-			{#if resetMessage}
-				<p class="text-xs font-semibold text-accent">{resetMessage}</p>
-			{/if}
-		</section>
-
-		<!-- Profiles -->
-		<section class="card space-y-3 p-5 sm:p-6">
-			<div>
-				<h2 class="h-display text-xl text-text-primary">Profiles</h2>
-				<p class="mt-1 text-sm text-text-muted">
-					Local profiles (max 2). The default profile cannot be deleted, and the active profile must
-					be switched away from first.
-				</p>
-			</div>
-			{#if scopeInfo}
-				<ul class="divide-y divide-border">
-					{#each scopeInfo.profiles as profile (profile.id)}
-						<li class="flex flex-wrap items-center gap-3 py-3">
-							<span
-								class="h-4 w-4 shrink-0 rounded-sm"
-								style="background:{profile.color}"
-								aria-hidden="true"
-							></span>
+				{#if dueDateMessage}
+					<p class="text-xs font-semibold text-accent">{dueDateMessage}</p>
+				{/if}
+				<ul class="space-y-2.5">
+					{#each assignments as item (item.assignment.id)}
+						<li
+							class="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface-900/50 p-4"
+						>
+							<span class="chip w-20 shrink-0 justify-center bg-surface-700 text-text-muted"
+								>{kindLabel(item.assignment.kind)}</span
+							>
 							<span class="min-w-0 flex-1">
-								<span class="block truncate text-sm font-bold text-text-primary">
-									{profile.name}
-									{#if profile.id === scopeInfo.scope.profileId}
-										<span class="chip ml-1 bg-accent/15 text-accent">active</span>
+								<span class="block truncate text-sm font-bold text-text-primary"
+									>{item.assignment.title}</span
+								>
+								<span class="block text-xs text-text-muted">
+									{item.dueDateLabel}
+									{#if item.overridden}
+										<span class="text-accent">· pinned (schedule: {item.derivedDueDateLabel})</span>
 									{/if}
 								</span>
-								<span class="block text-xs text-text-muted">
-									{scopeInfo.courses.find((course) => course.id === profile.courseId)?.shortTitle ??
-										profile.courseId}
-								</span>
 							</span>
-							{#if profile.id === renamingId}
-								<input
-									class="h-11 rounded-md border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
-									type="text"
-									bind:value={renameValue}
-									aria-label="New name"
-								/>
-								<button
-									class="btn btn-primary h-11 px-4 text-xs"
-									type="button"
-									onclick={() => renameProfile(profile.id)}
-								>
-									Save
-								</button>
-							{:else}
-								{#if profile.id !== scopeInfo.scope.profileId}
-									<button
-										class="btn btn-ghost h-11 px-4 text-xs"
-										type="button"
-										onclick={() => switchScope('profile', profile.id)}
-									>
-										Switch to
-									</button>
+							<input
+								type="date"
+								class="h-11 rounded-lg border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
+								aria-label="New due date for {item.assignment.title}"
+								bind:value={edits[item.assignment.id]}
+							/>
+							<button
+								class="btn btn-primary"
+								type="button"
+								disabled={busyAssignment === item.assignment.id ||
+									(!edits[item.assignment.id] && !item.overridden)}
+								onclick={() => saveDueDate(item)}
+							>
+								{#if edits[item.assignment.id]}
+									Pin
+								{:else}
+									Clear
 								{/if}
-								<button
-									class="btn btn-ghost h-11 px-4 text-xs"
-									type="button"
-									onclick={() => {
-										renamingId = profile.id;
-										renameValue = profile.name;
-									}}
-								>
-									Rename
-								</button>
-								<button
-									class="btn btn-danger h-11 px-4 text-xs"
-									type="button"
-									disabled={profile.id === 'default' || profile.id === scopeInfo.scope.profileId}
-									onclick={() => deleteProfile(profile)}
-								>
-									Delete
-								</button>
-							{/if}
+							</button>
 						</li>
 					{/each}
 				</ul>
+			</section>
 
-				<div class="flex flex-wrap items-center gap-2 border-t border-border pt-4">
-					<input
-						class="h-11 w-44 rounded-md border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
-						type="text"
-						placeholder="New profile name"
-						maxlength="24"
-						bind:value={newName}
-					/>
-					<div class="flex gap-1.5" role="radiogroup" aria-label="Profile color">
-						{#each PROFILE_COLORS as color (color)}
-							<button
-								type="button"
-								class="h-9 w-9 rounded-md border-2 transition {newColor === color
-									? 'border-accent'
-									: 'border-transparent'}"
-								style="background:{color}"
-								aria-label="Color {color}"
-								aria-checked={newColor === color}
-								role="radio"
-								onclick={() => (newColor = color)}
-							></button>
-						{/each}
-					</div>
-					<button class="btn btn-primary h-11 px-4 text-xs" type="button" onclick={createProfile}>
-						Create profile
-					</button>
+			<!-- Backup & restore -->
+			<section class="card space-y-3 p-5 sm:p-6" id="backup">
+				<div>
+					<h2 class="h-display text-xl text-text-primary">Backup &amp; restore</h2>
+					<p class="mt-1 text-sm text-text-muted">
+						Export all progress for this profile + course (sessions, answers, domain progress,
+						review cards, study log, submissions, lesson completions, exam date, pinned due dates)
+						as JSON. Importing replaces this scope's progress with the file's — the file must belong
+						to the same course.
+					</p>
 				</div>
-				{#if profileMessage}
-					<p class="text-xs font-semibold text-warning">{profileMessage}</p>
+				<div class="flex flex-wrap items-center gap-3">
+					<a class="btn btn-ghost" href="/api/admin/backup" download> Export backup </a>
+					<label class="btn btn-ghost cursor-pointer">
+						{importing ? 'Importing…' : 'Import backup'}
+						<input
+							type="file"
+							accept="application/json,.json"
+							class="hidden"
+							disabled={importing}
+							onchange={(event) => {
+								const file = event.currentTarget.files?.[0];
+								if (file) void importBackup(file);
+								event.currentTarget.value = '';
+							}}
+						/>
+					</label>
+				</div>
+				{#if backupMessage}
+					<p class="text-xs font-semibold {backupOk ? 'text-success' : 'text-danger'}">
+						{backupMessage}
+					</p>
 				{/if}
+			</section>
+
+			<!-- Danger zone -->
+			<section class="card space-y-3 border-danger/50 p-5 sm:p-6" id="danger">
+				<div>
+					<h2 class="h-display text-xl text-danger">Danger zone</h2>
+					<p class="mt-1 text-sm text-text-muted">
+						Reset erases, for the active profile and course only: quiz sessions &amp; answers,
+						domain progress, review cards, the study log (streaks and heatmap are per-profile),
+						assignment submissions, and lesson completions. Profiles, course content, the exam date,
+						and pinned due dates survive.
+					</p>
+				</div>
+				{#if !resetOpen}
+					<button class="btn btn-danger" type="button" onclick={() => (resetOpen = true)}>
+						Reset all progress…
+					</button>
+				{:else}
+					<div class="space-y-3 rounded-xl border border-danger/40 bg-danger/5 p-4">
+						<p class="text-sm text-text-secondary">
+							This cannot be undone. Type <span class="font-bold text-danger">RESET</span> to confirm.
+						</p>
+						<input
+							class="h-11 w-48 rounded-lg border border-border-strong bg-surface-900 px-3 text-sm text-text-primary"
+							type="text"
+							bind:value={resetPhrase}
+							aria-label="Type RESET to confirm"
+						/>
+						<div class="flex gap-2">
+							<button
+								class="btn btn-danger"
+								type="button"
+								disabled={resetPhrase !== 'RESET' || resetting}
+								onclick={resetProgress}
+							>
+								{resetting ? 'Wiping…' : 'Wipe progress'}
+							</button>
+							<button
+								class="btn btn-ghost"
+								type="button"
+								onclick={() => {
+									resetOpen = false;
+									resetPhrase = '';
+								}}
+							>
+								Cancel
+							</button>
+						</div>
+					</div>
+				{/if}
+				{#if resetMessage}
+					<p class="text-xs font-semibold text-accent">{resetMessage}</p>
+				{/if}
+			</section>
+
+			<!-- Profiles -->
+			<section class="card space-y-3 p-5 sm:p-6" id="profiles">
+				<div>
+					<h2 class="h-display text-xl text-text-primary">Profiles</h2>
+					<p class="mt-1 text-sm text-text-muted">
+						Local profiles (max 2). The default profile cannot be deleted, and the active profile
+						must be switched away from first.
+					</p>
+				</div>
+				{#if scopeInfo}
+					<ul class="space-y-2.5">
+						{#each scopeInfo.profiles as profile (profile.id)}
+							<li
+								class="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface-900/50 p-4"
+							>
+								<span
+									class="h-4 w-4 shrink-0 rounded"
+									style="background:{profile.color}"
+									aria-hidden="true"
+								></span>
+								<span class="min-w-0 flex-1">
+									<span class="block truncate text-sm font-bold text-text-primary">
+										{profile.name}
+										{#if profile.id === scopeInfo.scope.profileId}
+											<span class="chip ml-1 bg-accent/10 text-accent">active</span>
+										{/if}
+									</span>
+									<span class="block text-xs text-text-muted">
+										{scopeInfo.courses.find((course) => course.id === profile.courseId)
+											?.shortTitle ?? profile.courseId}
+									</span>
+								</span>
+								{#if profile.id === renamingId}
+									<input
+										class="h-11 rounded-lg border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
+										type="text"
+										bind:value={renameValue}
+										aria-label="New name"
+									/>
+									<button
+										class="btn btn-primary"
+										type="button"
+										onclick={() => renameProfile(profile.id)}
+									>
+										Save
+									</button>
+								{:else}
+									{#if profile.id !== scopeInfo.scope.profileId}
+										<button
+											class="btn btn-ghost"
+											type="button"
+											onclick={() => switchScope('profile', profile.id)}
+										>
+											Switch to
+										</button>
+									{/if}
+									<button
+										class="btn btn-ghost"
+										type="button"
+										onclick={() => {
+											renamingId = profile.id;
+											renameValue = profile.name;
+										}}
+									>
+										Rename
+									</button>
+									<button
+										class="btn btn-danger"
+										type="button"
+										disabled={profile.id === 'default' || profile.id === scopeInfo.scope.profileId}
+										onclick={() => deleteProfile(profile)}
+									>
+										Delete
+									</button>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+
+					<div class="flex flex-wrap items-center gap-3 border-t border-border pt-5">
+						<input
+							class="h-11 w-44 rounded-lg border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
+							type="text"
+							placeholder="New profile name"
+							maxlength="24"
+							bind:value={newName}
+						/>
+						<div class="flex gap-1.5" role="radiogroup" aria-label="Profile color">
+							{#each PROFILE_COLORS as color (color)}
+								<button
+									type="button"
+									class="h-11 w-11 rounded border-2 transition {newColor === color
+										? 'border-accent'
+										: 'border-transparent'}"
+									style="background:{color}"
+									aria-label="Color {color}"
+									aria-checked={newColor === color}
+									role="radio"
+									onclick={() => (newColor = color)}
+								></button>
+							{/each}
+						</div>
+						<button class="btn btn-primary" type="button" onclick={createProfile}>
+							Create profile
+						</button>
+					</div>
+					{#if profileMessage}
+						<p class="text-xs font-semibold text-warning">{profileMessage}</p>
+					{/if}
+				{/if}
+			</section>
+		</div>
+
+		<ContextRail title="On this page">
+			<nav class="card p-5" aria-label="Jump to section">
+				<div class="space-y-1">
+					<a
+						href="#exam-date"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Exam date</a
+					>
+					<a
+						href="#due-dates"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Assignment due dates</a
+					>
+					<a
+						href="#backup"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Backup &amp; restore</a
+					>
+					<a
+						href="#danger"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Danger zone</a
+					>
+					<a
+						href="#profiles"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Profiles</a
+					>
+				</div>
+			</nav>
+			{#if scopeInfo}
+				<div class="card p-5">
+					<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+						Active scope
+					</p>
+					<p class="mt-2 text-sm font-semibold text-text-primary">
+						{activeProfile?.name ?? scopeInfo.scope.profileId}
+					</p>
+					<p class="text-xs text-text-muted">{activeCourse?.title ?? scopeInfo.scope.courseId}</p>
+				</div>
 			{/if}
-		</section>
-	{/if}
-</div>
+		</ContextRail>
+	</div>
+{/if}

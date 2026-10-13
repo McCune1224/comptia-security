@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import StatusChip from '$lib/components/StatusChip.svelte';
 	import ExamDateEditor from '$lib/components/ExamDateEditor.svelte';
+	import ContextRail from '$lib/components/ContextRail.svelte';
 	import { formatDate, relativeDue } from '$lib/utils';
 
 	type AssignmentView = {
@@ -54,43 +55,69 @@
 					? 'PBQ'
 					: 'Full Exam';
 	}
+
+	const totals = $derived.by(() => {
+		const modules = data?.modules ?? [];
+		return {
+			lessonsDone: modules.reduce((sum, m) => sum + m.lessonsCompleted, 0),
+			lessonsTotal: modules.reduce((sum, m) => sum + m.lessonsTotal, 0),
+			assignmentsDone: modules.reduce((sum, m) => sum + m.assignmentsSubmitted, 0),
+			assignmentsTotal: modules.reduce((sum, m) => sum + m.assignmentsTotal, 0)
+		};
+	});
 </script>
 
-<div class="mx-auto max-w-5xl space-y-8">
-	<div>
-		<p class="eyebrow">Course schedule</p>
-		<h1 class="h-display mt-1 text-3xl text-text-primary sm:text-4xl">Syllabus</h1>
-		{#if data}
-			<p class="mt-3 text-text-secondary">
-				Exam date:
-				<span class="font-bold text-text-primary">{formatDate(data.examDate)}</span>
-				<span class="mx-2 text-text-subtle">·</span>
-				{data.daysUntilExam < 0
-					? `${-data.daysUntilExam} days ago`
-					: `${data.daysUntilExam} days to go`}
-			</p>
-			<div class="mt-4 max-w-xl">
-				<ExamDateEditor examDate={data.examDate} onsaved={load} />
-			</div>
-		{/if}
+{#if error}
+	<section class="card p-6 text-danger">{error}</section>
+{:else if !data}
+	<div class="grid min-h-64 place-items-center">
+		<span class="h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
+		></span>
 	</div>
+{:else}
+	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
+		<div class="space-y-5">
+			<header class="card p-6 sm:p-7">
+				<p class="eyebrow">Course schedule</p>
+				<h1 class="h-display mt-2 text-3xl text-text-primary sm:text-4xl">The path to exam day</h1>
+				<p class="mt-3 text-sm leading-relaxed text-text-secondary">
+					Four modules, {totals.lessonsTotal} lessons, and {totals.assignmentsTotal} graded assignments,
+					all back-scheduled from
+					<span class="font-semibold text-text-primary">{formatDate(data.examDate)}</span>.
+				</p>
+				<div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+					<div class="rounded-xl border border-border bg-surface-900/50 p-3.5">
+						<p class="num-display text-2xl text-text-primary">
+							{totals.lessonsDone}/{totals.lessonsTotal}
+						</p>
+						<p class="mt-0.5 text-xs text-text-muted">Lessons read</p>
+					</div>
+					<div class="rounded-xl border border-border bg-surface-900/50 p-3.5">
+						<p class="num-display text-2xl text-text-primary">
+							{totals.assignmentsDone}/{totals.assignmentsTotal}
+						</p>
+						<p class="mt-0.5 text-xs text-text-muted">Assignments in</p>
+					</div>
+					<div class="rounded-xl border border-border bg-surface-900/50 p-3.5">
+						<p
+							class="num-display text-2xl {data.daysUntilExam < 7
+								? 'text-accent'
+								: 'text-text-primary'}"
+						>
+							{data.daysUntilExam < 0 ? 0 : data.daysUntilExam}
+						</p>
+						<p class="mt-0.5 text-xs text-text-muted">Days to exam</p>
+					</div>
+				</div>
+			</header>
 
-	{#if error}
-		<section class="card p-6 text-danger">{error}</section>
-	{:else if !data}
-		<div class="grid min-h-64 place-items-center">
-			<span class="h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
-			></span>
-		</div>
-	{:else}
-		<div class="space-y-6">
 			{#each data.modules as module (module.module.id)}
-				<section class="card overflow-hidden">
-					<header class="border-b border-border bg-surface-900/60 p-5">
+				<section class="card overflow-hidden" id="week-{module.module.week}">
+					<header class="border-b border-border p-5 sm:p-6">
 						<div class="flex flex-wrap items-center justify-between gap-3">
-							<div class="flex items-center gap-3">
+							<div class="flex items-center gap-3.5">
 								<span
-									class="num-display grid h-11 w-11 shrink-0 place-items-center rounded-md bg-accent/15 text-sm text-accent"
+									class="serif-italic grid h-11 w-11 shrink-0 place-items-center rounded bg-accent/10 text-sm text-accent"
 									>W{module.module.week}</span
 								>
 								<div>
@@ -101,28 +128,26 @@
 									</p>
 								</div>
 							</div>
-							<a href="/modules/{module.module.id}" class="btn btn-ghost h-11 px-4 text-xs"
-								>Open module</a
-							>
+							<a href="/modules/{module.module.id}" class="btn btn-ghost">Open module</a>
 						</div>
-						<div class="mt-4 h-2 overflow-hidden rounded-full bg-surface-600">
+						<div class="mt-4 h-2 overflow-hidden rounded bg-surface-600">
 							<div
-								class="animate-progress h-full rounded-full bg-accent"
+								class="animate-progress h-full rounded bg-accent"
 								style="width: {module.assignmentsTotal
 									? (module.assignmentsSubmitted / module.assignmentsTotal) * 100
 									: 0}%"
 							></div>
 						</div>
 					</header>
-					<div class="divide-y divide-border">
+					<div class="space-y-2 p-4 sm:p-5">
 						{#each module.lessons as lesson (lesson.id)}
 							<a
 								href="/modules/{module.module.id}"
-								class="flex min-h-14 items-center gap-3 px-5 py-3 transition hover:bg-surface-700/40"
+								class="flex min-h-14 items-center gap-3 rounded-xl border border-border bg-surface-900/50 p-4 transition hover:border-border-strong hover:bg-surface-700/50"
 							>
 								<span
 									class="grid h-6 w-6 shrink-0 place-items-center rounded text-[11px] {lesson.completed
-										? 'bg-success/15 text-success'
+										? 'bg-success/10 text-success'
 										: 'border border-border text-transparent'}"
 								>
 									<svg
@@ -140,7 +165,7 @@
 						{#each module.assignments as item (item.assignment.id)}
 							<a
 								href="/assignments/{item.assignment.id}"
-								class="flex min-h-14 items-center gap-3 px-5 py-3 transition hover:bg-surface-700/40"
+								class="flex min-h-14 items-center gap-3 rounded-xl border border-border bg-surface-900/50 p-4 transition hover:border-border-strong hover:bg-surface-700/50"
 							>
 								<span class="chip w-20 shrink-0 justify-center bg-surface-700 text-text-muted"
 									>{kindLabel(item.assignment.kind)}</span
@@ -159,7 +184,7 @@
 									{item.dueDateLabel}
 									{#if item.overridden}
 										<span
-											class="chip ml-1 bg-accent/15 text-accent"
+											class="chip ml-1 bg-accent/10 text-accent"
 											title="Pinned by a due-date override (schedule would give {item.derivedDueDateLabel})"
 											>pinned</span
 										>
@@ -183,5 +208,74 @@
 				</section>
 			{/each}
 		</div>
-	{/if}
-</div>
+
+		<ContextRail title="Exam & schedule">
+			<div class="card p-5">
+				<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Exam date</p>
+				<p class="h-display mt-1.5 text-2xl text-text-primary">{formatDate(data.examDate)}</p>
+				<p class="mt-1 text-sm text-text-secondary">
+					{data.daysUntilExam < 0
+						? `${-data.daysUntilExam} days ago`
+						: `${data.daysUntilExam} days to go`}
+				</p>
+				<div class="mt-4">
+					<ExamDateEditor examDate={data.examDate} onsaved={load} />
+				</div>
+			</div>
+			<nav class="card p-5" aria-label="Jump to module">
+				<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Modules</p>
+				<div class="mt-3 space-y-1">
+					{#each data.modules as module (module.module.id)}
+						<a
+							href="#week-{module.module.week}"
+							class="flex min-h-11 items-center gap-2.5 rounded-lg px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>
+							<span class="serif-italic text-accent">W{module.module.week}</span>
+							<span class="min-w-0 flex-1 truncate">{module.module.title}</span>
+							<span class="text-xs text-text-subtle"
+								>{module.assignmentsSubmitted}/{module.assignmentsTotal}</span
+							>
+						</a>
+					{/each}
+				</div>
+			</nav>
+			<div class="card p-5">
+				<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Progress</p>
+				<div class="mt-3 space-y-3">
+					<div>
+						<div class="flex justify-between text-xs">
+							<span class="text-text-muted">Lessons</span>
+							<span class="font-bold text-text-secondary"
+								>{totals.lessonsDone}/{totals.lessonsTotal}</span
+							>
+						</div>
+						<div class="mt-1 h-1.5 overflow-hidden rounded bg-surface-600">
+							<div
+								class="h-full rounded bg-accent-secondary"
+								style="width: {totals.lessonsTotal
+									? (totals.lessonsDone / totals.lessonsTotal) * 100
+									: 0}%"
+							></div>
+						</div>
+					</div>
+					<div>
+						<div class="flex justify-between text-xs">
+							<span class="text-text-muted">Assignments</span>
+							<span class="font-bold text-text-secondary"
+								>{totals.assignmentsDone}/{totals.assignmentsTotal}</span
+							>
+						</div>
+						<div class="mt-1 h-1.5 overflow-hidden rounded bg-surface-600">
+							<div
+								class="h-full rounded bg-accent"
+								style="width: {totals.assignmentsTotal
+									? (totals.assignmentsDone / totals.assignmentsTotal) * 100
+									: 0}%"
+							></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ContextRail>
+	</div>
+{/if}

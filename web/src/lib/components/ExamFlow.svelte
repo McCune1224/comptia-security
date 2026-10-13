@@ -304,7 +304,9 @@
 
 	function hintable(question: PublicQuestion | undefined): boolean {
 		if (!question) return false;
-		return Boolean(question.hint) || (AUTO_HINTABLE_KINDS as readonly string[]).includes(question.kind);
+		return (
+			Boolean(question.hint) || (AUTO_HINTABLE_KINDS as readonly string[]).includes(question.kind)
+		);
 	}
 
 	async function revealHint() {
@@ -603,7 +605,7 @@
 			? 'border-success bg-success/10'
 			: draft?.kind === 'choice' && draft.optionIds.includes(optionId)
 				? 'border-danger bg-danger/10'
-				: 'border-border opacity-70';
+				: 'border-border bg-surface-900/50 opacity-70';
 	}
 
 	function choiceFeedbackIcon(optionId: string) {
@@ -663,21 +665,38 @@
 
 {#if error}
 	<div
-		class="mb-4 flex items-center justify-between gap-3 rounded-md border border-danger/40 bg-danger/10 p-4 text-danger"
+		class="mb-4 flex items-center justify-between gap-3 rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger"
 	>
-		<span>{error}</span><button class="font-bold underline" type="button" onclick={load}
-			>Retry</button
+		<span>{error}</span><button
+			class="touch-target font-bold underline"
+			type="button"
+			onclick={load}>Retry</button
 		>
 	</div>
 {/if}
 
 {#if activeConflict}
-	<div class="card mx-auto max-w-lg space-y-4 border-t-4 border-t-warning p-6">
-		<div>
-			<p class="text-sm font-bold text-warning">Session in progress</p>
-			<h1 class="h-display mt-1 text-xl text-text-primary">An active session already exists</h1>
+	<div class="card mx-auto max-w-lg space-y-5 p-6 sm:p-8">
+		<div class="flex items-start gap-4">
+			<span
+				class="grid h-11 w-11 shrink-0 place-items-center rounded bg-warning/10 text-warning"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					class="h-5 w-5"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.8"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg
+				>
+			</span>
+			<div>
+				<p class="text-[11px] font-bold uppercase tracking-[0.16em] text-warning">
+					Session in progress
+				</p>
+				<h1 class="h-display mt-1 text-xl text-text-primary">An active session already exists</h1>
+			</div>
 		</div>
-		<p class="text-text-secondary">
+		<p class="text-sm text-text-secondary">
 			{activeConflict.type} · {activeConflict.answeredCount}/{activeConflict.totalQuestions} answered
 		</p>
 		<div class="flex flex-col gap-3 sm:flex-row">
@@ -712,7 +731,7 @@
 				/></svg
 			>
 			<div class="absolute">
-				<p class="gradient-text num-display text-4xl">{result.percentage}%</p>
+				<p class="num-display text-4xl text-accent">{result.percentage}%</p>
 				<p class="text-xs text-text-muted">overall score</p>
 			</div>
 		</div>
@@ -720,13 +739,15 @@
 			<h1 class="h-display text-2xl text-text-primary">Practice performance</h1>
 			<p class="mt-2 text-text-secondary">
 				{result.earnedPoints.toFixed(2)} / {result.possiblePoints} points · {result.fullyCorrect} fully
-				correct of {result.totalQuestions}{result.durationSeconds !== undefined ? ` · ${Math.floor(result.durationSeconds / 60)}:${String(result.durationSeconds % 60).padStart(2, '0')}` : ''}
+				correct of {result.totalQuestions}{result.durationSeconds !== undefined
+					? ` · ${Math.floor(result.durationSeconds / 60)}:${String(result.durationSeconds % 60).padStart(2, '0')}`
+					: ''}
 			</p>
 		</div>
 		{#if Object.keys(result.domainBreakdown).length}
 			<div class="grid grid-cols-2 gap-3 text-left sm:grid-cols-5">
 				{#each Object.entries(result.domainBreakdown) as [domain, score]}<div
-						class="rounded-md border border-border bg-surface-800/60 p-3"
+						class="rounded-xl border border-border bg-surface-900/50 p-3"
 					>
 						<p class="text-xs text-text-muted">Domain {domain}</p>
 						<p class="num-display mt-1 text-lg text-text-primary">
@@ -739,7 +760,8 @@
 			<a class="btn btn-primary" href="/history/{result.sessionId}">Review Answers</a>
 			{#if result.review.some((item) => !item.feedback.fullyCorrect)}
 				<button class="btn btn-ghost" type="button" onclick={retakeMissed}
-					>Retake missed ({result.review.filter((item) => !item.feedback.fullyCorrect).length})</button
+					>Retake missed ({result.review.filter((item) => !item.feedback.fullyCorrect)
+						.length})</button
 				>
 			{/if}
 			<button class="btn btn-ghost" type="button" onclick={onDone}
@@ -749,42 +771,63 @@
 	</div>
 {:else if session && question}
 	<div class="mx-auto max-w-4xl space-y-5">
-		<header class="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-			<div class="flex flex-wrap items-center gap-2">
-				<span class="chip bg-surface-700 text-text-primary"
-					>Q{index + 1} of {session.totalQuestions}</span
-				><span class="chip bg-info/10 text-info">Domain {question.domain}</span><span
-					class="chip bg-surface-700 text-text-muted">{question.kind.replace('-', ' ')}</span
-				>
-			</div>
-			{#if session.mode === 'practice' && streak > 1}
-				<span
-					class="chip flex items-center gap-1.5 bg-surface-700 text-warning"
-					title="Answer streak"
-				>
-					<svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"
-						><path
-							d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
-						/></svg
+		<header
+			class="sticky top-16 z-30 -mx-4 border-b border-border bg-bg-base/95 px-4 pb-3 pt-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+		>
+			<div class="flex flex-wrap items-center justify-between gap-2 text-sm">
+				<div class="flex flex-wrap items-center gap-2">
+					<span class="chip bg-surface-700 text-text-secondary"
+						>Q{index + 1} of {session.totalQuestions}</span
+					><span class="chip bg-info/10 text-info">Domain {question.domain}</span><span
+						class="chip bg-surface-700 text-text-muted">{question.kind.replace('-', ' ')}</span
 					>
-					{streak}
+				</div>
+				<div class="flex flex-wrap items-center gap-2">
+					{#if session.mode === 'practice' && streak > 1}
+						<span
+							class="chip flex items-center gap-1.5 bg-warning/10 text-warning"
+							title="Answer streak"
+						>
+							<svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"
+								><path
+									d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5.9.3 1.8 0 2.3-.7.3 1.2.3 2.5-.3 3.7 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7 0 3.9-3.4 7-7.4 6.9C6.6 23.5 3 20.4 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
+								/></svg
+							>
+							{streak}
+						</span>
+					{/if}
+					{#if session.mode === 'practice' && sessionScore > 0}
+						<span class="chip bg-surface-700 text-text-secondary"
+							>{Math.round(sessionScore)} pts</span
+						>
+					{/if}
+					{#if timer}<span
+							class="chip flex items-center gap-1.5 {isLowTime()
+								? 'bg-danger/10 text-danger'
+								: 'bg-surface-700 text-text-secondary'}"
+							><svg
+								viewBox="0 0 24 24"
+								class="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg
+							><span class="num-display text-sm">{timer}</span></span
+						>{/if}
+				</div>
+			</div>
+			<div class="mt-3 flex items-center gap-3">
+				<div class="h-1.5 flex-1 overflow-hidden rounded bg-surface-600">
+					<div
+						class="h-full rounded bg-accent transition-all duration-300"
+						style="width: {session.totalQuestions
+							? (session.answeredCount / session.totalQuestions) * 100
+							: 0}%"
+					></div>
+				</div>
+				<span class="shrink-0 text-xs font-semibold text-text-muted">
+					{session.answeredCount}/{session.totalQuestions} answered
 				</span>
-			{/if}
-			{#if session.mode === 'practice' && sessionScore > 0}
-				<span class="chip bg-surface-700 text-text-secondary">{Math.round(sessionScore)} pts</span>
-			{/if}
-			{#if timer}<span
-					class="chip flex items-center gap-1.5 bg-surface-700 font-mono font-semibold {isLowTime()
-						? 'text-danger'
-						: 'text-text-secondary'}"
-					><svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg
-					>{timer}</span
-				>{/if}
+			</div>
 		</header>
 
 		{#if session && (session.mode === 'exam' || session.mode === 'practice')}
@@ -796,12 +839,12 @@
 						{@const isFlagged = session.flaggedQuestionIndexes.includes(qi)}
 						{@const isCurrent = qi === index}
 						<button
-							class="grid h-11 w-11 place-items-center rounded-md text-sm font-bold transition {isCurrent
-								? 'ring-2 ring-accent ring-offset-1 ring-offset-surface-800'
-								: ''} {isAnswered
-								? 'bg-accent text-on-accent'
-								: 'border border-border text-text-secondary hover:border-border-strong'} {isFlagged
-								? 'ring-1 ring-warning'
+							class="grid h-11 w-11 place-items-center rounded-xl border text-sm font-semibold transition {isCurrent
+								? 'border-accent bg-accent text-on-accent shadow-[var(--shadow-card)]'
+								: isAnswered
+									? 'border-accent/30 bg-accent/10 text-accent'
+									: 'border-border bg-surface-900/60 text-text-secondary hover:border-border-strong hover:text-text-primary'} {isFlagged
+								? 'ring-2 ring-warning/60'
 								: ''}"
 							type="button"
 							title="Question {qi + 1}{isFlagged ? ' (flagged)' : ''}{isAnswered
@@ -817,16 +860,20 @@
 		{/if}
 		<div class="card p-5 sm:p-8">
 			{#if session.mode === 'practice' && question.practiceSummary}
-				<div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-accent/20 bg-accent/5 p-3">
+				<div
+					class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent/25 bg-accent/10 p-3"
+				>
 					<label class="flex min-h-11 items-center gap-2 text-sm font-semibold text-text-secondary">
 						<input type="checkbox" bind:checked={showPracticeSummary} />
 						Show practice context
 					</label>
-					{#if showPracticeSummary}<span class="text-sm leading-relaxed text-text-primary">{question.practiceSummary.text}</span>{/if}
+					{#if showPracticeSummary}<span class="text-sm leading-relaxed text-text-primary"
+							>{question.practiceSummary.text}</span
+						>{/if}
 				</div>
 			{/if}
 			{#if question.context && !(session.mode === 'practice' && question.practiceSummary)}<div
-					class="mb-5 rounded-md border border-info/20 bg-info/5 p-4 text-sm leading-relaxed text-text-secondary"
+					class="mb-5 rounded-xl border border-info/25 bg-info/10 p-4 text-sm leading-relaxed text-text-secondary"
 				>
 					{question.context}
 				</div>{/if}
@@ -839,13 +886,13 @@
 			{#if question.kind === 'single-choice' || question.kind === 'multiple-choice'}
 				<div class="space-y-3">
 					{#each question.options as option (option.id)}<label
-							class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-md border-2 p-4 transition-all duration-150 {feedback
+							class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border p-4 transition duration-150 {feedback
 								? choiceFeedbackClass(option.id)
 								: draft?.kind === 'choice' && draft.optionIds.includes(option.id)
 									? 'border-accent bg-accent/10'
-									: 'border-border hover:border-border-strong'}"
+									: 'border-border bg-surface-900/50 hover:border-border-strong hover:bg-surface-700/50'}"
 							><input
-									data-answer-option
+								data-answer-option
 								type={question.kind === 'multiple-choice' ? 'checkbox' : 'radio'}
 								checked={draft?.kind === 'choice' && draft.optionIds.includes(option.id)}
 								onchange={() => choose(option.id, question.kind === 'multiple-choice')}
@@ -868,49 +915,52 @@
 				</div>
 			{:else if question.kind === 'ordering'}
 				<div bind:this={orderingEl} class="space-y-3">
-					{#key (draft?.kind === 'ordering' ? JSON.stringify(draft.itemIds) : JSON.stringify(question.items.map((item) => item.id)))}
-				{#each draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id) as id, itemIndex}
-						<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
-							<button
-								class="drag-handle grid h-11 w-11 cursor-grab active:cursor-grabbing place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
-								type="button"
-								aria-label="Reorder item. Press arrow keys to move."
-								onkeydown={(e) => {
-									if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-										e.preventDefault();
-										const ids = [
-											...(draft?.kind === 'ordering'
-												? draft.itemIds
-												: question.items.map((item) => item.id))
-										];
-										const dir = e.key === 'ArrowUp' ? -1 : 1;
-										const target = itemIndex + dir;
-										if (target < 0 || target >= ids.length) return;
-										[ids[itemIndex], ids[target]] = [ids[target], ids[itemIndex]];
-										draft = { kind: 'ordering', itemIds: ids };
-									}
-								}}
+					{#key draft?.kind === 'ordering' ? JSON.stringify(draft.itemIds) : JSON.stringify(question.items.map((item) => item.id))}
+						{#each draft?.kind === 'ordering' ? draft.itemIds : question.items.map((item) => item.id) as id, itemIndex}
+							<div
+								class="flex items-center gap-3 rounded-xl border border-border bg-surface-900/50 p-3"
+								data-id={id}
 							>
-								<svg
-									viewBox="0 0 24 24"
-									class="h-5 w-5 shrink-0 text-text-subtle"
-									fill="currentColor"
-									><circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" /><circle
-										cx="9"
-										cy="12"
-										r="1.5"
-									/><circle cx="15" cy="12" r="1.5" /><circle cx="9" cy="18" r="1.5" /><circle
-										cx="15"
-										cy="18"
-										r="1.5"
-									/></svg
-								></button
-							>
-							<span class="flex-1 text-text-primary"
-								>{question.items.find((item) => item.id === id)?.text}</span
-							>
-						</div>{/each}
-				{/key}
+								<button
+									class="drag-handle grid h-11 w-11 shrink-0 cursor-grab active:cursor-grabbing place-items-center rounded bg-surface-700/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+									type="button"
+									aria-label="Reorder item. Press arrow keys to move."
+									onkeydown={(e) => {
+										if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+											e.preventDefault();
+											const ids = [
+												...(draft?.kind === 'ordering'
+													? draft.itemIds
+													: question.items.map((item) => item.id))
+											];
+											const dir = e.key === 'ArrowUp' ? -1 : 1;
+											const target = itemIndex + dir;
+											if (target < 0 || target >= ids.length) return;
+											[ids[itemIndex], ids[target]] = [ids[target], ids[itemIndex]];
+											draft = { kind: 'ordering', itemIds: ids };
+										}
+									}}
+								>
+									<svg
+										viewBox="0 0 24 24"
+										class="h-5 w-5 shrink-0 text-text-subtle"
+										fill="currentColor"
+										><circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" /><circle
+											cx="9"
+											cy="12"
+											r="1.5"
+										/><circle cx="15" cy="12" r="1.5" /><circle cx="9" cy="18" r="1.5" /><circle
+											cx="15"
+											cy="18"
+											r="1.5"
+										/></svg
+									></button
+								>
+								<span class="flex-1 text-text-primary"
+									>{question.items.find((item) => item.id === id)?.text}</span
+								>
+							</div>{/each}
+					{/key}
 				</div>
 			{:else if question.kind === 'matching'}
 				<MatchConnect
@@ -944,7 +994,7 @@
 			{:else if question.kind === 'evidence'}
 				<div class="space-y-2 font-mono text-sm">
 					{#each question.artifact.lines as line}<label
-							class="flex min-w-0 cursor-pointer items-start gap-3 rounded-md border border-border bg-surface-900/60 p-3 transition {draft?.kind ===
+							class="flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-900/60 p-3 transition {draft?.kind ===
 								'evidence' && draft.lineIds.includes(line.id)
 								? 'border-accent bg-accent/10'
 								: 'hover:border-border-strong'}"
@@ -952,13 +1002,15 @@
 								type="checkbox"
 								checked={draft?.kind === 'evidence' && draft.lineIds.includes(line.id)}
 								onchange={() => toggleEvidence(line.id)}
-							/><span class="min-w-0 flex-1 break-words leading-relaxed text-text-secondary">{line.text}</span></label
+							/><span class="min-w-0 flex-1 break-words leading-relaxed text-text-secondary"
+								>{line.text}</span
+							></label
 						>{/each}
 				</div>
 			{:else if question.kind === 'configuration'}
 				<div class="space-y-3">
 					{#each question.fields as field}<label
-							class="flex flex-col gap-2 rounded-md bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
+							class="flex flex-col gap-2 rounded-xl border border-border bg-surface-900/50 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
 							><span class="flex-1">{field.label}</span><select
 								class="sm:w-56"
 								value={draft?.kind === 'configuration' ? draft.values[field.id] : ''}
@@ -991,7 +1043,7 @@
 					</p>
 					<div class="flex flex-wrap gap-2 text-xs text-text-muted">
 						{#each question.blanks as blank}
-							<span class="rounded-md bg-surface-700 px-2.5 py-1">
+							<span class="rounded bg-surface-700 px-2.5 py-1">
 								{blank.label}: {blank.placeholder}
 							</span>
 						{/each}
@@ -1003,9 +1055,7 @@
 					draft?.kind === 'word-bank' ? Object.values(draft.assignments) : []
 				)}
 				<div class="space-y-5">
-					<p
-						class="h-display text-xl leading-relaxed text-text-primary sm:text-2xl"
-					>
+					<p class="h-display text-xl leading-relaxed text-text-primary sm:text-2xl">
 						{#each segments as segment, si}
 							{segment}
 							{#if si < segments.length - 1}
@@ -1015,8 +1065,8 @@
 								{@const assignedWord = question.bank.find((word) => word.id === assignedId)}
 								<button
 									type="button"
-									class="mx-1 inline-flex min-h-11 min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold transition {assignedWord
-										? 'border-accent bg-accent/15 text-accent'
+									class="mx-1 inline-flex min-h-11 min-w-28 items-center justify-center rounded-xl border px-2 py-0.5 font-semibold transition {assignedWord
+										? 'border-accent bg-accent/10 text-accent'
 										: wordBankSelected === blank.id
 											? 'border-warning bg-warning/10 text-warning'
 											: 'border-dashed border-border-strong text-text-muted hover:border-accent'} {feedback
@@ -1042,11 +1092,11 @@
 								{@const isUsed = usedIds.has(word.id)}
 								<button
 									type="button"
-									class="min-h-11 rounded-md border px-3.5 py-1.5 text-sm font-medium transition {isUsed
+									class="min-h-11 rounded border px-3.5 py-1.5 text-sm font-medium transition {isUsed
 										? 'cursor-not-allowed border-border opacity-40 line-through'
 										: feedback
 											? 'cursor-default border-border opacity-70'
-											: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
+											: 'border-border bg-surface-900/60 text-text-primary hover:border-accent hover:text-accent'}"
 									disabled={isUsed || !!feedback}
 									onclick={() => assignWord(word.id)}
 								>
@@ -1116,10 +1166,10 @@
 				{@const subDraft = getSubResponse()}
 				<div class="space-y-4">
 					<div class="flex items-center gap-2 text-sm">
-						<span class="rounded-md bg-surface-700 px-3 py-1.5 font-semibold text-text-primary">
+						<span class="chip bg-surface-700 text-text-secondary">
 							Step {subStep + 1} of {question.steps.length}
 						</span>
-						<span class="rounded-md bg-surface-700 px-3 py-1.5 text-text-muted">
+						<span class="chip bg-surface-700 text-text-muted">
 							{step.kind.replace('-', ' ')}
 						</span>
 					</div>
@@ -1129,13 +1179,13 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.options as option (option.id)}
 								<label
-									class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-md border-2 p-4 transition-all duration-150 {subDraft?.kind ===
+									class="flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border p-4 transition duration-150 {subDraft?.kind ===
 										'choice' && subDraft.optionIds.includes(option.id)
 										? 'border-accent bg-accent/10'
-										: 'border-border hover:border-border-strong'}"
+										: 'border-border bg-surface-900/50 hover:border-border-strong hover:bg-surface-700/50'}"
 								>
 									<input
-											data-answer-option
+										data-answer-option
 										type={step.kind === 'multiple-choice' ? 'checkbox' : 'radio'}
 										checked={subDraft?.kind === 'choice' && subDraft.optionIds.includes(option.id)}
 										onchange={() => {
@@ -1156,45 +1206,48 @@
 					{:else if step.kind === 'ordering'}
 						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 						<div bind:this={subOrderingEl} class="space-y-3">
-							{#key (subDraft?.kind === 'ordering' ? JSON.stringify(subDraft.itemIds) : JSON.stringify(step.items.map((i) => i.id)))}
-							{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map((i) => i.id) as id, itemIndex}
-								<div class="glass flex items-center gap-3 rounded-md p-3" data-id={id}>
-									<button
-										class="drag-handle grid h-11 w-11 cursor-grab active:cursor-grabbing place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
-										type="button"
-										aria-label="Reorder item. Press arrow keys to move."
-										onkeydown={(e) => {
-											if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-												e.preventDefault();
-												const current = getSubResponse();
-												const ids =
-													current?.kind === 'ordering'
-														? [...current.itemIds]
-														: step.items.map((i) => i.id);
-												const dir = e.key === 'ArrowUp' ? -1 : 1;
-												const target = itemIndex + dir;
-												if (target < 0 || target >= ids.length) return;
-												[ids[itemIndex], ids[target]] = [ids[target], ids[itemIndex]];
-												updateSubResponse({ kind: 'ordering', itemIds: ids });
-											}
-										}}
+							{#key subDraft?.kind === 'ordering' ? JSON.stringify(subDraft.itemIds) : JSON.stringify(step.items.map((i) => i.id))}
+								{#each subDraft?.kind === 'ordering' ? subDraft.itemIds : step.items.map((i) => i.id) as id, itemIndex}
+									<div
+										class="flex items-center gap-3 rounded-xl border border-border bg-surface-900/50 p-3"
+										data-id={id}
 									>
-										<svg
-											viewBox="0 0 24 24"
-											class="h-5 w-5 shrink-0 text-text-subtle"
-											fill="currentColor"
+										<button
+											class="drag-handle grid h-11 w-11 shrink-0 cursor-grab active:cursor-grabbing place-items-center rounded bg-surface-700/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+											type="button"
+											aria-label="Reorder item. Press arrow keys to move."
+											onkeydown={(e) => {
+												if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+													e.preventDefault();
+													const current = getSubResponse();
+													const ids =
+														current?.kind === 'ordering'
+															? [...current.itemIds]
+															: step.items.map((i) => i.id);
+													const dir = e.key === 'ArrowUp' ? -1 : 1;
+													const target = itemIndex + dir;
+													if (target < 0 || target >= ids.length) return;
+													[ids[itemIndex], ids[target]] = [ids[target], ids[itemIndex]];
+													updateSubResponse({ kind: 'ordering', itemIds: ids });
+												}
+											}}
 										>
-											<circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" />
-											<circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
-											<circle cx="9" cy="18" r="1.5" /><circle cx="15" cy="18" r="1.5" />
-										</svg>
-									</button>
-									<span class="flex-1 text-text-primary"
-										>{step.items.find((i) => i.id === id)?.text}</span
-									>
-								</div>
-							{/each}
-						{/key}
+											<svg
+												viewBox="0 0 24 24"
+												class="h-5 w-5 shrink-0 text-text-subtle"
+												fill="currentColor"
+											>
+												<circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" />
+												<circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
+												<circle cx="9" cy="18" r="1.5" /><circle cx="15" cy="18" r="1.5" />
+											</svg>
+										</button>
+										<span class="flex-1 text-text-primary"
+											>{step.items.find((i) => i.id === id)?.text}</span
+										>
+									</div>
+								{/each}
+							{/key}
 						</div>
 					{:else if step.kind === 'matching'}
 						<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
@@ -1225,7 +1278,7 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.artifact.lines as line}
 								<label
-									class="flex cursor-pointer items-start gap-3 rounded-md border border-border bg-surface-900/60 p-3 transition {subDraft?.kind ===
+									class="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-900/60 p-3 transition {subDraft?.kind ===
 										'evidence' && subDraft.lineIds.includes(line.id)
 										? 'border-accent bg-accent/10'
 										: 'hover:border-border-strong'}"
@@ -1250,7 +1303,7 @@
 							<p class="mb-2 font-medium text-text-primary">{step.prompt}</p>
 							{#each step.fields as field}
 								<label
-									class="flex flex-col gap-2 rounded-md bg-surface-700/60 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
+									class="flex flex-col gap-2 rounded-xl border border-border bg-surface-900/50 p-4 text-sm font-medium text-text-secondary sm:flex-row sm:items-center"
 								>
 									<span class="flex-1">{field.label}</span>
 									<select
@@ -1309,8 +1362,8 @@
 											subDraft?.kind === 'word-bank' ? (subDraft.assignments[blank.id] ?? '') : ''}
 										{@const assignedWord = step.bank.find((word) => word.id === assignedId)}
 										<span
-											class="mx-1 inline-flex min-h-11 min-w-28 items-center justify-center rounded-lg border-2 px-2 py-0.5 font-semibold {assignedWord
-												? 'border-accent bg-accent/15 text-accent'
+											class="mx-1 inline-flex min-h-11 min-w-28 items-center justify-center rounded-xl border px-2 py-0.5 font-semibold {assignedWord
+												? 'border-accent bg-accent/10 text-accent'
 												: 'border-dashed border-border-strong text-text-muted'}"
 										>
 											{assignedWord ? assignedWord.word : `____${si + 1}`}
@@ -1326,11 +1379,11 @@
 									{#each step.bank as word}
 										<button
 											type="button"
-											class="min-h-11 rounded-md border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
+											class="min-h-11 rounded border px-3.5 py-1.5 text-sm font-medium transition {stepUsed.has(
 												word.id
 											)
 												? 'cursor-not-allowed border-border opacity-40 line-through'
-												: 'border-border-strong bg-surface-700 text-text-primary hover:border-accent hover:text-accent'}"
+												: 'border-border bg-surface-900/60 text-text-primary hover:border-accent hover:text-accent'}"
 											disabled={stepUsed.has(word.id)}
 											onclick={() => assignSubWord(word.id)}
 										>
@@ -1459,7 +1512,7 @@
 
 			{#if feedback}
 				<div
-					class="mt-5 translate-y-0 rounded-md border-l-4 p-4 opacity-100 transition-all duration-200 {feedback.fullyCorrect
+					class="mt-5 rounded-xl border border-border border-l-4 p-4 transition duration-200 {feedback.fullyCorrect
 						? 'border-l-success bg-success/10'
 						: feedback.earnedPoints > 0
 							? 'border-l-warning bg-warning/10'
@@ -1469,7 +1522,10 @@
 						<strong class="h-display text-text-primary"
 							>{feedback.fullyCorrect ? 'Correct' : 'Answer review'}</strong
 						><span class="chip bg-surface-800 text-text-primary"
-							>{feedback.earnedPoints}/{feedback.possiblePoints} points{session.mode === 'practice' && (session.retries[index] ?? 0) > 0 ? ' · retry-adjusted' : ''}</span
+							>{feedback.earnedPoints}/{feedback.possiblePoints} points{session.mode ===
+								'practice' && (session.retries[index] ?? 0) > 0
+								? ' · retry-adjusted'
+								: ''}</span
 						>
 					</div>
 					<p class="mt-2 leading-relaxed text-text-secondary">{feedback.explanation}</p>
@@ -1485,15 +1541,13 @@
 						<div class="mt-3">
 							{#if revealedHints[index]}
 								<p
-									class="rounded-md bg-surface-700/60 p-3 text-sm leading-relaxed text-text-secondary"
+									class="rounded-xl bg-surface-800/70 p-3 text-sm leading-relaxed text-text-secondary"
 								>
 									{revealedHints[index]}
 								</p>
 							{:else}
-								<button
-									class="btn btn-ghost h-11 px-4 text-sm"
-									type="button"
-									onclick={revealHint}>Hint — 25% off</button
+								<button class="btn btn-ghost h-11 px-4 text-sm" type="button" onclick={revealHint}
+									>Hint — 25% off</button
 								>
 							{/if}
 						</div>
@@ -1521,7 +1575,7 @@
 								{@const isSelected =
 									draft?.kind === 'choice' && draft.optionIds.includes(option.id)}
 								<div
-									class="rounded-md bg-surface-700/60 p-2.5 text-sm {isCorrect
+									class="rounded-xl border border-border bg-surface-900/50 p-3 text-sm {isCorrect
 										? 'border-l-2 border-l-success'
 										: isSelected
 											? 'border-l-2 border-l-danger'
@@ -1543,7 +1597,7 @@
 					{#if feedback.sourceRefs?.length}
 						<div class="mt-3 flex flex-wrap gap-2">
 							{#each feedback.sourceRefs as ref}
-								<span class="chip bg-surface-800 text-xs text-text-muted">
+								<span class="chip bg-surface-700 text-text-muted">
 									{ref.source}: {ref.section}
 								</span>
 							{/each}

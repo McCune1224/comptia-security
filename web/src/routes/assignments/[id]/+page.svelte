@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import StatusChip from '$lib/components/StatusChip.svelte';
+	import ContextRail from '$lib/components/ContextRail.svelte';
 	import { relativeDue } from '$lib/utils';
 
 	let { params } = $props();
@@ -64,121 +65,142 @@
 	}
 </script>
 
-<div class="mx-auto max-w-3xl space-y-6">
-	{#if error}
-		<section class="card p-6 text-danger">{error}</section>
-	{:else if !view}
-		<div class="grid min-h-64 place-items-center">
-			<span class="h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
-			></span>
-		</div>
-	{:else}
-		<div>
+{#if error}
+	<section class="card p-6 text-danger">{error}</section>
+{:else if !view}
+	<div class="grid min-h-64 place-items-center">
+		<span class="h-10 w-10 animate-spin rounded-full border-4 border-surface-600 border-t-accent"
+		></span>
+	</div>
+{:else}
+	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
+		<div class="space-y-5">
 			<a
 				href="/modules/{view.assignment.moduleId}"
-				class="inline-flex min-h-11 items-center text-sm font-bold text-accent hover:underline"
-				>← Back to module</a
+				class="touch-target text-sm font-semibold text-accent hover:underline">← Back to module</a
 			>
-			<div class="mt-4 flex flex-wrap items-center gap-3">
-				<span class="chip bg-surface-700 text-text-muted">{kindLabel(view.assignment.kind)}</span>
-				<StatusChip status={view.status} />
-			</div>
-			<h1 class="h-display mt-3 text-3xl text-text-primary sm:text-4xl">{view.assignment.title}</h1>
-			<p class="mt-3 leading-relaxed text-text-secondary">{view.assignment.description}</p>
-		</div>
-
-		<section class="card grid gap-4 p-5 sm:grid-cols-2 sm:p-6">
-			<div class="flex items-center gap-3">
-				<span
-					class="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-accent/15 text-accent"
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-5 w-5"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><rect x="3" y="5" width="18" height="16" rx="2" /><path
-							d="M8 3v4M16 3v4M3 10h18"
-						/></svg
-					>
-				</span>
-				<div>
-					<p class="text-xs font-semibold text-text-muted">Due date</p>
-					<p class="font-bold {view.daysUntilDue < 0 ? 'text-danger' : 'text-text-primary'}">
-						{view.dueDateLabel}
-						{#if view.overridden}
-							<span class="chip ml-1 bg-accent/15 text-accent align-middle">pinned</span>
-						{/if}
-					</p>
-					<p class="text-xs text-text-muted">{relativeDue(view.daysUntilDue)}</p>
+			<header class="card p-6 sm:p-7">
+				<div class="flex flex-wrap items-center gap-3">
+					<span class="chip bg-surface-700 text-text-muted">{kindLabel(view.assignment.kind)}</span>
+					<StatusChip status={view.status} />
 				</div>
-			</div>
-			<div class="flex items-center gap-3">
-				<span
-					class="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-warning/15 text-warning"
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-5 w-5"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg
-					>
-				</span>
-				<div>
-					<p class="text-xs font-semibold text-text-muted">Format</p>
-					<p class="font-bold text-text-primary">
-						{view.assignment.count} questions · {view.assignment.durationMinutes} minutes
-					</p>
-					<p class="text-xs text-text-muted">
-						{view.assignment.mode === 'exam' ? 'Timed exam conditions' : 'Practice with feedback'} · {view
-							.assignment.points} pts
-					</p>
-				</div>
-			</div>
-		</section>
+				<h1 class="h-display mt-3 text-3xl text-text-primary sm:text-4xl">
+					{view.assignment.title}
+				</h1>
+				<p class="mt-3 text-sm leading-relaxed text-text-secondary sm:text-base">
+					{view.assignment.description}
+				</p>
+			</header>
 
-		{#if view.bestSubmission}
-			<section class="card p-5 sm:p-6">
-				<h2 class="h-display text-xl text-text-primary">Best submission</h2>
-				<div class="mt-4 flex items-center gap-6">
-					<div
-						class="num-display grid h-20 w-20 place-items-center rounded-md text-lg {view
-							.bestSubmission.percentage >= 85
-							? 'bg-success/15 text-success'
-							: view.bestSubmission.percentage >= 60
-								? 'bg-warning/15 text-warning'
-								: 'bg-danger/15 text-danger'}"
-					>
-						{view.bestSubmission.percentage}%
-					</div>
-					<div>
-						<p class="text-sm text-text-secondary">
-							Submitted {new Date(view.bestSubmission.completedAt).toLocaleString('en-US', {
-								month: 'short',
-								day: 'numeric'
-							})}
+			<section class="card p-6 sm:p-7">
+				<p class="eyebrow">The attempt</p>
+				<div class="mt-4 grid gap-4 sm:grid-cols-2">
+					<div class="rounded border border-border bg-surface-900/50 p-4">
+						<p class="text-xs font-semibold text-text-muted">Format</p>
+						<p class="mt-1 font-bold text-text-primary">
+							{view.assignment.count} questions · {view.assignment.durationMinutes} min
 						</p>
-						<a
-							href="/history/{view.bestSubmission.sessionId}"
-							class="mt-2 inline-block text-sm font-bold text-accent hover:underline"
-							>Review answers →</a
-						>
+						<p class="mt-1 text-xs text-text-muted">
+							{view.assignment.mode === 'exam' ? 'Timed exam conditions' : 'Practice with feedback'}
+						</p>
 					</div>
+					<div class="rounded border border-border bg-surface-900/50 p-4">
+						<p class="text-xs font-semibold text-text-muted">Worth</p>
+						<p class="mt-1 font-bold text-text-primary">{view.assignment.points} points</p>
+						<p class="mt-1 text-xs text-text-muted">
+							{view.assignment.domain
+								? `Domain ${view.assignment.domain} weighted`
+								: 'Mixed domains'}
+						</p>
+					</div>
+				</div>
+				<div class="mt-5 flex flex-col gap-3 sm:flex-row">
+					<button class="btn btn-primary flex-1" type="button" onclick={launch}>
+						{view.status === 'submitted'
+							? 'Retake assignment'
+							: view.status === 'in-progress'
+								? 'Resume attempt'
+								: 'Start assignment'}
+					</button>
+					<a href="/quiz" class="btn btn-ghost">Free practice</a>
 				</div>
 			</section>
-		{/if}
-
-		<div class="flex flex-col gap-3 sm:flex-row">
-			<button class="btn btn-primary flex-1" type="button" onclick={launch}>
-				{view.status === 'submitted'
-					? 'Retake assignment'
-					: view.status === 'in-progress'
-						? 'Resume attempt'
-						: 'Start assignment'}
-			</button>
-			<a href="/quiz" class="btn btn-ghost">Free practice</a>
 		</div>
-	{/if}
-</div>
+
+		<ContextRail title="This assignment">
+			<div class="card p-5">
+				<div class="flex items-center justify-between gap-2">
+					<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Due</p>
+					<StatusChip status={view.status} />
+				</div>
+				<p class="mt-2 font-bold {view.daysUntilDue < 0 ? 'text-danger' : 'text-text-primary'}">
+					{view.dueDateLabel}
+				</p>
+				<p class="text-xs text-text-muted">{relativeDue(view.daysUntilDue)}</p>
+				{#if view.overridden}
+					<p class="mt-2 text-xs text-text-muted">
+						Pinned by a due-date override (schedule would give {view.derivedDueDateLabel}).
+					</p>
+				{/if}
+			</div>
+
+			<div class="card p-5">
+				<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+					Best submission
+				</p>
+				{#if view.bestSubmission}
+					<div class="mt-3 flex items-center gap-4">
+						<div
+							class="num-display grid h-16 w-16 shrink-0 place-items-center rounded text-lg {view
+								.bestSubmission.percentage >= 85
+								? 'bg-success/10 text-success'
+								: view.bestSubmission.percentage >= 60
+									? 'bg-warning/10 text-warning'
+									: 'bg-danger/10 text-danger'}"
+						>
+							{view.bestSubmission.percentage}%
+						</div>
+						<div class="min-w-0">
+							<p class="text-sm text-text-secondary">
+								{new Date(view.bestSubmission.completedAt).toLocaleString('en-US', {
+									month: 'short',
+									day: 'numeric'
+								})}
+							</p>
+							<a
+								href="/history/{view.bestSubmission.sessionId}"
+								class="touch-target text-sm font-semibold text-accent hover:underline"
+								>Review answers →</a
+							>
+						</div>
+					</div>
+				{:else}
+					<p class="mt-2 text-sm text-text-muted">
+						Nothing submitted yet. Retakes keep your best score.
+					</p>
+				{/if}
+			</div>
+
+			<nav class="card p-5" aria-label="Related">
+				<p class="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">Related</p>
+				<div class="mt-3 space-y-1">
+					<a
+						href="/modules/{view.assignment.moduleId}"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Module lessons</a
+					>
+					<a
+						href="/progress?tab=mastery"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Mastery grid</a
+					>
+					<a
+						href="/progress?tab=grades"
+						class="flex min-h-11 items-center rounded px-2 text-sm text-text-secondary transition hover:bg-surface-700 hover:text-text-primary"
+						>Gradebook</a
+					>
+				</div>
+			</nav>
+		</ContextRail>
+	</div>
+{/if}

@@ -18,7 +18,7 @@
 			.replace(/\*(.+?)\*/g, '<em>$1</em>')
 			.replace(
 				/`(.+?)`/g,
-				'<code class="rounded-sm bg-surface-700 px-1 py-0.5 text-[0.85em] text-accent">$1</code>'
+				'<code class="rounded bg-surface-900 px-1.5 py-0.5 text-[0.85em] text-accent">$1</code>'
 			);
 	}
 
@@ -111,7 +111,7 @@
 		{#if block.type === 'widget'}
 			{@const Widget = widgets[block.id]}
 			{#if Widget}
-				<div class="rounded-md border border-border bg-surface-800/60 p-4">
+				<div class="rounded-xl border border-border bg-surface-900/50 p-4 sm:p-5">
 					<Widget />
 				</div>
 			{/if}
@@ -120,12 +120,12 @@
 				{@html inline(block.text)}
 			</h3>
 		{:else if block.type === 'table'}
-			<div class="overflow-x-auto rounded-md border border-border">
+			<div class="overflow-x-auto rounded-lg border border-border">
 				<table class="w-full text-sm">
 					<thead>
-						<tr class="border-b border-border bg-surface-700/60">
+						<tr class="border-b border-border bg-surface-900/60">
 							{#each block.headers as header (header)}
-								<th class="px-3 py-2 text-left font-semibold text-text-primary">
+								<th class="h-display px-4 py-3 text-left text-sm text-text-primary">
 									{@html inline(header)}
 								</th>
 							{/each}
@@ -135,7 +135,7 @@
 						{#each block.rows as row (row.join('|'))}
 							<tr class="border-b border-border/50 last:border-b-0">
 								{#each row as cell (cell)}
-									<td class="px-3 py-2 align-top text-text-secondary">
+									<td class="px-4 py-3 align-top leading-relaxed text-text-secondary">
 										{@html inline(cell)}
 									</td>
 								{/each}
@@ -155,7 +155,7 @@
 				<ul class="space-y-1.5 text-sm leading-6 text-text-secondary">
 					{#each block.items as item (item)}
 						<li class="flex gap-2">
-							<span class="mt-2.5 h-1 w-1 shrink-0 bg-accent"></span>
+							<span class="mt-2.5 h-1 w-1 shrink-0 rounded bg-accent"></span>
 							<span>{@html inline(item)}</span>
 						</li>
 					{/each}

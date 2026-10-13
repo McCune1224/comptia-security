@@ -83,15 +83,15 @@
 		onpointercancel={() => (dragging = false)}
 		onkeydown={onKeydown}
 	>
-		<div class="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-sm bg-surface-700"></div>
+		<div class="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded bg-surface-700"></div>
 		<div
-			class="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-sm {feedbackValue !== null && !within
+			class="absolute top-1/2 h-1.5 -translate-y-1/2 rounded {feedbackValue !== null && !within
 				? 'bg-danger'
 				: 'bg-accent'}"
 			style:width="{pct}%"
 		></div>
 		<div
-			class="absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-md border-2 {feedbackValue !==
+			class="absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded border-2 {feedbackValue !==
 			null
 				? within
 					? 'border-success bg-success'
@@ -103,7 +103,7 @@
 	{#if feedbackValue !== null}
 		<p class="text-xs font-semibold text-success">Target: {feedbackValue}{unit}</p>
 	{:else if !disabled}
-		<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
+		<p class="serif-italic text-xs text-text-muted">
 			Drag or tap the track — page scroll still works
 		</p>
 	{/if}

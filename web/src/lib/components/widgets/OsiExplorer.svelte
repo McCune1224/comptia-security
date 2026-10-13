@@ -24,13 +24,11 @@
 </script>
 
 <div class="space-y-2">
-	<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
-		OSI model — tap a layer
-	</p>
+	<p class="eyebrow">OSI model — tap a layer</p>
 	{#each layers as layer (layer.n)}
 		<button
 			type="button"
-			class="w-full rounded-md border border-border bg-surface-700 px-3 py-2.5 text-left text-sm font-semibold text-text-primary transition {open ===
+			class="flex min-h-11 w-full items-center gap-3 rounded-lg border border-border bg-surface-800 px-3 py-2.5 text-left text-sm font-semibold text-text-primary transition {open ===
 			layer.n
 				? 'border-accent bg-accent/10'
 				: ''}"
@@ -38,12 +36,15 @@
 			aria-pressed={open === layer.n}
 			onclick={() => (open = open === layer.n ? null : layer.n)}
 		>
-			<span class="num-display mr-2 inline-block w-6 text-right text-xs text-text-muted"
+			<span
+				class="serif-italic grid h-8 w-8 shrink-0 place-items-center rounded bg-accent/10 text-sm text-accent"
 				>{layer.n}</span
 			>{layer.name}
 		</button>
 		{#if open === layer.n}
-			<p class="rounded-md bg-surface-800 px-3 py-2 text-sm leading-relaxed text-text-secondary">
+			<p
+				class="rounded-lg border border-border bg-surface-800 px-4 py-3 text-sm leading-relaxed text-text-secondary"
+			>
 				{layer.example}
 			</p>
 		{/if}

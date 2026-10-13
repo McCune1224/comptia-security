@@ -137,7 +137,7 @@
 	{#if shifts}
 		{@const moving = shifts.filter((shift) => !shift.overridden && shift.from !== shift.to)}
 		{@const pinned = shifts.filter((shift) => shift.overridden)}
-		<div class="rounded-md border border-border bg-surface-800/60 p-4">
+		<div>
 			<p class="eyebrow">Schedule preview</p>
 			<p class="mt-1 text-sm text-text-secondary">
 				{moving.length} assignment{moving.length === 1 ? '' : 's'} would move
@@ -145,12 +145,14 @@
 					<span class="text-text-muted">· {pinned.length} pinned by a due-date override</span>
 				{/if}
 			</p>
-			<ul class="mt-3 max-h-56 space-y-1.5 overflow-y-auto pr-1">
+			<ul class="mt-3 max-h-56 space-y-2 overflow-y-auto pr-1">
 				{#each shifts as shift (shift.assignmentId)}
-					<li class="flex items-center justify-between gap-3 text-xs">
+					<li
+						class="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-900/50 px-4 py-2.5 text-xs"
+					>
 						<span class="min-w-0 flex-1 truncate text-text-secondary">{shift.title}</span>
 						{#if shift.overridden}
-							<span class="chip shrink-0 bg-accent/15 text-accent">pinned</span>
+							<span class="chip shrink-0 bg-accent/10 text-accent">pinned</span>
 						{:else if shift.from !== shift.to}
 							<span class="shrink-0 font-semibold text-text-muted">
 								{formatDateKey(shift.from)} <span class="text-text-subtle">→</span>

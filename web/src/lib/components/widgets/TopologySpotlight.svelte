@@ -30,16 +30,14 @@
 </script>
 
 <div class="space-y-2">
-	<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
-		Small-office topology — tap a device
-	</p>
+	<p class="eyebrow">Small-office topology — tap a device</p>
 	<div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
 		{#each devices as device (device.id)}
 			<button
 				type="button"
-				class="rounded-md border border-border bg-surface-700 px-2 py-3 text-center text-xs font-semibold text-text-primary transition {open ===
+				class="min-h-14 rounded-lg border border-border bg-surface-800 px-2 py-3 text-center text-xs font-semibold text-text-primary transition {open ===
 				device.id
-					? 'border-accent bg-accent/10'
+					? 'border-accent bg-accent/10 text-accent'
 					: ''}"
 				aria-pressed={open === device.id}
 				onclick={() => (open = open === device.id ? null : device.id)}
@@ -50,7 +48,9 @@
 	</div>
 	{#if open}
 		{@const device = devices.find((d) => d.id === open)!}
-		<p class="rounded-md bg-surface-800 px-3 py-2 text-sm leading-relaxed text-text-secondary">
+		<p
+			class="rounded-lg border border-border bg-surface-800 px-4 py-3 text-sm leading-relaxed text-text-secondary"
+		>
 			{device.note}
 		</p>
 	{/if}

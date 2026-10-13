@@ -22,14 +22,12 @@
 </script>
 
 <div class="space-y-2">
-	<p class="text-xs font-semibold uppercase tracking-wide text-text-muted">
-		Well-known ports — tap to flip
-	</p>
+	<p class="eyebrow">Well-known ports — tap to flip</p>
 	<div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
 		{#each ports as entry, i (entry.port)}
 			<button
 				type="button"
-				class="min-h-11 rounded-md border border-border bg-surface-700 px-2 py-2 text-center text-sm font-semibold text-text-primary transition {flipped.has(
+				class="min-h-14 rounded-lg border border-border bg-surface-800 px-2 py-3 text-center text-sm font-semibold text-text-primary transition {flipped.has(
 					i
 				)
 					? 'border-accent bg-accent/10'

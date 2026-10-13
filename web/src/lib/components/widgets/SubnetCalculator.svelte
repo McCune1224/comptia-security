@@ -10,7 +10,7 @@
 
 <div class="space-y-3">
 	<div class="flex items-center justify-between">
-		<span class="text-xs font-semibold uppercase tracking-wide text-text-muted">CIDR prefix</span>
+		<span class="eyebrow">CIDR prefix</span>
 		<span class="num-display text-lg text-text-primary">/{prefix}</span>
 	</div>
 	<input
@@ -19,16 +19,16 @@
 		max="30"
 		step="1"
 		bind:value={prefix}
-		class="h-8 w-full"
+		class="h-11 w-full cursor-pointer"
 		style="accent-color: var(--color-accent)"
 		aria-label="CIDR prefix slider"
 	/>
 	<div class="grid grid-cols-2 gap-2 text-sm">
-		<div class="rounded-md bg-surface-700/60 p-3">
+		<div class="rounded-lg border border-border bg-surface-800 p-4">
 			<p class="text-xs text-text-muted">Subnet mask</p>
 			<p class="num-display mt-0.5 text-text-primary">{mask}</p>
 		</div>
-		<div class="rounded-md bg-surface-700/60 p-3">
+		<div class="rounded-lg border border-border bg-surface-800 p-4">
 			<p class="text-xs text-text-muted">Usable hosts</p>
 			<p class="num-display mt-0.5 text-text-primary">{hosts.toLocaleString()}</p>
 		</div>
