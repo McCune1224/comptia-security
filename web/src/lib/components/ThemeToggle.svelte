@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let isLight = $state(false);
+	let isLight = $state(true);
 
 	function applyTheme(theme: 'light' | 'dark') {
 		isLight = theme === 'light';
@@ -14,12 +14,12 @@
 	}
 
 	onMount(() => {
-		isLight = document.documentElement.dataset.theme === 'light';
+		isLight = document.documentElement.dataset.theme !== 'dark';
 	});
 </script>
 
 <button
-	class="relative inline-flex h-11 w-16 items-center rounded-full border border-border-strong bg-surface-800 p-1 transition-colors duration-200"
+	class="relative inline-flex h-11 w-16 items-center rounded border border-border-strong bg-surface-700 p-1 transition-colors duration-200"
 	type="button"
 	role="switch"
 	aria-checked={isLight}
@@ -27,7 +27,7 @@
 	onclick={toggleTheme}
 >
 	<span
-		class="absolute left-2 text-warning transition-opacity duration-200"
+		class="absolute left-2.5 text-warning transition-opacity duration-200"
 		class:opacity-0={isLight}
 		class:opacity-100={!isLight}
 		aria-hidden="true"
@@ -37,7 +37,7 @@
 		>
 	</span>
 	<span
-		class="absolute right-2 text-warning transition-opacity duration-200"
+		class="absolute right-2.5 text-accent transition-opacity duration-200"
 		class:opacity-0={!isLight}
 		class:opacity-100={isLight}
 		aria-hidden="true"
@@ -49,7 +49,7 @@
 		>
 	</span>
 	<span
-		class="relative z-10 h-7 w-7 rounded-full bg-accent transition-transform duration-250 ease-out"
+		class="relative z-10 h-7 w-7 rounded bg-primary shadow-[var(--shadow-card)] transition-transform duration-250 ease-out"
 		class:translate-x-7={isLight}
 	></span>
 </button>

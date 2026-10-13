@@ -98,7 +98,7 @@
 
 <div class="relative" bind:this={wrapper}>
 	<button
-		class="flex h-11 items-center gap-2 rounded-md border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700"
+		class="flex h-11 items-center gap-2 rounded border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700"
 		type="button"
 		aria-haspopup="menu"
 		aria-expanded={open}
@@ -120,14 +120,13 @@
 				: ''}"
 			fill="none"
 			stroke="currentColor"
-			stroke-width="2"
-			><path d="m6 9 6 6 6-6" /></svg
+			stroke-width="2"><path d="m6 9 6 6 6-6" /></svg
 		>
 	</button>
 
 	{#if open}
 		<div
-			class="absolute right-0 top-[calc(100%+0.5rem)] z-50 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-1rem))] overflow-y-auto rounded-md border border-border bg-surface-900 p-2 shadow-2xl"
+			class="absolute right-0 top-[calc(100%+0.5rem)] z-50 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-1rem))] overflow-y-auto rounded-2xl border border-border bg-surface-800 p-2 shadow-[var(--shadow-lift)]"
 			role="menu"
 			aria-label="Profile"
 		>
@@ -137,11 +136,9 @@
 
 			<div class="space-y-1">
 				{#each profiles as profile (profile.id)}
-					<div class="rounded-md border border-border bg-surface-800/60">
+					<div class="rounded-xl transition hover:bg-surface-700">
 						<div class="flex items-center gap-2.5 px-2.5">
-							<span
-								class="h-3.5 w-3.5 shrink-0 rounded-full"
-								style="background:{profile.color}"
+							<span class="h-3.5 w-3.5 shrink-0 rounded" style="background:{profile.color}"
 							></span>
 							<button
 								class="min-w-0 flex-1 py-2.5 text-left"
@@ -161,7 +158,7 @@
 							</button>
 							{#if profile.id !== 'default'}
 								<button
-									class="grid h-11 w-11 shrink-0 place-items-center rounded-md text-text-subtle transition hover:bg-surface-700 hover:text-text-primary"
+									class="grid h-11 w-11 shrink-0 place-items-center rounded text-text-subtle transition hover:bg-surface-700 hover:text-text-primary"
 									type="button"
 									aria-label="Rename {profile.name}"
 									role="menuitem"
@@ -177,7 +174,7 @@
 									>
 								</button>
 								<button
-									class="grid h-11 w-11 shrink-0 place-items-center rounded-md text-danger transition hover:bg-danger/15"
+									class="grid h-11 w-11 shrink-0 place-items-center rounded text-danger transition hover:bg-danger/15"
 									type="button"
 									class:opacity-40={profile.id === activeProfileId}
 									class:pointer-events-none={profile.id === activeProfileId}
@@ -211,7 +208,7 @@
 						{#if renamingId === profile.id}
 							<form class="flex gap-2 border-t border-border px-2.5 py-2.5" onsubmit={submitRename}>
 								<input
-									class="min-h-11 flex-1 rounded-md border border-border bg-surface-800 px-3 text-sm text-text-primary outline-none focus:border-accent"
+									class="min-h-11 flex-1 rounded-lg border border-border bg-surface-900 px-3 text-sm text-text-primary outline-none focus:border-accent"
 									bind:value={renameValue}
 									placeholder="Profile name"
 									maxlength="24"
@@ -225,11 +222,14 @@
 			</div>
 
 			{#if adding}
-				<form class="mt-2 rounded-md border border-border bg-surface-800/60 p-3" onsubmit={submitCreate}>
+				<form
+					class="mt-2 rounded-xl border border-border bg-surface-900/50 p-3"
+					onsubmit={submitCreate}
+				>
 					<label class="eyebrow" for="new-profile-name">Add profile</label>
 					<input
 						id="new-profile-name"
-						class="mt-2 min-h-11 w-full rounded-md border border-border bg-surface-800 px-3 text-sm text-text-primary outline-none focus:border-accent"
+						class="mt-2 min-h-11 w-full rounded-lg border border-border bg-surface-900 px-3 text-sm text-text-primary outline-none focus:border-accent"
 						bind:value={newName}
 						placeholder="Name (e.g. Alex)"
 						maxlength="24"
@@ -237,7 +237,7 @@
 					<div class="mt-3 flex items-center gap-2" role="radiogroup" aria-label="Profile color">
 						{#each PROFILE_COLORS as color (color)}
 							<button
-								class="h-11 w-11 rounded-md border transition {newColor === color
+								class="h-11 w-11 rounded border transition {newColor === color
 									? 'border-accent ring-2 ring-accent/40'
 									: 'border-border hover:border-border-strong'}"
 								type="button"
@@ -253,13 +253,12 @@
 					<button
 						class="btn btn-primary mt-3 w-full"
 						type="submit"
-						disabled={busy || newName.trim().length === 0}
-						>Add profile</button
+						disabled={busy || newName.trim().length === 0}>Add profile</button
 					>
 				</form>
 			{:else if profiles.length < 2}
 				<button
-					class="mt-1 flex min-h-11 w-full items-center gap-3 rounded-md border border-dashed border-border px-3 text-text-secondary transition hover:border-accent/50 hover:text-accent"
+					class="mt-1 flex min-h-11 w-full items-center gap-3 rounded-xl border border-dashed border-border px-3 text-text-secondary transition hover:border-accent/50 hover:text-accent"
 					type="button"
 					role="menuitem"
 					onclick={() => {
@@ -268,8 +267,12 @@
 						error = '';
 					}}
 				>
-					<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
-						><path d="M12 5v14M5 12h14" /></svg
+					<svg
+						viewBox="0 0 24 24"
+						class="h-5 w-5"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"><path d="M12 5v14M5 12h14" /></svg
 					>
 					<span class="text-sm font-semibold">Add profile</span>
 				</button>

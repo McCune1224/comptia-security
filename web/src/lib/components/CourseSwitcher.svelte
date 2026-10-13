@@ -3,7 +3,11 @@
 
 	type Course = { id: string; title: string; shortTitle: string };
 
-	let { courses, activeCourseId, onswitch }: {
+	let {
+		courses,
+		activeCourseId,
+		onswitch
+	}: {
 		courses: Course[];
 		activeCourseId: string;
 		onswitch: (id: string) => void;
@@ -35,7 +39,7 @@
 
 <div class="relative" bind:this={wrapper}>
 	<button
-		class="flex h-11 items-center gap-1.5 rounded-md border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700"
+		class="flex h-11 items-center gap-1.5 rounded border border-border bg-surface-800 px-2.5 transition hover:border-border-strong hover:bg-surface-700"
 		type="button"
 		aria-haspopup="menu"
 		aria-expanded={open}
@@ -47,11 +51,9 @@
 			class="h-4 w-4 shrink-0 text-accent"
 			fill="none"
 			stroke="currentColor"
-			stroke-width="2"
-			><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 13 9 5 9-5" /></svg
+			stroke-width="2"><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 13 9 5 9-5" /></svg
 		>
-		<span
-			class="hidden sm:inline max-w-28 truncate text-sm font-semibold text-text-primary"
+		<span class="hidden sm:inline max-w-28 truncate text-sm font-semibold text-text-primary"
 			>{activeCourse?.shortTitle ?? 'Course'}</span
 		>
 		<svg
@@ -61,14 +63,13 @@
 				: ''}"
 			fill="none"
 			stroke="currentColor"
-			stroke-width="2"
-			><path d="m6 9 6 6 6-6" /></svg
+			stroke-width="2"><path d="m6 9 6 6 6-6" /></svg
 		>
 	</button>
 
 	{#if open}
 		<div
-			class="absolute right-0 top-[calc(100%+0.5rem)] z-50 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-1rem))] overflow-y-auto rounded-md border border-border bg-surface-900 p-2 shadow-2xl"
+			class="absolute right-0 top-[calc(100%+0.5rem)] z-50 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-1rem))] overflow-y-auto rounded-2xl border border-border bg-surface-800 p-2 shadow-[var(--shadow-lift)]"
 			role="menu"
 			aria-label="Course"
 		>
@@ -78,7 +79,7 @@
 			<div class="space-y-1">
 				{#each courses as course (course.id)}
 					<button
-						class="flex min-h-12 w-full items-center gap-3 rounded-md border border-border bg-surface-800/60 px-3 text-left transition hover:border-border-strong hover:bg-surface-700"
+						class="flex min-h-12 w-full items-center gap-3 rounded-xl border border-transparent px-3 text-left transition hover:border-border hover:bg-surface-700"
 						type="button"
 						role="menuitem"
 						onclick={() => {
@@ -96,8 +97,7 @@
 								class="h-5 w-5 shrink-0 text-accent"
 								fill="none"
 								stroke="currentColor"
-								stroke-width="2.5"
-								><path d="m4 12.5 5 5L20 6.5" /></svg
+								stroke-width="2.5"><path d="m4 12.5 5 5L20 6.5" /></svg
 							>
 						{/if}
 					</button>

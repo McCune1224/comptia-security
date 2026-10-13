@@ -6,6 +6,8 @@
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import ProfileSwitcher from '$lib/components/ProfileSwitcher.svelte';
 	import CourseSwitcher from '$lib/components/CourseSwitcher.svelte';
+	import AppRail from '$lib/components/AppRail.svelte';
+	import CommandPalette from '$lib/components/CommandPalette.svelte';
 	import '../app.css';
 
 	type Profile = { id: string; name: string; color: string };
@@ -18,6 +20,37 @@
 
 	let { children } = $props();
 	let currentPath = $derived($page.url.pathname);
+	let pinned = $state(false);
+	let paletteOpen = $state(false);
+
+	const sectionTitle = $derived.by(() => {
+		const path = currentPath;
+		if (path === '/') return 'Home';
+		if (
+			path.startsWith('/syllabus') ||
+			path.startsWith('/modules') ||
+			path.startsWith('/assignments')
+		)
+			return 'Course';
+		if (
+			path.startsWith('/practice') ||
+			path.startsWith('/quiz') ||
+			path.startsWith('/scenarios') ||
+			path.startsWith('/pbq')
+		)
+			return 'Practice';
+		if (path.startsWith('/review')) return 'Review';
+		if (
+			path.startsWith('/progress') ||
+			path.startsWith('/gradebook') ||
+			path.startsWith('/mastery') ||
+			path.startsWith('/history')
+		)
+			return 'Progress';
+		if (path.startsWith('/calendar')) return 'Calendar';
+		if (path.startsWith('/admin')) return 'Admin';
+		return '';
+	});
 
 	let scopeInfo = $state<ScopeInfo | null>(null);
 	const activeCourse = $derived.by(() => {
@@ -53,7 +86,10 @@
 		if (response.ok) window.location.reload();
 	}
 
-	async function createProfile(name: string, color: string): Promise<{ ok: boolean; message?: string }> {
+	async function createProfile(
+		name: string,
+		color: string
+	): Promise<{ ok: boolean; message?: string }> {
 		const response = await fetch('/api/scope', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -91,231 +127,98 @@
 		if (response.ok) await loadScope();
 		return response.ok;
 	}
-
-	function isActive(path: string): boolean {
-		return path === '/' ? currentPath === '/' : currentPath.startsWith(path);
-	}
 </script>
 
-<div class="flex min-h-screen flex-col">
-	<nav
-		class="sticky top-0 z-50 border-b border-border"
-		aria-label="Main navigation"
-	>
-		<!-- Frosted background as a separate non-ancestor layer: keep
-		     backdrop-filter off the nav element itself, otherwise it becomes the
-		     containing block for position:absolute descendants (the header
-		     dropdowns) and traps them inside the header. -->
+<AppRail {currentPath} bind:pinned onopenpalette={() => (paletteOpen = true)} />
+<CommandPalette bind:open={paletteOpen} />
+
+<!-- The rail floats above the content: hovering it never reflows the page. Only pinning
+     (deliberate, persisted) offsets the content, so a stray pointer cannot shift a target. -->
+<div
+	class="flex min-h-screen flex-col transition-[padding] duration-200 ease-out {pinned
+		? 'lg:pl-[14.5rem]'
+		: 'lg:pl-16'}"
+>
+	<div class="sticky top-0 z-50 border-b border-border">
 		<div
-			class="pointer-events-none absolute inset-0 bg-surface-900/85 backdrop-blur-xl"
+			class="pointer-events-none absolute inset-0 bg-surface-800/85 backdrop-blur-xl"
 			aria-hidden="true"
 		></div>
-		<div class="relative mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-			<a href="/" class="flex min-h-11 items-center gap-2.5" aria-label={`${activeCourse?.shortTitle ?? 'Course'} home`}>
-				<span
-					class="hidden h-display text-lg text-text-primary transition group-hover:text-accent min-[360px]:inline"
-					>CompTIA</span
-				>
+		<header
+			class="relative mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8"
+		>
+			<a href="/" class="flex min-h-11 items-center gap-2.5 lg:hidden" aria-label="Course home">
+				<span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent text-on-accent">
+					<svg
+						viewBox="0 0 24 24"
+						class="h-5 w-5"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M12 3 4 6.5v4.6c0 4.6 3.2 7.6 8 9.4 4.8-1.8 8-4.8 8-9.4V6.5L12 3Z" />
+					</svg>
+				</span>
+				<span class="h-display hidden text-base text-text-primary min-[380px]:inline">CompTIA</span>
 			</a>
 
-			<div class="hidden items-center gap-1 xl:flex">
-				<a
-					href="/syllabus"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/syllabus'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/syllabus') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path
-							d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15Z"
-						/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" /></svg
-					>
-					Syllabus
-				</a>
-				<a
-					href="/gradebook"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/gradebook'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/gradebook') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" /></svg
-					>
-					Grades
-				</a>
-				<a
-					href="/calendar"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/calendar'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/calendar') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><rect x="3" y="5" width="18" height="16" rx="2" /><path
-							d="M8 3v4M16 3v4M3 10h18"
-						/></svg
-					>
-					Calendar
-				</a>
-				<a
-					href="/review"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/review'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/review') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path d="M4 5h16v14H4z" /><path d="M8 9h8M8 13h5" /></svg
-					>
-					Review
-				</a>
-				<div class="mx-1 h-5 w-px bg-border"></div>
-				<a
-					href="/quiz"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/quiz'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/quiz') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><rect x="5" y="3" width="14" height="18" rx="2" /><path
-							d="M9 3h6v3H9zM9 11h6M9 15h4"
-						/></svg
-					>
-					Quiz
-				</a>
-				<a
-					href="/scenarios"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/scenarios'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/scenarios') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path d="M20 11.5a7.5 7.5 0 0 1-11.6 6.3L4 19l1.2-3.6A7.5 7.5 0 1 1 20 11.5Z" /></svg
-					>
-					Scenarios
-				</a>
-				<a
-					href="/pbq"
-					class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-						'/pbq'
-					)
-						? 'bg-accent/15 text-accent'
-						: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-					aria-current={isActive('/pbq') ? 'page' : undefined}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-4 w-4"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path
-							d="M8 5.5 10.5 3l2.5 2.5L15.5 3 18 5.5 15.5 8 18 10.5 15.5 13 18 15.5 15.5 18 13 15.5 10.5 18 8 15.5 5.5 18 3 15.5 5.5 13 3 10.5 5.5 8 3 5.5 5.5 3 8 5.5Z"
-							/></svg
-						>
-						PBQs
-					</a>
-					<a
-						href="/admin"
-						class="flex h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold transition {isActive(
-							'/admin'
-						)
-							? 'bg-accent/15 text-accent'
-							: 'text-text-secondary hover:bg-surface-700 hover:text-text-primary'}"
-						aria-current={isActive('/admin') ? 'page' : undefined}
-					>
-						<svg
-							viewBox="0 0 24 24"
-							class="h-4 w-4"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							><circle cx="12" cy="12" r="3" /><path
-								d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"
-							/></svg
-						>
-						Admin
-					</a>
-					</div>
+			<div class="hidden min-w-0 lg:block">
+				<p class="eyebrow">{activeCourse?.shortTitle ?? 'Security+'}</p>
+				<p class="h-display truncate text-lg leading-tight text-text-primary">{sectionTitle}</p>
+			</div>
 
-					<div class="flex items-center gap-1.5 md:gap-2">
-					{#if scopeInfo}
-						<CourseSwitcher
-							courses={scopeInfo.courses}
-							activeCourseId={scopeInfo.scope.courseId}
-							onswitch={switchCourse}
-						/>
-						<ProfileSwitcher
-							profiles={scopeInfo.profiles}
-							activeProfileId={scopeInfo.scope.profileId}
-							onswitch={switchProfile}
-							onrename={renameProfile}
-							oncreate={createProfile}
-							ondelete={deleteProfile}
-						/>
-					{:else}
-						<div class="h-11 w-14 rounded-md border border-border bg-surface-800"></div>
-						<div class="h-11 w-14 rounded-md border border-border bg-surface-800"></div>
-					{/if}
-					<div class="hidden xl:block">
-						<ThemeToggle />
-					</div>
-					<MobileMenu />
-					</div>
-					</div>
-					</nav>
+			<div class="ml-auto flex items-center gap-1.5 md:gap-2">
+				<button
+					type="button"
+					class="hidden min-h-11 items-center gap-2 rounded border border-border bg-surface-800 px-3 text-sm font-semibold text-text-secondary transition hover:border-border-strong hover:text-text-primary lg:flex"
+					onclick={() => (paletteOpen = true)}
+					aria-label="Search and jump"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" /></svg
+					>
+					<span class="text-text-subtle">Search</span>
+					<kbd
+						class="rounded border border-border px-1.5 py-0.5 text-[10px] font-semibold text-text-subtle"
+						>⌘K</kbd
+					>
+				</button>
+				{#if scopeInfo}
+					<CourseSwitcher
+						courses={scopeInfo.courses}
+						activeCourseId={scopeInfo.scope.courseId}
+						onswitch={switchCourse}
+					/>
+					<ProfileSwitcher
+						profiles={scopeInfo.profiles}
+						activeProfileId={scopeInfo.scope.profileId}
+						onswitch={switchProfile}
+						onrename={renameProfile}
+						oncreate={createProfile}
+						ondelete={deleteProfile}
+					/>
+				{:else}
+					<div class="h-11 w-14 rounded border border-border bg-surface-800"></div>
+					<div class="h-11 w-14 rounded border border-border bg-surface-800"></div>
+				{/if}
+				<div class="hidden lg:block">
+					<ThemeToggle />
+				</div>
+				<MobileMenu />
+			</div>
+		</header>
+	</div>
 
-	<main class="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-8 xl:pb-12">
+	<main class="mx-auto w-full max-w-7xl flex-1 px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:px-8 xl:pb-14">
 		{@render children()}
 	</main>
 
-	<footer class="hidden border-t border-border py-6 text-center text-xs text-text-subtle xl:block">
-		CompTIA · {new Date().getFullYear()}
+	<footer class="hidden border-t border-border py-6 text-center text-xs text-text-subtle lg:block">
+		<p class="serif-italic">CompTIA · {new Date().getFullYear()}</p>
 	</footer>
 	<BottomNav {currentPath} />
 </div>
