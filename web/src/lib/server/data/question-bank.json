@@ -176,13 +176,13 @@
         },
         {
           "id": "c",
-          "text": "Corrective and corrective — both transaction-log rollback and backup recovery restore data",
+          "text": "Corrective and Corrective",
           "rationale": "Restoring from backup repairs the existing damage (corrective). Transaction-log rollback also repairs corruption by reverting to a known-good state (corrective). Both fix problems after they occur."
         },
         {
           "id": "d",
-          "text": "Detective and Preventive",
-          "rationale": "Backup recovery does not detect anything — it corrects damage. Transaction logs that enable rollback do not prevent corruption."
+          "text": "Corrective and Preventive",
+          "rationale": "Backup recovery is corrective, not preventive. Transaction logging does not stop corruption from occurring — it only lets the team roll back after it happens, so it is corrective as well."
         }
       ],
       "correctOptionIds": [
@@ -1631,7 +1631,7 @@
       "objective": "2.2",
       "format": "standard",
       "kind": "multiple-choice",
-      "prompt": "A user receives a voicemail claiming to be from IT, stating their account will be disabled unless they call back and provide their domain password. The caller ID shows the company's support number. What attack type is this?",
+      "prompt": "A user receives a voicemail claiming to be from IT, stating their account will be disabled unless they call back and provide their domain password. The caller ID shows the company's support number. Which TWO statements describe this attack technique? (Select TWO.)",
       "context": "Voicemail impersonating IT support demanding domain password under threat of account disablement, with spoofed caller ID.",
       "options": [
         {
@@ -1676,7 +1676,7 @@
           "section": "Social Engineering Attacks"
         }
       ],
-      "hint": "The deception is delivered through a real-time phone call rather than email or text — match the attack name to the channel and medium being used.",
+      "hint": "The deception is delivered through a real-time phone call rather than email or text — identify the channel first, then pick the statements that describe a phone-based attack.",
       "style": "scenario"
     },
     {
@@ -6738,42 +6738,42 @@
     {
       "id": "mcq-4-033",
       "domain": 4,
-      "objective": "4.5",
+      "objective": "4.8",
       "format": "standard",
-      "prompt": "Which sequence represents the CORRECT order of volatility?",
-      "context": "A forensic analyst must collect evidence from a running, compromised Linux server following the correct order of volatility. A forensic analyst must collect evidence from a running, compromised Linux server.",
+      "prompt": "An analyst responding to an incident must acquire five kinds of evidence from and around a still-running server. Which acquisition sequence follows the CORRECT order of volatility (MOST volatile first)?",
+      "context": "Evidence for the investigation sits in several places — some of it vanishes within seconds, some survives on other machines, and some is archived offsite.",
       "kind": "single-choice",
       "options": [
         {
           "id": "a",
-          "text": "RAM -> network connections -> running processes -> temporary files -> hard drive -> remote backups",
-          "rationale": "This follows the correct OOV: most volatile (RAM) to least volatile (archived data)."
+          "text": "Live memory image → firewall session table → local disk → shipped transaction log → tape archive",
+          "rationale": "Correct order of volatility: memory contents vanish first on power loss, then live session state, then data at rest on local disk, then the copy held on another host, and archival media last."
         },
         {
           "id": "b",
-          "text": "Hard drive -> RAM -> network connections -> running processes -> temporary files -> remote backups",
-          "rationale": "Hard drive is less volatile than RAM; network connections are lost on power-off."
+          "text": "Tape archive → shipped transaction log → local disk → firewall session table → live memory image",
+          "rationale": "This is the sequence reversed — the tape archive is the LEAST volatile source and must be acquired last, not first."
         },
         {
           "id": "c",
-          "text": "Remote backups -> hard drive -> temporary files -> running processes -> RAM -> network connections",
-          "rationale": "This is the reverse of the correct order."
+          "text": "Firewall session table → live memory image → local disk → shipped transaction log → tape archive",
+          "rationale": "The memory image comes first: the server's RAM contents disappear the moment the system loses power, while the firewall's session table persists on a separate device until entries time out."
         },
         {
           "id": "d",
-          "text": "Running processes -> hard drive -> RAM -> network connections -> temporary files -> remote backups",
-          "rationale": "RAM is more volatile than running processes."
+          "text": "Live memory image → local disk → firewall session table → shipped transaction log → tape archive",
+          "rationale": "The firewall session table is live network state that ages out and is lost on reboot — it must be captured before the data at rest on the local disk."
         }
       ],
       "correctOptionIds": [
         "a"
       ],
       "selectCount": 1,
-      "explanation": "RFC 3227 Order of Volatility: (1) CPU registers/cache, (2) routing/ARP/process tables, (3) live network connections, (4) temporary files, (5) disk, (6) remote logs, (7) archival media.",
+      "explanation": "RFC 3227's order of volatility runs from most to least volatile: volatile memory first, then live network and session state, then data at rest on local disk, then logs that exist on other machines, and archival media last. The analyst therefore acquires the live memory image, then the firewall session table, then the local disk, then the shipped transaction log, and finally the tape archive.",
       "sourceRefs": [
         {
           "source": "exam-objectives",
-          "section": "Objective 4.5"
+          "section": "Objective 4.8"
         },
         {
           "source": "study-guide",
@@ -7143,13 +7143,13 @@
       "domain": 4,
       "objective": "4.8",
       "format": "standard",
-      "prompt": "In a data breach trial: printed log showing IP, expert testimony, actual hard drive. Which evidence types? In a data breach trial, the prosecution presents: (1) a printed log showing the defendant's IP, (2) expert testimony about the log format, (3) the actual hard drive with original logs. Which evidence types are represented?",
+      "prompt": "In a data breach trial, the prosecution presents: (1) a printed log showing the defendant's IP, (2) expert testimony about the log format, (3) the actual hard drive with original logs. Which evidence types are represented?",
       "context": null,
       "kind": "single-choice",
       "options": [
         {
           "id": "a",
-          "text": "Documentary — testimonial — real: the log is a written record, the expert statement is testimonial, and the drive is the physical object",
+          "text": "(1) Documentary — (2) Testimonial — (3) Real",
           "rationale": "A printed log is documentary evidence (a writing or record), expert testimony is testimonial evidence (a sworn statement), and the original hard drive is real evidence (a physical object)."
         },
         {
@@ -7160,7 +7160,7 @@
         {
           "id": "c",
           "text": "(1) Real — (2) Documentary — (3) Testimonial",
-          "rationale": "Printed log is demonstrative, not real. Testimony is testimonial, not documentary."
+          "rationale": "The printed log is a writing, so it is documentary, not real evidence. Expert testimony is testimonial, not documentary; the hard drive is real, not testimonial."
         },
         {
           "id": "d",
@@ -7176,7 +7176,7 @@
       "sourceRefs": [
         {
           "source": "exam-objectives",
-          "section": "Objective 4.6"
+          "section": "Objective 4.8"
         },
         {
           "source": "study-guide",

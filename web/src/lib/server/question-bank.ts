@@ -66,7 +66,11 @@ export interface SliderDefinition extends DefinitionBase {
 
 export interface EvidenceDefinition extends DefinitionBase {
 	kind: 'evidence';
-	artifact: { label: string; format: 'log' | 'acl' | 'command-output'; lines: { id: string; text: string }[] };
+	artifact: {
+		label: string;
+		format: 'log' | 'acl' | 'command-output';
+		lines: { id: string; text: string }[];
+	};
 	selectCount: number;
 	correctLineIds: string[];
 }
@@ -192,20 +196,46 @@ export interface CourseBankSpec {
 
 export const SECP701_BANK_SPEC: CourseBankSpec = {
 	courseId: 'secp-701',
-	mcqTotal: 523,
+	mcqTotal: 692,
 	pbqTotal: 105,
 	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
 	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
 	domains: [1, 2, 3, 4, 5],
 	objectivesByDomain,
+	// Pinned to the exact authored counts (sum 692) so content cannot silently
+	// vanish or be retagged without failing validation — mirroring the exact
+	// pbqTotal / pbqDomainTotals checks.
 	mcqObjectiveTotals: {
-		'1.1': 10, '1.2': 13, '1.3': 10, '1.4': 15,
-		'2.1': 12, '2.2': 16, '2.3': 13, '2.4': 17, '2.5': 13,
-		'3.1': 15, '3.2': 18, '3.3': 13, '3.4': 16,
-		'4.1': 11, '4.2': 9, '4.3': 13, '4.4': 10, '4.5': 10, '4.6': 13, '4.7': 8, '4.8': 11, '4.9': 7,
-		'5.1': 9, '5.2': 11, '5.3': 10, '5.4': 9, '5.5': 10, '5.6': 10
+		'1.1': 41,
+		'1.2': 21,
+		'1.3': 18,
+		'1.4': 24,
+		'2.1': 13,
+		'2.2': 33,
+		'2.3': 51,
+		'2.4': 44,
+		'2.5': 23,
+		'3.1': 48,
+		'3.2': 27,
+		'3.3': 35,
+		'3.4': 56,
+		'4.1': 17,
+		'4.2': 12,
+		'4.3': 20,
+		'4.4': 23,
+		'4.5': 11,
+		'4.6': 20,
+		'4.7': 8,
+		'4.8': 21,
+		'4.9': 7,
+		'5.1': 14,
+		'5.2': 32,
+		'5.3': 25,
+		'5.4': 20,
+		'5.5': 14,
+		'5.6': 14
 	},
-	mcqDomainTotals: { 1: 48, 2: 71, 3: 62, 4: 92, 5: 59 },
+	mcqDomainTotals: { 1: 104, 2: 164, 3: 166, 4: 139, 5: 119 },
 	multiTotals: { 1: 6, 2: 11, 3: 9, 4: 13, 5: 7 },
 	// Scenario is no longer forced to 100%. The bank now carries a realistic mix:
 	// recall (self-contained), keyword (BEST/MOST/FIRST), short-form (word-bank), scenario (paragraph).
@@ -235,26 +265,46 @@ function regionsOverlap(
 
 function isValidHotspot(question: HotspotDefinition): boolean {
 	const def = hotspotTemplate(question.template);
-	if (!def || question.regions.length < def.minRegions || !hasUniqueIds(question.regions)) return false;
+	if (!def || question.regions.length < def.minRegions || !hasUniqueIds(question.regions))
+		return false;
 	if (def.expectedRegions && question.regions.length !== def.expectedRegions) return false;
-	if (question.regions.some((region) =>
-		!region.label.trim() ||
-		(def.maxLabelLength !== undefined && region.label.length > def.maxLabelLength) ||
-		!Number.isFinite(region.x1) || !Number.isFinite(region.y1) || !Number.isFinite(region.x2) || !Number.isFinite(region.y2) ||
-		region.x1 < 0 || region.y1 < 0 || region.x2 > 100 || region.y2 > 100 ||
-		region.x2 <= region.x1 || region.y2 <= region.y1
-	)) return false;
+	if (
+		question.regions.some(
+			(region) =>
+				!region.label.trim() ||
+				(def.maxLabelLength !== undefined && region.label.length > def.maxLabelLength) ||
+				!Number.isFinite(region.x1) ||
+				!Number.isFinite(region.y1) ||
+				!Number.isFinite(region.x2) ||
+				!Number.isFinite(region.y2) ||
+				region.x1 < 0 ||
+				region.y1 < 0 ||
+				region.x2 > 100 ||
+				region.y2 > 100 ||
+				region.x2 <= region.x1 ||
+				region.y2 <= region.y1
+		)
+	)
+		return false;
 	for (let i = 0; i < question.regions.length; i++) {
 		for (let j = i + 1; j < question.regions.length; j++) {
 			if (regionsOverlap(question.regions[i], question.regions[j])) return false;
 		}
 	}
-	return question.regions.some((region) => region.correct) && question.regions.some((region) => !region.correct);
+	return (
+		question.regions.some((region) => region.correct) &&
+		question.regions.some((region) => !region.correct)
+	);
 }
 
-export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = SECP701_BANK_SPEC): void {
-	if (bank.mcqs.length < spec.mcqTotal) fail('mcqs', `expected at least ${spec.mcqTotal} items, found ${bank.mcqs.length}`);
-	if (bank.pbqs.length !== spec.pbqTotal) fail('pbqs', `expected ${spec.pbqTotal} items, found ${bank.pbqs.length}`);
+export function validateQuestionBank(
+	bank: QuestionBank,
+	spec: CourseBankSpec = SECP701_BANK_SPEC
+): void {
+	if (bank.mcqs.length !== spec.mcqTotal)
+		fail('mcqs', `expected ${spec.mcqTotal} items, found ${bank.mcqs.length}`);
+	if (bank.pbqs.length !== spec.pbqTotal)
+		fail('pbqs', `expected ${spec.pbqTotal} items, found ${bank.pbqs.length}`);
 	const all = [...bank.mcqs, ...bank.pbqs] as QuestionDefinition[];
 	if (!hasUniqueIds(all)) fail('bank', 'question IDs must be unique');
 	const normalized = (text: string) => text.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -262,12 +312,18 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 		fail('bank', 'prompts must be unique (normalized)');
 	for (const domain of spec.domains) {
 		const mcqs = bank.mcqs.filter((question) => question.domain === domain);
-		if (mcqs.length < spec.mcqDomainTotals[domain]) fail(`mcq-${domain}`, `expected at least ${spec.mcqDomainTotals[domain]} items`);
-		if (mcqs.filter((question) => question.kind === 'multiple-choice').length < spec.multiTotals[domain]) fail(`mcq-${domain}`, 'too few multiple-choice items');
+		if (mcqs.length < spec.mcqDomainTotals[domain])
+			fail(`mcq-${domain}`, `expected at least ${spec.mcqDomainTotals[domain]} items`);
+		if (
+			mcqs.filter((question) => question.kind === 'multiple-choice').length <
+			spec.multiTotals[domain]
+		)
+			fail(`mcq-${domain}`, 'too few multiple-choice items');
 	}
 	if (spec.scenarioCeiling !== undefined) {
 		const scenario = bank.mcqs.filter((question) => question.style === 'scenario').length;
-		if (scenario > spec.scenarioCeiling) fail('mcq-scenario', `scenario count ${scenario} exceeds ceiling ${spec.scenarioCeiling}`);
+		if (scenario > spec.scenarioCeiling)
+			fail('mcq-scenario', `scenario count ${scenario} exceeds ceiling ${spec.scenarioCeiling}`);
 	}
 	if (spec.styleFloors) {
 		for (const [style, min] of Object.entries(spec.styleFloors)) {
@@ -278,16 +334,22 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 	if (spec.pbqDomainTotals) {
 		for (const domain of spec.domains) {
 			const pbqs = bank.pbqs.filter((question) => question.domain === domain);
-			if (pbqs.length !== spec.pbqDomainTotals[domain]) fail(`pbq-${domain}`, `expected ${spec.pbqDomainTotals[domain]} items`);
+			if (pbqs.length !== spec.pbqDomainTotals[domain])
+				fail(`pbq-${domain}`, `expected ${spec.pbqDomainTotals[domain]} items`);
 		}
 	}
-	for (const [objective, expected] of Object.entries(spec.mcqObjectiveTotals) as [ObjectiveId, number][]) {
-		if (bank.mcqs.filter((question) => question.objective === objective).length < expected) fail(objective, `expected at least ${expected} MCQs`);
+	for (const [objective, expected] of Object.entries(spec.mcqObjectiveTotals) as [
+		ObjectiveId,
+		number
+	][]) {
+		if (bank.mcqs.filter((question) => question.objective === objective).length !== expected)
+			fail(objective, `expected exactly ${expected} MCQs`);
 	}
 	if (spec.pbqObjectiveMinimum) {
 		for (const objective of Object.keys(spec.mcqObjectiveTotals)) {
 			const count = bank.pbqs.filter((question) => question.objective === objective).length;
-			if (count < spec.pbqObjectiveMinimum) fail(`pbq-${objective}`, `expected at least ${spec.pbqObjectiveMinimum} PBQs`);
+			if (count < spec.pbqObjectiveMinimum)
+				fail(`pbq-${objective}`, `expected at least ${spec.pbqObjectiveMinimum} PBQs`);
 		}
 	}
 	if (spec.kindDomainMinimums) {
@@ -295,64 +357,320 @@ export function validateQuestionBank(bank: QuestionBank, spec: CourseBankSpec = 
 			for (const domain of spec.domains) {
 				const expected = minimums[domain as Domain];
 				if (expected === undefined) continue;
-				const count = bank.pbqs.filter((question) => question.domain === domain && question.kind === kind).length;
-				if (count < expected) fail(`pbq-${kind}-${domain}`, `expected at least ${expected} ${kind} PBQs`);
+				const count = bank.pbqs.filter(
+					(question) => question.domain === domain && question.kind === kind
+				).length;
+				if (count < expected)
+					fail(`pbq-${kind}-${domain}`, `expected at least ${expected} ${kind} PBQs`);
 			}
 		}
 	}
 	for (const question of all) {
-		if (!spec.objectivesByDomain[question.domain].includes(question.objective)) fail(question.id, 'objective does not belong to domain');
+		if (!spec.objectivesByDomain[question.domain].includes(question.objective))
+			fail(question.id, 'objective does not belong to domain');
 		if (spec.styleFloors && question.format !== 'pbq') {
-			if (!question.style || !['recall', 'scenario', 'keyword', 'short-form'].includes(question.style))
+			if (
+				!question.style ||
+				!['recall', 'scenario', 'keyword', 'short-form'].includes(question.style)
+			)
 				fail(question.id, 'MCQ requires a valid style (recall|scenario|keyword|short-form)');
 		}
-		if (!question.id.match(question.format === 'pbq' ? spec.pbqIdPattern : spec.mcqIdPattern)) fail(question.id, 'invalid ID or format');
-		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0) fail(question.id, 'missing authored content or source reference');
-		if (question.sourceRefs.some((ref, i) => !ref.section.trim() || question.sourceRefs.findIndex((other) => other.source === ref.source && other.section === ref.section) !== i)) fail(question.id, 'source references must be unique and non-empty');
+		if (!question.id.match(question.format === 'pbq' ? spec.pbqIdPattern : spec.mcqIdPattern))
+			fail(question.id, 'invalid ID or format');
+		if (!question.prompt.trim() || !question.explanation.trim() || question.sourceRefs.length === 0)
+			fail(question.id, 'missing authored content or source reference');
+		if (
+			question.sourceRefs.some(
+				(ref, i) =>
+					!ref.section.trim() ||
+					question.sourceRefs.findIndex(
+						(other) => other.source === ref.source && other.section === ref.section
+					) !== i
+			)
+		)
+			fail(question.id, 'source references must be unique and non-empty');
 		if (spec.requireAuthoredHints && !question.hint) fail(question.id, 'missing authored hint');
-		if (spec.minSourceRefs !== undefined && question.sourceRefs.length < spec.minSourceRefs) fail(question.id, `expected at least ${spec.minSourceRefs} source references`);
-		if (question.kind === 'word-bank' && /typing the missing term|Spelling must be exact \(case-insensitive\)/i.test(question.prompt)) fail(question.id, 'word-bank prompts must use chip-selection instructions, not typing instructions');
-		if (question.kind === 'fill-blank') fail(question.id, 'fill-blank is deprecated — author word-bank or matching instead');
-		if (question.kind === 'numeric') fail(question.id, 'numeric is deprecated — author slider or word-bank instead');
-		if (question.hint !== undefined && !question.hint.trim()) fail(question.id, 'hint must be a non-empty string');
-		if (question.hint !== undefined && leaksAnswer(question.hint, question)) fail(question.id, 'hint must not reveal the correct answer');
+		if (spec.minSourceRefs !== undefined && question.sourceRefs.length < spec.minSourceRefs)
+			fail(question.id, `expected at least ${spec.minSourceRefs} source references`);
+		if (
+			question.kind === 'word-bank' &&
+			/typing the missing term|Spelling must be exact \(case-insensitive\)/i.test(question.prompt)
+		)
+			fail(
+				question.id,
+				'word-bank prompts must use chip-selection instructions, not typing instructions'
+			);
+		if (question.kind === 'fill-blank')
+			fail(question.id, 'fill-blank is deprecated — author word-bank or matching instead');
+		if (question.kind === 'numeric')
+			fail(question.id, 'numeric is deprecated — author slider or word-bank instead');
+		if (question.hint !== undefined && !question.hint.trim())
+			fail(question.id, 'hint must be a non-empty string');
+		if (question.hint !== undefined && leaksAnswer(question.hint, question))
+			fail(question.id, 'hint must not reveal the correct answer');
 		if (question.kind === 'single-choice' || question.kind === 'multiple-choice') {
-			if (question.options.length !== (question.kind === 'single-choice' ? 4 : question.options.length) || (question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))) fail(question.id, 'invalid option count');
-			if (!hasUniqueIds(question.options) || question.options.some((option) => !option.text.trim() || !option.rationale.trim())) fail(question.id, 'invalid options');
-			if (new Set(question.options.map((option) => normalized(option.text))).size !== question.options.length) fail(question.id, 'options must be unique (normalized)');
-			if (question.correctOptionIds.length !== question.selectCount || !question.correctOptionIds.every((id) => question.options.some((option) => option.id === id))) fail(question.id, 'invalid correct choice IDs');
+			if (
+				question.options.length !==
+					(question.kind === 'single-choice' ? 4 : question.options.length) ||
+				(question.kind === 'multiple-choice' && ![5, 6].includes(question.options.length))
+			)
+				fail(question.id, 'invalid option count');
+			if (
+				!hasUniqueIds(question.options) ||
+				question.options.some((option) => !option.text.trim() || !option.rationale.trim())
+			)
+				fail(question.id, 'invalid options');
+			if (
+				new Set(question.options.map((option) => normalized(option.text))).size !==
+				question.options.length
+			)
+				fail(question.id, 'options must be unique (normalized)');
+			if (
+				question.correctOptionIds.length !== question.selectCount ||
+				!question.correctOptionIds.every((id) =>
+					question.options.some((option) => option.id === id)
+				)
+			)
+				fail(question.id, 'invalid correct choice IDs');
 		}
-		if (question.kind === 'ordering' && (question.items.length < 6 || !hasUniqueIds(question.items) || question.correctOrder.length !== question.items.length || new Set(question.correctOrder).size !== question.items.length || !question.correctOrder.every((id) => question.items.some((item) => item.id === id)))) fail(question.id, 'invalid ordering (need ≥6 items)');
-		if (question.kind === 'matching' && (question.premises.length < 5 || !hasUniqueIds(question.premises) || !hasUniqueIds(question.targets) || question.premises.length !== question.targets.length || Object.keys(question.correctMatches).length !== question.premises.length || new Set(Object.values(question.correctMatches)).size !== question.targets.length || !question.extraTargets?.length)) fail(question.id, 'invalid matching (need ≥5 pairs + extraTargets)');
-		if (question.kind === 'slider' && (![question.min, question.max, question.step, question.correctValue].every(Number.isFinite) || question.tolerance < 0 || question.step <= 0 || question.correctValue < question.min || question.correctValue > question.max)) fail(question.id, 'invalid slider (need finite min/max/step/correctValue, step > 0, correctValue within range, tolerance ≥ 0)');
-		if (question.kind === 'evidence' && (question.correctLineIds.length !== question.selectCount || new Set(question.correctLineIds).size !== question.selectCount || !question.correctLineIds.every((id) => question.artifact.lines.some((line) => line.id === id)))) fail(question.id, 'invalid evidence response key');
-		if (question.kind === 'configuration' && (question.fields.length < 4 || Object.keys(question.correctValues).length !== question.fields.length || question.fields.some((field) => field.options.length < 4 || !question.correctValues[field.id] || !field.options.some((option) => option.id === question.correctValues[field.id])))) fail(question.id, 'invalid configuration (need ≥4 fields, ≥4 options each)');
-		if (question.kind === 'word-bank' && (question.blanks.length < 2 || !hasUniqueIds(question.blanks) || !hasUniqueIds(question.bank) || question.bank.length < question.blanks.length + 1 || Object.keys(question.correctAssignments).length !== question.blanks.length || question.blanks.some((blank) => !question.correctAssignments[blank.id] || !question.bank.some((word) => word.id === question.correctAssignments[blank.id])) || new Set(Object.values(question.correctAssignments)).size !== question.blanks.length || (question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)) fail(question.id, 'invalid word-bank (need ≥2 blanks, bank ≥ blanks+1 with distractors, unique assignments)');
-		if (question.kind === 'sort' && (question.items.length < 4 || !hasUniqueIds(question.items) || question.buckets.length < 2 || !hasUniqueIds(question.buckets) || Object.keys(question.correctBuckets).length !== question.items.length || !question.items.every((item) => question.correctBuckets[item.id] && question.buckets.some((bucket) => bucket.id === question.correctBuckets[item.id])) || new Set(Object.values(question.correctBuckets)).size >= question.buckets.length)) fail(question.id, 'invalid sort (need ≥4 items, ≥2 buckets, all items bucketed, at least one distractor bucket)');
-		if (question.kind === 'hotspot' && !isValidHotspot(question)) fail(question.id, 'invalid hotspot (need ≥2 non-overlapping regions in 0–100 on a known template, ≥1 correct + ≥1 distractor)');
-		if (question.kind === 'memory' && (question.pairs.length < 4 || !hasUniqueIds(question.pairs) || question.pairs.some((pair) => !pair.a.trim() || !pair.b.trim()) || new Set(question.pairs.flatMap((pair) => [pair.a, pair.b])).size !== question.pairs.length * 2)) fail(question.id, 'invalid memory (need ≥4 pairs, unique ids, every card text unique across the board)');
+		if (
+			question.kind === 'ordering' &&
+			(question.items.length < 6 ||
+				!hasUniqueIds(question.items) ||
+				question.correctOrder.length !== question.items.length ||
+				new Set(question.correctOrder).size !== question.items.length ||
+				!question.correctOrder.every((id) => question.items.some((item) => item.id === id)))
+		)
+			fail(question.id, 'invalid ordering (need ≥6 items)');
+		if (
+			question.kind === 'matching' &&
+			(question.premises.length < 5 ||
+				!hasUniqueIds(question.premises) ||
+				!hasUniqueIds(question.targets) ||
+				question.premises.length !== question.targets.length ||
+				Object.keys(question.correctMatches).length !== question.premises.length ||
+				new Set(Object.values(question.correctMatches)).size !== question.targets.length ||
+				!question.extraTargets?.length)
+		)
+			fail(question.id, 'invalid matching (need ≥5 pairs + extraTargets)');
+		if (
+			question.kind === 'slider' &&
+			(![question.min, question.max, question.step, question.correctValue].every(Number.isFinite) ||
+				question.tolerance < 0 ||
+				question.step <= 0 ||
+				question.correctValue < question.min ||
+				question.correctValue > question.max)
+		)
+			fail(
+				question.id,
+				'invalid slider (need finite min/max/step/correctValue, step > 0, correctValue within range, tolerance ≥ 0)'
+			);
+		if (
+			question.kind === 'evidence' &&
+			(question.correctLineIds.length !== question.selectCount ||
+				new Set(question.correctLineIds).size !== question.selectCount ||
+				!question.correctLineIds.every((id) =>
+					question.artifact.lines.some((line) => line.id === id)
+				))
+		)
+			fail(question.id, 'invalid evidence response key');
+		if (
+			question.kind === 'configuration' &&
+			(question.fields.length < 4 ||
+				Object.keys(question.correctValues).length !== question.fields.length ||
+				question.fields.some(
+					(field) =>
+						field.options.length < 4 ||
+						!question.correctValues[field.id] ||
+						!field.options.some((option) => option.id === question.correctValues[field.id])
+				))
+		)
+			fail(question.id, 'invalid configuration (need ≥4 fields, ≥4 options each)');
+		if (
+			question.kind === 'word-bank' &&
+			(question.blanks.length < 2 ||
+				!hasUniqueIds(question.blanks) ||
+				!hasUniqueIds(question.bank) ||
+				question.bank.length < question.blanks.length + 1 ||
+				Object.keys(question.correctAssignments).length !== question.blanks.length ||
+				question.blanks.some(
+					(blank) =>
+						!question.correctAssignments[blank.id] ||
+						!question.bank.some((word) => word.id === question.correctAssignments[blank.id])
+				) ||
+				new Set(Object.values(question.correctAssignments)).size !== question.blanks.length ||
+				(question.prompt.match(/____/g)?.length ?? 0) !== question.blanks.length)
+		)
+			fail(
+				question.id,
+				'invalid word-bank (need ≥2 blanks, bank ≥ blanks+1 with distractors, unique assignments)'
+			);
+		if (
+			question.kind === 'sort' &&
+			(question.items.length < 4 ||
+				!hasUniqueIds(question.items) ||
+				question.buckets.length < 2 ||
+				!hasUniqueIds(question.buckets) ||
+				Object.keys(question.correctBuckets).length !== question.items.length ||
+				!question.items.every(
+					(item) =>
+						question.correctBuckets[item.id] &&
+						question.buckets.some((bucket) => bucket.id === question.correctBuckets[item.id])
+				) ||
+				new Set(Object.values(question.correctBuckets)).size >= question.buckets.length)
+		)
+			fail(
+				question.id,
+				'invalid sort (need ≥4 items, ≥2 buckets, all items bucketed, at least one distractor bucket)'
+			);
+		if (question.kind === 'hotspot' && !isValidHotspot(question))
+			fail(
+				question.id,
+				'invalid hotspot (need ≥2 non-overlapping regions in 0–100 on a known template, ≥1 correct + ≥1 distractor)'
+			);
+		if (
+			question.kind === 'memory' &&
+			(question.pairs.length < 4 ||
+				!hasUniqueIds(question.pairs) ||
+				question.pairs.some((pair) => !pair.a.trim() || !pair.b.trim()) ||
+				new Set(question.pairs.flatMap((pair) => [pair.a, pair.b])).size !==
+					question.pairs.length * 2)
+		)
+			fail(
+				question.id,
+				'invalid memory (need ≥4 pairs, unique ids, every card text unique across the board)'
+			);
 		if (question.kind === 'multi-step') {
-			if (!question.steps || question.steps.length < 2 || question.steps.length > 4) fail(question.id, 'multi-step must have 2-4 steps');
+			if (!question.steps || question.steps.length < 2 || question.steps.length > 4)
+				fail(question.id, 'multi-step must have 2-4 steps');
 			for (const step of question.steps) {
-				if (!step.prompt.trim() || !step.explanation.trim() || !step.kind || !step.sourceRefs?.length) fail(step.id || question.id, 'invalid multi-step child definition');
-				if (step.sourceRefs.some((ref, i) => !ref.section.trim() || step.sourceRefs.findIndex((other) => other.source === ref.source && other.section === ref.section) !== i)) fail(step.id || question.id, 'child source references must be unique and non-empty');
-				if (spec.requireAuthoredHints && !step.hint) fail(step.id || question.id, 'missing authored hint on multi-step child');
-				if (spec.minSourceRefs !== undefined && step.sourceRefs.length < spec.minSourceRefs) fail(step.id || question.id, `expected at least ${spec.minSourceRefs} child source references`);
-				if (step.kind === 'fill-blank') fail(step.id || question.id, 'fill-blank child steps are deprecated');
-				if (step.kind === 'numeric') fail(step.id || question.id, 'numeric child steps are deprecated');
-				if (step.hint !== undefined && !step.hint.trim()) fail(step.id || question.id, 'hint must be a non-empty string');
-				if (step.hint !== undefined && leaksAnswer(step.hint, step)) fail(step.id || question.id, 'hint must not reveal the correct answer');
-				if (step.kind === 'single-choice' && (step.options.length !== 4 || !hasUniqueIds(step.options) || step.options.some((o) => !o.text.trim() || !o.rationale.trim()) || step.correctOptionIds.length !== 1)) fail(step.id || question.id, 'invalid child single-choice');
-				if (step.kind === 'multiple-choice' && (![5, 6].includes(step.options.length) || !hasUniqueIds(step.options) || step.options.some((o) => !o.text.trim() || !o.rationale.trim()) || step.correctOptionIds.length !== step.selectCount)) fail(step.id || question.id, 'invalid child multiple-choice');
-				if (step.kind === 'ordering' && (step.items.length < 6 || step.correctOrder.length !== step.items.length || new Set(step.correctOrder).size !== step.items.length)) fail(step.id || question.id, 'invalid child ordering (need ≥6)');
-				if (step.kind === 'matching' && (step.premises.length < 5 || step.premises.length !== step.targets.length || Object.keys(step.correctMatches).length !== step.premises.length || !step.extraTargets?.length)) fail(step.id || question.id, 'invalid child matching (need ≥5 pairs + extraTargets)');
-				if (step.kind === 'configuration' && (step.fields.length < 4 || Object.keys(step.correctValues).length !== step.fields.length || step.fields.some((f) => f.options.length < 4 || !step.correctValues[f.id] || !f.options.some((o) => o.id === step.correctValues[f.id])))) fail(step.id || question.id, 'invalid child configuration (need ≥4 fields, ≥4 options each, valid correctValues)');
-				if (step.kind === 'evidence' && (step.correctLineIds.length !== step.selectCount || !step.correctLineIds.every((id) => step.artifact.lines.some((l) => l.id === id)))) fail(step.id || question.id, 'invalid child evidence');
-				if (step.kind === 'slider' && (![step.min, step.max, step.step, step.correctValue].every(Number.isFinite) || step.tolerance < 0 || step.step <= 0 || step.correctValue < step.min || step.correctValue > step.max)) fail(step.id || question.id, 'invalid child slider');
-				if (step.kind === 'word-bank' && (step.blanks.length < 2 || !hasUniqueIds(step.blanks) || !hasUniqueIds(step.bank) || step.bank.length < step.blanks.length + 1 || Object.keys(step.correctAssignments).length !== step.blanks.length || new Set(Object.values(step.correctAssignments)).size !== step.blanks.length || (step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)) fail(step.id || question.id, 'invalid child word-bank');
-				if (step.kind === 'sort' && (step.items.length < 4 || step.buckets.length < 2 || Object.keys(step.correctBuckets).length !== step.items.length || !step.items.every((item) => step.correctBuckets[item.id] && step.buckets.some((bucket) => bucket.id === step.correctBuckets[item.id])) || new Set(Object.values(step.correctBuckets)).size >= step.buckets.length)) fail(step.id || question.id, 'invalid child sort');
-				if (step.kind === 'hotspot' && !isValidHotspot(step)) fail(step.id || question.id, 'invalid child hotspot');
-				if (step.kind === 'memory' && (step.pairs.length < 4 || !hasUniqueIds(step.pairs) || step.pairs.some((p) => !p.a.trim() || !p.b.trim()) || new Set(step.pairs.flatMap((p) => [p.a, p.b])).size !== step.pairs.length * 2)) fail(step.id || question.id, 'invalid child memory (need ≥4 pairs, unique texts)');
+				if (
+					!step.prompt.trim() ||
+					!step.explanation.trim() ||
+					!step.kind ||
+					!step.sourceRefs?.length
+				)
+					fail(step.id || question.id, 'invalid multi-step child definition');
+				if (
+					step.sourceRefs.some(
+						(ref, i) =>
+							!ref.section.trim() ||
+							step.sourceRefs.findIndex(
+								(other) => other.source === ref.source && other.section === ref.section
+							) !== i
+					)
+				)
+					fail(step.id || question.id, 'child source references must be unique and non-empty');
+				if (spec.requireAuthoredHints && !step.hint)
+					fail(step.id || question.id, 'missing authored hint on multi-step child');
+				if (spec.minSourceRefs !== undefined && step.sourceRefs.length < spec.minSourceRefs)
+					fail(
+						step.id || question.id,
+						`expected at least ${spec.minSourceRefs} child source references`
+					);
+				if (step.kind === 'fill-blank')
+					fail(step.id || question.id, 'fill-blank child steps are deprecated');
+				if (step.kind === 'numeric')
+					fail(step.id || question.id, 'numeric child steps are deprecated');
+				if (step.hint !== undefined && !step.hint.trim())
+					fail(step.id || question.id, 'hint must be a non-empty string');
+				if (step.hint !== undefined && leaksAnswer(step.hint, step))
+					fail(step.id || question.id, 'hint must not reveal the correct answer');
+				if (
+					step.kind === 'single-choice' &&
+					(step.options.length !== 4 ||
+						!hasUniqueIds(step.options) ||
+						step.options.some((o) => !o.text.trim() || !o.rationale.trim()) ||
+						step.correctOptionIds.length !== 1)
+				)
+					fail(step.id || question.id, 'invalid child single-choice');
+				if (
+					step.kind === 'multiple-choice' &&
+					(![5, 6].includes(step.options.length) ||
+						!hasUniqueIds(step.options) ||
+						step.options.some((o) => !o.text.trim() || !o.rationale.trim()) ||
+						step.correctOptionIds.length !== step.selectCount)
+				)
+					fail(step.id || question.id, 'invalid child multiple-choice');
+				if (
+					step.kind === 'ordering' &&
+					(step.items.length < 6 ||
+						step.correctOrder.length !== step.items.length ||
+						new Set(step.correctOrder).size !== step.items.length)
+				)
+					fail(step.id || question.id, 'invalid child ordering (need ≥6)');
+				if (
+					step.kind === 'matching' &&
+					(step.premises.length < 5 ||
+						step.premises.length !== step.targets.length ||
+						Object.keys(step.correctMatches).length !== step.premises.length ||
+						!step.extraTargets?.length)
+				)
+					fail(step.id || question.id, 'invalid child matching (need ≥5 pairs + extraTargets)');
+				if (
+					step.kind === 'configuration' &&
+					(step.fields.length < 4 ||
+						Object.keys(step.correctValues).length !== step.fields.length ||
+						step.fields.some(
+							(f) =>
+								f.options.length < 4 ||
+								!step.correctValues[f.id] ||
+								!f.options.some((o) => o.id === step.correctValues[f.id])
+						))
+				)
+					fail(
+						step.id || question.id,
+						'invalid child configuration (need ≥4 fields, ≥4 options each, valid correctValues)'
+					);
+				if (
+					step.kind === 'evidence' &&
+					(step.correctLineIds.length !== step.selectCount ||
+						!step.correctLineIds.every((id) => step.artifact.lines.some((l) => l.id === id)))
+				)
+					fail(step.id || question.id, 'invalid child evidence');
+				if (
+					step.kind === 'slider' &&
+					(![step.min, step.max, step.step, step.correctValue].every(Number.isFinite) ||
+						step.tolerance < 0 ||
+						step.step <= 0 ||
+						step.correctValue < step.min ||
+						step.correctValue > step.max)
+				)
+					fail(step.id || question.id, 'invalid child slider');
+				if (
+					step.kind === 'word-bank' &&
+					(step.blanks.length < 2 ||
+						!hasUniqueIds(step.blanks) ||
+						!hasUniqueIds(step.bank) ||
+						step.bank.length < step.blanks.length + 1 ||
+						Object.keys(step.correctAssignments).length !== step.blanks.length ||
+						new Set(Object.values(step.correctAssignments)).size !== step.blanks.length ||
+						(step.prompt.match(/____/g)?.length ?? 0) !== step.blanks.length)
+				)
+					fail(step.id || question.id, 'invalid child word-bank');
+				if (
+					step.kind === 'sort' &&
+					(step.items.length < 4 ||
+						step.buckets.length < 2 ||
+						Object.keys(step.correctBuckets).length !== step.items.length ||
+						!step.items.every(
+							(item) =>
+								step.correctBuckets[item.id] &&
+								step.buckets.some((bucket) => bucket.id === step.correctBuckets[item.id])
+						) ||
+						new Set(Object.values(step.correctBuckets)).size >= step.buckets.length)
+				)
+					fail(step.id || question.id, 'invalid child sort');
+				if (step.kind === 'hotspot' && !isValidHotspot(step))
+					fail(step.id || question.id, 'invalid child hotspot');
+				if (
+					step.kind === 'memory' &&
+					(step.pairs.length < 4 ||
+						!hasUniqueIds(step.pairs) ||
+						step.pairs.some((p) => !p.a.trim() || !p.b.trim()) ||
+						new Set(step.pairs.flatMap((p) => [p.a, p.b])).size !== step.pairs.length * 2)
+				)
+					fail(step.id || question.id, 'invalid child memory (need ≥4 pairs, unique texts)');
 			}
 		}
 	}
@@ -365,41 +683,139 @@ export function loadQuestionBank(): QuestionBank {
 }
 
 export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion {
-	const base = { id: definition.id, domain: definition.domain, objective: definition.objective, format: definition.format, ...(definition.style ? { style: definition.style } : {}), prompt: definition.prompt, ...(definition.context ? { context: definition.context } : {}), ...(definition.hint ? { hint: definition.hint } : {}) };
+	const base = {
+		id: definition.id,
+		domain: definition.domain,
+		objective: definition.objective,
+		format: definition.format,
+		...(definition.style ? { style: definition.style } : {}),
+		prompt: definition.prompt,
+		...(definition.context ? { context: definition.context } : {}),
+		...(definition.hint ? { hint: definition.hint } : {})
+	};
 	switch (definition.kind) {
 		case 'single-choice':
-		case 'multiple-choice': return { ...base, kind: definition.kind, options: definition.options.map(({ id, text }) => ({ id, text })), selectCount: definition.selectCount };
-		case 'ordering': return { ...base, kind: 'ordering', items: definition.items };
-		case 'matching': return { ...base, kind: 'matching', premises: definition.premises, targets: definition.targets, ...(definition.extraTargets ? { extraTargets: definition.extraTargets } : {}) };
-		case 'numeric': return { ...base, kind: 'numeric', unit: definition.unit };
-		case 'slider': return { ...base, kind: 'slider', min: definition.min, max: definition.max, step: definition.step, unit: definition.unit, tolerance: definition.tolerance };
-		case 'evidence': return { ...base, kind: 'evidence', artifact: definition.artifact, selectCount: definition.selectCount };
-		case 'configuration': return { ...base, kind: 'configuration', fields: definition.fields };
-		case 'fill-blank': return { ...base, kind: 'fill-blank', blanks: definition.blanks.map(({ id, label, placeholder }) => ({ id, label, placeholder })) };
-		case 'word-bank': return { ...base, kind: 'word-bank', blanks: definition.blanks, bank: definition.bank };
-		case 'sort': return { ...base, kind: 'sort', items: definition.items, buckets: definition.buckets };
-		case 'hotspot': return { ...base, kind: 'hotspot', template: definition.template, regions: definition.regions.map(({ id, label, x1, y1, x2, y2 }) => ({ id, label, x1, y1, x2, y2 })) };
-		case 'memory': return { ...base, kind: 'memory', pairs: definition.pairs };
-		case 'multi-step': return { ...base, kind: 'multi-step', context: definition.context, steps: definition.steps.map(toPublicQuestion) };
+		case 'multiple-choice':
+			return {
+				...base,
+				kind: definition.kind,
+				options: definition.options.map(({ id, text }) => ({ id, text })),
+				selectCount: definition.selectCount
+			};
+		case 'ordering':
+			return { ...base, kind: 'ordering', items: definition.items };
+		case 'matching':
+			return {
+				...base,
+				kind: 'matching',
+				premises: definition.premises,
+				targets: definition.targets,
+				...(definition.extraTargets ? { extraTargets: definition.extraTargets } : {})
+			};
+		case 'numeric':
+			return { ...base, kind: 'numeric', unit: definition.unit };
+		case 'slider':
+			return {
+				...base,
+				kind: 'slider',
+				min: definition.min,
+				max: definition.max,
+				step: definition.step,
+				unit: definition.unit,
+				tolerance: definition.tolerance
+			};
+		case 'evidence':
+			return {
+				...base,
+				kind: 'evidence',
+				artifact: definition.artifact,
+				selectCount: definition.selectCount
+			};
+		case 'configuration':
+			return { ...base, kind: 'configuration', fields: definition.fields };
+		case 'fill-blank':
+			return {
+				...base,
+				kind: 'fill-blank',
+				blanks: definition.blanks.map(({ id, label, placeholder }) => ({ id, label, placeholder }))
+			};
+		case 'word-bank':
+			return { ...base, kind: 'word-bank', blanks: definition.blanks, bank: definition.bank };
+		case 'sort':
+			return { ...base, kind: 'sort', items: definition.items, buckets: definition.buckets };
+		case 'hotspot':
+			return {
+				...base,
+				kind: 'hotspot',
+				template: definition.template,
+				regions: definition.regions.map(({ id, label, x1, y1, x2, y2 }) => ({
+					id,
+					label,
+					x1,
+					y1,
+					x2,
+					y2
+				}))
+			};
+		case 'memory':
+			return { ...base, kind: 'memory', pairs: definition.pairs };
+		case 'multi-step':
+			return {
+				...base,
+				kind: 'multi-step',
+				context: definition.context,
+				steps: definition.steps.map(toPublicQuestion)
+			};
 	}
 }
 
 /** Correct-answer surface text per kind (empty for multi-step — use child steps). */
 function answerTexts(definition: QuestionDefinition): string[] {
 	switch (definition.kind) {
-		case 'single-choice': case 'multiple-choice':
-			return definition.options.filter((option) => definition.correctOptionIds.includes(option.id)).map((option) => option.text);
-		case 'ordering': return definition.correctOrder.map((id) => definition.items.find((item) => item.id === id)?.text ?? '');
-		case 'matching': return Object.values(definition.correctMatches).map((id) => [...definition.targets, ...(definition.extraTargets ?? [])].find((target) => target.id === id)?.text ?? '');
-		case 'numeric': case 'slider': return [String(definition.correctValue)];
-		case 'evidence': return definition.correctLineIds.map((id) => definition.artifact.lines.find((line) => line.id === id)?.text ?? '');
-		case 'configuration': return definition.fields.flatMap((field) => { const id = definition.correctValues[field.id]; return field.options.filter((option) => option.id === id).map((option) => option.text); });
-		case 'fill-blank': return definition.blanks.flatMap((blank) => blank.acceptedAnswers);
-		case 'word-bank': return Object.values(definition.correctAssignments).map((id) => definition.bank.find((word) => word.id === id)?.word ?? '');
-		case 'sort': return Object.values(definition.correctBuckets).map((id) => definition.buckets.find((bucket) => bucket.id === id)?.label ?? '');
-		case 'hotspot': return definition.regions.filter((region) => region.correct).map((region) => region.label);
-		case 'memory': return definition.pairs.flatMap((pair) => [pair.a, pair.b]);
-		case 'multi-step': return definition.steps.flatMap(answerTexts);
+		case 'single-choice':
+		case 'multiple-choice':
+			return definition.options
+				.filter((option) => definition.correctOptionIds.includes(option.id))
+				.map((option) => option.text);
+		case 'ordering':
+			return definition.correctOrder.map(
+				(id) => definition.items.find((item) => item.id === id)?.text ?? ''
+			);
+		case 'matching':
+			return Object.values(definition.correctMatches).map(
+				(id) =>
+					[...definition.targets, ...(definition.extraTargets ?? [])].find(
+						(target) => target.id === id
+					)?.text ?? ''
+			);
+		case 'numeric':
+		case 'slider':
+			return [String(definition.correctValue)];
+		case 'evidence':
+			return definition.correctLineIds.map(
+				(id) => definition.artifact.lines.find((line) => line.id === id)?.text ?? ''
+			);
+		case 'configuration':
+			return definition.fields.flatMap((field) => {
+				const id = definition.correctValues[field.id];
+				return field.options.filter((option) => option.id === id).map((option) => option.text);
+			});
+		case 'fill-blank':
+			return definition.blanks.flatMap((blank) => blank.acceptedAnswers);
+		case 'word-bank':
+			return Object.values(definition.correctAssignments).map(
+				(id) => definition.bank.find((word) => word.id === id)?.word ?? ''
+			);
+		case 'sort':
+			return Object.values(definition.correctBuckets).map(
+				(id) => definition.buckets.find((bucket) => bucket.id === id)?.label ?? ''
+			);
+		case 'hotspot':
+			return definition.regions.filter((region) => region.correct).map((region) => region.label);
+		case 'memory':
+			return definition.pairs.flatMap((pair) => [pair.a, pair.b]);
+		case 'multi-step':
+			return definition.steps.flatMap(answerTexts);
 	}
 }
 
@@ -411,29 +827,71 @@ function leaksAnswer(text: string, definition: QuestionDefinition): boolean {
 }
 
 /** Build a deterministic, answer-neutral practice aid. Unsafe context fails closed. */
-export function practiceSummary(definition: QuestionDefinition): NonNullable<PublicQuestion['practiceSummary']> | undefined {
+export function practiceSummary(
+	definition: QuestionDefinition
+): NonNullable<PublicQuestion['practiceSummary']> | undefined {
 	const context = definition.context?.trim();
-	if (!context || /\b(correct answer|correct response|answer is|solution is|the answer)\b/i.test(context)) return undefined;
+	if (
+		!context ||
+		/\b(correct answer|correct response|answer is|solution is|the answer)\b/i.test(context)
+	)
+		return undefined;
 	const lowerContext = context.toLowerCase();
-	if (definition.explanation.trim().length >= 3 && lowerContext.includes(definition.explanation.trim().toLowerCase())) return undefined;
-	if (answerTexts(definition).some((term) => term.trim().length >= 3 && lowerContext.includes(term.trim().toLowerCase()))) return undefined;
-	return { text: context, domain: definition.domain, objective: definition.objective, format: definition.format };
+	if (
+		definition.explanation.trim().length >= 3 &&
+		lowerContext.includes(definition.explanation.trim().toLowerCase())
+	)
+		return undefined;
+	if (
+		answerTexts(definition).some(
+			(term) => term.trim().length >= 3 && lowerContext.includes(term.trim().toLowerCase())
+		)
+	)
+		return undefined;
+	return {
+		text: context,
+		domain: definition.domain,
+		objective: definition.objective,
+		format: definition.format
+	};
 }
 
 export function correctResponse(definition: QuestionDefinition): QuestionResponse {
 	switch (definition.kind) {
-		case 'single-choice': case 'multiple-choice': return { kind: 'choice', optionIds: definition.correctOptionIds };
-		case 'ordering': return { kind: 'ordering', itemIds: definition.correctOrder };
-		case 'matching': return { kind: 'matching', matches: definition.correctMatches };
-		case 'numeric': return { kind: 'numeric', value: definition.correctValue };
-		case 'slider': return { kind: 'slider', value: definition.correctValue };
-		case 'evidence': return { kind: 'evidence', lineIds: definition.correctLineIds };
-		case 'configuration': return { kind: 'configuration', values: definition.correctValues };
-		case 'fill-blank': return { kind: 'fill-blank', values: Object.fromEntries(definition.blanks.map((blank) => [blank.id, blank.acceptedAnswers[0]])) };
-		case 'word-bank': return { kind: 'word-bank', assignments: definition.correctAssignments };
-		case 'sort': return { kind: 'sort', assignments: definition.correctBuckets };
-		case 'hotspot': return { kind: 'hotspot', regionIds: definition.regions.filter((region) => region.correct).map((region) => region.id) };
-		case 'memory': return { kind: 'memory', matchedPairIds: definition.pairs.map((pair) => pair.id) };
-		case 'multi-step': return { kind: 'multi-step', stepResponses: definition.steps.map(correctResponse) };
+		case 'single-choice':
+		case 'multiple-choice':
+			return { kind: 'choice', optionIds: definition.correctOptionIds };
+		case 'ordering':
+			return { kind: 'ordering', itemIds: definition.correctOrder };
+		case 'matching':
+			return { kind: 'matching', matches: definition.correctMatches };
+		case 'numeric':
+			return { kind: 'numeric', value: definition.correctValue };
+		case 'slider':
+			return { kind: 'slider', value: definition.correctValue };
+		case 'evidence':
+			return { kind: 'evidence', lineIds: definition.correctLineIds };
+		case 'configuration':
+			return { kind: 'configuration', values: definition.correctValues };
+		case 'fill-blank':
+			return {
+				kind: 'fill-blank',
+				values: Object.fromEntries(
+					definition.blanks.map((blank) => [blank.id, blank.acceptedAnswers[0]])
+				)
+			};
+		case 'word-bank':
+			return { kind: 'word-bank', assignments: definition.correctAssignments };
+		case 'sort':
+			return { kind: 'sort', assignments: definition.correctBuckets };
+		case 'hotspot':
+			return {
+				kind: 'hotspot',
+				regionIds: definition.regions.filter((region) => region.correct).map((region) => region.id)
+			};
+		case 'memory':
+			return { kind: 'memory', matchedPairIds: definition.pairs.map((pair) => pair.id) };
+		case 'multi-step':
+			return { kind: 'multi-step', stepResponses: definition.steps.map(correctResponse) };
 	}
 }

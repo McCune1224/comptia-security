@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank, toPublicQuestion, validateQuestionBank, type ChoiceDefinition, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SliderDefinition, type SortDefinition } from './question-bank';
+import { loadQuestionBank, SECP701_BANK_SPEC, toPublicQuestion, validateQuestionBank, type ChoiceDefinition, type CourseBankSpec, type FillBlankDefinition, type HotspotDefinition, type MemoryDefinition, type SliderDefinition, type SortDefinition } from './question-bank';
 
 describe('question bank', () => {
 	it('rejects malformed sort definitions but accepts well-formed ones', () => {
@@ -335,8 +335,15 @@ describe('question bank', () => {
 
 	it('has the required authored allocation and redacts public questions', () => {
 		const bank = loadQuestionBank();
-		expect(bank.mcqs.length).toBeGreaterThanOrEqual(523);
+		// 692 MCQs / 105 PBQs are locked at their exact authored counts — the
+		// validator rejects any silent addition or loss, and these assertions
+		// document the pins (mirroring toHaveLength(105) below).
+		expect(bank.mcqs.length).toBe(692);
 		expect(bank.pbqs).toHaveLength(105);
+		// Per-objective floors are pinned to the exact authored counts too.
+		for (const [objective, expected] of Object.entries(SECP701_BANK_SPEC.mcqObjectiveTotals)) {
+			expect(bank.mcqs.filter((question) => question.objective === objective).length, objective).toBe(expected);
+		}
 		// Scenario is no longer 100%; it shares the bank with recall/keyword/short-form.
 		const scenario = bank.mcqs.filter((question) => question.style === 'scenario').length;
 		expect(scenario).toBeLessThanOrEqual(170);
@@ -431,6 +438,9 @@ describe('question bank', () => {
 		for (const id of ['mcq-4-093', 'mcq-4-094', 'mcq-4-095', 'mcq-4-096', 'mcq-4-097', 'mcq-4-098', 'mcq-4-100', 'mcq-4-101', 'mcq-4-102']) {
 			expect(objectiveOf(id), id).toBe('4.8');
 		}
+		// Order-of-volatility evidence collection is incident response (4.8),
+		// not 4.5 enterprise capabilities.
+		expect(objectiveOf('mcq-4-033')).toBe('4.8');
 		for (const id of ['mcq-4-108', 'mcq-4-109', 'mcq-4-110', 'mcq-4-111', 'mcq-4-112']) {
 			expect(objectiveOf(id), id).toBe('4.6');
 		}
@@ -459,12 +469,24 @@ describe('question bank', () => {
 		expect(authorization.correctOptionIds).toHaveLength(1);
 		expect(authorization.explanation.startsWith(keyedOption(authorization).text)).toBe(true);
 
-		// The printed log is documentary evidence, not demonstrative.
+		// The printed log is documentary evidence, not demonstrative; the keyed
+		// option is the terse (1)/(2)/(3) code matching its sibling options.
 		const evidence = get('mcq-4-041') as ChoiceDefinition;
-		expect(keyedOption(evidence).text.startsWith('Documentary')).toBe(true);
+		expect(keyedOption(evidence).text).toBe('(1) Documentary — (2) Testimonial — (3) Real');
 
 		// A single-answer item must not ask the reader to choose two.
 		expect(get('mcq-3-002').prompt).not.toContain('Choose TWO');
+	});
+
+	// Every multi-select must state how many options to pick (mcq-2-009 was the
+	// one item of 46 whose stem asked a singular question while keyed for two).
+	it('states the select-TWO instruction on every multi-select', () => {
+		const multis = loadQuestionBank().mcqs.filter((question) => question.kind === 'multiple-choice');
+		expect(multis.length).toBeGreaterThan(0);
+		for (const question of multis) {
+			expect(question.prompt, question.id).toMatch(/which two|select two|choose two/i);
+			expect(question.selectCount, question.id).toBe(2);
+		}
 	});
 
 	it('keeps the batch-3 objective retags in place', () => {
