@@ -283,7 +283,11 @@ function validateResponse(question: QuestionDefinition, response: QuestionRespon
 		response.stepResponses.length === question.steps.length
 	) {
 		for (let i = 0; i < question.steps.length; i++) {
-			validateResponse(question.steps[i], response.stepResponses[i]);
+			// A step the learner has not reached yet is stored as null. Validate only the
+			// steps that carry an answer so partial progress can be persisted.
+			const step = response.stepResponses[i];
+			if (step === null || step === undefined) continue;
+			validateResponse(question.steps[i], step);
 		}
 		return;
 	}

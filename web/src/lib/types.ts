@@ -59,7 +59,15 @@ export const AUTO_HINTABLE_KINDS = [
 ] as const;
 
 export interface SourceRef {
-	source: 'exam-objectives' | 'study-guide' | 'nist' | 'owasp' | 'mitre' | 'comptia' | 'cisa' | 'professor-messer';
+	source:
+		| 'exam-objectives'
+		| 'study-guide'
+		| 'nist'
+		| 'owasp'
+		| 'mitre'
+		| 'comptia'
+		| 'cisa'
+		| 'professor-messer';
 	section: string;
 }
 
@@ -75,7 +83,12 @@ export interface PublicQuestionBase {
 	/** Optional practice-mode hint; costs 25% of the question's points when revealed. */
 	hint?: string;
 	/** Present only for practice sessions; deliberately excludes answer-bearing data. */
-	practiceSummary?: { text: string; domain: Domain; objective: ObjectiveId; format: QuestionFormat };
+	practiceSummary?: {
+		text: string;
+		domain: Domain;
+		objective: ObjectiveId;
+		format: QuestionFormat;
+	};
 }
 
 export interface PublicChoiceQuestion extends PublicQuestionBase {
@@ -196,7 +209,7 @@ export type QuestionResponse =
 	| { kind: 'sort'; assignments: Record<string, string> }
 	| { kind: 'hotspot'; regionIds: string[] }
 	| { kind: 'memory'; matchedPairIds: string[] }
-	| { kind: 'multi-step'; stepResponses: QuestionResponse[] };
+	| { kind: 'multi-step'; stepResponses: (QuestionResponse | null)[] };
 
 export interface QuestionFeedback {
 	earnedPoints: number;

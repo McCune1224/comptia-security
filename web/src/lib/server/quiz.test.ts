@@ -115,6 +115,92 @@ describe('QuizService', () => {
 		await repository.close();
 	});
 
+	it('accepts a partially answered multi-step response and scores only the answered step', async () => {
+		// The UI stores unreached steps as null and saves on navigate-away so practice work
+		// is never lost, so the server must accept a partial response instead of throwing.
+		const repository = await createTestRepository();
+		const orderingStep: QuestionDefinition = {
+			id: 'pbq-3-ms-order',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt: 'Order the certificate lifecycle.',
+			explanation: 'Generation, CSR, issuance, deployment, renewal, revocation.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'ordering',
+			items: [
+				{ id: 'i1', text: 'Generate the key pair' },
+				{ id: 'i2', text: 'Submit a CSR to the CA' }
+			],
+			correctOrder: ['i1', 'i2']
+		};
+		const choiceStep: QuestionDefinition = {
+			id: 'pbq-3-ms-choice',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			prompt: 'Which control blocks credential reuse?',
+			explanation: 'MFA resists credential reuse.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Backups', rationale: 'Wrong.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const question: QuestionDefinition = {
+			id: 'pbq-3-ms-partial',
+			domain: 1,
+			objective: '1.4',
+			format: 'pbq',
+			context: 'An analyst is working through a certificate incident.',
+			prompt: 'Respond to the incident.',
+			explanation: 'Parent-level explanation.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.4' }],
+			kind: 'multi-step',
+			steps: [orderingStep, choiceStep]
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [question] },
+			rng: () => 0.5
+		});
+		const session = await service.startSession({ type: 'pbq', count: 1 });
+
+		const partial = {
+			kind: 'multi-step' as const,
+			stepResponses: [{ kind: 'ordering' as const, itemIds: ['i1', 'i2'] }, null]
+		};
+		const saved = await service.saveResponse(session.sessionId, 0, partial);
+		// One of two steps carries credit and the untouched step contributes nothing, so the
+		// score is partial. Assert the shape rather than the number: practice applies a
+		// retry factor the caller should not have to know about here.
+		const earned = saved.feedback?.earnedPoints ?? -1;
+		expect(earned).toBeGreaterThan(0);
+		expect(earned).toBeLessThan(1);
+
+		const stored = (await service.getSession(session.sessionId)) as typeof session;
+		expect(stored.responses[0]).toEqual(partial);
+
+		const result = await service.completeSession(session.sessionId);
+		// Completion reports partial credit too. It is not asserted equal to the save-time
+		// value: the two paths apply the practice retry factor differently, which is a
+		// pre-existing inconsistency outside this change.
+		const completed = result.review[0].feedback.earnedPoints;
+		expect(completed).toBeGreaterThan(0);
+		expect(completed).toBeLessThan(1);
+
+		// A response whose step count does not match the question is still rejected.
+		const next = await service.startSession({ type: 'pbq', count: 1 });
+		await expect(
+			service.saveResponse(next.sessionId, 0, { kind: 'multi-step', stepResponses: [null] })
+		).rejects.toThrow('Response does not match the question interaction.');
+
+		await repository.close();
+	});
+
 	it('reports elapsed practice time on resume and persists completion duration', async () => {
 		const repository = await createTestRepository();
 		let current = new Date('2026-07-22T12:00:00.000Z');

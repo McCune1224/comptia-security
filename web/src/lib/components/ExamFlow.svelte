@@ -387,9 +387,18 @@
 	 *  Used when navigating away so answers are never lost. */
 	async function silentSave() {
 		if (!session || !draft || feedback) return;
+		// A partially answered multi-step carries real work (a reordered step, a completed
+		// one), so keep it in practice, where a response never locks. A graded assignment
+		// locks on first save, so there it still waits until every step is answered.
+		const multiStepReady =
+			question?.kind !== 'multi-step'
+				? true
+				: Boolean(session.assignmentId)
+					? allSubStepsAnswered()
+					: draft.kind === 'multi-step' && draft.stepResponses.some((step) => step !== null);
 		const answered =
 			choiceAnswered() &&
-			allSubStepsAnswered() &&
+			multiStepReady &&
 			blanksAnswered() &&
 			sortAnswered() &&
 			matchingAnswered() &&
@@ -678,9 +687,7 @@
 {#if activeConflict}
 	<div class="card mx-auto max-w-lg space-y-5 p-6 sm:p-8">
 		<div class="flex items-start gap-4">
-			<span
-				class="grid h-11 w-11 shrink-0 place-items-center rounded bg-warning/10 text-warning"
-			>
+			<span class="grid h-11 w-11 shrink-0 place-items-center rounded bg-warning/10 text-warning">
 				<svg
 					viewBox="0 0 24 24"
 					class="h-5 w-5"
