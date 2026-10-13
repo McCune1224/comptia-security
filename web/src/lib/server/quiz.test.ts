@@ -174,23 +174,18 @@ describe('QuizService', () => {
 			stepResponses: [{ kind: 'ordering' as const, itemIds: ['i1', 'i2'] }, null]
 		};
 		const saved = await service.saveResponse(session.sessionId, 0, partial);
-		// One of two steps carries credit and the untouched step contributes nothing, so the
-		// score is partial. Assert the shape rather than the number: practice applies a
-		// retry factor the caller should not have to know about here.
-		const earned = saved.feedback?.earnedPoints ?? -1;
-		expect(earned).toBeGreaterThan(0);
-		expect(earned).toBeLessThan(1);
+		// One of two steps carries credit and the untouched step contributes nothing:
+		// half credit on the first attempt, with no retry decay yet.
+		expect(saved.feedback?.earnedPoints).toBeCloseTo(0.5);
 
 		const stored = (await service.getSession(session.sessionId)) as typeof session;
 		expect(stored.responses[0]).toEqual(partial);
 
 		const result = await service.completeSession(session.sessionId);
-		// Completion reports partial credit too. It is not asserted equal to the save-time
-		// value: the two paths apply the practice retry factor differently, which is a
-		// pre-existing inconsistency outside this change.
+		// The completion review scores the same stored response the same way.
 		const completed = result.review[0].feedback.earnedPoints;
-		expect(completed).toBeGreaterThan(0);
-		expect(completed).toBeLessThan(1);
+		expect(completed).toBeCloseTo(saved.feedback?.earnedPoints ?? -1);
+		expect(completed).toBeCloseTo(0.5);
 
 		// A response whose step count does not match the question is still rejected.
 		const next = await service.startSession({ type: 'pbq', count: 1 });
@@ -349,6 +344,65 @@ describe('QuizService', () => {
 			result,
 			finalized: false
 		});
+		await repository.close();
+	});
+
+	it('scores a first practice attempt at full credit before decaying retries', async () => {
+		const repository = await createTestRepository();
+		const choicePbq: QuestionDefinition = {
+			id: 'pbq-1-998',
+			domain: 1,
+			objective: '1.1',
+			format: 'pbq',
+			prompt: 'Which control BEST prevents credential replay?',
+			explanation: 'MFA stops replayed stolen credentials.',
+			sourceRefs: [{ source: 'exam-objectives', section: '1.1' }],
+			kind: 'single-choice',
+			options: [
+				{ id: 'a', text: 'MFA', rationale: 'Correct.' },
+				{ id: 'b', text: 'Patching', rationale: 'No.' },
+				{ id: 'c', text: 'Backups', rationale: 'No.' },
+				{ id: 'd', text: 'Ping sweep', rationale: 'No.' }
+			],
+			correctOptionIds: ['a'],
+			selectCount: 1
+		};
+		const service = createQuizService({
+			repository,
+			bank: { mcqs: [], pbqs: [choicePbq] },
+			rng: () => 0.5,
+			now: () => new Date('2026-07-22T12:00:00.000Z')
+		});
+		const session = await service.startSession({ type: 'pbq', count: 1 });
+		// Attempt 1: fully correct -> full credit, never the 60% retry factor.
+		const first = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
+		expect(first.feedback?.earnedPoints).toBe(1);
+		expect(((await service.getSession(session.sessionId)) as typeof session).retries[0]).toBe(0);
+		// Retry 1 (second attempt): correct -> 60%.
+		const second = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
+		expect(second.feedback?.earnedPoints).toBeCloseTo(0.6);
+		// Retry 2 (third attempt): correct -> 30%.
+		const third = await service.saveResponse(session.sessionId, 0, {
+			kind: 'choice',
+			optionIds: ['a']
+		});
+		expect(third.feedback?.earnedPoints).toBeCloseTo(0.3);
+		// Fourth attempt is locked.
+		await expect(
+			service.saveResponse(session.sessionId, 0, { kind: 'choice', optionIds: ['a'] })
+		).rejects.toThrow('Practice responses are locked after feedback.');
+		// Completion reviews the final attempt and must agree with its save-time score.
+		const result = await service.completeSession(session.sessionId);
+		expect(result.review[0].feedback.earnedPoints).toBeCloseTo(third.feedback?.earnedPoints ?? -1);
+		expect(result.review[0].feedback.earnedPoints).toBeCloseTo(0.3);
+		expect(result.review[0].feedback.fullyCorrect).toBe(true);
+		expect(result.review[0].retryCount).toBe(2);
 		await repository.close();
 	});
 
