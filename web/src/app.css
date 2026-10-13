@@ -1,93 +1,116 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
-@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/fraunces';
 
 /* ============================================================
-   Study tool — graphite + soft teal (dark), paper (light)
-   Single accent, clean grotesque type, sharp 6px corners, dense.
+   Paper & Ink — editorial study system
+   Warm paper + ink typography (light, default), deep umber
+   "ink" mode (dark). One brick accent, one sage secondary.
+   Serif display (Fraunces), Inter body, soft cards, hairlines.
+   Token NAMES are stable across themes; only values change.
    ============================================================ */
 
 @theme {
 	--font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-	--font-display: 'Space Grotesk Variable', 'Inter Variable', system-ui, -apple-system, sans-serif;
+	--font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 	--font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
 
-	/* Graphite + soft teal (dark) — the default theme */
-	--color-bg-base: #111416;
-	--color-surface-900: #161a1d;
-	--color-surface-800: #1c2125;
-	--color-surface-700: #252b30;
-	--color-surface-600: #31383e;
-	--color-accent: #67b8a8;
-	--color-accent-secondary: #a8a0c4;
-	--color-warning: #e0b66a;
-	--color-text-primary: #f1f4f3;
-	--color-text-secondary: #c2cac7;
-	--color-text-muted: #929d99;
-	--color-text-subtle: #8b9692;
-	--color-border: rgba(241, 244, 243, 0.12);
-	--color-border-strong: rgba(241, 244, 243, 0.24);
-	--color-success: #79c58e;
-	--color-danger: #f08c82;
-	--color-info: #82b5d5;
-	--color-on-accent: #0a2420;
-	--color-on-warning: #271704;
-	--color-on-success: #0a2113;
-	--color-on-danger: #2a0b08;
-	--color-on-info: #091a25;
-}
+	/* Crisp radius scale — nearly square. Existing rounded-* utilities pick these up. */
+	--radius: 0.25rem;
+	--radius-sm: 0.125rem;
+	--radius-md: 0.25rem;
+	--radius-lg: 0.25rem;
+	--radius-xl: 0.25rem;
+	--radius-2xl: 0.375rem;
 
-:root {
-	color-scheme: dark;
-	--color-bg-base: #111416;
-	--color-surface-900: #161a1d;
-	--color-surface-800: #1c2125;
-	--color-surface-700: #252b30;
-	--color-surface-600: #31383e;
-	--color-accent: #67b8a8;
-	--color-accent-secondary: #a8a0c4;
-	--color-warning: #e0b66a;
-	--color-text-primary: #f1f4f3;
-	--color-text-secondary: #c2cac7;
-	--color-text-muted: #929d99;
-	--color-text-subtle: #8b9692;
-	--color-border: rgba(241, 244, 243, 0.12);
-	--color-border-strong: rgba(241, 244, 243, 0.24);
-	--color-success: #79c58e;
-	--color-danger: #f08c82;
-	--color-info: #82b5d5;
-	--color-on-accent: #0a2420;
-	--color-on-warning: #271704;
-	--color-on-success: #0a2113;
-	--color-on-danger: #2a0b08;
-	--color-on-info: #091a25;
-}
-
-/* Paper (light) — same character, invert for sunlight */
-[data-theme='light'] {
-	color-scheme: light;
-	--color-bg-base: #f4f6f5;
-	--color-surface-900: #e8ecea;
+	/* Paper (light) — the default theme */
+	--color-bg-base: #f7f6f0;
+	--color-surface-900: #f1f0e7;
 	--color-surface-800: #ffffff;
-	--color-surface-700: #dee4e1;
-	--color-surface-600: #cdd6d2;
-	--color-accent: #176d63;
-	--color-accent-secondary: #665c91;
+	--color-surface-700: #eae8dd;
+	--color-surface-600: #d8d6c6;
+	--color-accent: #1f5d3f;
+	--color-accent-secondary: #7a5c1e;
 	--color-warning: #8a5a0a;
-	--color-text-primary: #18201d;
-	--color-text-secondary: #3c4944;
-	--color-text-muted: #56625c;
-	--color-text-subtle: #59665f;
-	--color-border: rgba(24, 32, 29, 0.12);
-	--color-border-strong: rgba(24, 32, 29, 0.24);
-	--color-success: #286b3e;
-	--color-danger: #a53e38;
-	--color-info: #2d668d;
+	--color-text-primary: #1a1c18;
+	--color-text-secondary: #42463c;
+	--color-text-muted: #5c6155;
+	--color-text-subtle: #5f6457;
+	--color-border: rgba(26, 28, 24, 0.14);
+	--color-border-strong: rgba(26, 28, 24, 0.28);
+	--color-success: #1f6b45;
+	--color-danger: #b3261e;
+	--color-info: #2d5b8e;
 	--color-on-accent: #ffffff;
 	--color-on-warning: #ffffff;
 	--color-on-success: #ffffff;
 	--color-on-danger: #ffffff;
 	--color-on-info: #ffffff;
+	/* Primary action: ink-filled in paper mode */
+	--color-primary: #1a1c18;
+	--color-on-primary: #f7f6f0;
+}
+
+:root {
+	color-scheme: light;
+	--color-bg-base: #f7f6f0;
+	--color-surface-900: #f1f0e7;
+	--color-surface-800: #ffffff;
+	--color-surface-700: #eae8dd;
+	--color-surface-600: #d8d6c6;
+	--color-accent: #1f5d3f;
+	--color-accent-secondary: #7a5c1e;
+	--color-warning: #8a5a0a;
+	--color-text-primary: #1a1c18;
+	--color-text-secondary: #42463c;
+	--color-text-muted: #5c6155;
+	--color-text-subtle: #5f6457;
+	--color-border: rgba(26, 28, 24, 0.14);
+	--color-border-strong: rgba(26, 28, 24, 0.28);
+	--color-success: #1f6b45;
+	--color-danger: #b3261e;
+	--color-info: #2d5b8e;
+	--color-on-accent: #ffffff;
+	--color-on-warning: #ffffff;
+	--color-on-success: #ffffff;
+	--color-on-danger: #ffffff;
+	--color-on-info: #ffffff;
+	--color-primary: #1a1c18;
+	--color-on-primary: #f7f6f0;
+	--shadow-card: 0 1px 2px rgba(26, 28, 24, 0.05);
+	--shadow-lift: 0 2px 4px rgba(26, 28, 24, 0.07), 0 8px 20px rgba(26, 28, 24, 0.06);
+}
+
+/* Ink (dark) — deep forest, cream text, brightened accents */
+[data-theme='dark'] {
+	color-scheme: dark;
+	--color-bg-base: #131611;
+	--color-surface-900: #181c16;
+	--color-surface-800: #1f241b;
+	--color-surface-700: #282e23;
+	--color-surface-600: #343b2c;
+	--color-accent: #84c79d;
+	--color-accent-secondary: #c2a566;
+	--color-warning: #e5b662;
+	--color-text-primary: #eef1ea;
+	--color-text-secondary: #ccd3c5;
+	--color-text-muted: #a6ae9e;
+	--color-text-subtle: #9aa192;
+	--color-border: rgba(238, 241, 234, 0.14);
+	--color-border-strong: rgba(238, 241, 234, 0.28);
+	--color-success: #7fd6a2;
+	--color-danger: #ef9a8f;
+	--color-info: #8fbcdc;
+	--color-on-accent: #0f1f16;
+	--color-on-warning: #241a06;
+	--color-on-success: #08200f;
+	--color-on-danger: #2a0b08;
+	--color-on-info: #0a1a25;
+	/* Primary action: cream-filled in ink mode */
+	--color-primary: #eef1ea;
+	--color-on-primary: #181c16;
+	--shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35);
+	--shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.4), 0 10px 24px rgba(0, 0, 0, 0.35);
 }
 
 @layer base {
@@ -106,6 +129,22 @@
 		min-height: 100vh;
 		background: var(--color-bg-base);
 		color: var(--color-text-primary);
+	}
+
+	/* Warm paper grain — a whisper of texture, invisible on ink mode */
+	body::before {
+		content: '';
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		opacity: 0.5;
+		background-image: radial-gradient(rgba(26, 28, 24, 0.028) 1px, transparent 1px);
+		background-size: 22px 22px;
+	}
+	[data-theme='dark'] body::before {
+		opacity: 0.25;
+		background-image: radial-gradient(rgba(238, 241, 234, 0.022) 1px, transparent 1px);
 	}
 
 	button,
@@ -128,16 +167,16 @@
 		width: 100%;
 		appearance: none;
 		border: 1px solid var(--color-border-strong);
-		border-radius: 0.375rem;
+		border-radius: 0.25rem;
 		background: var(--color-surface-800)
-			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23929D99'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E")
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%235C6155'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E")
 			right 0.75rem center / 0.875rem no-repeat;
 		color: var(--color-text-primary);
 		padding: 0.625rem 2.25rem 0.625rem 0.75rem;
 	}
 
-	[data-theme='light'] select {
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2356625C'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+	[data-theme='dark'] select {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23A6AE9E'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.09 1.03l-4.25 4.5a.75.75 0 0 1-1.09 0l-4.25-4.5a.75.75 0 0 1 .02-1.05Z' clip-rule='evenodd'/%3E%3C/svg%3E");
 	}
 
 	input[type='number'],
@@ -145,7 +184,7 @@
 	input[type='text'] {
 		min-height: 2.75rem;
 		border: 1px solid var(--color-border-strong);
-		border-radius: 0.375rem;
+		border-radius: 0.25rem;
 		background: var(--color-surface-800);
 		color: var(--color-text-primary);
 		padding: 0.625rem 0.75rem;
@@ -155,8 +194,8 @@
 	input[type='checkbox'] {
 		appearance: none;
 		display: inline-grid;
-		width: 1rem;
-		height: 1rem;
+		width: 1.125rem;
+		height: 1.125rem;
 		place-content: center;
 		vertical-align: -0.15em;
 		border: 2px solid var(--color-text-muted);
@@ -168,7 +207,7 @@
 	}
 
 	input[type='checkbox'] {
-		border-radius: 0.2rem;
+		border-radius: 0.125rem;
 	}
 
 	input[type='radio']::before,
@@ -201,7 +240,7 @@
 }
 
 ::selection {
-	background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+	background: color-mix(in srgb, var(--color-accent) 26%, transparent);
 	color: var(--color-text-primary);
 }
 
@@ -216,7 +255,7 @@
 
 ::-webkit-scrollbar-thumb {
 	background: var(--color-surface-600);
-	border-radius: 2px;
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -226,35 +265,37 @@
 *:focus-visible {
 	outline: 2px solid var(--color-accent);
 	outline-offset: 2px;
-	border-radius: 2px;
+	border-radius: 3px;
 }
 
 /* ---------- Components ---------- */
 
-/* Panel — sharp, flat, hairline border */
+/* Card — white paper panel, hairline border, whisper shadow */
 .card {
-	border: 1px solid var(--color-border-strong);
-	border-radius: 0.375rem;
+	border: 1px solid var(--color-border);
+	border-radius: 0.25rem;
 	background: var(--color-surface-800);
+	box-shadow: var(--shadow-card);
 }
 
-/* Glass — legacy alias kept for compatibility */
+/* Legacy alias kept for compatibility */
 .glass {
-	border: 1px solid var(--color-border-strong);
-	border-radius: 0.375rem;
-	background: color-mix(in srgb, var(--color-surface-800) 80%, transparent);
+	border: 1px solid var(--color-border);
+	border-radius: 0.25rem;
+	background: color-mix(in srgb, var(--color-surface-800) 88%, transparent);
 	backdrop-filter: blur(8px);
+	box-shadow: var(--shadow-card);
 }
 
-/* Buttons — flat, sharp, ≥44px tall */
+/* Buttons — ink-filled primary, ≥44px tall, soft radius */
 .btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	gap: 0.5rem;
 	min-height: 2.75rem;
-	padding: 0.625rem 1rem;
-	border-radius: 0.375rem;
+	padding: 0.625rem 1.125rem;
+	border-radius: 0.25rem;
 	font-size: 0.875rem;
 	font-weight: 600;
 	line-height: 1;
@@ -262,6 +303,7 @@
 		background-color 0.12s ease,
 		border-color 0.12s ease,
 		color 0.12s ease,
+		box-shadow 0.12s ease,
 		transform 0.08s ease;
 }
 
@@ -276,17 +318,18 @@
 }
 
 .btn-primary {
-	background: var(--color-accent);
-	color: var(--color-on-accent);
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	box-shadow: var(--shadow-card);
 }
 
 .btn-primary:hover:not(:disabled) {
-	background: color-mix(in srgb, var(--color-accent) 82%, #000);
+	background: color-mix(in srgb, var(--color-primary) 88%, var(--color-accent));
 }
 
 .btn-ghost {
 	border: 1px solid var(--color-border-strong);
-	background: transparent;
+	background: var(--color-surface-800);
 	color: var(--color-text-secondary);
 }
 
@@ -298,21 +341,21 @@
 
 .btn-danger {
 	border: 1px solid color-mix(in srgb, var(--color-danger) 40%, transparent);
-	background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+	background: color-mix(in srgb, var(--color-danger) 8%, transparent);
 	color: var(--color-danger);
 }
 
 .btn-danger:hover:not(:disabled) {
-	background: color-mix(in srgb, var(--color-danger) 18%, transparent);
+	background: color-mix(in srgb, var(--color-danger) 16%, transparent);
 }
 
-/* Small tag — square, dense, no rounding */
+/* Small tag — soft pill */
 .chip {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35rem;
-	border-radius: 0;
-	padding: 0.2rem 0.45rem;
+	border-radius: 0.1875rem;
+	padding: 0.25rem 0.6rem;
 	font-size: 0.7rem;
 	font-weight: 700;
 	letter-spacing: 0.02em;
@@ -320,7 +363,7 @@
 }
 
 /* Chips used as BUTTONS (domain filters, word-bank) must clear the 44px touch
-   floor — same square geometry, just taller hit area. */
+   floor — same geometry, just taller hit area. */
 button.chip {
 	min-height: 2.75rem;
 	justify-content: center;
@@ -328,42 +371,51 @@ button.chip {
 }
 
 /* Reusable 44px touch floor for inline links / text controls that otherwise
-   render at text height. Keeps flat styling; only guarantees the hit area. */
+   render at text height. Keeps styling; only guarantees the hit area. */
 .touch-target {
 	display: inline-flex;
 	align-items: center;
 	min-height: 2.75rem;
 }
 
-/* Mono label — tool-style eyebrow */
+/* Eyebrow — small-caps editorial label */
 .eyebrow {
-	font-family: var(--font-mono);
 	font-size: 0.7rem;
-	font-weight: 600;
-	letter-spacing: 0.12em;
+	font-weight: 700;
+	letter-spacing: 0.16em;
 	text-transform: uppercase;
 	color: var(--color-accent);
 }
 
-/* Display headings — grotesque, tight, bold */
+/* Display headings — Fraunces serif, tight, medium weight */
 .h-display {
 	font-family: var(--font-display);
-	font-weight: 700;
-	letter-spacing: -0.02em;
+	font-weight: 600;
+	letter-spacing: -0.01em;
 	line-height: 1.15;
+	font-variation-settings: 'opsz' 40;
 }
 
-/* Big numerals (rings, scores) */
+/* Serif italic accent — the editorial flourish */
+.serif-italic {
+	font-family: var(--font-display);
+	font-style: italic;
+	font-weight: 500;
+	font-variation-settings: 'opsz' 20;
+}
+
+/* Big numerals (rings, scores) — serif, tabular where the font allows */
 .num-display {
 	font-family: var(--font-display);
-	font-weight: 700;
+	font-weight: 600;
 	font-variant-numeric: tabular-nums;
-	letter-spacing: -0.02em;
+	letter-spacing: -0.01em;
+	font-variation-settings: 'opsz' 60;
 }
 
-/* Ruled divider */
+/* Ruled divider — a typographic rule */
 .ruled {
-	border-top: 1px dashed var(--color-border-strong);
+	border-top: 1px solid var(--color-border);
 }
 
 /* Emphasis text — accent color */

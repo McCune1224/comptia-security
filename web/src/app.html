@@ -8,11 +8,11 @@
 			try {
 				const theme = localStorage.getItem('theme');
 				document.documentElement.dataset.theme =
-					theme ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+					theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 			} catch {
-				document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: light)').matches
-					? 'light'
-					: 'dark';
+				document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches
+					? 'dark'
+					: 'light';
 			}
 		</script>
 		%sveltekit.head%

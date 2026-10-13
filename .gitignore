@@ -7,6 +7,9 @@ node_modules/
 opencode.json
 .worktrees/
 
+# OpenChamber local state (screenshots, captures)
+.openchamber/
+
 # Python
 __pycache__/
 *.pyc
