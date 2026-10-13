@@ -31,8 +31,7 @@ import {
 	BACKUP_FORMAT,
 	BACKUP_VERSION,
 	type BackupAnswer,
-	type BackupSessionResponse,
-	type ProgressBackup
+	type BackupSessionResponse
 } from './backup';
 
 /**
@@ -65,6 +64,39 @@ async function wipeScopeProgress(tx: postgres.TransactionSql, scope: Scope): Pro
 	await tx`DELETE FROM course_lesson_completions
 		WHERE profile_id = ${scope.profileId}
 			AND lesson_id IN (SELECT id FROM course_lessons WHERE course_id = ${scope.courseId})`;
+}
+
+/**
+ * Upserts one `review_cards` row on either the pool or an open transaction,
+ * so the standalone method and the review-completion transaction share one
+ * definition of the statement.
+ */
+async function upsertReviewCardRow(
+	db: postgres.ISql,
+	scope: Scope,
+	card: ReviewCardRow
+): Promise<void> {
+	await db`INSERT INTO review_cards (profile_id, course_id, question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at)
+		VALUES (${scope.profileId}, ${scope.courseId}, ${card.questionId}, ${card.intervalDays}, ${card.ease}, ${card.lapses}, ${card.dueAt}, ${card.lastResult}, ${card.reviewCount}, ${card.firstSeenAt})
+		ON CONFLICT (profile_id, course_id, question_id) DO UPDATE
+		SET interval_days = EXCLUDED.interval_days, ease = EXCLUDED.ease, lapses = EXCLUDED.lapses,
+			due_at = EXCLUDED.due_at, last_result = EXCLUDED.last_result, review_count = EXCLUDED.review_count`;
+}
+
+/** Increments one `study_log` day on either the pool or an open transaction. */
+async function recordStudyDayRow(
+	db: postgres.ISql,
+	scope: Scope,
+	dateKey: string,
+	questions: number,
+	updatedAt: string
+): Promise<void> {
+	await db`INSERT INTO study_log (profile_id, date_key, questions, sessions, updated_at)
+		VALUES (${scope.profileId}, ${dateKey}, ${questions}, 1, ${updatedAt})
+		ON CONFLICT (profile_id, date_key) DO UPDATE
+		SET questions = study_log.questions + EXCLUDED.questions,
+			sessions = study_log.sessions + 1,
+			updated_at = EXCLUDED.updated_at`;
 }
 
 /**
@@ -350,11 +382,7 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 				return rows as unknown as ReviewCardRow[];
 			},
 			async upsertReviewCard(card) {
-				await sql`INSERT INTO review_cards (profile_id, course_id, question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at)
-					VALUES (${scope.profileId}, ${scope.courseId}, ${card.questionId}, ${card.intervalDays}, ${card.ease}, ${card.lapses}, ${card.dueAt}, ${card.lastResult}, ${card.reviewCount}, ${card.firstSeenAt})
-					ON CONFLICT (profile_id, course_id, question_id) DO UPDATE
-					SET interval_days = EXCLUDED.interval_days, ease = EXCLUDED.ease, lapses = EXCLUDED.lapses,
-						due_at = EXCLUDED.due_at, last_result = EXCLUDED.last_result, review_count = EXCLUDED.review_count`;
+				await upsertReviewCardRow(sql, scope, card);
 			},
 			async getStudyLog() {
 				const rows =
@@ -365,12 +393,15 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 				return rows as unknown as StudyDayRow[];
 			},
 			async recordStudyDay(dateKey, questions, updatedAt) {
-				await sql`INSERT INTO study_log (profile_id, date_key, questions, sessions, updated_at)
-					VALUES (${scope.profileId}, ${dateKey}, ${questions}, 1, ${updatedAt})
-					ON CONFLICT (profile_id, date_key) DO UPDATE
-					SET questions = study_log.questions + EXCLUDED.questions,
-						sessions = study_log.sessions + 1,
-						updated_at = EXCLUDED.updated_at`;
+				await recordStudyDayRow(sql, scope, dateKey, questions, updatedAt);
+			},
+			async recordReviewCompletion({ dateKey, questions, updatedAt, cards }) {
+				await sql.begin(async (tx) => {
+					for (const card of cards) await upsertReviewCardRow(tx, scope, card);
+					// Study day last (and in the same transaction): a failure can
+					// never advance the streak while review_cards stay stale.
+					await recordStudyDayRow(tx, scope, dateKey, questions, updatedAt);
+				});
 			},
 			async getAnswerHistory() {
 				const rows =

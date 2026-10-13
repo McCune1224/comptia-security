@@ -135,7 +135,7 @@ export function createReviewService({
 		new Map((await repository.getReviewCards()).map((card) => [card.questionId, card]));
 
 	/** Questions answered wrong at least once and not yet proven mastered by review cards. */
-	async function wallItems(date = now()): Promise<WallItem[]> {
+	async function wallItems(): Promise<WallItem[]> {
 		const cards = await cardMap();
 		const missed = new Map<string, { wrongCount: number; lastWrongAt: string | null }>();
 		for (const row of await repository.getAnswerHistory()) {
@@ -185,7 +185,7 @@ export function createReviewService({
 		};
 
 		if (input.source === 'wall') {
-			const wallIds = new Set((await wallItems(date)).map((item) => item.questionId));
+			const wallIds = new Set((await wallItems()).map((item) => item.questionId));
 			for (const question of shuffle(all, rng)) if (wallIds.has(question.id)) add(question);
 			return selected.slice(0, count);
 		}
@@ -228,13 +228,23 @@ export function createReviewService({
 		sessionType: string
 	): Promise<void> {
 		const todayKey = localDateKey(new Date(completedAt));
-		await repository.recordStudyDay(todayKey, answers.length, completedAt);
-		if (sessionType !== 'review') return;
-		const cards = await cardMap();
-		for (const answer of answers) {
-			const next = scheduleReview(cards.get(answer.questionId), answer.points >= 1, todayKey);
-			await repository.upsertReviewCard({ ...next, questionId: answer.questionId });
+		if (sessionType !== 'review') {
+			await repository.recordStudyDay(todayKey, answers.length, completedAt);
+			return;
 		}
+		// Cards and study day land in one transaction: a mid-loop failure can
+		// never advance the streak while review_cards stay stale.
+		const cards = await cardMap();
+		const nextCards = answers.map((answer) => ({
+			...scheduleReview(cards.get(answer.questionId), answer.points >= 1, todayKey),
+			questionId: answer.questionId
+		}));
+		await repository.recordReviewCompletion({
+			dateKey: todayKey,
+			questions: answers.length,
+			updatedAt: completedAt,
+			cards: nextCards
+		});
 	}
 
 	async function summary(date = now()): Promise<ReviewSummary> {
@@ -243,7 +253,7 @@ export function createReviewService({
 		const log = await repository.getStudyLog();
 		const byDay = new Map(log.map((day) => [day.dateKey, day]));
 		const today = byDay.get(todayKey);
-		const wall = await wallItems(date);
+		const wall = await wallItems();
 		const wallByDomain: Record<Domain, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 		for (const item of wall) wallByDomain[item.domain]++;
 		// Last 12 weeks (84 days) ending today.

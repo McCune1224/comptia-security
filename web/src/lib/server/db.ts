@@ -194,6 +194,17 @@ export interface QuizRepository {
 	upsertReviewCard(card: ReviewCardRow): Promise<void>;
 	getStudyLog(): Promise<StudyDayRow[]>;
 	recordStudyDay(dateKey: string, questions: number, updatedAt: string): Promise<void>;
+	/**
+	 * Atomically records one review session: upserts every review card and logs
+	 * the study day in a single transaction, so a mid-loop failure can never
+	 * leave `study_log` advanced while `review_cards` are stale.
+	 */
+	recordReviewCompletion(payload: {
+		dateKey: string;
+		questions: number;
+		updatedAt: string;
+		cards: ReviewCardRow[];
+	}): Promise<void>;
 	getAnswerHistory(): Promise<AnswerHistoryRow[]>;
 	getAnsweredQuestionIds(): Promise<string[]>;
 	getObjectiveProgress(): Promise<

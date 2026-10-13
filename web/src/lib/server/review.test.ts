@@ -161,6 +161,23 @@ describe('recordCompletion', () => {
 		expect(days[0].sessions).toBe(2);
 		await repository.close();
 	});
+
+	it('re-reviews update the existing card and the same-day log together', async () => {
+		const { repository, service } = await makeService();
+		const answers = [{ questionId: 'mcq-1-001', points: 1 }];
+		await service.recordCompletion(answers, NOW.toISOString(), 'review');
+		await service.recordCompletion(answers, NOW.toISOString(), 'review');
+		// The card conflict path and the study-day increment share one transaction.
+		const cards = await repository.getReviewCards();
+		expect(cards).toHaveLength(1);
+		expect(cards[0].reviewCount).toBe(2);
+		expect(cards[0].intervalDays).toBe(3);
+		const days = await repository.getStudyLog();
+		expect(days).toHaveLength(1);
+		expect(days[0].questions).toBe(2);
+		expect(days[0].sessions).toBe(2);
+		await repository.close();
+	});
 });
 
 describe('composeQueue', () => {
@@ -266,13 +283,6 @@ describe('composeQueue', () => {
 		const { repository, bank, service } = await makeService();
 		// Every question answered correctly and every card mastered → all pools empty.
 		const all = [...bank.mcqs, ...bank.pbqs].slice(0, 40);
-		const quizService = createQuizService({
-			repository,
-			bank,
-			rng: () => 0.5,
-			now: () => NOW,
-			reviewSvc: service
-		});
 		await repository.createSession({
 			id: 'seed-correct',
 			type: 'quiz',
