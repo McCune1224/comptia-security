@@ -51,4 +51,4 @@
 - **Question Types:** Multiple choice + Performance-based (PBQs)
 - **Time:** 90 minutes
 - **Passing Score:** 750/900 (approximately 83%)
-- **Cost:** ~$404 USD
+- **Cost:** Changes without notice — check https://www.comptia.org/certifications/security for current pricing (historically ~$400 USD) before purchasing

@@ -14,8 +14,8 @@
 Use format: `1.X - Topic Name.md`
 
 Example:
-- `1.1 - CIA Triad.md`
-- `1.2 - Security Controls.md`
+- `1.1 - Security Controls.md`
+- `1.2 - Fundamental Security Concepts.md`
 
 ## Related
 - [[Security+ Dashboard]]

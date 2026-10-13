@@ -16,7 +16,7 @@ Use format: `5.X - Topic Name.md`
 Example:
 - `5.1 - Governance and Policies.md`
 - `5.2 - Risk Management.md`
-- `5.3 - Compliance.md`
+- `5.3 - Third-Party Risk.md`
 
 ## Related
 - [[Security+ Dashboard]]

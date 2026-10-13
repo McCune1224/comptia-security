@@ -16,8 +16,8 @@ Use format: `2.X - Topic Name.md`
 
 Example:
 - `2.1 - Threat Actors.md`
-- `2.2 - Malware Types.md`
-- `2.3 - Social Engineering.md`
+- `2.2 - Threat Vectors and Attack Surfaces.md`
+- `2.3 - Types of Vulnerabilities.md`
 
 ## Related
 - [[Security+ Dashboard]]

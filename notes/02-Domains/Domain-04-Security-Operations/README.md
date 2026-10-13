@@ -17,8 +17,8 @@ Use format: `4.X - Topic Name.md`
 
 Example:
 - `4.1 - Secure Baselines.md`
-- `4.2 - Endpoint Security.md`
-- `4.3 - Incident Response.md`
+- `4.2 - Asset Management.md`
+- `4.3 - Vulnerability Management.md`
 
 ## Related
 - [[Security+ Dashboard]]

@@ -1,20 +1,23 @@
 # Dion Training Security+ SY0-701 — Anki Decks
 
 Flashcards rebuilt from the Dion Training "CompTIA Security+ (SY0-701) Study Guide"
-(study notes PDF). Replaces the older V1/V2/V3 decks in `anki/AI Security+`.
+(study notes PDF). Does **not** replace `anki/AI Security+/V3`: V3 is aligned to this
+repo's question bank and remains maintained (both decks last updated 2026-08-26).
+The older V1/V2 decks are superseded and archived under `anki/_archive/`.
 
 ## Files
 
-| File | Contents | Approx. cards |
-| ---- | -------- | ------------- |
-| `01_Domain1_General_Security_Concepts.csv` | CIA/AAA, controls, zero trust, threat actors, social engineering, malware, physical security, data, crypto concepts | 150 |
-| `02_Domain2_Risk_Governance_Compliance.csv` | Risk math, supply chain, governance, policies, change management, audits & pentests | 50 |
-| `03_Domain3_Security_Architecture.csv` | HA/resilience, cloud, network, firewalls, IDS/IPS, appliances, secure protocols, wireless | 95 |
-| `04_Domain4_Security_Operations.csv` | IAM, vulnerabilities, attacks, hardening, wireless auth, vuln management, monitoring, incident response, forensics, automation | 130 |
-| `05_Domain5_Security_Program_Management.csv` | Awareness, insider threats, policies, security culture | 20 |
-| `06_Ports_and_Protocols.csv` | Port ↔ protocol, both directions, plus port ranges | 66 |
+| File | Contents | Cards |
+| ---- | -------- | ----- |
+| `01_Domain1_General_Security_Concepts.csv` | CIA/AAA, controls, zero trust, threat actors, social engineering, malware, physical security, data, crypto concepts | 186 |
+| `02_Domain2_Risk_Governance_Compliance.csv` | Risk math, supply chain, governance, policies, change management, audits & pentests | 121 |
+| `03_Domain3_Security_Architecture.csv` | HA/resilience, cloud, network, firewalls, IDS/IPS, appliances, secure protocols, wireless | 154 |
+| `04_Domain4_Security_Operations.csv` | IAM, vulnerabilities, attacks, hardening, wireless auth, vuln management, monitoring, incident response, forensics, automation | 202 |
+| `05_Domain5_Security_Program_Management.csv` | Awareness, insider threats, policies, security culture | 79 |
+| `06_Ports_and_Protocols.csv` | Port ↔ protocol, both directions, plus port ranges | 69 |
 | `07_Crypto_Algorithms.csv` | Algorithm key/block sizes and properties | 30 |
-| `08_Acronyms.csv` | Acronym expansions (exam loves these) | 130 |
+| `08_Acronyms.csv` | Acronym expansions (exam loves these) | 129 |
+| **Total** | | **970** |
 
 ## Card design
 

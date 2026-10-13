@@ -3,14 +3,15 @@
 > Purpose: verify that a learner who works the course from start to finish is prepared to pass
 > CompTIA Security+ SY0-701, and record the gaps that were closed to make that true.
 >
-> Audited: 2026-09-29 · Bank: 692 MCQs + 105 PBQs · Objectives version 5.0
+> Audited: 2026-10-12 · Bank: 692 MCQs + 105 PBQs · Objectives version 5.0
 
 ## Verdict
 
 **Yes, with one condition.** The course now teaches every bullet in the official SY0-701 objectives
 and drills each objective with scored, scenario-style questions. A learner who completes the four
-modules, the six objective quizzes, both scenario/PBQ sets, and the four full-length exams, and who
-clears the review queue to the app's 83.3% readiness target, is prepared to pass.
+modules, the six objective quizzes, both scenario/PBQ sets, the three 90-question full-length exams
+and the 20-question Week-1 checkpoint, and who clears the review queue to the app's 83.3% readiness
+target, is prepared to pass.
 
 The condition is consistency: the material is only as good as the learner's use of it. Read every
 lesson, finish every assignment, and work the daily review until weak objectives recover. Skipping
@@ -22,9 +23,9 @@ the drills and reading the lessons alone is not enough.
 | --- | --- | --- |
 | Course + lessons | `web/` (SvelteKit app), 7 lessons across 4 modules | Teaches every objective bullet |
 | Question banks | `question-bank.json`, 692 MCQ + 105 PBQ | Scored practice for all 28 objectives |
-| Full exams | 4 × 90-question timed exams, PBQs first (SY0-701 weighting) | Exam simulation and readiness |
+| Full exams | 3 × 90-question timed exams + 1 × 20-question Week-1 checkpoint; full exams are PBQs first (SY0-701 weighting) | Exam simulation and readiness |
 | Spaced repetition | Daily review, mastery matrix, Wall of Shame | Retention and weak-topic recovery |
-| Flashcards | `anki/` (Dion decks + ports, crypto, acronyms) | Cram layer |
+| Flashcards | `anki/` (Dion decks, `AI Security+/V3`, ports, crypto, acronyms) | Cram layer |
 | Study vault | `notes/` | Planning, cram plan, trackers, mock-exam log |
 
 The app is the source of truth for teaching content. The vault is a planning and cram companion,
@@ -120,9 +121,9 @@ questions, and the test suite fails if a mapped lesson stops containing its term
 
 ## Bank defects fixed
 
-A multi-model review of 208 MCQs and all 105 PBQ keys found concrete defects. All were fixed in
-`web/scripts/fix-bank-defects.py` (idempotent, keyed by question id) and locked with regression
-tests in `question-bank.test.ts`:
+A multi-model review of 208 MCQs and all 105 PBQ keys found concrete defects. All were fixed in a
+repair pass (`fix-bank-defects.py`, idempotent, keyed by question id; since deleted, kept in git
+history) and locked with regression tests in `question-bank.test.ts`:
 
 - **mcq-2-004** — a select-TWO item keyed an option whose own rationale called it false. Rebuilt as
   a single-answer item.
@@ -173,8 +174,8 @@ to match domain, and the id prefix to match the domain).
 
 **Duplicate definition items removed.** The bank had a family of thin "Which security term is
 defined as" items with the same keyed term, so a learner met the same definition two or three times.
-Retagging the twins just produced new collisions, so `web/scripts/dedupe-definitions.py` removes the
-duplicate by a fixed rule: group by keyed term, keep the richest prompt, refuse to drop anything the
+Retagging the twins just produced new collisions, so a one-shot rule (`dedupe-definitions.py`,
+since deleted) removed the duplicate: group by keyed term, keep the richest prompt, refuse to drop anything the
 coverage manifest still references. Five duplicates were removed.
 
 **Low-confidence PBQ items corrected.**
@@ -231,9 +232,10 @@ It found and fixed a distinct class of defects that sampling had missed.
 | mcq-4-121 NIST CSF | 4.7 | 5.1 |
 | mcq-4-122 MITRE ATT&CK | 4.7 | 2.4 |
 
-**How the fixes are applied.** `web/scripts/fix-bank-defects-3.py` is idempotent. The full pipeline
-(`fix-bank-defects.py`, `fix-bank-defects-2.py`, `dedupe-definitions.py`, `fix-bank-defects-3.py`)
-replay from HEAD reproduces the committed bank byte for byte and a second run prints `0 change(s)`.
+**How the fixes were applied.** The four-step pipeline (`fix-bank-defects.py`,
+`fix-bank-defects-2.py`, `dedupe-definitions.py`, `fix-bank-defects-3.py`) was idempotent: it
+replayed from HEAD to reproduce the committed bank byte for byte. The scripts were deleted once the
+repair passes finished; git history keeps them.
 
 **What did not change.** No item was found with a factually wrong answer outside the cases listed
 above. Ports, formulas (SLE, ALE, ARO, availability), protocol mappings, control classifications,
@@ -249,9 +251,9 @@ and evidence-handling rules were all verified against the objective text.
   longer destroys `style` (the replace path preserves omitted fields), but running it rewrites
   `format` from `scenario`/`standard` to the fragment's value on ~90 MCQs. `format` is only read as
   a `pbq` versus not-`pbq` check, so this is cosmetic, but it makes the git diff noisy. Run
-  `git status` after any generator and treat the committed JSON as the source of truth. The three
-  bank writers that should be run are `fix-bank-defects.py`, `fix-bank-defects-2.py`, and
-  `dedupe-definitions.py`; all three are idempotent and print `0` when clean.
+  `git status` after any generator and treat the committed JSON as the source of truth. The one-shot bank
+  writers were deleted after the repair passes, so nothing rewrites the bank by hand anymore — the
+  validator and `npm test` are the guard now.
 - **No generator drift guard.** Nothing in CI prevents a stale generator from being run by hand.
   Add a check that diffs the bank after a dry run of the authoring pipeline.
 - **No hands-on lab.** SY0-701 is knowledge-heavy, but the objective set includes skills (config,
@@ -263,20 +265,17 @@ and evidence-handling rules were all verified against the objective text.
 
 ```bash
 cd web
-npm test        # 136 tests: coverage enforcement, bank-defect guards, retag and
+npm test        # run `npm test`: coverage enforcement, bank-defect guards, retag and
                 # duplicate-definition guards, and batch-3 read-through guards
 npm run check   # svelte-check: 0 errors
 npm run build   # production build
 cd ..
-python3 web/scripts/repair-question-bank.py --check   # report pending changes, write nothing
-python3 web/scripts/repair-question-bank.py           # apply; loads once, writes once
 ```
 
-`repair-question-bank.py` runs the four repair steps in order against one in-memory copy of the
-bank and writes the file exactly once, so a failure partway through leaves it untouched. Every step
-is idempotent, so a second run reports `0 change(s)` and rewrites the same bytes. The individual
-steps (`fix-bank-defects.py`, `fix-bank-defects-2.py`, `dedupe-definitions.py`,
-`fix-bank-defects-3.py`) still run standalone for debugging.
+The one-shot repair scripts that produced these fixes (`repair-question-bank.py` and its four
+`fix-bank-defects` / `dedupe-definitions` steps) were deleted once the repair passes completed;
+git history keeps them. Every invariant they enforced is now asserted by the bank validator and
+`npm test`, so the three commands above are the standing check.
 
 ## Related
 

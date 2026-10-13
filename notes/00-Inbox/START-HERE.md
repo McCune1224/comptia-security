@@ -11,7 +11,6 @@ Welcome! This vault is organized to help you efficiently study for the CompTIA S
 03-Flashcards/     → Anki-ready flashcards
 04-Resources/      → Video notes, practice test logs
 05-Exam-Prep/      → PBQs and mock exams
-99-Archive/        → Completed/old notes
 ```
 
 ## Quick Start

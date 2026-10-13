@@ -1,3 +1,0 @@
-# Security+ Weak Topics
-
-

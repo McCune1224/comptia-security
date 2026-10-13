@@ -3,11 +3,47 @@ id: Objectives
 aliases: []
 tags: []
 ---
-```markdown
 # CompTIA Security+ SY0-701 Cram Plan
 
 > Study load: ~2 hours per weekday + heavy weekends  
 > Target: 3 weeks primary prep + optional 4th‑week buffer
+
+---
+
+## 28 SY0-701 Objectives
+
+> Source: `web/src/lib/server/data/security-objective-coverage.json` (objectives v5.0, exam SY0-701).
+
+| ID | Objective | Domain (exam weight) |
+| --- | --- | --- |
+| 1.1 | Compare and contrast various types of security controls. | General Security Concepts (12%) |
+| 1.2 | Summarize fundamental security concepts. | General Security Concepts (12%) |
+| 1.3 | Explain the importance of change management processes and the impact to security. | General Security Concepts (12%) |
+| 1.4 | Explain the importance of using appropriate cryptographic solutions. | General Security Concepts (12%) |
+| 2.1 | Compare and contrast common threat actors and motivations. | Threats, Vulnerabilities, and Mitigations (22%) |
+| 2.2 | Explain common threat vectors and attack surfaces. | Threats, Vulnerabilities, and Mitigations (22%) |
+| 2.3 | Explain various types of vulnerabilities. | Threats, Vulnerabilities, and Mitigations (22%) |
+| 2.4 | Given a scenario, analyze indicators of malicious activity. | Threats, Vulnerabilities, and Mitigations (22%) |
+| 2.5 | Explain the purpose of mitigation techniques used to secure the enterprise. | Threats, Vulnerabilities, and Mitigations (22%) |
+| 3.1 | Compare and contrast security implications of different architecture models. | Security Architecture (18%) |
+| 3.2 | Given a scenario, apply security principles to secure enterprise infrastructure. | Security Architecture (18%) |
+| 3.3 | Compare and contrast concepts and strategies to protect data. | Security Architecture (18%) |
+| 3.4 | Explain the importance of resilience and recovery in security architecture. | Security Architecture (18%) |
+| 4.1 | Given a scenario, apply common security techniques to computing resources. | Security Operations (28%) |
+| 4.2 | Explain the security implications of proper hardware, software, and data asset management. | Security Operations (28%) |
+| 4.3 | Explain various activities associated with vulnerability management. | Security Operations (28%) |
+| 4.4 | Explain security alerting and monitoring concepts and tools. | Security Operations (28%) |
+| 4.5 | Given a scenario, modify enterprise capabilities to enhance security. | Security Operations (28%) |
+| 4.6 | Given a scenario, implement and maintain identity and access management. | Security Operations (28%) |
+| 4.7 | Explain the importance of automation and orchestration related to secure operations. | Security Operations (28%) |
+| 4.8 | Explain appropriate incident response activities. | Security Operations (28%) |
+| 4.9 | Given a scenario, use data sources to support an investigation. | Security Operations (28%) |
+| 5.1 | Summarize elements of effective security governance. | Security Program Management and Oversight (20%) |
+| 5.2 | Explain elements of the risk management process. | Security Program Management and Oversight (20%) |
+| 5.3 | Explain the processes associated with third-party risk assessment and management. | Security Program Management and Oversight (20%) |
+| 5.4 | Summarize elements of effective security compliance. | Security Program Management and Oversight (20%) |
+| 5.5 | Explain types and purposes of audits and assessments. | Security Program Management and Oversight (20%) |
+| 5.6 | Given a scenario, implement security awareness practices. | Security Program Management and Oversight (20%) |
 
 ---
 
@@ -272,4 +308,3 @@ Use this week if your scores are inconsistent or you want extra confidence befor
 - [ ] After each question session:
   - [ ] Add any repeatedly missed topic to the weak‑topics list.
   - [ ] Plan the next day’s study around those items.
-```
