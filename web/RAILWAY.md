@@ -92,7 +92,7 @@ railway run npm run db:migrate
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string (set automatically by Railway) |
-| `PORT` | No | Server port (default: 3000, Railway sets this automatically) |
+| `PORT` | No | Server port. The Docker image sets `PORT=8080` (`EXPOSE 8080`); Railway injects its own `PORT`, which overrides the image value. Without either, adapter-node falls back to 3000 |
 | `GOOGLE_CLIENT_ID` | No | Google Calendar API client ID |
 | `GOOGLE_CLIENT_SECRET` | No | Google Calendar API client secret |
 | `GOOGLE_REDIRECT_URI` | No | OAuth redirect URI (default: auto-detected) |
@@ -114,7 +114,8 @@ PostgreSQL is the only runtime database, in every environment:
 
 ```
 comptia-security/
-├── Dockerfile            # Multi-stage build for Railway
+├── Dockerfile            # Multi-stage build (build context = repo root)
+├── .dockerignore         # Keeps node_modules, build output, data, .env out of the context
 ├── railway.toml          # Railway configuration
 └── web/
     ├── src/lib/server/
@@ -146,18 +147,27 @@ npm run dev
 
 ## Production Build
 
-The Dockerfile uses a multi-stage build:
+The `Dockerfile` lives at the **repo root** and uses a multi-stage build. Its
+`COPY` paths are relative to the repo root, so the build context must be the
+repo root (which is also where `railway.toml` and `.dockerignore` live —
+Railway builds with the repo root as context and resolves the root `Dockerfile`
+by default):
 
 1. **Builder stage**: Installs dependencies and builds the SvelteKit app
 2. **Production stage**: Copies built assets and runs the production server
 
 ```bash
-# Build Docker image locally (for testing)
+# From the repo root — build the Docker image locally (for testing)
 docker build -t comptia-security .
 
-# Run locally with PostgreSQL
-docker run -p 3000:3000 -e DATABASE_URL=postgresql://... comptia-security
+# Run locally with PostgreSQL. The image listens on 8080 (ENV PORT=8080),
+# so map host port 3000 to container port 8080:
+docker run -p 3000:8080 -e DATABASE_URL=postgresql://... comptia-security
 ```
+
+Note: `railway.toml` sets `startCommand = "node build"`, which Railway runs in
+the container's working directory (`/app`) instead of the image `CMD`. Both are
+the same command (`node build`), so behavior is identical either way.
 
 ## Troubleshooting
 

@@ -1,0 +1,36 @@
+# Git & agent tooling
+.git
+.hermes
+.opencode
+.openchamber
+.worktrees
+opencode.json
+
+# Dependencies
+node_modules
+web/node_modules
+
+# Build outputs & test artifacts
+web/build
+web/.svelte-kit
+web/coverage
+web/test-results
+web/playwright-report
+__pycache__
+
+# Local runtime data (SQLite legacy db, backups)
+data
+web/data
+
+# Environment files (secrets) — .env.example patterns are safe but excluded too
+.env
+.env.*
+web/.env
+web/.env.*
+
+# Docs and content not needed inside the image
+README.md
+AUDIT.md
+kimi-analysis.md
+notes
+anki
