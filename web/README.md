@@ -24,7 +24,8 @@ Built with SvelteKit 5 (runes), Tailwind CSS v4, and PostgreSQL.
 
 ## Screenshots
 
-The app is designed as a focused, dark study workspace that works on desktop and mobile.
+The app is designed as a focused study workspace that works on desktop and mobile, with a light
+default theme and an optional dark mode.
 
 ### Course home
 

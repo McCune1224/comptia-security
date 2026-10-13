@@ -5,10 +5,10 @@ An offline-first, Blackboard-style course learning system for preparing for the 
 
 The app combines a structured four-week course plan with adaptive practice, graded assignments,
 PBQs, full-length exams, spaced repetition, a weighted gradebook, and exam-readiness tracking. It is
-designed for focused study on desktop or mobile and runs locally with SQLite.
+designed for focused study on desktop or mobile and runs locally on PostgreSQL.
 
 > **A personal project first.** This is the tool I built and dogfooded for my own study sessions —
-> the course plan, banks, and schedules are tuned for how *I* study, not a generic audience, and it
+> the course plan, banks, and schedules are tuned for how _I_ study, not a generic audience, and it
 > isn't a configurable product. That said, it's open source for a reason: fork it, use it, and steal
 > whatever ideas work for you. If you'd like to see it go further, PRs are welcome.
 
@@ -68,7 +68,7 @@ targeted five-question practice session.
 - Cheap to deploy — offline-first with self-hosted fonts and PostgreSQL storage, no external
   services; runs on a single small VPS (or a free-tier host) via `make deploy` (systemd)
 - Optional Google Calendar synchronization for exam and assignment deadlines
-- Responsive dark study-tool interface with light-theme support
+- Responsive study-tool interface with a light default theme and full dark-mode support
 
 ## Quick Start
 
@@ -105,7 +105,7 @@ npm run build
 - PostgreSQL (`postgres` driver) — the only runtime database
 - Vitest for unit and service tests
 - Playwright for end-to-end coverage
-- Self-hosted Inter and Space Grotesk fonts
+- Self-hosted Fraunces (display) and Inter (body) fonts
 
 ## Project Layout
 

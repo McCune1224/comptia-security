@@ -13,7 +13,7 @@ import { effectiveDueDate, toDateKey, COURSE_META } from './course';
 // ─────────────────────────────────────────────────────────────────────────────
 // Google Calendar integration — OAuth2 (PKCE) + Calendar v3 API client.
 //
-// Single-user personal app: the OAuth token lives in SQLite (`google_oauth`),
+// Single-user personal app: the OAuth token lives in PostgreSQL (`google_oauth`),
 // and pushed deadlines are tracked in `google_synced_events` so re-syncing
 // updates/deletes instead of duplicating.
 //
