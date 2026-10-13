@@ -56,23 +56,23 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
     interleaved; PBQs are scored at `ExamConfig.pbqPoints` (SY0-701 = 6, so 5 PBQs ≈ 26% of the
     score) while MCQs are worth 1 — mirroring the real exam's 20–30% PBQ weight.
 - **Question banks:** Security+ 692 MCQs (104/164/166/139/119 across Domains 1–5; styles: recall 376, keyword 159, scenario 109, short-form 48)
-  + 105 PBQs (matching, ordering, evidence, configuration, numeric, word-bank, sort, multi-step). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
-  multi-selects) **+ 20 PBQs** (3/5/4/2/6 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
-  MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 20 PBQs** (5/6/4/5 per domain,
-  8 kinds). Bank ids: `mcq-/pbq-` (Security+), `a1-`/`a1-pbq-` (A+ Core 1), `a2-`/`a2-pbq-`
-  (A+ Core 2). A+ banks validate against per-course `CourseBankSpec` constants in
-  `bank-aplus-1201.ts` / `bank-aplus-1202.ts` (validator generalized in `question-bank.ts`).
-  A+ authoring pipeline: `web/scripts/aplus-lib.py` + `merge-aplus-fragments.py` merge JSON
-  fragments from `web/scripts/data/frags/` (fragments are authored directly; the expand-*.py
-  scripts merge PBQs). Exam specs: A+ Core 1 90Q/90min pass 675; Core 2 90Q/90min pass 700 —
-  both read from `COURSE_META.passingScore` (readiness thresholds 675/900 and 700/900).
-  Bank expansion scripts live in `web/scripts/expand-d*.py`, `expand-pbqs.py`,
-  `expand-exam-aligned.py`, `expand-pbqs-exam-style.py`; `bank-lib.py` merges them idempotently.
-  PBQ coverage spans all 28 objectives; real-exam formats include firewall ACL rule ordering,
-  certificate-type matching, crypto-algorithm selection, SQLi/Windows-event log analysis,
-  vulnerability-scan prioritization, device-placement/segmentation, least-privilege permissions,
-  MFA/SSO configuration, SOAR/automation matching, investigation data sources, sensitive-data
-  handling, and recovery metrics.
+  - 105 PBQs (matching, ordering, evidence, configuration, numeric, word-bank, sort, multi-step). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
+    multi-selects) **+ 20 PBQs** (3/5/4/2/6 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
+    MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 20 PBQs** (5/6/4/5 per domain,
+    8 kinds). Bank ids: `mcq-/pbq-` (Security+), `a1-`/`a1-pbq-` (A+ Core 1), `a2-`/`a2-pbq-`
+    (A+ Core 2). A+ banks validate against per-course `CourseBankSpec` constants in
+    `bank-aplus-1201.ts` / `bank-aplus-1202.ts` (validator generalized in `question-bank.ts`).
+    A+ authoring pipeline: `web/scripts/aplus-lib.py` + `merge-aplus-fragments.py` merge JSON
+    fragments from `web/scripts/data/frags/` (fragments are authored directly; the expand-_.py
+    scripts merge PBQs). Exam specs: A+ Core 1 90Q/90min pass 675; Core 2 90Q/90min pass 700 —
+    both read from `COURSE_META.passingScore` (readiness thresholds 675/900 and 700/900).
+    Bank expansion scripts live in `web/scripts/expand-d_.py`, `expand-pbqs.py`,
+`expand-exam-aligned.py`, `expand-pbqs-exam-style.py`; `bank-lib.py` merges them idempotently.
+    PBQ coverage spans all 28 objectives; real-exam formats include firewall ACL rule ordering,
+    certificate-type matching, crypto-algorithm selection, SQLi/Windows-event log analysis,
+    vulnerability-scan prioritization, device-placement/segmentation, least-privilege permissions,
+    MFA/SSO configuration, SOAR/automation matching, investigation data sources, sensitive-data
+    handling, and recovery metrics.
 - **Interactive kinds:** `word-bank` (sentence blanks + word chips with distractors, click-to-fill,
   partial credit per assignment), `sort` (tap-to-bucket classification with ≥1 distractor bucket),
   `hotspot` (tap regions on a shared diagram template — `osi-stack` / `topology-basic` /
@@ -168,60 +168,72 @@ wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
 
 ## API Routes
 
-| Method | Path | Purpose |
-| ------ | ---- | ------- |
-| `GET`  | `/api/scope` | Current scope + available profiles & courses (drives the header switchers) |
-| `POST` | `/api/scope` | `{action:'switch', profileId?, courseId?}` sets scope cookies; `{action:'create', name, color}` (400 past 2-profile cap); `{action:'rename', profileId, name}` |
-| `DELETE` | `/api/scope?profileId=` | Delete a profile (blocked while it is the active scope; `default` is protected) |
-| `GET`  | `/api/course/overview` | Home payload: exam date/countdown, readiness, gradebook summary, modules w/ progress, to-do list, recent sessions |
-| `GET`  | `/api/course/syllabus` | All modules with lessons + assignments + statuses |
-| `GET`  | `/api/course/modules/[id]` | Single module (lessons + assignments) |
-| `GET`  | `/api/course/assignments/[id]` | Assignment detail incl. best submission + launch config |
-| `POST` | `/api/course/lessons/[id]` | Mark lesson `{ completed: boolean }` |
-| `POST` | `/api/course/exam-date` | Set exam date `{ examDate: 'YYYY-MM-DD' }` (real calendar date; reschedules all non-overridden assignments) |
-| `POST` | `/api/course/exam-date/preview` | Dry-run: `{ examDate }` → per-assignment `{ from, to, overridden }` shifts, nothing saved |
-| `POST` | `/api/course/due-date` | `{ assignmentId, dueDate: 'YYYY-MM-DD' \| null }` — pin or clear a per-scope due-date override (assignment must belong to the active course) |
-| `GET`  | `/api/gradebook` | `{ gradebook, readiness }` |
-| `GET`  | `/api/mastery` | Per-objective + per-domain accuracy across all 28 SY0-701 objectives (from `quiz_answers`) |
-| `GET`  | `/api/review` | Daily-review summary: streak, due cards, today count, 84-day heatmap, wall of shame (with wall items) |
-| `POST` | `/api/quiz/start` | Session start — accepts optional `assignmentId`; `type: 'quiz'` accepts optional `objective` filter; `type: 'review'` requires `reviewSource: 'daily' \| 'wall'` |
-| `GET/PATCH/DELETE` | `/api/quiz/session/[id]` | Resume, move/flag, abandon |
-| `PUT`  | `/api/quiz/answer` | Save answer. Practice returns feedback (correct response + explanation); **graded assignment sessions (`assignmentId` set) return no feedback and lock each response after saving** — results appear on completion. Retries are capped at 2 (60%/30% factors) in practice only. |
-| `POST` | `/api/quiz/hint` | Practice-mode hint reveal `{ sessionId, questionIndex }` — returns `{ hint: { text } }` and records the 25% point cost **server-side** (`quiz_session_responses.hint_used`). Authored hints take precedence; otherwise an answer-safe auto-hint is generated per kind (see `src/lib/server/hints.ts`). Refused for exam mode and graded sessions. |
-| `POST` | `/api/quiz/retake` | `{ sessionId }` (completed session) → starts a practice session containing only the missed questions |
-| `POST` | `/api/quiz/complete` | Finalize; records assignment submission when linked |
-| `GET`  | `/api/progress`, `/api/history`, `/api/cards`, `/api/sync` | Legacy analytics/tools |
-| `GET`  | `/api/calendar/google/status` | Google Calendar connection status (`configured`, `connected`, `email`, `syncedCount`, `lastSyncAt`) |
-| `GET`  | `/api/calendar/google/auth-url` | Starts OAuth: returns auth URL, sets `gcal_oauth_state` cookie (PKCE + state) |
-| `GET`  | `/api/calendar/google/callback` | OAuth callback: exchanges code, stores token, redirects to `/calendar?connected=1` |
-| `GET`  | `/api/calendar/google/events?start&end` | Merged events from the user's visible calendars (server-side proxy) |
-| `POST` | `/api/calendar/google/sync` | Pushes exam + assignment deadlines into the per-course "… Prep" calendar (create/update/delete) |
-| `POST` | `/api/calendar/google/disconnect` | Clears the stored OAuth token + sync tracking |
-| `POST` | `/api/admin/reset` | Full progress reset for the ACTIVE profile+course (from scope cookies). Requires `{ confirm: true }`. Wipes quiz sessions/answers/state/responses, domain progress, review cards, study log (per-profile by design), this course's submissions + lesson completions. Profiles, content, exam date, and overrides survive. |
-| `GET`  | `/api/admin/backup` | Download the active profile+course progress as JSON (`course-progress-backup` v1: sessions+state+responses+answers, domain progress, review cards, study log, submissions, lesson completions, exam date, overrides) |
-| `POST` | `/api/admin/backup` | Restore a backup into the active scope: same `courseId` required (400 `COURSE_MISMATCH`), payload validated by `parseProgressBackup` (400 `INVALID_BACKUP`), progress wiped first, session ids remapped |
+| Method             | Path                                                       | Purpose                                                                                                                                                                                                                                                                                                                                           |
+| ------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET`              | `/api/scope`                                               | Current scope + available profiles & courses (drives the header switchers)                                                                                                                                                                                                                                                                        |
+| `POST`             | `/api/scope`                                               | `{action:'switch', profileId?, courseId?}` sets scope cookies; `{action:'create', name, color}` (400 past 2-profile cap); `{action:'rename', profileId, name}`                                                                                                                                                                                    |
+| `DELETE`           | `/api/scope?profileId=`                                    | Delete a profile (blocked while it is the active scope; `default` is protected)                                                                                                                                                                                                                                                                   |
+| `GET`              | `/api/course/overview`                                     | Home payload: exam date/countdown, readiness, gradebook summary, modules w/ progress, to-do list, recent sessions                                                                                                                                                                                                                                 |
+| `GET`              | `/api/course/syllabus`                                     | All modules with lessons + assignments + statuses                                                                                                                                                                                                                                                                                                 |
+| `GET`              | `/api/course/modules/[id]`                                 | Single module (lessons + assignments)                                                                                                                                                                                                                                                                                                             |
+| `GET`              | `/api/course/assignments/[id]`                             | Assignment detail incl. best submission + launch config                                                                                                                                                                                                                                                                                           |
+| `POST`             | `/api/course/lessons/[id]`                                 | Mark lesson `{ completed: boolean }`                                                                                                                                                                                                                                                                                                              |
+| `POST`             | `/api/course/exam-date`                                    | Set exam date `{ examDate: 'YYYY-MM-DD' }` (real calendar date; reschedules all non-overridden assignments)                                                                                                                                                                                                                                       |
+| `POST`             | `/api/course/exam-date/preview`                            | Dry-run: `{ examDate }` → per-assignment `{ from, to, overridden }` shifts, nothing saved                                                                                                                                                                                                                                                         |
+| `POST`             | `/api/course/due-date`                                     | `{ assignmentId, dueDate: 'YYYY-MM-DD' \| null }` — pin or clear a per-scope due-date override (assignment must belong to the active course)                                                                                                                                                                                                      |
+| `GET`              | `/api/gradebook`                                           | `{ gradebook, readiness }`                                                                                                                                                                                                                                                                                                                        |
+| `GET`              | `/api/mastery`                                             | Per-objective + per-domain accuracy across all 28 SY0-701 objectives (from `quiz_answers`)                                                                                                                                                                                                                                                        |
+| `GET`              | `/api/review`                                              | Daily-review summary: streak, due cards, today count, 84-day heatmap, wall of shame (with wall items)                                                                                                                                                                                                                                             |
+| `POST`             | `/api/quiz/start`                                          | Session start — accepts optional `assignmentId`; `type: 'quiz'` accepts optional `objective` filter; `type: 'review'` requires `reviewSource: 'daily' \| 'wall'`                                                                                                                                                                                  |
+| `GET/PATCH/DELETE` | `/api/quiz/session/[id]`                                   | Resume, move/flag, abandon                                                                                                                                                                                                                                                                                                                        |
+| `PUT`              | `/api/quiz/answer`                                         | Save answer. Practice returns feedback (correct response + explanation); **graded assignment sessions (`assignmentId` set) return no feedback and lock each response after saving** — results appear on completion. Retries are capped at 2 (60%/30% factors) in practice only.                                                                   |
+| `POST`             | `/api/quiz/hint`                                           | Practice-mode hint reveal `{ sessionId, questionIndex }` — returns `{ hint: { text } }` and records the 25% point cost **server-side** (`quiz_session_responses.hint_used`). Authored hints take precedence; otherwise an answer-safe auto-hint is generated per kind (see `src/lib/server/hints.ts`). Refused for exam mode and graded sessions. |
+| `POST`             | `/api/quiz/retake`                                         | `{ sessionId }` (completed session) → starts a practice session containing only the missed questions                                                                                                                                                                                                                                              |
+| `POST`             | `/api/quiz/complete`                                       | Finalize; records assignment submission when linked                                                                                                                                                                                                                                                                                               |
+| `GET`              | `/api/progress`, `/api/history`, `/api/cards`, `/api/sync` | Legacy analytics/tools                                                                                                                                                                                                                                                                                                                            |
+| `GET`              | `/api/calendar/google/status`                              | Google Calendar connection status (`configured`, `connected`, `email`, `syncedCount`, `lastSyncAt`)                                                                                                                                                                                                                                               |
+| `GET`              | `/api/calendar/google/auth-url`                            | Starts OAuth: returns auth URL, sets `gcal_oauth_state` cookie (PKCE + state)                                                                                                                                                                                                                                                                     |
+| `GET`              | `/api/calendar/google/callback`                            | OAuth callback: exchanges code, stores token, redirects to `/calendar?connected=1`                                                                                                                                                                                                                                                                |
+| `GET`              | `/api/calendar/google/events?start&end`                    | Merged events from the user's visible calendars (server-side proxy)                                                                                                                                                                                                                                                                               |
+| `POST`             | `/api/calendar/google/sync`                                | Pushes exam + assignment deadlines into the per-course "… Prep" calendar (create/update/delete)                                                                                                                                                                                                                                                   |
+| `POST`             | `/api/calendar/google/disconnect`                          | Clears the stored OAuth token + sync tracking                                                                                                                                                                                                                                                                                                     |
+| `POST`             | `/api/admin/reset`                                         | Full progress reset for the ACTIVE profile+course (from scope cookies). Requires `{ confirm: true }`. Wipes quiz sessions/answers/state/responses, domain progress, review cards, study log (per-profile by design), this course's submissions + lesson completions. Profiles, content, exam date, and overrides survive.                         |
+| `GET`              | `/api/admin/backup`                                        | Download the active profile+course progress as JSON (`course-progress-backup` v1: sessions+state+responses+answers, domain progress, review cards, study log, submissions, lesson completions, exam date, overrides)                                                                                                                              |
+| `POST`             | `/api/admin/backup`                                        | Restore a backup into the active scope: same `courseId` required (400 `COURSE_MISMATCH`), payload validated by `parseProgressBackup` (400 `INVALID_BACKUP`), progress wiped first, session ids remapped                                                                                                                                           |
 
 ## Frontend Pages (Svelte 5 runes, Tailwind CSS v4)
 
-| Route | File | Purpose |
-| ----- | ---- | ------- |
-| `/` | `src/routes/+page.svelte` | **Course home** — banner w/ exam countdown, readiness ring, "What's due" to-do, module cards, recent sessions |
-| `/syllabus` | `src/routes/syllabus/+page.svelte` | Full schedule + exam-date editor |
-| `/modules/[id]` | `src/routes/modules/[id]/+page.svelte` | Module detail — lessons (expandable, mark read) + assignments |
-| `/assignments/[id]` | `src/routes/assignments/[id]/+page.svelte` | Assignment detail — due date, status, best submission, launch |
-| `/gradebook` | `src/routes/gradebook/+page.svelte` | Weighted grade, letter grade, category breakdown, per-assignment table |
-| `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`) |
-| `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session |
-| `/review` | `src/routes/review/+page.svelte` | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame |
-| `/admin` | `src/routes/admin/+page.svelte` | **Self-service administration** — exam-date editor (with shift preview), per-assignment due-date overrides, backup export/import, progress reset (type-RESET gate), and profile management. All scoping resolved server-side from the scope cookies. |
-| `/mastery` | `src/routes/mastery/+page.svelte` | **Mastery matrix** — per-course objectives color-coded by accuracy (grid renders from `COURSE_META[course].objectives`); tap any cell to drill it (5-question practice session filtered to that objective) |
-| `/progress` `/history` | existing | Legacy analytics |
+| Route                       | File                                       | Purpose                                                                                                                                                                                                                                                                                                |
+| --------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/`                         | `src/routes/+page.svelte`                  | **Course home** — bento grid: readiness hero (ring, grade, domain/exam bars), today, what's due, course path, drills, recent                                                                                                                                                                           |
+| `/syllabus`                 | `src/routes/syllabus/+page.svelte`         | Full schedule in a two-pane layout; exam-date editor, module jump list and progress live in the right context rail                                                                                                                                                                                     |
+| `/modules/[id]`             | `src/routes/modules/[id]/+page.svelte`     | Module detail in two panes; lessons expand in place, and the rail outline jumps to and opens a lesson                                                                                                                                                                                                  |
+| `/assignments/[id]`         | `src/routes/assignments/[id]/+page.svelte` | Assignment detail — due date, status, best submission, launch                                                                                                                                                                                                                                          |
+| `/practice`                 | `src/routes/practice/+page.svelte`         | **Practice hub** — the drill room: cards for Quiz, Scenarios, PBQs, full exam, Today's 10, Wall of Shame                                                                                                                                                                                               |
+| `/progress`                 | `src/routes/progress/+page.svelte`         | **Progress ledger** — one tabbed hub (`?tab=grades\|mastery\|sessions`, default `grades`) merging the gradebook, the mastery matrix, and session history. Legacy `/gradebook`, `/mastery`, `/history` 308-redirect into the matching tab; `/history/[sessionId]` still serves the session detail page. |
+| `/calendar`                 | `src/routes/calendar/+page.svelte`         | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`)                                                                                                                                                                                                      |
+| `/quiz` `/scenarios` `/pbq` | existing                                   | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session                                                                                                                                                               |
+| `/review`                   | `src/routes/review/+page.svelte`           | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame                                                                                                                                                                                                       |
+| `/admin`                    | `src/routes/admin/+page.svelte`            | **Self-service administration** — exam-date editor (with shift preview), per-assignment due-date overrides, backup export/import, progress reset (type-RESET gate), and profile management. All scoping resolved server-side from the scope cookies.                                                   |
+| `/mastery`                  | `src/routes/mastery/+page.server.ts`       | 308 redirect to `/progress?tab=mastery`                                                                                                                                                                                                                                                                |
 
 ### Shared components
 
 - `StatusChip.svelte` — assignment status badge.
 - `ProgressRing.svelte` — circular percentage (readiness/grade).
-- `BottomNav.svelte` / `MobileMenu.svelte` — course navigation (Home, Syllabus, Grades, Calendar). `MobileMenu.svelte` is a self-contained hamburger trigger + top dropdown (mobile-first) for the secondary links (Quiz, Scenarios, PBQs, Progress, History) and the theme toggle.
+- `AppRail.svelte` — **desktop primary navigation**: an icon rail (4rem) that expands to show
+  labels on hover and pins open (`localStorage['rail-pinned']`). Holds the groups Study, Drill,
+  Track, plus Admin and the pin toggle; carries `nav[aria-label="Main navigation"]`.
+- `CommandPalette.svelte` — Cmd+K / header-triggered navigation dialog (sections + modules).
+- `ContextRail.svelte` — sticky right-hand rail (`hidden xl:block`) that content pages fill with
+  orientation and quick actions. Used by syllabus, modules, assignments, progress, review, calendar,
+  admin, and every drill launcher.
+- `DrillLauncher.svelte` — the shared launcher shell for `/quiz`, `/scenarios`, and `/pbq`: hero with
+  icon + eyebrow + heading, an options card, and the drills rail.
+- `BottomNav.svelte` / `MobileMenu.svelte` — mobile chrome. Bottom tab bar (hidden from `lg`):
+  Home, Course, Practice (raised center button), Progress, Review. `MobileMenu.svelte` is a
+  self-contained hamburger trigger + top dropdown for Calendar, Quiz, Scenarios, PBQs, Admin and
+  the theme toggle.
 - `ProfileSwitcher.svelte` / `CourseSwitcher.svelte` — header chips → top dropdowns
   for profile (add/rename/delete, 2-profile cap) and course selection; switching
   sets the scope cookies and reloads.
@@ -240,7 +252,15 @@ npm run dev          # dev server on localhost:5173
 npm run build        # production build (adapter-node)
 npm run check        # svelte-check type checking
 npm run test         # vitest, against TEST_DATABASE_URL
+npm run test:e2e     # build + Playwright (needs a database; see below)
+npm run verify       # unit + check + build + e2e + whitespace gates
 ```
+
+Playwright starts the built server and passes it `DATABASE_URL`, preferring `TEST_DATABASE_URL`
+from `web/.env` (loaded by `playwright.config.ts`) so runs never touch real progress.
+`e2e/quiz-presentation.spec.ts` is stateful: the app allows one active session per scope, so a
+spec that leaves a session active makes a later spec resume it. Reset the scope (or run specs
+against a fresh database) if those two tests fail in sequence.
 
 `course.test.ts` covers the course definition, scheduling (incl. due-date override precedence and
 exam-shift preview), assignment status, gradebook math, readiness, and the course service
@@ -254,22 +274,34 @@ DB-enforced single active session, completion timing persistence, and seed heali
 ## Styling
 
 - Tailwind CSS v4 — `@import "tailwindcss"` in `app.css`, no config file.
-- **"Dark study tool" design system** — near-black warm charcoal + a single acid-lime accent.
-  Dark theme (`#0e0d0b` bg) is the default; light theme (`#f4f3ee` warm gray, not beige) is for
-  sunlight readability. Accent = acid lime (`--color-accent`, `#b7f04c` dark / `#557a10` light).
+- **"Paper & Ink" design system** (v2) — a beautifully typeset textbook. Warm paper + ink
+  typography with one deep-green accent and one brass secondary. **Paper (light) is the default theme**
+  (`#f7f6f0` bg, `#1a1c18` ink); **ink mode** (dark) is deep forest (`#131611` bg) with cream text.
+  Accent = forest green (`--color-accent`, `#1f5d3f` light / `#84c79d` dark); secondary = brass (`#7a5c1e` / `#c2a566`).
   Semantic status colors only for success/danger/info/warning — never brand accents.
-- Fonts: **Inter Variable** (body) + **Space Grotesk Variable** (display, `.h-display` /
-  `.num-display`), self-hosted via `@fontsource-variable/*` — works offline. No serif anywhere.
-- Component classes in `app.css`: `.card` (sharp 6px, hairline border, flat — no shadows/glows),
-  `.btn` / `.btn-primary` / `.btn-ghost` / `.btn-danger` (≥44px touch targets, flat, sharp),
-  `.chip` (square, 0 radius), `.eyebrow` (mono uppercase), `.gradient-text` (solid lime), `.pb-safe`.
-- **Mobile-first**: bottom nav (`BottomNav.svelte`) has 5 tabs with a raised center Practice
+  Primary buttons are ink-filled (light) / cream-filled (dark) via `--color-primary` /
+  `--color-on-primary`, not the accent color.
+- Fonts: **Fraunces Variable** (serif display: `.h-display`, `.num-display`, `.serif-italic`) +
+  **Inter Variable** (body), self-hosted via `@fontsource-variable/*` — works offline.
+- Component classes in `app.css`: `.card` (4px radius, hairline border, whisper shadow),
+  `.btn` / `.btn-primary` / `.btn-ghost` / `.btn-danger` (≥44px touch targets, 4px radius),
+  `.chip` (square tag), `.eyebrow` (small-caps editoral label), `.serif-italic` (the editorial
+  flourish), `.gradient-text` (solid accent), `.touch-target` (44px inline hit area), `.pb-safe`.
+  Radius scale is crisp, not soft: `rounded`/`-md`/`-lg`/`-xl` = 4px, `rounded-sm` = 2px,
+  `rounded-2xl` = 6px. Only true circles use `rounded-full`.
+- **Full contract: `web/DESIGN.md`** — tokens, patterns, and hard rules. Read it before restyling
+  any page; `src/routes/+page.svelte` and `src/routes/practice/+page.svelte` are the reference
+  implementations.
+- **Mobile-first**: bottom nav (`BottomNav.svelte`) has 5 tabs with a raised accent Practice
   button; the mobile "more" menu is a top dropdown (`MobileMenu.svelte`); gradebook/history tables become
-  stacked cards below `md:`; `max-w-6xl` content column.
+  stacked cards below `md:`. Desktop uses the left icon rail plus a slim top strip, and the
+  content column is `max-w-7xl` inside the shell.
 - Progress colors: red (<60%), amber (60–84%), green (≥85%) via `getPercentColor` /
   `getBarColor` in `utils.ts`.
-- Design rules: no gradients, no glow/colored shadows, no pill buttons, no serif — keep it
-  flat, sharp (6px max), and dense.
+- Design rules: no gradients, no glow/colored shadows, no hardcoded hex in components — always
+  theme tokens. Crisp radii (4px), hairline warm borders, serif headings, generous
+  whitespace. `e2e/theme-mobile.spec.ts` enforces WCAG AA (4.5:1) for every text token against
+  every surface in both themes.
 
 ## Phase 2 Candidates (not yet implemented)
 
