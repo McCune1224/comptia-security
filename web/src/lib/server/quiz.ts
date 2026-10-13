@@ -95,6 +95,18 @@ export const MAX_PRACTICE_RETRIES = 2;
 /** Points factor per attempt: attempt 1 = 100%, retry 1 = 60%, retry 2 = 30%. */
 export const RETRY_FACTORS = [1, 0.6, 0.3];
 
+/**
+ * Points factor for a practice attempt, indexed by the retry count stored for
+ * it: 0 = first attempt, 1 = first retry, 2 = second retry (the cap). Both
+ * scoring paths index by the count the attempt leaves in storage.
+ * `saveResponse` predicts it before writing (an absent row inserts 0, an
+ * existing row increments on conflict) and `complete` reads it afterwards, so
+ * save-time feedback and the completion review cannot disagree.
+ */
+function practiceAttemptFactor(storedRetries: number): number {
+	return RETRY_FACTORS[Math.min(storedRetries, MAX_PRACTICE_RETRIES)];
+}
+
 function shuffle<T>(items: T[], rng: () => number): T[] {
 	const result = [...items];
 	for (let index = result.length - 1; index > 0; index--) {
@@ -368,9 +380,7 @@ export function createQuizService({
 		} as QuizResult['domainBreakdown'];
 		const objectiveBreakdown: QuizResult['objectiveBreakdown'] = {};
 		const attemptFactor = (retries: number) =>
-			stored.summary.mode === 'practice'
-				? RETRY_FACTORS[Math.min(retries, MAX_PRACTICE_RETRIES)]
-				: 1;
+			stored.summary.mode === 'practice' ? practiceAttemptFactor(retries) : 1;
 		let totalEarned = 0;
 		let totalPossible = 0;
 		const review = stored.questions.map((question, index) => {
@@ -665,8 +675,12 @@ export function createQuizService({
 			const feedback = scoreQuestion(question, response, {
 				hintUsed: stored.hints[questionIndex] ?? false
 			});
-			feedback.earnedPoints *=
-				RETRY_FACTORS[Math.min((stored.retries[questionIndex] ?? 0) + 1, MAX_PRACTICE_RETRIES)];
+			// Index by the retry count this save stores: an absent row inserts 0 (first
+			// attempt), an existing row increments on conflict. That is the same count
+			// complete() reads back, so the save score and the completion review agree.
+			const retriesAfterSave =
+				questionIndex in stored.retries ? (stored.retries[questionIndex] ?? 0) + 1 : 0;
+			feedback.earnedPoints *= practiceAttemptFactor(retriesAfterSave);
 			return { saved: true as const, feedback };
 		},
 		async revealHint(id, questionIndex) {
