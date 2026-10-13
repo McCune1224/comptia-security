@@ -1,4 +1,4 @@
-// ponytail: shared domain names, progress helpers — single source across all components
+// shared domain names, progress helpers — single source across all components
 export const DOMAIN_NAMES: Record<number, string> = {
 	1: 'General Security Concepts',
 	2: 'Threats, Vulnerabilities, Mitigations',

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared helpers for bank expansion scripts (mirrors replace-domain2.py pattern)."""
+"""Shared helpers for bank expansion scripts."""
 import json
 import sys
 from pathlib import Path

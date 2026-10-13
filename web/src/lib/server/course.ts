@@ -1,4 +1,11 @@
-import type { CourseId, CourseMeta, Domain, ObjectiveId, SessionMode, SessionType } from '$lib/types';
+import type {
+	CourseId,
+	CourseMeta,
+	Domain,
+	ObjectiveId,
+	SessionMode,
+	SessionType
+} from '$lib/types';
 import { objectivesByDomain } from './question-bank';
 import {
 	APLUS_1201_OBJECTIVES,
@@ -7,6 +14,10 @@ import {
 	APLUS_1202_WEIGHTS
 } from './aplus-meta';
 import { APLUS_1201_COURSE, APLUS_1202_COURSE } from './aplus-courses';
+
+// Single source of truth for date formatting lives in the isomorphic $lib/utils
+// (no imports, no browser/server deps — safe to pull into server code).
+export { formatDate } from '$lib/utils';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Course definition — Security+ SY0-701, structured like a college course.
@@ -946,20 +957,6 @@ export function previewExamDateShift(
 		from: effectiveDueDate(assignment, fromExamDate, overrides),
 		to: effectiveDueDate(assignment, toExamDate, overrides)
 	}));
-}
-
-export function formatDate(date: Date | string): string {
-	let value: Date;
-	if (typeof date === 'string') {
-		// Treat YYYY-MM-DD as a local calendar date to avoid UTC timezone shifts.
-		const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
-		value = match
-			? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
-			: new Date(date);
-	} else {
-		value = date;
-	}
-	return value.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export function daysUntil(date: Date): number {
