@@ -1,47 +1,13 @@
 import { expect, test } from '@playwright/test';
+import {
+	abandonSession,
+	drawSessionMatching,
+	openSessionQuestion,
+	type SessionQuestion
+} from './session';
 
-interface SessionQuestion {
-	kind: string;
-	steps?: { kind: string }[];
-}
-
-async function startPbq(context: import('@playwright/test').BrowserContext) {
-	const page = await context.newPage();
-	// Start via API; clear any prior active session in the default scope first.
-	const start = async () =>
-		context.request.post('/api/quiz/start', {
-			data: { type: 'pbq', mode: 'practice', count: 30 }
-		});
-	let res = await start();
-	let data = await res.json();
-	if (data.error?.code === 'ACTIVE_SESSION_EXISTS') {
-		const sid = data.error.details.session.sessionId;
-		await context.request.delete(`/api/quiz/session/${sid}`);
-		res = await start();
-		data = await res.json();
-	}
-	const sessionId = data.session.sessionId;
-	await page.goto(`/pbq?session=${sessionId}`);
-	await page.waitForSelector('.drag-handle, .btn-primary');
-	return { page, sessionId };
-}
-
-async function findOrderingIndex(
-	context: import('@playwright/test').BrowserContext,
-	sessionId: string
-) {
-	const res = await context.request.get(`/api/quiz/session/${sessionId}`);
-	const data = await res.json();
-	const questions: SessionQuestion[] = data.session.questions;
-	// Prefer a top-level ordering question; fall back to a multi-step whose first step is ordering.
-	const top = questions.findIndex((q) => q.kind === 'ordering');
-	if (top >= 0) return { index: top, isSubStep: false };
-	const sub = questions.findIndex(
-		(q) => q.kind === 'multi-step' && q.steps?.[0]?.kind === 'ordering'
-	);
-	if (sub >= 0) return { index: sub, isSubStep: true };
-	throw new Error('No ordering question found in seeded PBQ session');
-}
+// Redrawing a random PBQ sample for a rare question shape can take several attempts.
+test.describe.configure({ timeout: 120_000 });
 
 async function orderFromDom(page: import('@playwright/test').Page): Promise<string[]> {
 	return page.$$eval('[data-id]', (els) => els.map((e) => e.getAttribute('data-id') ?? ''));
@@ -61,17 +27,39 @@ async function dragHandle(page: import('@playwright/test').Page, from: number, t
 	await page.waitForTimeout(300);
 }
 
-test('ordering drag-and-drop persists the new order (top-level)', async ({ browser }) => {
-	const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-	const { page, sessionId } = await startPbq(context);
-	const { index, isSubStep } = await findOrderingIndex(context, sessionId);
-	expect(isSubStep).toBe(false);
-
+/** Move to a question through the runner's rail, confirming the move took. */
+async function moveToQuestion(page: import('@playwright/test').Page, index: number) {
 	await page
-		.locator('button', { hasText: new RegExp(`^${index + 1}$`) })
+		.getByRole('button', { name: String(index + 1), exact: true })
 		.first()
 		.click();
+	// The counter reads "Q14 of 30" (the uppercase look is CSS only). Waiting for it
+	// proves the move landed; the target question may not be an ordering task, so do
+	// not wait for a drag handle here.
+	await expect(page.getByText(new RegExp(`^Q${index + 1} of \\d+$`))).toBeVisible();
+}
+
+/** The save fires when the runner leaves the question, so pick a different one. */
+function awayFrom(index: number): number {
+	return index === 0 ? 1 : 0;
+}
+
+test('ordering drag-and-drop persists the new order (top-level)', async ({ browser }) => {
+	const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+
+	// Only a few of the 105 PBQs are ordering tasks and the draw is a random sample,
+	// so ask for a session that actually contains one.
+	const { sessionId, questions } = await drawSessionMatching(
+		context.request,
+		{ type: 'pbq', mode: 'practice', count: 30 },
+		(sample) => sample.some((question: SessionQuestion) => question.kind === 'ordering')
+	);
+	const index = questions.findIndex((question) => question.kind === 'ordering');
+
+	const page = await context.newPage();
+	await openSessionQuestion(page, `/pbq?session=${sessionId}`, index);
 	await page.waitForSelector('.drag-handle');
+
 	const initial = await orderFromDom(page);
 	expect(initial.length).toBeGreaterThan(1);
 
@@ -81,10 +69,7 @@ test('ordering drag-and-drop persists the new order (top-level)', async ({ brows
 	expect(afterDrag).not.toEqual(initial);
 
 	// Navigate away to trigger the silent save, then read the stored response.
-	await page
-		.locator('button', { hasText: new RegExp('^1$') })
-		.first()
-		.click();
+	await moveToQuestion(page, awayFrom(index));
 	await page.waitForTimeout(400);
 	const res = await context.request.get(`/api/quiz/session/${sessionId}`);
 	const data = await res.json();
@@ -92,34 +77,49 @@ test('ordering drag-and-drop persists the new order (top-level)', async ({ brows
 	expect(stored).toBeTruthy();
 	expect(stored.itemIds).toEqual(afterDrag);
 
+	await abandonSession(context.request, sessionId);
 	await context.close();
 });
 
 test('ordering drag-and-drop persists the new order (multi-step step 0)', async ({ browser }) => {
 	const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-	const { page, sessionId } = await startPbq(context);
-	const { index, isSubStep } = await findOrderingIndex(context, sessionId);
-	if (!isSubStep) {
-		// Seeded bank for this scope has no multi-step ordering question; nothing to regress.
-		test.skip(true, 'No multi-step ordering question in seeded PBQ session');
+
+	let drawn: { sessionId: string; questions: SessionQuestion[] };
+	try {
+		drawn = await drawSessionMatching(
+			context.request,
+			{ type: 'pbq', mode: 'practice', count: 30 },
+			(sample) =>
+				sample.some(
+					(question) => question.kind === 'multi-step' && question.steps?.[0]?.kind === 'ordering'
+				),
+			8
+		);
+	} catch (cause) {
+		// No multi-step ordering PBQ in the seeded bank, so there is nothing to regress.
+		// The kinds seen are reported so the skip stays diagnosable.
+		test.skip(true, `No multi-step ordering PBQ available: ${(cause as Error).message}`);
 		await context.close();
 		return;
 	}
 
-	await page
-		.locator('button', { hasText: new RegExp(`^${index + 1}$`) })
-		.first()
-		.click();
+	const { sessionId, questions } = drawn;
+	const index = questions.findIndex(
+		(question) => question.kind === 'multi-step' && question.steps?.[0]?.kind === 'ordering'
+	);
+
+	const page = await context.newPage();
+	await openSessionQuestion(page, `/pbq?session=${sessionId}`, index);
 	await page.waitForSelector('.drag-handle');
+
 	const initial = await orderFromDom(page);
+	expect(initial.length).toBeGreaterThan(1);
+
 	await dragHandle(page, 1, 0);
 	const afterDrag = await orderFromDom(page);
 	expect(afterDrag).not.toEqual(initial);
 
-	await page
-		.locator('button', { hasText: new RegExp('^1$') })
-		.first()
-		.click();
+	await moveToQuestion(page, awayFrom(index));
 	await page.waitForTimeout(400);
 	const res = await context.request.get(`/api/quiz/session/${sessionId}`);
 	const data = await res.json();
@@ -127,5 +127,6 @@ test('ordering drag-and-drop persists the new order (multi-step step 0)', async 
 	expect(stored).toBeTruthy();
 	expect(stored.stepResponses[0].itemIds).toEqual(afterDrag);
 
+	await abandonSession(context.request, sessionId);
 	await context.close();
 });
