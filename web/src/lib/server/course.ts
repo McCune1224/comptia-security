@@ -876,11 +876,76 @@ export const ACTIVE_COURSES: CourseId[] = ['secp-701', 'aplus-1201', 'aplus-1202
 
 // ── Scheduling helpers ───────────────────────────────────────────────────────
 
+/** Per-scope explicit due dates: assignment id → YYYY-MM-DD. Overrides beat the derived schedule. */
+export type DueDateOverrides = Readonly<Record<string, string>>;
+
+/**
+ * Validates a calendar date key: strict YYYY-MM-DD shape AND a real calendar
+ * date (2026-02-30 is rejected, not clamped). Single implementation lives in
+ * `$lib/utils` (client-safe); re-exported here for server-side boundaries.
+ */
+export { parseDateKey } from '$lib/utils';
+
+/** Local-midnight Date from a validated YYYY-MM-DD key. */
+export function dateKeyToDate(key: string): Date {
+	return new Date(`${key}T00:00:00`);
+}
+
+/** YYYY-MM-DD key for a Date, in its local calendar day (no UTC shift). */
+export function toDateKey(date: Date): string {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+}
+
 /** Returns the due date (local midnight) for an assignment given the exam date (YYYY-MM-DD). */
 export function assignmentDueDate(assignment: CourseAssignment, examDate: string): Date {
 	const due = new Date(`${examDate}T00:00:00`);
 	due.setDate(due.getDate() + assignment.dueOffsetDays);
 	return due;
+}
+
+/**
+ * The due date that actually applies: an explicit override wins; otherwise the
+ * schedule derives from the exam date. Single source of truth for every place
+ * a due date is displayed or status is computed.
+ */
+export function effectiveDueDate(
+	assignment: CourseAssignment,
+	examDate: string,
+	overrides: DueDateOverrides = {}
+): Date {
+	const override = overrides[assignment.id];
+	return override ? dateKeyToDate(override) : assignmentDueDate(assignment, examDate);
+}
+
+export interface ExamDateShift {
+	assignmentId: string;
+	title: string;
+	/** True when the due date is an explicit override — it holds still while the rest of the schedule moves. */
+	overridden: boolean;
+	from: Date;
+	to: Date;
+}
+
+/**
+ * How each assignment's due date moves when the exam date changes from one
+ * date to another. Pure — used by the exam-date editor's preview, before save.
+ */
+export function previewExamDateShift(
+	assignments: CourseAssignment[],
+	fromExamDate: string,
+	toExamDate: string,
+	overrides: DueDateOverrides = {}
+): ExamDateShift[] {
+	return assignments.map((assignment) => ({
+		assignmentId: assignment.id,
+		title: assignment.title,
+		overridden: assignment.id in overrides,
+		from: effectiveDueDate(assignment, fromExamDate, overrides),
+		to: effectiveDueDate(assignment, toExamDate, overrides)
+	}));
 }
 
 export function formatDate(date: Date | string): string {
@@ -909,11 +974,12 @@ export function assignmentStatus(
 	assignment: CourseAssignment,
 	examDate: string,
 	submissions: SubmissionRecord[],
-	activeAssignmentId: string | null
+	activeAssignmentId: string | null,
+	overrides: DueDateOverrides = {}
 ): AssignmentStatus {
 	if (submissions.some((s) => s.assignmentId === assignment.id)) return 'submitted';
 	if (activeAssignmentId === assignment.id) return 'in-progress';
-	const due = assignmentDueDate(assignment, examDate);
+	const due = effectiveDueDate(assignment, examDate, overrides);
 	const days = daysUntil(due);
 	if (days < 0) return 'overdue';
 	if (days <= 2) return 'due-soon';
@@ -936,6 +1002,8 @@ export interface CategoryGrade {
 export interface AssignmentGrade extends SubmissionRecord {
 	assignment: CourseAssignment;
 	dueDate: Date;
+	/** True when an explicit due-date override (not the exam-anchored schedule) sets the due date. */
+	overridden: boolean;
 	status: AssignmentStatus;
 }
 
@@ -963,7 +1031,8 @@ export function computeGradebook(
 	submissions: SubmissionRecord[],
 	examDate: string,
 	activeAssignmentId: string | null,
-	weights = COURSE_DEFINITION.gradeWeights
+	weights = COURSE_DEFINITION.gradeWeights,
+	overrides: DueDateOverrides = {}
 ): Gradebook {
 	const bestByAssignment = new Map<string, SubmissionRecord>();
 	for (const submission of submissions) {
@@ -1016,8 +1085,9 @@ export function computeGradebook(
 			return {
 				...submission!,
 				assignment,
-				dueDate: assignmentDueDate(assignment, examDate),
-				status: assignmentStatus(assignment, examDate, submissions, activeAssignmentId)
+				dueDate: effectiveDueDate(assignment, examDate, overrides),
+				overridden: assignment.id in overrides,
+				status: assignmentStatus(assignment, examDate, submissions, activeAssignmentId, overrides)
 			};
 		})
 		.sort((a, b) => a.assignment.position - b.assignment.position);

@@ -9,16 +9,22 @@ import {
 	computeGradebook,
 	computeReadiness,
 	daysUntil,
+	effectiveDueDate,
 	formatDate,
+	parseDateKey,
+	previewExamDateShift,
 	sessionLaunchFor,
 	type AssignmentStatus,
 	type CourseAssignment,
 	type CourseLesson,
 	type CourseModule,
+	type DueDateOverrides,
+	type ExamDateShift,
 	type Gradebook,
 	type Readiness,
 	type SubmissionRecord
 } from './course';
+import { QuizServiceError } from './quiz';
 
 export interface CourseOverview {
 	course: { id: CourseId; title: string; code: string; examName: string };
@@ -47,6 +53,10 @@ export interface AssignmentView {
 	assignment: CourseAssignment;
 	dueDate: Date;
 	dueDateLabel: string;
+	/** True when an explicit due-date override sets the due date for this scope. */
+	overridden: boolean;
+	/** What the schedule would derive without the override (equals dueDateLabel when not overridden). */
+	derivedDueDateLabel: string;
 	daysUntilDue: number;
 	status: AssignmentStatus;
 	bestSubmission: SubmissionRecord | null;
@@ -62,6 +72,9 @@ export interface CourseService {
 	getGradebook(): Promise<Gradebook>;
 	getReadiness(): Promise<Readiness>;
 	setExamDate(examDate: string): Promise<void>;
+	/** How each due date would move if the exam moved to `toExamDate` (no writes). */
+	previewExamDate(toExamDate: string): Promise<ExamDateShift[]>;
+	setDueDateOverride(assignmentId: string, dueDate: string | null): Promise<void>;
 	setLessonCompleted(lessonId: string, completed: boolean): Promise<void>;
 	recordCompletion(assignmentId: string, sessionId: string, result: QuizResult): Promise<void>;
 }
@@ -70,9 +83,10 @@ function buildAssignmentView(
 	assignment: CourseAssignment,
 	examDate: string,
 	submissions: SubmissionRecord[],
-	activeAssignmentId: string | null
+	activeAssignmentId: string | null,
+	overrides: DueDateOverrides = {}
 ): AssignmentView {
-	const dueDate = assignmentDueDate(assignment, examDate);
+	const dueDate = effectiveDueDate(assignment, examDate, overrides);
 	const bestSubmission =
 		submissions
 			.filter((s) => s.assignmentId === assignment.id)
@@ -81,8 +95,10 @@ function buildAssignmentView(
 		assignment,
 		dueDate,
 		dueDateLabel: formatDate(dueDate),
+		overridden: assignment.id in overrides,
+		derivedDueDateLabel: formatDate(assignmentDueDate(assignment, examDate)),
 		daysUntilDue: daysUntil(dueDate),
-		status: assignmentStatus(assignment, examDate, submissions, activeAssignmentId),
+		status: assignmentStatus(assignment, examDate, submissions, activeAssignmentId, overrides),
 		bestSubmission,
 		launch: sessionLaunchFor(assignment)
 	};
@@ -129,12 +145,14 @@ export function createCourseService({
 			const submissions = await repository.getSubmissions();
 			const activeSession = await repository.getActiveSession();
 			const activeAssignmentId = activeSession?.summary.assignment_id ?? null;
+			const overrides = await repository.getDueDateOverrides();
 			const gradebook = computeGradebook(
 				assignments,
 				submissions,
 				examDate,
 				activeAssignmentId,
-				gradeWeights
+				gradeWeights,
+				overrides
 			);
 			const domainProgress = await repository.getAllDomainProgress();
 			const completedExams = (await repository.getAllCompletedSessions())
@@ -148,7 +166,7 @@ export function createCourseService({
 				const moduleLessons = lessons.filter((l) => l.moduleId === module.id);
 				const moduleAssignments = assignments.filter((a) => a.moduleId === module.id);
 				const assignmentViews = moduleAssignments.map((a) =>
-					buildAssignmentView(a, examDate, submissions, activeAssignmentId)
+					buildAssignmentView(a, examDate, submissions, activeAssignmentId, overrides)
 				);
 				return {
 					module,
@@ -214,7 +232,15 @@ export function createCourseService({
 			const submissions = await repository.getSubmissions();
 			const activeAssignmentId =
 				(await repository.getActiveSession())?.summary.assignment_id ?? null;
-			return computeGradebook(assignments, submissions, examDate, activeAssignmentId, gradeWeights);
+			const overrides = await repository.getDueDateOverrides();
+			return computeGradebook(
+				assignments,
+				submissions,
+				examDate,
+				activeAssignmentId,
+				gradeWeights,
+				overrides
+			);
 		},
 		async getReadiness() {
 			const domainProgress = await repository.getAllDomainProgress();
@@ -227,6 +253,31 @@ export function createCourseService({
 		},
 		async setExamDate(examDate) {
 			await repository.setExamDate(examDate);
+		},
+		async previewExamDate(toExamDate) {
+			const [assignments, overrides] = await Promise.all([
+				repository.getCourseAssignments(),
+				repository.getDueDateOverrides()
+			]);
+			return previewExamDateShift(
+				assignments,
+				await repository.getExamDate(),
+				toExamDate,
+				overrides
+			);
+		},
+		async setDueDateOverride(assignmentId, dueDate) {
+			// `null` clears; otherwise a validated calendar date key. Membership is
+			// checked against the active course so overrides can't reference foreign ids.
+			if (dueDate !== null && parseDateKey(dueDate) === null)
+				throw new QuizServiceError('INVALID_REQUEST', 'dueDate must be a real YYYY-MM-DD date.');
+			const assignments = await repository.getCourseAssignments();
+			if (!assignments.some((a) => a.id === assignmentId))
+				throw new QuizServiceError(
+					'INVALID_REQUEST',
+					`Unknown assignment for this course: ${assignmentId}`
+				);
+			await repository.setDueDateOverride(assignmentId, dueDate);
 		},
 		async setLessonCompleted(lessonId, completed) {
 			await repository.setLessonCompleted(lessonId, completed);

@@ -29,6 +29,7 @@ const runtimeTables = [
 	'study_log',
 	'course_meta',
 	'course_assignment_submissions',
+	'course_assignment_overrides',
 	'course_lesson_completions',
 	'google_oauth',
 	'google_synced_events'

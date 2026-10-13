@@ -104,7 +104,13 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into SQLite on fi
   history page, relaunch a practice session containing only the missed questions.
 - **Scheduling:** every assignment has a `dueOffsetDays` (negative = days before exam). The exam
   date lives in `course_meta` (`exam_date`, default: **last day of the current month**) and can be
-  changed from the Syllabus page — changing it reschedules every due date.
+  changed from the Syllabus page or `/admin` — changing it reschedules every due date, and the
+  editor previews each shift before saving (`POST /api/course/exam-date/preview`). Any assignment
+  can also carry a **per-scope due-date override** (`course_assignment_overrides`, keyed
+  `(profile_id, course_id, assignment_id)`): an explicit `YYYY-MM-DD` that beats the derived
+  date everywhere (`effectiveDueDate()` in `course.ts` is the single precedence point — home,
+  syllabus, modules, assignment detail, gradebook, status, and Google Calendar sync). Overrides
+  hold still when the exam date moves; clearing one returns the assignment to the schedule.
 
 ### Gradebook
 
@@ -135,7 +141,8 @@ over the same pool, and all reads/writes filter by the scope.
   `(profile_id, course_id)`; `quiz_session_state`, `quiz_session_responses` keyed by session.
 - Course layer: `course_meta` (`(profile_id, course_id, key)` — per-scope
   `exam_date`), `course_modules` / `course_lessons` / `course_assignments`
-  (content, `course_id` column), `course_assignment_submissions` and
+  (content, `course_id` column), `course_assignment_overrides` (per-scope
+  explicit due dates), `course_assignment_submissions` and
   `course_lesson_completions` (scoped by `profile_id`).
 - Review layer: `review_cards` (`(profile_id, course_id, question_id)`),
   `study_log` (`(profile_id, date_key)` — streaks are per-profile, not per-course).
@@ -171,7 +178,9 @@ wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
 | `GET`  | `/api/course/modules/[id]` | Single module (lessons + assignments) |
 | `GET`  | `/api/course/assignments/[id]` | Assignment detail incl. best submission + launch config |
 | `POST` | `/api/course/lessons/[id]` | Mark lesson `{ completed: boolean }` |
-| `POST` | `/api/course/exam-date` | Set exam date `{ examDate: 'YYYY-MM-DD' }` (reschedules all) |
+| `POST` | `/api/course/exam-date` | Set exam date `{ examDate: 'YYYY-MM-DD' }` (real calendar date; reschedules all non-overridden assignments) |
+| `POST` | `/api/course/exam-date/preview` | Dry-run: `{ examDate }` → per-assignment `{ from, to, overridden }` shifts, nothing saved |
+| `POST` | `/api/course/due-date` | `{ assignmentId, dueDate: 'YYYY-MM-DD' \| null }` — pin or clear a per-scope due-date override (assignment must belong to the active course) |
 | `GET`  | `/api/gradebook` | `{ gradebook, readiness }` |
 | `GET`  | `/api/mastery` | Per-objective + per-domain accuracy across all 28 SY0-701 objectives (from `quiz_answers`) |
 | `GET`  | `/api/review` | Daily-review summary: streak, due cards, today count, 84-day heatmap, wall of shame (with wall items) |
@@ -188,6 +197,9 @@ wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
 | `GET`  | `/api/calendar/google/events?start&end` | Merged events from the user's visible calendars (server-side proxy) |
 | `POST` | `/api/calendar/google/sync` | Pushes exam + assignment deadlines into the per-course "… Prep" calendar (create/update/delete) |
 | `POST` | `/api/calendar/google/disconnect` | Clears the stored OAuth token + sync tracking |
+| `POST` | `/api/admin/reset` | Full progress reset for the ACTIVE profile+course (from scope cookies). Requires `{ confirm: true }`. Wipes quiz sessions/answers/state/responses, domain progress, review cards, study log (per-profile by design), this course's submissions + lesson completions. Profiles, content, exam date, and overrides survive. |
+| `GET`  | `/api/admin/backup` | Download the active profile+course progress as JSON (`course-progress-backup` v1: sessions+state+responses+answers, domain progress, review cards, study log, submissions, lesson completions, exam date, overrides) |
+| `POST` | `/api/admin/backup` | Restore a backup into the active scope: same `courseId` required (400 `COURSE_MISMATCH`), payload validated by `parseProgressBackup` (400 `INVALID_BACKUP`), progress wiped first, session ids remapped |
 
 ## Frontend Pages (Svelte 5 runes, Tailwind CSS v4)
 
@@ -201,6 +213,7 @@ wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
 | `/calendar` | `src/routes/calendar/+page.svelte` | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`) |
 | `/quiz` `/scenarios` `/pbq` | existing | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session |
 | `/review` | `src/routes/review/+page.svelte` | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame |
+| `/admin` | `src/routes/admin/+page.svelte` | **Self-service administration** — exam-date editor (with shift preview), per-assignment due-date overrides, backup export/import, progress reset (type-RESET gate), and profile management. All scoping resolved server-side from the scope cookies. |
 | `/mastery` | `src/routes/mastery/+page.svelte` | **Mastery matrix** — per-course objectives color-coded by accuracy (grid renders from `COURSE_META[course].objectives`); tap any cell to drill it (5-question practice session filtered to that objective) |
 | `/progress` `/history` | existing | Legacy analytics |
 
@@ -229,8 +242,11 @@ npm run check        # svelte-check type checking
 npm run test         # vitest, against TEST_DATABASE_URL
 ```
 
-`course.test.ts` covers the course definition, scheduling, assignment status, gradebook math,
-readiness, and the course service end-to-end. DB tests use `createTestRepository()` from
+`course.test.ts` covers the course definition, scheduling (incl. due-date override precedence and
+exam-shift preview), assignment status, gradebook math, readiness, and the course service
+end-to-end. `admin.test.ts` covers the scoped progress reset (target scope wiped, other profile +
+other course intact) and the backup export→wipe→import round trip plus import validation. DB tests
+use `createTestRepository()` from
 `test-db.ts` (fresh truncated + reseeded Postgres per call, `TEST_DATABASE_URL` only).
 `db-pg.test.ts` covers scope isolation between profiles, the 2-profile cap,
 DB-enforced single active session, completion timing persistence, and seed healing.

@@ -55,3 +55,17 @@ export function relativeDue(days: number): string {
 	if (days === 1) return 'Due tomorrow';
 	return `Due in ${days} days`;
 }
+
+/**
+ * Validates a calendar date key: strict YYYY-MM-DD shape AND a real calendar
+ * date (2026-02-30 is rejected, not clamped). Returns the normalized key or
+ * null. Shared by the client-side editors and the server API boundary.
+ */
+export function parseDateKey(value: unknown): string | null {
+	if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+	const [year, month, day] = value.split('-').map(Number) as [number, number, number];
+	const date = new Date(year, month - 1, day);
+	if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day)
+		return null;
+	return value;
+}

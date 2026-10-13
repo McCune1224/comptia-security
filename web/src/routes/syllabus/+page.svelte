@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import StatusChip from '$lib/components/StatusChip.svelte';
+	import ExamDateEditor from '$lib/components/ExamDateEditor.svelte';
 	import { formatDate, relativeDue } from '$lib/utils';
 
 	type AssignmentView = {
@@ -14,6 +15,8 @@
 			durationMinutes: number;
 		};
 		dueDateLabel: string;
+		overridden: boolean;
+		derivedDueDateLabel: string;
 		daysUntilDue: number;
 		status: 'open' | 'due-soon' | 'overdue' | 'in-progress' | 'submitted';
 		bestSubmission: { percentage: number } | null;
@@ -33,35 +36,14 @@
 		null
 	);
 	let error = $state('');
-	let examDateInput = $state('');
-	let savingExamDate = $state(false);
-	let examDateSaved = $state(false);
 
-	onMount(async () => {
+	async function load() {
 		const response = await fetch('/api/course/syllabus');
-		if (response.ok) {
-			const payload = await response.json();
-			data = payload;
-			examDateInput = payload.examDate;
-		} else error = 'Unable to load the syllabus.';
-	});
-
-	async function saveExamDate() {
-		if (!/^\d{4}-\d{2}-\d{2}$/.test(examDateInput)) return;
-		savingExamDate = true;
-		examDateSaved = false;
-		const response = await fetch('/api/course/exam-date', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ examDate: examDateInput })
-		});
-		savingExamDate = false;
-		if (response.ok) {
-			examDateSaved = true;
-			const refreshed = await fetch('/api/course/syllabus');
-			if (refreshed.ok) data = await refreshed.json();
-		}
+		if (response.ok) data = await response.json();
+		else error = 'Unable to load the syllabus.';
 	}
+
+	onMount(load);
 
 	function kindLabel(kind: string): string {
 		return kind === 'quiz'
@@ -87,29 +69,8 @@
 					? `${-data.daysUntilExam} days ago`
 					: `${data.daysUntilExam} days to go`}
 			</p>
-			<div class="mt-4 flex flex-wrap items-center gap-2">
-				<label class="text-sm font-semibold text-text-muted" for="exam-date-input"
-					>Change exam date</label
-				>
-				<input
-					id="exam-date-input"
-					type="date"
-					class="h-11 rounded-md border border-border-strong bg-surface-800 px-3 text-sm text-text-primary"
-					bind:value={examDateInput}
-				/>
-				<button
-					class="btn btn-primary h-11 px-4 text-xs"
-					type="button"
-					disabled={savingExamDate || !/^\d{4}-\d{2}-\d{2}$/.test(examDateInput)}
-					onclick={saveExamDate}
-				>
-					{savingExamDate ? 'Saving…' : 'Save'}
-				</button>
-				{#if examDateSaved}
-					<span class="text-xs font-semibold text-success"
-						>Schedule updated — all due dates recalculated.</span
-					>
-				{/if}
+			<div class="mt-4 max-w-xl">
+				<ExamDateEditor examDate={data.examDate} onsaved={load} />
 			</div>
 		{/if}
 	</div>
@@ -196,6 +157,13 @@
 										: 'text-text-muted'}"
 								>
 									{item.dueDateLabel}
+									{#if item.overridden}
+										<span
+											class="chip ml-1 bg-accent/15 text-accent"
+											title="Pinned by a due-date override (schedule would give {item.derivedDueDateLabel})"
+											>pinned</span
+										>
+									{/if}
 								</span>
 								<span class="hidden text-xs text-text-subtle lg:block">
 									{relativeDue(item.daysUntilDue)}

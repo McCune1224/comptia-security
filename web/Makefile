@@ -4,7 +4,6 @@ HOME_DIR ?= /home/$(DEPLOY_USER)
 REPO_DIR ?= $(HOME_DIR)/comptia-security
 WEB_DIR ?= $(REPO_DIR)/web
 NODE ?= /usr/local/bin/node
-DB ?= $(WEB_DIR)/data/quiz.db
 BACKUP_DIR ?= $(WEB_DIR)/data/backups
 
 .PHONY: pull install check test verify build restart deploy update status logs start stop reset-runtime
@@ -48,19 +47,24 @@ start:
 stop:
 	sudo systemctl stop $(SERVICE)
 
+# Wipes per-user runtime rows from the PostgreSQL database named by
+# DATABASE_URL (the runtime DB), preserving profiles and course content.
+# Dumps a pg_dump backup first when pg_dump is installed.
 reset-runtime:
 	@test "$(CONFIRM)" = "YES" || (echo 'Refusing reset: rerun with CONFIRM=YES'; exit 2)
-	@test -f "$(DB)" || (echo "Database not found: $(DB)"; exit 2)
 	@set -eu; \
+		db_url=$${DATABASE_URL:?DATABASE_URL is not set — export it (see web/.env.example) before resetting}; \
 		stamp=$$(date +%Y%m%d-%H%M%S); \
-		backup="$(BACKUP_DIR)/quiz.db.before-clean-slate-$$stamp"; \
 		mkdir -p "$(BACKUP_DIR)"; \
+		backup="$(BACKUP_DIR)/runtime-before-reset-$$stamp.sql"; \
+		if command -v pg_dump >/dev/null 2>&1; then \
+			echo "Backing up to $$backup"; \
+			pg_dump "$$db_url" > "$$backup"; \
+		else \
+			echo "pg_dump not found — continuing without a backup."; \
+		fi; \
 		sudo systemctl stop "$(SERVICE)"; \
 		trap 'sudo systemctl start "$(SERVICE)"' EXIT; \
-		cp --preserve=mode,timestamps "$(DB)" "$$backup"; \
-		[ ! -f "$(DB)-wal" ] || cp --preserve=mode,timestamps "$(DB)-wal" "$$backup-wal"; \
-		[ ! -f "$(DB)-shm" ] || cp --preserve=mode,timestamps "$(DB)-shm" "$$backup-shm"; \
 		cd "$(WEB_DIR)"; \
-		"$(NODE)" scripts/reset-runtime.mjs --db "$(DB)" --yes; \
-		echo "Backup: $$backup"; \
+		"$(NODE)" scripts/reset-runtime.mjs --database-url "$$db_url" --yes; \
 		echo "Service will start automatically."

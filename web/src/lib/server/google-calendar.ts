@@ -8,7 +8,7 @@ import {
 	type StoredSyncedEvent as SyncedEvent
 } from './db';
 import { quizRepository } from './db-pg';
-import { assignmentDueDate, COURSE_META } from './course';
+import { effectiveDueDate, toDateKey, COURSE_META } from './course';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Google Calendar integration — OAuth2 (PKCE) + Calendar v3 API client.
@@ -333,6 +333,7 @@ function toEventView(event: CalendarEvent, calendarName: string): CalendarEventV
 export async function planSyncEvents(scope: Scope = DEFAULT_SCOPE): Promise<PlannedEvent[]> {
 	const repo = createScopedRepo(quizRepository(), scope);
 	const examDate = await repo.getExamDate();
+	const dueOverrides = await repo.getDueDateOverrides();
 	const examName = COURSE_META[scope.courseId]?.examName ?? 'Certification Exam';
 	const planned: PlannedEvent[] = [
 		{
@@ -343,7 +344,7 @@ export async function planSyncEvents(scope: Scope = DEFAULT_SCOPE): Promise<Plan
 		}
 	];
 	for (const assignment of await repo.getCourseAssignments()) {
-		const due = assignmentDueDate(assignment, examDate);
+		const due = effectiveDueDate(assignment, examDate, dueOverrides);
 		planned.push({
 			source: `assignment:${assignment.id}`,
 			summary: assignment.title,
@@ -352,13 +353,6 @@ export async function planSyncEvents(scope: Scope = DEFAULT_SCOPE): Promise<Plan
 		});
 	}
 	return planned;
-}
-
-function toDateKey(date: Date): string {
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const day = String(date.getDate()).padStart(2, '0');
-	return `${year}-${month}-${day}`;
 }
 
 function nextDayKey(dateKey: string): string {

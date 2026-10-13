@@ -7,7 +7,11 @@ import {
 	computeGradebook,
 	computeReadiness,
 	defaultExamDate,
+	effectiveDueDate,
+	formatDate,
 	letterForPercentage,
+	parseDateKey,
+	previewExamDateShift,
 	sessionLaunchFor
 } from './course';
 import { createCourseService } from './course-service';
@@ -37,6 +41,75 @@ describe('CourseDefinition', () => {
 		expect(sessionLaunchFor(pbq).type).toBe('pbq');
 		const domainQuiz = COURSE_DEFINITION.assignments.find((a) => a.id === 'a1-1')!;
 		expect(sessionLaunchFor(domainQuiz)).toMatchObject({ type: 'quiz', domain: 1, count: 20 });
+	});
+});
+
+describe('Due-date overrides (pure scheduling)', () => {
+	const examDate = '2026-10-15';
+	const a1 = COURSE_DEFINITION.assignments[0]; // a1-1, derived: exam - 24 days = Sep 21
+
+	function key(date: Date): string {
+		return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+	}
+
+	it('rejects malformed and impossible date keys, accepts real ones', () => {
+		expect(parseDateKey('2026-09-30')).toBe('2026-09-30');
+		expect(parseDateKey('2026-9-30')).toBeNull();
+		expect(parseDateKey('2026-13-01')).toBeNull();
+		expect(parseDateKey('2026-02-30')).toBeNull();
+		expect(parseDateKey('not-a-date')).toBeNull();
+		expect(parseDateKey(42)).toBeNull();
+	});
+
+	it('an explicit override beats the derived exam-anchored date', () => {
+		expect(key(assignmentDueDate(a1, examDate))).toBe('2026-09-21');
+		expect(key(effectiveDueDate(a1, examDate, { 'a1-1': '2026-09-30' }))).toBe('2026-09-30');
+		// Assignments without an override keep the derived date.
+		expect(key(effectiveDueDate(a1, examDate, { 'a1-2': '2026-09-30' }))).toBe('2026-09-21');
+	});
+
+	it('status honours the override (a past override is overdue even when derived is open)', () => {
+		// Derived date is far in the future relative to "today" → open.
+		const derived = assignmentStatus(a1, '2999-01-01', [], null);
+		expect(derived).toBe('open');
+		const overridden = assignmentStatus(a1, '2999-01-01', [], null, { 'a1-1': '2020-01-01' });
+		expect(overridden).toBe('overdue');
+	});
+
+	it('gradebook rows carry the effective due date and the overridden flag', () => {
+		const gradebook = computeGradebook(
+			COURSE_DEFINITION.assignments,
+			[],
+			examDate,
+			null,
+			undefined,
+			{
+				'a1-1': '2026-09-30'
+			}
+		);
+		const row = gradebook.assignments.find((a) => a.assignment.id === 'a1-1')!;
+		expect(row.overridden).toBe(true);
+		expect(formatDate(row.dueDate)).toBe('Sep 30, 2026');
+		const clean = gradebook.assignments.find((a) => a.assignment.id === 'a1-2')!;
+		expect(clean.overridden).toBe(false);
+	});
+
+	it('preview shows which dates move with the exam and which stay pinned', () => {
+		const overrides = { 'a1-1': '2026-09-30' };
+		const shifts = previewExamDateShift(
+			COURSE_DEFINITION.assignments,
+			examDate,
+			'2026-11-15',
+			overrides
+		);
+		const pinned = shifts.find((shift) => shift.assignmentId === 'a1-1')!;
+		expect(pinned.overridden).toBe(true);
+		expect(key(pinned.from)).toBe('2026-09-30');
+		expect(key(pinned.to)).toBe('2026-09-30'); // holds still
+		const moving = shifts.find((shift) => shift.assignmentId === 'a1-2')!; // -22 days
+		expect(moving.overridden).toBe(false);
+		expect(key(moving.from)).toBe('2026-09-23');
+		expect(key(moving.to)).toBe('2026-10-24'); // shifts +31 days with the exam
 	});
 });
 
@@ -234,6 +307,60 @@ describe('CourseService', () => {
 		const firstDue = overview.modules[0].assignments[0];
 		expect(firstDue.assignment.id).toBe('a1-1');
 		expect(firstDue.dueDateLabel).toBe('Sep 21, 2026'); // -24 days
+		await repository.close();
+	});
+
+	it('pins a due-date override that beats the schedule and survives exam-date moves', async () => {
+		const repository = await createTestRepository();
+		const service = createCourseService({ repository });
+		await service.setExamDate('2026-10-15');
+		await service.setDueDateOverride('a1-1', '2026-09-30');
+
+		const overview = await service.getOverview();
+		const pinned = overview.modules[0].assignments[0];
+		expect(pinned.assignment.id).toBe('a1-1');
+		expect(pinned.overridden).toBe(true);
+		expect(pinned.dueDateLabel).toBe('Sep 30, 2026');
+		expect(pinned.derivedDueDateLabel).toBe('Sep 21, 2026');
+		const following = overview.modules[0].assignments[1]; // a1-2, no override
+		expect(following.overridden).toBe(false);
+		expect(following.dueDateLabel).toBe('Sep 23, 2026');
+
+		// The gradebook shows the same effective dates.
+		const gradebook = await service.getGradebook();
+		const gradeRow = gradebook.assignments.find((a) => a.assignment.id === 'a1-1')!;
+		expect(gradeRow.overridden).toBe(true);
+		expect(formatDate(gradeRow.dueDate)).toBe('Sep 30, 2026');
+
+		// Moving the exam shifts every derived date but the pinned one holds still.
+		await service.setExamDate('2026-11-15');
+		const moved = await service.getOverview();
+		expect(moved.modules[0].assignments[0].dueDateLabel).toBe('Sep 30, 2026'); // pinned
+		expect(moved.modules[0].assignments[1].dueDateLabel).toBe('Oct 24, 2026'); // -22 days
+
+		// Preview (dry run): the pinned assignment never moves; the derived one does.
+		const shifts = await service.previewExamDate('2026-12-15');
+		expect(shifts.find((shift) => shift.assignmentId === 'a1-1')).toMatchObject({
+			overridden: true,
+			from: moved.modules[0].assignments[0].dueDate,
+			to: moved.modules[0].assignments[0].dueDate
+		});
+		const derivedShift = shifts.find((shift) => shift.assignmentId === 'a1-2')!;
+		expect(derivedShift.overridden).toBe(false);
+		expect(formatDate(derivedShift.to)).toBe('Nov 23, 2026'); // -22 days from Dec 15
+
+		// Clearing the override returns the assignment to the derived schedule.
+		await service.setDueDateOverride('a1-1', null);
+		const cleared = await service.getOverview();
+		expect(cleared.modules[0].assignments[0].overridden).toBe(false);
+		expect(cleared.modules[0].assignments[0].dueDateLabel).toBe('Oct 22, 2026'); // -24 days
+		expect(cleared.modules[0].assignments[0].derivedDueDateLabel).toBe('Oct 22, 2026');
+
+		// Validation: impossible dates and foreign assignments are refused.
+		await expect(service.setDueDateOverride('a1-1', '2026-02-30')).rejects.toThrow('YYYY-MM-DD');
+		await expect(service.setDueDateOverride('does-not-exist', '2026-09-30')).rejects.toThrow(
+			'Unknown assignment'
+		);
 		await repository.close();
 	});
 

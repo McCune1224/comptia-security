@@ -20,6 +20,8 @@
 			durationMinutes: number;
 		};
 		dueDateLabel: string;
+		overridden: boolean;
+		derivedDueDateLabel: string;
 		daysUntilDue: number;
 		status: 'open' | 'due-soon' | 'overdue' | 'in-progress' | 'submitted';
 		bestSubmission: { percentage: number; completedAt: string; sessionId: string } | null;
@@ -105,6 +107,9 @@
 					<p class="text-xs font-semibold text-text-muted">Due date</p>
 					<p class="font-bold {view.daysUntilDue < 0 ? 'text-danger' : 'text-text-primary'}">
 						{view.dueDateLabel}
+						{#if view.overridden}
+							<span class="chip ml-1 bg-accent/15 text-accent align-middle">pinned</span>
+						{/if}
 					</p>
 					<p class="text-xs text-text-muted">{relativeDue(view.daysUntilDue)}</p>
 				</div>

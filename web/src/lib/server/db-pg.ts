@@ -27,6 +27,45 @@ import { DEFAULT_SCOPE, MAX_PROFILES } from './db';
 import { applyPgSchema } from './schema-pg';
 import { seedCourseContent } from './pg-seed';
 import { ScopedReadCache, type ScopedCacheStats } from './scoped-cache';
+import {
+	BACKUP_FORMAT,
+	BACKUP_VERSION,
+	type BackupAnswer,
+	type BackupSessionResponse,
+	type ProgressBackup
+} from './backup';
+
+/**
+ * Deletes every progress row for one profile+course scope inside a transaction:
+ * quiz sessions (children first), answers, domain progress, review cards, the
+ * profile's study log, and this course's submissions + lesson completions.
+ * Profiles, course content, exam date and due-date overrides are untouched.
+ * Study days are per-profile by design (streaks span courses), so they wipe
+ * profile-wide — the table has no course column to filter by.
+ */
+async function wipeScopeProgress(tx: postgres.TransactionSql, scope: Scope): Promise<void> {
+	await tx`DELETE FROM quiz_session_responses WHERE session_id IN (
+		SELECT id FROM quiz_sessions WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}
+	)`;
+	await tx`DELETE FROM quiz_session_state WHERE session_id IN (
+		SELECT id FROM quiz_sessions WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}
+	)`;
+	await tx`DELETE FROM quiz_answers
+		WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+	await tx`DELETE FROM quiz_sessions
+		WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+	await tx`DELETE FROM domain_progress
+		WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+	await tx`DELETE FROM review_cards
+		WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+	await tx`DELETE FROM study_log WHERE profile_id = ${scope.profileId}`;
+	await tx`DELETE FROM course_assignment_submissions
+		WHERE profile_id = ${scope.profileId}
+			AND assignment_id IN (SELECT id FROM course_assignments WHERE course_id = ${scope.courseId})`;
+	await tx`DELETE FROM course_lesson_completions
+		WHERE profile_id = ${scope.profileId}
+			AND lesson_id IN (SELECT id FROM course_lessons WHERE course_id = ${scope.courseId})`;
+}
 
 /**
  * Resolves the PostgreSQL connection string the same way the Google Calendar
@@ -366,6 +405,256 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 				await sql`INSERT INTO course_meta (profile_id, course_id, key, value)
 					VALUES (${scope.profileId}, ${scope.courseId}, 'exam_date', ${examDate})
 					ON CONFLICT (profile_id, course_id, key) DO UPDATE SET value = EXCLUDED.value`;
+				cache.invalidateScope(scope);
+			},
+			async getDueDateOverrides() {
+				const rows = await sql`SELECT assignment_id, due_date FROM course_assignment_overrides
+					WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+				const overrides: Record<string, string> = {};
+				for (const row of rows) overrides[row.assignment_id as string] = row.due_date as string;
+				return overrides;
+			},
+			async setDueDateOverride(assignmentId, dueDate) {
+				if (dueDate === null)
+					await sql`DELETE FROM course_assignment_overrides
+						WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}
+							AND assignment_id = ${assignmentId}`;
+				else
+					await sql`INSERT INTO course_assignment_overrides (profile_id, course_id, assignment_id, due_date, updated_at)
+						VALUES (${scope.profileId}, ${scope.courseId}, ${assignmentId}, ${dueDate}, ${new Date().toISOString()})
+						ON CONFLICT (profile_id, course_id, assignment_id) DO UPDATE
+						SET due_date = EXCLUDED.due_date, updated_at = EXCLUDED.updated_at`;
+				cache.invalidateScope(scope);
+			},
+			async resetProgress() {
+				await sql.begin((tx) => wipeScopeProgress(tx, scope));
+				cache.invalidateScope(scope);
+			},
+			async exportProgress() {
+				cache.bypass();
+				const sessionFilter = sql`
+					WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+				const [
+					examDate,
+					overrideRows,
+					sessionRows,
+					answerRows,
+					domainRows,
+					cardRows,
+					logRows,
+					submissionRows,
+					completionRows
+				] = await Promise.all([
+					this.getExamDate(),
+					this.getDueDateOverrides(),
+					sql`SELECT * FROM quiz_sessions ${sessionFilter} ORDER BY started_at`,
+					sql`SELECT * FROM quiz_answers ${sessionFilter}`,
+					sql`SELECT * FROM domain_progress ${sessionFilter} ORDER BY domain`,
+					sql`SELECT * FROM review_cards ${sessionFilter}`,
+					sql`SELECT * FROM study_log WHERE profile_id = ${scope.profileId} ORDER BY date_key`,
+					sql`SELECT * FROM course_assignment_submissions
+							WHERE profile_id = ${scope.profileId}
+								AND assignment_id IN (SELECT id FROM course_assignments WHERE course_id = ${scope.courseId})`,
+					sql`SELECT * FROM course_lesson_completions
+							WHERE profile_id = ${scope.profileId}
+								AND lesson_id IN (SELECT id FROM course_lessons WHERE course_id = ${scope.courseId})`
+				]);
+				const sessionIds = sessionRows.map((row) => row.id as string);
+				const [stateRows, responseRows] = await Promise.all([
+					sessionIds.length
+						? sql`SELECT * FROM quiz_session_state WHERE session_id IN ${sql(sessionIds)}`
+						: [],
+					sessionIds.length
+						? sql`SELECT * FROM quiz_session_responses WHERE session_id IN ${sql(sessionIds)}`
+						: []
+				]);
+				const stateBySession = new Map(stateRows.map((row) => [row.session_id as string, row]));
+				const responsesBySession = new Map<string, BackupSessionResponse[]>();
+				for (const row of responseRows) {
+					const list = responsesBySession.get(row.session_id as string) ?? [];
+					list.push({
+						questionIndex: row.question_index as number,
+						responseJson: (row.response_json as string | null) ?? null,
+						flagged: row.flagged as number,
+						retries: row.retries as number,
+						hintUsed: row.hint_used as number,
+						answeredAt: (row.answered_at as string | null) ?? null
+					});
+					responsesBySession.set(row.session_id as string, list);
+				}
+				const answersBySession = new Map<string, BackupAnswer[]>();
+				for (const row of answerRows) {
+					const list = answersBySession.get(row.session_id as string) ?? [];
+					list.push({
+						questionIndex: row.question_index as number,
+						prompt: row.prompt as string,
+						domain: row.domain as number,
+						category: (row.category as string | null) ?? null,
+						correctAnswer: (row.correct_answer as string) ?? '',
+						userAnswer: (row.user_answer as string) ?? '',
+						isCorrect: row.is_correct as number,
+						questionId: (row.question_id as string | null) ?? null,
+						objective: (row.objective as string | null) ?? null,
+						responseJson: (row.response_json as string | null) ?? null,
+						pointsEarned: Number(row.points_earned),
+						pointsPossible: Number(row.points_possible)
+					});
+					answersBySession.set(row.session_id as string, list);
+				}
+				return {
+					format: BACKUP_FORMAT,
+					version: BACKUP_VERSION,
+					courseId: scope.courseId,
+					exportedAt: new Date().toISOString(),
+					examDate,
+					dueDateOverrides: overrideRows,
+					sessions: sessionRows.map((row) => ({
+						id: row.id as string,
+						startedAt: row.started_at as string,
+						completedAt: (row.completed_at as string | null) ?? null,
+						type: row.type as string,
+						domain: (row.domain as number | null) ?? null,
+						totalQuestions: row.total_questions as number,
+						correctAnswers: row.correct_answers as number,
+						mode: row.mode as string,
+						status: row.status as string,
+						pointsEarned: Number(row.points_earned),
+						pointsPossible: Number(row.points_possible),
+						updatedAt: row.updated_at as string,
+						assignmentId: (row.assignment_id as string | null) ?? null,
+						elapsedSeconds: (row.elapsed_seconds as number | null) ?? null,
+						durationSeconds: (row.duration_seconds as number | null) ?? null,
+						state: (() => {
+							const state = stateBySession.get(row.id as string);
+							return state
+								? {
+										deadlineAt: (state.deadline_at as string | null) ?? null,
+										currentIndex: state.current_index as number,
+										questionsJson: state.questions_json as string,
+										resultJson: (state.result_json as string | null) ?? null
+									}
+								: null;
+						})(),
+						responses: (responsesBySession.get(row.id as string) ?? []).sort(
+							(a, b) => a.questionIndex - b.questionIndex
+						),
+						answers: (answersBySession.get(row.id as string) ?? []).sort(
+							(a, b) => a.questionIndex - b.questionIndex
+						)
+					})),
+					domainProgress: domainRows.map((row) => ({
+						domain: row.domain as number,
+						totalAttempted: row.total_attempted as number,
+						totalCorrect: row.total_correct as number,
+						pointsEarned: Number(row.points_earned),
+						pointsPossible: Number(row.points_possible),
+						lastReviewedAt: (row.last_reviewed_at as string | null) ?? null
+					})),
+					reviewCards: cardRows.map((row) => ({
+						questionId: row.question_id as string,
+						intervalDays: Number(row.interval_days),
+						ease: Number(row.ease),
+						lapses: row.lapses as number,
+						dueAt: row.due_at as string,
+						lastResult: (row.last_result as ReviewCardRow['lastResult']) ?? null,
+						reviewCount: row.review_count as number,
+						firstSeenAt: row.first_seen_at as string
+					})),
+					studyLog: logRows.map((row) => ({
+						dateKey: row.date_key as string,
+						questions: row.questions as number,
+						sessions: row.sessions as number,
+						updatedAt: row.updated_at as string
+					})),
+					submissions: submissionRows.map((row) => ({
+						assignmentId: row.assignment_id as string,
+						sessionId: row.session_id as string,
+						earned: Number(row.earned),
+						percentage: Number(row.percentage),
+						completedAt: row.completed_at as string
+					})),
+					lessonCompletions: completionRows.map((row) => ({
+						lessonId: row.lesson_id as string,
+						completedAt: row.completed_at as string
+					}))
+				};
+			},
+			async importProgress(backup) {
+				if (backup.courseId !== scope.courseId)
+					throw new Error(
+						`Backup is for course ${backup.courseId} but the active course is ${scope.courseId}.`
+					);
+				await sql.begin(async (tx) => {
+					await wipeScopeProgress(tx, scope);
+					// Configuration travels with the backup (exam date + due-date overrides).
+					// The document is the source of truth: overrides absent from it are dropped.
+					await tx`INSERT INTO course_meta (profile_id, course_id, key, value)
+						VALUES (${scope.profileId}, ${scope.courseId}, 'exam_date', ${backup.examDate})
+						ON CONFLICT (profile_id, course_id, key) DO UPDATE SET value = EXCLUDED.value`;
+					await tx`DELETE FROM course_assignment_overrides
+						WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+					const assignmentRows =
+						await tx`SELECT id FROM course_assignments WHERE course_id = ${scope.courseId}`;
+					const knownAssignments = new Set(assignmentRows.map((row) => row.id as string));
+					for (const [assignmentId, dueDate] of Object.entries(backup.dueDateOverrides)) {
+						if (!knownAssignments.has(assignmentId)) continue;
+						await tx`INSERT INTO course_assignment_overrides (profile_id, course_id, assignment_id, due_date, updated_at)
+							VALUES (${scope.profileId}, ${scope.courseId}, ${assignmentId}, ${dueDate}, ${backup.exportedAt})
+							ON CONFLICT (profile_id, course_id, assignment_id) DO UPDATE
+							SET due_date = EXCLUDED.due_date, updated_at = EXCLUDED.updated_at`;
+					}
+					// Session ids are remapped so a backup can never collide with live rows.
+					const sessionIdMap = new Map<string, string>();
+					for (const session of backup.sessions) {
+						const newId = crypto.randomUUID();
+						sessionIdMap.set(session.id, newId);
+						await tx`INSERT INTO quiz_sessions (id, started_at, completed_at, type, domain, total_questions, correct_answers, mode, status, points_earned, points_possible, updated_at, assignment_id, profile_id, course_id, elapsed_seconds, duration_seconds)
+							VALUES (${newId}, ${session.startedAt}, ${session.completedAt}, ${session.type}, ${session.domain}, ${session.totalQuestions}, ${session.correctAnswers}, ${session.mode}, ${session.status}, ${session.pointsEarned}, ${session.pointsPossible}, ${session.updatedAt}, ${session.assignmentId}, ${scope.profileId}, ${scope.courseId}, ${session.elapsedSeconds}, ${session.durationSeconds})`;
+						if (session.state)
+							await tx`INSERT INTO quiz_session_state (session_id, schema_version, deadline_at, current_index, questions_json, result_json, updated_at)
+								VALUES (${newId}, 1, ${session.state.deadlineAt}, ${session.state.currentIndex}, ${session.state.questionsJson}, ${session.state.resultJson}, ${session.updatedAt})`;
+						for (const response of session.responses)
+							await tx`INSERT INTO quiz_session_responses (session_id, question_index, response_json, flagged, retries, hint_used, answered_at)
+								VALUES (${newId}, ${response.questionIndex}, ${response.responseJson}, ${response.flagged}, ${response.retries}, ${response.hintUsed}, ${response.answeredAt})`;
+						for (const answer of session.answers)
+							await tx`INSERT INTO quiz_answers (session_id, question_index, prompt, domain, category, correct_answer, user_answer, is_correct, question_id, objective, response_json, points_earned, points_possible, profile_id, course_id)
+								VALUES (${newId}, ${answer.questionIndex}, ${answer.prompt}, ${answer.domain}, ${answer.category}, ${answer.correctAnswer}, ${answer.userAnswer}, ${answer.isCorrect}, ${answer.questionId}, ${answer.objective}, ${answer.responseJson}, ${answer.pointsEarned}, ${answer.pointsPossible}, ${scope.profileId}, ${scope.courseId})`;
+					}
+					for (const row of backup.domainProgress)
+						await tx`INSERT INTO domain_progress (profile_id, course_id, domain, total_attempted, total_correct, points_earned, points_possible, last_reviewed_at)
+							VALUES (${scope.profileId}, ${scope.courseId}, ${row.domain}, ${row.totalAttempted}, ${row.totalCorrect}, ${row.pointsEarned}, ${row.pointsPossible}, ${row.lastReviewedAt})
+							ON CONFLICT (profile_id, course_id, domain) DO UPDATE
+							SET total_attempted = EXCLUDED.total_attempted, total_correct = EXCLUDED.total_correct,
+								points_earned = EXCLUDED.points_earned, points_possible = EXCLUDED.points_possible,
+								last_reviewed_at = EXCLUDED.last_reviewed_at`;
+					for (const card of backup.reviewCards)
+						await tx`INSERT INTO review_cards (profile_id, course_id, question_id, interval_days, ease, lapses, due_at, last_result, review_count, first_seen_at)
+							VALUES (${scope.profileId}, ${scope.courseId}, ${card.questionId}, ${card.intervalDays}, ${card.ease}, ${card.lapses}, ${card.dueAt}, ${card.lastResult}, ${card.reviewCount}, ${card.firstSeenAt})
+							ON CONFLICT (profile_id, course_id, question_id) DO UPDATE
+							SET interval_days = EXCLUDED.interval_days, ease = EXCLUDED.ease, lapses = EXCLUDED.lapses,
+								due_at = EXCLUDED.due_at, last_result = EXCLUDED.last_result, review_count = EXCLUDED.review_count`;
+					for (const day of backup.studyLog)
+						await tx`INSERT INTO study_log (profile_id, date_key, questions, sessions, updated_at)
+							VALUES (${scope.profileId}, ${day.dateKey}, ${day.questions}, ${day.sessions}, ${day.updatedAt})
+							ON CONFLICT (profile_id, date_key) DO UPDATE
+							SET questions = EXCLUDED.questions, sessions = EXCLUDED.sessions, updated_at = EXCLUDED.updated_at`;
+					for (const submission of backup.submissions) {
+						if (!knownAssignments.has(submission.assignmentId)) continue;
+						await tx`INSERT INTO course_assignment_submissions (profile_id, assignment_id, session_id, earned, percentage, completed_at)
+							VALUES (${scope.profileId}, ${submission.assignmentId}, ${sessionIdMap.get(submission.sessionId) ?? submission.sessionId}, ${submission.earned}, ${submission.percentage}, ${submission.completedAt})
+							ON CONFLICT (profile_id, assignment_id, session_id) DO UPDATE
+							SET earned = EXCLUDED.earned, percentage = EXCLUDED.percentage, completed_at = EXCLUDED.completed_at`;
+					}
+					const lessonRows =
+						await tx`SELECT id FROM course_lessons WHERE course_id = ${scope.courseId}`;
+					const knownLessons = new Set(lessonRows.map((row) => row.id as string));
+					for (const completion of backup.lessonCompletions) {
+						if (!knownLessons.has(completion.lessonId)) continue;
+						await tx`INSERT INTO course_lesson_completions (profile_id, lesson_id, completed_at)
+							VALUES (${scope.profileId}, ${completion.lessonId}, ${completion.completedAt})
+							ON CONFLICT (profile_id, lesson_id) DO UPDATE SET completed_at = EXCLUDED.completed_at`;
+					}
+				});
 				cache.invalidateScope(scope);
 			},
 			async getCourseModules() {

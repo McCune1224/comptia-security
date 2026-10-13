@@ -18,6 +18,8 @@
 		assignment: { id: string; title: string; kind: string; points: number };
 		percentage: number;
 		dueDate: string;
+		overridden: boolean;
+		derivedDueDateLabel?: string;
 		status: 'open' | 'due-soon' | 'overdue' | 'in-progress' | 'submitted';
 	};
 	type Gradebook = {
@@ -214,7 +216,15 @@
 										{item.assignment.title}
 									</a>
 								</td>
-								<td class="py-3 pr-4 text-text-muted">{formatDate(item.dueDate)}</td>
+								<td class="py-3 pr-4 text-text-muted">
+									{formatDate(item.dueDate)}
+									{#if item.overridden}
+										<span
+											class="chip ml-1 bg-accent/15 text-accent"
+											title="Pinned by a due-date override">pinned</span
+										>
+									{/if}
+								</td>
 								<td class="py-3 pr-4 text-text-muted">{item.assignment.points}</td>
 								<td
 									class="num-display py-3 pr-4 {pctClass(

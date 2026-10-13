@@ -8,6 +8,7 @@ import type {
 } from '$lib/types';
 import type { QuestionDefinition } from './question-bank';
 import type { CourseAssignment, CourseLesson, CourseModule, SubmissionRecord } from './course';
+import type { ProgressBackup } from './backup';
 import type { ScopedCacheStats } from './scoped-cache';
 
 /** Hard cap on profiles (local study app; two users). */
@@ -205,6 +206,21 @@ export interface QuizRepository {
 	>;
 	getExamDate(): Promise<string>;
 	setExamDate(examDate: string): Promise<void>;
+	/** Explicit due dates for this scope: assignment id → YYYY-MM-DD. */
+	getDueDateOverrides(): Promise<Record<string, string>>;
+	/** Sets an explicit due date; `null` clears the override so the schedule derives again. */
+	setDueDateOverride(assignmentId: string, dueDate: string | null): Promise<void>;
+	/**
+	 * Wipes all runtime progress for this scope: quiz sessions (with state,
+	 * responses, answers), domain progress, review cards, the profile's study
+	 * log, and this course's assignment submissions + lesson completions.
+	 * Profiles, course content, exam date and due-date overrides survive.
+	 */
+	resetProgress(): Promise<void>;
+	/** Everything `resetProgress` removes, plus configuration, as a portable document. */
+	exportProgress(): Promise<ProgressBackup>;
+	/** Restores a validated backup into this scope: wipes scoped progress, then reinserts (session ids remapped). */
+	importProgress(backup: ProgressBackup): Promise<void>;
 	getCourseModules(): Promise<CourseModule[]>;
 	getCourseLessons(): Promise<CourseLesson[]>;
 	getCourseAssignments(): Promise<CourseAssignment[]>;

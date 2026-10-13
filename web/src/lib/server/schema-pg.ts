@@ -155,6 +155,14 @@ export const PG_SCHEMA_STATEMENTS: string[] = [
 		completed_at TEXT NOT NULL,
 		PRIMARY KEY (profile_id, assignment_id, session_id)
 	)`,
+	`CREATE TABLE IF NOT EXISTS course_assignment_overrides (
+		profile_id TEXT NOT NULL,
+		course_id TEXT NOT NULL,
+		assignment_id TEXT NOT NULL,
+		due_date TEXT NOT NULL,
+		updated_at TEXT NOT NULL,
+		PRIMARY KEY (profile_id, course_id, assignment_id)
+	)`,
 	`CREATE TABLE IF NOT EXISTS course_lesson_completions (
 		profile_id TEXT NOT NULL,
 		lesson_id TEXT NOT NULL,
@@ -209,6 +217,7 @@ export const PG_RUNTIME_TABLES: string[] = [
 	'study_log',
 	'course_meta',
 	'course_assignment_submissions',
+	'course_assignment_overrides',
 	'course_lesson_completions',
 	'google_oauth',
 	'google_synced_events'
