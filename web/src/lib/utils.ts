@@ -69,3 +69,17 @@ export function parseDateKey(value: unknown): string | null {
 		return null;
 	return value;
 }
+
+/**
+ * Shifts a YYYY-MM-DD key by whole days using calendar arithmetic (DST-safe —
+ * millisecond math drifts across a daylight-saving boundary). Used for all-day
+ * calendar events, whose end is exclusive.
+ */
+export function addDaysToDateKey(key: string, days: number): string {
+	const [year, month, day] = key.split('-').map(Number) as [number, number, number];
+	const date = new Date(year, month - 1, day + days);
+	const y = date.getFullYear();
+	const m = String(date.getMonth() + 1).padStart(2, '0');
+	const d = String(date.getDate()).padStart(2, '0');
+	return `${y}-${m}-${d}`;
+}

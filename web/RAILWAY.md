@@ -29,6 +29,7 @@ railway add --database postgresql
 ```
 
 This will:
+
 - Create a new PostgreSQL database
 - Set the `DATABASE_URL` environment variable automatically
 
@@ -75,6 +76,22 @@ railway run npm run db:setup
 railway run npm run db:seed
 ```
 
+### Schema vs. content after a release
+
+**Schema is automatic.** `src/hooks.server.ts` exports SvelteKit's `init` hook,
+which calls `applyPgSchema` before the server answers its first request. Every
+statement is `CREATE ... IF NOT EXISTS`, so a deploy that adds a table creates it
+itself. No `db:setup` step is needed for schema changes.
+
+**Content is not.** `db:seed` writes rows (course modules, lessons, assignments,
+default profiles), so a release that changes _content_ still needs:
+
+```bash
+railway run npm run db:seed   # idempotent upsert; keeps profile edits
+```
+
+`db:setup` remains useful for a first-ever database and for scripts/CI.
+
 ## Step 6: Migrate Existing Data (Optional)
 
 If you have existing SQLite data you want to migrate:
@@ -89,13 +106,14 @@ railway run npm run db:migrate
 
 ## Environment Variables Reference
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string (set automatically by Railway) |
-| `PORT` | No | Server port. The Docker image sets `PORT=8080` (`EXPOSE 8080`); Railway injects its own `PORT`, which overrides the image value. Without either, adapter-node falls back to 3000 |
-| `GOOGLE_CLIENT_ID` | No | Google Calendar API client ID |
-| `GOOGLE_CLIENT_SECRET` | No | Google Calendar API client secret |
-| `GOOGLE_REDIRECT_URI` | No | OAuth redirect URI (default: auto-detected) |
+| Variable               | Required | Description                                                                                                                                                                                                                            |
+| ---------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`         | Yes      | PostgreSQL connection string (set automatically by Railway)                                                                                                                                                                            |
+| `PORT`                 | No       | Server port. The Docker image sets `PORT=8080` (`EXPOSE 8080`); Railway injects its own `PORT`, which overrides the image value. Without either, adapter-node falls back to 3000                                                       |
+| `BODY_SIZE_LIMIT`      | No       | Largest request body adapter-node will accept (default **512K**). The Docker image sets `6M`, which the `.ics` calendar import needs — its files go up to 4 MB (`web/CALENDAR-FILES.md`). Set it here only to override the image value |
+| `GOOGLE_CLIENT_ID`     | No       | Google Calendar API client ID                                                                                                                                                                                                          |
+| `GOOGLE_CLIENT_SECRET` | No       | Google Calendar API client secret                                                                                                                                                                                                      |
+| `GOOGLE_REDIRECT_URI`  | No       | OAuth redirect URI (default: auto-detected)                                                                                                                                                                                            |
 
 ## Architecture
 
@@ -145,6 +163,17 @@ npm run db:seed
 npm run dev
 ```
 
+> **Manual verification goes to `TEST_DATABASE_URL`, not `DATABASE_URL`.**
+> `web/.env` points `DATABASE_URL` at the deployed database (a Railway public
+> proxy URL, `…proxy.rlwy.net:…`), so `npm run dev`, `db:seed`, `db:setup` and any
+> ad-hoc script run against live data. The test suite and Playwright already
+> prefer `TEST_DATABASE_URL`; do the same for anything manual:
+>
+> ```bash
+> DATABASE_URL="$TEST_DATABASE_URL" npm run db:setup
+> DATABASE_URL="$TEST_DATABASE_URL" node build/index.js
+> ```
+
 ## Production Build
 
 The `Dockerfile` lives at the **repo root** and uses a multi-stage build. Its
@@ -180,15 +209,24 @@ railway run node -e "const sql = require('postgres')(process.env.DATABASE_URL); 
 
 ### Schema Migration Errors
 
-If you see schema errors, run the setup script again:
+Schema changes apply themselves at server startup (`hooks.server.ts` →
+`applyPgSchema`), so a missing table usually means the deploy did not restart.
+Redeploy, then re-check the boot logs:
 
 ```bash
-railway run npm run db:setup
+railway run npm run db:setup   # still available for a first-ever database
 ```
+
+### Calendar import fails with "too large for the server to accept"
+
+The request body passed adapter-node's `BODY_SIZE_LIMIT`. The image sets `6M`; if
+you overrode it, raise it above the import cap (see the environment variables
+table). `npm run dev` has no such limit, so this only shows up in production.
 
 ### Performance Tuning
 
 Railway's PostgreSQL includes connection pooling. The app uses:
+
 - Max 10 connections
 - 20 second idle timeout
 - 10 second connect timeout
@@ -198,6 +236,7 @@ Adjust in `db-pg.ts` if needed.
 ## Cost Considerations
 
 Railway offers:
+
 - **Hobby plan**: $5/month + usage
 - **PostgreSQL**: ~$1-5/month for small databases
 - **Compute**: Pay per second of usage

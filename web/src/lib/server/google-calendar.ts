@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/private';
 import crypto from 'node:crypto';
+import { addDaysToDateKey } from '$lib/utils';
 import {
 	createScopedRepo,
 	DEFAULT_SCOPE,
@@ -8,7 +9,8 @@ import {
 	type StoredSyncedEvent as SyncedEvent
 } from './db';
 import { quizRepository } from './db-pg';
-import { effectiveDueDate, toDateKey, COURSE_META } from './course';
+import { COURSE_META } from './course';
+import { planDeadlineEvents, type CalendarEventView, type PlannedEvent } from './calendar-events';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Google Calendar integration — OAuth2 (PKCE) + Calendar v3 API client.
@@ -30,25 +32,6 @@ const API_BASE = 'https://www.googleapis.com/calendar/v3';
 
 const PREP_CALENDAR_NAME = (courseId: string): string =>
 	`${COURSE_META[courseId as keyof typeof COURSE_META]?.title ?? 'Security+'} Prep`;
-
-export interface CalendarEventView {
-	id: string;
-	summary: string;
-	calendarName: string;
-	allDay: boolean;
-	start: string; // YYYY-MM-DD (all-day) or ISO datetime (timed)
-	startTime?: string; // human time label for timed events
-	end: string;
-	htmlLink: string;
-	url: string;
-}
-
-export interface PlannedEvent {
-	source: string;
-	summary: string;
-	description: string;
-	date: string; // YYYY-MM-DD
-}
 
 export function googleConfigured(): boolean {
 	return Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
@@ -330,43 +313,12 @@ function toEventView(event: CalendarEvent, calendarName: string): CalendarEventV
 
 // ── Deadline sync (push course deadlines into a dedicated calendar) ─────────
 
-export async function planSyncEvents(scope: Scope = DEFAULT_SCOPE): Promise<PlannedEvent[]> {
-	const repo = createScopedRepo(quizRepository(), scope);
-	const examDate = await repo.getExamDate();
-	const dueOverrides = await repo.getDueDateOverrides();
-	const examName = COURSE_META[scope.courseId]?.examName ?? 'Certification Exam';
-	const planned: PlannedEvent[] = [
-		{
-			source: 'exam',
-			summary: examName,
-			description: "CompTIA exam day. You've got this!",
-			date: examDate
-		}
-	];
-	for (const assignment of await repo.getCourseAssignments()) {
-		const due = effectiveDueDate(assignment, examDate, dueOverrides);
-		planned.push({
-			source: `assignment:${assignment.id}`,
-			summary: assignment.title,
-			description: `Due before the ${examName.split(' ')[0] ?? 'exam'} (${examDate}). From the ${COURSE_META[scope.courseId]?.title ?? 'Security+'} course app.`,
-			date: toDateKey(due)
-		});
-	}
-	return planned;
-}
-
-function nextDayKey(dateKey: string): string {
-	const [year, month, day] = dateKey.split('-').map(Number);
-	const next = new Date(year, month - 1, day + 1);
-	return toDateKey(next);
-}
-
 function allDayEvent(planned: PlannedEvent): Record<string, unknown> {
 	return {
 		summary: planned.summary,
 		description: planned.description,
 		start: { date: planned.date },
-		end: { date: nextDayKey(planned.date) },
+		end: { date: addDaysToDateKey(planned.date, 1) },
 		reminders: {
 			useDefault: false,
 			overrides: [
@@ -407,7 +359,7 @@ export async function syncDeadlinesToGoogle(scope: Scope = DEFAULT_SCOPE): Promi
 			await repo.saveGoogleOAuth({ ...oauth, calendarId });
 		}
 
-		const planned = await planSyncEvents(scope);
+		const planned = await planDeadlineEvents(scope);
 		const existing = new Map((await repo.getSyncedEvents()).map((row) => [row.source, row]));
 		let created = 0;
 		let updated = 0;

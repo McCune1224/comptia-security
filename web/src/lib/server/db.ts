@@ -9,6 +9,7 @@ import type {
 import type { QuestionDefinition } from './question-bank';
 import type { CourseAssignment, CourseLesson, CourseModule, SubmissionRecord } from './course';
 import type { ProgressBackup } from './backup';
+import type { IcsEvent } from './ics';
 import type { ScopedCacheStats } from './scoped-cache';
 
 /** Hard cap on profiles (local study app; two users). */
@@ -68,6 +69,13 @@ export interface StoredSyncedEvent {
 	summary: string;
 	dueDate: string;
 	syncedAt: string;
+}
+
+/** A user's uploaded .ics calendar, normalized at the import boundary. */
+export interface StoredCalendarImport {
+	sourceName: string;
+	events: IcsEvent[];
+	importedAt: string;
 }
 
 export interface StoredSession {
@@ -257,6 +265,13 @@ export interface QuizRepository {
 		syncedAt: string
 	): Promise<void>;
 	removeSyncedEvent(source: string): Promise<void>;
+	getCalendarImport(): Promise<StoredCalendarImport | null>;
+	saveCalendarImport(input: {
+		sourceName: string;
+		events: IcsEvent[];
+		importedAt: string;
+	}): Promise<void>;
+	clearCalendarImport(): Promise<void>;
 	/** Test/dev-only counters for the bounded read cache; zeroed in production. */
 	getCacheStats(): ScopedCacheStats;
 	close(): Promise<void>;

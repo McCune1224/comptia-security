@@ -3,6 +3,7 @@ import postgres from 'postgres';
 import crypto from 'node:crypto';
 import type { QuestionResponse, QuizResult } from '$lib/types';
 import type { QuestionDefinition } from './question-bank';
+import type { IcsEvent } from './ics';
 import {
 	defaultExamDate,
 	type CourseAssignment,
@@ -114,6 +115,30 @@ function resolveConnectionString(explicit?: string): string {
 	return url;
 }
 
+/**
+ * Applies the schema on a short-lived connection. Called once at server startup
+ * (`hooks.server.ts`) so a deploy that adds a table creates it itself, instead of
+ * 500ing until someone remembers `npm run db:setup` against the deployed
+ * database. Every statement is `CREATE ... IF NOT EXISTS`, so this is a cheap
+ * no-op on an up-to-date database.
+ */
+export async function ensureSchema(): Promise<void> {
+	const sql = postgres(resolveConnectionString(), {
+		max: 1,
+		// Every `CREATE ... IF NOT EXISTS` raises a NOTICE per object that already
+		// exists, which is the normal case on every boot. Keep that out of the
+		// deploy logs, but surface anything unexpected. 42P07 = relation exists.
+		onnotice: (notice) => {
+			if (notice.code !== '42P07') console.warn('[startup]', notice.message);
+		}
+	});
+	try {
+		await applyPgSchema(sql);
+	} finally {
+		await sql.end({ timeout: 5 });
+	}
+}
+
 /** Create a PostgreSQL-backed quiz repository. */
 export function createPgQuizRepository(connectionString?: string): QuizRepository {
 	const sql = postgres(resolveConnectionString(connectionString), {
@@ -189,7 +214,8 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 						'course_assignment_submissions',
 						'course_lesson_completions',
 						'google_oauth',
-						'google_synced_events'
+						'google_synced_events',
+						'calendar_imports'
 					] as const)
 						await tx`DELETE FROM ${sql(table)} WHERE profile_id = ${id}`;
 					await tx`DELETE FROM profiles WHERE id = ${id}`;
@@ -795,6 +821,33 @@ export function createPgQuizRepository(connectionString?: string): QuizRepositor
 			},
 			async removeSyncedEvent(source) {
 				await sql`DELETE FROM google_synced_events WHERE profile_id = ${scope.profileId} AND source = ${source}`;
+			},
+			async getCalendarImport() {
+				const rows =
+					await sql`SELECT source_name AS "sourceName", events_json AS "eventsJson", imported_at AS "importedAt"
+					FROM calendar_imports
+					WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
+				if (rows.length === 0) return null;
+				const row = rows[0] as unknown as {
+					sourceName: string;
+					eventsJson: string;
+					importedAt: string;
+				};
+				return {
+					sourceName: row.sourceName,
+					events: JSON.parse(row.eventsJson) as IcsEvent[],
+					importedAt: row.importedAt
+				};
+			},
+			async saveCalendarImport(input) {
+				await sql`INSERT INTO calendar_imports (profile_id, course_id, source_name, events_json, imported_at)
+					VALUES (${scope.profileId}, ${scope.courseId}, ${input.sourceName}, ${JSON.stringify(input.events)}, ${input.importedAt})
+					ON CONFLICT (profile_id, course_id) DO UPDATE
+					SET source_name = EXCLUDED.source_name, events_json = EXCLUDED.events_json,
+						imported_at = EXCLUDED.imported_at`;
+			},
+			async clearCalendarImport() {
+				await sql`DELETE FROM calendar_imports WHERE profile_id = ${scope.profileId} AND course_id = ${scope.courseId}`;
 			},
 			getCacheStats(): ScopedCacheStats {
 				return cache.getStats();

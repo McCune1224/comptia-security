@@ -188,6 +188,16 @@ export const PG_SCHEMA_STATEMENTS: string[] = [
 		synced_at TEXT NOT NULL,
 		PRIMARY KEY (profile_id, source)
 	)`,
+	// An .ics file the user uploaded to overlay their real calendar on the course
+	// grid — one import per profile+course, replaced wholesale on re-import.
+	`CREATE TABLE IF NOT EXISTS calendar_imports (
+		profile_id TEXT NOT NULL,
+		course_id TEXT NOT NULL,
+		source_name TEXT NOT NULL,
+		events_json TEXT NOT NULL,
+		imported_at TEXT NOT NULL,
+		PRIMARY KEY (profile_id, course_id)
+	)`,
 	`CREATE INDEX IF NOT EXISTS idx_quiz_sessions_status ON quiz_sessions(status)`,
 	`CREATE INDEX IF NOT EXISTS idx_quiz_sessions_profile_course ON quiz_sessions(profile_id, course_id)`,
 	`CREATE INDEX IF NOT EXISTS idx_quiz_answers_session ON quiz_answers(session_id)`,
@@ -220,7 +230,8 @@ export const PG_RUNTIME_TABLES: string[] = [
 	'course_assignment_overrides',
 	'course_lesson_completions',
 	'google_oauth',
-	'google_synced_events'
+	'google_synced_events',
+	'calendar_imports'
 ];
 
 /** Every table in the runtime shape, in safe truncate order. */

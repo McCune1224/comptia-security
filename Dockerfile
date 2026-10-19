@@ -36,6 +36,9 @@ COPY --from=builder /app/.svelte-kit ./build/.svelte-kit
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=8080
+# adapter-node refuses request bodies over this before the app sees them; the
+# .ics import caps a file at 4 MB, so leave headroom above it (see web/CALENDAR-FILES.md).
+ENV BODY_SIZE_LIMIT=6M
 
 # Expose port
 EXPOSE 8080

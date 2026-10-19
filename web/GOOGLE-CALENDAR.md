@@ -1,5 +1,10 @@
 # Google Calendar integration
 
+> **You probably want [CALENDAR-FILES.md](CALENDAR-FILES.md) instead.** Downloading
+> an `.ics` and importing it into Proton Calendar (or any other app) needs no
+> Google Cloud project, no client id, and no consent screen. This document is only
+> for the optional Google sync.
+
 The calendar page (`/calendar`) does two things with your Google account:
 
 1. **Reads your real events** — your visible Google calendars are merged into the
@@ -77,6 +82,9 @@ provisions it automatically.
   Environment=GOOGLE_CLIENT_ID=...
   Environment=GOOGLE_CLIENT_SECRET=...
   Environment=PORT=3000
+  # Request bodies over this are refused before the app sees them (default 512K).
+  # The .ics import accepts files up to 4 MB — see CALENDAR-FILES.md.
+  Environment=BODY_SIZE_LIMIT=6M
   ```
 
   or `node --env-file=.env build`.
@@ -95,10 +103,10 @@ provisions it automatically.
 
 ## Troubleshooting
 
-| Symptom | Fix |
-| --- | --- |
-| `redirect_uri_mismatch` | The redirect URI in `GOOGLE_REDIRECT_URI` / the URL you're browsing on isn't registered in step 4. Register the exact origin you connect from. |
-| `Error 403: access_denied` | You're not a test user — add the account at <https://console.cloud.google.com/auth/audience>. |
-| `access_type=offline` returns no refresh token | Revoke at <https://myaccount.google.com/permissions>, reconnect with the consent screen (we force `prompt=consent` so this shouldn't happen). |
-| `Calendar API has not been used` | Enable the Calendar API (step 2) for the project that owns the client ID. |
-| Token refresh failing | Reconnect: Disconnect on the calendar page, then Connect again. |
+| Symptom                                        | Fix                                                                                                                                            |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `redirect_uri_mismatch`                        | The redirect URI in `GOOGLE_REDIRECT_URI` / the URL you're browsing on isn't registered in step 4. Register the exact origin you connect from. |
+| `Error 403: access_denied`                     | You're not a test user — add the account at <https://console.cloud.google.com/auth/audience>.                                                  |
+| `access_type=offline` returns no refresh token | Revoke at <https://myaccount.google.com/permissions>, reconnect with the consent screen (we force `prompt=consent` so this shouldn't happen).  |
+| `Calendar API has not been used`               | Enable the Calendar API (step 2) for the project that owns the client ID.                                                                      |
+| Token refresh failing                          | Reconnect: Disconnect on the calendar page, then Connect again.                                                                                |

@@ -5,8 +5,15 @@ import { createTestRepository, testDatabaseUrl } from './test-db';
 import { loadQuestionBank, correctResponse } from './question-bank';
 import { createQuizService } from './quiz';
 import { PG_RUNTIME_TABLES } from './schema-pg';
+import { runtimeTables } from '../../../scripts/reset-runtime.mjs';
 
 describe('reset-runtime script', () => {
+	it('wipes exactly the tables the schema marks as runtime data', () => {
+		// The script cannot import PG_RUNTIME_TABLES (it runs under plain node),
+		// so the list is duplicated there on purpose and guarded here.
+		expect(runtimeTables).toEqual(PG_RUNTIME_TABLES);
+	});
+
 	it('wipes FK-linked runtime rows without constraint errors and keeps profiles', async () => {
 		const repository = await createTestRepository();
 		const bank = loadQuestionBank();

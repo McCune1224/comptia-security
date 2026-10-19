@@ -149,6 +149,10 @@ over the same pool, and all reads/writes filter by the scope.
   `study_log` (`(profile_id, date_key)` — streaks are per-profile, not per-course).
 - Google Calendar: `google_oauth` (one row per profile), `google_synced_events`
   (`(profile_id, source)`).
+- Calendar files: `calendar_imports` (`(profile_id, course_id)` — one uploaded
+  `.ics` per scope, normalized to `IcsEvent[]` at the import boundary; wiped when
+  a profile is deleted, and left alone by the progress reset since it is
+  configuration, not progress).
 
 The active-session invariant (one per scope) is enforced by the partial unique
 index `quiz_sessions_one_active_scope`; the schema is created by `db:setup` and
@@ -163,9 +167,30 @@ npm run db:seed       # seed course content + default profiles (idempotent)
 npm run db:migrate    # import legacy SQLite data/quiz.db (optional)
 ```
 
+**The schema is applied automatically at server startup.** `src/hooks.server.ts`
+exports SvelteKit's `init` hook, which calls `ensureSchema()` (`db-pg.ts`) →
+`applyPgSchema` on a short-lived connection before the first request. Every
+statement is `CREATE ... IF NOT EXISTS`, so it is a cheap no-op on an up-to-date
+database, and a release that adds a table now creates it itself instead of 500ing
+until someone remembers `db:setup`. It never blocks startup — a failure is logged
+and the server still boots. `db:setup` remains for a first-ever database, CI, and
+scripts.
+
+**Seeding is still explicit.** `db:seed` owns course content and default profiles —
+rows, not the shape they live in — so a release that changes content needs it run
+against the deployed database (Railway: `railway run npm run db:seed`).
+
+The built server also needs `BODY_SIZE_LIMIT` above adapter-node's 512 KB default
+for the `.ics` calendar import; the Dockerfile sets `6M`, and `RAILWAY.md` /
+`.env.example` cover the other paths.
+
 Tests run against `TEST_DATABASE_URL` (an isolated database that the suite
 wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
-`vite.config.ts` forces sequential file execution for that reason.
+`vite.config.ts` forces sequential file execution for that reason. **Manual
+verification follows the same rule** — point `DATABASE_URL` at `TEST_DATABASE_URL`
+for ad-hoc scripts and server runs (`DATABASE_URL="$TEST_DATABASE_URL" node
+build/index.js`). The `web/.env` `DATABASE_URL` is the live database, so an
+unqualified local command edits real data.
 
 ## API Routes
 
@@ -192,6 +217,10 @@ wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
 | `POST`             | `/api/quiz/retake`                      | `{ sessionId }` (completed session) → starts a practice session containing only the missed questions                                                                                                                                                                                                                                              |
 | `POST`             | `/api/quiz/complete`                    | Finalize; records assignment submission when linked                                                                                                                                                                                                                                                                                               |
 | `GET`              | `/api/history`                          | Completed-session history (type, timing, score) — feeds the Sessions tab on `/progress`                                                                                                                                                                                                                                                           |
+| `GET`              | `/api/calendar/export.ics`              | Downloads the exam date + every assignment deadline as an iCalendar (.ics) file — all-day events with VALARM reminders and stable UIDs, so re-importing into Proton/Apple/Outlook updates instead of duplicating. Needs no API key (see `CALENDAR-FILES.md`).                                                                                     |
+| `GET`              | `/api/calendar/import`                  | The scope's imported .ics: `{ imported, sourceName, eventCount, importedAt, events }` (events normalized to the shared calendar event shape)                                                                                                                                                                                                      |
+| `POST`             | `/api/calendar/import`                  | Replace the import with the uploaded `.ics` as a raw `text/calendar` body (`?name=` labels it; not a form content type, so the CSRF guard does not apply). Parsed and validated at the boundary (`CalendarFileError` → 400, 413 past 4 MB), stored in `calendar_imports`                                                                          |
+| `DELETE`           | `/api/calendar/import`                  | Remove the stored import (the user's real calendar is untouched)                                                                                                                                                                                                                                                                                  |
 | `GET`              | `/api/calendar/google/status`           | Google Calendar connection status (`configured`, `connected`, `email`, `syncedCount`, `lastSyncAt`)                                                                                                                                                                                                                                               |
 | `GET`              | `/api/calendar/google/auth-url`         | Starts OAuth: returns auth URL, sets `gcal_oauth_state` cookie (PKCE + state)                                                                                                                                                                                                                                                                     |
 | `GET`              | `/api/calendar/google/callback`         | OAuth callback: exchanges code, stores token, redirects to `/calendar?connected=1`                                                                                                                                                                                                                                                                |
@@ -212,7 +241,7 @@ wipes); `createTestRepository()` in `test-db.ts` resets + reseeds per call and
 | `/assignments/[id]`         | `src/routes/assignments/[id]/+page.svelte` | Assignment detail — due date, status, best submission, launch                                                                                                                                                                                                                                          |
 | `/practice`                 | `src/routes/practice/+page.svelte`         | **Practice hub** — the drill room: cards for Quiz, Scenarios, PBQs, full exam, Today's 10, Wall of Shame                                                                                                                                                                                               |
 | `/progress`                 | `src/routes/progress/+page.svelte`         | **Progress ledger** — one tabbed hub (`?tab=grades\|mastery\|sessions`, default `grades`) merging the gradebook, the mastery matrix, and session history. Legacy `/gradebook`, `/mastery`, `/history` 308-redirect into the matching tab; `/history/[sessionId]` still serves the session detail page. |
-| `/calendar`                 | `src/routes/calendar/+page.svelte`         | Month grid of deadlines + "Next up" list; Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`)                                                                                                                                                                                                      |
+| `/calendar`                 | `src/routes/calendar/+page.svelte`         | Month grid of deadlines + "Next up" list; **.ics export/import** (the no-API-key path — see `CALENDAR-FILES.md`) plus the optional Google Calendar connect/sync (see `GOOGLE-CALENDAR.md`)                                                                                                             |
 | `/quiz` `/scenarios` `/pbq` | existing                                   | Free practice tools (not graded); accept `?assignment=` to run a graded assignment; `/quiz?review=daily\|wall` launches a review session                                                                                                                                                               |
 | `/review`                   | `src/routes/review/+page.svelte`           | **Daily review** — streak hero, "Today's 10" launcher, 12-week heatmap, filterable Wall of Shame                                                                                                                                                                                                       |
 | `/admin`                    | `src/routes/admin/+page.svelte`            | **Self-service administration** — exam-date editor (with shift preview), per-assignment due-date overrides, backup export/import, progress reset (type-RESET gate), and profile management. All scoping resolved server-side from the scope cookies.                                                   |

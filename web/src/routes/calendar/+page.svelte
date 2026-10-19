@@ -10,7 +10,7 @@
 		status: 'open' | 'due-soon' | 'overdue' | 'in-progress' | 'submitted';
 	};
 
-	type GoogleEvent = {
+	type ExternalEvent = {
 		id: string;
 		summary: string;
 		calendarName: string;
@@ -31,6 +31,13 @@
 		lastSyncAt: string | null;
 	};
 
+	type ImportStatus = {
+		imported: boolean;
+		sourceName: string | null;
+		eventCount: number;
+		importedAt: string | null;
+	};
+
 	let assignments = $state<AssignmentView[]>([]);
 	let error = $state('');
 	let loading = $state(true);
@@ -39,11 +46,19 @@
 	let selectedDay = $state<Date | null>(null);
 
 	let gcal = $state<GcalStatus | null>(null);
-	let gcalEvents = $state<GoogleEvent[]>([]);
-	let gcalUpcoming = $state<GoogleEvent[]>([]);
+	let gcalEvents = $state<ExternalEvent[]>([]);
+	let gcalUpcoming = $state<ExternalEvent[]>([]);
 	let showGoogle = $state(true);
 	let gcalBusy = $state(false);
 	let gcalNotice = $state('');
+
+	// .ics import — the no-API-key path for seeing your real calendar here.
+	let importStatus = $state<ImportStatus | null>(null);
+	let importedEvents = $state<ExternalEvent[]>([]);
+	let showImported = $state(true);
+	let fileBusy = $state(false);
+	let fileNotice = $state('');
+	let fileNoticeOk = $state(false);
 
 	const monthLabel = $derived(
 		viewMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -64,16 +79,25 @@
 		}, {})
 	);
 
-	const gcalByDay = $derived(
-		gcalEvents.reduce<Record<string, GoogleEvent[]>>((map, event) => {
+	// Both external sources (Google, an imported .ics) render identically, so
+	// merge them once and let the grid and the day panel read one list.
+	const externalEvents = $derived([
+		...(gcal?.connected && showGoogle ? gcalEvents : []),
+		...(importStatus?.imported && showImported ? importedEvents : [])
+	]);
+
+	const externalByDay = $derived(
+		externalEvents.reduce<Record<string, ExternalEvent[]>>((map, event) => {
 			const key = dayKeyForEvent(event);
 			if (key) (map[key] ??= []).push(event);
 			return map;
 		}, {})
 	);
 
+	const hasExternal = $derived(Boolean(gcal?.connected) || Boolean(importStatus?.imported));
+
 	const nextUp = $derived.by(() => {
-		type Row = { key: string; ms: number; assignment?: AssignmentView; event?: GoogleEvent };
+		type Row = { key: string; ms: number; assignment?: AssignmentView; event?: ExternalEvent };
 		const rows: Row[] = [];
 		const today0 = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
 		for (const item of assignments.filter((a) => a.status !== 'submitted')) {
@@ -83,9 +107,14 @@
 				assignment: item
 			});
 		}
-		for (const event of gcalUpcoming) {
+		const horizon = today0 + 45 * 86_400_000;
+		const upcoming = [
+			...gcalUpcoming,
+			...(importStatus?.imported && showImported ? importedEvents : [])
+		];
+		for (const event of upcoming) {
 			const ms = startMs(event);
-			if (ms >= today0) rows.push({ key: `g:${event.id}`, ms, event });
+			if (ms >= today0 && ms <= horizon) rows.push({ key: `g:${event.id}`, ms, event });
 		}
 		return rows.sort((a, b) => a.ms - b.ms).slice(0, 8);
 	});
@@ -102,6 +131,7 @@
 		}
 
 		await loadStatus();
+		await loadImport();
 
 		const params = new URLSearchParams(window.location.search);
 		if (params.get('connected') === '1' && gcal?.connected) {
@@ -157,6 +187,62 @@
 	function shiftMonth(delta: number) {
 		viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + delta, 1);
 		selectedDay = null;
+	}
+
+	// ── Calendar files (.ics) ──────────────────────────────────────────────────
+
+	async function loadImport() {
+		try {
+			const response = await fetch('/api/calendar/import');
+			if (!response.ok) return;
+			const data = (await response.json()) as ImportStatus & { events: ExternalEvent[] };
+			importStatus = data;
+			importedEvents = data.events.map((event) => ({ ...event, id: `import:${event.id}` }));
+		} catch {
+			// no import yet, or the server is unreachable — deadlines still render
+		}
+	}
+
+	async function importFile(file: File) {
+		fileBusy = true;
+		fileNotice = '';
+		try {
+			const response = await fetch(`/api/calendar/import?name=${encodeURIComponent(file.name)}`, {
+				method: 'POST',
+				headers: { 'content-type': 'text/calendar' },
+				body: await file.text()
+			});
+			const payload = (await response.json().catch(() => null)) as {
+				eventCount?: number;
+				skipped?: number;
+				error?: { message?: string };
+			} | null;
+			fileNoticeOk = response.ok;
+			if (response.ok) {
+				fileNotice = `Imported ${payload?.eventCount ?? 0} event${payload?.eventCount === 1 ? '' : 's'} from ${file.name}${payload?.skipped ? ` (${payload.skipped} skipped)` : ''}.`;
+				await loadImport();
+			} else fileNotice = payload?.error?.message ?? 'Could not import that file.';
+		} catch {
+			fileNoticeOk = false;
+			fileNotice = 'Could not reach the server.';
+		} finally {
+			fileBusy = false;
+		}
+	}
+
+	async function clearImport() {
+		if (!confirm('Remove the imported calendar from this view? Your own calendar is untouched.'))
+			return;
+		fileBusy = true;
+		try {
+			await fetch('/api/calendar/import', { method: 'DELETE' });
+			importStatus = null;
+			importedEvents = [];
+			fileNoticeOk = true;
+			fileNotice = 'Imported calendar removed.';
+		} finally {
+			fileBusy = false;
+		}
 	}
 
 	// ── Google Calendar helpers ────────────────────────────────────────────────
@@ -257,7 +343,7 @@
 		}
 	}
 
-	function dayKeyForEvent(event: GoogleEvent): string | null {
+	function dayKeyForEvent(event: ExternalEvent): string | null {
 		if (event.allDay) {
 			const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(event.start);
 			if (!m) return null;
@@ -267,7 +353,7 @@
 		return Number.isNaN(d.getTime()) ? null : keyFor(d);
 	}
 
-	function startMs(event: GoogleEvent): number {
+	function startMs(event: ExternalEvent): number {
 		if (event.allDay) {
 			const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(event.start);
 			if (!m) return Infinity;
@@ -277,7 +363,7 @@
 		return Number.isNaN(t) ? Infinity : t;
 	}
 
-	function whenLabel(event: GoogleEvent): string {
+	function whenLabel(event: ExternalEvent): string {
 		const ms = startMs(event);
 		const today0 = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
 		const dayDiff = Math.round((ms - today0) / 86_400_000);
@@ -376,7 +462,8 @@
 		Course <span class="serif-italic text-accent">calendar</span>
 	</h1>
 	<p class="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
-		Every assignment due date, anchored to your exam date — plus your Google events.
+		Every assignment due date, anchored to your exam date. Export it to any calendar app, or bring
+		your own calendar in.
 	</p>
 </header>
 
@@ -394,6 +481,105 @@
 {:else}
 	<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-8">
 		<div class="space-y-6 sm:space-y-8">
+			<!-- Calendar files: the no-setup path (Proton, Apple, Thunderbird, Outlook). -->
+			<section class="card p-5 sm:p-6" id="calendar-files">
+				<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+					<div>
+						<p class="eyebrow">No setup needed</p>
+						<h2 class="h-display mt-1 text-xl text-text-primary">Calendar files (.ics)</h2>
+						<p class="mt-1 max-w-lg text-sm leading-relaxed text-text-secondary">
+							Download your deadlines as an <code
+								class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary">.ics</code
+							>
+							file and import it into Proton Calendar, Apple Calendar, Thunderbird, or Outlook. In Proton:
+							<span class="text-text-primary"
+								>Settings → All settings → Import/export → Import from ICS</span
+							>. Re-importing updates the same events instead of duplicating them.
+						</p>
+					</div>
+					<a class="btn btn-primary shrink-0" href="/api/calendar/export.ics" download
+						>Download .ics</a
+					>
+				</div>
+
+				<div class="mt-5 border-t border-border pt-4">
+					<p class="text-sm leading-relaxed text-text-secondary">
+						Or bring your own calendar in. Export a <code
+							class="rounded bg-surface-700 px-1.5 py-0.5 text-xs text-text-primary">.ics</code
+						>
+						from Proton (or anywhere) and import it here to see those events beside your deadlines.
+					</p>
+					<div class="mt-3 flex flex-wrap items-center gap-3">
+						<label class="btn btn-ghost cursor-pointer">
+							{fileBusy ? 'Working…' : 'Import .ics'}
+							<input
+								type="file"
+								accept="text/calendar,.ics"
+								class="hidden"
+								disabled={fileBusy}
+								onchange={(event) => {
+									const file = event.currentTarget.files?.[0];
+									if (file) void importFile(file);
+									event.currentTarget.value = '';
+								}}
+							/>
+						</label>
+						{#if importStatus?.imported}
+							<button
+								class="btn btn-ghost h-11 px-3 text-xs"
+								type="button"
+								aria-pressed={showImported}
+								onclick={() => (showImported = !showImported)}
+							>
+								{#if showImported}
+									<svg
+										viewBox="0 0 24 24"
+										class="mr-1.5 inline h-4 w-4 align-[-2px]"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="3"><path d="m5 13 4 4L19 7" /></svg
+									>
+								{/if}
+								Show imported events
+							</button>
+							<button
+								class="touch-target text-sm font-semibold text-danger transition hover:text-danger/70 disabled:opacity-50"
+								type="button"
+								onclick={clearImport}
+								disabled={fileBusy}
+							>
+								Remove import
+							</button>
+						{/if}
+					</div>
+					{#if importStatus?.imported}
+						<p class="mt-3 text-xs text-text-muted">
+							{importStatus.sourceName} · {importStatus.eventCount} event{importStatus.eventCount ===
+							1
+								? ''
+								: 's'}
+							{#if importStatus.importedAt}
+								· imported {new Date(importStatus.importedAt).toLocaleDateString('en-US', {
+									month: 'short',
+									day: 'numeric'
+								})}
+							{/if}
+						</p>
+					{/if}
+					{#if fileNotice}
+						<p
+							class="mt-3 rounded-xl border px-3 py-2 text-sm {fileNoticeOk
+								? 'border-success/20 bg-success/10 text-success'
+								: 'border-danger/20 bg-danger/10 text-danger'}"
+							role="status"
+							aria-live="polite"
+						>
+							{fileNotice}
+						</p>
+					{/if}
+				</div>
+			</section>
+
 			{#if gcal}
 				<section class="card p-5 sm:p-6">
 					{#if !gcal.configured}
@@ -569,8 +755,7 @@
 								{#each Array(daysInMonth) as _, index (index)}
 									{@const day = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1)}
 									{@const items = byDay[keyFor(day)] ?? []}
-									{@const gitems =
-										gcal?.connected && showGoogle ? (gcalByDay[keyFor(day)] ?? []) : []}
+									{@const gitems = externalByDay[keyFor(day)] ?? []}
 									<button
 										class="flex min-h-14 flex-col items-start rounded-lg border p-1.5 text-left transition sm:min-h-16 {isToday(
 											day
@@ -608,7 +793,7 @@
 												{#each gitems.slice(0, 3) as event (event.id)}
 													<span
 														class="block h-1.5 w-1.5 rounded-full bg-accent-secondary"
-														title={`${event.summary} (Google)`}
+														title={`${event.summary} (${event.calendarName})`}
 													></span>
 												{/each}
 												{#if gitems.length > 3}
@@ -627,16 +812,15 @@
 						<span class="flex items-center gap-1.5"
 							><span class="h-2 w-2 rounded-full bg-accent"></span> course deadline</span
 						>
-						{#if gcal?.connected}
+						{#if hasExternal}
 							<span class="flex items-center gap-1.5"
-								><span class="h-2 w-2 rounded-full bg-accent-secondary"></span> Google event</span
+								><span class="h-2 w-2 rounded-full bg-accent-secondary"></span> your calendar</span
 							>
 						{/if}
 					</div>
 					{#if selectedDay}
 						{@const items = byDay[keyFor(selectedDay)] ?? []}
-						{@const gitems =
-							gcal?.connected && showGoogle ? (gcalByDay[keyFor(selectedDay)] ?? []) : []}
+						{@const gitems = externalByDay[keyFor(selectedDay)] ?? []}
 						<div class="mt-4 rounded-xl border border-border bg-surface-900/50 p-4">
 							<p class="mb-3 text-sm font-bold text-text-primary">
 								{keyFor(selectedDay)}
@@ -667,7 +851,7 @@
 								{/if}
 								{#if gitems.length}
 									<p class="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-text-muted">
-										Google events
+										Your calendar
 									</p>
 									<div class="space-y-2">
 										{#each gitems as event (event.id)}

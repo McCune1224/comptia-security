@@ -94,5 +94,10 @@ See [AGENTS.md](AGENTS.md) for the full architecture, data model, API routes, an
 
 ## Deploy
 
-The repo's `Makefile` deploys via systemd (`quizapp` service) — `make deploy` pulls, installs,
-builds, and restarts.
+Deployed to **Railway** from the repo-root `Dockerfile` (see [RAILWAY.md](RAILWAY.md) for the full
+guide). The Pi path is still supported: the repo's `Makefile` deploys via systemd (`quizapp`
+service) — `make deploy` pulls, installs, builds, and restarts.
+
+The database **schema applies itself at server startup** (`src/hooks.server.ts` → `applyPgSchema`,
+all `CREATE ... IF NOT EXISTS`), so a release that adds a table needs no manual step. Course
+**content** is seeded, not schemed — run `railway run npm run db:seed` when a release changes it.
