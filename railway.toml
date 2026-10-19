@@ -1,5 +1,16 @@
+# Railway build/deploy configuration.
+#
+# Config as Code is deprecated in favour of .railway/railway.ts (hard cutoff
+# 2026-12-01) — migrate before then.
+#
+# `dockerfilePath` is set here as well as on the service: the dashboard kept a
+# stale `web/Dockerfile` after the Dockerfile moved to the repo root, and every
+# deploy failed in seconds looking for a file that no longer existed. Config as
+# Code overrides the dashboard, so this file is the authority.
 [build]
 builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+watchPatterns = ["/web/**", "/Dockerfile", "/railway.toml"]
 
 [deploy]
 startCommand = "node build"
