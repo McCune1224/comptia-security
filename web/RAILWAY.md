@@ -223,6 +223,29 @@ The request body passed adapter-node's `BODY_SIZE_LIMIT`. The image sets `6M`; i
 you overrode it, raise it above the import cap (see the environment variables
 table). `npm run dev` has no such limit, so this only shows up in production.
 
+### Deploy fails in seconds with an empty build log
+
+Symptom: the deployment goes `FAILED` in under ten seconds, `failureStage` is
+`BUILD_IMAGE`, and the build stream holds only `scheduling build on Metal
+builder` — no `npm ci`, no `vite build`.
+
+Cause: Railway could not resolve the Dockerfile, so the build never started. The
+service keeps a `dockerfilePath` setting that is independent of where the file
+actually lives, and it goes stale whenever the Dockerfile moves. Check it:
+
+```bash
+railway service          # then inspect Settings → Build in the dashboard
+```
+
+`dockerfilePath` must name the Dockerfile's real path relative to the repo root
+(`Dockerfile`, not `web/Dockerfile`). `railway.toml` now states it explicitly
+because Config as Code overrides the dashboard, so the file is the authority.
+
+Also check `watchPatterns`: a commit that touches nothing in them is skipped
+(`no changes detected in watch paths, build will skip`), which is why
+`/railway.toml` and `/Dockerfile` are both listed — a build-config change should
+deploy rather than be ignored.
+
 ### Performance Tuning
 
 Railway's PostgreSQL includes connection pooling. The app uses:
