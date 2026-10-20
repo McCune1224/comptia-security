@@ -1,0 +1,8 @@
+{
+  "name": "comptia-security-iac",
+  "private": true,
+  "description": "Railway Infrastructure as Code for this project (.railway/railway.ts). The application itself lives in web/ — this package exists only so the Railway CLI can evaluate the authoring file.",
+  "devDependencies": {
+    "railway": "^3.16.0"
+  }
+}
