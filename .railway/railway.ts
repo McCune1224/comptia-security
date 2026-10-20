@@ -13,7 +13,7 @@ export default defineRailway(() => {
       buildEnvironment: "V3",
       builder: "DOCKERFILE",
       dockerfilePath: "Dockerfile",
-      watchPatterns: ["/web/**", "/Dockerfile", "/railway.toml"],
+      watchPatterns: ["/web/**", "/Dockerfile"],
     },
     start: "node build",
     replicas: { "us-east4-eqdc4a": 1 },

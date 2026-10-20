@@ -134,7 +134,9 @@ PostgreSQL is the only runtime database, in every environment:
 comptia-security/
 ├── Dockerfile            # Multi-stage build (build context = repo root)
 ├── .dockerignore         # Keeps node_modules, build output, data, .env out of the context
-├── railway.toml          # Railway configuration
+├── package.json          # Root package exists only for the IaC SDK (see below)
+├── .railway/
+│   └── railway.ts        # Infrastructure as Code — the Railway service config
 └── web/
     ├── src/lib/server/
     │   ├── db.ts           # QuizRepository contract (promise-based)
@@ -146,6 +148,35 @@ comptia-security/
         ├── seed-pg.ts                # Seed course data (db:seed)
         └── migrate-sqlite-to-pg.ts   # Import legacy SQLite data (db:migrate)
 ```
+
+## Infrastructure as Code
+
+The Railway service is defined in `.railway/railway.ts`, not in `railway.toml`
+(Config as Code, which stopped being read on 2026-12-01). It is applied with the
+Railway CLI, which is a local tool — **Railway does not read `.railway/` during a
+deploy**, so the service's stored settings are what a build actually uses.
+
+```bash
+npm install                  # root package: resolves railway/iac for the CLI
+railway login                # once per machine
+railway link --project ef941ef0-971f-4fcd-ba69-42bf8b241088 --environment production
+railway config plan          # preview; never changes anything
+railway config apply         # apply after reviewing the plan
+```
+
+`railway config plan` should print `Your Railway configuration is already up to
+date.` when the file matches the live service. A plan that proposes deletes needs
+reading before it is applied.
+
+The file exports `partial = "comptia-security"`, and ownership is recorded on the
+environment (`railway config partials list`). That is deliberate: the project also
+holds the **Prod** and **Test** Postgres services and their 5 GB volumes, and a
+partial only deletes resources it owns, so an apply from this repository cannot
+remove them. Whole-project planning is blocked while named ownership exists. Do
+not drop the partial export.
+
+Variables are `managed: false` — IaC never reads or writes them, so `DATABASE_URL`
+stays on Railway instead of landing in the repo.
 
 ## Local Development
 
@@ -178,9 +209,8 @@ npm run dev
 
 The `Dockerfile` lives at the **repo root** and uses a multi-stage build. Its
 `COPY` paths are relative to the repo root, so the build context must be the
-repo root (which is also where `railway.toml` and `.dockerignore` live —
-Railway builds with the repo root as context and resolves the root `Dockerfile`
-by default):
+repo root (which is also where `.dockerignore` lives — Railway builds with the
+repo root as context and resolves the root `Dockerfile` by default):
 
 1. **Builder stage**: Installs dependencies and builds the SvelteKit app
 2. **Production stage**: Copies built assets and runs the production server
@@ -194,9 +224,10 @@ docker build -t comptia-security .
 docker run -p 3000:8080 -e DATABASE_URL=postgresql://... comptia-security
 ```
 
-Note: `railway.toml` sets `startCommand = "node build"`, which Railway runs in
-the container's working directory (`/app`) instead of the image `CMD`. Both are
-the same command (`node build`), so behavior is identical either way.
+Note: the service's `startCommand` is `node build` (set in `.railway/railway.ts`),
+which Railway runs in the container's working directory (`/app`) instead of the
+image `CMD`. Both are the same command (`node build`), so behavior is identical
+either way.
 
 ## Troubleshooting
 
@@ -231,20 +262,22 @@ builder` — no `npm ci`, no `vite build`.
 
 Cause: Railway could not resolve the Dockerfile, so the build never started. The
 service keeps a `dockerfilePath` setting that is independent of where the file
-actually lives, and it goes stale whenever the Dockerfile moves. Check it:
+actually lives, and it goes stale whenever the Dockerfile moves. Check the live
+value against the authoring file:
 
 ```bash
-railway service          # then inspect Settings → Build in the dashboard
+railway config plan     # shows any drift between .railway/railway.ts and the service
 ```
 
 `dockerfilePath` must name the Dockerfile's real path relative to the repo root
-(`Dockerfile`, not `web/Dockerfile`). `railway.toml` now states it explicitly
-because Config as Code overrides the dashboard, so the file is the authority.
+(`Dockerfile`, not `web/Dockerfile`). `.railway/railway.ts` states it explicitly,
+so the authoring file is the authority; a `railway config apply` restores it.
 
 Also check `watchPatterns`: a commit that touches nothing in them is skipped
-(`no changes detected in watch paths, build will skip`), which is why
-`/railway.toml` and `/Dockerfile` are both listed — a build-config change should
-deploy rather than be ignored.
+(`no changes detected in watch paths, build will skip`). They are `/web/**` and
+`/Dockerfile` — the two things a build actually depends on. Note that a change to
+`.railway/` itself does not deploy, because IaC is applied with the CLI rather
+than read at deploy time.
 
 ### Performance Tuning
 
