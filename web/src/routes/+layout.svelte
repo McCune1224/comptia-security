@@ -36,7 +36,8 @@
 			path.startsWith('/practice') ||
 			path.startsWith('/quiz') ||
 			path.startsWith('/scenarios') ||
-			path.startsWith('/pbq')
+			path.startsWith('/pbq') ||
+			path.startsWith('/terminology')
 		)
 			return 'Practice';
 		if (path.startsWith('/review')) return 'Review';

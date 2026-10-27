@@ -27,6 +27,13 @@
 			icon: 'practice',
 			group: 'Drill'
 		},
+		{
+			href: '/terminology',
+			label: 'Terminology',
+			match: ['/terminology'],
+			icon: 'terminology',
+			group: 'Drill'
+		},
 		{ href: '/review', label: 'Review', match: ['/review'], icon: 'review', group: 'Drill' },
 		{
 			href: '/progress',
@@ -145,6 +152,17 @@
 								stroke-width="1.8"
 								><path
 									d="M12 2c.5 4.5-2 6.5-3 9-.6 1.5 0 3 1.5 3.5 2.8-1 4.5-3.8 4.1-6.7 2 1.2 3.3 3.4 3.3 5.7A7.4 7.4 0 0 1 3 16.5c0-4.3 3.2-7.8 7.5-9.5C11 5.5 11.6 3.7 12 2Z"
+								/></svg
+							>
+						{:else if item.icon === 'terminology'}
+							<svg
+								viewBox="0 0 24 24"
+								class="h-5 w-5"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.8"
+								><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z" /><path
+									d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5M8 7h8M8 11h6"
 								/></svg
 							>
 						{:else if item.icon === 'progress'}

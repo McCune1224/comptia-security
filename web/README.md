@@ -21,6 +21,8 @@ Built with SvelteKit 5 (runes), Tailwind CSS v4, and PostgreSQL.
 - **Exam readiness** — blends your domain mastery with recent full-exam scores and projects your
   scaled score against the real 750/900 passing threshold.
 - **Free practice** — the original quiz, scenario, and PBQ tools, ungraded, for open study.
+- **Terminology drill** — SY0-701 protocols, acronyms, concepts, and well-known ports in matching
+  or fill-in-the-blank sessions, scoped by domain, with immediate feedback and missed-item retry.
 
 ## Screenshots
 
@@ -86,6 +88,8 @@ Syllabus page. To import legacy data from an old SQLite `data/quiz.db`, run
 npm run check      # svelte-check (0 errors)
 npm run test       # vitest — runs against TEST_DATABASE_URL (never DATABASE_URL)
 npm run build      # production build (adapter-node)
+npm run coverage:terminology  # terminology bank floors + objective acronym coverage
+npx playwright test e2e/terminology.spec.ts  # drill flows, both formats, all widths/themes
 ```
 
 ## Docs

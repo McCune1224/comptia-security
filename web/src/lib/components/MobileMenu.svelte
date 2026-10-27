@@ -31,6 +31,12 @@
 			hint: 'Hands-on performance tasks'
 		},
 		{
+			href: '/terminology',
+			label: 'Terminology',
+			icon: 'terminology',
+			hint: 'Protocols, acronyms, ports'
+		},
+		{
 			href: '/admin',
 			label: 'Admin',
 			icon: 'admin',
@@ -89,9 +95,7 @@
 						role="menuitem"
 						onclick={close}
 					>
-						<span
-							class="grid h-9 w-9 shrink-0 place-items-center rounded bg-accent/10 text-accent"
-						>
+						<span class="grid h-9 w-9 shrink-0 place-items-center rounded bg-accent/10 text-accent">
 							{#if link.icon === 'calendar'}
 								<svg
 									viewBox="0 0 24 24"
@@ -134,6 +138,17 @@
 									stroke-width="1.8"
 									><path
 										d="M8 5.5 10.5 3l2.5 2.5L15.5 3 18 5.5 15.5 8 18 10.5 15.5 13 18 15.5 15.5 18 13 15.5 10.5 18 8 15.5 5.5 18 3 15.5 5.5 13 3 10.5 5.5 8 3 5.5 5.5 3 8 5.5Z"
+									/></svg
+								>
+							{:else if link.icon === 'terminology'}
+								<svg
+									viewBox="0 0 24 24"
+									class="h-5 w-5"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="1.8"
+									><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z" /><path
+										d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5M8 7h8M8 11h6"
 									/></svg
 								>
 							{:else}

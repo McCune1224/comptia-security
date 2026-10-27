@@ -12,7 +12,7 @@
 		{
 			href: '/practice',
 			label: 'Practice',
-			match: ['/practice', '/quiz', '/scenarios', '/pbq'],
+			match: ['/practice', '/quiz', '/scenarios', '/pbq', '/terminology'],
 			icon: 'practice'
 		},
 		{

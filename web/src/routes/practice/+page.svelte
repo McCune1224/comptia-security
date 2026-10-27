@@ -109,6 +109,33 @@
 		</a>
 
 		<a
+			href="/terminology"
+			class="card group p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
+		>
+			<div class="flex items-start justify-between">
+				<span
+					class="grid h-11 w-11 place-items-center rounded-xl bg-accent-secondary/10 text-accent-secondary"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="h-5 w-5"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+					>
+						<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z" />
+						<path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5M8 7h8M8 11h6" />
+					</svg>
+				</span>
+				<span class="text-text-subtle transition group-hover:text-accent">→</span>
+			</div>
+			<h2 class="h-display mt-4 text-xl text-text-primary group-hover:text-accent">Terminology</h2>
+			<p class="mt-1.5 text-sm leading-relaxed text-text-muted">
+				Protocols, acronyms, concepts, and ports — matching or fill-in drills with instant feedback.
+			</p>
+		</a>
+
+		<a
 			href="/quiz?start=1&type=full&mode=exam"
 			class="card group p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
 		>

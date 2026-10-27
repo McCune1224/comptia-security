@@ -10,6 +10,12 @@
 		{ label: 'Home', hint: 'Dashboard', href: '/', group: 'Go to' },
 		{ label: 'Course', hint: 'Syllabus, modules, lessons', href: '/syllabus', group: 'Go to' },
 		{ label: 'Practice', hint: 'Drills, scenarios, PBQs', href: '/practice', group: 'Go to' },
+		{
+			label: 'Terminology',
+			hint: 'Protocols, acronyms, ports',
+			href: '/terminology',
+			group: 'Go to'
+		},
 		{ label: 'Review', hint: "Today's 10, wall of shame", href: '/review', group: 'Go to' },
 		{ label: 'Progress', hint: 'Grades, mastery, sessions', href: '/progress', group: 'Go to' },
 		{ label: 'Calendar', hint: 'Deadlines', href: '/calendar', group: 'Go to' },

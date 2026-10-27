@@ -32,6 +32,7 @@
 
 	const drills = [
 		{ href: '/quiz', label: 'Quiz', hint: 'Multiple choice' },
+		{ href: '/terminology', label: 'Terminology', hint: 'Protocols, acronyms, ports' },
 		{ href: '/scenarios', label: 'Scenarios', hint: 'Applied judgment' },
 		{ href: '/pbq', label: 'PBQs', hint: 'Hands-on tasks' },
 		{ href: '/review', label: 'Daily review', hint: 'Spaced cards' }
