@@ -44867,6 +44867,1516 @@
         }
       ],
       "hint": "Distinguish each activity by who performs it and what it produces: a formal examination by an outside party, a signed conclusion, a baseline comparison, active exploitation, and a passive observation phase."
+    },
+    {
+      "id": "pbq-1-901",
+      "domain": 1,
+      "objective": "1.4",
+      "format": "pbq",
+      "kind": "memory",
+      "prompt": "Match each cryptographic primitive to the job it performs.",
+      "context": "A security architect is writing a one-page primer for new analysts. Pair every primitive with the description that makes its role unambiguous.",
+      "pairs": [
+        {
+          "id": "p1",
+          "a": "Symmetric encryption",
+          "b": "One shared secret encrypts and decrypts"
+        },
+        {
+          "id": "p2",
+          "a": "Asymmetric encryption",
+          "b": "A public and private key pair"
+        },
+        {
+          "id": "p3",
+          "a": "Hashing",
+          "b": "A one-way fixed-length integrity digest"
+        },
+        {
+          "id": "p4",
+          "a": "Digital signature",
+          "b": "A hash protected by the sender private key"
+        },
+        {
+          "id": "p5",
+          "a": "Key escrow",
+          "b": "A trusted third party holds a recovery copy"
+        }
+      ],
+      "explanation": "Symmetric ciphers use one shared key; asymmetric ciphers use a key pair; hashes provide integrity and are one-way; a digital signature binds a hash to a private key; escrow stores a recovery copy with a trusted party.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 1.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Cryptography Fundamentals"
+        }
+      ],
+      "hint": "Separate confidentiality mechanisms from integrity mechanisms, then decide which ones use one key versus a pair."
+    },
+    {
+      "id": "pbq-2-901",
+      "domain": 2,
+      "objective": "2.2",
+      "format": "pbq",
+      "kind": "memory",
+      "prompt": "Match each social-engineering technique to its delivery channel or defining trait.",
+      "context": "The awareness team is building a quick reference card. Each technique has one trait that distinguishes it from the others.",
+      "pairs": [
+        {
+          "id": "p1",
+          "a": "Phishing",
+          "b": "Email impersonating a trusted sender"
+        },
+        {
+          "id": "p2",
+          "a": "Vishing",
+          "b": "Voice call used to pressure a target"
+        },
+        {
+          "id": "p3",
+          "a": "Smishing",
+          "b": "Text message carrying a malicious link"
+        },
+        {
+          "id": "p4",
+          "a": "Typosquatting",
+          "b": "Look-alike domain registered by an attacker"
+        },
+        {
+          "id": "p5",
+          "a": "Pretexting",
+          "b": "Invented scenario used to build trust"
+        }
+      ],
+      "explanation": "Phishing arrives by email, vishing by voice, and smishing by SMS. Typosquatting abuses a misspelled domain, while pretexting is the fabricated story that gives the request credibility.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Social Engineering and Delivery Vectors"
+        }
+      ],
+      "hint": "Group the delivery channels by medium first, then match the remaining terms to domain names and fabricated stories."
+    },
+    {
+      "id": "pbq-4-901",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "pbq",
+      "kind": "memory",
+      "prompt": "Match each investigation data source to the evidence it contributes.",
+      "context": "An incident responder is documenting where each artifact comes from before collection. Pair the source with the evidence it actually holds.",
+      "pairs": [
+        {
+          "id": "p1",
+          "a": "Syslog",
+          "b": "Centralized host and network event messages"
+        },
+        {
+          "id": "p2",
+          "a": "NetFlow",
+          "b": "Traffic flow metadata without payloads"
+        },
+        {
+          "id": "p3",
+          "a": "Packet capture",
+          "b": "Full packet headers and payloads"
+        },
+        {
+          "id": "p4",
+          "a": "EDR telemetry",
+          "b": "Endpoint process, file, and network activity"
+        },
+        {
+          "id": "p5",
+          "a": "DNS logs",
+          "b": "Name-resolution query history"
+        }
+      ],
+      "explanation": "Syslog carries event messages, NetFlow records metadata about conversations, packet capture preserves full content, EDR reports endpoint behavior, and DNS logs show which names hosts tried to resolve.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "study-guide",
+          "section": "Log Sources and Evidence"
+        }
+      ],
+      "hint": "Decide which sources keep metadata, which keep content, and which observe endpoint behavior before pairing."
+    },
+    {
+      "id": "pbq-4-908",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "pbq",
+      "kind": "hotspot",
+      "template": "log-lines",
+      "prompt": "An analyst is triaging Windows security events after a suspected account compromise. Tap the single line that confirms the account was granted administrative rights after authentication.",
+      "context": "The excerpt mixes routine logon and process events with one privilege-assignment event. Only one line answers the question asked.",
+      "regions": [
+        {
+          "id": "r1",
+          "label": "4688 New process created: svchost.exe (normal service startup)",
+          "x1": 0,
+          "y1": 0,
+          "x2": 100,
+          "y2": 20,
+          "correct": false
+        },
+        {
+          "id": "r2",
+          "label": "4624 Logon success: type 3, user=svc_backup (network logon)",
+          "x1": 0,
+          "y1": 20,
+          "x2": 100,
+          "y2": 40,
+          "correct": false
+        },
+        {
+          "id": "r3",
+          "label": "4672 Special privileges assigned to new logon: user=svc_backup",
+          "x1": 0,
+          "y1": 40,
+          "x2": 100,
+          "y2": 60,
+          "correct": true
+        },
+        {
+          "id": "r4",
+          "label": "4634 An account was logged off: user=svc_backup",
+          "x1": 0,
+          "y1": 60,
+          "x2": 100,
+          "y2": 80,
+          "correct": false
+        },
+        {
+          "id": "r5",
+          "label": "5156 Windows Filtering Platform permitted a connection (routine)",
+          "x1": 0,
+          "y1": 80,
+          "x2": 100,
+          "y2": 100,
+          "correct": false
+        }
+      ],
+      "explanation": "Event 4672 records that special privileges were assigned to a new logon. A successful network logon (4624) shows access but not administrative rights; process and logoff events do not establish privilege assignment.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Windows Security Event Analysis"
+        }
+      ],
+      "hint": "Look for the event ID whose description is specifically about privileges assigned to a logon session."
+    },
+    {
+      "id": "pbq-5-901",
+      "domain": 5,
+      "objective": "5.3",
+      "format": "pbq",
+      "kind": "single-choice",
+      "prompt": "A SaaS vendor will process customer PII and has returned a completed security questionnaire. Which artifact should the security team request NEXT to independently validate the vendor controls?",
+      "context": "The vendor is new, the data is regulated, and the contract is still being negotiated. The team needs evidence produced by an independent party rather than another self-report.",
+      "options": [
+        {
+          "id": "a",
+          "text": "A current SOC 2 Type II report",
+          "rationale": "A SOC 2 Type II report is independent attestation over an operating period and tests whether controls actually operated."
+        },
+        {
+          "id": "b",
+          "text": "A longer vendor questionnaire",
+          "rationale": "Another questionnaire is still self-reported and does not independently validate the controls."
+        },
+        {
+          "id": "c",
+          "text": "The vendor marketing brochure",
+          "rationale": "Marketing material is not audit evidence and is not independently produced."
+        },
+        {
+          "id": "d",
+          "text": "A verbal assurance from the sales representative",
+          "rationale": "A verbal assurance is not documented, independent, or verifiable."
+        }
+      ],
+      "correctOptionIds": [
+        "a"
+      ],
+      "selectCount": 1,
+      "explanation": "A SOC 2 Type II report provides independent examination of control operation over time, which is stronger evidence than a self-completed questionnaire, marketing copy, or a sales assurance.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 5.3"
+        },
+        {
+          "source": "study-guide",
+          "section": "Vendor Assessment and Attestations"
+        }
+      ],
+      "hint": "Prefer evidence produced by an independent examiner over anything the vendor writes or says about itself."
+    },
+    {
+      "id": "pbq-4-902",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "pbq",
+      "kind": "rule-table",
+      "prompt": "Build the inbound rule set for the public web server. Permit HTTPS from any source, permit SSH only from the administrator network, block cleartext HTTP, and end with an explicit default block.",
+      "context": "Rules are evaluated top to bottom. A broad rule placed above a specific exception defeats the exception, and an implicit-allow default would expose every other service.",
+      "columns": [
+        {
+          "id": "source",
+          "label": "Source",
+          "options": [
+            {
+              "id": "s-any",
+              "text": "Any"
+            },
+            {
+              "id": "s-admin",
+              "text": "10.10.5.0/24 (admin)"
+            },
+            {
+              "id": "s-web",
+              "text": "10.10.20.10"
+            },
+            {
+              "id": "s-guest",
+              "text": "10.10.30.0/24 (guest)"
+            }
+          ]
+        },
+        {
+          "id": "destination",
+          "label": "Destination",
+          "options": [
+            {
+              "id": "d-web",
+              "text": "Web server"
+            },
+            {
+              "id": "d-db",
+              "text": "Database server"
+            },
+            {
+              "id": "d-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "port",
+          "label": "Port",
+          "options": [
+            {
+              "id": "p-443",
+              "text": "443"
+            },
+            {
+              "id": "p-80",
+              "text": "80"
+            },
+            {
+              "id": "p-22",
+              "text": "22"
+            },
+            {
+              "id": "p-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Action",
+          "options": [
+            {
+              "id": "a-allow",
+              "text": "Allow"
+            },
+            {
+              "id": "a-deny",
+              "text": "Deny"
+            },
+            {
+              "id": "a-log",
+              "text": "Log only"
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "label": "Rule 1",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-web",
+            "port": "p-443",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r2",
+          "label": "Rule 2",
+          "cells": {
+            "source": "s-admin",
+            "destination": "d-web",
+            "port": "p-22",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r3",
+          "label": "Rule 3",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-web",
+            "port": "p-80",
+            "action": "a-deny"
+          }
+        },
+        {
+          "id": "r4",
+          "label": "Rule 4",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-any",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        }
+      ],
+      "correctOrder": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "correctValues": {
+        "r1": {
+          "source": "s-any",
+          "destination": "d-web",
+          "port": "p-443",
+          "action": "a-allow"
+        },
+        "r2": {
+          "source": "s-admin",
+          "destination": "d-web",
+          "port": "p-22",
+          "action": "a-allow"
+        },
+        "r3": {
+          "source": "s-any",
+          "destination": "d-web",
+          "port": "p-80",
+          "action": "a-deny"
+        },
+        "r4": {
+          "source": "s-any",
+          "destination": "d-any",
+          "port": "p-any",
+          "action": "a-deny"
+        }
+      },
+      "explanation": "The permit for HTTPS is first, the narrow SSH permit from the administrator subnet is second, the cleartext web rule is explicitly blocked third, and the catch-all block is last. A broad block before the narrow permit would shadow it.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Firewall Rules and Rule Order"
+        }
+      ],
+      "hint": "Order the most specific rules first and leave the catch-all for the end. Read each stated source, destination, and port exactly."
+    },
+    {
+      "id": "pbq-3-902",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "kind": "rule-table",
+      "prompt": "Build the screened-subnet policy. Internet clients may use HTTPS on the public web server, the web server may reach the database on MySQL, and nothing else may cross into the database segment.",
+      "context": "The web server sits in a DMZ; the database sits on the internal network. The rule set must allow only the application path and block everything else.",
+      "columns": [
+        {
+          "id": "source",
+          "label": "Source",
+          "options": [
+            {
+              "id": "s-any",
+              "text": "Any"
+            },
+            {
+              "id": "s-web",
+              "text": "Web server"
+            },
+            {
+              "id": "s-db",
+              "text": "Database server"
+            },
+            {
+              "id": "s-admin",
+              "text": "Admin network"
+            }
+          ]
+        },
+        {
+          "id": "destination",
+          "label": "Destination",
+          "options": [
+            {
+              "id": "d-web",
+              "text": "Web server"
+            },
+            {
+              "id": "d-db",
+              "text": "Database server"
+            },
+            {
+              "id": "d-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "port",
+          "label": "Port",
+          "options": [
+            {
+              "id": "p-443",
+              "text": "443"
+            },
+            {
+              "id": "p-3306",
+              "text": "3306"
+            },
+            {
+              "id": "p-22",
+              "text": "22"
+            },
+            {
+              "id": "p-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Action",
+          "options": [
+            {
+              "id": "a-allow",
+              "text": "Allow"
+            },
+            {
+              "id": "a-deny",
+              "text": "Deny"
+            },
+            {
+              "id": "a-log",
+              "text": "Log only"
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "label": "Rule 1",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-web",
+            "port": "p-443",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r2",
+          "label": "Rule 2",
+          "cells": {
+            "source": "s-web",
+            "destination": "d-db",
+            "port": "p-3306",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r3",
+          "label": "Rule 3",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-db",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        },
+        {
+          "id": "r4",
+          "label": "Rule 4",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-any",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        }
+      ],
+      "correctOrder": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "correctValues": {
+        "r1": {
+          "source": "s-any",
+          "destination": "d-web",
+          "port": "p-443",
+          "action": "a-allow"
+        },
+        "r2": {
+          "source": "s-web",
+          "destination": "d-db",
+          "port": "p-3306",
+          "action": "a-allow"
+        },
+        "r3": {
+          "source": "s-any",
+          "destination": "d-db",
+          "port": "p-any",
+          "action": "a-deny"
+        },
+        "r4": {
+          "source": "s-any",
+          "destination": "d-any",
+          "port": "p-any",
+          "action": "a-deny"
+        }
+      },
+      "explanation": "HTTPS to the web server and MySQL from the web server are the only permitted paths. The database-specific block prevents every other source from reaching the database, and the final catch-all blocks the rest.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Segmentation and Screened Subnets"
+        }
+      ],
+      "hint": "Permit the two application paths first, then block the database segment broadly, then block everything else."
+    },
+    {
+      "id": "pbq-3-903",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "kind": "rule-table",
+      "prompt": "Configure the cloud security group for a public web instance. Allow HTTPS from the Internet, allow SSH only from the corporate egress range 203.0.113.0/24, and block all other inbound traffic.",
+      "context": "Security groups are stateful and default-deny, but an explicit broad allow can still expose the instance. The organization wants the rule set to document both the intended paths and the deny boundary.",
+      "columns": [
+        {
+          "id": "source",
+          "label": "Source",
+          "options": [
+            {
+              "id": "s-any",
+              "text": "0.0.0.0/0"
+            },
+            {
+              "id": "s-corp",
+              "text": "203.0.113.0/24"
+            },
+            {
+              "id": "s-vpc",
+              "text": "10.0.0.0/16"
+            },
+            {
+              "id": "s-web",
+              "text": "Web instance"
+            }
+          ]
+        },
+        {
+          "id": "destination",
+          "label": "Destination",
+          "options": [
+            {
+              "id": "d-web",
+              "text": "Web instance"
+            },
+            {
+              "id": "d-db",
+              "text": "Database instance"
+            },
+            {
+              "id": "d-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "port",
+          "label": "Port",
+          "options": [
+            {
+              "id": "p-443",
+              "text": "443"
+            },
+            {
+              "id": "p-22",
+              "text": "22"
+            },
+            {
+              "id": "p-80",
+              "text": "80"
+            },
+            {
+              "id": "p-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Action",
+          "options": [
+            {
+              "id": "a-allow",
+              "text": "Allow"
+            },
+            {
+              "id": "a-deny",
+              "text": "Deny"
+            },
+            {
+              "id": "a-log",
+              "text": "Log only"
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "label": "Rule 1",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-web",
+            "port": "p-443",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r2",
+          "label": "Rule 2",
+          "cells": {
+            "source": "s-corp",
+            "destination": "d-web",
+            "port": "p-22",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r3",
+          "label": "Rule 3",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-web",
+            "port": "p-22",
+            "action": "a-deny"
+          }
+        },
+        {
+          "id": "r4",
+          "label": "Rule 4",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-any",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        }
+      ],
+      "correctOrder": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "correctValues": {
+        "r1": {
+          "source": "s-any",
+          "destination": "d-web",
+          "port": "p-443",
+          "action": "a-allow"
+        },
+        "r2": {
+          "source": "s-corp",
+          "destination": "d-web",
+          "port": "p-22",
+          "action": "a-allow"
+        },
+        "r3": {
+          "source": "s-any",
+          "destination": "d-web",
+          "port": "p-22",
+          "action": "a-deny"
+        },
+        "r4": {
+          "source": "s-any",
+          "destination": "d-any",
+          "port": "p-any",
+          "action": "a-deny"
+        }
+      },
+      "explanation": "HTTPS is open to the Internet. SSH is permitted only from the corporate egress range, then explicitly denied from everywhere else, and the final rule denies all remaining inbound traffic. Placing the broad SSH deny above the corporate allow would lock administrators out.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Cloud Security Groups and Segmentation"
+        }
+      ],
+      "hint": "Put the trusted-range exception above the broad block for that service, and keep the catch-all at the bottom."
+    },
+    {
+      "id": "pbq-4-903",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "pbq",
+      "kind": "rule-table",
+      "prompt": "Build the database access policy. The application server may use MySQL, the database administrators may use SSH from the admin network, and every other path into the database must be blocked.",
+      "context": "Only two support paths are approved. Admin traffic must not be blocked by the broad database deny, so precedence matters.",
+      "columns": [
+        {
+          "id": "source",
+          "label": "Source",
+          "options": [
+            {
+              "id": "s-web",
+              "text": "Web/app server"
+            },
+            {
+              "id": "s-admin",
+              "text": "Admin network"
+            },
+            {
+              "id": "s-any",
+              "text": "Any"
+            },
+            {
+              "id": "s-guest",
+              "text": "Guest network"
+            }
+          ]
+        },
+        {
+          "id": "destination",
+          "label": "Destination",
+          "options": [
+            {
+              "id": "d-db",
+              "text": "Database server"
+            },
+            {
+              "id": "d-web",
+              "text": "Web server"
+            },
+            {
+              "id": "d-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "port",
+          "label": "Port",
+          "options": [
+            {
+              "id": "p-3306",
+              "text": "3306"
+            },
+            {
+              "id": "p-22",
+              "text": "22"
+            },
+            {
+              "id": "p-443",
+              "text": "443"
+            },
+            {
+              "id": "p-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Action",
+          "options": [
+            {
+              "id": "a-allow",
+              "text": "Allow"
+            },
+            {
+              "id": "a-deny",
+              "text": "Deny"
+            },
+            {
+              "id": "a-log",
+              "text": "Log only"
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "label": "Rule 1",
+          "cells": {
+            "source": "s-web",
+            "destination": "d-db",
+            "port": "p-3306",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r2",
+          "label": "Rule 2",
+          "cells": {
+            "source": "s-admin",
+            "destination": "d-db",
+            "port": "p-22",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r3",
+          "label": "Rule 3",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-db",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        },
+        {
+          "id": "r4",
+          "label": "Rule 4",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-any",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        }
+      ],
+      "correctOrder": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "correctValues": {
+        "r1": {
+          "source": "s-web",
+          "destination": "d-db",
+          "port": "p-3306",
+          "action": "a-allow"
+        },
+        "r2": {
+          "source": "s-admin",
+          "destination": "d-db",
+          "port": "p-22",
+          "action": "a-allow"
+        },
+        "r3": {
+          "source": "s-any",
+          "destination": "d-db",
+          "port": "p-any",
+          "action": "a-deny"
+        },
+        "r4": {
+          "source": "s-any",
+          "destination": "d-any",
+          "port": "p-any",
+          "action": "a-deny"
+        }
+      },
+      "explanation": "The two approved paths are permitted first. The database-wide deny then blocks every other source, and the final deny covers all remaining destinations. Reversing the first two rules is acceptable only if both stay above the broad block.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Firewall Rules and Least Privilege"
+        }
+      ],
+      "hint": "The approved support paths must sit above the broad database block. The final catch-all covers everything else."
+    },
+    {
+      "id": "pbq-4-904",
+      "domain": 4,
+      "objective": "4.5",
+      "format": "pbq",
+      "kind": "rule-table",
+      "prompt": "Build the guest-wireless egress policy. Guests may reach the Internet over HTTPS and DNS, but must not reach the internal network. End with a default block.",
+      "context": "The guest VLAN is isolated at layer 2, and this rule set is the layer 3 backstop. DNS uses UDP and TCP port 53; the HTTPS path uses TCP 443.",
+      "columns": [
+        {
+          "id": "source",
+          "label": "Source",
+          "options": [
+            {
+              "id": "s-guest",
+              "text": "Guest network"
+            },
+            {
+              "id": "s-internal",
+              "text": "Internal network"
+            },
+            {
+              "id": "s-any",
+              "text": "Any"
+            },
+            {
+              "id": "s-web",
+              "text": "Web server"
+            }
+          ]
+        },
+        {
+          "id": "destination",
+          "label": "Destination",
+          "options": [
+            {
+              "id": "d-any",
+              "text": "Any"
+            },
+            {
+              "id": "d-internal",
+              "text": "Internal network"
+            },
+            {
+              "id": "d-web",
+              "text": "Web server"
+            },
+            {
+              "id": "d-db",
+              "text": "Database server"
+            }
+          ]
+        },
+        {
+          "id": "port",
+          "label": "Port",
+          "options": [
+            {
+              "id": "p-443",
+              "text": "443"
+            },
+            {
+              "id": "p-53",
+              "text": "53"
+            },
+            {
+              "id": "p-22",
+              "text": "22"
+            },
+            {
+              "id": "p-any",
+              "text": "Any"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Action",
+          "options": [
+            {
+              "id": "a-allow",
+              "text": "Allow"
+            },
+            {
+              "id": "a-deny",
+              "text": "Deny"
+            },
+            {
+              "id": "a-log",
+              "text": "Log only"
+            }
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "label": "Rule 1",
+          "cells": {
+            "source": "s-guest",
+            "destination": "d-any",
+            "port": "p-443",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r2",
+          "label": "Rule 2",
+          "cells": {
+            "source": "s-guest",
+            "destination": "d-any",
+            "port": "p-53",
+            "action": "a-allow"
+          }
+        },
+        {
+          "id": "r3",
+          "label": "Rule 3",
+          "cells": {
+            "source": "s-guest",
+            "destination": "d-internal",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        },
+        {
+          "id": "r4",
+          "label": "Rule 4",
+          "cells": {
+            "source": "s-any",
+            "destination": "d-any",
+            "port": "p-any",
+            "action": "a-deny"
+          }
+        }
+      ],
+      "correctOrder": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "correctValues": {
+        "r1": {
+          "source": "s-guest",
+          "destination": "d-any",
+          "port": "p-443",
+          "action": "a-allow"
+        },
+        "r2": {
+          "source": "s-guest",
+          "destination": "d-any",
+          "port": "p-53",
+          "action": "a-allow"
+        },
+        "r3": {
+          "source": "s-guest",
+          "destination": "d-internal",
+          "port": "p-any",
+          "action": "a-deny"
+        },
+        "r4": {
+          "source": "s-any",
+          "destination": "d-any",
+          "port": "p-any",
+          "action": "a-deny"
+        }
+      },
+      "explanation": "Guests receive only web and name-resolution egress. The internal-network block is placed after those permits but before the catch-all. If the internal block were first, it would be correct but the final catch-all would still handle other destinations; the graded order keeps the two permits first.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Guest Network Segmentation"
+        }
+      ],
+      "hint": "Permit the two guest services, then block the protected internal range, then block everything else."
+    },
+    {
+      "id": "pbq-4-905",
+      "domain": 4,
+      "objective": "4.4",
+      "format": "pbq",
+      "kind": "cli",
+      "prompt": "Use the Linux terminal to inventory listening sockets and inspect the tail of the authentication log.",
+      "device": "linux-analyst-01",
+      "shell": "analyst@linux-analyst-01:~$",
+      "transcript": [
+        "analyst@linux-analyst-01:~$ uname -a",
+        "Linux linux-analyst-01 6.8.0-generic #1 SMP x86_64 GNU/Linux",
+        "analyst@linux-analyst-01:~$ ls -l /var/log/auth.log",
+        "-rw-r----- 1 syslog adm 481203 Nov 14 09:12 /var/log/auth.log"
+      ],
+      "vocabulary": [
+        "ss",
+        "-tulpn",
+        "netstat",
+        "-ano",
+        "tail",
+        "-n",
+        "20",
+        "/var/log/auth.log",
+        "grep",
+        "journalctl",
+        "-u",
+        "ssh"
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "label": "Show listening TCP and UDP sockets with the owning process",
+          "placeholder": "type a command",
+          "tokens": [
+            "ss",
+            "-tulpn",
+            "netstat",
+            "-ano"
+          ],
+          "accepted": [
+            "ss -tulpn",
+            "ss -tulnp",
+            "netstat -tulpn",
+            "netstat -ano"
+          ]
+        },
+        {
+          "id": "t2",
+          "label": "Show the last 20 lines of the authentication log",
+          "placeholder": "type a command",
+          "tokens": [
+            "tail",
+            "-n",
+            "20",
+            "/var/log/auth.log"
+          ],
+          "accepted": [
+            "tail -n 20 /var/log/auth.log",
+            "tail -20 /var/log/auth.log",
+            "tail -n20 /var/log/auth.log"
+          ]
+        }
+      ],
+      "explanation": "`ss -tulpn` lists listening sockets with process owners; `tail -n 20 /var/log/auth.log` shows the most recent authentication events. Netstat variants and `tail -20` are accepted because they produce the same evidence.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.4"
+        },
+        {
+          "source": "study-guide",
+          "section": "Linux Host Triage Commands"
+        }
+      ],
+      "hint": "Start with the socket table for listeners, then read the tail of the authentication log. Use the exact path shown by the terminal."
+    },
+    {
+      "id": "pbq-4-906",
+      "domain": 4,
+      "objective": "4.9",
+      "format": "pbq",
+      "kind": "cli",
+      "prompt": "Use the Windows terminal to map active connections to process IDs and resolve the suspicious hostname.",
+      "device": "win-analyst-02",
+      "shell": "PS C:\\Users\\analyst>",
+      "transcript": [
+        "PS C:\\Users\\analyst> Get-Date",
+        "Thursday, November 14, 2026 9:18:44 AM",
+        "PS C:\\Users\\analyst> Get-Process | Where-Object {$_.ProcessName -eq \"rundll32\"}",
+        "Handles  NPM(K)  PM(K)  WS(K)  CPU(s)  Id  ProcessName",
+        "    312      18   9216  14208    0.42 4812 rundll32"
+      ],
+      "vocabulary": [
+        "netstat",
+        "-ano",
+        "nslookup",
+        "198.51.100.23",
+        "suspicious.example",
+        "ipconfig",
+        "/flushdns",
+        "Get-NetTCPConnection",
+        "Resolve-DnsName"
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "label": "List active network connections with the owning process ID",
+          "placeholder": "type a command",
+          "tokens": [
+            "netstat",
+            "-ano",
+            "Get-NetTCPConnection"
+          ],
+          "accepted": [
+            "netstat -ano",
+            "netstat -a -n -o",
+            "Get-NetTCPConnection"
+          ]
+        },
+        {
+          "id": "t2",
+          "label": "Resolve the suspicious hostname to an IP address",
+          "placeholder": "type a command",
+          "tokens": [
+            "nslookup",
+            "suspicious.example",
+            "Resolve-DnsName"
+          ],
+          "accepted": [
+            "nslookup suspicious.example",
+            "nslookup suspicious.example.com",
+            "Resolve-DnsName suspicious.example"
+          ]
+        }
+      ],
+      "explanation": "`netstat -ano` maps connections to process IDs, which ties the suspicious `rundll32` process to its remote endpoint. `nslookup suspicious.example` resolves the name so the analyst can compare it with the connection list.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.9"
+        },
+        {
+          "source": "study-guide",
+          "section": "Windows Network and DNS Evidence"
+        }
+      ],
+      "hint": "Pair the connection table with the process ID, then resolve the name the alert supplied. Use the command that ships with Windows."
+    },
+    {
+      "id": "pbq-4-907",
+      "domain": 4,
+      "objective": "4.1",
+      "format": "pbq",
+      "kind": "cli",
+      "prompt": "Complete the two SSH hardening directives shown in the transcript.",
+      "device": "linux-web-03",
+      "shell": "root@linux-web-03:~#",
+      "transcript": [
+        "root@linux-web-03:~# grep -E \"^(PermitRootLogin|PasswordAuthentication)\" /etc/ssh/sshd_config",
+        "#PermitRootLogin prohibit-password",
+        "#PasswordAuthentication yes",
+        "root@linux-web-03:~#"
+      ],
+      "vocabulary": [
+        "PermitRootLogin",
+        "PasswordAuthentication",
+        "no",
+        "yes",
+        "/etc/ssh/sshd_config",
+        "systemctl",
+        "restart",
+        "sshd",
+        "ssh"
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "label": "Set the directive that prevents direct root logon",
+          "placeholder": "directive value",
+          "tokens": [
+            "PermitRootLogin",
+            "no",
+            "yes"
+          ],
+          "accepted": [
+            "PermitRootLogin no"
+          ]
+        },
+        {
+          "id": "t2",
+          "label": "Set the directive that disables password-based SSH authentication",
+          "placeholder": "directive value",
+          "tokens": [
+            "PasswordAuthentication",
+            "no",
+            "yes"
+          ],
+          "accepted": [
+            "PasswordAuthentication no"
+          ]
+        }
+      ],
+      "explanation": "`PermitRootLogin no` stops direct root SSH sessions; `PasswordAuthentication no` forces key-based authentication. The commented defaults in the transcript must be replaced with the explicit hardened values.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 4.1"
+        },
+        {
+          "source": "study-guide",
+          "section": "Linux Host Hardening"
+        }
+      ],
+      "hint": "Write the two directives with the hardened value only, exactly as they belong in the SSH daemon configuration."
+    },
+    {
+      "id": "pbq-3-904",
+      "domain": 3,
+      "objective": "3.2",
+      "format": "pbq",
+      "kind": "cli",
+      "prompt": "Use the firewall terminal to append the HTTPS permit and the final catch-all drop.",
+      "device": "edge-fw-01",
+      "shell": "admin@edge-fw-01:~$",
+      "transcript": [
+        "admin@edge-fw-01:~$ sudo iptables -L INPUT -n --line-numbers",
+        "Chain INPUT (policy ACCEPT)",
+        "num  target     prot opt source               destination",
+        "1    ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:22",
+        "admin@edge-fw-01:~$"
+      ],
+      "vocabulary": [
+        "iptables",
+        "-A",
+        "INPUT",
+        "-p",
+        "tcp",
+        "--dport",
+        "443",
+        "-j",
+        "ACCEPT",
+        "DROP",
+        "REJECT"
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "label": "Append a rule that permits inbound HTTPS",
+          "placeholder": "type a command",
+          "tokens": [
+            "iptables",
+            "-A",
+            "INPUT",
+            "-p",
+            "tcp",
+            "--dport",
+            "443",
+            "-j",
+            "ACCEPT"
+          ],
+          "accepted": [
+            "iptables -A INPUT -p tcp --dport 443 -j ACCEPT"
+          ]
+        },
+        {
+          "id": "t2",
+          "label": "Append the final rule that drops all remaining inbound traffic",
+          "placeholder": "type a command",
+          "tokens": [
+            "iptables",
+            "-A",
+            "INPUT",
+            "-j",
+            "DROP",
+            "REJECT"
+          ],
+          "accepted": [
+            "iptables -A INPUT -j DROP"
+          ]
+        }
+      ],
+      "explanation": "`iptables -A INPUT -p tcp --dport 443 -j ACCEPT` appends the HTTPS permit; `iptables -A INPUT -j DROP` appends the default drop. Appending keeps the existing SSH rule above the catch-all.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 3.2"
+        },
+        {
+          "source": "study-guide",
+          "section": "Host and Network Firewall Configuration"
+        }
+      ],
+      "hint": "Append both rules to the inbound chain: one filtered by protocol and destination port, one unfiltered catch-all."
+    },
+    {
+      "id": "pbq-2-902",
+      "domain": 2,
+      "objective": "2.5",
+      "format": "pbq",
+      "kind": "cli",
+      "prompt": "Use the host firewall to block the confirmed malicious source and enable the firewall.",
+      "device": "linux-endpoint-07",
+      "shell": "analyst@linux-endpoint-07:~$",
+      "transcript": [
+        "analyst@linux-endpoint-07:~$ sudo ufw status verbose",
+        "Status: inactive",
+        "analyst@linux-endpoint-07:~$"
+      ],
+      "vocabulary": [
+        "ufw",
+        "deny",
+        "from",
+        "198.51.100.23",
+        "enable",
+        "allow",
+        "status",
+        "verbose",
+        "reset"
+      ],
+      "tasks": [
+        {
+          "id": "t1",
+          "label": "Block all traffic from the confirmed malicious address",
+          "placeholder": "type a command",
+          "tokens": [
+            "ufw",
+            "deny",
+            "from",
+            "198.51.100.23"
+          ],
+          "accepted": [
+            "ufw deny from 198.51.100.23"
+          ]
+        },
+        {
+          "id": "t2",
+          "label": "Turn the host firewall on",
+          "placeholder": "type a command",
+          "tokens": [
+            "ufw",
+            "enable"
+          ],
+          "accepted": [
+            "ufw enable"
+          ]
+        }
+      ],
+      "explanation": "`ufw deny from 198.51.100.23` blocks the confirmed source, and `ufw enable` activates the host firewall. The status shows it was inactive, so the rule alone would not take effect.",
+      "sourceRefs": [
+        {
+          "source": "exam-objectives",
+          "section": "Objective 2.5"
+        },
+        {
+          "source": "study-guide",
+          "section": "Host-Based Mitigation"
+        }
+      ],
+      "hint": "Apply a host-firewall rule for the confirmed source address, then turn the service on."
     }
   ]
 }

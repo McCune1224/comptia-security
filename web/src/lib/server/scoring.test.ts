@@ -215,3 +215,49 @@ describe('scoreQuestion', () => {
 		expect(scoreQuestion(choice, { kind: 'choice', optionIds: ['b'] }, { hintUsed: true }).earnedPoints).toBe(0);
 	});
 });
+
+describe('new interactive PBQ kinds', () => {
+	it('scores a firewall rule-table by cell values and row order with partial credit', () => {
+		const ruleTable = bank.pbqs.find((question) => question.kind === 'rule-table')!;
+		if (ruleTable.kind !== 'rule-table') throw new Error('missing rule-table fixture');
+		const correct = {
+			kind: 'rule-table' as const,
+			values: ruleTable.correctValues,
+			rowOrder: ruleTable.correctOrder
+		};
+		expect(scoreQuestion(ruleTable, correct).earnedPoints).toBe(1);
+		const oneCellWrong = structuredClone(correct);
+		const firstRow = ruleTable.rows[0].id;
+		const firstColumn = ruleTable.columns[0].id;
+		oneCellWrong.values[firstRow] = {
+			...oneCellWrong.values[firstRow],
+			[firstColumn]: 'not-a-real-option'
+		};
+		const total = ruleTable.rows.length * ruleTable.columns.length + ruleTable.rows.length;
+		expect(scoreQuestion(ruleTable, oneCellWrong).earnedPoints).toBe((total - 1) / total);
+		const wrongOrder = { ...correct, rowOrder: [...correct.rowOrder].reverse() };
+		expect(scoreQuestion(ruleTable, wrongOrder).earnedPoints).toBeLessThan(1);
+	});
+
+	it('scores typed CLI commands after normalization and rejects a wrong command', () => {
+		const cli = bank.pbqs.find((question) => question.kind === 'cli')!;
+		if (cli.kind !== 'cli') throw new Error('missing cli fixture');
+		const accepted = Object.fromEntries(cli.tasks.map((task) => [task.id, task.accepted[0]]));
+		expect(scoreQuestion(cli, { kind: 'cli', values: accepted }).earnedPoints).toBe(1);
+		const noisy = Object.fromEntries(
+			cli.tasks.map((task) => [task.id, `  ${task.accepted[0].toUpperCase()}  `])
+		);
+		// Uppercase and surrounding whitespace normalize, so the answer still scores.
+		const first = cli.tasks[0];
+		expect(
+			scoreQuestion(cli, {
+				kind: 'cli',
+				values: { ...accepted, [first.id]: `  ${first.accepted[0].toUpperCase()}  ` }
+			}).earnedPoints
+		).toBe(1);
+		expect(
+			scoreQuestion(cli, { kind: 'cli', values: { ...accepted, [first.id]: 'wrong command' } })
+				.earnedPoints
+		).toBe((cli.tasks.length - 1) / cli.tasks.length);
+	});
+});

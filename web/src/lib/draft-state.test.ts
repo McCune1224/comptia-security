@@ -271,3 +271,52 @@ describe('isDraftComplete (graded saves + answered display)', () => {
 		);
 	});
 });
+
+const ruleTable: PublicQuestion = {
+	...base,
+	kind: 'rule-table',
+	columns: [
+		{ id: 'c1', label: 'Source', options: [{ id: 'a', text: 'Any' }] },
+		{ id: 'c2', label: 'Action', options: [{ id: 'allow', text: 'Allow' }] }
+	],
+	rows: [
+		{ id: 'r1', label: 'Rule 1' },
+		{ id: 'r2', label: 'Rule 2' }
+	]
+};
+
+const cli: PublicQuestion = {
+	...base,
+	kind: 'cli',
+	device: 'host',
+	shell: '$',
+	transcript: [],
+	vocabulary: ['sudo', 'ufw', 'status', 'verbose'],
+	tasks: [
+		{ id: 't1', label: 'Task 1', placeholder: 'type' },
+		{ id: 't2', label: 'Task 2', placeholder: 'type' }
+	]
+};
+
+describe('rule-table and cli draft predicates', () => {
+	it('requires every cell and task for completeness but records partial work', () => {
+		const partialTable: QuestionResponse = {
+			kind: 'rule-table',
+			values: { r1: { c1: 'a' } },
+			rowOrder: ['r1', 'r2']
+		};
+		expect(isDraftComplete(ruleTable, partialTable)).toBe(false);
+		expect(hasDraftWork(ruleTable, partialTable)).toBe(true);
+		const completeTable: QuestionResponse = {
+			kind: 'rule-table',
+			values: { r1: { c1: 'a', c2: 'allow' }, r2: { c1: 'a', c2: 'allow' } },
+			rowOrder: ['r1', 'r2']
+		};
+		expect(isDraftComplete(ruleTable, completeTable)).toBe(true);
+
+		const partialCli: QuestionResponse = { kind: 'cli', values: { t1: 'sudo ufw status' } };
+		expect(isDraftComplete(cli, partialCli)).toBe(false);
+		expect(hasDraftWork(cli, partialCli)).toBe(true);
+		expect(isDraftComplete(cli, { kind: 'cli', values: { t1: 'a', t2: 'b' } })).toBe(true);
+	});
+});

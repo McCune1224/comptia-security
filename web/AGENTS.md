@@ -56,7 +56,7 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into PostgreSQL o
     interleaved; PBQs are scored at `ExamConfig.pbqPoints` (SY0-701 = 6, so 5 PBQs ≈ 26% of the
     score) while MCQs are worth 1 — mirroring the real exam's 20–30% PBQ weight.
 - **Question banks:** Security+ 692 MCQs (104/164/166/139/119 across Domains 1–5; styles: recall 376, keyword 159, scenario 109, short-form 48)
-  - 105 PBQs (matching 24, word-bank 20, configuration 18, multi-step 11, evidence 9, ordering 8, sort 4, slider 3, multiple-choice 4, single-choice 2, hotspot 2). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
+  - 120 PBQs (matching 24, word-bank 20, configuration 18, multi-step 11, evidence 9, ordering 8, rule-table 5, cli 5, sort 4, multiple-choice 4, slider 3, hotspot 3, memory 3, single-choice 3). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
     multi-selects) **+ 28 PBQs** (3/6/9/2/8 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
     MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 28 PBQs** (7/9/6/6 per domain,
     7 kinds). Bank ids: `mcq-/pbq-` (Security+), `a1-`/`a1-pbq-` (A+ Core 1), `a2-`/`a2-pbq-`
@@ -80,11 +80,12 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into PostgreSQL o
   leaks to the client), `matching` (tap-to-connect via MatchConnect), `ordering` (drag/tap
   ordering), `configuration` (dropdown rule builders), `evidence` (artifact line selection),
   `slider` (value selection with min/max/step + tolerance), `multi-step` (2–4 guided child steps),
-  and `memory` (paired-card matching board — implemented in the engine, no bank questions yet).
+  `rule-table` (firewall/ACL rows + precedence), `cli` (constrained typed commands/config), and
+  `memory` (paired-card matching board).
   **`numeric` and `fill-blank` are banned from authoring** (the validator rejects both top-level
   and as multi-step children; each has 0 bank items). `fill-blank` still renders legacy read-only
   for stored session snapshots. Interactive renderers: `MatchConnect.svelte`, `SortBoard.svelte`,
-  `Hotspot.svelte` — all ≥44px touch targets.
+  `Hotspot.svelte`, `RuleTable.svelte`, `CliTerminal.svelte`, `MemoryBoard.svelte` — all ≥44px touch targets.
 - **Daily review engine** (`src/lib/server/review.ts`): SM-2-lite spaced repetition over the bank.
   `review_cards` holds per-question interval/ease/lapses/due date (local calendar day); `study_log`
   records per-day question counts for streaks and the 12-week heatmap. `composeQueue('daily')`

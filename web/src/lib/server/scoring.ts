@@ -1,5 +1,10 @@
 import type { QuestionFeedback, QuestionResponse } from '$lib/types';
-import { correctResponse, toPublicQuestion, type QuestionDefinition } from './question-bank';
+import {
+	correctResponse,
+	normalizeCommand,
+	toPublicQuestion,
+	type QuestionDefinition
+} from './question-bank';
 
 function selectedScore(correctIds: string[], selectedIds: string[]): number {
 	const correct = new Set(correctIds);
@@ -117,6 +122,38 @@ export function scoreQuestion(
 						(response.matchedPairIds ?? []).filter((id) => correctIds.has(id)).length /
 						question.pairs.length;
 				}
+				break;
+			case 'rule-table':
+				if (response.kind === 'rule-table') {
+					let cells = 0;
+					let cellHits = 0;
+					for (const row of question.rows) {
+						for (const column of question.columns) {
+							cells += 1;
+							if (
+								response.values[row.id]?.[column.id] ===
+								question.correctValues[row.id]?.[column.id]
+							)
+								cellHits += 1;
+						}
+					}
+					const orderHits = question.correctOrder.filter(
+						(id, position) => response.rowOrder[position] === id
+					).length;
+					// Cells carry the configuration score; order carries the firewall/ACL
+					// precedence score. Both are partial-credit (possiblePoints stays 1).
+					earnedPoints = (cellHits + orderHits) / (cells + question.rows.length);
+				}
+				break;
+			case 'cli':
+				if (response.kind === 'cli')
+					earnedPoints =
+						question.tasks.filter((task) =>
+							task.accepted.some(
+								(answer) =>
+									normalizeCommand(answer) === normalizeCommand(response.values[task.id] ?? '')
+							)
+						).length / question.tasks.length;
 				break;
 			case 'multi-step':
 				if (response.kind === 'multi-step') {

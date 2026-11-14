@@ -17,7 +17,7 @@ export async function POST(event: RequestEvent) {
 		const style = body.style;
 		if (
 			typeof type !== 'string' ||
-			!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(type) ||
+			!['quiz', 'scenario', 'pbq', 'full', 'review', 'quick'].includes(type) ||
 			(mode !== undefined && (typeof mode !== 'string' || !['practice', 'exam'].includes(mode))) ||
 			(count !== undefined &&
 				(typeof count !== 'number' || !Number.isInteger(count) || count < 1)) ||

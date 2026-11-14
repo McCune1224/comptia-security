@@ -3,7 +3,7 @@
 > Purpose: verify that a learner who works the course from start to finish is prepared to pass
 > CompTIA Security+ SY0-701, and record the gaps that were closed to make that true.
 >
-> Audited: 2026-10-12 · Bank: 692 MCQs + 105 PBQs · Objectives version 5.0
+> Audited: 2026-10-12 · Bank: 692 MCQs + 120 PBQs · Objectives version 5.0
 
 ## Verdict
 
@@ -22,7 +22,7 @@ the drills and reading the lessons alone is not enough.
 | Surface | Where | Role |
 | --- | --- | --- |
 | Course + lessons | `web/` (SvelteKit app), 7 lessons across 4 modules | Teaches every objective bullet |
-| Question banks | `question-bank.json`, 692 MCQ + 105 PBQ | Scored practice for all 28 objectives |
+| Question banks | `question-bank.json`, 692 MCQ + 120 PBQ (incl. rule-table and typed CLI) | Scored practice for all 28 objectives |
 | Full exams | 3 × 90-question timed exams + 1 × 20-question Week-1 checkpoint; full exams are PBQs first (SY0-701 weighting) | Exam simulation and readiness |
 | Spaced repetition | Daily review, mastery matrix, Wall of Shame | Retention and weak-topic recovery |
 | Flashcards | `anki/` (Dion decks, `AI Security+/V3`, ports, crypto, acronyms) | Cram layer |
@@ -79,7 +79,7 @@ full read-through and the third batch of tag corrections.
 | 5.5 | Audits and assessments | 14 | 2 |
 | 5.6 | Security awareness | 14 | 2 |
 
-692 MCQs and 105 PBQs total. Domain MCQ counts 104/164/166/139/119. Every objective clears the
+692 MCQs and 120 PBQs total (the 15 added PBQs close the interaction-format matrix; see `PBQs/PBQ-TYPE-MATRIX.md`). Domain MCQ counts 104/164/166/139/119. Every objective clears the
 bank spec's floor.
 
 ## Gaps found and closed

@@ -74,7 +74,8 @@
 			scenario: 'Scenario Quiz',
 			pbq: 'PBQ Practice',
 			full: 'Practice Exam',
-			review: 'Daily Review'
+			review: 'Daily Review',
+			quick: 'Low-drain Round'
 		};
 		return labels[type] ?? type;
 	}
@@ -121,6 +122,10 @@
 				return 'See correct regions below.';
 			case 'memory':
 				return 'See matched pairs below.';
+			case 'rule-table':
+				return 'See the correct rule values and order below.';
+			case 'cli':
+				return 'See the accepted commands below.';
 			case 'slider':
 				return `${cr.value}`;
 			case 'numeric':
@@ -162,6 +167,10 @@
 				return review.response.regionIds.join(', ');
 			case 'memory':
 				return review.response.matchedPairIds.join(', ');
+			case 'rule-table':
+				return `${review.response.rowOrder.length} rule(s) ordered`;
+			case 'cli':
+				return Object.values(review.response.values).join(' | ');
 			case 'slider':
 				return `${review.response.value}${q.kind === 'slider' ? q.unit : ''}`;
 			case 'numeric':

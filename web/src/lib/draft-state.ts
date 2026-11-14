@@ -67,6 +67,19 @@ export function isDraftComplete(
 			return response.kind === 'hotspot' && response.regionIds.length > 0;
 		case 'memory':
 			return response.kind === 'memory' && response.matchedPairIds.length === question.pairs.length;
+		case 'rule-table':
+			return (
+				response.kind === 'rule-table' &&
+				question.rows.every((row) =>
+					question.columns.every((column) => nonEmpty(response.values[row.id]?.[column.id]))
+				) &&
+				response.rowOrder.length === question.rows.length
+			);
+		case 'cli':
+			return (
+				response.kind === 'cli' &&
+				question.tasks.every((task) => nonEmpty(response.values[task.id]))
+			);
 		case 'multi-step':
 			return (
 				response.kind === 'multi-step' &&
@@ -107,6 +120,13 @@ export function hasDraftWork(
 			return response.kind === 'hotspot' && response.regionIds.length > 0;
 		case 'memory':
 			return response.kind === 'memory' && response.matchedPairIds.length > 0;
+		case 'rule-table':
+			return (
+				response.kind === 'rule-table' &&
+				Object.values(response.values).some((row) => Object.values(row).some(nonEmpty))
+			);
+		case 'cli':
+			return response.kind === 'cli' && Object.values(response.values).some(nonEmpty);
 		case 'multi-step':
 			// Existing practice rule: a multi-step draft carries work as soon as any
 			// step holds a response (each stored step is validated server-side).

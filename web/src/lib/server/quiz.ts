@@ -323,6 +323,40 @@ function validateResponse(
 		response.matchedPairIds.every((id) => question.pairs.some((pair) => pair.id === id))
 	)
 		return;
+	if (question.kind === 'rule-table' && response.kind === 'rule-table') {
+		const rowIds = question.rows.map((row) => row.id);
+		if (
+			response.rowOrder.length !== rowIds.length ||
+			!distinct(response.rowOrder) ||
+			!response.rowOrder.every((id) => rowIds.includes(id)) ||
+			!countOk(Object.keys(response.values).length, rowIds.length) ||
+			Object.keys(response.values).every((rowId) => rowIds.includes(rowId)) &&
+				rowIds.every(
+					(rowId) =>
+						(draft && response.values[rowId] === undefined) ||
+						(draft
+							? Object.keys(response.values[rowId] ?? {}).length > 0
+							: Object.keys(response.values[rowId] ?? {}).length === question.columns.length) &&
+							Object.entries(response.values[rowId] ?? {}).every(
+								([columnId, optionId]) =>
+									question.columns.some((column) => column.id === columnId) &&
+									question.columns
+										.find((column) => column.id === columnId)
+										?.options.some((option) => option.id === optionId)
+							)
+				)
+		)
+			return;
+	}
+	if (question.kind === 'cli' && response.kind === 'cli') {
+		const taskIds = Object.keys(response.values);
+		if (
+			countOk(taskIds.length, question.tasks.length) &&
+			taskIds.every((taskId) => question.tasks.some((task) => task.id === taskId)) &&
+			Object.values(response.values).every((value) => typeof value === 'string')
+		)
+			return;
+	}
 	if (
 		question.kind === 'multi-step' &&
 		response.kind === 'multi-step' &&
@@ -529,9 +563,10 @@ export function createQuizService({
 					{ session: summary(current) }
 				);
 		}
-		const mode: SessionMode = input.type === 'full' ? 'exam' : (input.mode ?? 'practice');
+		const mode: SessionMode =
+			input.type === 'full' ? 'exam' : input.type === 'quick' ? 'practice' : (input.mode ?? 'practice');
 		if (
-			!['quiz', 'scenario', 'pbq', 'full', 'review'].includes(input.type) ||
+			!['quiz', 'scenario', 'pbq', 'full', 'review', 'quick'].includes(input.type) ||
 			!['practice', 'exam'].includes(mode) ||
 			(input.type !== 'quiz' && input.domain !== undefined) ||
 			(input.objective !== undefined &&
@@ -558,9 +593,11 @@ export function createQuizService({
 		const source =
 			input.type === 'pbq'
 				? bank.pbqs
-				: styleFilter
-					? bank.mcqs.filter((question) => question.style === styleFilter)
-					: bank.mcqs;
+				: input.type === 'quick'
+					? [...bank.pbqs, ...bank.mcqs]
+					: styleFilter
+						? bank.mcqs.filter((question) => question.style === styleFilter)
+						: bank.mcqs;
 		const count =
 			input.type === 'full'
 				? 90
@@ -571,7 +608,9 @@ export function createQuizService({
 							? 10
 							: input.type === 'review'
 								? 10
-								: 5));
+								: input.type === 'quick'
+									? 8
+									: 5));
 		let selected: QuestionDefinition[];
 		if (input.type === 'review') {
 			if (count < 1 || count > 20)
@@ -585,6 +624,51 @@ export function createQuizService({
 				.filter((question): question is QuestionDefinition => Boolean(question));
 			if (selected.length !== input.questionIds.length)
 				throw new QuizServiceError('INVALID_REQUEST', 'One or more question ids are unknown.');
+		} else if (input.type === 'quick') {
+			// Low-drain round: short, no deadline, and interleaved so the learner
+			// switches between hands-on and recall instead of grinding one format.
+			if (count < 3 || count > 15)
+				throw new QuizServiceError(
+					'INVALID_REQUEST',
+					'Low-drain rounds must be between 3 and 15 questions.'
+				);
+			const pbqCount = Math.max(1, Math.round(count / 3));
+			const pickedPbqs: QuestionDefinition[] = [];
+			const usedKinds = new Set<string>();
+			for (const pbq of shuffle(bank.pbqs, rng)) {
+				if (usedKinds.has(pbq.kind)) continue;
+				usedKinds.add(pbq.kind);
+				pickedPbqs.push(pbq);
+				if (pickedPbqs.length >= pbqCount) break;
+			}
+			// A bank with fewer kinds than the round needs falls back to repeats.
+			if (pickedPbqs.length < pbqCount) {
+				const extra = shuffle(
+					bank.pbqs.filter((question) => !pickedPbqs.includes(question)),
+					rng
+				);
+				pickedPbqs.push(...extra.slice(0, pbqCount - pickedPbqs.length));
+			}
+			const mcqs = shuffle(
+				bank.mcqs.filter((question) => question.domain === 4 || question.domain === 3),
+				rng
+			).slice(0, count - pbqCount);
+			const slots: (QuestionDefinition | undefined)[] = new Array(count);
+			for (let i = 0; i < pbqCount; i++) {
+				const slot = Math.min(count - 1, Math.round((i * count) / pbqCount));
+				slots[slot] = pickedPbqs[i];
+			}
+			const remaining = shuffle(
+				mcqs.length >= count - pbqCount
+					? mcqs
+					: [...mcqs, ...shuffle(bank.mcqs, rng)],
+				rng
+			);
+			let cursor = 0;
+			selected = Array.from(
+				{ length: count },
+				(_, position) => slots[position] ?? remaining[cursor++]
+			) as QuestionDefinition[];
 		} else if (input.type === 'full') {
 			const pbqs = assemblePbqSet(bank, examConfig.domains);
 			if (!pbqs)

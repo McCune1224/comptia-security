@@ -109,6 +109,31 @@
 		</a>
 
 		<a
+			href="/quick"
+			class="card group p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
+		>
+			<div class="flex items-start justify-between">
+				<span class="grid h-11 w-11 place-items-center rounded-xl bg-accent/10 text-accent">
+					<svg
+						viewBox="0 0 24 24"
+						class="h-5 w-5"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+					>
+						<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />
+					</svg>
+				</span>
+				<span class="text-text-subtle transition group-hover:text-accent">→</span>
+			</div>
+			<h2 class="h-display mt-4 text-xl text-text-primary group-hover:text-accent">Quick round</h2>
+			<p class="mt-1.5 text-sm leading-relaxed text-text-muted">
+				Low-drain PBQ + MCQ rounds, four to fifteen questions, no timer. Short enough to finish when
+				you are tired.
+			</p>
+		</a>
+
+		<a
 			href="/terminology"
 			class="card group p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
 		>
@@ -157,6 +182,31 @@
 			<p class="mt-1.5 text-sm leading-relaxed text-text-muted">
 				90 questions, 90 minutes, exam weighting — the dress rehearsal. Ungraded here, but it feeds
 				readiness.
+			</p>
+		</a>
+
+		<a
+			href="/quiz?start=1&type=full&mode=exam&sections=3"
+			class="card group p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
+		>
+			<div class="flex items-start justify-between">
+				<span class="grid h-11 w-11 place-items-center rounded-xl bg-warning/10 text-warning">
+					<svg
+						viewBox="0 0 24 24"
+						class="h-5 w-5"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.8"
+					>
+						<path d="M5 4h14M5 12h14M5 20h14" />
+					</svg>
+				</span>
+				<span class="text-text-subtle transition group-hover:text-accent">→</span>
+			</div>
+			<h2 class="h-display mt-4 text-xl text-text-primary group-hover:text-accent">Chunked exam</h2>
+			<p class="mt-1.5 text-sm leading-relaxed text-text-muted">
+				The 90-question exam split into three sections with a start screen between them. Resume any
+				time without losing answers.
 			</p>
 		</a>
 

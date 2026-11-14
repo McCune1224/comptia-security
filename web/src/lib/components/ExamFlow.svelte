@@ -5,6 +5,8 @@
 	import SortBoard from '$lib/components/SortBoard.svelte';
 	import Hotspot from '$lib/components/Hotspot.svelte';
 	import MemoryBoard from '$lib/components/MemoryBoard.svelte';
+	import RuleTable from '$lib/components/RuleTable.svelte';
+	import CliTerminal from '$lib/components/CliTerminal.svelte';
 	import SliderInput from '$lib/components/SliderInput.svelte';
 	import type {
 		ActiveSessionSummary,
@@ -28,6 +30,7 @@
 		assignmentId,
 		reviewSource,
 		style,
+		sections = 0,
 		onDone
 	}: {
 		type: SessionType;
@@ -38,11 +41,20 @@
 		assignmentId?: string;
 		reviewSource?: 'daily' | 'wall';
 		style?: QuestionStyle | 'mixed';
+		/** Break the session into N equal chunks with a start screen between them. */
+		sections?: number;
 		onDone?: () => void;
 	} = $props();
 	let session = $state<SessionView | null>(null);
 	let result = $state<QuizResult | null>(null);
 	let index = $state(0);
+	/** Chunked exam: a start screen on the first question of each section after the first. */
+	let breakVisible = $state(false);
+	let acknowledgedSections = $state<Record<number, boolean>>({});
+	let sectionSize = $derived(
+		sections > 1 && session ? Math.ceil(session.totalQuestions / sections) : 0
+	);
+	let sectionIndex = $derived(sectionSize ? Math.floor(index / sectionSize) : 0);
 	let subStep = $state(0);
 	let draft = $state<QuestionResponse | null>(null);
 	let feedback = $state<QuestionFeedback | null>(null);
@@ -51,6 +63,44 @@
 	let timer = $state('');
 	let activeConflict = $state<ActiveSessionSummary | null>(null);
 	let question = $derived(session?.questions[index]);
+
+	function sectionStart(section: number): number {
+		return section * sectionSize + 1;
+	}
+
+	function sectionEnd(section: number): number {
+		return Math.min(session?.totalQuestions ?? 0, (section + 1) * sectionSize);
+	}
+
+	function sectionAnswered(section: number): number {
+		if (!session) return 0;
+		const start = section * sectionSize;
+		const end = Math.min(session.totalQuestions, start + sectionSize);
+		let count = 0;
+		for (let i = start; i < end; i++)
+			if (isDraftComplete(session.questions[i], session.responses[i])) count += 1;
+		return count;
+	}
+
+	function maybeShowSectionBreak(next: number) {
+		if (!sectionSize || next <= 0 || next % sectionSize !== 0) return;
+		const section = Math.floor(next / sectionSize);
+		if (!acknowledgedSections[section]) breakVisible = true;
+	}
+
+	async function beginSection() {
+		acknowledgedSections = { ...acknowledgedSections, [sectionIndex]: true };
+		breakVisible = false;
+		await tick();
+		document.getElementById('session-question-card')?.focus();
+	}
+
+	/** Keep the query string (including `sections`) when a session id is added. */
+	function setSessionUrl(sessionId: string) {
+		const url = new URL(location.href);
+		url.searchParams.set('session', sessionId);
+		history.replaceState({}, '', url.toString());
+	}
 	/** Count of questions with a COMPLETE response — partial drafts don't count as answered. */
 	function completeAnsweredCount(): number {
 		const s = session;
@@ -136,6 +186,22 @@
 		return Number.isFinite(response.value);
 	}
 
+	function ruleTableAnswered(): boolean {
+		if (question?.kind !== 'rule-table') return true;
+		const response = draft?.kind === 'rule-table' ? draft : null;
+		if (!response) return false;
+		return question.rows.every((row) =>
+			question.columns.every((column) => Boolean(response.values[row.id]?.[column.id]))
+		);
+	}
+
+	function cliAnswered(): boolean {
+		if (question?.kind !== 'cli') return true;
+		const response = draft?.kind === 'cli' ? draft : null;
+		if (!response) return false;
+		return question.tasks.every((task) => (response.values[task.id] ?? '').trim().length > 0);
+	}
+
 	/** Uncommitted display start for a slider (mid-range, snapped to step) — draft stays null until touched. */
 	function sliderDefault(question: PublicQuestion): number {
 		if (question.kind !== 'slider') return 0;
@@ -192,6 +258,18 @@
 				return response.kind === 'memory' && response.matchedPairIds.length === step.pairs.length;
 			case 'slider':
 				return response.kind === 'slider' && Number.isFinite(response.value);
+			case 'rule-table':
+				return (
+					response.kind === 'rule-table' &&
+					step.rows.every((row) =>
+						step.columns.every((column) => Boolean(response.values[row.id]?.[column.id]))
+					)
+				);
+			case 'cli':
+				return (
+					response.kind === 'cli' &&
+					step.tasks.every((task) => (response.values[task.id] ?? '').trim().length > 0)
+				);
 		}
 		return true;
 	}
@@ -265,6 +343,14 @@
 		draft = value.responses[index] ?? null;
 		feedback = null;
 		savedAck = false;
+		const size = sections > 1 ? Math.ceil(value.totalQuestions / sections) : 0;
+		if (
+			size &&
+			index > 0 &&
+			index % size === 0 &&
+			!acknowledgedSections[Math.floor(index / size)]
+		)
+			breakVisible = true;
 	}
 
 	async function load() {
@@ -302,7 +388,7 @@
 				throw new Error(data.error?.message ?? 'Unable to start session');
 			}
 			hydrate(data.session);
-			history.replaceState({}, '', `${location.pathname}?session=${data.session.sessionId}`);
+			setSessionUrl(data.session.sessionId);
 		} catch (cause) {
 			error = cause instanceof Error ? cause.message : 'Unable to load session';
 		}
@@ -350,7 +436,7 @@
 			if (!response.ok) throw new Error(data.error?.message ?? 'Unable to start retake session');
 			result = null;
 			hydrate(data.session);
-			history.replaceState({}, '', `${location.pathname}?session=${data.session.sessionId}`);
+			setSessionUrl(data.session.sessionId);
 		} catch (cause) {
 			error = cause instanceof Error ? cause.message : 'Unable to start retake session';
 		}
@@ -438,6 +524,7 @@
 		draft = session.responses[index] ?? null;
 		feedback = null;
 		savedAck = false;
+		maybeShowSectionBreak(index);
 		await fetch(`/api/quiz/session/${session.sessionId}`, {
 			method: 'PATCH',
 			headers: { 'content-type': 'application/json' },
@@ -647,7 +734,9 @@
 			? `/pbq?session=${active.sessionId}`
 			: active.type === 'scenario'
 				? `/scenarios?session=${active.sessionId}`
-				: `/quiz?session=${active.sessionId}`;
+				: active.type === 'quick'
+					? `/quick?session=${active.sessionId}`
+					: `/quiz?session=${active.sessionId}`;
 	}
 
 	async function abandonAndStart() {
@@ -838,6 +927,39 @@
 				</span>
 			</div>
 		</header>
+
+		{#if breakVisible && sectionSize > 0}
+			<div
+				class="fixed inset-0 z-50 grid place-items-center bg-bg-base/85 p-4 backdrop-blur-sm"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="section-break-title"
+				data-testid="section-break"
+			>
+				<div class="card w-full max-w-lg space-y-4 p-6 text-center sm:p-8">
+					<p class="eyebrow">Exam section break</p>
+					<h2 id="section-break-title" class="h-display text-2xl text-text-primary">
+						Section {sectionIndex} of {sections} complete
+					</h2>
+					<p class="text-sm leading-relaxed text-text-secondary">
+						You answered {sectionAnswered(sectionIndex - 1)} of {Math.min(
+							sectionSize,
+							(session?.totalQuestions ?? 0) - (sectionIndex - 1) * sectionSize
+						)} questions in the previous section. Section {sectionIndex + 1} starts at question {sectionIndex *
+							sectionSize +
+							1}.
+					</p>
+					<p class="text-xs text-text-muted">
+						The exam clock keeps running during the break. Your saved answers are already persisted.
+					</p>
+					<button
+						class="btn btn-primary min-h-11 w-full sm:w-auto"
+						type="button"
+						onclick={beginSection}>Begin section {sectionIndex + 1}</button
+					>
+				</div>
+			</div>
+		{/if}
 
 		{#if session && (session.mode === 'exam' || session.mode === 'practice')}
 			{@const showGrid = session.mode === 'exam' || session.mode === 'practice'}
@@ -1161,6 +1283,38 @@
 							: null}
 						disabled={!!feedback}
 						onchange={(matchedPairIds) => (draft = { kind: 'memory', matchedPairIds })}
+					/>
+				</div>
+			{:else if question.kind === 'rule-table'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<RuleTable
+						columns={question.columns}
+						rows={question.rows}
+						values={draft?.kind === 'rule-table' ? draft.values : {}}
+						rowOrder={draft?.kind === 'rule-table' ? draft.rowOrder : []}
+						feedbackValues={feedback?.correctResponse.kind === 'rule-table'
+							? feedback.correctResponse.values
+							: null}
+						disabled={!!feedback}
+						onchange={(response) => (draft = response)}
+					/>
+				</div>
+			{:else if question.kind === 'cli'}
+				<div class="space-y-3">
+					<p class="mb-2 font-medium text-text-primary">{question.prompt}</p>
+					<CliTerminal
+						device={question.device}
+						shell={question.shell}
+						transcript={question.transcript}
+						vocabulary={question.vocabulary}
+						tasks={question.tasks}
+						values={draft?.kind === 'cli' ? draft.values : {}}
+						feedbackValues={feedback?.correctResponse.kind === 'cli'
+							? feedback.correctResponse.values
+							: null}
+						disabled={!!feedback}
+						onchange={(response) => (draft = response)}
 					/>
 				</div>
 			{:else if question.kind === 'slider'}
@@ -1495,7 +1649,9 @@
 						!matchingAnswered() ||
 						!hotspotAnswered() ||
 						!memoryAnswered() ||
-						!sliderAnswered()}
+						!sliderAnswered() ||
+						!ruleTableAnswered() ||
+						!cliAnswered()}
 					>{saving
 						? 'Saving…'
 						: session.mode === 'practice' && !session.assignmentId

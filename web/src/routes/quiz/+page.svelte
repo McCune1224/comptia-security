@@ -36,6 +36,8 @@
 	let assignmentId = $state<string | undefined>(
 		page.url.searchParams.get('assignment') ?? undefined
 	);
+	/** Section count for a chunked full exam (0 = one continuous sitting). */
+	let sections = $state(Number(page.url.searchParams.get('sections')) || 0);
 
 	function onDone() {
 		goto(assignmentId ? `/assignments/${assignmentId}` : '/');
@@ -52,6 +54,7 @@
 		style={reviewSource ? undefined : style}
 		{assignmentId}
 		{reviewSource}
+		{sections}
 		onDone={() => {
 			if (reviewSource) {
 				goto('/review');

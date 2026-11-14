@@ -129,6 +129,40 @@ export interface MemoryDefinition extends DefinitionBase {
 	pairs: { id: string; a: string; b: string }[];
 }
 
+export interface RuleTableDefinition extends DefinitionBase {
+	kind: 'rule-table';
+	/** Constrained columns; every cell is chosen from that column's options. */
+	columns: { id: string; label: string; options: { id: string; text: string }[] }[];
+	/** Rows in authored order (shuffled for presentation); cells are the authored seed values. */
+	rows: { id: string; label: string; cells: Record<string, string> }[];
+	/** Required rule order (row ids, first match first). */
+	correctOrder: string[];
+	/** rowId -> columnId -> optionId */
+	correctValues: Record<string, Record<string, string>>;
+}
+
+export interface CliDefinition extends DefinitionBase {
+	kind: 'cli';
+	/** Simulated device, shown in the terminal chrome. */
+	device: string;
+	/** Shell prompt, e.g. `C:\\Windows\\system32>` or `analyst@linux:~$`. */
+	shell: string;
+	/** Existing terminal output / configuration shown above the prompts. */
+	transcript: string[];
+	/** Bounded command vocabulary offered as insertable tokens. */
+	vocabulary: string[];
+	/** One typed command/directive per task. */
+	tasks: {
+		id: string;
+		label: string;
+		placeholder: string;
+		/** Optional per-task token subset; defaults to the full vocabulary. */
+		tokens?: string[];
+		/** Accepted spellings; compared after normalization. */
+		accepted: string[];
+	}[];
+}
+
 export interface MultiStepPbqDefinition extends DefinitionBase {
 	kind: 'multi-step';
 	context: string;
@@ -148,6 +182,8 @@ export type QuestionDefinition =
 	| SortDefinition
 	| HotspotDefinition
 	| MemoryDefinition
+	| RuleTableDefinition
+	| CliDefinition
 	| MultiStepPbqDefinition;
 
 export interface QuestionBank {
@@ -197,7 +233,7 @@ export interface CourseBankSpec {
 export const SECP701_BANK_SPEC: CourseBankSpec = {
 	courseId: 'secp-701',
 	mcqTotal: 692,
-	pbqTotal: 105,
+	pbqTotal: 120,
 	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
 	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
 	domains: [1, 2, 3, 4, 5],
@@ -241,15 +277,36 @@ export const SECP701_BANK_SPEC: CourseBankSpec = {
 	// recall (self-contained), keyword (BEST/MOST/FIRST), short-form (word-bank), scenario (paragraph).
 	styleFloors: { recall: 80, keyword: 60, 'short-form': 12 },
 	scenarioCeiling: 170,
-	pbqDomainTotals: { 1: 15, 2: 21, 3: 19, 4: 32, 5: 18 },
+	pbqDomainTotals: { 1: 16, 2: 23, 3: 22, 4: 40, 5: 19 },
 	requireAuthoredHints: true,
 	minSourceRefs: 2,
 	pbqObjectiveMinimum: 2,
-	kindDomainMinimums: { 'word-bank': { 1: 5, 2: 3, 3: 4, 4: 5, 5: 3 } }
+	kindDomainMinimums: {
+		'word-bank': { 1: 5, 2: 3, 3: 4, 4: 5, 5: 3 },
+		memory: { 1: 1, 2: 1, 4: 1 },
+		'rule-table': { 3: 2, 4: 3 },
+		cli: { 2: 1, 3: 1, 4: 3 }
+	}
 };
 
 function fail(id: string, message: string): never {
 	throw new Error(`Question bank validation failed for ${id}: ${message}`);
+}
+
+/**
+ * Normalize a typed command for comparison: case-insensitive, collapsed
+ * whitespace, straight quotes, and no whitespace around separators. This is
+ * deliberately forgiving about formatting (never about content), so a correct
+ * command still scores when the learner spaces it differently.
+ */
+export function normalizeCommand(value: string): string {
+	return value
+		.trim()
+		.toLowerCase()
+		.replace(/[“”]/g, '"')
+		.replace(/[‘’]/g, "'")
+		.replace(/\s+/g, ' ')
+		.replace(/\s*([=,:;])\s*/g, '$1');
 }
 
 function hasUniqueIds(items: { id: string }[]): boolean {
@@ -294,6 +351,72 @@ function isValidHotspot(question: HotspotDefinition): boolean {
 	return (
 		question.regions.some((region) => region.correct) &&
 		question.regions.some((region) => !region.correct)
+	);
+}
+
+function isValidRuleTable(question: RuleTableDefinition): boolean {
+	const rowIds = question.rows.map((row) => row.id);
+	if (
+		question.columns.length < 3 ||
+		question.rows.length < 3 ||
+		!hasUniqueIds(question.columns) ||
+		!hasUniqueIds(question.rows) ||
+		question.columns.some(
+			(column) =>
+				!column.label.trim() ||
+				column.options.length < 2 ||
+				!hasUniqueIds(column.options) ||
+				column.options.some((option) => !option.text.trim())
+		) ||
+		question.rows.some(
+			(row) =>
+				!row.label.trim() ||
+				question.columns.some(
+					(column) =>
+						!row.cells[column.id] ||
+						!column.options.some((option) => option.id === row.cells[column.id])
+				)
+		) ||
+		question.correctOrder.length !== question.rows.length ||
+		new Set(question.correctOrder).size !== question.rows.length ||
+		!question.correctOrder.every((id) => rowIds.includes(id)) ||
+		Object.keys(question.correctValues).length !== question.rows.length ||
+		question.rows.some(
+			(row) =>
+				Object.keys(question.correctValues[row.id] ?? {}).length !== question.columns.length ||
+				question.columns.some(
+					(column) =>
+						!question.correctValues[row.id]?.[column.id] ||
+						!column.options.some(
+							(option) => option.id === question.correctValues[row.id]?.[column.id]
+						)
+				)
+		)
+	)
+		return false;
+	return true;
+}
+
+function isValidCli(question: CliDefinition): boolean {
+	if (
+		!question.device.trim() ||
+		!question.shell.trim() ||
+		question.vocabulary.length < 4 ||
+		new Set(question.vocabulary.map(normalizeCommand)).size !== question.vocabulary.length ||
+		question.vocabulary.some((token) => !token.trim()) ||
+		question.tasks.length < 2 ||
+		!hasUniqueIds(question.tasks)
+	)
+		return false;
+	return question.tasks.every(
+		(task) =>
+			Boolean(task.label.trim()) &&
+			Boolean(task.placeholder.trim()) &&
+			task.accepted.length >= 1 &&
+			task.accepted.every((answer) => answer.trim().length > 0) &&
+			new Set(task.accepted.map(normalizeCommand)).size === task.accepted.length &&
+			(task.tokens === undefined ||
+				(task.tokens.length >= 1 && task.tokens.every((token) => token.trim().length > 0)))
 	);
 }
 
@@ -529,6 +652,77 @@ export function validateQuestionBank(
 				'invalid hotspot (need ≥2 non-overlapping regions in 0–100 on a known template, ≥1 correct + ≥1 distractor)'
 			);
 		if (
+			question.kind === 'rule-table' &&
+			(question.columns.length < 3 ||
+				question.rows.length < 3 ||
+				!hasUniqueIds(question.columns) ||
+				!hasUniqueIds(question.rows) ||
+				question.columns.some(
+					(column) =>
+						!column.label.trim() ||
+						column.options.length < 2 ||
+						!hasUniqueIds(column.options) ||
+						column.options.some((option) => !option.text.trim())
+				) ||
+				question.rows.some(
+					(row) =>
+						!row.label.trim() ||
+						question.columns.some(
+							(column) =>
+								!row.cells[column.id] ||
+								!column.options.some((option) => option.id === row.cells[column.id])
+						)
+				) ||
+				question.correctOrder.length !== question.rows.length ||
+				new Set(question.correctOrder).size !== question.rows.length ||
+				!question.correctOrder.every((id) => question.rows.some((row) => row.id === id)) ||
+				Object.keys(question.correctValues).length !== question.rows.length ||
+				question.rows.some(
+					(row) =>
+						!question.correctValues[row.id] ||
+						question.columns.some(
+							(column) =>
+								!column.options.some(
+									(option) => option.id === question.correctValues[row.id]?.[column.id]
+								)
+						)
+				))
+		)
+			fail(
+				question.id,
+				'invalid rule-table (need ≥3 columns, ≥3 rows, unique ids, every cell seeded and correct, and a complete row order)'
+			);
+		if (
+			question.kind === 'cli' &&
+			(!question.device.trim() ||
+				!question.shell.trim() ||
+				question.tasks.length < 2 ||
+				!hasUniqueIds(question.tasks) ||
+				question.vocabulary.length < 4 ||
+				question.tasks.some(
+					(task) =>
+						!task.label.trim() ||
+						!task.placeholder.trim() ||
+						task.accepted.length < 1 ||
+						task.accepted.some((answer) => !normalizeCommand(answer)) ||
+						new Set(task.accepted.map(normalizeCommand)).size !== task.accepted.length
+				))
+		)
+			fail(
+				question.id,
+				'invalid cli (need ≥2 tasks, bounded vocabulary, and at least one unique accepted command per task)'
+			);
+		if (question.kind === 'rule-table' && !isValidRuleTable(question))
+			fail(
+				question.id,
+				'invalid rule-table (need ≥3 columns and ≥3 rows, constrained option values, a valid row permutation, and correct values for every cell)'
+			);
+		if (question.kind === 'cli' && !isValidCli(question))
+			fail(
+				question.id,
+				'invalid cli (need a device/shell, ≥4 unique vocabulary tokens, ≥2 unique tasks with non-empty accepted answers)'
+			);
+		if (
 			question.kind === 'memory' &&
 			(question.pairs.length < 4 ||
 				!hasUniqueIds(question.pairs) ||
@@ -759,6 +953,28 @@ export function toPublicQuestion(definition: QuestionDefinition): PublicQuestion
 			};
 		case 'memory':
 			return { ...base, kind: 'memory', pairs: definition.pairs };
+		case 'rule-table':
+			return {
+				...base,
+				kind: 'rule-table',
+				columns: definition.columns,
+				rows: definition.rows.map(({ id, label }) => ({ id, label }))
+			};
+		case 'cli':
+			return {
+				...base,
+				kind: 'cli',
+				device: definition.device,
+				shell: definition.shell,
+				transcript: definition.transcript,
+				vocabulary: definition.vocabulary,
+				tasks: definition.tasks.map(({ id, label, placeholder, tokens }) => ({
+					id,
+					label,
+					placeholder,
+					...(tokens ? { tokens } : {})
+				}))
+			};
 		case 'multi-step':
 			return {
 				...base,
@@ -814,6 +1030,15 @@ function answerTexts(definition: QuestionDefinition): string[] {
 			return definition.regions.filter((region) => region.correct).map((region) => region.label);
 		case 'memory':
 			return definition.pairs.flatMap((pair) => [pair.a, pair.b]);
+		case 'rule-table':
+			return definition.rows.flatMap((row) =>
+				definition.columns.flatMap((column) => {
+					const id = definition.correctValues[row.id]?.[column.id];
+					return column.options.filter((option) => option.id === id).map((option) => option.text);
+				})
+			);
+		case 'cli':
+			return definition.tasks.flatMap((task) => task.accepted);
 		case 'multi-step':
 			return definition.steps.flatMap(answerTexts);
 	}
@@ -891,6 +1116,19 @@ export function correctResponse(definition: QuestionDefinition): QuestionRespons
 			};
 		case 'memory':
 			return { kind: 'memory', matchedPairIds: definition.pairs.map((pair) => pair.id) };
+		case 'rule-table':
+			return {
+				kind: 'rule-table',
+				values: definition.correctValues,
+				rowOrder: definition.correctOrder
+			};
+		case 'cli':
+			return {
+				kind: 'cli',
+				values: Object.fromEntries(
+					definition.tasks.map((task) => [task.id, task.accepted[0]])
+				)
+			};
 		case 'multi-step':
 			return { kind: 'multi-step', stepResponses: definition.steps.map(correctResponse) };
 	}

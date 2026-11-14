@@ -54,8 +54,9 @@ targeted five-question practice session.
 - Objective quizzes, scenario sets, PBQs, and 90-question timed full exams that mirror the real
   SY0-701: PBQs open the exam and carry ~26% of the score (5 PBQs at ~6 MCQ-points each), with
   domain quotas 11/20/16/25/18 across the five domains
-- Interactive PBQ formats including matching, ordering, configuration, evidence, hotspot, sorting,
-  word-bank, and multi-step tasks
+- Interactive PBQ formats including matching, ordering, configuration, firewall/ACL rule tables,
+  constrained terminal/config completion, evidence, hotspot, sorting, word-bank, memory, and multi-step tasks
+- Low-drain quick rounds (interleaved PBQ + MCQ, no timer) and a chunked 90-question exam with section breaks
 - Daily spaced-repetition review with streaks, heatmap, and weak-topic recovery
 - Mastery matrix across all 28 SY0-701 objectives
 - Weighted gradebook with assignment statuses, retakes, category breakdowns, and letter grade

@@ -335,11 +335,12 @@ describe('question bank', () => {
 
 	it('has the required authored allocation and redacts public questions', () => {
 		const bank = loadQuestionBank();
-		// 692 MCQs / 105 PBQs are locked at their exact authored counts — the
+		// 692 MCQs / 120 PBQs are locked at their exact authored counts — the
 		// validator rejects any silent addition or loss, and these assertions
-		// document the pins (mirroring toHaveLength(105) below).
+		// document the pins. The 15 added PBQs close the format matrix: memory,
+		// hotspot, single-choice, firewall/ACL rule-table, and typed CLI.
 		expect(bank.mcqs.length).toBe(692);
-		expect(bank.pbqs).toHaveLength(105);
+		expect(bank.pbqs).toHaveLength(120);
 		// Per-objective floors are pinned to the exact authored counts too.
 		for (const [objective, expected] of Object.entries(SECP701_BANK_SPEC.mcqObjectiveTotals)) {
 			expect(bank.mcqs.filter((question) => question.objective === objective).length, objective).toBe(expected);

@@ -29,7 +29,7 @@ export interface CourseMeta {
 	objectives: Record<number, ObjectiveId[]>; // domain -> objective ids
 }
 
-export type SessionType = 'quiz' | 'scenario' | 'pbq' | 'full' | 'review';
+export type SessionType = 'quiz' | 'scenario' | 'pbq' | 'full' | 'review' | 'quick';
 export type SessionMode = 'practice' | 'exam';
 export type SessionStatus = 'active' | 'completed' | 'abandoned';
 export type QuestionFormat = 'standard' | 'scenario' | 'pbq';
@@ -55,7 +55,9 @@ export const AUTO_HINTABLE_KINDS = [
 	'hotspot',
 	'memory',
 	'evidence',
-	'slider'
+	'slider',
+	'rule-table',
+	'cli'
 ] as const;
 
 export interface SourceRef {
@@ -175,6 +177,32 @@ export interface PublicMemoryQuestion extends PublicQuestionBase {
 	pairs: { id: string; a: string; b: string }[];
 }
 
+/**
+ * Firewall/ACL rule-table builder. Each row is a rule; each column is a
+ * constrained field (source, destination, port, action). The learner fills
+ * every cell and orders the rows — the two things a real ACL task asks for.
+ * Correct cell values and row order stay server-side.
+ */
+export interface PublicRuleTableQuestion extends PublicQuestionBase {
+	kind: 'rule-table';
+	columns: { id: string; label: string; options: { id: string; text: string }[] }[];
+	rows: { id: string; label: string }[];
+}
+
+/**
+ * Constrained command-line/config completion. The learner types one command
+ * or directive per task; a token palette keeps the vocabulary bounded while
+ * the answer is still produced by typing.
+ */
+export interface PublicCliQuestion extends PublicQuestionBase {
+	kind: 'cli';
+	device: string;
+	shell: string;
+	transcript: string[];
+	vocabulary: string[];
+	tasks: { id: string; label: string; placeholder: string; tokens?: string[] }[];
+}
+
 export interface PublicMultiStepPbqQuestion extends PublicQuestionBase {
 	kind: 'multi-step';
 	context: string;
@@ -194,6 +222,8 @@ export type PublicQuestion =
 	| PublicSortQuestion
 	| PublicHotspotQuestion
 	| PublicMemoryQuestion
+	| PublicRuleTableQuestion
+	| PublicCliQuestion
 	| PublicMultiStepPbqQuestion;
 
 export type QuestionResponse =
@@ -209,6 +239,14 @@ export type QuestionResponse =
 	| { kind: 'sort'; assignments: Record<string, string> }
 	| { kind: 'hotspot'; regionIds: string[] }
 	| { kind: 'memory'; matchedPairIds: string[] }
+	| {
+			kind: 'rule-table';
+			/** rowId -> columnId -> optionId */
+			values: Record<string, Record<string, string>>;
+			/** Row ids in the learner's chosen order. */
+			rowOrder: string[];
+	  }
+	| { kind: 'cli'; values: Record<string, string> }
 	| { kind: 'multi-step'; stepResponses: (QuestionResponse | null)[] };
 
 export interface QuestionFeedback {
