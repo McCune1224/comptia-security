@@ -55,7 +55,7 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into PostgreSQL o
     assembles 5 PBQs (one distinct kind per domain) placed **first**, then domain-weighted MCQs
     interleaved; PBQs are scored at `ExamConfig.pbqPoints` (SY0-701 = 6, so 5 PBQs ≈ 26% of the
     score) while MCQs are worth 1 — mirroring the real exam's 20–30% PBQ weight.
-- **Question banks:** Security+ 692 MCQs (104/164/166/139/119 across Domains 1–5; styles: recall 376, keyword 159, scenario 109, short-form 48)
+- **Question banks:** Security+ 692 MCQs (104/164/166/139/119 across Domains 1–5; styles: recall 80, keyword 394, scenario 170, short-form 48)
   - 120 PBQs (matching 24, word-bank 20, configuration 18, multi-step 11, evidence 9, ordering 8, rule-table 5, cli 5, sort 4, multiple-choice 4, slider 3, hotspot 3, memory 3, single-choice 3). **A+ Core 1 (220-1201): 150 MCQs** (20/34/38/16/42 across Domains 1–5, 21
     multi-selects) **+ 28 PBQs** (3/6/9/2/8 per domain, 8 kinds). **A+ Core 2 (220-1202): 150
     MCQs** (42/42/34/32 across Domains 1–4, 22 multi-selects) **+ 28 PBQs** (7/9/6/6 per domain,
@@ -96,6 +96,7 @@ The course is a static definition (`COURSE_DEFINITION`) seeded into PostgreSQL o
   cards (`reviewSvc.recordCompletion` hook in `quiz.ts`). `/review` page: streak hero, heatmap,
   filterable wall; home page has a review strip. Start a review session via
   `POST /api/quiz/start {type:'review', reviewSource:'daily'|'wall'}` or `/quiz?review=daily`.
+- **Bank quality gates** (`src/lib/server/bank-quality.ts`, run from `validateQuestionBank`): authored context/hint presence, answer neutrality, acronym direction, prompt/context/hint leakage, duplicate stems/contexts/hints/options, the 15%-of-recall stem-template cap, generic explanation/rationale patterns, same-objective term-pool distractors, distractor-answer leakage, and prompt/context duplication. `question-bank-ledger.{json,md}` covers all 812 items with verdict, changes, sources, and context/hint quality; `question-bank-ledger.test.ts` is the coverage gate.
 - **Practice hints** (`src/lib/server/hints.ts` + `POST /api/quiz/hint`): revealed after a wrong
   answer in free-practice mode. Authored per-question hints are optional (validator rejects hints
   containing the correct answer text); every question without one gets a deterministic auto-hint
