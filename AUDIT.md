@@ -44,11 +44,44 @@ whitespace):
 - **Docs drift** — Coverage-Audit corrections (3×90 + 1×20, date, test count,
   deleted-script runbooks), cost hedged, PBQ guide rewritten against the app.
 
+## Status — fixed in the 2026-11-14 bank-quality pass
+
+Resolved (verified by the bank validator, `npm run check`, `npm run build`,
+`npm run test` against an isolated Postgres, and `npm run test:e2e`):
+
+- **M1** stem monoculture — all 268 `Which security term is defined as: "…"?`
+  items were rewritten or reclassified. The recall bank is now 80 items with
+  zero definition-template stems; the new template gate caps any recall stem
+  template at 15% and currently sees no group above 2/80.
+- **M2** weak distractors — every rewritten term item draws its distractors
+  from the same objective's term pool, with a reviewed overlap list for
+  legitimate cross-objective concepts. Every distractor now carries a specific
+  contrast rationale, and a compact keyed distractor outside the item's
+  objective pool fails validation.
+- **Context and hints** — every one of the 797 items has a unique authored
+  scenario context (≥100 chars) and a unique answer-neutral hint (≥40 chars).
+  Hints never contain the keyed answer, and exam mode still withholds them.
+- **Explanations and rationales** — explanations teach why the key is right and
+  include a specific clause for every distractor; the generic "addresses a
+  different concern", "does not match the definition", "Correct/Incorrect"
+  patterns and blank-filler explanations are gone.
+- **Acronym direction** — no stem, context, or hint spells out a keyed acronym's
+  expansion; acronym-definition stems must present the acronym and require its
+  expansion.
+- **Leakage and duplicates** — prompt/context/hint leakage, duplicate stems,
+  duplicate contexts, duplicate hints, duplicate option sets with the same key,
+  and near-duplicate stems all fail the validator.
+- **Audit ledger** — `web/question-bank-ledger.json` and
+  `web/question-bank-ledger.md` cover all 797 items with verdict, changes,
+  sources, and context/hint quality. 659 items were rewritten; 138 were
+  certified unchanged; 0 rows are unresolved. No answer key changed.
+- **Gates** — `src/lib/server/bank-quality.ts` runs from
+  `validateQuestionBank` for the SY0-701 spec, with focused rejection tests in
+  `bank-quality.test.ts` and a ledger coverage test.
+
+
 ## Open — deliberately deferred
 
-- **M1, M2** — rewriting the 268-item definition template and tightening its
-  distractors. Content authorship with real quality risk right before a
-  November exam; needs an authored pass, not a script.
 - **N1** — the notes vault itself still needs domain content (1 note for 28
   objectives).
 - **M3, M6** — bank domain rebalance toward Domain 4; coverage-manifest
@@ -86,8 +119,8 @@ keyword 159, scenario 109, short-form 48. Objective tags 797/797.
 
 | # | Sev | Finding | Evidence | Fix |
 |---|-----|---------|----------|-----|
-| M1 | HIGH | **Stem monoculture:** 268/692 MCQs (38.7%) open verbatim `Which security term is defined as: "…"?`. In 260 of them the quoted definition is repeated verbatim inside the explanation, so the explanation adds no reasoning. | grep count = 268 in `question-bank.json` | Cap the template ≤15% of recall items; rewrite the rest as scenarios, term→definition matching, or word-bank |
-| M2 | HIGH | **Weak distractors** in the definition family — random-term fillers discardable without subject knowledge: `mcq-5-130` (correct NIST CSF; distractors DAC/Risk/Quantitative risk), `mcq-1-053` (AAA vs Race condition/Legal hold/NIDS), `mcq-1-049` (Confidentiality vs DLP/SaaS/Hashing) | `question-bank.json` | Validator rule: distractors must come from the same objective's term pool |
+| M1 | HIGH | **Stem monoculture:** (fixed 2026-11-14) 268/692 MCQs (38.7%) open verbatim `Which security term is defined as: "…"?`. In 260 of them the quoted definition is repeated verbatim inside the explanation, so the explanation adds no reasoning. | grep count = 268 in `question-bank.json` | Cap the template ≤15% of recall items; rewrite the rest as scenarios, term→definition matching, or word-bank |
+| M2 | HIGH | **Weak distractors** (fixed 2026-11-14) in the definition family — random-term fillers discardable without subject knowledge: `mcq-5-130` (correct NIST CSF; distractors DAC/Risk/Quantitative risk), `mcq-1-053` (AAA vs Race condition/Legal hold/NIDS), `mcq-1-049` (Confidentiality vs DLP/SaaS/Hashing) | `question-bank.json` | Validator rule: distractors must come from the same objective's term pool |
 | M3 | MED | **Domain mix vs exam weights:** Domain 4 (28% of exam) is 21.5% of the bank (−6.5pp); Domain 3 is +5.2pp over. Full exams are correct (quota `11/20/16/25/18` in `quiz.ts:90`), but every objective quiz, drill, and review pull inherits the skew | computed vs `notes/01-Index/SY0-701 Exam Overview.md:7-11` | Rebalance toward D4 or document the skew as intentional |
 | M4 | MED | **Answer-position bias in stored data:** correct = option `a` 52.3% overall; among non-definition single-choice items 73.6% (243/330). Currently neutralized — `quiz.ts` Fisher-Yates shuffles every presentation — but the data is only safe because of the shuffle | `quiz.ts:110-134`, distribution computed from bank | Re-sort stored `correctOptionIds` to uniform so safety is by construction |
 | M5 | MED | **Validation floors allow silent content loss:** MCQ floor `>= 523` vs actual 692 (24% could vanish and still pass); per-objective floors sum to 332 vs 692 actual. PBQs, by contrast, are locked exactly at 105 | `question-bank.ts:256,201-207,257` | Raise MCQ and per-objective floors to current counts; fix the repeated assertion in `question-bank.test.ts:338` |

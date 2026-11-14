@@ -10,6 +10,7 @@ import type {
 } from '$lib/types';
 import rawBank from './data/question-bank.json';
 import { hotspotTemplate } from '$lib/hotspot-templates';
+import { validateBankQuality } from './bank-quality';
 
 export interface DefinitionBase {
 	id: string;
@@ -189,6 +190,8 @@ export interface CourseBankSpec {
 	pbqDomainTotals?: Record<number, number>;
 	/** Security+ quality gates — optional; banks that omit them stay valid. */
 	requireAuthoredHints?: boolean;
+	/** Enable the authored-content quality gates in bank-quality.ts. */
+	qualityGates?: boolean;
 	minSourceRefs?: number;
 	pbqObjectiveMinimum?: number;
 	kindDomainMinimums?: Partial<Record<QuestionDefinition['kind'], Partial<Record<Domain, number>>>>;
@@ -243,6 +246,7 @@ export const SECP701_BANK_SPEC: CourseBankSpec = {
 	scenarioCeiling: 170,
 	pbqDomainTotals: { 1: 15, 2: 21, 3: 19, 4: 32, 5: 18 },
 	requireAuthoredHints: true,
+	qualityGates: true,
 	minSourceRefs: 2,
 	pbqObjectiveMinimum: 2,
 	kindDomainMinimums: { 'word-bank': { 1: 5, 2: 3, 3: 4, 4: 5, 5: 3 } }
@@ -674,6 +678,7 @@ export function validateQuestionBank(
 			}
 		}
 	}
+	if (spec.qualityGates) validateBankQuality(bank, spec);
 }
 
 export function loadQuestionBank(): QuestionBank {
