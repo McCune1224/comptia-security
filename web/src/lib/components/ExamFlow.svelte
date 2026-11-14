@@ -736,7 +736,7 @@
 				? `/scenarios?session=${active.sessionId}`
 				: active.type === 'quick'
 					? `/quick?session=${active.sessionId}`
-					: `/quiz?session=${active.sessionId}`;
+					: `/quiz?session=${active.sessionId}${sections > 1 ? `&sections=${sections}` : ''}`;
 	}
 
 	async function abandonAndStart() {

@@ -119,14 +119,22 @@ test.describe('new PBQ mechanics and drill modes', () => {
 	}) => {
 		await page.goto('/quiz?start=1&type=full&mode=exam&sections=3');
 		await expect(page.getByText('Q1 of 90')).toBeVisible();
-		await page
-			.getByRole('button', { name: /^Question 31\b/ })
-			.first()
-			.click();
+		await Promise.all([
+			page.waitForResponse(
+				(response) =>
+					response.url().includes('/api/quiz/session/') &&
+					response.request().method() === 'PATCH'
+			),
+			page
+				.getByRole('button', { name: /^Question 31\b/ })
+				.first()
+				.click()
+		]);
 		await expect(page.getByTestId('section-break')).toBeVisible();
 		await page.getByRole('button', { name: /Begin section 2/ }).click();
 		await expect(page.getByText('Q31 of 90')).toBeVisible();
 		const sessionUrl = page.url();
+		await page.waitForTimeout(300);
 		await page.reload();
 		// The boundary is restored from currentIndex and shows the break again.
 		await expect(page.getByTestId('section-break')).toBeVisible();
