@@ -15,6 +15,10 @@ const spec = {
 	multiTotals: { 1: 0, 2: 0 }
 } as unknown as CourseBankSpec;
 
+// Every MCQ stem in the bank now carries its own scenario, so fixtures do too.
+const stemPrefix =
+	'A security team is reviewing a production service after an audit finding and must decide which option applies to the situation described. ';
+
 const context =
 	'A security team is reviewing a production service after an audit finding. The service owner must choose a control that satisfies the stated requirement without adding unrelated scope or breaking availability.';
 const hint =
@@ -27,8 +31,9 @@ function choice(overrides: Record<string, unknown> = {}): QuestionDefinition {
 		objective: '1.1',
 		format: 'standard',
 		style: 'recall',
-		prompt: 'Which control best satisfies the requirement?',
-		context,
+		prompt:
+			'A security team is reviewing a production service after an audit finding. The service owner must choose a control that satisfies the stated requirement without adding unrelated scope or breaking availability. Which of the following BEST satisfies the requirement?',
+		context: '',
 		hint,
 		explanation:
 			'Alpha prevents the exposure at the boundary. Beta does not apply because it protects data at rest, Gamma does not apply because it records activity after the fact, and Delta does not apply because it changes the network path.',
@@ -72,9 +77,21 @@ describe('bank quality gates', () => {
 		expect(run([choice()])).not.toThrow();
 	});
 
-	it('rejects missing or thin context', () => {
-		expect(run([choice({ context: '' })])).toThrow(/missing scenario context/);
+	it('leaves context optional for MCQs but rejects a thin one when present', () => {
+		expect(run([choice()])).not.toThrow();
 		expect(run([choice({ context: 'Too short.' })])).toThrow(/at least 100 characters/);
+	});
+
+	it('rejects a stem that cannot stand alone', () => {
+		expect(run([choice({ prompt: `${stemPrefix} Which control is this?` })])).toThrow(
+			/cannot be|must be at least|tag question|stem is/i
+		);
+		const tag = choice({
+			prompt:
+				'A security team is reviewing a production service after an audit finding and must decide which category of control is in place. Which control is this?',
+			context: ''
+		});
+		expect(run([tag])).toThrow(/tag question/);
 	});
 
 	it('rejects missing, short, generic, or duplicate hints', () => {
@@ -87,8 +104,7 @@ describe('bank quality gates', () => {
 		).toThrow(/generic fallback/);
 		const second = choice({
 			id: 'mcq-1-002',
-			prompt: 'Which control addresses the audit finding?',
-			context: context.replace('production service', 'payment service')
+			prompt: context.replace('production service', 'payment service')
 		});
 		expect(run([choice(), second])).toThrow(/duplicate hint/);
 	});
@@ -125,7 +141,7 @@ describe('bank quality gates', () => {
 			run([
 				{
 					...leaking,
-					prompt: 'Which control, Alpha boundary control, best satisfies the requirement?'
+					prompt: `${stemPrefix} Which control, Alpha boundary control, best satisfies the requirement?`
 				}
 			])
 		).toThrow(/leaks into prompt/);
@@ -136,7 +152,7 @@ describe('bank quality gates', () => {
 
 	it('rejects a keyed acronym whose expansion appears in the stem', () => {
 		const question = choice({
-			prompt: 'Which control uses Security Information and Event Management?',
+			prompt: `${stemPrefix} Which control uses Security Information and Event Management?`,
 			options: [
 				{
 					id: 'a',
@@ -167,7 +183,7 @@ describe('bank quality gates', () => {
 
 	it('rejects an acronym-definition stem that does not present the acronym', () => {
 		const question = choice({
-			prompt: 'What does this term stand for?',
+			prompt: `${stemPrefix} What does this term stand for?`,
 			options: [
 				{
 					id: 'a',
@@ -199,7 +215,7 @@ describe('bank quality gates', () => {
 		expect(run([choice(), second])).toThrow(/duplicate prompt/);
 		const third = choice({
 			id: 'mcq-1-003',
-			prompt: 'Which control answers the audit finding?',
+			prompt: `${stemPrefix} Which control answers the audit finding?`,
 			context: `${context} This case concerns the refund workflow.`,
 			hint: `${hint} This case concerns the refund workflow specifically.`
 		});
@@ -267,7 +283,7 @@ describe('bank quality gates', () => {
 
 	it('accepts an acronym item that presents the acronym and keys the expansion', () => {
 		const question = choice({
-			prompt: 'What does SIEM stand for?',
+			prompt: `${stemPrefix} What does SIEM stand for?`,
 			options: [
 				{
 					id: 'a',
@@ -342,7 +358,7 @@ describe('bank quality gates', () => {
 			id: 'mcq-2-001',
 			domain: 2,
 			objective: '2.1',
-			prompt: 'Which actor is described?',
+			prompt: `${stemPrefix} Which actor is described?`,
 			context: context.replace('production service', 'threat-intelligence platform'),
 			hint: 'Focus on the actor motivation and capability described in the scenario rather than on the control category.',
 			options: [
@@ -443,5 +459,366 @@ describe('bank quality gates', () => {
 			});
 		});
 		expect(run(questions)).toThrow(/stem template/);
+	});
+});
+
+describe('stem and instruction gates', () => {
+	function multiSelect(overrides: Record<string, unknown> = {}): QuestionDefinition {
+		return choice({
+			kind: 'multiple-choice',
+			selectCount: 2,
+			correctOptionIds: ['a', 'b'],
+			options: [
+				{
+					id: 'a',
+					text: 'Alpha',
+					rationale:
+						'Alpha prevents the exposure at the boundary before the request reaches the service.'
+				},
+				{
+					id: 'b',
+					text: 'Beta',
+					rationale: 'Beta validates the request path and rejects callers that skip the front door.'
+				},
+				{
+					id: 'c',
+					text: 'Gamma',
+					rationale: 'Gamma protects stored data but does not stop the request at the boundary.'
+				},
+				{
+					id: 'd',
+					text: 'Delta',
+					rationale: 'Delta records activity after it happens instead of preventing the exposure.'
+				},
+				{
+					id: 'e',
+					text: 'Epsilon',
+					rationale: 'Epsilon changes the network path but leaves the exposure in place.'
+				}
+			],
+			explanation:
+				'Alpha prevents the exposure at the boundary and Beta validates the request path. Gamma protects stored data, Delta records activity, and Epsilon changes the network path.',
+			...overrides
+		});
+	}
+
+	const ratOptions = [
+		{
+			id: 'a',
+			text: 'rat',
+			rationale: 'rat names the remote access trojan the report describes in this case.'
+		},
+		{
+			id: 'b',
+			text: 'Beta',
+			rationale: 'Beta protects stored data and does not stop the request at the boundary.'
+		},
+		{
+			id: 'c',
+			text: 'Gamma',
+			rationale: 'Gamma records activity after it happens instead of preventing the exposure.'
+		},
+		{
+			id: 'd',
+			text: 'Delta',
+			rationale: 'Delta changes the network path but leaves the underlying exposure in place.'
+		}
+	];
+
+	const ratExplanation =
+		'rat names the remote access trojan the report describes. Beta protects stored data, Gamma records activity after it happens, and Delta changes the network path.';
+
+	it('rejects a keyed answer that appears in the stem', () => {
+		expect(run([choice({ prompt: `${stemPrefix} Which control is this when the subject is Alpha?` })])).toThrow(
+			/keyed answer .* appears in the stem/i
+		);
+	});
+
+	it('accepts a stem that does not name the keyed answer', () => {
+		expect(
+			run([choice({ prompt: `${stemPrefix} Which control is this when the subject is a boundary device?` })])
+		).not.toThrow();
+	});
+
+	it('rejects a short keyed token that appears in the stem', () => {
+		expect(
+			run([
+				choice({
+					prompt: `${stemPrefix} Which control is this when the subject is rat?`,
+					options: ratOptions,
+					explanation: ratExplanation
+				})
+			])
+		).toThrow(/keyed answer .* appears in the stem/i);
+	});
+
+	it('accepts a longer word that merely starts with a short keyed token', () => {
+		expect(
+			run([
+				choice({
+					prompt: `${stemPrefix} Which control lowers the error rate for this service?`,
+					options: ratOptions,
+					explanation: ratExplanation
+				})
+			])
+		).not.toThrow();
+	});
+
+	it('rejects a multi-select item that never states how many to select', () => {
+		expect(
+			run([multiSelect({ prompt: `${stemPrefix} Which controls best satisfy the stated requirement?` })])
+		).toThrow(/must state how many/);
+	});
+
+	it('rejects a single-select item whose stem states a count of two', () => {
+		expect(
+			run([choice({ prompt: `${stemPrefix} Which control best satisfies the requirement? (Select TWO.)` })])
+		).toThrow(/selectCount/);
+	});
+
+	it('accepts a multi-select item whose stem states the matching count', () => {
+		expect(
+			run([
+				multiSelect({ prompt: `${stemPrefix} Which controls best satisfy the stated requirement? (Select two.)` })
+			])
+		).not.toThrow();
+	});
+
+	it('rejects a degenerate option that names the same thing twice', () => {
+		expect(
+			run([
+				choice({
+					options: [
+						{
+							id: 'a',
+							text: 'Alpha',
+							rationale:
+								'Alpha prevents the exposure at the boundary before the request reaches the service.'
+						},
+						{
+							id: 'b',
+							text: 'Beta',
+							rationale: 'Beta protects stored data and does not stop the request at the boundary.'
+						},
+						{
+							id: 'c',
+							text: 'Corrective and Corrective',
+							rationale:
+								'The duplicate pair names one control category twice instead of two distinct categories.'
+						},
+						{
+							id: 'd',
+							text: 'Delta',
+							rationale:
+								'Delta changes the network path but leaves the underlying exposure in place.'
+						}
+					],
+					explanation:
+						'Alpha prevents the exposure at the boundary. Beta protects stored data, Corrective names the remediation category the scenario requires, and Delta changes the network path.'
+				})
+			])
+		).toThrow(/degenerate duplicate option/i);
+	});
+
+	it('accepts an option that pairs two distinct categories', () => {
+		expect(
+			run([
+				choice({
+					options: [
+						{
+							id: 'a',
+							text: 'Alpha',
+							rationale:
+								'Alpha prevents the exposure at the boundary before the request reaches the service.'
+						},
+						{
+							id: 'b',
+							text: 'Beta',
+							rationale: 'Beta protects stored data and does not stop the request at the boundary.'
+						},
+						{
+							id: 'c',
+							text: 'Corrective and Preventive',
+							rationale:
+								'Corrective and Preventive pair two distinct remediation categories the audit separates.'
+						},
+						{
+							id: 'd',
+							text: 'Delta',
+							rationale:
+								'Delta changes the network path but leaves the underlying exposure in place.'
+						}
+					],
+					explanation:
+						'Alpha prevents the exposure at the boundary. Beta protects stored data, Corrective and Preventive are two distinct remediation categories, and Delta changes the network path.'
+				})
+			])
+		).not.toThrow();
+	});
+});
+
+// ---------------------------------------------------------------------------
+// PBQ answer-position gates. A PBQ that keys the same option position in every
+// field, or whose display order mirrors the answer order, can be scored without
+// any subject knowledge — which makes the score meaningless.
+// ---------------------------------------------------------------------------
+
+const pbqBase = {
+	domain: 1 as const,
+	objective: '1.1' as const,
+	format: 'pbq' as const,
+	prompt: `${stemPrefix} Configure each setting to meet the stated requirement.`,
+	context,
+	hint,
+	explanation:
+		'The baseline requires the strongest option in each field, so every field resolves to the modern setting rather than a legacy one.',
+	sourceRefs: [{ source: 'exam-objectives', section: 'Objective 1.1' }]
+};
+
+function config(options: string[], keyed: number[]): QuestionDefinition {
+	return {
+		...pbqBase,
+		id: 'pbq-1-100',
+		kind: 'configuration',
+		fields: options.map((_, index) => ({
+			id: `f${index + 1}`,
+			label: `Setting ${index + 1}`,
+			options: options.map((text, optionIndex) => ({
+				id: `o${optionIndex + 1}`,
+				text: `${text} ${index + 1}`
+			}))
+		})),
+		correctValues: Object.fromEntries(
+			keyed.map((position, index) => [`f${index + 1}`, `o${position + 1}`])
+		)
+	} as QuestionDefinition;
+}
+
+function matching(premiseIds: string[], map: Record<string, string>): QuestionDefinition {
+	return {
+		...pbqBase,
+		id: 'pbq-1-101',
+		kind: 'matching',
+		premises: premiseIds.map((id, index) => ({ id, text: `Premise ${index + 1}` })),
+		targets: ['t1', 't2', 't3', 't4', 't5'].map((id, index) => ({
+			id,
+			text: `Target ${index + 1}`
+		})),
+		extraTargets: [{ id: 't9', text: 'Unused distractor' }],
+		correctMatches: map
+	} as QuestionDefinition;
+}
+
+describe('PBQ answer-position gates', () => {
+	const pbqRun = (question: QuestionDefinition) => () =>
+		validateBankQuality({ mcqs: [], pbqs: [question] }, spec);
+
+	it('rejects a configuration PBQ that keys the same position in every field', () => {
+		const flat = config(['Alpha', 'Beta', 'Gamma', 'Delta'], [0, 0, 0, 0]);
+		expect(pbqRun(flat)).toThrow(/every field keys option position 1/);
+	});
+
+	it('accepts a configuration PBQ whose keyed positions vary', () => {
+		const varied = config(['Alpha', 'Beta', 'Gamma', 'Delta'], [0, 2, 1, 3]);
+		expect(pbqRun(varied)).not.toThrow();
+	});
+
+	it('rejects a matching PBQ whose display order mirrors the answer order', () => {
+		const identity = matching(
+			['p1', 'p2', 'p3', 'p4', 'p5'],
+			{ p1: 't1', p2: 't2', p3: 't3', p4: 't4', p5: 't5' }
+		);
+		expect(pbqRun(identity)).toThrow(/mirrors the answer order/);
+	});
+
+	it('rejects a matching PBQ whose mapping is a uniform rotation', () => {
+		const rotated = matching(
+			['p1', 'p2', 'p3', 'p4', 'p5'],
+			{ p1: 't2', p2: 't3', p3: 't4', p4: 't5', p5: 't1' }
+		);
+		expect(pbqRun(rotated)).toThrow(/uniform shift/);
+	});
+
+	it('accepts a matching PBQ with a non-uniform mapping', () => {
+		const mixed = matching(
+			['p1', 'p2', 'p3', 'p4', 'p5'],
+			{ p1: 't3', p2: 't1', p3: 't5', p4: 't2', p5: 't4' }
+		);
+		expect(pbqRun(mixed)).not.toThrow();
+	});
+});
+
+describe('evidence artifact gate', () => {
+	const evidenceRun = (lines: { id: string; text: string }[]) => () =>
+		validateBankQuality(
+			{
+				mcqs: [],
+				pbqs: [
+					{
+						...pbqBase,
+						id: 'pbq-1-102',
+						kind: 'evidence',
+						artifact: { label: 'Access log', format: 'log', lines },
+						selectCount: 2,
+						correctLineIds: lines.slice(0, 2).map((line) => line.id)
+					} as QuestionDefinition
+				]
+			},
+			spec
+		);
+
+	it('rejects an artifact line that labels its own finding', () => {
+		expect(
+			evidenceRun([
+				{ id: 'l1', text: 'GET /a?id=1 OR 1=1 -- SQL injection probe' },
+				{ id: 'l2', text: 'GET /a?id=2 200 (1.1 KB)' },
+				{ id: 'l3', text: 'GET /a?id=3 200 (1.2 KB)' }
+			])
+		).toThrow(/labels its own finding/);
+		expect(
+			evidenceRun([
+				{ id: 'l1', text: '10.0.0.5 -> 203.0.113.9:4444 tcp 1 pkt/60s (low-rate beacon)' },
+				{ id: 'l2', text: 'GET /a?id=2 200 (1.1 KB)' },
+				{ id: 'l3', text: 'GET /a?id=3 200 (1.2 KB)' }
+			])
+		).toThrow(/labels its own finding/);
+	});
+
+	it('accepts raw log lines', () => {
+		expect(
+			evidenceRun([
+				{ id: 'l1', text: 'GET /a?id=1+OR+1%3D1 HTTP/1.1" 200 (4.2 KB)' },
+				{ id: 'l2', text: 'GET /../../../../etc/passwd HTTP/1.1" 404 (0.3 KB)' },
+				{ id: 'l3', text: 'GET /index.html HTTP/1.1" 200 (0.8 KB)' }
+			])
+		).not.toThrow();
+	});
+});
+
+describe('study-guide provenance gate', () => {
+	const specWithSections = {
+		...spec,
+		studyGuideSections: ['Security Control Types', 'Zero Trust']
+	} as unknown as CourseBankSpec;
+	const provenanceRun = (section: string) => () =>
+		validateBankQuality(
+			{ mcqs: [choice({ sourceRefs: [{ source: 'study-guide', section }] })], pbqs: [] },
+			specWithSections
+		);
+
+	it('accepts a citation that names a real study-guide section', () => {
+		expect(provenanceRun('Zero Trust')).not.toThrow();
+	});
+
+	it('rejects an invented chapter title', () => {
+		expect(provenanceRun('Chapter 3: Symmetric Encryption and AES Key Sizes.')).toThrow(
+			/not a section of the course study guide/
+		);
+	});
+
+	it('rejects a whole-domain placeholder', () => {
+		expect(provenanceRun('Domain 4 - Security Operations')).toThrow(
+			/not a section of the course study guide/
+		);
 	});
 });

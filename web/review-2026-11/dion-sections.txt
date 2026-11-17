@@ -1,0 +1,226 @@
+11:​ Introduction
+79:​ Exam Tips
+181:​ Threats and Vulnerabilities
+218:​ Confidentiality
+255:​ Integrity
+292:​ Availability
+328:​ Non-repudiation
+352:​ Authentication
+387:​ Authorization
+397:​ Accounting
+450:​ Security Control Categories
+468:​ Security Control Types
+498:​ Gap Analysis
+534:​ Zero Trust
+658:​ Threat Actor Motivations
+710:​ Threat Actor Attributes
+741:​ Unskilled Attackers
+760:​ Hacktivists
+799:​ Organized Crime
+830:​ Nation-state Actor
+865:​ Insider Threats
+899:​ Shadow IT
+912:​ Threat Vectors and Attack Surfaces
+1002:​ Outsmarting Threat Actors
+1115:​ Fencing and Bollards
+1141:​ Attacking with Brute Force
+1177:​ Surveillance Systems
+1244:​ Bypassing Surveillance Systems
+1281:​ Access Control Vestibules
+1319:​ Door Locks
+1378:​ Access Badge Cloning
+1488:​ Motivational Triggers
+1523:​ Impersonation
+1588:​ Pretexting
+1596:​ Phishing Attacks
+1638:​ Preventing Phishing Attacks
+1710:​ Frauds and Scams
+1740:​ Influence Campaigns
+1763:​ Other Social Engineering Attacks
+1906:​ Viruses
+1964:​ Worms
+1980:​ Trojans
+2001:​ Ransomware
+2021:​ Zombies and Botnets
+2054:​ Rootkits
+2112:​ Backdoors and Logic Bombs
+2136:​ Keylogger
+2158:​ Spyware and Bloatware
+2201:​ Malware Attack Techniques
+2235:​ Shellcode
+2238:​ Stage 2: Downloader
+2241:​ “Actions on Objectives” Phase
+2246:​ Concealment
+2266:​ Indications of Malware Attacks
+2398:​ Data Classifications
+2460:​ Data Ownership
+2502:​ Data States
+2564:​ Data Types
+2608:​ Data Sovereignty
+2633:​ Securing Data
+2675:​ Data Loss Prevention (DLP)
+2812:​ Symmetric vs Asymmetric
+2856:​ Symmetric Algorithms
+2904:​ Asymmetric Algorithms
+2960:​ Hashing
+3022:​ Increasing Hash Security
+3089:​ Public Key Infrastructure (PKI)
+3140:​ Digital Certificates
+3255:​ Blockchain
+3320:​ Encryption Tools
+3353:​ Obfuscation
+3377:​ Cryptographic Attacks
+3553:​ Risk Assessment Frequency
+3574:​ Risk Identification
+3623:​ Risk Register
+3689:​ Qualitative Risk Analysis
+3723:​ Quantitative Risk Analysis
+3754:​ Risk Management Strategies
+3801:​ Risk Monitoring and Reporting
+3904:​ Supply Chain Risks
+3953:​ Supply Chain Attacks
+3992:​ Vendor Assessment
+4034:​ Vendor Selection and Monitoring
+4073:​ Contracts and Agreements
+4227:​ Governance
+4257:​ Governance Structures
+4290:​ Policies
+4336:​ Standards
+4370:​ Procedures
+4404:​ Governance Considerations
+4448:​ Compliance
+4503:​ Non-compliance Consequences
+4611:​ Acquisition and Procurement
+4649:​ Mobile Asset Deployments
+4683:​ Asset Management
+4746:​ Asset Disposal and Decommissioning
+4823:​ Change Management
+4880:​ Change Management Processes
+4947:​ Technical Implications of Changes
+4995:​ Documenting Changes
+5128:​ Internal Audits and Assessments
+5219:​ Performing an Internal Assessment
+5263:​ External Audits and Assessments
+5333:​ Performing an External Assessment
+5364:​ Penetration Testing
+5424:​ Reconnaissance in Pentesting
+5467:​ Performing a Basic PenTest
+5473:​ Attestation of Findings
+5624:​ High Availability
+5692:​ Data Redundancy
+5751:​ Capacity Planning
+5792:​ Powering Data Centers
+5860:​ Data Backups
+5948:​ Continuity of Operations Plan
+5991:​ Redundant Site Considerations
+6050:​ Resilience and Recovery Testing
+6184:​ On-premise versus the Cloud
+6262:​ Cloud Security
+6350:​ Virtualization and Containerization
+6399:​ Serverless
+6435:​ Microservices
+6485:​ Network Infrastructure
+6507:​ Software-defined Network (SDN)
+6540:​ Infrastructure as Code (IaC)
+6588:​ Centralized vs Decentralized Architectures
+6645:​ Internet of Things (IoT)
+6689:​ ICS and SCADA
+6739:​ Embedded Systems
+6869:​ Ports and Protocols
+6948:​ Firewalls
+7035:​ Configuring Firewalls
+7093:​ IDS and IPS
+7141:​ Network Appliances
+7194:​ Port Security
+7269:​ Securing Network Communications
+7383:​ SD-WAN and SASE
+7470:​ Infrastructure Considerations
+7537:​ Selecting Infrastructure Controls
+7720:​ Identity and Access Management (IAM)
+7788:​ Multi-factor Authentication
+7855:​ Password Security
+7931:​ Password Attacks
+7975:​ Single Sign-On (SSO)
+8030:​ Federation
+8077:​ Privileged Access Management (PAM)
+8109:​ Access Control Models
+8167:​ Assigning Permissions
+8334:​ Hardware Vulnerabilities
+8394:​ Bluetooth Vulnerabilities and Attacks
+8461:​ Mobile Vulnerabilities and Attacks
+8501:​ Zero-day Vulnerabilities
+8526:​ Operating System Vulnerabilities
+8564:​ SQL and XML Injections
+8657:​ XSS and XSRF
+8744:​ Buffer Overflow
+8797:​ Race Conditions
+8938:​ Distributed Denial of Service
+8994:​ Domain Name System (DNS) Attacks
+9048:​ Directory Traversal Attack
+9087:​ Execution and Escalation Attacks
+9151:​ Replay Attacks
+9190:​ Session Hijacking
+9229:​ On-path Attacks
+9292:​ Injection Attacks
+9329:​ Indicators of Compromise (IoC)
+9474:​ Changing Default Configurations
+9489:​ Restricting Applications
+9543:​ Trusted Operating Systems
+9584:​ Updates and Patches
+9621:​ Patch Management
+9655:​ Group Policies
+9726:​ SELinux
+9824:​ Data Encryption Levels
+9863:​ Secure Baselines
+9993:​ Wireless Infrastructure Security
+10053:​ Wireless Security Settings
+10143:​ Application Security
+10214:​ Network Access Control (NAC)
+10262:​ Web and DNS Filtering
+10318:​ Email Security
+10395:​ Endpoint Detection and Response
+10478:​ User Behavior Analytics
+10521:​ Selecting Secure Protocols
+10631:​ Identifying Vulnerabilities
+10700:​ Threat Intelligence Feeds
+10782:​ Responsible Disclosure Programs
+10823:​ Analyzing Vulnerabilities
+10885:​ Vulnerability Response and Remediation
+10923:​ Validating Vulnerability Remediation
+10971:​ Vulnerability Reporting
+11119:​ Monitoring Resources
+11166:​ Alerting and Monitoring Activities
+11269:​ Simple Network Management Protocol (SNMP)
+11352:​ Security Information and Event Management (SIEM)
+11419:​ Data from Security Tools
+11480:​ Security Content Automation and Protocol (SCAP)
+11576:​ Network and Flow Analysis
+11651:​ Single Pane of Glass
+11704:​ Developing Standard Operating Procedures (SOPs) and Documentation
+11709:​ Continuous Monitoring and Maintenance
+11800:​ Incident Response Process
+11903:​ Threat Hunting
+11946:​ Root Cause Analysis
+12000:​ Incident Response Training and Testing
+12067:​ Digital Forensic Procedures
+12165:​ Data Collection Procedures
+12269:​ Investigative Data
+12338:​ Dashboards
+12360:​ Automated Reports
+12417:​ Vulnerability Scans
+12469:​ Packet Captures
+12503:​ Metadata
+12588:​ When to Automate and Orchestrate
+12636:​ Benefits of Automation and Orchestration
+12690:​ Automating Support Tickets
+12737:​ Automating Onboarding
+12823:​ Automating Security
+12872:​ Automating Application Development
+12942:​ Integrations and APIs
+13071:​ Recognizing Insider Threats
+13121:​ Password Managers
+13153:​ Avoiding Social Engineering
+13215:​ Policy and Handbooks
+13277:​ Remote and Hybrid Work Environments
+13313:​ Creating a Culture of Security
+13381:​ Conclusion

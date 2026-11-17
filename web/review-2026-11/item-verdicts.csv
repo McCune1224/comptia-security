@@ -1,0 +1,813 @@
+id,kind,domain,objective,verdict,reason
+mcq-1-001,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-002,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-003,multiple-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-004,single-choice,1,1.1,REWRITE,P0 key wrong or degenerate
+mcq-1-005,single-choice,1,1.1,REWRITE,P0 stem says Select TWO but item is single-choice
+mcq-1-006,single-choice,1,1.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-007,single-choice,1,1.2,KEEP,meets standard
+mcq-1-008,single-choice,1,1.2,REVISE,P1 scenario restated in the stem (overlap 0.60)
+mcq-1-009,single-choice,1,1.2,KEEP,meets standard
+mcq-1-010,multiple-choice,1,1.2,REVISE,P1 off-model option count
+mcq-1-011,single-choice,1,1.2,KEEP,meets standard
+mcq-1-012,single-choice,1,1.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-013,single-choice,1,1.3,KEEP,meets standard
+mcq-1-014,single-choice,1,1.3,KEEP,meets standard
+mcq-1-015,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-016,single-choice,1,1.3,KEEP,meets standard
+mcq-1-017,single-choice,1,1.3,KEEP,meets standard
+mcq-1-018,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-019,single-choice,1,1.4,REWRITE,P0 key wrong or degenerate
+mcq-1-020,single-choice,1,1.4,KEEP,meets standard
+mcq-1-021,multiple-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-022,single-choice,1,1.4,KEEP,meets standard
+mcq-1-023,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-024,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-001,single-choice,2,2.1,KEEP,meets standard
+mcq-2-002,multiple-choice,2,2.1,REVISE,P1 off-model option count
+mcq-2-003,multiple-choice,2,2.1,REVISE,P1 off-model option count
+mcq-2-004,single-choice,2,2.1,REWRITE,P0 stem says Select TWO but item is single-choice
+mcq-2-005,multiple-choice,2,2.1,REVISE,P1 off-model option count
+mcq-2-006,multiple-choice,2,2.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-007,multiple-choice,2,2.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-008,multiple-choice,2,2.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-009,multiple-choice,2,2.2,REVISE,P1 scenario restated in the stem (overlap 0.64)
+mcq-2-010,single-choice,2,2.2,KEEP,meets standard
+mcq-2-011,single-choice,2,2.2,KEEP,meets standard
+mcq-2-012,single-choice,2,2.4,REVISE,P1 scenario restated in the stem (overlap 0.79)
+mcq-2-013,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-014,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-015,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-016,single-choice,2,2.4,KEEP,meets standard
+mcq-2-017,single-choice,2,2.2,KEEP,meets standard
+mcq-2-018,single-choice,2,2.3,REVISE,P1 scenario restated in the stem (overlap 0.65)
+mcq-2-019,single-choice,2,2.3,KEEP,meets standard
+mcq-2-020,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-021,single-choice,2,2.3,REVISE,P1 scenario restated in the stem (overlap 0.73)
+mcq-2-022,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-023,single-choice,2,2.3,KEEP,meets standard
+mcq-2-024,single-choice,2,2.3,KEEP,meets standard
+mcq-2-025,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-026,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-027,single-choice,2,2.4,KEEP,meets standard
+mcq-2-028,single-choice,2,2.4,KEEP,meets standard
+mcq-2-029,single-choice,2,2.4,KEEP,meets standard
+mcq-2-030,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-031,single-choice,2,2.2,REVISE,P2 near-duplicate stem family
+mcq-2-032,single-choice,2,2.4,REVISE,"P2 merge: sandbox-with-INetSim — keep 2-032 (ransomware lifecycle), absorb 2-038"
+mcq-2-033,single-choice,2,2.4,KEEP,meets standard
+mcq-2-034,single-choice,2,2.4,KEEP,meets standard
+mcq-2-035,single-choice,2,2.4,REWRITE,P0 key wrong or degenerate
+mcq-2-036,single-choice,2,2.5,KEEP,meets standard
+mcq-2-037,single-choice,2,2.5,KEEP,meets standard
+mcq-2-038,single-choice,2,2.5,REMOVE,"P2 merge: sandbox-with-INetSim — keep 2-032 (ransomware lifecycle), absorb 2-038"
+mcq-2-039,single-choice,2,2.5,KEEP,meets standard
+mcq-2-040,single-choice,2,2.5,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-041,single-choice,2,2.5,KEEP,meets standard
+mcq-2-042,single-choice,2,2.5,KEEP,meets standard
+mcq-2-043,single-choice,2,2.5,KEEP,meets standard
+mcq-2-044,single-choice,2,2.5,KEEP,meets standard
+mcq-3-001,single-choice,3,3.1,KEEP,meets standard
+mcq-3-002,single-choice,3,3.1,KEEP,meets standard
+mcq-3-003,single-choice,3,3.1,REVISE,P1 scenario restated in the stem (overlap 0.67)
+mcq-3-004,single-choice,3,3.1,KEEP,meets standard
+mcq-3-005,single-choice,3,3.1,KEEP,meets standard
+mcq-3-006,single-choice,3,3.1,KEEP,meets standard
+mcq-3-007,single-choice,3,3.1,KEEP,meets standard
+mcq-3-008,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-009,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-010,single-choice,3,3.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-011,multiple-choice,3,3.2,REWRITE,P0 key wrong or degenerate
+mcq-3-012,single-choice,3,3.2,KEEP,meets standard
+mcq-3-013,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-014,multiple-choice,3,3.2,REVISE,P1 off-model option count
+mcq-3-015,single-choice,3,3.2,KEEP,meets standard
+mcq-3-016,single-choice,3,3.2,KEEP,meets standard
+mcq-3-017,single-choice,3,3.2,KEEP,meets standard
+mcq-3-018,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-019,single-choice,3,3.3,KEEP,meets standard
+mcq-3-020,single-choice,3,3.3,KEEP,meets standard
+mcq-3-021,multiple-choice,3,3.3,REVISE,P1 off-model option count
+mcq-3-022,single-choice,3,3.3,KEEP,meets standard
+mcq-3-023,single-choice,3,3.3,KEEP,meets standard
+mcq-3-024,single-choice,3,3.3,KEEP,meets standard
+mcq-3-025,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-026,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-027,single-choice,3,3.3,KEEP,meets standard
+mcq-3-028,single-choice,3,3.4,REWRITE,P1 options written as prose / self-evaluating
+mcq-3-029,single-choice,3,3.4,REWRITE,P1 options written as prose / self-evaluating
+mcq-3-030,single-choice,3,3.4,KEEP,meets standard
+mcq-3-031,multiple-choice,3,3.4,REVISE,P1 off-model option count
+mcq-3-032,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-033,single-choice,3,3.4,KEEP,meets standard
+mcq-3-034,single-choice,3,3.4,REWRITE,P1 options written as prose / self-evaluating
+mcq-3-035,single-choice,3,3.4,REWRITE,P1 options written as prose / self-evaluating
+mcq-3-036,single-choice,3,3.4,KEEP,meets standard
+mcq-4-001,single-choice,4,4.1,REVISE,P1 scenario restated in the stem (overlap 0.92)
+mcq-4-002,single-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-003,single-choice,4,4.1,REVISE,P1 scenario restated in the stem (overlap 0.62)
+mcq-4-004,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-005,multiple-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-006,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-007,single-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-008,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-009,single-choice,4,4.2,KEEP,meets standard
+mcq-4-010,single-choice,4,4.4,REVISE,P1 scenario restated in the stem (overlap 0.75)
+mcq-4-011,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-012,single-choice,4,4.2,KEEP,meets standard
+mcq-4-013,multiple-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-014,single-choice,4,4.4,KEEP,meets standard
+mcq-4-015,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-016,single-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-017,single-choice,4,4.7,KEEP,meets standard
+mcq-4-018,single-choice,4,4.3,KEEP,meets standard
+mcq-4-019,multiple-choice,4,4.7,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-020,single-choice,4,4.3,KEEP,meets standard
+mcq-4-021,single-choice,4,4.7,REVISE,P1 scenario restated in the stem (overlap 0.62)
+mcq-4-022,single-choice,4,4.7,KEEP,meets standard
+mcq-4-023,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-024,single-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-025,single-choice,4,4.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-026,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-027,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-028,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-029,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-030,single-choice,4,4.8,REVISE,P1 scenario restated in the stem (overlap 0.81)
+mcq-4-031,single-choice,4,4.9,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-032,single-choice,4,4.2,KEEP,meets standard
+mcq-4-033,single-choice,4,4.8,REVISE,"P2 merge: order of volatility — keep 4-033 (5-source sequence), absorb 4-076"
+mcq-4-034,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-035,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-036,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-037,multiple-choice,4,4.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-038,single-choice,4,4.5,REVISE,P1 scenario restated in the stem (overlap 0.63)
+mcq-4-039,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-040,single-choice,4,4.9,REVISE,P1 scenario restated in the stem (overlap 0.62)
+mcq-4-041,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-042,multiple-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-043,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-044,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-045,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-046,multiple-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-047,single-choice,4,4.7,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-048,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-049,single-choice,4,4.9,KEEP,meets standard
+mcq-4-050,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-051,single-choice,4,4.9,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-052,multiple-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-053,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-054,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-055,multiple-choice,4,4.7,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-056,single-choice,4,4.6,REVISE,P1 scenario restated in the stem (overlap 0.68)
+mcq-5-001,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-002,single-choice,5,5.1,REVISE,P1 scenario restated in the stem (overlap 0.61)
+mcq-5-003,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-004,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-005,multiple-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-006,single-choice,5,5.1,KEEP,meets standard
+mcq-5-007,single-choice,5,5.1,REVISE,P1 leftover heading fragment glued onto the stem
+mcq-5-008,single-choice,5,5.2,REVISE,P2 near-duplicate stem family
+mcq-5-009,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-010,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-011,multiple-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-012,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-013,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-014,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-015,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-016,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-017,multiple-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-018,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-019,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-020,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-021,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-022,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-023,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-024,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-025,multiple-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-026,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-027,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-028,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-029,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-030,single-choice,5,5.5,REVISE,P2 near-duplicate stem family
+mcq-5-031,multiple-choice,5,5.5,REVISE,P1 off-model option count
+mcq-5-032,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-033,single-choice,5,5.5,REVISE,P1 scenario restated in the stem (overlap 0.73)
+mcq-5-034,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-035,single-choice,5,5.6,KEEP,meets standard
+mcq-5-036,single-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-037,multiple-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-038,single-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-039,single-choice,5,5.6,KEEP,meets standard
+mcq-5-040,single-choice,5,5.6,REVISE,P2 near-duplicate stem family
+mcq-1-025,single-choice,1,1.1,KEEP,meets standard
+mcq-1-026,single-choice,1,1.1,KEEP,meets standard
+mcq-1-027,single-choice,1,1.1,KEEP,meets standard
+mcq-1-028,single-choice,1,1.1,REVISE,P1 scenario restated in the stem (overlap 0.74)
+mcq-1-029,single-choice,1,1.2,KEEP,meets standard
+mcq-1-030,single-choice,1,1.2,KEEP,meets standard
+mcq-1-031,single-choice,1,1.2,KEEP,meets standard
+mcq-1-032,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-033,single-choice,1,1.3,KEEP,meets standard
+mcq-1-034,single-choice,1,1.3,REVISE,P1 scenario restated in the stem (overlap 0.67)
+mcq-1-035,single-choice,1,1.3,KEEP,meets standard
+mcq-1-036,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-037,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-038,single-choice,1,1.4,REVISE,P1 scenario restated in the stem (overlap 0.68)
+mcq-1-039,single-choice,1,1.4,REVISE,P1 scenario restated in the stem (overlap 0.79)
+mcq-1-040,single-choice,1,1.4,KEEP,meets standard
+mcq-2-045,single-choice,2,2.1,KEEP,meets standard
+mcq-2-046,single-choice,2,2.1,KEEP,meets standard
+mcq-2-047,multiple-choice,2,2.1,REVISE,P0 multi-select missing count instruction
+mcq-2-048,single-choice,2,2.1,KEEP,meets standard
+mcq-2-049,single-choice,2,2.2,KEEP,meets standard
+mcq-2-050,single-choice,2,2.2,KEEP,meets standard
+mcq-2-051,single-choice,2,2.2,KEEP,meets standard
+mcq-2-052,single-choice,2,2.3,KEEP,meets standard
+mcq-2-053,single-choice,2,2.3,KEEP,meets standard
+mcq-2-054,multiple-choice,2,2.3,REVISE,P0 multi-select missing count instruction
+mcq-2-055,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-056,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-057,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-058,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-059,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-060,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-037,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-038,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-039,multiple-choice,3,3.1,REVISE,P0 multi-select missing count instruction
+mcq-3-040,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-041,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-042,multiple-choice,3,3.1,REVISE,P0 multi-select missing count instruction
+mcq-3-043,single-choice,3,3.1,REVISE,P1 scenario restated in the stem (overlap 0.75)
+mcq-3-044,single-choice,3,3.2,KEEP,meets standard
+mcq-3-045,single-choice,3,3.3,KEEP,meets standard
+mcq-3-046,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-047,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-048,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-049,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-050,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-051,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-052,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-057,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-058,multiple-choice,4,4.1,REVISE,P0 multi-select missing count instruction
+mcq-4-059,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-060,single-choice,4,4.9,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-061,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-062,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-063,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-064,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-065,single-choice,4,4.3,KEEP,meets standard
+mcq-4-066,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-067,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-068,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-069,single-choice,4,4.7,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-070,single-choice,4,4.7,REVISE,P1 scenario restated in the stem (overlap 0.70)
+mcq-4-071,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-072,single-choice,4,4.9,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-041,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-042,single-choice,5,5.4,KEEP,meets standard
+mcq-5-043,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-044,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-045,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-046,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-047,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-048,single-choice,5,5.5,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-049,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-050,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-051,single-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-052,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-053,single-choice,5,5.6,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-054,single-choice,5,5.2,REVISE,P1 scenario restated in the stem (overlap 0.61)
+mcq-5-055,single-choice,5,5.6,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-056,single-choice,5,5.6,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-041,multiple-choice,1,1.2,REVISE,P0 multi-select missing count instruction
+mcq-1-042,single-choice,1,1.2,REVISE,P1 scenario restated in the stem (overlap 0.65)
+mcq-1-043,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-044,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-045,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-061,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-062,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-063,single-choice,2,2.4,REVISE,P2 near-duplicate stem family
+mcq-2-064,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-065,single-choice,2,2.4,REVISE,P2 near-duplicate stem family
+mcq-2-066,multiple-choice,2,2.4,REVISE,P0 multi-select missing count instruction
+mcq-3-053,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-054,multiple-choice,3,3.2,REVISE,P0 multi-select missing count instruction
+mcq-3-055,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-073,single-choice,4,4.9,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-074,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-075,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-076,single-choice,4,4.8,REMOVE,"P2 merge: order of volatility — keep 4-033 (5-source sequence), absorb 4-076"
+mcq-4-077,multiple-choice,4,4.8,REVISE,P0 multi-select missing count instruction
+mcq-5-057,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-046,single-choice,1,1.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-047,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-048,multiple-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-067,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-068,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-069,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-070,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-071,multiple-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-056,multiple-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-057,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-058,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-059,multiple-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-060,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-061,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-062,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-078,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-079,multiple-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-080,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-081,multiple-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-082,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-083,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-084,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-085,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-086,single-choice,4,4.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-087,single-choice,4,4.6,REVISE,P2 near-duplicate stem family
+mcq-4-088,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-089,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-090,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-091,multiple-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-092,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-058,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-059,multiple-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-049,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-050,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-051,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-052,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-053,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-054,single-choice,1,1.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-055,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-056,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-057,single-choice,1,1.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-058,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-059,single-choice,1,1.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-060,single-choice,1,1.1,REVISE,P2 near-duplicate stem family
+mcq-1-061,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-062,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-063,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-064,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-065,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-066,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-067,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-068,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-069,single-choice,1,1.4,REVISE,P2 near-duplicate stem family
+mcq-1-070,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-071,single-choice,1,1.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-072,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-073,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-074,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-127,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-128,single-choice,5,5.4,REVISE,P2 near-duplicate stem family
+mcq-5-129,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-072,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-073,single-choice,2,2.4,REWRITE,P0 answer printed in stem
+mcq-2-074,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-075,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-076,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-077,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-078,single-choice,2,2.4,REWRITE,P0 answer printed in stem
+mcq-2-079,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-080,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-081,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-082,single-choice,2,2.2,REVISE,P2 near-duplicate stem family
+mcq-2-083,single-choice,2,2.2,REVISE,P2 near-duplicate stem family
+mcq-2-084,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-085,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-086,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-087,single-choice,2,2.2,REVISE,P2 near-duplicate stem family
+mcq-2-088,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-089,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-090,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-091,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-092,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-093,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-094,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-095,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-096,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-097,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-098,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-099,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-100,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-101,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-102,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-103,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-104,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-105,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-106,single-choice,2,2.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-107,single-choice,2,2.4,REWRITE,P0 answer printed in stem
+mcq-2-108,single-choice,2,2.4,REVISE,P2 near-duplicate stem family
+mcq-2-109,single-choice,2,2.4,REVISE,P2 near-duplicate stem family
+mcq-2-110,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-111,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-112,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-113,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-114,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-115,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-116,single-choice,2,2.5,REVISE,P2 near-duplicate stem family
+mcq-3-064,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-065,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-066,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-067,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-068,single-choice,3,3.1,REVISE,P2 near-duplicate stem family
+mcq-3-070,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-071,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-072,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-073,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-074,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-075,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-076,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-077,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-079,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-080,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-081,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-082,single-choice,3,3.3,REVISE,P2 near-duplicate stem family
+mcq-3-083,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-084,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-085,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-086,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-087,single-choice,3,3.3,REWRITE,P0 answer printed in stem
+mcq-3-088,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-089,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-090,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-091,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-092,single-choice,3,3.4,REVISE,P2 near-duplicate stem family
+mcq-3-093,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-094,single-choice,3,3.4,REWRITE,P0 answer printed in stem
+mcq-3-095,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-096,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-097,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-093,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-094,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-095,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-096,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-097,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-098,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-099,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-100,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-101,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-102,single-choice,4,4.8,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-103,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-104,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-105,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-106,single-choice,4,4.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-107,single-choice,4,4.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-108,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-109,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-110,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-111,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-112,single-choice,4,4.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-179,single-choice,3,3.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-183,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-184,single-choice,3,3.4,REWRITE,P0 answer printed in stem
+mcq-3-185,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-186,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-180,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-181,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-182,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-130,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-175,single-choice,2,2.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-123,single-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-187,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-060,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-061,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-062,single-choice,5,5.2,REVISE,P2 near-duplicate stem family
+mcq-5-063,single-choice,5,5.2,REVISE,P2 near-duplicate stem family
+mcq-5-064,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-065,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-066,single-choice,5,5.2,REVISE,P2 near-duplicate stem family
+mcq-5-067,single-choice,5,5.2,REWRITE,P0 answer printed in stem
+mcq-5-068,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-069,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-070,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-071,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-072,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-073,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-074,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-075,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-076,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-077,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-078,single-choice,5,5.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-079,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-080,single-choice,5,5.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-081,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-082,single-choice,5,5.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-083,single-choice,5,5.5,REVISE,P2 near-duplicate stem family
+mcq-1-123,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-085,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-086,single-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-087,single-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-078,word-bank,1,1.4,KEEP,meets standard
+mcq-1-079,word-bank,1,1.1,KEEP,meets standard
+mcq-2-117,word-bank,2,2.2,KEEP,meets standard
+mcq-2-118,word-bank,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-098,word-bank,3,3.1,REVISE,P1 scenario restated in the stem (overlap 0.60)
+mcq-3-099,word-bank,3,3.3,KEEP,meets standard
+mcq-3-100,word-bank,3,3.2,KEEP,meets standard
+mcq-3-101,word-bank,3,3.4,KEEP,meets standard
+mcq-4-125,word-bank,4,4.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-126,word-bank,4,4.4,REVISE,P1 scenario restated in the stem (overlap 0.78)
+mcq-4-127,word-bank,4,4.5,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-128,word-bank,4,4.6,REVISE,P1 scenario restated in the stem (overlap 0.86)
+mcq-5-088,word-bank,5,5.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-089,word-bank,5,5.2,REVISE,P1 scenario restated in the stem (overlap 1.00)
+mcq-5-090,word-bank,5,5.3,KEEP,meets standard
+mcq-2-119,word-bank,2,2.1,REVISE,P1 scenario restated in the stem (overlap 0.60)
+mcq-3-102,word-bank,3,3.3,KEEP,meets standard
+mcq-1-080,word-bank,1,1.1,REVISE,P1 scenario restated in the stem (overlap 1.00)
+mcq-4-129,word-bank,4,4.3,REVISE,P1 scenario restated in the stem (overlap 0.90)
+mcq-5-091,word-bank,5,5.5,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-103,word-bank,3,3.4,REVISE,P1 scenario restated in the stem (overlap 0.64)
+mcq-2-120,word-bank,2,2.4,REVISE,P1 scenario restated in the stem (overlap 0.89)
+mcq-3-104,single-choice,3,3.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-105,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-106,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-107,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-108,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-109,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-110,single-choice,3,3.1,REVISE,P2 near-duplicate stem family
+mcq-3-111,single-choice,3,3.1,REVISE,P2 near-duplicate stem family
+mcq-3-112,single-choice,3,3.1,REVISE,P2 near-duplicate stem family
+mcq-3-113,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-114,single-choice,3,3.1,REVISE,P2 near-duplicate stem family
+mcq-3-115,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-116,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-117,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-118,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-119,single-choice,3,3.1,REWRITE,P0 answer printed in stem
+mcq-3-120,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-122,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-123,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-124,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-125,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-127,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-128,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-129,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-121,single-choice,2,2.4,REWRITE,P0 answer printed in stem
+mcq-2-122,single-choice,2,2.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-123,single-choice,2,2.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-130,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-131,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-132,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-081,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-082,single-choice,1,1.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-124,single-choice,2,2.5,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-125,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-126,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-127,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-092,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-093,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-133,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-134,single-choice,3,3.4,REWRITE,P0 answer printed in stem
+mcq-3-135,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-136,single-choice,3,3.4,REVISE,P2 near-duplicate stem family
+mcq-3-137,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-138,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-139,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-130,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-131,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-128,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-129,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-130,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-131,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-132,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-133,single-choice,2,2.3,REVISE,"P2 merge: DNS poisoning — keep 2-133, absorb 2-157 (context similarity 0.98)"
+mcq-2-134,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-135,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-136,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-137,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-138,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-139,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-140,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-141,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-142,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-143,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-144,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-145,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-146,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-147,single-choice,2,2.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-083,single-choice,1,1.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-084,single-choice,1,1.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-085,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-140,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-141,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-142,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-143,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-144,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-145,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-094,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-095,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-132,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-133,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-134,single-choice,4,4.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-135,single-choice,4,4.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-096,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-097,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-098,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-099,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-100,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-101,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-102,single-choice,5,5.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-103,single-choice,5,5.6,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-086,single-choice,1,1.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-087,single-choice,1,1.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-088,single-choice,1,1.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-089,single-choice,1,1.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-090,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-091,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-092,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-093,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-094,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-095,single-choice,1,1.1,REVISE,P2 near-duplicate stem family
+mcq-1-096,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-136,single-choice,4,4.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-1-097,single-choice,1,1.3,KEEP,meets standard
+mcq-1-098,single-choice,1,1.1,KEEP,meets standard
+mcq-1-099,single-choice,1,1.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-148,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-149,single-choice,2,2.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-150,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-151,single-choice,2,2.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-2-152,single-choice,2,2.5,REVISE,P1 scenario restated in the stem (overlap 0.62)
+mcq-2-153,single-choice,2,2.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-146,single-choice,3,3.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-147,single-choice,3,3.2,REVISE,P1 scenario restated in the stem (overlap 0.79)
+mcq-3-148,single-choice,3,3.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-149,single-choice,3,3.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-3-150,single-choice,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-151,single-choice,3,3.4,REVISE,P1 scenario restated in the stem (overlap 0.60)
+mcq-4-137,single-choice,4,4.1,REVISE,P1 scenario restated in the stem (overlap 0.75)
+mcq-4-138,single-choice,4,4.2,REVISE,P1 scenario restated in the stem (overlap 0.70)
+mcq-4-139,single-choice,4,4.3,REVISE,P1 scenario restated in the stem (overlap 0.80)
+mcq-4-140,single-choice,4,4.3,REVISE,P1 scenario restated in the stem (overlap 0.75)
+mcq-4-141,single-choice,4,4.5,REVISE,P2 objective tag disagrees with the official objective text
+mcq-4-142,single-choice,4,4.6,REVISE,P1 scenario restated in the stem (overlap 0.78)
+mcq-5-104,single-choice,5,5.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-105,single-choice,5,5.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-106,single-choice,5,5.3,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-107,single-choice,5,5.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-108,single-choice,5,5.5,REVISE,P1 scenario restated in the stem (overlap 0.78)
+mcq-2-154,single-choice,2,2.4,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-152,single-choice,3,3.4,REVISE,P1 scenario restated in the stem (overlap 0.67)
+mcq-4-143,single-choice,4,4.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-1-100,single-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-2-155,single-choice,2,2.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-153,single-choice,3,3.3,KEEP,meets standard
+mcq-4-144,single-choice,4,4.3,REVISE,P2 objective tag disagrees with the official objective text
+mcq-5-109,single-choice,5,5.1,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-154,single-choice,3,3.1,KEEP,meets standard
+mcq-2-156,single-choice,2,2.5,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-110,single-choice,5,5.6,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-145,single-choice,4,4.4,KEEP,meets standard
+mcq-1-101,single-choice,1,1.2,REVISE,P1 scenario restated in the stem (overlap 0.80)
+mcq-2-157,single-choice,2,2.3,REMOVE,"P2 merge: DNS poisoning — keep 2-133, absorb 2-157 (context similarity 0.98)"
+mcq-3-155,single-choice,3,3.4,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-4-146,single-choice,4,4.2,REWRITE,P1 bare interrogative: premise lives only in context
+mcq-5-111,single-choice,5,5.2,REVISE,P2 objective tag disagrees with the official objective text
+mcq-3-162,word-bank,3,3.1,KEEP,meets standard
+mcq-3-163,word-bank,3,3.3,KEEP,meets standard
+mcq-2-162,word-bank,2,2.4,REVISE,P1 scenario restated in the stem (overlap 0.70)
+mcq-1-105,word-bank,1,1.1,KEEP,meets standard
+mcq-2-163,word-bank,2,2.3,KEEP,meets standard
+mcq-5-116,word-bank,5,5.2,REVISE,P1 scenario restated in the stem (overlap 0.60)
+mcq-3-164,word-bank,3,3.4,REVISE,P1 scenario restated in the stem (overlap 0.60)
+mcq-1-106,word-bank,1,1.3,KEEP,meets standard
+mcq-4-152,word-bank,4,4.1,KEEP,meets standard
+mcq-2-164,word-bank,2,2.3,KEEP,meets standard
+mcq-3-165,word-bank,3,3.4,KEEP,meets standard
+mcq-5-117,word-bank,5,5.3,REVISE,P1 scenario restated in the stem (overlap 0.70)
+mcq-2-172,word-bank,2,2.3,KEEP,meets standard
+mcq-3-176,word-bank,3,3.1,KEEP,meets standard
+mcq-3-177,word-bank,3,3.1,KEEP,meets standard
+mcq-4-159,word-bank,4,4.4,REVISE,P1 scenario restated in the stem (overlap 0.62)
+mcq-1-112,word-bank,1,1.3,REVISE,P1 scenario restated in the stem (overlap 0.67)
+mcq-5-124,word-bank,5,5.3,REVISE,P1 scenario restated in the stem (overlap 0.79)
+mcq-2-173,word-bank,2,2.2,KEEP,meets standard
+mcq-4-160,word-bank,4,4.3,KEEP,meets standard
+mcq-3-178,word-bank,3,3.4,KEEP,meets standard
+mcq-1-113,word-bank,1,1.2,REVISE,P1 scenario restated in the stem (overlap 0.75)
+mcq-5-125,word-bank,5,5.4,KEEP,meets standard
+mcq-2-174,word-bank,2,2.5,KEEP,meets standard
+mcq-4-161,word-bank,4,4.2,KEEP,meets standard
+mcq-5-126,word-bank,5,5.1,REVISE,P1 scenario restated in the stem (overlap 0.67)
+mcq-1-122,multiple-choice,1,1.1,REWRITE,P1 bare interrogative: premise lives only in context
+pbq-1-001,multi-step,1,1.1,KEEP,meets standard
+pbq-1-002,multi-step,1,1.3,KEEP,meets standard
+pbq-1-003,ordering,1,1.4,KEEP,meets standard
+pbq-1-004,configuration,1,1.4,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-2-001,matching,2,2.1,REVISE,P0 matching identity-mapped (farmable)
+pbq-2-002,matching,2,2.1,REVISE,P0 matching identity-mapped (farmable)
+pbq-2-003,multiple-choice,2,2.2,REMOVE,P1 MCQ wearing a PBQ label
+pbq-2-004,multi-step,2,2.4,KEEP,meets standard
+pbq-2-005,evidence,2,2.4,REVISE,P0 evidence artifact or context leaks the answer
+pbq-2-006,configuration,2,2.5,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-2-007,multiple-choice,2,2.5,REMOVE,P1 MCQ wearing a PBQ label
+pbq-3-001,multi-step,3,3.1,REVISE,P2 objective tag disagrees with the official objective text
+pbq-3-002,multi-step,3,3.2,REVISE,P2 objective tag disagrees with the official objective text
+pbq-3-003,configuration,3,3.2,KEEP,meets standard
+pbq-3-004,multiple-choice,3,3.1,REMOVE,P1 MCQ wearing a PBQ label
+pbq-3-005,configuration,3,3.4,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-001,multi-step,4,4.8,KEEP,meets standard
+pbq-4-002,ordering,4,4.8,REVISE,P2 objective tag disagrees with the official objective text
+pbq-4-003,matching,4,4.2,REVISE,P0 matching identity-mapped (farmable)
+pbq-4-004,multi-step,4,4.9,KEEP,meets standard
+pbq-4-005,evidence,4,4.9,REVISE,P0 evidence artifact or context leaks the answer
+pbq-4-006,configuration,4,4.5,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-007,configuration,4,4.4,REVISE,P1 scenario restated in the stem (overlap 0.77)
+pbq-4-008,hotspot,4,4.5,REVISE,"P1 hotspot answerable from the label, not the diagram"
+pbq-5-001,multi-step,5,5.2,KEEP,meets standard
+pbq-5-002,single-choice,5,5.2,REMOVE,P1 MCQ wearing a PBQ label
+pbq-5-003,slider,5,5.2,REMOVE,P1 slider is not an exam interaction
+pbq-5-004,sort,5,5.6,REVISE,"P1 bucket labelled ""distractor"" in the UI"
+pbq-5-005,multi-step,5,5.4,REVISE,P2 objective tag disagrees with the official objective text
+pbq-5-006,multiple-choice,5,5.3,REMOVE,P1 MCQ wearing a PBQ label
+pbq-1-005,matching,1,1.1,REVISE,P0 matching identity-mapped (farmable)
+pbq-1-006,slider,1,1.4,REMOVE,P1 slider is not an exam interaction
+pbq-1-007,ordering,1,1.2,KEEP,meets standard
+pbq-1-008,multi-step,1,1.4,KEEP,meets standard
+pbq-2-008,matching,2,2.3,REVISE,P0 matching identity-mapped (farmable)
+pbq-2-009,evidence,2,2.4,KEEP,meets standard
+pbq-2-010,configuration,2,2.5,KEEP,meets standard
+pbq-2-011,ordering,2,2.2,KEEP,meets standard
+pbq-3-006,slider,3,3.4,REMOVE,P1 slider is not an exam interaction
+pbq-3-007,matching,3,3.2,REVISE,P0 matching identity-mapped (farmable)
+pbq-3-008,multi-step,3,3.3,KEEP,meets standard
+pbq-3-009,configuration,3,3.1,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-009,ordering,4,4.8,REVISE,P1 scenario restated in the stem (overlap 0.62)
+pbq-4-010,ordering,4,4.9,REVISE,P2 objective tag disagrees with the official objective text
+pbq-4-011,matching,4,4.6,REVISE,P0 matching identity-mapped (farmable)
+pbq-4-012,configuration,4,4.1,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-5-007,single-choice,5,5.2,REMOVE,P1 MCQ wearing a PBQ label
+pbq-5-008,matching,5,5.1,REVISE,P0 matching identity-mapped (farmable)
+pbq-5-009,ordering,5,5.2,REVISE,P2 objective tag disagrees with the official objective text
+pbq-5-010,configuration,5,5.3,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-1-009,word-bank,1,1.4,REVISE,"P2 merge: CIA word banks — keep 1-009 (6 blanks), absorb 1-010 and 1-011"
+pbq-2-012,word-bank,2,2.4,REVISE,"P2 merge: attack-definition word banks — keep 2-012, absorb 4-014"
+pbq-3-010,word-bank,3,3.4,REVISE,P2 objective tag disagrees with the official objective text
+pbq-4-013,word-bank,4,4.6,KEEP,meets standard
+pbq-5-011,word-bank,5,5.2,REVISE,P2 objective tag disagrees with the official objective text
+pbq-1-010,word-bank,1,1.2,REMOVE,"P2 merge: CIA word banks — keep 1-009 (6 blanks), absorb 1-010 and 1-011"
+pbq-1-011,word-bank,1,1.1,REMOVE,"P2 merge: CIA word banks — keep 1-009 (6 blanks), absorb 1-010 and 1-011"
+pbq-3-011,word-bank,3,3.4,KEEP,meets standard
+pbq-4-014,word-bank,4,4.4,REMOVE,"P2 merge: attack-definition word banks — keep 2-012, absorb 4-014"
+pbq-5-012,word-bank,5,5.1,REVISE,P2 objective tag disagrees with the official objective text
+pbq-2-013,matching,2,2.3,REVISE,P0 matching identity-mapped (farmable)
+pbq-3-012,matching,3,3.2,REVISE,P0 matching identity-mapped (farmable)
+pbq-4-015,matching,4,4.8,REVISE,P0 matching identity-mapped (farmable)
+pbq-5-013,matching,5,5.2,REVISE,P0 matching identity-mapped (farmable)
+pbq-1-012,word-bank,1,1.4,KEEP,meets standard
+pbq-2-014,matching,2,2.4,REVISE,P0 matching identity-mapped (farmable)
+pbq-2-015,evidence,2,2.4,KEEP,meets standard
+pbq-3-013,matching,3,3.2,REVISE,P0 matching identity-mapped (farmable)
+pbq-3-014,matching,3,3.2,REMOVE,"P2 merge: insecure-to-secure protocols — keep 4-803 (5 protos, SNMP/SMB), absorb 3-014"
+pbq-4-016,evidence,4,4.9,REVISE,P1 scenario restated in the stem (overlap 0.81)
+pbq-4-017,evidence,4,4.9,REVISE,P1 scenario restated in the stem (overlap 0.65)
+pbq-4-018,word-bank,4,4.4,KEEP,meets standard
+pbq-5-014,matching,5,5.3,REVISE,P0 matching identity-mapped (farmable)
+pbq-1-013,configuration,1,1.4,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-1-014,matching,1,1.4,REVISE,P0 matching identity-mapped (farmable)
+pbq-2-016,evidence,2,2.4,REVISE,P0 evidence artifact or context leaks the answer
+pbq-2-017,evidence,2,2.4,REVISE,P0 evidence artifact or context leaks the answer
+pbq-3-015,ordering,3,3.2,REVISE,P1 scenario restated in the stem (overlap 0.67)
+pbq-3-016,configuration,3,3.2,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-3-017,matching,3,3.3,REVISE,P0 matching identity-mapped (farmable)
+pbq-4-020,evidence,4,4.3,KEEP,meets standard
+pbq-4-021,configuration,4,4.5,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-022,configuration,4,4.6,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-023,configuration,4,4.6,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-019,matching,4,4.7,REVISE,P0 matching identity-mapped (farmable)
+pbq-4-024,matching,4,4.9,REVISE,P0 matching identity-mapped (farmable)
+pbq-5-015,matching,5,5.4,REVISE,P0 matching identity-mapped (farmable)
+pbq-5-016,matching,5,5.6,REVISE,P0 matching identity-mapped (farmable)
+pbq-2-801,sort,2,2.4,REVISE,P1 scenario restated in the stem (overlap 0.60)
+pbq-5-801,sort,5,5.5,KEEP,meets standard
+pbq-4-801,sort,4,4.3,REVISE,"P1 bucket labelled ""distractor"" in the UI"
+pbq-4-802,hotspot,4,4.2,REVISE,"P1 hotspot answerable from the label, not the diagram"
+pbq-2-802,matching,2,2.4,REVISE,P0 matching identity-mapped (farmable)
+pbq-4-803,matching,4,4.1,REVISE,"P2 merge: insecure-to-secure protocols — keep 4-803 (5 protos, SNMP/SMB), absorb 3-014"
+pbq-4-804,word-bank,4,4.6,KEEP,meets standard
+pbq-3-801,word-bank,3,3.2,REVISE,P2 objective tag disagrees with the official objective text
+pbq-4-805,configuration,4,4.6,REVISE,P0 config keys every field to option #1 (farmable)
+pbq-4-806,configuration,4,4.4,KEEP,meets standard
+pbq-1-015,word-bank,1,1.3,KEEP,meets standard
+pbq-2-018,word-bank,2,2.2,KEEP,meets standard
+pbq-2-019,word-bank,2,2.5,KEEP,meets standard
+pbq-3-018,word-bank,3,3.4,KEEP,meets standard
+pbq-4-025,word-bank,4,4.7,KEEP,meets standard
+pbq-4-026,configuration,4,4.5,KEEP,meets standard
+pbq-5-017,word-bank,5,5.5,KEEP,meets standard
+pbq-1-901,memory,1,1.4,REMOVE,P1 memory game is not a real PBQ kind
+pbq-2-901,memory,2,2.2,REMOVE,P1 memory game is not a real PBQ kind
+pbq-4-901,memory,4,4.9,REMOVE,P1 memory game is not a real PBQ kind
+pbq-4-908,hotspot,4,4.4,KEEP,meets standard
+pbq-5-901,single-choice,5,5.3,REMOVE,P1 MCQ wearing a PBQ label
+pbq-4-902,rule-table,4,4.5,KEEP,meets standard
+pbq-3-902,rule-table,3,3.2,KEEP,meets standard
+pbq-3-903,rule-table,3,3.2,KEEP,meets standard
+pbq-4-903,rule-table,4,4.5,KEEP,meets standard
+pbq-4-904,rule-table,4,4.5,KEEP,meets standard
+pbq-4-905,cli,4,4.4,KEEP,meets standard
+pbq-4-906,cli,4,4.9,KEEP,meets standard
+pbq-4-907,cli,4,4.1,KEEP,meets standard
+pbq-3-904,cli,3,3.2,KEEP,meets standard
+pbq-2-902,cli,2,2.5,KEEP,meets standard

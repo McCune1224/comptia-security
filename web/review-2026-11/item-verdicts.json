@@ -1,0 +1,6498 @@
+[
+ {
+  "id": "mcq-1-001",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-002",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-003",
+  "kind": "multiple-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-004",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P0 key wrong or degenerate"
+ },
+ {
+  "id": "mcq-1-005",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P0 stem says Select TWO but item is single-choice"
+ },
+ {
+  "id": "mcq-1-006",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-007",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-008",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "mcq-1-009",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-010",
+  "kind": "multiple-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-1-011",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-012",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-013",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-014",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-015",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-016",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-017",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-018",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-019",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P0 key wrong or degenerate"
+ },
+ {
+  "id": "mcq-1-020",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-021",
+  "kind": "multiple-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-022",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-023",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-024",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-001",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-002",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-2-003",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-2-004",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REWRITE",
+  "reason": "P0 stem says Select TWO but item is single-choice"
+ },
+ {
+  "id": "mcq-2-005",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-2-006",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-007",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-008",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-009",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.64)"
+ },
+ {
+  "id": "mcq-2-010",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-011",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-012",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.79)"
+ },
+ {
+  "id": "mcq-2-013",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-014",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-015",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-016",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-017",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-018",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.65)"
+ },
+ {
+  "id": "mcq-2-019",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-020",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-021",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.73)"
+ },
+ {
+  "id": "mcq-2-022",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-023",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-024",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-025",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-026",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-027",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-028",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-029",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-030",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-031",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-032",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 merge: sandbox-with-INetSim \u2014 keep 2-032 (ransomware lifecycle), absorb 2-038"
+ },
+ {
+  "id": "mcq-2-033",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-034",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-035",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P0 key wrong or degenerate"
+ },
+ {
+  "id": "mcq-2-036",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-037",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-038",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: sandbox-with-INetSim \u2014 keep 2-032 (ransomware lifecycle), absorb 2-038"
+ },
+ {
+  "id": "mcq-2-039",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-040",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-041",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-042",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-043",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-044",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-001",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-002",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-003",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.67)"
+ },
+ {
+  "id": "mcq-3-004",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-005",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-006",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-007",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-008",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-009",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-010",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-011",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P0 key wrong or degenerate"
+ },
+ {
+  "id": "mcq-3-012",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-013",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-014",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-3-015",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-016",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-017",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-018",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-019",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-020",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-021",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-3-022",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-023",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-024",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-025",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-026",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-027",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-028",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 options written as prose / self-evaluating"
+ },
+ {
+  "id": "mcq-3-029",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 options written as prose / self-evaluating"
+ },
+ {
+  "id": "mcq-3-030",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-031",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-3-032",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-033",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-034",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 options written as prose / self-evaluating"
+ },
+ {
+  "id": "mcq-3-035",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 options written as prose / self-evaluating"
+ },
+ {
+  "id": "mcq-3-036",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-001",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.92)"
+ },
+ {
+  "id": "mcq-4-002",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-003",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.62)"
+ },
+ {
+  "id": "mcq-4-004",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-005",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-006",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-007",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-008",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-009",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-010",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.75)"
+ },
+ {
+  "id": "mcq-4-011",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-012",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-013",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-014",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-015",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-016",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-017",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-018",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-019",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-020",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-021",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.62)"
+ },
+ {
+  "id": "mcq-4-022",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-023",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-024",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-025",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-026",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-027",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-028",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-029",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-030",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.81)"
+ },
+ {
+  "id": "mcq-4-031",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-032",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-033",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REVISE",
+  "reason": "P2 merge: order of volatility \u2014 keep 4-033 (5-source sequence), absorb 4-076"
+ },
+ {
+  "id": "mcq-4-034",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-035",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-036",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-037",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-038",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.63)"
+ },
+ {
+  "id": "mcq-4-039",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-040",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.62)"
+ },
+ {
+  "id": "mcq-4-041",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-042",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-043",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-044",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-045",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-046",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-047",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-048",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-049",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-050",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-051",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-052",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-053",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-054",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-055",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-056",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.68)"
+ },
+ {
+  "id": "mcq-5-001",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-002",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.61)"
+ },
+ {
+  "id": "mcq-5-003",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-004",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-005",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-006",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-007",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P1 leftover heading fragment glued onto the stem"
+ },
+ {
+  "id": "mcq-5-008",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-5-009",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-010",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-011",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-012",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-013",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-014",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-015",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-016",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-017",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-018",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-019",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-020",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-021",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-022",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-023",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-024",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-025",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-026",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-027",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-028",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-029",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-030",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-5-031",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P1 off-model option count"
+ },
+ {
+  "id": "mcq-5-032",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-033",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.73)"
+ },
+ {
+  "id": "mcq-5-034",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-035",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-036",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-037",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-038",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-039",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-040",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-1-025",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-026",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-027",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-028",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.74)"
+ },
+ {
+  "id": "mcq-1-029",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-030",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-031",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-032",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-033",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-034",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.67)"
+ },
+ {
+  "id": "mcq-1-035",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-036",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-037",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-038",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.68)"
+ },
+ {
+  "id": "mcq-1-039",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.79)"
+ },
+ {
+  "id": "mcq-1-040",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-045",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-046",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-047",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-2-048",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-049",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-050",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-051",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-052",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-053",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-054",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-2-055",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-056",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-057",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-058",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-059",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-060",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-037",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-038",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-039",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-3-040",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-041",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-042",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-3-043",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.75)"
+ },
+ {
+  "id": "mcq-3-044",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-045",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-046",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-047",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-048",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-049",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-050",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-051",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-052",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-057",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-058",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-4-059",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-060",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-061",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-062",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-063",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-064",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-065",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-066",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-067",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-068",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-069",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-070",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.70)"
+ },
+ {
+  "id": "mcq-4-071",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-072",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-041",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-042",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-043",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-044",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-045",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-046",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-047",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-048",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-049",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-050",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-051",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-052",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-053",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-054",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.61)"
+ },
+ {
+  "id": "mcq-5-055",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-056",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-041",
+  "kind": "multiple-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-1-042",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.65)"
+ },
+ {
+  "id": "mcq-1-043",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-044",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-045",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-061",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-062",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-063",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-064",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-065",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-066",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-3-053",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-054",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-3-055",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-073",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-074",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-075",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-076",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: order of volatility \u2014 keep 4-033 (5-source sequence), absorb 4-076"
+ },
+ {
+  "id": "mcq-4-077",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REVISE",
+  "reason": "P0 multi-select missing count instruction"
+ },
+ {
+  "id": "mcq-5-057",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-046",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-047",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-048",
+  "kind": "multiple-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-067",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-068",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-069",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-070",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-071",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-056",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-057",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-058",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-059",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-060",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-061",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-062",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-078",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-079",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-080",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-081",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-082",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-083",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-084",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-085",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-086",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-087",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-4-088",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-089",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-090",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-091",
+  "kind": "multiple-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-092",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-058",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-059",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-049",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-050",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-051",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-052",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-053",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-054",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-055",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-056",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-057",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-058",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-059",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-060",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-1-061",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-062",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-063",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-064",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-065",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-066",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-067",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-068",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-069",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-1-070",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-071",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-072",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-073",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-074",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-127",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-128",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-5-129",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-072",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-073",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-2-074",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-075",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-076",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-077",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-078",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-2-079",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-080",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-081",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-082",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-083",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-084",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-085",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-086",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-087",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-088",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-089",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-090",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-091",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-092",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-093",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-094",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-095",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-096",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-097",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-098",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-099",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-100",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-101",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-102",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-103",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-104",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-105",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-106",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-107",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-2-108",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-109",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-2-110",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-111",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-112",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-113",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-114",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-115",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-116",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-064",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-065",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-066",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-067",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-068",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-070",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-071",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-072",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-073",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-074",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-075",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-076",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-077",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-079",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-080",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-081",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-082",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-083",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-084",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-085",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-086",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-087",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-3-088",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-089",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-090",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-091",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-092",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-093",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-094",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-3-095",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-096",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-097",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-093",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-094",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-095",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-096",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-097",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-098",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-099",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-100",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-101",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-102",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-103",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-104",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-105",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-106",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-107",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-108",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-109",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-110",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-111",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-112",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-179",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-183",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-184",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-3-185",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-186",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-180",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-181",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-182",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-130",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-175",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-123",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-187",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-060",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-061",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-062",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-5-063",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-5-064",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-065",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-066",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-5-067",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-5-068",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-069",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-070",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-071",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-072",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-073",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-074",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-075",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-076",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-077",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-078",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-079",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-080",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-081",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-082",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-083",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-1-123",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-085",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-086",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-087",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-078",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-079",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-117",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-118",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-098",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "mcq-3-099",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-100",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-101",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-125",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-126",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.78)"
+ },
+ {
+  "id": "mcq-4-127",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-128",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.86)"
+ },
+ {
+  "id": "mcq-5-088",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-089",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 1.00)"
+ },
+ {
+  "id": "mcq-5-090",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-119",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "mcq-3-102",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-080",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 1.00)"
+ },
+ {
+  "id": "mcq-4-129",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.90)"
+ },
+ {
+  "id": "mcq-5-091",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-103",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.64)"
+ },
+ {
+  "id": "mcq-2-120",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.89)"
+ },
+ {
+  "id": "mcq-3-104",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-105",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-106",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-107",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-108",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-109",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-110",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-111",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-112",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-113",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-114",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-115",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-116",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-117",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-118",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-119",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-3-120",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-122",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-123",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-124",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-125",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-127",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-128",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-129",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-121",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-2-122",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-123",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-130",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-131",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-132",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-081",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-082",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-124",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-125",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-126",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-127",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-092",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-093",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-133",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-134",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P0 answer printed in stem"
+ },
+ {
+  "id": "mcq-3-135",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-136",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-3-137",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-138",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-139",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-130",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-131",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-128",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-129",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-130",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-131",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-132",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-133",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 merge: DNS poisoning \u2014 keep 2-133, absorb 2-157 (context similarity 0.98)"
+ },
+ {
+  "id": "mcq-2-134",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-135",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-136",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-137",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-138",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-139",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-140",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-141",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-142",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-143",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-144",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-145",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-146",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-147",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-083",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-084",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-085",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-140",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-141",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-142",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-143",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-144",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-145",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-094",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-095",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-132",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-133",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-134",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-135",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-096",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-097",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-098",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-099",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-100",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-101",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-102",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-103",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-086",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-087",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-088",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-089",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-090",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-091",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-092",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-093",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-094",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-095",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P2 near-duplicate stem family"
+ },
+ {
+  "id": "mcq-1-096",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-136",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-1-097",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-098",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-099",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-148",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-149",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-150",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-151",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-2-152",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.62)"
+ },
+ {
+  "id": "mcq-2-153",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-146",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-147",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.79)"
+ },
+ {
+  "id": "mcq-3-148",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-149",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-3-150",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-151",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "mcq-4-137",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.75)"
+ },
+ {
+  "id": "mcq-4-138",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.70)"
+ },
+ {
+  "id": "mcq-4-139",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.80)"
+ },
+ {
+  "id": "mcq-4-140",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.75)"
+ },
+ {
+  "id": "mcq-4-141",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-4-142",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.78)"
+ },
+ {
+  "id": "mcq-5-104",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-105",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-106",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-107",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-108",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.78)"
+ },
+ {
+  "id": "mcq-2-154",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-152",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.67)"
+ },
+ {
+  "id": "mcq-4-143",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-1-100",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-2-155",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-153",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-144",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-5-109",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-154",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-156",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-110",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-145",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-101",
+  "kind": "single-choice",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.80)"
+ },
+ {
+  "id": "mcq-2-157",
+  "kind": "single-choice",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: DNS poisoning \u2014 keep 2-133, absorb 2-157 (context similarity 0.98)"
+ },
+ {
+  "id": "mcq-3-155",
+  "kind": "single-choice",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-4-146",
+  "kind": "single-choice",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "mcq-5-111",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "mcq-3-162",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-163",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-162",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.70)"
+ },
+ {
+  "id": "mcq-1-105",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-163",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-116",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "mcq-3-164",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "mcq-1-106",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-152",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-164",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-165",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-117",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.70)"
+ },
+ {
+  "id": "mcq-2-172",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-176",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-177",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-159",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.62)"
+ },
+ {
+  "id": "mcq-1-112",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.67)"
+ },
+ {
+  "id": "mcq-5-124",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.79)"
+ },
+ {
+  "id": "mcq-2-173",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-160",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-3-178",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-1-113",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.75)"
+ },
+ {
+  "id": "mcq-5-125",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-2-174",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-4-161",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "mcq-5-126",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.67)"
+ },
+ {
+  "id": "mcq-1-122",
+  "kind": "multiple-choice",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REWRITE",
+  "reason": "P1 bare interrogative: premise lives only in context"
+ },
+ {
+  "id": "pbq-1-001",
+  "kind": "multi-step",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-1-002",
+  "kind": "multi-step",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-1-003",
+  "kind": "ordering",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-1-004",
+  "kind": "configuration",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-2-001",
+  "kind": "matching",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-2-002",
+  "kind": "matching",
+  "domain": 2,
+  "objective": "2.1",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-2-003",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-2-004",
+  "kind": "multi-step",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-005",
+  "kind": "evidence",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P0 evidence artifact or context leaks the answer"
+ },
+ {
+  "id": "pbq-2-006",
+  "kind": "configuration",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-2-007",
+  "kind": "multiple-choice",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-3-001",
+  "kind": "multi-step",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-3-002",
+  "kind": "multi-step",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-3-003",
+  "kind": "configuration",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-004",
+  "kind": "multiple-choice",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-3-005",
+  "kind": "configuration",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-001",
+  "kind": "multi-step",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-002",
+  "kind": "ordering",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-4-003",
+  "kind": "matching",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-4-004",
+  "kind": "multi-step",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-005",
+  "kind": "evidence",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REVISE",
+  "reason": "P0 evidence artifact or context leaks the answer"
+ },
+ {
+  "id": "pbq-4-006",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-007",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.77)"
+ },
+ {
+  "id": "pbq-4-008",
+  "kind": "hotspot",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REVISE",
+  "reason": "P1 hotspot answerable from the label, not the diagram"
+ },
+ {
+  "id": "pbq-5-001",
+  "kind": "multi-step",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-5-002",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-5-003",
+  "kind": "slider",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REMOVE",
+  "reason": "P1 slider is not an exam interaction"
+ },
+ {
+  "id": "pbq-5-004",
+  "kind": "sort",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P1 bucket labelled \"distractor\" in the UI"
+ },
+ {
+  "id": "pbq-5-005",
+  "kind": "multi-step",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-5-006",
+  "kind": "multiple-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-1-005",
+  "kind": "matching",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-1-006",
+  "kind": "slider",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REMOVE",
+  "reason": "P1 slider is not an exam interaction"
+ },
+ {
+  "id": "pbq-1-007",
+  "kind": "ordering",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-1-008",
+  "kind": "multi-step",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-008",
+  "kind": "matching",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-2-009",
+  "kind": "evidence",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-010",
+  "kind": "configuration",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-011",
+  "kind": "ordering",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-006",
+  "kind": "slider",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REMOVE",
+  "reason": "P1 slider is not an exam interaction"
+ },
+ {
+  "id": "pbq-3-007",
+  "kind": "matching",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-3-008",
+  "kind": "multi-step",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-009",
+  "kind": "configuration",
+  "domain": 3,
+  "objective": "3.1",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-009",
+  "kind": "ordering",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.62)"
+ },
+ {
+  "id": "pbq-4-010",
+  "kind": "ordering",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-4-011",
+  "kind": "matching",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-4-012",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-5-007",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-5-008",
+  "kind": "matching",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-5-009",
+  "kind": "ordering",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-5-010",
+  "kind": "configuration",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-1-009",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P2 merge: CIA word banks \u2014 keep 1-009 (6 blanks), absorb 1-010 and 1-011"
+ },
+ {
+  "id": "pbq-2-012",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P2 merge: attack-definition word banks \u2014 keep 2-012, absorb 4-014"
+ },
+ {
+  "id": "pbq-3-010",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-4-013",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-5-011",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-1-010",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.2",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: CIA word banks \u2014 keep 1-009 (6 blanks), absorb 1-010 and 1-011"
+ },
+ {
+  "id": "pbq-1-011",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.1",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: CIA word banks \u2014 keep 1-009 (6 blanks), absorb 1-010 and 1-011"
+ },
+ {
+  "id": "pbq-3-011",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-014",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: attack-definition word banks \u2014 keep 2-012, absorb 4-014"
+ },
+ {
+  "id": "pbq-5-012",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.1",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-2-013",
+  "kind": "matching",
+  "domain": 2,
+  "objective": "2.3",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-3-012",
+  "kind": "matching",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-4-015",
+  "kind": "matching",
+  "domain": 4,
+  "objective": "4.8",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-5-013",
+  "kind": "matching",
+  "domain": 5,
+  "objective": "5.2",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-1-012",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-014",
+  "kind": "matching",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-2-015",
+  "kind": "evidence",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-013",
+  "kind": "matching",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-3-014",
+  "kind": "matching",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REMOVE",
+  "reason": "P2 merge: insecure-to-secure protocols \u2014 keep 4-803 (5 protos, SNMP/SMB), absorb 3-014"
+ },
+ {
+  "id": "pbq-4-016",
+  "kind": "evidence",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.81)"
+ },
+ {
+  "id": "pbq-4-017",
+  "kind": "evidence",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.65)"
+ },
+ {
+  "id": "pbq-4-018",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-5-014",
+  "kind": "matching",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-1-013",
+  "kind": "configuration",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-1-014",
+  "kind": "matching",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-2-016",
+  "kind": "evidence",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P0 evidence artifact or context leaks the answer"
+ },
+ {
+  "id": "pbq-2-017",
+  "kind": "evidence",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P0 evidence artifact or context leaks the answer"
+ },
+ {
+  "id": "pbq-3-015",
+  "kind": "ordering",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.67)"
+ },
+ {
+  "id": "pbq-3-016",
+  "kind": "configuration",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-3-017",
+  "kind": "matching",
+  "domain": 3,
+  "objective": "3.3",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-4-020",
+  "kind": "evidence",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-021",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-022",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-023",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-019",
+  "kind": "matching",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-4-024",
+  "kind": "matching",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-5-015",
+  "kind": "matching",
+  "domain": 5,
+  "objective": "5.4",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-5-016",
+  "kind": "matching",
+  "domain": 5,
+  "objective": "5.6",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-2-801",
+  "kind": "sort",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P1 scenario restated in the stem (overlap 0.60)"
+ },
+ {
+  "id": "pbq-5-801",
+  "kind": "sort",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-801",
+  "kind": "sort",
+  "domain": 4,
+  "objective": "4.3",
+  "verdict": "REVISE",
+  "reason": "P1 bucket labelled \"distractor\" in the UI"
+ },
+ {
+  "id": "pbq-4-802",
+  "kind": "hotspot",
+  "domain": 4,
+  "objective": "4.2",
+  "verdict": "REVISE",
+  "reason": "P1 hotspot answerable from the label, not the diagram"
+ },
+ {
+  "id": "pbq-2-802",
+  "kind": "matching",
+  "domain": 2,
+  "objective": "2.4",
+  "verdict": "REVISE",
+  "reason": "P0 matching identity-mapped (farmable)"
+ },
+ {
+  "id": "pbq-4-803",
+  "kind": "matching",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "REVISE",
+  "reason": "P2 merge: insecure-to-secure protocols \u2014 keep 4-803 (5 protos, SNMP/SMB), absorb 3-014"
+ },
+ {
+  "id": "pbq-4-804",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-801",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "REVISE",
+  "reason": "P2 objective tag disagrees with the official objective text"
+ },
+ {
+  "id": "pbq-4-805",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.6",
+  "verdict": "REVISE",
+  "reason": "P0 config keys every field to option #1 (farmable)"
+ },
+ {
+  "id": "pbq-4-806",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-1-015",
+  "kind": "word-bank",
+  "domain": 1,
+  "objective": "1.3",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-018",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-019",
+  "kind": "word-bank",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-018",
+  "kind": "word-bank",
+  "domain": 3,
+  "objective": "3.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-025",
+  "kind": "word-bank",
+  "domain": 4,
+  "objective": "4.7",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-026",
+  "kind": "configuration",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-5-017",
+  "kind": "word-bank",
+  "domain": 5,
+  "objective": "5.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-1-901",
+  "kind": "memory",
+  "domain": 1,
+  "objective": "1.4",
+  "verdict": "REMOVE",
+  "reason": "P1 memory game is not a real PBQ kind"
+ },
+ {
+  "id": "pbq-2-901",
+  "kind": "memory",
+  "domain": 2,
+  "objective": "2.2",
+  "verdict": "REMOVE",
+  "reason": "P1 memory game is not a real PBQ kind"
+ },
+ {
+  "id": "pbq-4-901",
+  "kind": "memory",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "REMOVE",
+  "reason": "P1 memory game is not a real PBQ kind"
+ },
+ {
+  "id": "pbq-4-908",
+  "kind": "hotspot",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-5-901",
+  "kind": "single-choice",
+  "domain": 5,
+  "objective": "5.3",
+  "verdict": "REMOVE",
+  "reason": "P1 MCQ wearing a PBQ label"
+ },
+ {
+  "id": "pbq-4-902",
+  "kind": "rule-table",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-902",
+  "kind": "rule-table",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-903",
+  "kind": "rule-table",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-903",
+  "kind": "rule-table",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-904",
+  "kind": "rule-table",
+  "domain": 4,
+  "objective": "4.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-905",
+  "kind": "cli",
+  "domain": 4,
+  "objective": "4.4",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-906",
+  "kind": "cli",
+  "domain": 4,
+  "objective": "4.9",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-4-907",
+  "kind": "cli",
+  "domain": 4,
+  "objective": "4.1",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-3-904",
+  "kind": "cli",
+  "domain": 3,
+  "objective": "3.2",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ },
+ {
+  "id": "pbq-2-902",
+  "kind": "cli",
+  "domain": 2,
+  "objective": "2.5",
+  "verdict": "KEEP",
+  "reason": "meets standard"
+ }
+]

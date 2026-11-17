@@ -1,6 +1,6 @@
 # SY0-701 PBQ Type Matrix
 
-> Research cut-off: **2026-11-14**. Bank checked: **120 PBQs / 692 MCQs**. The app now ships every in-scope interaction below; a type is not listed as covered unless the named item ids load through `/pbq` or `/quick` and score through the shared engine.
+> Research cut-off: **2026-11-17**. Bank checked: **104 PBQs / 801 MCQs**. The app now ships every in-scope interaction below; a type is not listed as covered unless the named item ids load through `/pbq` or `/quick` and score through the shared engine.
 
 ## Evidence rules
 
@@ -38,8 +38,6 @@
 | `multi-step` | Multi-part scenario | 2–4 linked child interactions inside one scenario. | plausible | S3, S5 | Drillable — Common (11 PBQs) | `pbq-1-001`, `pbq-1-002`, `pbq-2-004`, `pbq-3-001`, `pbq-3-002`, `pbq-4-001`, `pbq-4-004`, `pbq-5-001`, `pbq-5-005`, `pbq-1-008`, `pbq-3-008` |
 | `hotspot` | Diagram / topology hotspot | Tapping a device, layer, frame field, or log line on a diagram. | confirmed | S2, S3, S4 | Drillable — Rare (3 PBQs) | `pbq-4-008`, `pbq-4-802`, `pbq-4-908` |
 | `sort` | Classification buckets | Placing items into labeled buckets, with distractor buckets. | plausible | S4, S5 | Drillable — Rare (4 PBQs) | `pbq-5-004`, `pbq-2-801`, `pbq-5-801`, `pbq-4-801` |
-| `slider` | Numeric threshold / value | Choosing a value within a range and tolerance (SLE/ALE, ports, metrics). | plausible | Objective 5.2; app extension | Drillable — Rare (3 PBQs) | `pbq-5-003`, `pbq-1-006`, `pbq-3-006` |
-| `memory` | Paired-card recall | Matching terms to definitions by flipping pairs; a recall drill, not a reported exam format. | plausible | App extension (no independent report) | Drillable (activated; was built but empty) — Rare (3 PBQs) | `pbq-1-901`, `pbq-2-901`, `pbq-4-901` |
 | `single-choice` | Single-select embedded task | One correct option inside a short PBQ scenario. | plausible | S3, S4 | Drillable — Rare (3 PBQs) | `pbq-5-002`, `pbq-5-007`, `pbq-5-901` |
 | `multiple-choice` | Multi-select embedded task | Several correct options inside a short PBQ scenario. | plausible | S3, S4 | Drillable — Rare (4 PBQs) | `pbq-2-003`, `pbq-2-007`, `pbq-3-004`, `pbq-5-006` |
 
@@ -55,8 +53,6 @@
 - `multi-step`: **11** drillable item(s).
 - `hotspot`: **3** drillable item(s).
 - `sort`: **4** drillable item(s).
-- `slider`: **3** drillable item(s).
-- `memory`: **3** drillable item(s).
 - `single-choice`: **3** drillable item(s).
 - `multiple-choice`: **4** drillable item(s).
 
@@ -66,15 +62,15 @@
 |---|---|---|---|
 | Firewall/ACL rule configuration and precedence | Rule table; order matters; default deny last | rule-table, ordering, evidence (acl) | `pbq-4-902`, `pbq-3-902`, `pbq-4-903`, `pbq-4-001` |
 | Log / output / packet analysis | Select evidence, identify host or attack, next action | evidence, hotspot (log-lines), cli | `pbq-2-005`, `pbq-4-908`, `pbq-4-905` |
-| Attack-to-defense or term-to-definition matching | Drag labels into slots | matching, memory | `pbq-2-001`, `pbq-1-901`, `pbq-2-901` |
+| Attack-to-defense or term-to-definition matching | Drag labels into slots | matching | `pbq-2-001`, `pbq-2-008`, `pbq-2-013` |
 | Incident response / recovery sequencing | Put steps in the correct order | ordering | `pbq-4-005`, `pbq-4-007` |
 | Device placement, DMZ, segmentation | Tap or place a device on a topology | hotspot (topology-basic), rule-table | `pbq-4-008`, `pbq-4-908`, `pbq-3-903` |
 | Host/device hardening and configuration | Set values in a checklist or console | configuration, cli | `pbq-1-004`, `pbq-4-907`, `pbq-4-906` |
 | Secure protocol and port selection | Match or complete secure/insecure pairs | matching, word-bank | `pbq-3-002`, `pbq-1-002` |
-| Cryptography, PKI, certificate selection | Choose algorithm, key, certificate, or validation step | matching, configuration, memory, single-choice | `pbq-1-003`, `pbq-1-901`, `pbq-5-901` |
+| Cryptography, PKI, certificate selection | Choose algorithm, key, certificate, or validation step | matching, configuration, ordering | `pbq-1-003`, `pbq-1-004`, `pbq-1-007` |
 | IAM least privilege, MFA, SSO | Assign permissions or choose the authentication control | matching, sort, configuration | `pbq-4-003`, `pbq-4-004`, `pbq-2-901` |
-| Vulnerability prioritization and risk math | Rank findings or choose a quantitative value | sort, slider, single-choice | `pbq-4-801`, `pbq-5-002`, `pbq-5-901` |
-| Investigation data sources and timelines | Pick the source that answers a question | memory, evidence, cli | `pbq-4-901`, `pbq-4-906` |
+| Vulnerability prioritization and risk math | Rank findings or bucket them by urgency | sort, multi-step | `pbq-4-801`, `pbq-5-001`, `pbq-4-020` |
+| Investigation data sources and timelines | Pick the source that answers a question | evidence, matching, cli | `pbq-4-016`, `pbq-4-024`, `pbq-4-905` |
 | Cloud security groups and guest isolation | Build the allow/deny boundary | rule-table | `pbq-3-903` |
 | Wireless and account policy | Configure WPA/802.1X or account lockout/MFA | configuration | `pbq-3-004`, `pbq-4-003` |
 | Incident containment via host firewall | Type the minimal blocking command | cli | `pbq-2-902`, `pbq-3-904` |
@@ -84,8 +80,8 @@
 - **Every in-scope kind above is drillable through `/pbq`** (free PBQ practice) and is included in full exams and quick rounds when selected. Memory was previously implemented but had zero bank items; it now has three paired-recall items (`pbq-1-901`, `pbq-2-901`, `pbq-4-901`).
 - **New mechanics**: the firewall/ACL `rule-table` builder and the constrained `cli` terminal render in `ExamFlow`, score with partial credit, validate on the server, and persist partial drafts. Both are mobile-first (44px targets, no hover-only affordances) and keyboard operable.
 - **Common-format floor**: matching 24, ordering 8, configuration 18, word-bank 20, rule-table 5, cli 5, evidence 9, multi-step 11 — all at or above 5.
-- **Rare-format floor**: hotspot 3, sort 4, slider 3, memory 3, single-choice 3, multiple-choice 4 — all at or above 3.
-- **No in-scope kind is at zero.** The bank validator pins the 120-PBQ total, per-domain totals, per-objective floors, and per-kind minimums for memory, rule-table, and cli.
+- **Rare-format floor**: hotspot 3, sort 4 — both at or above 3. `slider`, `memory`, and plain `single-choice`/`multiple-choice` were retired: a performance-based question is a simulation or interaction, and a quiz question shown as a PBQ misrepresents the format.
+- **No in-scope kind is at zero.** The bank validator pins the 104-PBQ total, per-domain totals, per-objective floors, and per-kind minimums for word-bank, rule-table, and cli.
 
 ## Out of scope: full VM / terminal labs
 

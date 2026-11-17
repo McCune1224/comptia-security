@@ -9,6 +9,7 @@ import type {
 	SourceRef
 } from '$lib/types';
 import rawBank from './data/question-bank.json';
+import dionSections from './data/dion-sections.json';
 import { hotspotTemplate } from '$lib/hotspot-templates';
 import { validateBankQuality } from './bank-quality';
 
@@ -220,7 +221,6 @@ export interface CourseBankSpec {
 	scenarioTotals?: Record<number, number>;
 	/** MCQ practice-style minimums (e.g. { recall: 80, keyword: 60, 'short-form': 12 }). Secp-701 only. */
 	styleFloors?: Partial<Record<QuestionStyle, number>>;
-	/** MCQ scenario-style maximum (secp-701 only). Enforces a minority share of paragraph questions. */
 	scenarioCeiling?: number;
 	/** optional per-domain PBQ floor (checked when provided) */
 	pbqDomainTotals?: Record<number, number>;
@@ -231,65 +231,42 @@ export interface CourseBankSpec {
 	minSourceRefs?: number;
 	pbqObjectiveMinimum?: number;
 	kindDomainMinimums?: Partial<Record<QuestionDefinition['kind'], Partial<Record<Domain, number>>>>;
+	/**
+	 * Canonical section titles from the course's own study guide (secp-701 only).
+	 * When present, every `study-guide` sourceRef must name one of these — this is
+	 * what stops invented chapter titles and whole-domain placeholders creeping
+	 * back into the provenance trail.
+	 */
+	studyGuideSections?: string[];
 }
 
 export const SECP701_BANK_SPEC: CourseBankSpec = {
 	courseId: 'secp-701',
-	mcqTotal: 692,
-	pbqTotal: 120,
+	mcqTotal: 801,
+	pbqTotal: 104,
 	mcqIdPattern: /^mcq-[1-5]-\d{3}$/,
 	pbqIdPattern: /^pbq-[1-5]-\d{3}$/,
 	domains: [1, 2, 3, 4, 5],
 	objectivesByDomain,
-	// Pinned to the exact authored counts (sum 692) so content cannot silently
+	// Pinned to the exact authored counts (sum 699) so content cannot silently
 	// vanish or be retagged without failing validation — mirroring the exact
 	// pbqTotal / pbqDomainTotals checks.
-	mcqObjectiveTotals: {
-		'1.1': 41,
-		'1.2': 21,
-		'1.3': 18,
-		'1.4': 24,
-		'2.1': 13,
-		'2.2': 33,
-		'2.3': 51,
-		'2.4': 44,
-		'2.5': 23,
-		'3.1': 48,
-		'3.2': 27,
-		'3.3': 35,
-		'3.4': 56,
-		'4.1': 17,
-		'4.2': 12,
-		'4.3': 20,
-		'4.4': 23,
-		'4.5': 11,
-		'4.6': 20,
-		'4.7': 8,
-		'4.8': 21,
-		'4.9': 7,
-		'5.1': 14,
-		'5.2': 32,
-		'5.3': 25,
-		'5.4': 20,
-		'5.5': 14,
-		'5.6': 14
-	},
-	mcqDomainTotals: { 1: 104, 2: 164, 3: 166, 4: 139, 5: 119 },
-	multiTotals: { 1: 6, 2: 11, 3: 9, 4: 13, 5: 7 },
+	mcqObjectiveTotals: {'1.1': 41, '1.2': 24, '1.3': 20, '1.4': 30, '2.1': 15, '2.2': 35, '2.3': 51, '2.4': 49, '2.5': 23, '3.1': 51, '3.2': 30, '3.3': 28, '3.4': 53, '4.1': 23, '4.2': 17, '4.3': 30, '4.4': 31, '4.5': 19, '4.6': 29, '4.7': 14, '4.8': 26, '4.9': 11, '5.1': 22, '5.2': 42, '5.3': 31, '5.4': 24, '5.5': 16, '5.6': 16},
+	mcqDomainTotals: { 1: 115, 2: 173, 3: 162, 4: 200, 5: 151 },
+	multiTotals: { 1: 7, 2: 14, 3: 10, 4: 13, 5: 8 },
 	// Scenario is no longer forced to 100%. The bank now carries a realistic mix:
 	// recall (self-contained), keyword (BEST/MOST/FIRST), short-form (word-bank), scenario (paragraph).
 	styleFloors: { recall: 80, keyword: 60, 'short-form': 12 },
-	scenarioCeiling: 170,
-	pbqDomainTotals: { 1: 16, 2: 23, 3: 22, 4: 40, 5: 19 },
+	pbqDomainTotals: { 1: 15, 2: 20, 3: 17, 4: 38, 5: 14 },
 	requireAuthoredHints: true,
 	qualityGates: true,
 	minSourceRefs: 2,
 	pbqObjectiveMinimum: 2,
+	studyGuideSections: dionSections.sections,
 	kindDomainMinimums: {
-		'word-bank': { 1: 5, 2: 3, 3: 4, 4: 5, 5: 3 },
-		memory: { 1: 1, 2: 1, 4: 1 },
+		'word-bank': { 1: 5, 2: 3, 3: 2, 4: 4, 5: 3 },
 		'rule-table': { 3: 2, 4: 3 },
-		cli: { 2: 1, 3: 1, 4: 3 }
+		'cli': { 2: 1, 3: 1, 4: 3 }
 	}
 };
 

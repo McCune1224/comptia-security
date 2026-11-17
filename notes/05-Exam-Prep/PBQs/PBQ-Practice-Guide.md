@@ -3,19 +3,8 @@
 ## Practice in the app
 
 - Open `/pbq` for free PBQ practice. Start from the practice hub at `/practice` for every drill.
-- The Security+ bank ships **120 PBQs**. Kinds and counts:
-  - `matching` (24), `word-bank` (20), `configuration` (18), `multi-step` (11), `evidence` (9),
-    `ordering` (8), `rule-table` (5), `cli` (5), `sort` (4), `multiple-choice` (4), `slider` (3),
-    `hotspot` (3), `memory` (3), `single-choice` (3)
-- Two new mechanics cover the real-exam shapes that were missing:
-  - **Firewall / ACL rule-table builder** — fill source, destination, port, action for every row,
-    then order the rules; scored with partial credit for cells and order.
-  - **Constrained terminal / config completion** — type commands or directives from a bounded
-    vocabulary (no arbitrary shell); each task scores independently.
-- `memory` is now activated with three paired-recall items. It was implemented in the engine but
-  previously had no bank content.
-- The daily review queue at `/review` resurfaces the PBQs you get wrong.
-
+- The Security+ bank ships **104 PBQs**. Kinds and counts:
+  matching 24, configuration 18, word-bank 17, multi-step 11, evidence 9, ordering 8, rule-table 5, cli 5, sort 4, hotspot 3. There are **no** slider, memory-matching or plain multiple-choice PBQs — the real exam's PBQs are simulations and interactions, not quiz questions.
 ## Drill modes
 
 - **Low-drain quick round** (`/quick`): 4–15 questions, no timer, PBQs spread through the round

@@ -1,5 +1,11 @@
 # Full System Audit — 2026-10-13
 
+> **Historical record as of 2026-10-13.** The question-bank counts, PBQ inventory and validation
+> floors described below were all superseded by the 2026-11 pass, which rebuilt provenance,
+> rewrote the MCQ stems, de-farmed the PBQs and rebalanced the domains. **For current state read
+> `SY0-701-BANK-REVIEW.md`.** Numbers below (812 items, 692 MCQ, 120 PBQ) are kept as the record of
+> what was found at that date.
+
 Read-only audit of material, PBQs, UI, and architecture. Every finding below was
 verified against the file it names (spot-checked directly, not only via review).
 

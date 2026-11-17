@@ -155,37 +155,62 @@ const ACRONYM_EXPANSIONS: Record<string, string> = {
  * as a cross-domain filler.
  */
 const EXTRA_TERM_OBJECTIVES: Record<string, ObjectiveId[]> = {
-	'cross-site scripting': ['2.3'],
-	'cross-site request forgery': ['2.3'],
-	'sql injection': ['2.3'],
-	'buffer overflow': ['2.3'],
-	honeypot: ['1.2'],
-	honeynet: ['1.2'],
-	'chain of custody': ['4.8', '4.9'],
-	'zero trust': ['1.2', '3.1'],
-	'defense in depth': ['1.2', '3.1'],
-	hashing: ['1.4', '3.3', '3.4', '4.9'],
-	'data minimization': ['3.3', '5.3', '5.4'],
-	casb: ['3.4', '4.6'],
-	edr: ['2.4', '4.5', '4.7'],
-	'penetration test': ['2.5', '4.3', '5.5'],
-	'vulnerability scan': ['2.5', '4.3', '5.6'],
-	jamming: ['2.2', '2.3', '4.3'],
-	tokenization: ['1.4', '3.3', '3.4'],
-	authorization: ['1.1', '1.2', '4.6'],
-	federation: ['3.3', '4.6'],
-	accounting: ['1.1', '1.2', '4.6'],
-	'non-repudiation': ['1.1', '1.2', '4.6'],
-	'security awareness training': ['1.1', '5.6'],
-	encryption: ['1.4', '3.3', '3.4', '4.2', '4.5', '5.1'],
-	monitoring: ['1.1', '4.4'],
-	patching: ['2.5', '4.1', '4.3'],
-	isolation: ['2.5', '3.1', '4.4'],
-	'least privilege': ['1.2', '2.5', '4.6'],
 	'access control': ['1.2', '2.5', '4.6'],
+	accounting: ['1.1', '1.2', '4.6'],
+	'actions on objectives': ['2.4'],
+	authorization: ['1.1', '1.2', '4.6'],
+	'blind spot': ['1.2'],
+	'buffer overflow': ['2.3'],
+	casb: ['3.4', '4.6'],
+	'chain of custody': ['4.8', '4.9'],
+	crl: ['3.3'],
+	'cross-site request forgery': ['2.3'],
+	'cross-site scripting': ['2.3'],
+	dast: ['3.4', '5.5'],
+	'data minimization': ['3.3', '5.3', '5.4'],
+	'defense in depth': ['1.2', '3.1'],
+	dnssec: ['1.4'],
+	downloader: ['2.4'],
+	edr: ['2.4', '4.5', '4.7'],
+	encryption: ['1.4', '3.3', '3.4', '4.2', '4.5', '5.1'],
+	exploitation: ['2.4'],
+	federation: ['3.3', '4.6'],
+	fido: ['4.6'],
+	'full backup': ['5.2'],
+	hashing: ['1.4', '3.3', '3.4', '4.9'],
+	honeynet: ['1.2', '3.2'],
+	honeypot: ['1.2', '3.2'],
+	hsm: ['3.3'],
+	identification: ['4.1'],
+	isolation: ['2.5', '3.1', '4.4'],
+	jamming: ['2.2', '2.3', '4.3'],
+	ldap: ['4.6'],
+	'least privilege': ['1.2', '1.3', '2.5', '4.6'],
+	mfa: ['3.3'],
+	monitoring: ['1.1', '4.4'],
+	mttr: ['3.4'],
+	'non-repudiation': ['1.1', '1.2', '4.6'],
+	ocsp: ['3.3'],
+	patching: ['2.5', '4.1', '4.3'],
+	'penetration test': ['2.5', '4.3', '5.5'],
+	preparation: ['4.1'],
+	radius: ['4.6'],
+	reconnaissance: ['2.4'],
+	'risk avoidance': ['5.1'],
+	rpo: ['3.4'],
+	rto: ['3.4'],
+	'security awareness training': ['1.1', '5.6'],
 	segmentation: ['2.5', '3.1', '3.2', '3.3', '4.4'],
+	shellcode: ['2.4'],
+	'single pane of glass': ['4.4'],
 	'social engineering': ['2.2', '5.6'],
-	dast: ['3.4', '5.5']
+	'sql injection': ['2.3'],
+	'tacacs+': ['4.6'],
+	tokenization: ['1.4', '3.3', '3.4'],
+	utm: ['3.2'],
+	'vulnerability scan': ['2.5', '4.3', '5.6'],
+	waf: ['2.4'],
+	'zero trust': ['1.2', '3.1']
 };
 
 /**
@@ -409,6 +434,19 @@ function jaccard(a: Set<string>, b: Set<string>): number {
 	return intersection / (a.size + b.size - intersection);
 }
 
+const SELECT_COUNT_WORDS: Record<string, number> = { two: 2, three: 3, four: 4 };
+
+/** Reads a stated answer count out of the stem, e.g. "(Select TWO.)" or "Choose 3.". */
+function statedSelectCount(prompt: string): number | undefined {
+	const match = /(?:select|choose)\s+(two|three|four|2|3|4)\b/i.exec(prompt);
+	if (!match) return undefined;
+	return SELECT_COUNT_WORDS[match[1].toLowerCase()] ?? Number(match[1]);
+}
+
+function escapeRegExp(text: string): string {
+	return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 export function validateBankQuality(
 	bank: { mcqs: QuestionDefinition[]; pbqs: QuestionDefinition[] },
 	spec: CourseBankSpec
@@ -423,8 +461,12 @@ export function validateBankQuality(
 	for (const question of all) {
 		const context = question.context?.trim() ?? '';
 		const hint = question.hint?.trim() ?? '';
-		if (!context) fail(question.id, 'missing scenario context');
-		if (context.length < CONTEXT_MIN)
+		// A multiple-choice stem carries its own scenario, the way the exam does it.
+		// The separate `context` field is reserved for PBQs, where a multi-part item
+		// legitimately needs a shared brief above its steps.
+		if (!context && question.format === 'pbq')
+			fail(question.id, 'missing scenario context');
+		if (context && context.length < CONTEXT_MIN)
 			fail(question.id, `context must be at least ${CONTEXT_MIN} characters`);
 		if (!hint) fail(question.id, 'missing authored hint');
 		if (hint.length < HINT_MIN) fail(question.id, `hint must be at least ${HINT_MIN} characters`);
@@ -435,12 +477,12 @@ export function validateBankQuality(
 		const hintKey = normalize(hint);
 		if (promptSeen.has(promptKey))
 			fail(question.id, `duplicate prompt also used by ${promptSeen.get(promptKey)}`);
-		if (contextSeen.has(contextKey))
+		if (context && contextSeen.has(contextKey))
 			fail(question.id, `duplicate context also used by ${contextSeen.get(contextKey)}`);
 		if (hintSeen.has(hintKey))
 			fail(question.id, `duplicate hint also used by ${hintSeen.get(hintKey)}`);
 		promptSeen.set(promptKey, question.id);
-		contextSeen.set(contextKey, question.id);
+		if (context) contextSeen.set(contextKey, question.id);
 		hintSeen.set(hintKey, question.id);
 		for (const sentence of question.prompt.split(/(?<=[.!?])\s+/)) {
 			const clause = normalize(sentence);
@@ -599,6 +641,147 @@ export function validateBankQuality(
 			).length;
 			if (count > cap)
 				fail('mcq-template', `definition template appears ${count} times (cap ${cap})`);
+		}
+	}
+
+
+	// --- A multiple-choice stem must stand on its own ----------------------
+	// The exam never parks the scenario in a separate field, and it never asks a
+	// bare tag question ("Which control is this?") that only makes sense with
+	// earlier text on screen.
+	const STEM_MIN = 120;
+	const TAG_STEM =
+		/\b(?:is|are) (?:this|these)\?|\bwhich (?:one )?(?:of these|of the following)? ?(?:one )?is (?:it|this)\?/i;
+	for (const node of choiceNodes(bank.mcqs)) {
+		const prompt = node.prompt.trim();
+		if (prompt.length < STEM_MIN)
+			fail(node.id, `stem is ${prompt.length} characters; a scenario stem must be at least ${STEM_MIN}`);
+		if (TAG_STEM.test(prompt))
+			fail(node.id, 'stem asks a bare tag question; write the scenario into the stem so it stands alone');
+	}
+
+	// --- Keyed answer text must not appear in the stem -------------------
+	for (const node of choiceNodes(all)) {
+		const stem = normalize(node.prompt);
+		for (const option of node.options) {
+			if (!node.correctOptionIds.includes(option.id)) continue;
+			const trimmed = option.text.trim().toLowerCase();
+			// Short keys (risk, DAC, RAT) are the leak-prone ones; long keys are
+			// already covered by the distinctive-answer gate above.
+			if (trimmed.length < 3 || trimmed.length > 60) continue;
+			const key = normalize(trimmed);
+			if (!key) continue;
+			if (new RegExp(`\\b${escapeRegExp(key)}\\b`).test(stem))
+				fail(node.id, `keyed answer "${option.text.trim()}" appears in the stem`);
+		}
+	}
+
+	// --- Stated select count must match the response key -----------------
+	for (const node of choiceNodes(all)) {
+		const stated = statedSelectCount(node.prompt);
+		if (node.selectCount > 1 && stated === undefined)
+			fail(
+				node.id,
+				`selectCount is ${node.selectCount}, so the stem must state how many options to select`
+			);
+		if (node.selectCount > 1 && stated !== undefined && stated !== node.selectCount)
+			fail(node.id, `stem states ${stated} but selectCount is ${node.selectCount}`);
+		if (node.selectCount === 1 && stated !== undefined && stated >= 2)
+			fail(node.id, `stem states ${stated} but selectCount is ${node.selectCount}`);
+	}
+
+	// --- Degenerate "X and X" options ------------------------------------
+	for (const node of choiceNodes(all)) {
+		for (const option of node.options) {
+			const parts = option.text.split(/\s+and\s+/i).map(normalize);
+			if (parts.length !== 2) continue;
+			const [first, second] = parts;
+			if (!first || first !== second) continue;
+			fail(
+				node.id,
+				`option ${option.id} is a degenerate duplicate option: "${option.text.trim()}"`
+			);
+		}
+	}
+
+
+	// --- Study-guide citations must name a real section --------------------
+	// The provenance trail is only worth keeping if it can be checked. Invented
+	// chapter titles ("Chapter 3: Symmetric Encryption and AES Key Sizes.") and
+	// whole-domain placeholders ("Domain 4 - Security Operations") both used to
+	// satisfy every other gate.
+	if (spec.studyGuideSections) {
+		const known = new Set(spec.studyGuideSections);
+		for (const node of allNodes) {
+			for (const ref of node.sourceRefs ?? []) {
+				if (ref.source !== 'study-guide') continue;
+				const section = (ref.section ?? '').trim();
+				if (!known.has(section))
+					fail(
+						node.id,
+						`study-guide section "${section}" is not a section of the course study guide`
+					);
+			}
+		}
+	}
+
+	// --- PBQ answer positions must not be predictable ----------------------
+	// A configuration PBQ whose every field keys the same option position, or a
+	// matching PBQ whose display order mirrors the answer order, can be scored
+	// without any subject knowledge.
+	for (const node of allNodes) {
+		if (node.kind === 'configuration') {
+			const positions: number[] = [];
+			for (const field of node.fields) {
+				const keyed = node.correctValues[field.id];
+				const index = field.options.findIndex((option) => option.id === keyed);
+				if (index >= 0) positions.push(index);
+			}
+			if (positions.length > 1 && new Set(positions).size === 1)
+				fail(
+					node.id,
+					`every field keys option position ${positions[0] + 1}; shuffle the option order so the answer position varies per field`
+				);
+		}
+
+		const ordered =
+			node.kind === 'matching'
+				? { left: node.premises.map((item) => item.id), right: node.targets.map((item) => item.id), map: node.correctMatches }
+				: node.kind === 'sort'
+					? { left: node.items.map((item) => item.id), right: node.buckets.map((item) => item.id), map: node.correctBuckets }
+					: undefined;
+		if (!ordered) continue;
+		const { left, right, map } = ordered;
+		if (left.length < 4) continue;
+		const shifts = new Set<number>();
+		for (const [premiseId, targetId] of Object.entries(map)) {
+			const from = left.indexOf(premiseId);
+			const to = right.indexOf(targetId);
+			if (from < 0 || to < 0) continue;
+			shifts.add((to - from + left.length * 2) % left.length);
+		}
+		if (shifts.size === 1)
+			fail(
+				node.id,
+				shifts.has(0)
+					? 'matching display order mirrors the answer order; shuffle the left column so the mapping cannot be guessed'
+					: `matching display order is a uniform shift (${[...shifts][0]}); shuffle so the mapping is not a rotation`
+			);
+	}
+
+	// --- Evidence artifacts must not label their own findings ----------------
+	const INTERPRETIVE_LABEL = [
+		/\((?:[^)]*\b(?:beacon|scan|scanning|brute|tunnel|tunnelling|exfil|exfiltration|injection|traversal|xss|malicious|suspicious|normal|attack|probe)\b[^)]*)\)/i,
+		/--\s*(?:sql|path|os |reflected|stored|dom|command|directory)/i
+	];
+	for (const node of allNodes) {
+		if (node.kind !== 'evidence') continue;
+		for (const line of node.artifact.lines) {
+			if (INTERPRETIVE_LABEL.some((pattern) => pattern.test(line.text)))
+				fail(
+					node.id,
+					`artifact line ${line.id} labels its own finding; present the raw log line so the analyst has to interpret it`
+				);
 		}
 	}
 }

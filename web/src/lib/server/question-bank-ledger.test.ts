@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { loadQuestionBank } from './question-bank';
+import { loadQuestionBank, SECP701_BANK_SPEC } from './question-bank';
 
 interface LedgerItem {
 	id: string;
@@ -27,7 +27,7 @@ describe('question bank audit ledger', () => {
 		const bank = loadQuestionBank();
 		const bankIds = new Set([...bank.mcqs, ...bank.pbqs].map((question) => question.id));
 		const ledgerIds = new Set(ledger.items.map((item) => item.id));
-		expect(ledger.items).toHaveLength(812);
+		expect(ledger.items).toHaveLength(SECP701_BANK_SPEC.mcqTotal + SECP701_BANK_SPEC.pbqTotal);
 		expect(ledgerIds.size).toBe(ledger.items.length);
 		expect([...bankIds].filter((id) => !ledgerIds.has(id))).toEqual([]);
 		expect([...ledgerIds].filter((id) => !bankIds.has(id))).toEqual([]);
@@ -45,8 +45,10 @@ describe('question bank audit ledger', () => {
 	});
 
 	it('matches the bank totals', () => {
-		expect(ledger.summary.total).toBe(812);
-		expect(ledger.summary.rewritten + ledger.summary.certified).toBe(812);
+		expect(ledger.summary.total).toBe(SECP701_BANK_SPEC.mcqTotal + SECP701_BANK_SPEC.pbqTotal);
+		expect(ledger.summary.rewritten + ledger.summary.certified).toBe(
+			SECP701_BANK_SPEC.mcqTotal + SECP701_BANK_SPEC.pbqTotal
+		);
 		expect(ledger.summary.unresolved).toBe(0);
 	});
 });

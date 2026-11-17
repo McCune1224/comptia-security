@@ -35,11 +35,15 @@ describe('PBQ format matrix coverage', () => {
 		])
 			expect(counts.get(kind) ?? 0, kind).toBeGreaterThanOrEqual(5);
 		// Rare formats: at least three drillable items each.
-		for (const kind of ['memory', 'hotspot', 'sort', 'slider', 'single-choice', 'multiple-choice'])
-			expect(counts.get(kind) ?? 0, kind).toBeGreaterThanOrEqual(3);
-		expect(counts.get('memory')).toBe(3);
+		for (const kind of ['hotspot', 'sort']) expect(counts.get(kind) ?? 0, kind).toBeGreaterThanOrEqual(3);
 		expect(counts.get('rule-table')).toBe(5);
 		expect(counts.get('cli')).toBe(5);
+		// A performance-based question is a simulation, not a quiz question. A plain
+		// multiple-choice item, a slider, or a memory-matching game shown as a PBQ
+		// misrepresents the format and inflates PBQ coverage, so the bank must not
+		// carry any of them.
+		for (const kind of ['single-choice', 'multiple-choice', 'slider', 'memory'])
+			expect(counts.get(kind) ?? 0, kind).toBe(0);
 	});
 });
 

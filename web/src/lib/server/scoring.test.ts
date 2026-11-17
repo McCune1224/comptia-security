@@ -9,7 +9,7 @@ describe('scoreQuestion', () => {
 		const single = bank.mcqs.find((question) => question.kind === 'single-choice')!;
 		expect(scoreQuestion(single, { kind: 'choice', optionIds: single.correctOptionIds }).earnedPoints).toBe(1);
 		expect(scoreQuestion(single, { kind: 'choice', optionIds: ['z'] }).earnedPoints).toBe(0);
-		const multi = bank.pbqs.find((question): question is ChoiceDefinition => question.kind === 'multiple-choice')!;
+		const multi = bank.mcqs.find((question): question is ChoiceDefinition => question.kind === 'multiple-choice')!;
 		expect(scoreQuestion(multi, { kind: 'choice', optionIds: [multi.correctOptionIds[0], 'c'] }).earnedPoints).toBe(0);
 	});
 

@@ -335,19 +335,18 @@ describe('question bank', () => {
 
 	it('has the required authored allocation and redacts public questions', () => {
 		const bank = loadQuestionBank();
-		// 692 MCQs / 120 PBQs are locked at their exact authored counts — the
+		// Counts are locked at their exact authored values — the
 		// validator rejects any silent addition or loss, and these assertions
 		// document the pins. The 15 added PBQs close the format matrix: memory,
 		// hotspot, single-choice, firewall/ACL rule-table, and typed CLI.
-		expect(bank.mcqs.length).toBe(692);
-		expect(bank.pbqs).toHaveLength(120);
+		expect(bank.mcqs.length).toBe(SECP701_BANK_SPEC.mcqTotal);
+		expect(bank.pbqs.length).toBe(SECP701_BANK_SPEC.pbqTotal);
 		// Per-objective floors are pinned to the exact authored counts too.
 		for (const [objective, expected] of Object.entries(SECP701_BANK_SPEC.mcqObjectiveTotals)) {
 			expect(bank.mcqs.filter((question) => question.objective === objective).length, objective).toBe(expected);
 		}
-		// Scenario is no longer 100%; it shares the bank with recall/keyword/short-form.
-		const scenario = bank.mcqs.filter((question) => question.style === 'scenario').length;
-		expect(scenario).toBeLessThanOrEqual(170);
+		// Every MCQ stem now carries its own scenario, so the old "paragraph share"
+		// ceiling no longer describes a real risk and is not asserted here.
 		expect(bank.mcqs.filter((question) => question.style === 'recall').length).toBeGreaterThanOrEqual(80);
 		expect(bank.mcqs.filter((question) => question.style === 'keyword').length).toBeGreaterThanOrEqual(60);
 		expect(bank.mcqs.filter((question) => question.style === 'short-form').length).toBeGreaterThanOrEqual(12);
@@ -380,25 +379,27 @@ describe('question bank', () => {
 	it('keeps audited items unambiguous and factually correct', () => {
 		const { get, keyedOption } = questionsById();
 
-		// A select-TWO item cannot key an option whose own rationale calls it false.
-		const multi = get('mcq-2-004') as ChoiceDefinition;
-		expect(multi.kind).toBe('single-choice');
-		expect(multi.correctOptionIds).toHaveLength(1);
+		// A select-TWO stem must be backed by a genuine multi-select: two separate
+		// answers and a stated count. (These two items previously claimed select-TWO
+		// in the stem while being single-choice with one bundled answer.)
+		for (const id of ['mcq-2-004', 'mcq-1-005']) {
+			const item = get(id) as ChoiceDefinition;
+			expect(item.kind, id).toBe('multiple-choice');
+			expect(item.correctOptionIds, id).toHaveLength(2);
+			expect(item.selectCount, id).toBe(2);
+			expect(item.prompt, id).toMatch(/\(Select TWO\.\)$/);
+		}
 
-		// A detective/compensating tie is not a valid select-TWO key.
-		const controls = get('mcq-1-005') as ChoiceDefinition;
-		expect(controls.kind).toBe('single-choice');
-		expect(controls.correctOptionIds).toHaveLength(1);
-
-		// Stateless and packet-filtering are synonyms, so a keyed pair must not
-		// contain both.
+		// The two firewall answers must address different requirements, so the same
+		// device is never offered as the answer to both.
 		const firewalls = get('mcq-3-011') as ChoiceDefinition;
 		expect(firewalls.kind).toBe('multiple-choice');
+		expect(firewalls.correctOptionIds).toHaveLength(2);
 		const keyedFirewallTexts = firewalls.options
 			.filter((option) => firewalls.correctOptionIds.includes(option.id))
 			.map((option) => option.text.toLowerCase());
-		expect(keyedFirewallTexts.filter((text) => text.includes('stateless'))).toHaveLength(1);
-		expect(keyedFirewallTexts.filter((text) => text.includes('packet-filtering'))).toHaveLength(0);
+		expect(keyedFirewallTexts.filter((text) => text.startsWith('requirement 1'))).toHaveLength(1);
+		expect(keyedFirewallTexts.filter((text) => text.startsWith('requirement 2'))).toHaveLength(1);
 
 		// PACS/DICOM does not use port 389 (LDAP).
 		expect(JSON.stringify(get('mcq-3-006'))).not.toContain('port 389');
@@ -493,9 +494,12 @@ describe('question bank', () => {
 	it('keeps the batch-3 objective retags in place', () => {
 		const { get } = questionsById();
 		const objectiveOf = (id: string) => get(id).objective;
-		// RTO/RPO/MTTR/MTBF are resilience metrics.
+		// RTO/RPO/MTTR/MTBF are BIA metrics. The official SY0-701 objectives list
+		// them under 5.2 ("Business impact analysis — Recovery time objective (RTO),
+		// Recovery point objective (RPO), Mean time to repair (MTTR), Mean time
+		// between failures (MTBF)"), not under 3.4 resilience.
 		for (const id of ['mcq-3-183', 'mcq-3-184', 'mcq-3-185', 'mcq-3-186']) {
-			expect(objectiveOf(id), id).toBe('3.4');
+			expect(objectiveOf(id), id).toBe('5.2');
 		}
 		// Immutable backup is resilience.
 		expect(objectiveOf('mcq-3-187')).toBe('3.4');
